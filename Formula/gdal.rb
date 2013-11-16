@@ -16,7 +16,7 @@ class Gdal < Formula
   option 'enable-opencl', 'Build with OpenCL acceleration.'
   option 'enable-armadillo', 'Build with Armadillo accelerated TPS transforms.'
   option 'enable-unsupported', "Allow configure to drag in any library it can find. Invoke this at your own risk."
-  option 'enable-mdb', 'Build with ESRI Personal Geodatabase read-only MDB driver (requires Java 1.6+ JDK install, Apple or Oracle).'
+  option 'enable-mdb', 'Build with Access MDB driver (requires Java 1.6+ JDK/JRE, from Apple or Oracle).'
 
   depends_on :python => :recommended
   depends_on :libpng
