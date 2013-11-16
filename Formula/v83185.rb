@@ -5,17 +5,12 @@ require 'formula'
 # https://code.google.com/p/v8/issues/detail?id=2545
 # http://omahaproxy.appspot.com/
 
-class V8 < Formula
+class V83185 < Formula
   homepage 'http://code.google.com/p/v8/'
   url 'https://github.com/v8/v8/archive/3.18.5.tar.gz'
   sha1 'd11c925898c5a0480aa947b1ed03b8f039d7e5d2'
 
-  devel do
-    url 'https://github.com/v8/v8/archive/3.19.16.tar.gz'
-    sha1 'fa9862f805ce07d1dbaf5a9229ebbbbe616298f2'
-  end
-
-  head 'https://github.com/v8/v8.git'
+  keg_only 'Conflicts with v8 in main repository.'
 
   # gyp currently depends on a full xcode install
   # https://code.google.com/p/gyp/issues/detail?id=292
