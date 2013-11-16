@@ -39,6 +39,8 @@ class Gdal < Formula
 
   depends_on 'homebrew/science/armadillo' if build.include? 'enable-armadillo'
 
+  depends_on 'dakcarto/osgeo4mac/openjpeg20' if build.include? 'enable-unsupported'
+
   if build.include? 'complete'
     # Raster libraries
     depends_on "homebrew/science/netcdf" # Also brings in HDF5
