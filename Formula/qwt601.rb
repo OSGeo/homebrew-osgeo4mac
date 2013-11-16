@@ -1,9 +1,11 @@
 require 'formula'
 
-class Qwt < Formula
+class Qwt601 < Formula
   homepage 'http://qwt.sourceforge.net/'
   url 'http://downloads.sourceforge.net/project/qwt/qwt/6.0.1/qwt-6.0.1.tar.bz2'
   sha1 '301cca0c49c7efc14363b42e082b09056178973e'
+
+  keg_only 'Conflicts with qwt in main repository.'
 
   depends_on 'qt'
 
