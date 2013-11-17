@@ -15,6 +15,9 @@ class Qwt60 < Formula
       s.gsub! /^\s*QWT_INSTALL_PREFIX\s*=(.*)$/, "QWT_INSTALL_PREFIX=#{prefix}"
     end
 
+    # ensure frameworks aren't built, or qwtmathml fails to link via -lqwt
+    File.open('qwtconfig.pri', 'a') { |f| f.write('QWT_CONFIG -= QwtFramework') }
+
     system "qmake -spec macx-g++ -config release"
     system "make"
     system "make install"
