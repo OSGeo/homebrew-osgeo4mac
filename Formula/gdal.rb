@@ -34,6 +34,11 @@ class Gdal < Formula
   depends_on "postgresql" => :optional
   depends_on "mysql" => :optional
 
+  # There is a problem with compiling and avx, so we will disable avx for now in trunk builds
+  if build.head?
+    args << "--without-avx"
+  end
+
   # Without Numpy, the Python bindings can't deal with raster data.
   depends_on 'numpy' => :python if build.with? 'python'
 
@@ -194,9 +199,11 @@ class Gdal < Formula
   def patches
     p = []
     # Prevent build failure on 10.6 / 10.7
-    # TODO: Remove when 1.10.2 releases
+    # TODO: Remove when 1.10.2 releases, ignore for HEAD
     # http://trac.osgeo.org/gdal/ticket/5197
-    p << DATA
+    unless build.head?
+      p << DATA
+    end
 
     # Patch of configure that finds Mac Java for MDB driver (uses Oracle or Mac default JDK)
     # TODO: Remove when future GDAL release includes a fix
@@ -226,6 +233,11 @@ class Gdal < Formula
 
     # Fix hardcoded mandir: http://trac.osgeo.org/gdal/ticket/5092
     inreplace 'configure', %r[^mandir='\$\{prefix\}/man'$], ''
+
+    #Fix install fail on lib check for Mavericks
+    if MacOS.version >= :mavericks
+      cxxstdlib_check :skip
+    end
 
     system "./configure", *get_configure_args
     system "make"
