@@ -198,17 +198,16 @@ class Gdal < Formula
 
   def patches
     p = []
-    # Prevent build failure on 10.6 / 10.7
-    # TODO: Remove when 1.10.2 releases, ignore for HEAD
-    # http://trac.osgeo.org/gdal/ticket/5197
-    unless build.head?
-      p << DATA
-    end
 
-    # Patch of configure that finds Mac Java for MDB driver (uses Oracle or Mac default JDK)
-    # TODO: Remove when future GDAL release includes a fix
-    # http://trac.osgeo.org/gdal/ticket/5267  (patch applied to trunk, 2.0 release milestone)
-    unless build.head?
+    if build.stable?
+      # Prevent build failure on 10.6 / 10.7
+      # TODO: Remove when 1.10.2 releases, ignore for HEAD
+      # http://trac.osgeo.org/gdal/ticket/5197
+      p << DATA
+
+      # Patch of configure that finds Mac Java for MDB driver (uses Oracle or Mac default JDK)
+      # TODO: Remove when future GDAL release includes a fix
+      # http://trac.osgeo.org/gdal/ticket/5267  (patch applied to trunk, 2.0 release milestone)
       p << "https://gist.github.com/dakcarto/6877854/raw" if build.include? 'enable-mdb'
     end
 
@@ -235,9 +234,7 @@ class Gdal < Formula
     inreplace 'configure', %r[^mandir='\$\{prefix\}/man'$], ''
 
     #Fix install fail on lib check for Mavericks
-    if MacOS.version >= :mavericks
-      cxxstdlib_check :skip
-    end
+    cxxstdlib_check :skip if MacOS.version >= :mavericks
 
     system "./configure", *get_configure_args
     system "make"
