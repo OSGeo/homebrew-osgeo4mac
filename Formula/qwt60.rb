@@ -13,10 +13,9 @@ class Qwt60 < Formula
     inreplace 'qwtconfig.pri' do |s|
       # change_make_var won't work because there are leading spaces
       s.gsub! /^\s*QWT_INSTALL_PREFIX\s*=(.*)$/, "QWT_INSTALL_PREFIX=#{prefix}"
+      # ensure frameworks aren't built, or qwtmathml linking fails to find -lqwt
+      s << "\n" << "QWT_CONFIG -= QwtFramework"
     end
-
-    # ensure frameworks aren't built, or qwtmathml fails to link via -lqwt
-    File.open('qwtconfig.pri', 'a') { |f| f.write('QWT_CONFIG -= QwtFramework') }
 
     system "qmake -spec macx-g++ -config release"
     system "make"
