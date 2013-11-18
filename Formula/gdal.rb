@@ -34,11 +34,6 @@ class Gdal < Formula
   depends_on "postgresql" => :optional
   depends_on "mysql" => :optional
 
-  # There is a problem with compiling and avx, so we will disable avx for now in trunk builds
-  if build.head?
-    args << "--without-avx"
-  end
-
   # Without Numpy, the Python bindings can't deal with raster data.
   depends_on 'numpy' => :python if build.with? 'python'
 
@@ -173,6 +168,11 @@ class Gdal < Formula
       # The rpath is only embedded for Oracle (non-framework) installs
       args << "--with-jvm-lib-add-rpath=yes"
       args << "--with-mdb=yes"
+    end
+
+    # There is a problem with compiling and avx, so disable avx for HEAD builds
+    if build.head?
+      args << "--without-avx"
     end
 
     # Python is installed manually to ensure everything is properly sandboxed.
