@@ -15,38 +15,56 @@ class PyQtImportable < Requirement
   end
 end
 
-class Qgis < Formula
+class Qgis20 < Formula
   homepage 'http://www.qgis.org'
   url 'https://github.com/qgis/QGIS/archive/final-2_0_1.tar.gz'
+  version '2.0.1'
 
   head 'https://github.com/qgis/Quantum-GIS.git', :branch => 'master'
 
   option 'with-globe', 'Build the globe plugin with osgearth dependencies'
+  option 'with-server', 'Build QGIS Server (qgis_mapserv.fcgi)'
+  option 'with-postgresql', 'Build with current PostgreSQL client'
+  option 'with-api-docs', 'Build the API documentation with Doxygen and Graphviz'
+  option 'with-debug', 'Enable debug build (default for --HEAD installs).'
 
+  # core qgis
   depends_on 'cmake' => :build
+  depends_on 'bison' => :build
   depends_on :python
   depends_on PyQtImportable
   depends_on 'gsl'
   depends_on 'pyqt'
-  depends_on 'qwt'
-  depends_on 'expat'
-  depends_on 'gdal'
-  depends_on 'proj'
   depends_on 'qscintilla2'
+  depends_on 'qwt60'
+  depends_on 'expat'
+  depends_on 'proj'
   depends_on 'spatialindex'
-  depends_on 'bison'
-  depends_on 'grass' => :optional
-  depends_on 'gettext' if build.with? 'grass'
+  depends_on 'fcgi' if build.with? 'server'
+  depends_on 'postgresql' => :optional
+
+  # core providers
+  depends_on 'gdal'
+  # add gdal-shared-plugins (todo, formula for all third-party commercial plugins)
   depends_on 'postgis' => :optional
-  depends_on 'osgearth' if build.include? 'with-globe'
+  # add oracle third-party support (oci, todo)
+
+  # core plugins (c++ and python)
+  depends_on 'grass' => :optional
+  depends_on 'gdal-grass' if build.with? 'grass' # TODO: check that this is true
+  depends_on 'gettext' if build.with? 'grass'
+  depends_on 'gpsbabel' => [:optional, '--with-libusb']
+  depends_on 'osgearth' => 'with-minizip' if build.with? 'globe'
+  depends_on :python => ['psycopg2']
+  depends_on 'pyspatialite'
+  # add qgis-processing :recommended (todo, formula for all Processing support)
+  # add qt-mysql-driver for eVis, not part of bottle (todo)
 
   def install
     cxxstdlib_check :skip
     # Set bundling level back to 0 (the default in all versions prior to 1.8.0)
     # so that no time and energy is wasted copying the Qt frameworks into QGIS.
     args = std_cmake_args.concat %W[
-      -DQWT_INCLUDE_DIR=#{Formula.factory('qwt').opt_prefix}/lib/qwt.framework/Headers/
-      -DQWT_LIBRARY=#{Formula.factory('qwt').opt_prefix}/lib/qwt.framework/qwt
       -DBISON_EXECUTABLE=#{Formula.factory('bison').opt_prefix}/bin/bison
       -DENABLE_TESTS=NO
       -DQGIS_MACAPP_BUNDLE=0
@@ -55,20 +73,31 @@ class Qgis < Formula
       -DPYTHON_LIBRARY='#{python.libdir}/lib#{python.xy}.dylib'
     ]
 
-    # GRASS has to be prefixed one directory deeper than opt_prefix provides. This will break with grass version change.
-    args << "-DGRASS_PREFIX='#{Formula.factory('grass').opt_prefix}/grass-6.4.3'" if build.with? 'grass'
-    # Globe args are tied to specific version, need cleanup in code beyond my skills
-    args << [ "-DWITH_GLOBE=ON", '-DOSG_PLUGINS_PATH=/usr/local/lib/osgPlugins-3.2.0' ]if build.include? 'with-globe'
+    if build.with? 'debug' or build.head?
+      ENV.O2
+      ENV.enable_warnings
+      args << '-DCMAKE_BUILD_TYPE=RelWithDebInfo'
+    end
 
-    # So that `libintl.h` can be found
-    ENV.append 'CXXFLAGS', "-I'#{Formula.factory('gettext').opt_prefix}/include'" if build.with? 'grass'
+    if build.with? 'grass'
+      grass = Formula.factory('grass')
+      args << "-DGRASS_PREFIX='#{grass.opt_prefix}/grass-#{grass.version}'"
+      # So that `libintl.h` can be found
+      ENV.append 'CXXFLAGS', "-I'#{Formula.factory('gettext').opt_prefix}/include'"
+    end
 
-    # Avoid ld: framework not found QtSql (https://github.com/Homebrew/homebrew-science/issues/23)
+    if build.with? 'globe'
+      osg = Formula.factory('open-scene-graph')
+      args << "-DWITH_GLOBE=ON"
+      args << "-DOSG_PLUGINS_PATH=#{HOMEBREW_PREFIX}/lib/osgPlugins-#{osg.version}"
+    end
+
+    # Avoid ld: framework not found QtSql
+    # (https://github.com/Homebrew/homebrew-science/issues/23)
     ENV.append 'CXXFLAGS', "-F#{Formula.factory('qt').opt_prefix}/lib"
 
-    Dir.mkdir 'build'
     python do
-      Dir.chdir 'build' do
+      mkdir 'build' do
         system 'cmake', '..', *args
         system 'make install'
       end
@@ -78,6 +107,8 @@ class Qgis < Formula
       py_lib.mkpath
       ln_s qgis_modules, py_lib + 'qgis'
 
+      # [REPLACE THIS with Info.plist setup, add other env vars: GDAL, OSG, etc.]
+      # TODO: add PYQGIS_STARTUP?
       # Create script to launch QGIS app
       (bin + 'qgis').write <<-EOS.undent
         #!/bin/sh
