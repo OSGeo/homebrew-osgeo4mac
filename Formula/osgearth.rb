@@ -6,8 +6,8 @@ class Osgearth < Formula
   sha1 'f5938da83ef235775856bce60e6f856a6709821b'
 
   devel do
-    url 'https://github.com/gwaldron/osgearth/archive/osgearth-2.5-RC1.tar.gz'
-    sha1 'e380fcc255dce8ebdaf445aee9bcd5329c7dbc5f'
+    url 'https://github.com/gwaldron/osgearth/archive/osgearth-2.5-RC4.tar.gz'
+    sha1 'e6d31301ec8baadffd1996555972428901e665f0'
   end
 
   head do
@@ -23,7 +23,9 @@ class Osgearth < Formula
   depends_on 'open-scene-graph'
   depends_on 'gdal'
   depends_on 'minizip' => :optional
-  depends_on 'v8' => :optional
+  if build.with? 'v8'
+    depends_on (build.stable?) ? 'v8318' : 'v8'
+  end
   depends_on 'tinyxml' if build.include? 'external-tinyxml'
 
   def install
@@ -42,9 +44,11 @@ class Osgearth < Formula
       args << "-DMINIZIP_LIBRARY='#{HOMEBREW_PREFIX}/lib/libminizip.dylib'"
     end
 
-    if build.with? 'v8'
-      args << "-DV8_INCLUDE_DIR='#{HOMEBREW_PREFIX}/include'"
-      args << "-DV8_LIBRARY='#{HOMEBREW_PREFIX}/lib/libv8.dylib'"
+    # for osgearth 2.4, no higher than v8 version 3.18.5
+    if build.with? 'v8' and build.stable?
+      v8 = Formula.factory(build.stable? ? 'v8318' : 'v8')
+      args << "-DV8_INCLUDE_DIR='#{v8.opt_prefix}/include'"
+      args << "-DV8_LIBRARY='#{v8.opt_prefix}/lib/libv8.dylib'"
     end
 
     if build.include? 'external-tinyxml'
