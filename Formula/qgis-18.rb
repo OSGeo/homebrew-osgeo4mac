@@ -28,7 +28,7 @@ class Qgis18 < Formula
   depends_on 'pyqt'
   depends_on 'qwt60'
   depends_on 'expat'
-  depends_on 'gdal19'
+  depends_on 'gdal-19'
   depends_on 'proj'
   depends_on 'spatialindex'
   depends_on 'bison'
