@@ -14,26 +14,29 @@ class Minizip < Formula
   depends_on :automake => :build
   depends_on :libtool => :build
 
-  depends_on 'homebrew/dupes/zlib'
-
-  conflicts_with 'libkml', :because => 'libkml installs `libminizip.dylib` with custom symbol names'
+  conflicts_with 'libkml', :because => 'older `libkml` formula installs `libminizip.dylib`'
 
   def patches
-    # Remove -I and -L flags to parent zlib source
-    # (allows linking to homebrew/dupes/zlib)
+    # configure script fails to detect the right compiler when "cc" is
+    # clang, not gcc. zlib mantainers have been notified of the issue.
+    # See: https://github.com/Homebrew/homebrew-dupes/pull/228
     DATA
   end
 
   def install
     ENV.universal_binary if build.universal?
+    system "./configure", "--prefix=#{prefix}"
+    system "make"
 
-    ENV.prepend 'CPPFLAGS', "-I#{Formula.factory('homebrew/dupes/zlib').opt_prefix}/include"
-    ENV.prepend 'LDFLAGS', "-L#{Formula.factory('homebrew/dupes/zlib').opt_prefix}/lib"
-
-    Dir.chdir 'contrib/minizip' do
+    cd 'contrib/minizip' do
+      # Edits to statically link to libz.a
+      inreplace "Makefile.am" do |s|
+        s.sub! "-L$(zlib_top_builddir)", "$(zlib_top_builddir)/libz.a"
+        s.sub! "-version-info 1:0:0 -lz", "-version-info 1:0:0"
+        s.sub! "libminizip.la -lz", "libminizip.la"
+      end
       system "autoreconf", "-fi"
       system "./configure", "--prefix=#{prefix}"
-      system "make"
       system "make install"
     end
 
@@ -55,22 +58,15 @@ class Minizip < Formula
 end
 
 __END__
-diff --git a/contrib/minizip/Makefile.am b/contrib/minizip/Makefile.am
-index d343011..079ab18 100644
---- a/contrib/minizip/Makefile.am
-+++ b/contrib/minizip/Makefile.am
-@@ -4,11 +4,8 @@ if COND_DEMOS
- bin_PROGRAMS = miniunzip minizip
- endif
- 
--zlib_top_srcdir = $(top_srcdir)/../..
--zlib_top_builddir = $(top_builddir)/../..
--
--AM_CPPFLAGS = -I$(zlib_top_srcdir)
--AM_LDFLAGS = -L$(zlib_top_builddir)
-+AM_CPPFLAGS =
-+AM_LDFLAGS =
- 
- if WIN32
- iowin32_src = iowin32.c
+diff --git a/configure b/configure
+index b77a8a8..54f33f7 100755
+--- a/configure
++++ b/configure
+@@ -159,6 +159,7 @@ case "$cc" in
+ esac
+ case `$cc -v 2>&1` in
+   *gcc*) gcc=1 ;;
++  *clang*) gcc=1 ;;
+ esac
 
+ show $cc -c $test.c
