@@ -1,0 +1,105 @@
+diff --git a/Library/Formula/gdal.rb b/Library/Taps/dakcarto-osgeo4mac/Formula/gdal.rb
+index 0cc2863..3993c94 100644
+--- a/Library/Formula/gdal.rb
++++ b/Library/Taps/dakcarto-osgeo4mac/Formula/gdal.rb
+@@ -16,6 +16,7 @@ class Gdal < Formula
+   option 'enable-opencl', 'Build with OpenCL acceleration.'
+   option 'enable-armadillo', 'Build with Armadillo accelerated TPS transforms.'
+   option 'enable-unsupported', "Allow configure to drag in any library it can find. Invoke this at your own risk."
++  option 'enable-mdb', 'Build with Access MDB driver (requires Java 1.6+ JDK/JRE, from Apple or Oracle).'
+ 
+   depends_on :python => :recommended
+   depends_on :libpng
+@@ -38,6 +39,8 @@ class Gdal < Formula
+ 
+   depends_on 'homebrew/science/armadillo' if build.include? 'enable-armadillo'
+ 
++  depends_on 'dakcarto/osgeo4mac/openjpeg20' if build.include? 'enable-unsupported'
++
+   if build.include? 'complete'
+     # Raster libraries
+     depends_on "homebrew/science/netcdf" # Also brings in HDF5
+@@ -160,6 +163,18 @@ class Gdal < Formula
+     args << (build.with?("postgres") ? "--with-pg=#{HOMEBREW_PREFIX}/bin/pg_config" : "--without-pg")
+     args << (build.with?("mysql") ? "--with-mysql=#{HOMEBREW_PREFIX}/bin/mysql_config" : "--without-mysql")
+ 
++    if build.include? 'enable-mdb'
++      args << "--with-java=yes"
++      # The rpath is only embedded for Oracle (non-framework) installs
++      args << "--with-jvm-lib-add-rpath=yes"
++      args << "--with-mdb=yes"
++    end
++
++    # There is a problem with compiling and avx, so disable avx for HEAD builds
++    if build.head?
++      args << "--without-avx"
++    end
++
+     # Python is installed manually to ensure everything is properly sandboxed.
+     args << '--without-python'
+ 
+@@ -182,10 +197,21 @@ class Gdal < Formula
+   end
+ 
+   def patches
+-    # Prevent build failure on 10.6 / 10.7
+-    # TODO: Remove when 1.10.2 releases
+-    # http://trac.osgeo.org/gdal/ticket/5197
+-    DATA
++    p = []
++
++    if build.stable?
++      # Prevent build failure on 10.6 / 10.7
++      # TODO: Remove when 1.10.2 releases, ignore for HEAD
++      # http://trac.osgeo.org/gdal/ticket/5197
++      p << DATA
++
++      # Patch of configure that finds Mac Java for MDB driver (uses Oracle or Mac default JDK)
++      # TODO: Remove when future GDAL release includes a fix
++      # http://trac.osgeo.org/gdal/ticket/5267  (patch applied to trunk, 2.0 release milestone)
++      p << "https://gist.github.com/dakcarto/6877854/raw" if build.include? 'enable-mdb'
++    end
++
++    return p
+   end
+ 
+   def install
+@@ -207,6 +233,9 @@ class Gdal < Formula
+     # Fix hardcoded mandir: http://trac.osgeo.org/gdal/ticket/5092
+     inreplace 'configure', %r[^mandir='\$\{prefix\}/man'$], ''
+ 
++    #Fix install fail on lib check for Mavericks
++    cxxstdlib_check :skip if MacOS.version >= :mavericks
++
+     system "./configure", *get_configure_args
+     system "make"
+     system "make install"
+@@ -233,14 +262,27 @@ class Gdal < Formula
+   end
+ 
+   def caveats
++    msg = ""
+     if python
+-      python.standard_caveats +
++      msg += python.standard_caveats +
+       <<-EOS.undent
+         This version of GDAL was built with Python support. In addition to providing
+         modules that makes GDAL functions available to Python scripts, the Python
+         binding provides additional command line tools.
+       EOS
+     end
++
++    if build.include? 'enable-mdb'
++      msg += <<-EOS.undent
++
++      To have a functional MDB driver, install supporting .jar files in:
++        `/Library/Java/Extensions/`
++
++      See: `http://www.gdal.org/ogr/drv_mdb.html`
++      EOS
++    end
++
++    msg
+   end
+ end
+ 
