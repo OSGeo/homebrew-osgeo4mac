@@ -1,10 +1,5 @@
 require 'formula'
 
-# Postgis depends on gdal, which in turn depends on libspatialite,
-# so enabling a "with-postgis" option in this formula introduces a
-# circular dependency.
-# See https://github.com/mxcl/homebrew/issues/20373
-
 class Libspatialite < Formula
   homepage 'https://www.gaia-gis.it/fossil/libspatialite/index'
   url 'http://www.gaia-gis.it/gaia-sins/libspatialite-sources/libspatialite-4.1.1.tar.gz'
