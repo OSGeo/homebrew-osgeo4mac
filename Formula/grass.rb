@@ -27,7 +27,7 @@ class Grass < Formula
   # Patches that files are not installed outside of the prefix.
   def patches;
     if build.head?
-      "https://gist.github.com/jctull/0fe3db92a3e7c19fa6e0/raw"
+      "https://gist.github.com/jctull/0fe3db92a3e7c19fa6e0/raw/42e819f0a9b144de782c94f730dbc4da136e9227/grassPatchHead.diff"
     else
       DATA
     end
@@ -40,7 +40,7 @@ class Grass < Formula
   def headless?
     # The GRASS GUI is based on WxPython. Unfortunately, Lion does not include
     # this module so we have to drop it.
-    build.include? 'without-gui' #or MacOS.version == :lion
+    build.include? 'without-gui' or MacOS.version == :lion
   end
 
   def install
@@ -152,6 +152,6 @@ index f1edea6..be404b0 100644
  endif
 -	@# enable OSX Help Viewer
 -	@if [ "`cat include/Make/Platform.make | grep -i '^ARCH.*darwin'`" ] ; then /bin/ln -sfh "${INST_DIR}/docs/html" /Library/Documentation/Help/GRASS-${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR} ; fi
-
-
+ 
+ 
  install-strip: FORCE
