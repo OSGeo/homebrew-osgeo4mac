@@ -14,8 +14,6 @@ class Minizip < Formula
   depends_on :automake => :build
   depends_on :libtool => :build
 
-  conflicts_with 'libkml', :because => 'older `libkml` formula installs `libminizip.dylib`'
-
   def patches
     # configure script fails to detect the right compiler when "cc" is
     # clang, not gcc. zlib mantainers have been notified of the issue.
