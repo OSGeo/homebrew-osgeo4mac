@@ -198,14 +198,15 @@ class Gdal < Formula
     p = []
 
     if build.stable?
-      # Prevent build failure on 10.6 / 10.7: http://trac.osgeo.org/gdal/ticket/5197
-      # Fix build against MySQL 5.6.x: http://trac.osgeo.org/gdal/ticket/5284
-      p << DATA
-
       # Patch of configure that finds Mac Java for MDB driver (uses Oracle or Mac default JDK)
       # TODO: Remove when future GDAL release includes a fix
       # http://trac.osgeo.org/gdal/ticket/5267  (patch applied to trunk, 2.0 release milestone)
+      # Must come before DATA
       p << "https://gist.github.com/dakcarto/6877854/raw" if build.include? 'enable-mdb'
+
+      # Prevent build failure on 10.6 / 10.7: http://trac.osgeo.org/gdal/ticket/5197
+      # Fix build against MySQL 5.6.x: http://trac.osgeo.org/gdal/ticket/5284
+      p << DATA
     end
 
     return p
@@ -294,7 +295,7 @@ index d7273aa..2fcbd53 100644
  MYSQL_INC  =	@MYSQL_INC@
 +MYSQL_NEEDS_LOAD_DEFAULTS_DECLARATION  =    @MYSQL_NEEDS_LOAD_DEFAULTS_DECLARATION@
  LIBS	   +=	$(MYSQL_LIB)
-
+ 
  #
 diff --git a/configure b/configure
 index 1c4f8fb..120b17f 100755
@@ -344,14 +345,14 @@ index 1c4f8fb..120b17f 100755
    esac
  fi
 @@ -23055,6 +23084,8 @@ MYSQL_INC=$MYSQL_INC
-
+ 
  MYSQL_LIB=$MYSQL_LIB
-
+ 
 +MYSQL_NEEDS_LOAD_DEFAULTS_DECLARATION=$MYSQL_NEEDS_LOAD_DEFAULTS_DECLARATION
 +
-
-
-
+ 
+ 
+ 
 diff --git a/configure.in b/configure.in
 index 481e8ea..d83797f 100644
 --- a/configure.in
@@ -393,7 +394,7 @@ index 481e8ea..d83797f 100644
  AC_SUBST(MYSQL_INC,$MYSQL_INC)
  AC_SUBST(MYSQL_LIB,$MYSQL_LIB)
 +AC_SUBST(MYSQL_NEEDS_LOAD_DEFAULTS_DECLARATION,$MYSQL_NEEDS_LOAD_DEFAULTS_DECLARATION)
-
+ 
  dnl ---------------------------------------------------------------------------
  dnl INGRES support.
 diff --git a/ogr/ogrsf_frmts/mysql/GNUmakefile b/ogr/ogrsf_frmts/mysql/GNUmakefile
@@ -401,16 +402,16 @@ index 292ae45..e78398d 100644
 --- a/ogr/ogrsf_frmts/mysql/GNUmakefile
 +++ b/ogr/ogrsf_frmts/mysql/GNUmakefile
 @@ -7,6 +7,11 @@ OBJ	=	ogrmysqldriver.o ogrmysqldatasource.o \
-
+ 
  CPPFLAGS	:=	-I.. -I../.. $(GDAL_INCLUDE) $(MYSQL_INC) $(CPPFLAGS)
-
+ 
 +ifeq ($(MYSQL_NEEDS_LOAD_DEFAULTS_DECLARATION),yes)
 +CPPFLAGS +=   -DMYSQL_NEEDS_LOAD_DEFAULTS_DECLARATION
 +endif
 +
 +
  default:	$(O_OBJ:.o=.$(OBJ_EXT))
-
+ 
  clean:
 diff --git a/ogr/ogrsf_frmts/mysql/ogrmysqldatasource.cpp b/ogr/ogrsf_frmts/mysql/ogrmysqldatasource.cpp
 index 65c275b..447e374 100644
@@ -419,7 +420,7 @@ index 65c275b..447e374 100644
 @@ -36,6 +36,16 @@
  #include "cpl_conv.h"
  #include "cpl_string.h"
-
+ 
 +/* Recent versions of mysql no longer declare load_defaults() in my_sys.h */
 +/* but they still have it in the lib. Very fragile... */
 +#ifdef MYSQL_NEEDS_LOAD_DEFAULTS_DECLARATION
