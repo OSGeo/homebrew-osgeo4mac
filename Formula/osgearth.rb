@@ -41,7 +41,6 @@ class Osgearth < Formula
     end
 
     args << "-DOSGEARTH_BUILD_APPLICATION_BUNDLES=ON" if build.include? 'enable-app-bundles'
-#     osg = Formula.factory('open-scene-graph')
     args << "-DOSG_DIR='#{HOMEBREW_PREFIX}'"
 
     sdkpath = (MacOS::CLT.installed?) ? "" : "#{MacOS.sdk_path}"
@@ -74,20 +73,30 @@ class Osgearth < Formula
       args << "-DTINYXML_LIBRARY='#{HOMEBREW_PREFIX}/lib/libtinyxml.dylib'"
     end
 
+    args << '..'
+
     mkdir 'build' do
-#       system 'cmake', '..', *args
-#       raise ''
-#       system 'make'
-#       system 'make', 'Documentation' if build.include? 'with-docs-examples'
-#       system 'make install'
+      system 'cmake', *args
+      system 'make install'
     end
 
     if build.include? 'with-docs-examples'
       cd 'docs' do
+        inreplace "Makefile", "sphinx-build", "#{HOMEBREW_PREFIX}/bin/sphinx-build"
         system 'make', 'html'
         doc.install "build/html" => 'html'
       end
-      share.install ['data', 'tests']
+      doc.install ['data', 'tests']
     end
+  end
+
+  def caveats; <<-EOS.undent
+    This formula installs Open Scene Graph plugins, to ensure access when using
+    the osgEarth toolset, set the OSG_LIBRARY_PATH enviroment variable (where
+    `#.#.#` refers to the installed Open Scene Graph version):
+
+      `export OSG_LIBRARY_PATH=#{HOMEBREW_PREFIX}/lib/osgPlugins-#.#.#`
+
+    EOS
   end
 end
