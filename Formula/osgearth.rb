@@ -9,12 +9,11 @@ class Osgearth < Formula
     url 'https://github.com/gwaldron/osgearth.git', :branch => 'master'
   end
 
-  option 'enable-app-bundles', 'Build applications as .app bundles'
-  option 'with-docs-examples', 'Build and install html documentation and examples'
   option 'without-minizip', 'Build without Google KMZ file access support'
   option 'with-v8', 'Build with Google\'s V8 JavaScript engine support'
   option 'with-libnoise', 'Build with coherent noise-generating terrain support'
   option 'external-tinyxml', 'Use external libtinyxml, instead of internal'
+  option 'with-docs-examples', 'Build and install html documentation and examples'
   option :cxx11
 
   depends_on 'cmake' => :build
@@ -40,7 +39,6 @@ class Osgearth < Formula
       args << "-DCMAKE_OSX_ARCHITECTURES=i386"
     end
 
-    args << "-DOSGEARTH_BUILD_APPLICATION_BUNDLES=ON" if build.include? 'enable-app-bundles'
     args << "-DOSG_DIR='#{HOMEBREW_PREFIX}'"
 
     sdkpath = (MacOS::CLT.installed?) ? "" : "#{MacOS.sdk_path}"
@@ -91,12 +89,16 @@ class Osgearth < Formula
   end
 
   def caveats; <<-EOS.undent
-    This formula installs Open Scene Graph plugins, to ensure access when using
+    This formula installs Open Scene Graph plugins. To ensure access when using
     the osgEarth toolset, set the OSG_LIBRARY_PATH enviroment variable (where
     `#.#.#` refers to the installed Open Scene Graph version):
 
       `export OSG_LIBRARY_PATH=#{HOMEBREW_PREFIX}/lib/osgPlugins-#.#.#`
 
     EOS
+  end
+
+  test do
+    system "#{bin}/osgearth_version"
   end
 end
