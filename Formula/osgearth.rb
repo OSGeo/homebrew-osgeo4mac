@@ -2,31 +2,32 @@ require 'formula'
 
 class Osgearth < Formula
   homepage 'http://osgearth.org'
-  url 'https://github.com/gwaldron/osgearth/archive/osgearth-2.4.tar.gz'
-  sha1 'f5938da83ef235775856bce60e6f856a6709821b'
-
-  devel do
-    url 'https://github.com/gwaldron/osgearth/archive/osgearth-2.5-RC4.tar.gz'
-    sha1 'e6d31301ec8baadffd1996555972428901e665f0'
-  end
+  url 'https://github.com/gwaldron/osgearth/archive/osgearth-2.5.tar.gz'
+  sha1 '97ed0075422c3efcb7b958f89ae02b32d670c48e'
 
   head do
     url 'https://github.com/gwaldron/osgearth.git', :branch => 'master'
   end
 
-  option 'with-minizip', 'Build with Google KMZ file (MiniZIP) support'
-  option 'with-v8', 'Build with Google\'s V8 JavaScript engine to embed scripts in earth files'
-  option 'external-tinyxml', 'Use external, instead of internal, libtinyxml'
+  option 'enable-app-bundles', 'Build applications as .app bundles'
+  option 'with-docs-examples', 'Build and install html documentation and examples'
+  option 'without-minizip', 'Build without Google KMZ file access support'
+  option 'with-v8', 'Build with Google\'s V8 JavaScript engine support'
+  option 'with-libnoise', 'Build with coherent noise-generating terrain support'
+  option 'external-tinyxml', 'Use external libtinyxml, instead of internal'
   option :cxx11
 
   depends_on 'cmake' => :build
   depends_on 'open-scene-graph'
   depends_on 'gdal'
-  depends_on 'minizip' => :optional
-  if build.with? 'v8'
-    depends_on (build.stable?) ? 'v8318' : 'v8'
-  end
+  depends_on 'sqlite'
+  depends_on 'qt' => :recommended
+  depends_on 'minizip' => :recommended
+  depends_on 'v8' => :optional
+  depends_on 'libnoise' => :optional
   depends_on 'tinyxml' if build.include? 'external-tinyxml'
+
+  depends_on :python => ['sphinx'] if build.include? 'with-docs-examples'
 
   def install
     cxxstdlib_check :skip
@@ -39,16 +40,32 @@ class Osgearth < Formula
       args << "-DCMAKE_OSX_ARCHITECTURES=i386"
     end
 
-    if build.with? 'minizip'
+    args << "-DOSGEARTH_BUILD_APPLICATION_BUNDLES=ON" if build.include? 'enable-app-bundles'
+#     osg = Formula.factory('open-scene-graph')
+    args << "-DOSG_DIR='#{HOMEBREW_PREFIX}'"
+
+    sdkpath = (MacOS::CLT.installed?) ? "" : "#{MacOS.sdk_path}"
+    jscore = "#{sdkpath}/System/Library/Frameworks/JavaScriptCore.framework"
+    if File.exists?("#{jscore}/Headers")
+      args << "-DJAVASCRIPTCORE_INCLUDE_DIR='#{jscore}/Headers'"
+      args << "-DJAVASCRIPTCORE_LIBRARY='#{jscore}/JavaScriptCore'"
+    end
+
+    unless build.without? 'minizip'
       args << "-DMINIZIP_INCLUDE_DIR='#{HOMEBREW_PREFIX}/include/minizip'"
       args << "-DMINIZIP_LIBRARY='#{HOMEBREW_PREFIX}/lib/libminizip.dylib'"
     end
 
-    # for osgearth 2.4, no higher than v8 version 3.18.5
-    if build.with? 'v8' and build.stable?
-      v8 = Formula.factory(build.stable? ? 'v8318' : 'v8')
-      args << "-DV8_INCLUDE_DIR='#{v8.opt_prefix}/include'"
-      args << "-DV8_LIBRARY='#{v8.opt_prefix}/lib/libv8.dylib'"
+    if build.with? 'v8'
+      # TODO: check with 32-bit build that 'basebit' suffix is indeed missing
+      basebit = (MacOS.prefer_64_bit?) ? ".x64" : ""
+      args << "-DV8_BASE_LIBRARY='#{HOMEBREW_PREFIX}/lib/libv8_base#{basebit}.a'"
+      args << "-DV8_DIR='#{HOMEBREW_PREFIX}'"
+    end
+
+    if build.with? 'libnoise'
+      args << "-DLIBNOISE_INCLUDE_DIR='#{HOMEBREW_PREFIX}/include/noise'"
+      args << "-DLIBNOISE_LIBRARY='#{HOMEBREW_PREFIX}/lib/libnoise.dylib'"
     end
 
     if build.include? 'external-tinyxml'
@@ -57,12 +74,20 @@ class Osgearth < Formula
       args << "-DTINYXML_LIBRARY='#{HOMEBREW_PREFIX}/lib/libtinyxml.dylib'"
     end
 
-    args << '..'
-
     mkdir 'build' do
-      system 'cmake', *args
-      system 'make'
-      system 'make install'
+#       system 'cmake', '..', *args
+#       raise ''
+#       system 'make'
+#       system 'make', 'Documentation' if build.include? 'with-docs-examples'
+#       system 'make install'
+    end
+
+    if build.include? 'with-docs-examples'
+      cd 'docs' do
+        system 'make', 'html'
+        doc.install "build/html" => 'html'
+      end
+      share.install ['data', 'tests']
     end
   end
 end
