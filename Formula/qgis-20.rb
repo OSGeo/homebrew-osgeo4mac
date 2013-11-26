@@ -1,12 +1,5 @@
 require 'formula'
 
-class QgisDownloadStrategy < GitDownloadStrategy
-  # Requires presence of .git to define QGSVERSION
-  def support_depth?
-    false
-  end
-end
-
 class PyQtImportable < Requirement
   fatal true
   satisfy { quiet_system 'python', '-c', 'from PyQt4 import QtCore' }
@@ -26,43 +19,46 @@ class Qgis20 < Formula
   homepage 'http://www.qgis.org'
   url 'https://github.com/qgis/QGIS/archive/final-2_0_1.tar.gz'
 
-  head 'https://github.com/qgis/QGIS.git', :branch => 'master',
-                                           :using => QgisDownloadStrategy
+  head 'https://github.com/qgis/QGIS.git', :branch => 'master'
 
   option 'with-debug', 'Enable debug build (default for --HEAD installs)'
   option 'without-server', 'Build without QGIS Server (qgis_mapserv.fcgi)'
-  option 'with-processing', 'Build external utilities used by Processing plugin'
+  option 'with-processing-extras', 'Build extra utilities used by Processing plugin'
   option 'with-globe', 'Build the Globe plugin, based upon osgEarth'
   option 'without-postgresql', 'Build without current PostgreSQL client'
   option 'with-api-docs', 'Build the API documentation with Doxygen and Graphviz'
+#   option 'persistent-build', 'Maintain the build directory in HOMEBREW_TEMP (--HEAD only)'
 
   # core qgis
-  depends_on 'readline' => :build # fix for formula not being found later on
   depends_on 'cmake' => :build
   depends_on 'bison' => :build
   depends_on :python
   depends_on PyQtImportable
-  depends_on 'gsl'
+  if build.with? 'api-docs'
+    depends_on 'graphviz' => 'with-freetype'
+    depends_on 'doxygen' => 'with-dot' # with graphviz support
+  end
   depends_on 'pyqt'
   depends_on 'qscintilla2'
-  depends_on 'qwt60' # max of 6.0.2 works with embedded QwtPolar in 2.0.1
+  depends_on 'gsl'
+  depends_on 'qwt60' # max of 6.0.2 works with embedded QwtPolar in QGIS 2.0.1
   depends_on 'sqlite' # use keg-only install
   depends_on 'expat'
   depends_on 'proj'
   depends_on 'spatialindex'
   depends_on 'fcgi' unless build.without? 'server'
-  depends_on 'postgresql' => :recommended # or it uses Apple's old one
+  depends_on 'postgresql' => :recommended # or might use Apple's much older client
 
   # core providers
-  gdalopts = ['enable-mdb', 'enable-unsupported', 'complete']
+  gdalopts = ['enable-unsupported', 'complete']
   gdalopts << 'with-postgresql' if build.with? 'postgresql' or build.with? 'postgis'
   depends_on 'gdal' => gdalopts
   # add gdal-shared-plugins (todo, all third-party commercial plugins)
-  depends_on 'postgis' => :optional
+  depends_on 'postgis' => (build.with? 'processing-extras') ? :recommended : :optional
   # add oracle third-party support (oci, todo)
 
   # core plugins (c++ and python)
-  depends_on 'grass' => :optional
+  depends_on 'grass' => (build.with? 'processing-extras') ? :recommended : :optional
   depends_on 'gdal-grass' if build.with? 'grass' # TODO: check that this is true
   depends_on 'gettext' if build.with? 'grass'
   depends_on 'gpsbabel' => [:recommended, 'with-libusb']
@@ -70,26 +66,17 @@ class Qgis20 < Formula
   depends_on :python => ['psycopg2', 'numpy']
   depends_on 'pyspatialite' # for DB Manager (broken in PyPi)
   depends_on 'qt-mysql' # driver for eVis, not part of bottle
-  # add qgis-processing :recommended (todo, formula for all Processing support)
-
-  if build.include? 'with-api-docs'
-    depends_on 'doxygen' => 'with-dot' # with graphviz support
+  if build.with? 'processing-extras'
+    # depends on `postgis` and `grass`, see above
+    depends_on 'orfeo'
+    depends_on 'openblas'
+    depends_on 'r' => 'with-openblas'
+    depends_on 'saga-gis' => 'disable-gui'
+    # TODO: LASTools straight build (2 reporting tools), or via `wine` (10 tools)
+    # TODO: Fusion from USFS (via `wine`?)
   end
 
   conflicts_with 'homebrew/science/qgis'
-
-  def linked_version(f)
-    if f.rack.directory?
-      kegs = f.rack.subdirs.map { |keg| Keg.new(keg) }.sort_by(&:version)
-      kegs.each do |keg|
-        return keg.version if keg.linked?
-      end
-#       return "KEG-UNLINKED"
-#     else
-#       return "MISSING"
-    end
-    opoo "Unable to determine linked keg version for '#{f}' formula"
-  end
 
   def install
     cxxstdlib_check :skip
@@ -118,11 +105,14 @@ class Qgis20 < Formula
       args << '-DCMAKE_BUILD_TYPE=None'
     end
 
-    # git is used to find GIT_MARKER in .git/index
+    # find git revision for HEAD build
     if build.head?
-#       args << "-DGITCOMMAND=#{Formula.factory('git').bin}/git"
-#       args << "-DGIT_MARKER=#{buildpath}/.git/index"
-      args << "-DGIT_MARKER=''"
+      if File.exists?("#{cached_download}/.git/index")
+        args << "-DGITCOMMAND=#{Formula.factory('git').bin}/git"
+        args << "-DGIT_MARKER=#{cached_download}/.git/index"
+      else
+        args << "-DGIT_MARKER=''" # if git clone borked, ends up defined as 'exported'
+      end
     end
 
     args << "-DWITH_MAPSERVER=TRUE" unless build.without? 'server'
@@ -131,33 +121,57 @@ class Qgis20 < Formula
 
     if build.with? 'grass'
       grass = Formula.factory('grass')
-      args << "-DGRASS_PREFIX='#{grass.opt_prefix}/grass-#{linked_version(grass)}'"
+      opoo "`grass` formula's keg not linked. Please link an installed version." if not grass.linked_keg.exist?
+      args << "-DGRASS_PREFIX='#{grass.opt_prefix}/grass-#{grass.linked_keg.realpath.basename.to_s}'"
       # So that `libintl.h` can be found
       ENV.append 'CXXFLAGS', "-I'#{Formula.factory('gettext').opt_prefix}/include'"
     end
 
     if build.with? 'globe'
       osg = Formula.factory('open-scene-graph')
+      opoo "`open-scene-graph` formula's keg not linked. Please link an installed version." if not osg.linked_keg.exist?
       args << "-DWITH_GLOBE=TRUE"
-      args << "-DOSG_PLUGINS_PATH=#{HOMEBREW_PREFIX}/lib/osgPlugins-#{linked_version(osg)}"
+      args << "-DOSG_PLUGINS_PATH=#{HOMEBREW_PREFIX}/lib/osgPlugins-#{osg.linked_keg.realpath.basename.to_s}"
     end
 
-    args << "-DWITH_APIDOC=TRUE" if build.include? 'with-api-docs'
+    args << "-DWITH_APIDOC=TRUE" if build.with? 'api-docs'
 
     # Avoid ld: framework not found QtSql
     # (https://github.com/Homebrew/homebrew-science/issues/23)
     ENV.append 'CXXFLAGS', "-F#{Formula.factory('qt').opt_prefix}/lib"
 
     python do
-      mkdir 'build' do
+#       #tmpname = File.basename Dir.pwd
+#       src = Dir.pwd
+#       if build.include? 'persistent-build'
+#         cd '..' do
+#           mkdir 'qgis-build' unless File.exists?('qgis-build')
+#           ln_s '../qgis-build', src + '/build'
+#           cd 'qgis-build' do
+#             if File.exists?('CMakeCache.txt')
+#               # swap out any old cache dir path and new temp src directory path
+#               inreplace "CMakeCache.txt" do |s|
+#                 s.sub! /(CMAKE_CACHEFILE_DIR:INTERNAL=)(.+)$/, '\1' + Dir.pwd
+#                 oldsrc = /(CMAKE_HOME_DIRECTORY:INTERNAL=)(.+)$/.match(s)[2]
+#                 s.gsub! oldsrc, src
+#               end
+#             end
+#           end
+#         end
+#       else
+#         mkdir 'build'
+#       end
+      mkdir 'build'
+
+      cd 'build' do
         system 'cmake', '..', *args
         system 'make install'
       end
 
       py_lib = lib/"#{python.xy}/site-packages"
-      qgis_modules = prefix + 'QGIS.app/Contents/Resources/python/qgis'
+      qgis_modules = prefix/'QGIS.app/Contents/Resources/python/qgis'
       py_lib.mkpath
-      ln_s qgis_modules, py_lib + 'qgis'
+      ln_s qgis_modules, py_lib/'qgis'
 
       # TODO: write PYQGIS_STARTUP file pyqgis_startup.py
 
@@ -172,9 +186,12 @@ class Qgis20 < Formula
       EOS
     end
 
-    if build.include? 'with-api-docs'
-      # TODO: move docs
-    end
+    ln_s 'QGIS.app/Contents/MacOS/fcgi-bin', prefix/'fcgi-bin' if build.with? 'server'
+
+    doc.mkpath
+    mv prefix/'QGIS.app/Contents/Resources/doc/api', doc/'api' if build.with? 'api-docs'
+    ln_s prefix/'QGIS.app/Contents/Resources/doc', doc/'doc'
+
   end
 
   def caveats
