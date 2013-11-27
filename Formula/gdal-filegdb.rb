@@ -37,33 +37,28 @@ class GdalFilegdb < Formula
   def install
 
     # stage third-party libs in prefix
+    fgdb = prefix/'filegdb'
+    fgdb.mkpath
+    fgdb_opt = opt_prefix/'filegdb'
+
     resource('filegdb').stage do
       docs = %W[doc samples xmlResources]
       Dir['*'].each do |rsc|
-        prefix.install rsc unless build.without? 'docs' and docs.include? rsc
+        fgdb.install rsc unless build.without? 'docs' and docs.include? rsc
       end
     end
 
-    # move filegdb headers to subdirectory
-    (prefix/'filegdb').mkpath
-    cd prefix do
-      mv Dir['include/*'], 'filegdb'
-      mv 'filegdb', 'include'
-    end
-
-    hblib = "#{HOMEBREW_PREFIX}/lib"
-
     # update third-party libs
-    cd prefix/'lib' do
+    cd fgdb/'lib' do
       system "install_name_tool", "-id",
-                                  "#{hblib}/libFileGDBAPI.dylib",
+                                  "#{fgdb_opt}/lib/libFileGDBAPI.dylib",
                                   "libFileGDBAPI.dylib"
       system "install_name_tool", "-id",
-                                  "#{hblib}/libfgdbunixrtl.dylib",
+                                  "#{fgdb_opt}/lib/libfgdbunixrtl.dylib",
                                   "libfgdbunixrtl.dylib"
       system "install_name_tool", "-change",
                                   "@rpath/libfgdbunixrtl.dylib",
-                                  "#{hblib}/libfgdbunixrtl.dylib",
+                                  "#{fgdb_opt}/lib/libfgdbunixrtl.dylib",
                                   "libFileGDBAPI.dylib"
     end
 
@@ -72,7 +67,7 @@ class GdalFilegdb < Formula
 
     # cxx flags
     args = %W[-Iport -Igcore -Iogr -Iogr/ogrsf_frmts
-               -Iogr/ogrsf_frmts/filegdb -I#{include}/filegdb]
+               -Iogr/ogrsf_frmts/filegdb -I#{fgdb}/include]
 
     # source files
     Dir["ogr/ogrsf_frmts/filegdb/*.c*"].each do |src|
@@ -80,9 +75,10 @@ class GdalFilegdb < Formula
     end
 
     # plugin dylib
+    # TODO: can the compatibility_version be 1.10.0?
     args.concat %W[
       -dynamiclib
-      -install_name #{hblib}/gdalplugins/ogr_FileGDB.dylib
+      -install_name #{HOMEBREW_PREFIX}/lib/gdalplugins/ogr_FileGDB.dylib
       -current_version #{version}
       -compatibility_version #{version}
       -o #{lib}/gdalplugins/ogr_FileGDB.dylib
@@ -90,7 +86,7 @@ class GdalFilegdb < Formula
     ]
 
     # ld flags
-    args.concat %W[-L#{gdal.lib} -lgdal -L#{lib} -lFileGDBAPI]
+    args.concat %W[-L#{gdal.lib} -lgdal -L#{fgdb}/lib -lFileGDBAPI]
 
     # build and install shared plugin
     system ENV.cxx, *args
@@ -104,10 +100,11 @@ class GdalFilegdb < Formula
 
       export GDAL_DRIVER_PATH=#{HOMEBREW_PREFIX}/lib/gdalplugins
 
-    To build against the FileGDB libraries directly, add its include sub-directory
-    to your CPPFLAGS environment variable:
+    The FileGDB libraries are `keg-only`. To build software that uses them, add
+    to the following environment variables:
 
-      CPPFLAGS: -I#{HOMEBREW_PREFIX}/include/filegdb
+      CPPFLAGS: -I#{opt_prefix}/filegdb/include
+      LDFLAGS:  -L#{opt_prefix}/filegdb/lib
 
     EOS
   end
