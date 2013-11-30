@@ -23,10 +23,12 @@ class Osgearth < Formula
   depends_on 'v8' => :optional
   depends_on 'libnoise' => :optional
   depends_on 'tinyxml' => :optional
-
   depends_on :python => ['sphinx'] if build.with? 'docs-examples'
 
-  # fixes finding a v8 lib: https://github.com/gwaldron/osgearth/pull/434
+  # likely all merged upstream, remove on next version
+  # find a v8 lib: https://github.com/gwaldron/osgearth/pull/434
+  # find JavaScriptCore lib: https://github.com/gwaldron/osgearth/pull/435
+  # find libnoise lib: https://github.com/gwaldron/osgearth/pull/436
   def patches
     DATA
   end
@@ -42,34 +44,19 @@ class Osgearth < Formula
       args << "-DCMAKE_OSX_ARCHITECTURES=i386"
     end
 
-    args << "-DOSG_DIR='#{HOMEBREW_PREFIX}'"
+    args << '-DOSGEARTH_USE_QT=OFF' if build.without? 'qt'
+    args << '-DWITH_EXTERNAL_TINYXML=ON' if build.with? 'tinyxml'
 
-    sdkpath = (MacOS::CLT.installed?) ? "" : "#{MacOS.sdk_path}"
-    jscore = "#{sdkpath}/System/Library/Frameworks/JavaScriptCore.framework"
-    if File.exists?("#{jscore}/Headers")
-      args << "-DJAVASCRIPTCORE_INCLUDE_DIR='#{jscore}/Headers'"
-      args << "-DJAVASCRIPTCORE_LIBRARY='#{jscore}/JavaScriptCore'"
+    # v8, noise and minizip options should have empty values if not defined '--with'
+    if build.without? 'v8'
+      args << "-DV8_INCLUDE_DIR=''" << "-DV8_BASE_LIBRARY=''" << "-DV8_SNAPSHOT_LIBRARY=''"
+      args << "-DV8_ICUI18N_LIBRARY=''" << "-DV8_ICUUC_LIBRARY=''"
     end
-
-    unless build.without? 'minizip'
-      args << "-DMINIZIP_INCLUDE_DIR='#{HOMEBREW_PREFIX}/include/minizip'"
-      args << "-DMINIZIP_LIBRARY='#{HOMEBREW_PREFIX}/lib/libminizip.dylib'"
-    end
-
-    if build.with? 'v8'
-      args << "-DV8_DIR='#{HOMEBREW_PREFIX}'"
-    end
-
-    if build.with? 'libnoise'
-      args << "-DLIBNOISE_INCLUDE_DIR='#{HOMEBREW_PREFIX}/include/noise'"
-      args << "-DLIBNOISE_LIBRARY='#{HOMEBREW_PREFIX}/lib/libnoise.dylib'"
-    end
-
-    if build.with? 'tinyxml'
-      args << '-DWITH_EXTERNAL_TINYXML=ON'
-      args << "-DTINYXML_INCLUDE_DIR='#{HOMEBREW_PREFIX}/include'"
-      args << "-DTINYXML_LIBRARY='#{HOMEBREW_PREFIX}/lib/libtinyxml.dylib'"
-    end
+    args << "-DLIBNOISE_INCLUDE_DIR=''" << "-DLIBNOISE_LIBRARY=''" if build.without? 'libnoise'
+    # define libminizip paths (skips the only pkconfig dependency in cmake modules)
+    mzo = Formula.factory('minizip').opt_prefix
+    args << "-DMINIZIP_INCLUDE_DIR=#{(build.with? 'minizip') ? mzo/'include/minizip' : ''}"
+    args << "-DMINIZIP_LIBRARY=#{(build.with? 'minizip') ? mzo/'lib/libminizip.dylib' : ''}"
 
     mkdir 'build' do
       system 'cmake', '..', *args
@@ -127,3 +114,29 @@ index 9f5684d..94cf4c4 100644
      PATHS
      ${V8_DIR}
      ${V8_DIR}/lib
+diff --git a/CMakeModules/FindJavaScriptCore.cmake b/CMakeModules/FindJavaScriptCore.cmake
+index 1bca250..3877cd5 100644
+--- a/CMakeModules/FindJavaScriptCore.cmake
++++ b/CMakeModules/FindJavaScriptCore.cmake
+@@ -21,7 +21,7 @@ FIND_PATH(JAVASCRIPTCORE_INCLUDE_DIR JavaScriptCore.h
+ )
+
+ FIND_LIBRARY(JAVASCRIPTCORE_LIBRARY
+-    NAMES libJavaScriptCore
++    NAMES libJavaScriptCore JavaScriptCore
+     PATHS
+     ${JAVASCRIPTCORE_DIR}
+     ${JAVASCRIPTCORE_DIR}/lib
+diff --git a/CMakeModules/FindLibNoise.cmake b/CMakeModules/FindLibNoise.cmake
+index 99d006b..0051b51 100644
+--- a/CMakeModules/FindLibNoise.cmake
++++ b/CMakeModules/FindLibNoise.cmake
+@@ -43,7 +43,7 @@ FIND_LIBRARY(LIBNOISE_LIBRARY
+ )
+
+ FIND_LIBRARY(LIBNOISE_LIBRARY
+-  NAMES libnoise
++  NAMES libnoise noise
+   PATHS
+     ~/Library/Frameworks
+     /Library/Frameworks
