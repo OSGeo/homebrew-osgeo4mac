@@ -26,6 +26,7 @@ class Qgis20 < Formula
   option 'with-processing-extras', 'Build extra utilities used by Processing plugin'
   option 'with-globe', 'Build the Globe plugin, based upon osgEarth'
   option 'without-postgresql', 'Build without current PostgreSQL client'
+  option 'with-qt-mysql', 'Build extra Qt MySQL plugin for QGIS\'s eVis plugin'
   option 'with-api-docs', 'Build the API documentation with Doxygen and Graphviz'
 #   option 'persistent-build', 'Maintain the build directory in HOMEBREW_TEMP (--HEAD only)'
 
@@ -53,7 +54,7 @@ class Qgis20 < Formula
   gdalopts = ['enable-unsupported', 'complete']
   gdalopts << 'with-postgresql' if build.with? 'postgresql' or build.with? 'postgis'
   depends_on 'gdal' => gdalopts
-  # add gdal-shared-plugins (todo, all third-party commercial plugins)
+  # add gdal shared plugins (todo, all third-party commercial plugins)
   depends_on 'postgis' => (build.with? 'processing-extras') ? :recommended : :optional
   # add oracle third-party support (oci, todo)
 
@@ -64,8 +65,8 @@ class Qgis20 < Formula
   depends_on 'gpsbabel' => [:recommended, 'with-libusb']
   depends_on 'osgearth' => 'with-v8' if build.with? 'globe'
   depends_on :python => ['psycopg2', 'numpy']
-  depends_on 'pyspatialite' # for DB Manager (broken in PyPi)
-  depends_on 'qt-mysql' # driver for eVis, not part of bottle
+  depends_on 'pyspatialite' # for DB Manager (broken via PyPi)
+  depends_on 'qt-mysql' if build.with? 'qt-mysql'
   if build.with? 'processing-extras'
     # depends on `postgis` and `grass`, see above
     depends_on 'orfeo'
@@ -98,7 +99,6 @@ class Qgis20 < Formula
     ]
 
     if build.with? 'debug' or build.head?
-      ENV.O2
       ENV.enable_warnings
       args << '-DCMAKE_BUILD_TYPE=RelWithDebInfo'
     else
@@ -115,13 +115,14 @@ class Qgis20 < Formula
       end
     end
 
-    args << "-DWITH_MAPSERVER=TRUE" unless build.without? 'server'
+    args << '-DWITH_MAPSERVER=TRUE' unless build.without? 'server'
 
-    args << "-DPOSTGRES_CONFIG=#{HOMEBREW_PREFIX}/bin/pg_config" if build.with? 'postgresql'
+    pgsql = Formula.factory('postgresql')
+    args << "-DPOSTGRES_CONFIG=#{pgsql.opt_prefix}/bin/pg_config" if build.with? 'postgresql'
 
     if build.with? 'grass'
       grass = Formula.factory('grass')
-      opoo "`grass` formula's keg not linked. Please link an installed version." if not grass.linked_keg.exist?
+      opoo "`grass` formula's keg not linked." unless grass.linked_keg.exist?
       args << "-DGRASS_PREFIX='#{grass.opt_prefix}/grass-#{grass.linked_keg.realpath.basename.to_s}'"
       # So that `libintl.h` can be found
       ENV.append 'CXXFLAGS', "-I'#{Formula.factory('gettext').opt_prefix}/include'"
@@ -129,12 +130,13 @@ class Qgis20 < Formula
 
     if build.with? 'globe'
       osg = Formula.factory('open-scene-graph')
-      opoo "`open-scene-graph` formula's keg not linked. Please link an installed version." if not osg.linked_keg.exist?
-      args << "-DWITH_GLOBE=TRUE"
+      opoo "`open-scene-graph` formula's keg not linked." unless osg.linked_keg.exist?
+      args << '-DWITH_GLOBE=TRUE'
+      # must be HOMEBREW_PREFIX/lib/osgPlugins-#.#.#, since all osg plugins are symlinked there
       args << "-DOSG_PLUGINS_PATH=#{HOMEBREW_PREFIX}/lib/osgPlugins-#{osg.linked_keg.realpath.basename.to_s}"
     end
 
-    args << "-DWITH_APIDOC=TRUE" if build.with? 'api-docs'
+    args << '-DWITH_APIDOC=TRUE' if build.with? 'api-docs'
 
     # Avoid ld: framework not found QtSql
     # (https://github.com/Homebrew/homebrew-science/issues/23)
@@ -176,7 +178,6 @@ class Qgis20 < Formula
       # TODO: write PYQGIS_STARTUP file pyqgis_startup.py
 
       # [REPLACE THIS with Info.plist setup, add other env vars: GDAL, OSG, etc.]
-      # TODO: add PYQGIS_STARTUP?
       # Create script to launch QGIS app
       (bin + 'qgis').write <<-EOS.undent
         #!/bin/sh
