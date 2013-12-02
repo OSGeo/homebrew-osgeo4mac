@@ -23,7 +23,7 @@ class Osgearth < Formula
   depends_on 'v8' => :optional
   depends_on 'libnoise' => :optional
   depends_on 'tinyxml' => :optional
-  depends_on :python => ['sphinx'] if build.with? 'docs-examples'
+  depends_on :python => %w[sphinx] if build.with? 'docs-examples'
 
   # likely all merged upstream, remove on next version
   # find a v8 lib: https://github.com/gwaldron/osgearth/pull/434
@@ -41,7 +41,7 @@ class Osgearth < Formula
     if MacOS.prefer_64_bit?
       args << "-DCMAKE_OSX_ARCHITECTURES=#{Hardware::CPU.arch_64_bit}"
     else
-      args << "-DCMAKE_OSX_ARCHITECTURES=i386"
+      args << '-DCMAKE_OSX_ARCHITECTURES=i386'
     end
 
     args << '-DOSGEARTH_USE_QT=OFF' if build.without? 'qt'
@@ -65,9 +65,9 @@ class Osgearth < Formula
 
     if build.with? 'docs-examples'
       cd 'docs' do
-        inreplace "Makefile", "sphinx-build", "#{HOMEBREW_PREFIX}/bin/sphinx-build"
+        inreplace 'Makefile', 'sphinx-build', "#{HOMEBREW_PREFIX}/bin/sphinx-build"
         system 'make', 'html'
-        doc.install "build/html" => 'html'
+        doc.install 'build/html' => 'html'
       end
       doc.install 'data'
       doc.install 'tests' => 'examples'
