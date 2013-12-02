@@ -38,6 +38,7 @@ defaults write "$PLIST" "LSEnvironment" '{
   "PYTHONHOME" = "/usr/local/Frameworks/Python.framework/Versions/2.7";
   "PYTHONPATH" = "/usr/local/lib/python2.7/site-packages";
   "PYQGIS_STARTUP" = "/usr/local/Library/Taps/dakcarto-osgeo4mac/enviro/python_startup.py";
+  "OSG_LIBRARY_PATH" = "/usr/local/lib/osgPlugins-3.2.0";
 }'
 
 # leave the plist readable; convert from binary to XML format
