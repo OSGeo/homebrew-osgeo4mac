@@ -7,16 +7,16 @@ class Libnoise < Formula
 
   version '1.0.0-cmake'
 
-  option "with-docs", 'Install documentation'
+  option 'with-docs', 'Install documentation'
 
   depends_on 'cmake' => :build
   depends_on 'doxygen' if build.include? 'with-docs'
 
   def install
-    inreplace "doc/CMakeLists.txt", "/usr/share", share if build.include? 'with-docs'
+    inreplace 'doc/CMakeLists.txt', '/usr/share', share if build.include? 'with-docs'
 
     args = std_cmake_args
-    args << "-DBUILD_LIBNOISE_DOCUMENTATION=ON" if build.include? 'with-docs'
+    args << '-DBUILD_LIBNOISE_DOCUMENTATION=ON' if build.include? 'with-docs'
 
     mkdir 'build' do
       system 'cmake', '..', *args

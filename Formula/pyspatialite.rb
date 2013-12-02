@@ -18,20 +18,20 @@ class Pyspatialite < Formula
     # link libspatialite and sqlite3, and fix redeclaration build error
     # Reported upstream: http://code.google.com/p/pyspatialite/issues/detail?id=15
     # (not tested/supported with HEAD builds)
-    "https://gist.github.com/dakcarto/7510460/raw" if build.stable?
+    'https://gist.github.com/dakcarto/7510460/raw/2e56dd217c19d8dd661e4d3ffb2b669f34da580b/pyspatialite-3.0.1-Mac-patch.diff' if build.stable?
   end
 
   def install
     # write setup.cfg
-    (buildpath/"setup.cfg").write <<-EOS.undent
+    (buildpath/'setup.cfg').write <<-EOS.undent
       [build_ext]
       include_dirs=#{HOMEBREW_PREFIX}/include/:#{HOMEBREW_PREFIX}/opt/sqlite/include/
       library_dirs=#{HOMEBREW_PREFIX}/lib:#{HOMEBREW_PREFIX}/opt/sqlite/lib
     EOS
 
     python do
-      system python, "setup.py", "build"
-      system python, "setup.py", "install", "--prefix=#{prefix}"
+      system python, 'setup.py', 'build'
+      system python, 'setup.py', 'install', "--prefix=#{prefix}"
     end
   end
 

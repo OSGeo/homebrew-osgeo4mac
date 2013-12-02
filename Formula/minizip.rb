@@ -23,19 +23,19 @@ class Minizip < Formula
 
   def install
     ENV.universal_binary if build.universal?
-    system "./configure", "--prefix=#{prefix}"
-    system "make"
+    system './configure', "--prefix=#{prefix}"
+    system 'make'
 
     cd 'contrib/minizip' do
       # Edits to statically link to libz.a
-      inreplace "Makefile.am" do |s|
-        s.sub! "-L$(zlib_top_builddir)", "$(zlib_top_builddir)/libz.a"
-        s.sub! "-version-info 1:0:0 -lz", "-version-info 1:0:0"
-        s.sub! "libminizip.la -lz", "libminizip.la"
+      inreplace 'Makefile.am' do |s|
+        s.sub! '-L$(zlib_top_builddir)', '$(zlib_top_builddir)/libz.a'
+        s.sub! '-version-info 1:0:0 -lz', '-version-info 1:0:0'
+        s.sub! 'libminizip.la -lz', 'libminizip.la'
       end
-      system "autoreconf", "-fi"
-      system "./configure", "--prefix=#{prefix}"
-      system "make install"
+      system 'autoreconf', '-fi'
+      system './configure', "--prefix=#{prefix}"
+      system 'make install'
     end
 
   end

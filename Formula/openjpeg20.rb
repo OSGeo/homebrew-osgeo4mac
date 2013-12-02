@@ -15,7 +15,7 @@ class Openjpeg20 < Formula
   depends_on :libpng
 
   def install
-    system "cmake", ".", *std_cmake_args
-    system "make install"
+    system 'cmake', '.', *std_cmake_args
+    system 'make install'
   end
 end
