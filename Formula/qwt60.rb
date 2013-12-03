@@ -5,7 +5,7 @@ class Qwt60 < Formula
   url 'http://downloads.sourceforge.net/project/qwt/qwt/6.0.2/qwt-6.0.2.tar.bz2'
   sha1 'cbdd00b29521987c9e7bc6aa51092f0474b9428d'
 
-  keg_only 'Conflicts with qwt in main repository.'
+  keg_only 'Conflicts with Qwt in main repository.'
 
   depends_on 'qt'
 
