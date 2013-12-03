@@ -52,9 +52,10 @@ class Qgis20 < Formula
   depends_on 'postgresql' => :recommended # or might use Apple's much older client
 
   # core providers
-  gdalopts = %w[enable-unsupported complete]
-  gdalopts << 'with-postgresql' if build.with? 'postgresql' or build.with? 'postgis'
-  depends_on 'gdal' => gdalopts unless Formula.factory('gdal').installed?
+  #gdalopts = %w[enable-unsupported complete]
+  #gdalopts << 'with-postgresql' if build.with? 'postgresql' or build.with? 'postgis'
+  #depends_on 'gdal' => gdalopts unless Formula.factory('gdal').installed?
+  depends_on 'gdal'
   # add gdal shared plugins (todo, all third-party commercial plugins)
   depends_on 'postgis' => (build.with? 'processing-extras') ? :recommended : :optional
   # add oracle third-party support (oci, todo)
