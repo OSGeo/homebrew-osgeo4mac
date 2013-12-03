@@ -18,6 +18,7 @@ end
 class Qgis20 < Formula
   homepage 'http://www.qgis.org'
   url 'https://github.com/qgis/QGIS/archive/final-2_0_1.tar.gz'
+  sha1 'd532677c1934c3faacd3036af15958b464051853'
 
   head 'https://github.com/qgis/QGIS.git', :branch => 'master'
 
