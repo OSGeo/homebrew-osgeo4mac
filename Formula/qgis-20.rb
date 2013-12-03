@@ -106,13 +106,11 @@ class Qgis20 < Formula
     end
 
     # find git revision for HEAD build
-    if build.head?
-      if File.exists?("#{cached_download}/.git/index")
-        args << "-DGITCOMMAND=#{Formula.factory('git').bin}/git"
-        args << "-DGIT_MARKER=#{cached_download}/.git/index"
-      else
-        args << "-DGIT_MARKER=''" # if git clone borked, ends up defined as 'exported'
-      end
+    if build.head? && File.exists?("#{cached_download}/.git/index")
+      args << "-DGITCOMMAND=#{Formula.factory('git').bin}/git"
+      args << "-DGIT_MARKER=#{cached_download}/.git/index"
+    else
+      args << "-DGIT_MARKER=''" # if git clone borked, or release tarball, ends up defined as 'exported'
     end
 
     args << '-DWITH_MAPSERVER=TRUE' unless build.without? 'server'
