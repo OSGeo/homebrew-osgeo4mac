@@ -26,6 +26,7 @@ class Qgis20 < Formula
   option 'without-server', 'Build without QGIS Server (qgis_mapserv.fcgi)'
   option 'with-processing-extras', 'Build extra utilities used by Processing plugin'
   option 'with-globe', 'Build the Globe plugin, based upon osgEarth'
+  option 'without-orfeo', 'Build without orfeo support in Processing'
   option 'without-postgresql', 'Build without current PostgreSQL client'
   option 'with-qt-mysql', 'Build extra Qt MySQL plugin for QGIS\'s eVis plugin'
   option 'with-api-docs', 'Build the API documentation with Doxygen and Graphviz'
@@ -70,7 +71,7 @@ class Qgis20 < Formula
   depends_on 'qt-mysql' => :optional
   if build.with? 'processing-extras'
     # depends on `postgis` and `grass`, see above
-    depends_on 'orfeo'
+    depends_on 'orfeo' unless build.without? 'orfeo'
     depends_on 'openblas'
     depends_on 'r' => 'with-openblas'
     depends_on 'saga-gis'
