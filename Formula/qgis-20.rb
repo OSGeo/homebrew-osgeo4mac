@@ -79,6 +79,16 @@ class Qgis20 < Formula
 
   conflicts_with 'homebrew/science/qgis'
 
+  # fixes for stable to work with sip 4.15, remove on release > 2.0.1
+  # see: https://github.com/qgis/QGIS/commit/d27ad33c
+  # see: https://github.com/qgis/QGIS/commit/641359d3
+  def patches
+    unless build.head?
+      # TODO: set to specific hash when done updating
+      'https://gist.github.com/dakcarto/7764118/raw'
+    end
+  end
+
   def install
     cxxstdlib_check :skip
     # Set bundling level back to 0 (the default in all versions prior to 1.8.0)
