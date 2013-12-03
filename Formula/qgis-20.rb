@@ -168,6 +168,9 @@ class Qgis20 < Formula
 
       cd 'build' do
         system 'cmake', '..', *args
+        #system 'bbedit', 'CMakeCache.txt'
+        #raise ''
+        #exit
         system 'make install'
       end
 
