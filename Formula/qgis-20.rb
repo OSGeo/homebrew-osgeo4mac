@@ -52,21 +52,21 @@ class Qgis20 < Formula
   depends_on 'postgresql' => :recommended # or might use Apple's much older client
 
   # core providers
-  gdalopts = ['enable-unsupported', 'complete']
+  gdalopts = %w[enable-unsupported complete]
   gdalopts << 'with-postgresql' if build.with? 'postgresql' or build.with? 'postgis'
-  depends_on 'gdal' => gdalopts
+  depends_on 'gdal' => gdalopts unless Formula.factory('gdal').installed?
   # add gdal shared plugins (todo, all third-party commercial plugins)
   depends_on 'postgis' => (build.with? 'processing-extras') ? :recommended : :optional
   # add oracle third-party support (oci, todo)
 
   # core plugins (c++ and python)
   depends_on 'grass' => (build.with? 'processing-extras') ? :recommended : :optional
-  depends_on 'gdal-grass' if build.with? 'grass' # TODO: check that this is true
+  depends_on 'gdal-grass' if build.with? 'grass' # TODO: check that this is required for QGIs plugin
   depends_on 'gettext' if build.with? 'grass'
   depends_on 'gpsbabel' => [:recommended, 'with-libusb']
   depends_on 'osgearth' => 'with-v8' if build.with? 'globe'
-  depends_on 'pyspatialite' # for DB Manager (broken via PyPi)
-  depends_on 'qt-mysql' if build.with? 'qt-mysql'
+  #depends on 'pyspatialite' # for DB Manager (currently being updated: )
+  depends_on 'qt-mysql' => :optional
   if build.with? 'processing-extras'
     # depends on `postgis` and `grass`, see above
     depends_on 'orfeo'
