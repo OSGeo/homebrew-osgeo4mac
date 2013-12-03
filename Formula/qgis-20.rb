@@ -73,7 +73,7 @@ class Qgis20 < Formula
     depends_on 'orfeo'
     depends_on 'openblas'
     depends_on 'r' => 'with-openblas'
-    depends_on 'saga-gis' => 'disable-gui'
+    depends_on 'saga-gis'
     # TODO: LASTools straight build (2 reporting tools), or via `wine` (10 tools)
     # TODO: Fusion from USFS (via `wine`?)
   end
