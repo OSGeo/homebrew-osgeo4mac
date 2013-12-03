@@ -93,10 +93,18 @@ class Qgis20 < Formula
       -DQGIS_MACAPP_BUNDLE=0
       -DQGIS_MACAPP_DEV_PREFIX='#{prefix}/Frameworks'
       -DQGIS_MACAPP_INSTALL_DEV=TRUE
-      -DPYTHON_CUSTOM_FRAMEWORK='#{python.framework}'
       -DWITH_QSCIAPI=FALSE
       -DWITH_STAGED_PLUGINS=FALSE
     ]
+
+    unless python.from_osx?
+      if python.framework?
+        args << "-DPYTHON_CUSTOM_FRAMEWORK='#{python.framework}/Python.framework'"
+      else
+        args << "-DPYTHON_INCLUDE_DIR='#{python.incdir}'"
+        args << "-DPYTHON_LIBRARY='#{python.libdir}/lib#{python.xy}.dylib'"
+      end
+    end
 
     if build.with? 'debug' or build.head?
       ENV.enable_warnings
