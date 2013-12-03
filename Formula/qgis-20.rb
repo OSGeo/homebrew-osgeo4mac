@@ -81,7 +81,8 @@ class Qgis20 < Formula
 
   # fixes for stable to work with sip 4.15, remove on release > 2.0.1
   # see: https://github.com/qgis/QGIS/commit/d27ad33c
-  # see: https://github.com/qgis/QGIS/commit/641359d3
+  #      https://github.com/qgis/QGIS/commit/641359d3
+  #      https://github.com/qgis/QGIS/commit/6f9795b0
   def patches
     unless build.head?
       # TODO: set to specific hash when done updating
