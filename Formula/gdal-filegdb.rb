@@ -50,16 +50,16 @@ class GdalFilegdb < Formula
 
     # update third-party libs
     cd fgdb/'lib' do
-      system "install_name_tool", "-id",
+      system 'install_name_tool', '-id',
                                   "#{fgdb_opt}/lib/libFileGDBAPI.dylib",
-                                  "libFileGDBAPI.dylib"
-      system "install_name_tool", "-id",
+                                  'libFileGDBAPI.dylib'
+      system 'install_name_tool', '-id',
                                   "#{fgdb_opt}/lib/libfgdbunixrtl.dylib",
-                                  "libfgdbunixrtl.dylib"
-      system "install_name_tool", "-change",
-                                  "@rpath/libfgdbunixrtl.dylib",
+                                  'libfgdbunixrtl.dylib'
+      system 'install_name_tool', '-change',
+                                  '@rpath/libfgdbunixrtl.dylib',
                                   "#{fgdb_opt}/lib/libfgdbunixrtl.dylib",
-                                  "libFileGDBAPI.dylib"
+                                  'libFileGDBAPI.dylib'
     end
 
     gdal = Formula.factory('gdal')
@@ -70,7 +70,7 @@ class GdalFilegdb < Formula
                -Iogr/ogrsf_frmts/filegdb -I#{fgdb}/include]
 
     # source files
-    Dir["ogr/ogrsf_frmts/filegdb/*.c*"].each do |src|
+    Dir['ogr/ogrsf_frmts/filegdb/*.c*'].each do |src|
       args.concat %W[#{src}]
     end
 

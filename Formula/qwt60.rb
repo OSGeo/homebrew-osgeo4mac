@@ -14,20 +14,20 @@ class Qwt60 < Formula
       # change_make_var won't work because there are leading spaces
       s.gsub! /^\s*QWT_INSTALL_PREFIX\s*=(.*)$/, "QWT_INSTALL_PREFIX=#{prefix}"
       # ensure frameworks aren't built, or qwtmathml linking fails to find -lqwt
-      s << "\n" << "QWT_CONFIG -= QwtFramework"
+      s << "\n" << 'QWT_CONFIG -= QwtFramework'
     end
 
     # see https://github.com/mxcl/homebrew/commit/e4df2f545a037c250f723981d65d59b08a37af44
-    args = ['-config', 'release', '-spec']
+    args = %w[-config release -spec]
     # On Mavericks we want to target libc++, this requires a unsupported/macx-clang-libc++ flag
     if ENV.compiler == :clang and MacOS.version >= :mavericks
-      args << "unsupported/macx-clang-libc++"
+      args << 'unsupported/macx-clang-libc++'
     else
-      args << "macx-g++"
+      args << 'macx-g++'
     end
     system 'qmake', *args
-    system "make"
-    system "make install"
+    system 'make'
+    system 'make install'
   end
 
   def caveats; <<-EOS.undent
