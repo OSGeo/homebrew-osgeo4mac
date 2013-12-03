@@ -17,7 +17,15 @@ class Qwt60 < Formula
       s << "\n" << "QWT_CONFIG -= QwtFramework"
     end
 
-    system "qmake -spec macx-g++ -config release"
+    # see https://github.com/mxcl/homebrew/commit/e4df2f545a037c250f723981d65d59b08a37af44
+    args = ['-config', 'release', '-spec']
+    # On Mavericks we want to target libc++, this requires a unsupported/macx-clang-libc++ flag
+    if ENV.compiler == :clang and MacOS.version >= :mavericks
+      args << "unsupported/macx-clang-libc++"
+    else
+      args << "macx-g++"
+    end
+    system 'qmake', *args
     system "make"
     system "make install"
   end
