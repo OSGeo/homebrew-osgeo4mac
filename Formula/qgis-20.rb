@@ -34,7 +34,7 @@ class Qgis20 < Formula
   # core qgis
   depends_on 'cmake' => :build
   depends_on 'bison' => :build
-  depends_on :python
+  depends_on :python # => %w[psycopg2 numpy]
   depends_on PyQtImportable
   if build.with? 'api-docs'
     depends_on 'graphviz' => 'with-freetype'
@@ -65,7 +65,6 @@ class Qgis20 < Formula
   depends_on 'gettext' if build.with? 'grass'
   depends_on 'gpsbabel' => [:recommended, 'with-libusb']
   depends_on 'osgearth' => 'with-v8' if build.with? 'globe'
-  depends_on :python => ['psycopg2', 'numpy']
   depends_on 'pyspatialite' # for DB Manager (broken via PyPi)
   depends_on 'qt-mysql' if build.with? 'qt-mysql'
   if build.with? 'processing-extras'
