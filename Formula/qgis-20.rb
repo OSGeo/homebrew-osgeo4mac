@@ -87,13 +87,13 @@ class Qgis20 < Formula
   #      https://github.com/qgis/QGIS/commit/6f9795b0
   def patches
     unless build.head?
-      # TODO: set to specific hash when done updating
-      'https://gist.github.com/dakcarto/7764118/raw'
+      'https://gist.github.com/dakcarto/7764118/raw/6cdc678857ae773dceabe6226bfc40ead4f11837/qgis-20_sip-fixes'
     end
   end
 
   def install
     cxxstdlib_check :skip
+
     # Set bundling level back to 0 (the default in all versions prior to 1.8.0)
     # so that no time and energy is wasted copying the Qt frameworks into QGIS.
     args = %W[
@@ -119,7 +119,7 @@ class Qgis20 < Formula
       end
     end
 
-    if build.with? 'debug' or build.head?
+    if build.with? 'debug' || build.head?
       ENV.enable_warnings
       args << '-DCMAKE_BUILD_TYPE=RelWithDebInfo'
     else
@@ -162,33 +162,36 @@ class Qgis20 < Formula
     ENV.append 'CXXFLAGS', "-F#{Formula.factory('qt').opt_prefix}/lib"
 
     python do
-#       #tmpname = File.basename Dir.pwd
-#       src = Dir.pwd
-#       if build.include? 'persistent-build'
-#         cd '..' do
-#           mkdir 'qgis-build' unless File.exists?('qgis-build')
-#           ln_s '../qgis-build', src + '/build'
-#           cd 'qgis-build' do
-#             if File.exists?('CMakeCache.txt')
-#               # swap out any old cache dir path and new temp src directory path
-#               inreplace "CMakeCache.txt" do |s|
-#                 s.sub! /(CMAKE_CACHEFILE_DIR:INTERNAL=)(.+)$/, '\1' + Dir.pwd
-#                 oldsrc = /(CMAKE_HOME_DIRECTORY:INTERNAL=)(.+)$/.match(s)[2]
-#                 s.gsub! oldsrc, src
-#               end
-#             end
-#           end
-#         end
-#       else
-#         mkdir 'build'
-#       end
+      # TODO: update .app's bundle identifier for HEAD builds
+
+      # TODO: keep persistent build directory for HEAD builds
+      ##tmpname = File.basename Dir.pwd
+      #src = Dir.pwd
+      #if build.include? 'persistent-build'
+      # cd '..' do
+      #   mkdir 'qgis-build' unless File.exists?('qgis-build')
+      #   ln_s '../qgis-build', src + '/build'
+      #   cd 'qgis-build' do
+      #     if File.exists?('CMakeCache.txt')
+      #       # swap out any old cache dir path and new temp src directory path
+      #       inreplace "CMakeCache.txt" do |s|
+      #         s.sub! /(CMAKE_CACHEFILE_DIR:INTERNAL=)(.+)$/, '\1' + Dir.pwd
+      #         oldsrc = /(CMAKE_HOME_DIRECTORY:INTERNAL=)(.+)$/.match(s)[2]
+      #         s.gsub! oldsrc, src
+      #       end
+      #     end
+      #   end
+      # end
+      #else
+      # mkdir 'build'
+      #end
+
       mkdir 'build'
 
       cd 'build' do
         system 'cmake', '..', *args
         #system 'bbedit', 'CMakeCache.txt'
         #raise ''
-        #exit
         system 'make install'
       end
 
@@ -197,9 +200,13 @@ class Qgis20 < Formula
       py_lib.mkpath
       ln_s qgis_modules, py_lib/'qgis'
 
-      # TODO: write PYQGIS_STARTUP file pyqgis_startup.py
+      # TODO: define default env vars, relative to whether or not to isolate
 
-      # [REPLACE THIS with Info.plist setup, add other env vars: GDAL, OSG, etc.]
+      # TODO: write PYQGIS_STARTUP file pyqgis_startup.py, if isolating
+
+      # TODO: add Info.plist setup, add other env vars: GDAL, OSG, etc.
+
+      # TODO: rewrite this only for running QGIS.app/Contents/MacOS/QGIS directly
       # Create script to launch QGIS app
       (bin + 'qgis').write <<-EOS.undent
         #!/bin/sh
@@ -218,6 +225,7 @@ class Qgis20 < Formula
   end
 
   def caveats
+    # TODO: complete rewrite, not using .MacOSX/environment.plist hack
     s = <<-EOS.undent
       QGIS has been built as an application bundle. To make it easily available, a
       wrapper script has been written that launches the app with environment
