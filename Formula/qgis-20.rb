@@ -1,20 +1,5 @@
 require 'formula'
 
-class PyQtImportable < Requirement
-  fatal true
-  satisfy { quiet_system 'python', '-c', 'from PyQt4 import QtCore' }
-
-  def message
-    <<-EOS.undent
-      Python could not import the PyQt4 module. This will cause the QGIS build to fail.
-      The most common reason for this failure is that the PYTHONPATH needs to be adjusted.
-      The pyqt caveats explain this adjustment and may be reviewed using:
-
-          brew info pyqt
-    EOS
-  end
-end
-
 class Qgis20 < Formula
   homepage 'http://www.qgis.org'
   url 'https://github.com/qgis/QGIS/archive/final-2_0_1.tar.gz'
@@ -23,61 +8,66 @@ class Qgis20 < Formula
   head 'https://github.com/qgis/QGIS.git', :branch => 'master'
 
   option 'with-debug', 'Enable debug build (default for --HEAD installs)'
+  option 'without-brewed-python', 'Prefer system\'s Python over Hombebrew\'s'
   option 'without-server', 'Build without QGIS Server (qgis_mapserv.fcgi)'
-  option 'with-processing-extras', 'Build extra utilities used by Processing plugin'
-  option 'with-globe', 'Build the Globe plugin, based upon osgEarth'
-  option 'without-orfeo', 'Build without orfeo support in Processing'
   option 'without-postgresql', 'Build without current PostgreSQL client'
-  option 'with-qt-mysql', 'Build extra Qt MySQL plugin for QGIS\'s eVis plugin'
+  option 'with-globe', 'Build with Globe plugin, based upon osgEarth'
+  option 'with-grass', 'Build with GRASS integration plugin support'
+  option 'with-postgis', 'Build extra PostGIS geospatial database extender'
+  option 'with-orfeo', 'Build extra Orfeo Toolbox for Processing plugin'
+  option 'with-r', 'Build extra R for Processing plugin'
+  option 'with-saga-gis', 'Build extra Saga GIS for Processing plugin'
+  option 'with-qt-mysql', 'Build extra Qt MySQL plugin for eVis plugin'
   option 'with-api-docs', 'Build the API documentation with Doxygen and Graphviz'
 #   option 'persistent-build', 'Maintain the build directory in HOMEBREW_TEMP (--HEAD only)'
 
   # core qgis
   depends_on 'cmake' => :build
   depends_on 'bison' => :build
-  depends_on :python # => %w[psycopg2 numpy]
-  depends_on PyQtImportable
   if build.with? 'api-docs'
     depends_on 'graphviz' => 'with-freetype'
     depends_on 'doxygen' => 'with-dot' # with graphviz support
   end
-  depends_on 'pyqt'
-  depends_on 'qscintilla2'
+  # while QGIS can be built without Python support, it is ON by default here
+  if build.with? 'brewed-python' # prefer Homebrew python
+    depends_on 'sip'
+    depends_on 'pyqt'
+    depends_on 'qscintilla2' # will probably be a C++ lib deps in near future
+  end
+  # TODO: add 'pyspatialite' python dep for DB Manager (currently being updated by developer)
+  # '2.6' is unnecessary, but just makes this work, else 'python not found on PATH' error thrown
+  depends_on :python => ['2.6', 'sip', 'PyQt4', 'PyQt4.Qsci', 'psycopg2']
+  depends_on 'qwt60' # keg_only, max of 6.0.2 works with embedded QwtPolar in QGIS 2.0.1
+  # TODO: add external QwtPolar 1.1 formula for HEAD builds
   depends_on 'gsl'
-  depends_on 'qwt60' # max of 6.0.2 works with embedded QwtPolar in QGIS 2.0.1
-  depends_on 'sqlite' # use keg-only install
-  depends_on 'expat'
+  depends_on 'sqlite' # keg_only
+  depends_on 'expat' # keg_only
   depends_on 'proj'
   depends_on 'spatialindex'
   depends_on 'fcgi' unless build.without? 'server'
   depends_on 'postgresql' => :recommended # or might use Apple's much older client
 
   # core providers
-  #gdalopts = %w[enable-unsupported complete]
-  #gdalopts << 'with-postgresql' if build.with? 'postgresql' or build.with? 'postgis'
-  #depends_on 'gdal' => gdalopts unless Formula.factory('gdal').installed?
   depends_on 'gdal'
-  # add gdal shared plugins (todo, all third-party commercial plugins)
-  depends_on 'postgis' => (build.with? 'processing-extras') ? :recommended : :optional
-  # add oracle third-party support (oci, todo)
+  depends_on 'postgis' => :optional
+  # TODO: add oracle third-party support formula (oci)
 
   # core plugins (c++ and python)
-  depends_on 'grass' => (build.with? 'processing-extras') ? :recommended : :optional
-  depends_on 'gdal-grass' if build.with? 'grass' # TODO: check that this is required for QGIs plugin
+  depends_on 'grass' => :optional
+  depends_on 'gdal-grass' if build.with? 'grass'
   depends_on 'gettext' if build.with? 'grass'
   depends_on 'gpsbabel' => [:recommended, 'with-libusb']
-  depends_on 'osgearth' => 'with-v8' if build.with? 'globe'
-  #depends on 'pyspatialite' # for DB Manager (currently being updated: )
-  depends_on 'qt-mysql' => :optional
-  if build.with? 'processing-extras'
-    # depends on `postgis` and `grass`, see above
-    depends_on 'orfeo' unless build.without? 'orfeo'
-    depends_on 'openblas'
-    depends_on 'r' => 'with-openblas'
-    depends_on 'saga-gis'
-    # TODO: LASTools straight build (2 reporting tools), or via `wine` (10 tools)
-    # TODO: Fusion from USFS (via `wine`?)
-  end
+  depends_on 'open-scene-graph' if build.with? 'globe'
+  depends_on 'osgearth' if build.with? 'globe'
+  depends_on 'qt-mysql' => :optional # for eVis plugin (non-functional in 2.0.1?)
+
+  # processing plugin extras
+  # see `postgis` and `grass` above
+  depends_on 'orfeo' => :optional
+  depends_on 'r' => :optional
+  depends_on 'saga-gis' => :optional
+  # TODO: LASTools straight build (2 reporting tools), or via `wine` (10 tools)
+  # TODO: Fusion from USFS (via `wine`?)
 
   conflicts_with 'homebrew/science/qgis'
 
