@@ -1,5 +1,75 @@
 require 'formula'
 
+class BrewedPython < Requirement
+  fatal true
+
+  attr_reader :py_action
+
+  satisfy do
+    py = Formula.factory('python')
+    installed = py.installed?
+    linked = py.linked_keg.exist?
+    @py_action = (installed) ? 'link' : 'install'
+    installed && linked
+  end
+
+  def message
+    <<-EOS.undent
+        You need to #{@py_action} Hombebrew's Python, then install this formula:
+
+          brew #{@py_action} python
+
+        Or, choose the 'without-brewed-python' formula option.
+
+    EOS
+  end
+end
+
+class PythonUnlinked < Requirement
+  fatal true
+  satisfy { !Formula.factory('python').linked_keg.exist? }
+
+  def message
+    <<-EOS.undent
+        You need to unlik Hombebrew's Python, then install this formula:
+
+          brew unlink python
+
+    EOS
+  end
+end
+
+class PyQtImportable < Requirement
+  fatal true
+  satisfy { quiet_system 'python', '-c', 'from PyQt4 import QtCore' }
+
+  def message
+    <<-EOS.undent
+      Python could not import the PyQt4 module. This will cause the QGIS build to fail.
+      The most common reason for this failure is that the PYTHONPATH needs to be adjusted.
+      The `pyqt` caveats explain this adjustment and may be reviewed using:
+
+          brew info pyqt
+
+      Ensure `pyqt` formula is installed and linked.
+
+    EOS
+  end
+end
+
+class SipBinary < Requirement
+  fatal true
+  satisfy { which 'sip' }
+
+  def message
+    <<-EOS.undent
+      The `sip` binary is missing. It is needed to generate the Python bindings for QGIS.
+      Ensure `sip` formula is installed and linked.
+
+    EOS
+  end
+end
+
 class Qgis20 < Formula
   homepage 'http://www.qgis.org'
   url 'https://github.com/qgis/QGIS/archive/final-2_0_1.tar.gz'
@@ -7,8 +77,8 @@ class Qgis20 < Formula
 
   head 'https://github.com/qgis/QGIS.git', :branch => 'master'
 
-  option 'with-debug', 'Enable debug build (default for --HEAD installs)'
-  option 'without-brewed-python', 'Prefer system\'s Python over Hombebrew\'s'
+  option 'with-debug', 'Enable debug build/output (default for --HEAD installs)'
+  option 'without-brewed-python', "Prefer system Python (default is Homebrew's, if linked)"
   option 'without-server', 'Build without QGIS Server (qgis_mapserv.fcgi)'
   option 'without-postgresql', 'Build without current PostgreSQL client'
   option 'with-globe', 'Build with Globe plugin, based upon osgEarth'
@@ -25,32 +95,38 @@ class Qgis20 < Formula
   depends_on 'cmake' => :build
   depends_on 'bison' => :build
   if build.with? 'api-docs'
-    depends_on 'graphviz' => 'with-freetype'
-    depends_on 'doxygen' => 'with-dot' # with graphviz support
+    depends_on 'graphviz' => [:build, 'with-freetype']
+    depends_on 'doxygen' => [:build, 'with-dot'] # with graphviz support
   end
   # while QGIS can be built without Python support, it is ON by default here
-  if build.with? 'brewed-python' # prefer Homebrew python
-    depends_on 'sip'
-    depends_on 'pyqt'
-    depends_on 'qscintilla2' # will probably be a C++ lib deps in near future
+  if build.with? 'brewed-python'
+    depends_on BrewedPython
+  else
+    depends_on PythonUnlinked
   end
-  # TODO: add 'pyspatialite' python dep for DB Manager (currently being updated by developer)
-  # '2.6' is unnecessary, but just makes this work, else 'python not found on PATH' error thrown
-  depends_on :python => ['2.6', 'sip', 'PyQt4', 'PyQt4.Qsci', 'psycopg2']
+  depends_on :python
+  depends_on 'qt'
+  depends_on 'pyqt'
+  depends_on 'qscintilla2' # will probably be a C++ lib deps in near future
+  depends_on PyQtImportable
+  depends_on SipBinary
+
   depends_on 'qwt60' # keg_only, max of 6.0.2 works with embedded QwtPolar in QGIS 2.0.1
-  # TODO: add external QwtPolar 1.1 formula for HEAD builds
+  # TODO: add QwtPolar 1.1 formula for HEAD builds (then set external CMake options)
   depends_on 'gsl'
   depends_on 'sqlite' # keg_only
   depends_on 'expat' # keg_only
   depends_on 'proj'
   depends_on 'spatialindex'
   depends_on 'fcgi' unless build.without? 'server'
-  depends_on 'postgresql' => :recommended # or might use Apple's much older client
+  # use newer postgresql client than Apple's, also needed by `psycopg2`
+  depends_on 'postgresql' => :recommended
 
   # core providers
   depends_on 'gdal'
   depends_on 'postgis' => :optional
-  # TODO: add oracle third-party support formula (oci)
+  # TODO: add Oracle third-party support formula, :optional
+  # TODO: add MSSQL third-party support formula?, :optional
 
   # core plugins (c++ and python)
   depends_on 'grass' => :optional
@@ -82,6 +158,7 @@ class Qgis20 < Formula
   end
 
   def install
+    #raise
     cxxstdlib_check :skip
 
     # Set bundling level back to 0 (the default in all versions prior to 1.8.0)
@@ -110,7 +187,6 @@ class Qgis20 < Formula
     end
 
     if build.with? 'debug' || build.head?
-      ENV.enable_warnings
       args << '-DCMAKE_BUILD_TYPE=RelWithDebInfo'
     else
       args << '-DCMAKE_BUILD_TYPE=None'
@@ -181,7 +257,7 @@ class Qgis20 < Formula
       cd 'build' do
         system 'cmake', '..', *args
         #system 'bbedit', 'CMakeCache.txt'
-        #raise ''
+        #raise
         system 'make install'
       end
 
@@ -216,7 +292,33 @@ class Qgis20 < Formula
 
   def caveats
     # TODO: complete rewrite, not using .MacOSX/environment.plist hack
-    s = <<-EOS.undent
+    s = ''
+    # check for required run-time Python module dependencies
+    # TODO: add 'pyspatialite' dep for DB Manager (currently being updated by developer)
+    xm = []
+    %w[psycopg2].each { |m| xm << m unless python.importable? m }
+    unless xm.empty?
+      s += <<-EOS.undent
+        The following Python modules are needed by QGIS during run-time:
+
+            #{xm.join(', ')}
+
+        You can install manually, via installer package or with `pip` (if availble):
+
+            pip install <module>  OR  pip-2.7 install <module>
+
+      EOS
+    end
+    # TODO: remove this when libqscintilla.dylib becomes core build dependency?
+    unless python.importable? 'PyQt4.Qsci'
+      s += <<-EOS.undent
+        QScintilla Python module is needed by QGIS during run-time.
+        Ensure `qscintilla2` formula is linked.
+
+      EOS
+    end
+
+    s += <<-EOS.undent
       QGIS has been built as an application bundle. To make it easily available, a
       wrapper script has been written that launches the app with environment
       variables set so that Python modules will be functional:
