@@ -41,6 +41,7 @@ end
 
 class SipBinary < Requirement
   fatal true
+  #noinspection RubyResolve
   default_formula 'sip'
   satisfy { which 'sip' }
 
@@ -55,6 +56,7 @@ end
 
 class PyQtConfig < Requirement
   fatal true
+  #noinspection RubyResolve
   default_formula 'pyqt'
   # pyqtconfig is not created with PyQt4 >= 4.10.x when using configure-ng.
   # Homebrew's `pyqt` formula corrects this. Remains an issue until QGIS project
