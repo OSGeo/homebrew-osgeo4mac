@@ -2,7 +2,8 @@ require 'formula'
 
 class Pyspatialite < Formula
   homepage 'http://code.google.com/p/pyspatialite/'
-  url 'https://pypi.python.org/packages/source/p/pyspatialite/pyspatialite-3.0.1.tar.gz'
+  # temporary download of source, prior to pyspatialite move to github
+  url 'http://qgis.dakotacarto.com/osgeo4mac/pyspatialite-3.0.1.tar.gz'
   sha1 'bcb3fdbc902a1b2f4451f2dad84dbbfba157ed4e'
 
   head 'https://code.google.com/p/pyspatialite/', :using => :hg
