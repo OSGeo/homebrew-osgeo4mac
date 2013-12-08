@@ -326,15 +326,15 @@ class Qgis20 < Formula
 
     # add env vars to QGIS.app's Info.plist, in LSEnvironment section
     app = prefix/'QGIS.app'
-    domn = app/'Contents/Info'
     plst = app/'Contents/Info.plist'
     # first delete any LSEnvironment setting, ignoring errors
     # CAUTION!: may not be what you want, if .app already has LSEnvironment settings
-    system "defaults delete \"#{domn}\" LSEnvironment 2>/dev/null"
+    dflt = quiet_system "defaults read-type \"#{plst}\" LSEnvironment"
+    system "defaults delete \"#{plst}\" LSEnvironment" if dflt
     kv = '{ '
     envars.each { |key, value| kv += "'#{key.to_s}' = '#{value}'; " }
     kv += '}'
-    system "defaults write \"#{plst}\" \"LSEnvironment\" \"#{kv}\""
+    system "defaults write \"#{plst}\" LSEnvironment \"#{kv}\""
     # leave the plist readable; convert from binary to XML format
     system "plutil -convert xml1 -- \"#{plst}\""
     # update modification date on app bundle, or changes won't take effect
