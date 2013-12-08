@@ -1,6 +1,6 @@
 require 'formula'
 
-class Grass < Formula
+class GrassOff < Formula
   homepage 'http://grass.osgeo.org/'
   head 'https://svn.osgeo.org/grass/grass/trunk'
   url 'http://grass.osgeo.org/grass64/source/grass-6.4.3.tar.gz'
