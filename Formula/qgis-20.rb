@@ -141,6 +141,8 @@ class Qgis20 < Formula
   depends_on 'gpsbabel' => [:recommended, 'with-libusb']
   depends_on 'open-scene-graph' if build.with? 'globe'
   depends_on 'osgearth' if build.with? 'globe'
+  # TODO: remove 'pyspatialite' when PyPi package supports spatialite 4.x
+  depends on 'pyspatialite' # for DB Manager
   depends_on 'qt-mysql' => :optional # for eVis plugin (non-functional in 2.0.1?)
 
   # core processing plugin extras
@@ -386,7 +388,7 @@ class Qgis20 < Formula
     end
 
     # check for required run-time Python module dependencies
-    # TODO: add 'pyspatialite' dep for DB Manager (currently being updated by developer)
+    # TODO: add 'pyspatialite' when PyPi package supports spatialite 4.x
     xm = []
     %w[psycopg2].each { |m| xm << m unless python.importable? m }
     unless xm.empty?
