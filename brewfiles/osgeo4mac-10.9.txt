@@ -1,0 +1,258 @@
+##############################################################################
+#                                                                            #
+#  Homewbrew Brewfile for OSGeo4Mac setup from scratch for Mac OS X 10.9     #
+#                               -------------------                          #
+#         begin    : 2013-12-07                                              #
+#         copyright: (C) 2013 Larry Shaffer                                  #
+#         email    : larrys@dakotacarto.com                                  #
+#                                                                            #
+##############################################################################
+#                                                                            #
+#    This program is free software; you can redistribute it and/or modify    #
+#    it under the terms of the GNU General Public License as published by    #
+#    the Free Software Foundation; either version 2 of the License, or       #
+#    (at your option) any later version.                                     #
+#                                                                            #
+##############################################################################
+
+# optional
+#update
+
+# tap main hombrew repos
+# tap homebrew/versions
+# tap homebrew/science
+# 
+# # tap osgeo4mac repo
+# tap dakcarto/osgeo4mac
+
+# useful homebrew utils
+install git bash-completion
+
+# notes about concurrent Kyngchaos.com installs and avoiding /Library/Frameworks
+
+# build tools
+# 2.8.12.1
+install cmake
+# 1.14, 2.4.2
+install automake libtool
+# 0.28
+install pkg-config
+# 3.0.1
+install bison
+# 2.24
+install gpp
+
+# common large support libs
+# boost build time 14.6 minutes with make -j 4 under i5
+# 1.55.0 bottle had malformed headers in dylibs
+install boost
+# qt mysql plugin needed for eVis core QGIS plugin
+# 0.1.4 bottle, 5.6.14 bottle info
+install pidof mysql
+# qt build time built in 49.4 minutes with make -j 4 under i5
+# 4.8.5 bottle had malformed headers
+install qt
+# see also: qt-mysql
+
+# base python 2.7.x setup
+# 6.2.4
+install readline
+# 3.8.1
+install sqlite
+# 2.7.6
+install python
+# pyqt built in 7.7 minutes
+# if already installed in /Library/Python/2.7, temporarily rename to 2.7_off
+# 4.15.3, 4.10.3
+install sip pyqt
+# libqscintilla and python Qsci.so used by PyQGIS console
+# 2.7.1
+install qscintilla2
+
+# other base support libs
+# 2.38.2, xz gettext libffi 5.0.5, 0.18.3.1, 3.0.13
+install glib
+# 2.1.0
+install expat
+# 8.33
+install pcre
+# 1.16
+install gsl
+# 1.8.0
+install spatialindex
+# 2.3.1
+install unixodbc
+# dakcarto/osgeo4mac/qwt60, QGIS GPS plugin needs qwt < 6.1.x
+# 6.0.2
+install qwt60
+# gps tools
+# 1.4.4, 1.0.9
+install gpsbabel --with-libusb
+
+# text, fonts and documentation; does NOT contain latex support
+# 2.5.0.1, 2.11.0
+install freetype fontconfig
+# 2.6
+install txt2tags
+# 52.1
+install icu4c
+# 0.32.4
+install pixman
+# 1.12.16, 1.36.1
+install cairo pango
+# 2.34.0
+install graphviz --with-freetype --with-pangocairo
+# 1.8.5
+install doxygen --with-dot
+
+# qgis_mapserv.fcgi; QGIS Server
+# 2.4.0, 1.6.3, 1.1.0
+install fcgi spawn-fcgi fcgiwrap
+# lighttpd is easily configure-able for running unit tests
+# 1.4.33, info, port 8080
+install lighttpd
+
+# providers' support libs
+# 4.8.0
+install proj
+# 3.4.2
+install geos
+# 0.11
+install json-c
+# 2.9.1, info
+install libxml2
+# 1.0.0f
+install freexl
+# 1.1
+install minizip
+
+# common libs needing to be universal, mainly for grass, wxmac and spatialite-g*
+# 1.5.14
+install libpng --universal
+# 8d
+install jpeg --universal
+# 4.0.3
+install libtiff --universal
+
+# different than openjpeg20
+# 1.5.1
+install openjpeg
+# 1.4.0
+install libgeotiff
+
+# 2.1.1, from postgis
+install liblwgeom
+# 4.1.1
+install libspatialite
+
+# 9.3.1, info
+install postgresql
+
+# gdal support
+# HEAD
+install --HEAD libkml
+# dakcarto/osgeo4mac/openjpeg20; PR to homebrew-versions
+# 2.0.0
+install openjpeg20
+# 3.920.2
+install homebrew/science/armadillo
+# 0.24.3
+install poppler --with-glib --with-qt4
+# FAILED 0.9.2
+# install podofo
+
+# pip-2.7 install numpy
+# 1.10.1
+install gdal --enable-mdb --enable-unsupported --complete --with-postgresql --enable-armadillo --enable-mysql
+# --complete brings in:
+# szip (2.1), hdf5 (1.8.12), homebrew/science/netcdf (4.3.0),
+# jasper (1.900.1), webp (0.3.1), cfit (3.350),
+# popt (1.16), epsilon (0.9.2), libdap (3.11.7), xerces-c (3.1.1)
+
+# gdal shared plugins
+# install gdal-fgdb
+# ? brew install gdal-mdb
+# install gdal-oci
+# install gdal-mysql
+# install gdal-mrsid
+# ? brew install gdal-libkml
+# ? brew install gdal-ecw
+
+# 2.1.1 (FAILS to install if cross-volume from temp to install)
+install postgis
+# 4.3
+install cgal --imaging
+# 2.0.0
+install pgrouting
+# 1.0.0
+install virtualpg
+
+# needed by spatialite-g* and grass
+# 2.9.4.x allows for grass to have a wxgui
+# 2.9.5.0 universal, 24.0 minutes
+install wxmac
+
+# globe plugin
+install open-scene-graph --with-collada-dom --with-gdal --with-jasper --with-librsvg
+install v8
+install libnoise --with-docs
+# osgearth build in 9.6 minutes; --enable-app-bundles (doesn't work yet)
+# brew install osgearth --with-v8 --with-libnoise --with-docs-examples
+install osgearth --with-v8 --with-tinyxml --with-libnoise --with-docs-examples
+
+# grass70
+install grass --with-mysql --with-postgresql
+# FAILs with grass 7.x
+install gdal-grass
+
+# python modules (via /usr/local/bin/pip)
+#   PIL==1.1.7
+#   Sphinx==1.1.3
+#   geomag==0.9
+#   matplotlib==1.3.0
+#   numpy==1.7.1
+#   psycopg2==2.5.1  # required for Processing
+#   simplejson==3.3.0
+#   sphinx-bootstrap-theme==0.3.2
+# 
+#   # pyspatialite fix, see:
+#   # http://code.google.com/p/pyspatialite/issues/detail?id=15
+#   # https://github.com/dakcarto/pyspatialite/commits/master
+#   # https://gist.github.com/dakcarto/7510460
+#   pyspatialite==3.0.1
+
+# install pyspatialite
+
+### extra tools ####
+
+# 4.1.1
+install spatialite-tools
+# 1.1g
+install librasterlite
+# 0.5
+install --devel libgaiagraphics
+# 1.7.1
+install --devel spatialite-gui
+#brew install spatialite-gis (1.0.0c) # doesn't seem to work on >= Lion (not updated for libspatialite 4.x?)
+
+# 
+# # R
+# install openblas  # <-- long time, install gfortran, etc.
+# install r --with-openblas
+# 
+# # OTB
+# install orfeo
+# 
+# # Saga (dakcarto/osgeo4mac/), gui is wxmac carbon-based
+# install saga-gis --disable-gui
+# 
+# # LAStools
+# 
+# # Fusion
+# 
+# # QGIS
+# #/usr/local/Cellar/qgis-20/HEAD: 13347 files, 446M, built in 31.6 minutes (6 minutes under clang on i7 iMac)
+# install --dv --HEAD qgis-20 --with-grass --with-postgis --with-globe --with-orfeo --with-r --with-saga-gis --with-qt-mysql --with-api-docs # --persistent-build
+
+# minimum build
+install -dv qgis-20 --with-grass --with-globe
