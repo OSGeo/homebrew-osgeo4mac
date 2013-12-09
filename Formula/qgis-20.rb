@@ -142,7 +142,7 @@ class Qgis20 < Formula
   depends_on 'open-scene-graph' if build.with? 'globe'
   depends_on 'osgearth' if build.with? 'globe'
   # TODO: remove 'pyspatialite' when PyPi package supports spatialite 4.x
-  depends on 'pyspatialite' # for DB Manager
+  depends_on 'pyspatialite' # for DB Manager
   depends_on 'qt-mysql' => :optional # for eVis plugin (non-functional in 2.0.1?)
 
   # core processing plugin extras
