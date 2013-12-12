@@ -85,7 +85,7 @@ class Qgis20 < Formula
   head 'https://github.com/qgis/QGIS.git', :branch => 'master'
 
   option 'enable-isolation', "Isolate .app's environment to HOMEBRE_PREFIX, to coexist with other QGIS installs"
-  option 'with-debug', 'Enable debug build/output (default for --HEAD installs)'
+  option 'with-debug', 'Enable debug build, which outputs info to system.log or console'
   option 'without-brewed-python', "Prefer system Python (default is Homebrew's, if linked)"
   option 'without-server', 'Build without QGIS Server (qgis_mapserv.fcgi)'
   option 'without-postgresql', 'Build without current PostgreSQL client'
@@ -173,6 +173,7 @@ class Qgis20 < Formula
     # so that no time and energy is wasted copying the Qt frameworks into QGIS.
     args = %W[
       -DCMAKE_INSTALL_PREFIX=#{prefix}
+      -DCMAKE_BUILD_TYPE=#{(build.with?('debug')) ? 'RelWithDebInfo' : 'None' }
       -DCMAKE_FIND_FRAMEWORK=LAST
       -DCMAKE_VERBOSE_MAKEFILE=TRUE
       -Wno-dev
@@ -192,12 +193,6 @@ class Qgis20 < Formula
         args << "-DPYTHON_INCLUDE_DIR='#{python.incdir}'"
         args << "-DPYTHON_LIBRARY='#{python.libdir}/lib#{python.xy}.dylib'"
       end
-    end
-
-    if build.with?('debug') || build.head?
-      args << '-DCMAKE_BUILD_TYPE=RelWithDebInfo' unless build.without? 'debug'
-    else
-      args << '-DCMAKE_BUILD_TYPE=None'
     end
 
     # find git revision for HEAD build
