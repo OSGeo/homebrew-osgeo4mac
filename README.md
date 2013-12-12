@@ -28,6 +28,11 @@ You can also install via URL:
 brew install https://raw.github.com/dakcarto/homebrew-osgeo4mac/master/<formula>.rb
 ```
 
+How do I use the Brewfiles?
+--------------------------------
+
+See: [Using OSGeo4Mac Brewfiles][brewfiles] in the wiki.
+
 Docs
 ----
 `brew help`, `man brew`, or the Homebrew [wiki][].
@@ -35,3 +40,4 @@ Docs
 [homebrew]:http://brew.sh
 [taps]:https://github.com/Homebrew/homebrew-versions
 [wiki]:http://wiki.github.com/mxcl/homebrew
+[brewfiles]:https://github.com/dakcarto/homebrew-osgeo4mac/wiki/Using-OSGeo4Mac-Brewfiles
