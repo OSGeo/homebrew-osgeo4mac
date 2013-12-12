@@ -195,7 +195,7 @@ class Qgis20 < Formula
     end
 
     if build.with?('debug') || build.head?
-      args << '-DCMAKE_BUILD_TYPE=RelWithDebInfo'
+      args << '-DCMAKE_BUILD_TYPE=RelWithDebInfo' unless build.without? 'debug'
     else
       args << '-DCMAKE_BUILD_TYPE=None'
     end
