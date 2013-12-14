@@ -10,6 +10,8 @@ class Mapserver64 < Formula
     depends_on 'harfbuzz'
   end
 
+  conflicts_with 'mapserver', :because => 'mapserver is in main tap'
+
   option 'with-php', 'Build PHP MapScript module'
   option 'with-ruby', 'Build Ruby MapScript module'
   option 'with-perl', 'Build Perl MapScript module'
