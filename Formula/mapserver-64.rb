@@ -5,7 +5,10 @@ class Mapserver64 < Formula
   url 'http://download.osgeo.org/mapserver/mapserver-6.4.0.tar.gz'
   sha1 '8af4883610091de7ba374ced2564ed90ca2faa5b'
 
-  head 'https://github.com/mapserver/mapserver.git', :branch => 'master'
+  head do
+    url 'https://github.com/mapserver/mapserver.git', :branch => 'master'
+    depends_on 'harfbuzz'
+  end
 
   option 'with-php', 'Build PHP MapScript module'
   option 'with-ruby', 'Build Ruby MapScript module'
@@ -65,6 +68,8 @@ class Mapserver64 < Formula
       -DWITH_KML=ON
     ]
 
+    args << '-DWITH_HARFBUZZ=ON' if build.head?
+
     ft = Formula.factory('freetype')
     if ft.installed?
       args.concat %W[
@@ -119,7 +124,8 @@ class Mapserver64 < Formula
       if build.with? 'ruby'
         args << '-DWITH_RUBY=ON'
         (mapscr_dir/'ruby').mkpath
-        inreplace 'ruby/CMakeLists.txt', '${RUBY_ARCHDIR}', "\"#{mapscr_dir}/ruby\""
+        site_arch = (build.head?) ? '${RUBY_SITEARCHDIR}' : '${RUBY_ARCHDIR}'
+        inreplace 'ruby/CMakeLists.txt', site_arch, "\"#{mapscr_dir}/ruby\""
       end
 
       if build.with? 'php'
@@ -138,7 +144,8 @@ class Mapserver64 < Formula
         args << '-DWITH_JAVA=ON'
         ENV['JAVA_HOME'] = `/usr/libexec/java_home`.chomp!
         (mapscr_dir/'java').mkpath
-        inreplace 'java/CMakeLists.txt', 'DESTINATION lib', "DESTINATION \"#{mapscr_dir}/java\""
+        lib_dir = (build.head?) ? '${CMAKE_INSTALL_LIBDIR}' : 'lib'
+        inreplace 'java/CMakeLists.txt', "DESTINATION #{lib_dir}", "DESTINATION \"#{mapscr_dir}/java\""
       end
     end
 
