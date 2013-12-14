@@ -16,7 +16,7 @@ class Mapserver64 < Formula
   option 'with-librsvg', 'Build with SVG symbology support'
   option 'without-geos', 'Build without GEOS spatial operations support'
   option 'without-postgresql', 'Build without PostgreSQL data source support'
-  option 'without-ows-clients', 'Build without WMS and WFS Client support'
+  option 'without-ows-clients', 'Build without WMS and WFS client support'
   option 'with-docs', 'Download and generate HTML documentation'
 
   depends_on 'cmake' => :build
@@ -28,8 +28,8 @@ class Mapserver64 < Formula
   depends_on 'giflib'
   depends_on 'gd' => [:optional, 'with-freetype']
   depends_on 'proj'
-  depends_on 'gdal'
   depends_on 'geos' => :recommended
+  depends_on 'gdal'
   depends_on :postgresql => :recommended
   depends_on :mysql => :optional
   depends_on 'fcgi' => :recommended
@@ -43,6 +43,11 @@ class Mapserver64 < Formula
     # NOTE: seems to be no tagged releases for `docs`, just active branches
     url 'https://github.com/mapserver/docs.git', :branch => 'branch-6-4'
     version '6.4'
+  end
+
+  # fix ruby module's output suffix
+  def patches
+    DATA
   end
 
   def install
@@ -141,13 +146,12 @@ class Mapserver64 < Formula
       python do
         system 'cmake', '..', *args
         #system 'bbedit', 'CMakeCache.txt'
-        #system 'bbedit', '../mapscript/python/CMakeLists.txt'
         #raise
         system 'make install'
       end
     end
 
-    # fix @rpath in modules
+    # fix @rpath in modules, so non-standard HOMEBREW_PREFIX works
     # TODO: how to keep swig from doing this? (tried a bunch of CMake RPATH settings)
     def fix_rpath(mod_dir, shared_lib)
       cd mod_dir do
@@ -162,10 +166,9 @@ class Mapserver64 < Formula
         end
       end
     end
-
     fix_rpath(lib/python.xy/'site-packages', '_mapscript.so')
-    fix_rpath(mapscr_dir/'ruby', 'mapscript.so') if build.with? 'ruby'
     fix_rpath(mapscr_dir/'php', 'php_mapscript.so') if build.with? 'php'
+    fix_rpath(mapscr_dir/'ruby', 'mapscript.bundle') if build.with? 'ruby'
     fix_rpath(mapscr_dir/'perl/auto/mapscript', 'mapscript.bundle') if build.with? 'perl'
     fix_rpath(mapscr_dir/'java', 'libjavamapscript.jnilib') if build.with? 'java'
 
@@ -183,26 +186,40 @@ class Mapserver64 < Formula
   end
 
   def caveats
+    mapscr_dir = opt_prefix/'mapscript'
     s = <<-EOS.undent
-      The Mapserver CGI executable is #{opt_prefix}/mapserv
+      The Mapserver CGI executable is #{opt_prefix}/bin/mapserv
 
     EOS
     if build.with? 'php'
       s += <<-EOS.undent
         Using the built PHP module:
           * Add the following line to php.ini:
-            extension="#{opt_prefix}/mapscript/php/php_mapscript.so"
+            extension="#{mapscr_dir}/php/php_mapscript.so"
           * Execute "php -m"
           * You should see MapScript in the module list
 
       EOS
     end
-    %w[perl ruby java].each do |m|
+    %w[ruby perl java].each do |m|
       if build.with? m
+        cmd = []
+        case m
+          when 'ruby'
+            ruby_site = %x[ruby -r rbconfig -e 'puts RbConfig::CONFIG["sitearchdir"]'].chomp
+            cmd << "sudo cp -f mapscript.bundle #{ruby_site}/"
+          when 'perl'
+            perl_site = %x[perl -MConfig -e 'print $Config{"sitearch"};'].chomp
+            cmd << "sudo cp -f mapscript.pm #{perl_site}/"
+            cmd << "sudo cp -fR auto/mapscript #{perl_site}/auto/"
+          when 'java'
+            cmd << 'sudo cp -f libjavamapscript.jnilib /Library/Java/Extensions/'
+        end
         s += <<-EOS.undent
-          The built, but uninstalled, #{m.upcase} module is located in:
-            #{opt_prefix}/mapscript/#{m}/
-
+          Install the built #{m.upcase} module with:
+            cd #{mapscr_dir}/#{m}
+            #{cmd[0]}
+            #{cmd[1] + "\n" if cmd[1]}
         EOS
       end
     end
@@ -211,5 +228,24 @@ class Mapserver64 < Formula
 
   def test
     system "#{bin}/mapserv", '-v'
+    system 'python', '-c', '"import mapscript"'
+    system 'ruby', '-e', "\"require '#{opt_prefix}/mapscript/ruby/mapscript'\"" if build.with? 'ruby'
+    system 'perl', "-I#{opt_prefix}/mapscript/perl", '-e', '"use mapscript;"' if build.with? 'perl'
   end
 end
+
+__END__
+diff --git a/mapscript/ruby/CMakeLists.txt b/mapscript/ruby/CMakeLists.txt
+index 95f5982..2dc084a 100644
+--- a/mapscript/ruby/CMakeLists.txt
++++ b/mapscript/ruby/CMakeLists.txt
+@@ -11,6 +11,9 @@ SWIG_LINK_LIBRARIES(rubymapscript ${RUBY_LIBRARY} ${MAPSERVER_LIBMAPSERVER})
+
+ set_target_properties(${SWIG_MODULE_rubymapscript_REAL_NAME} PROPERTIES PREFIX "")
+ set_target_properties(${SWIG_MODULE_rubymapscript_REAL_NAME} PROPERTIES OUTPUT_NAME mapscript)
++if(APPLE)
++  set_target_properties(${SWIG_MODULE_rubymapscript_REAL_NAME} PROPERTIES SUFFIX ".bundle")
++endif(APPLE)
+
+ get_target_property(LOC_MAPSCRIPT_LIB ${SWIG_MODULE_rubymapscript_REAL_NAME} LOCATION)
+ execute_process(COMMAND ${RUBY_EXECUTABLE} -r rbconfig -e "puts RbConfig::CONFIG['archdir']" OUTPUT_VARIABLE RUBY_ARCHDIR OUTPUT_STRIP_TRAILING_WHITESPACE)
