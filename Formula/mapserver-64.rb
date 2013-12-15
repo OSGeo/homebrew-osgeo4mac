@@ -52,6 +52,7 @@ class Mapserver64 < Formula
   end
 
   # fix ruby module's output suffix
+  # see: https://github.com/mapserver/mapserver/pull/4826
   def patches
     DATA
   end
