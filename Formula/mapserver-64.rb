@@ -8,6 +8,7 @@ class Mapserver64 < Formula
   head do
     url 'https://github.com/mapserver/mapserver.git', :branch => 'master'
     depends_on 'harfbuzz'
+    depends_on 'v8' => :optional
   end
 
   conflicts_with 'mapserver', :because => 'mapserver is in main tap'
@@ -17,7 +18,7 @@ class Mapserver64 < Formula
   option 'with-perl', 'Build Perl MapScript module'
   option 'with-java', 'Build Java MapScript module'
   option 'with-sos', 'Build with SOS server support'
-  option 'with-gd', 'Build with (old) GD support'
+  option 'with-gd', 'Build with GD support (deprecated)' unless build.head?
   option 'with-librsvg', 'Build with SVG symbology support'
   option 'without-geos', 'Build without GEOS spatial operations support'
   option 'without-postgresql', 'Build without PostgreSQL data source support'
@@ -31,7 +32,7 @@ class Mapserver64 < Formula
   depends_on :python => :recommended
   depends_on 'swig' => :build
   depends_on 'giflib'
-  depends_on 'gd' => [:optional, 'with-freetype']
+  depends_on 'gd' => [:optional, 'with-freetype'] unless build.head?
   depends_on 'proj'
   depends_on 'geos' => :recommended
   depends_on 'gdal'
@@ -70,8 +71,6 @@ class Mapserver64 < Formula
       -DWITH_KML=ON
     ]
 
-    args << '-DWITH_HARFBUZZ=ON' if build.head?
-
     ft = Formula.factory('freetype')
     if ft.installed?
       args.concat %W[
@@ -105,7 +104,6 @@ class Mapserver64 < Formula
       args << '-DWITH_MYSQL=ON'
       my = Formula.factory('mysql')
       if my.installed?
-        # TODO: check if this should be statically linked, i.e. mysqlclient_r.a
         args.concat %W[
           -DMYSQL_INCLUDE_DIR=#{my.opt_prefix}/include
           -DMYSQL_LIBRARY=#{my.opt_prefix}/lib/libmysqlclient.dylib
@@ -113,7 +111,7 @@ class Mapserver64 < Formula
       end
     end
 
-    args << '-DWITH_GD=ON' if build.with? 'gd'
+    args << '-DWITH_GD=ON' if build.with? 'gd' && !build.head?
     args << '-DWITH_RSVG=ON' if build.with? 'librsvg'
 
     mapscr_dir = prefix/'mapscript'
