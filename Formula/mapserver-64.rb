@@ -14,22 +14,19 @@ class Mapserver64 < Formula
   conflicts_with 'mapserver', :because => 'mapserver is in main tap'
 
   option 'with-php', 'Build PHP MapScript module'
-  option 'with-ruby', 'Build Ruby MapScript module'
-  option 'with-perl', 'Build Perl MapScript module'
   option 'with-java', 'Build Java MapScript module'
-  option 'with-sos', 'Build with SOS server support'
+  option 'without-rpath', "Don't embed rpath to installed libmapserver in modules"
   option 'with-gd', 'Build with GD support (deprecated)' unless build.head?
   option 'with-librsvg', 'Build with SVG symbology support'
   option 'without-geos', 'Build without GEOS spatial operations support'
   option 'without-postgresql', 'Build without PostgreSQL data source support'
-  option 'without-ows-clients', 'Build without WMS and WFS client support'
   option 'with-docs', 'Download and generate HTML documentation'
 
   depends_on 'cmake' => :build
   depends_on :freetype
   depends_on :fontconfig
   depends_on :libpng
-  depends_on :python => :recommended
+  depends_on :python
   depends_on 'swig' => :build
   depends_on 'giflib'
   depends_on 'gd' => [:optional, 'with-freetype'] unless build.head?
@@ -53,12 +50,30 @@ class Mapserver64 < Formula
 
   # fix ruby module's output suffix
   # see: https://github.com/mapserver/mapserver/pull/4826
+  # TODO: submit pull requests for FindFreetype.cmake and FindMySQL.cmake
   def patches
     DATA
   end
 
+  def png_prefix
+    png = Formula.factory('libpng')
+    (png.installed? or MacOS.version >= :mountain_lion) ? png.opt_prefix : MacOS::X11.prefix
+  end
+
+  def freetype_prefix
+    ft = Formula.factory('freetype')
+    (ft.installed? or MacOS.version >= :mountain_lion) ? ft.opt_prefix : MacOS::X11.prefix
+  end
+
+  def fontconfig_prefix
+    fc = Formula.factory('fontconfig')
+    (fc.installed? or MacOS.version >= :mountain_lion) ? fc.opt_prefix : MacOS::X11.prefix
+  end
+
   def install
-    cxxstdlib_check :skip
+    ENV.prepend_path 'CMAKE_PREFIX_PATH', freetype_prefix
+    ENV.prepend_path 'CMAKE_PREFIX_PATH', fontconfig_prefix
+    ENV.prepend_path 'CMAKE_PREFIX_PATH', png_prefix
 
     args = std_cmake_args
     if MacOS.prefer_64_bit?
@@ -67,138 +82,89 @@ class Mapserver64 < Formula
       args << '-DCMAKE_OSX_ARCHITECTURES=i386'
     end
 
-    # defaults different than CMakeLists.txt
+    # defaults different than CMakeLists.txt (they don't incur extra dependencies)
     args.concat %W[
       -DWITH_KML=ON
+      -DWITH_CURL=ON
+      -DWITH_CLIENT_WMS=ON
+      -DWITH_CLIENT_WFS=ON
+      -DWITH_SOS=ON
     ]
 
-    ft = Formula.factory('freetype')
-    if ft.installed?
-      args.concat %W[
-        -DFREETYPE_INCLUDE_DIR_ft2build=#{ft.opt_prefix}/include/freetype
-        -DFREETYPE_INCLUDE_DIR_freetype2=#{ft.opt_prefix}/include/freetype
-        -DFREETYPE_LIBRARY=#{ft.opt_prefix}/lib/libfreetype.dylib
-      ]
-    end
-
-    fc = Formula.factory('fontconfig')
-    args << "-DFC_INCLUDE_DIR=#{fc.opt_prefix}/include" if fc.installed?
-
-    args << '-DWITH_SOS=ON' if build.with? 'sos'
-    unless build.without? 'ows-clients'
-      args.concat %w[
-        -DWITH_CURL=ON
-        -DWITH_CLIENT_WMS=ON
-        -DWITH_CLIENT_WFS=ON
-      ]
-    end
-
-    pg = Formula.factory('postgresql')
-    if build.with? 'postgresql' && pg.installed?
-      args.concat %W[
-        -DPOSTGRESQL_INCLUDE_DIR=#{pg.opt_prefix}/include
-        -DPOSTGRESQL_LIBRARY=#{pg.opt_prefix}/lib/libpq.dylib
-      ]
-    end
-
-    if build.with? 'mysql'
-      args << '-DWITH_MYSQL=ON'
-      my = Formula.factory('mysql')
-      if my.installed?
-        args.concat %W[
-          -DMYSQL_INCLUDE_DIR=#{my.opt_prefix}/include
-          -DMYSQL_LIBRARY=#{my.opt_prefix}/lib/libmysqlclient.dylib
-        ]
-      end
-    end
-
+    args << '-DWITH_MYSQL=ON' if build.with? 'mysql'
     args << '-DWITH_GD=ON' if build.with? 'gd' && !build.head?
     args << '-DWITH_RSVG=ON' if build.with? 'librsvg'
 
     mapscr_dir = prefix/'mapscript'
     mapscr_dir.mkpath
+    rpath = %Q{-Wl,-rpath,"#{opt_prefix/'lib'}"}
+    use_rpath = build.with? 'rpath' && HOMEBREW_PREFIX != '/usr/local'
     cd 'mapscript' do
       args << '-DWITH_PYTHON=ON'
-      inreplace 'python/CMakeLists.txt', '${PYTHON_SITE_PACKAGES}', "\"#{lib/python.xy/'site-packages'}\""
+      inreplace 'python/CMakeLists.txt' do |s|
+        s.gsub! '${PYTHON_SITE_PACKAGES}', %Q{"#{lib/python.xy/'site-packages'}"}
+        s.sub! '${MAPSERVER_LIBMAPSERVER}',
+               "#{rpath} ${MAPSERVER_LIBMAPSERVER}" if use_rpath
+      end
 
       # override language extension install locations, e.g. install to prefix/'mapscript/lang'
-      if build.with? 'ruby'
-        args << '-DWITH_RUBY=ON'
-        (mapscr_dir/'ruby').mkpath
-        site_arch = (build.head?) ? '${RUBY_SITEARCHDIR}' : '${RUBY_ARCHDIR}'
-        inreplace 'ruby/CMakeLists.txt', site_arch, "\"#{mapscr_dir}/ruby\""
+      args << '-DWITH_RUBY=ON'
+      (mapscr_dir/'ruby').mkpath
+      # TODO: remove this conditional on next release
+      site_arch = (build.head?) ? '${RUBY_SITEARCHDIR}' : '${RUBY_ARCHDIR}'
+      inreplace 'ruby/CMakeLists.txt' do |s|
+        s.gsub! site_arch, %Q{"#{mapscr_dir}/ruby"}
+        s.sub! '${MAPSERVER_LIBMAPSERVER}',
+               "#{rpath} ${MAPSERVER_LIBMAPSERVER}" if use_rpath
       end
 
       if build.with? 'php'
         args << '-DWITH_PHP=ON'
         (mapscr_dir/'php').mkpath
-        inreplace 'php/CMakeLists.txt', '${PHP5_EXTENSION_DIR}', "\"#{mapscr_dir}/php\""
+        inreplace 'php/CMakeLists.txt' do |s|
+          s.gsub! '${PHP5_EXTENSION_DIR}', %Q{"#{mapscr_dir}/php"}
+          s.sub! '${MAPSERVER_LIBMAPSERVER}',
+                 "#{rpath} ${MAPSERVER_LIBMAPSERVER}" if use_rpath
+        end
       end
 
-      if build.with? 'perl'
-        args << '-DWITH_PERL=ON'
-        (mapscr_dir/'perl').mkpath
-        args << "-DCUSTOM_PERL_SITE_ARCH_DIR=#{mapscr_dir}/perl"
-      end
+      args << '-DWITH_PERL=ON'
+      (mapscr_dir/'perl').mkpath
+      args << "-DCUSTOM_PERL_SITE_ARCH_DIR=#{mapscr_dir}/perl"
+      inreplace 'perl/CMakeLists.txt', '${MAPSERVER_LIBMAPSERVER}',
+                "#{rpath} ${MAPSERVER_LIBMAPSERVER}" if use_rpath
 
       if build.with? 'java'
         args << '-DWITH_JAVA=ON'
+        # TODO: this is NOT adequate to set up Java paths
         ENV['JAVA_HOME'] = `/usr/libexec/java_home`.chomp!
         (mapscr_dir/'java').mkpath
+        # TODO: remove this conditional on next release
         lib_dir = (build.head?) ? '${CMAKE_INSTALL_LIBDIR}' : 'lib'
-        inreplace 'java/CMakeLists.txt', "DESTINATION #{lib_dir}", "DESTINATION \"#{mapscr_dir}/java\""
+        inreplace 'java/CMakeLists.txt' do |s|
+          s.gsub! "DESTINATION #{lib_dir}", %Q{DESTINATION "#{mapscr_dir}/java"}
+          s.sub! '${MAPSERVER_LIBMAPSERVER}',
+                 "#{rpath} ${MAPSERVER_LIBMAPSERVER}" if use_rpath
+        end
       end
     end
 
     mkdir 'build' do
-      python do
+      #python do
         system 'cmake', '..', *args
-        #system 'bbedit', 'CMakeCache.txt'
-        #raise
+        system 'bbedit', 'CMakeCache.txt'
+        raise
         system 'make install'
-      end
+      #end
     end
-
-    # fix @rpath in modules, so non-standard HOMEBREW_PREFIX works
-    # TODO: how to keep swig from doing this? (tried a bunch of CMake RPATH settings)
-    def fix_rpath(mod_dir, shared_lib)
-      cd mod_dir do
-        sys_args = %W[
-          -change
-          @rpath/libmapserver.1.dylib
-          #{opt_prefix}/lib/libmapserver.1.dylib
-          #{shared_lib}
-        ]
-        Homebrew.system('install_name_tool', *sys_args) do
-          $stdout.reopen('/dev/null')
-        end
-      end
-    end
-    fix_rpath(lib/python.xy/'site-packages', '_mapscript.so')
-    fix_rpath(mapscr_dir/'php', 'php_mapscript.so') if build.with? 'php'
-    fix_rpath(mapscr_dir/'ruby', 'mapscript.bundle') if build.with? 'ruby'
-    fix_rpath(mapscr_dir/'perl/auto/mapscript', 'mapscript.bundle') if build.with? 'perl'
-    fix_rpath(mapscr_dir/'java', 'libjavamapscript.jnilib') if build.with? 'java'
 
     # install devel headers
     # TODO: not quite sure which of these headers are unnecessary to copy
     (include/'mapserver').install Dir['*.h']
 
-    if build.with? 'docs'
-      resource('docs').stage do
-        inreplace 'Makefile', 'sphinx-build', "#{HOMEBREW_PREFIX}/bin/sphinx-build"
-        system 'make', 'html'
-        doc.install 'build/html' => 'html'
-      end
-    end
-  end
-
-  def caveats
+    # write install instructions for modules
+    s = ''
     mapscr_dir = opt_prefix/'mapscript'
-    s = <<-EOS.undent
-      The Mapserver CGI executable is #{opt_prefix}/bin/mapserv
-
-    EOS
     if build.with? 'php'
       s += <<-EOS.undent
         Using the built PHP module:
@@ -231,7 +197,24 @@ class Mapserver64 < Formula
         EOS
       end
     end
-    s
+    (prefix/'Install_Modules.txt').write s unless s.empty?
+
+    if build.with? 'docs'
+      resource('docs').stage do
+        inreplace 'Makefile', 'sphinx-build', "#{HOMEBREW_PREFIX}/bin/sphinx-build"
+        system 'make', 'html'
+        doc.install 'build/html' => 'html'
+      end
+    end
+  end
+
+  def caveats; <<-EOS.undent
+      The Mapserver CGI executable is #{opt_prefix}/bin/mapserv
+
+      Notes on installing any built mapscript modules are listed in:
+        #{opt_prefix}/Install_Modules.txt
+
+    EOS
   end
 
   def test
@@ -257,3 +240,50 @@ index 95f5982..2dc084a 100644
 
  get_target_property(LOC_MAPSCRIPT_LIB ${SWIG_MODULE_rubymapscript_REAL_NAME} LOCATION)
  execute_process(COMMAND ${RUBY_EXECUTABLE} -r rbconfig -e "puts RbConfig::CONFIG['archdir']" OUTPUT_VARIABLE RUBY_ARCHDIR OUTPUT_STRIP_TRAILING_WHITESPACE)
+diff --git a/cmake/FindFreetype.cmake b/cmake/FindFreetype.cmake
+index edb142d..73dd42f 100644
+--- a/cmake/FindFreetype.cmake
++++ b/cmake/FindFreetype.cmake
+@@ -44,7 +44,7 @@
+ FIND_PATH(FREETYPE_INCLUDE_DIR_ft2build ft2build.h 
+   HINTS
+   $ENV{FREETYPE_DIR}
+-  PATH_SUFFIXES include
++  PATH_SUFFIXES include include/freetype2
+   PATHS
+   /usr/local/X11R6/include
+   /usr/local/X11/include
+@@ -54,7 +54,7 @@ FIND_PATH(FREETYPE_INCLUDE_DIR_ft2build ft2build.h
+   /usr/freeware/include
+ )
+
+-FIND_PATH(FREETYPE_INCLUDE_DIR_freetype2 freetype/config/ftheader.h 
++FIND_PATH(FREETYPE_INCLUDE_DIR_freetype2 config/ftheader.h
+   HINTS
+   $ENV{FREETYPE_DIR}/include/freetype2
+   PATHS
+@@ -64,7 +64,7 @@ FIND_PATH(FREETYPE_INCLUDE_DIR_freetype2 freetype/config/ftheader.h
+   /sw/include
+   /opt/local/include
+   /usr/freeware/include
+-  PATH_SUFFIXES freetype2
++  PATH_SUFFIXES freetype freetype2
+ )
+
+ set(FREETYPE_NAMES ${FREETYPE_NAMES} freetype libfreetype freetype219 freetype239 freetype241MT_D freetype2411)
+diff --git a/cmake/FindMySQL.cmake b/cmake/FindMySQL.cmake
+index 1b5de7e..3bbf824 100644
+--- a/cmake/FindMySQL.cmake
++++ b/cmake/FindMySQL.cmake
+@@ -13,9 +13,10 @@ ENDIF (MYSQL_INCLUDE_DIR)
+ FIND_PATH(MYSQL_INCLUDE_DIR mysql.h
+   /usr/local/include/mysql
+   /usr/include/mysql
++  PATH_SUFFIXES mysql
+ )
+
+-SET(MYSQL_NAMES mysqlclient mysqlclient_r)
++SET(MYSQL_NAMES mysqlclient mysqlclient_r libmysqlclient)
+ FIND_LIBRARY(MYSQL_LIBRARY
+   NAMES ${MYSQL_NAMES}
+   PATHS /usr/lib /usr/local/lib
