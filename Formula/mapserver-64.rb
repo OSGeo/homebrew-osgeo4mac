@@ -48,9 +48,9 @@ class Mapserver64 < Formula
     version '6.4'
   end
 
-  # fix ruby module's output suffix
+  # fix ruby module's output suffix and cmake modules
   # see: https://github.com/mapserver/mapserver/pull/4826
-  # TODO: submit pull requests for FindFreetype.cmake and FindMySQL.cmake
+  #      https://github.com/mapserver/mapserver/pull/4833
   def patches
     DATA
   end
