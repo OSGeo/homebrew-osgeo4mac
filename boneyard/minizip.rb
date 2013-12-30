@@ -16,8 +16,9 @@ class Minizip < Formula
 
   def patches
     # configure script fails to detect the right compiler when "cc" is
-    # clang, not gcc. zlib mantainers have been notified of the issue.
-    # See: https://github.com/Homebrew/homebrew-dupes/pull/228
+    # clang, not gcc.
+    # see: https://github.com/Homebrew/homebrew-dupes/pull/228
+    #      https://github.com/madler/zlib/pull/54
     DATA
   end
 
@@ -27,7 +28,7 @@ class Minizip < Formula
     system 'make'
 
     cd 'contrib/minizip' do
-      # Edits to statically link to libz.a
+      # edits to statically link to libz.a
       inreplace 'Makefile.am' do |s|
         s.sub! '-L$(zlib_top_builddir)', '$(zlib_top_builddir)/libz.a'
         s.sub! '-version-info 1:0:0 -lz', '-version-info 1:0:0'
@@ -44,13 +45,6 @@ class Minizip < Formula
     <<-EOS.undent
       Minizip headers installed in 'minizip' subdirectory, since they conflict
       with the venerable 'unzip' library.
-
-      If you build your own software and it requires these components,
-      you may need to add to your build variables:
-
-      CPPFLAGS:  -I#{HOMEBREW_PREFIX}/include/minizip
-      LDFLAGS:   -L#{HOMEBREW_PREFIX}/lib
-
     EOS
   end
 end
