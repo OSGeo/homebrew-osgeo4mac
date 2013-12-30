@@ -33,17 +33,17 @@
 #   pyspatialite==3.0.1  # see formula below
 
 # useful homebrew utils
-# 1.8.5.1, 1.3
+# 1.8.5.2, 1.3
 install git bash-completion
 
 # build tools
 # 2.8.12.1 bottle
 install cmake
-# 1.14, 2.4.2 bottles
+# 1.14.1, 2.4.2 bottles
 install automake libtool
 # 0.28
 install pkg-config
-# 3.0.1 keg-only
+# 3.0.2 keg-only
 install bison
 # 2.24
 install gpp
@@ -61,7 +61,7 @@ install dakcarto/osgeo4mac/qt-mysql
 # base python 2.7.x setup
 # 6.2.4 keg-only
 install readline
-# 3.8.1 bottle keg-only
+# 3.8.2 bottle keg-only
 install sqlite
 # 2.7.6, this should be optional and installed upfront, with modules 
 # install python
@@ -71,6 +71,8 @@ install sip pyqt
 # libqscintilla and python Qsci.so used by PyQGIS console
 # 2.7.1
 install qscintilla2
+# 2.0.11
+install swig
 
 # other base support libs
 # 0.18.3.1 bottle keg-only
@@ -102,7 +104,7 @@ install jpeg --universal
 install libtiff --universal
 
 # text, fonts and documentation; does NOT contain latex support
-# 2.5.0.1 bottle, 2.11.0 bottle
+# 2.5.2 bottle, 2.11.0 bottle
 install freetype fontconfig
 # 2.6
 install txt2tags
@@ -114,15 +116,21 @@ install pixman
 install cairo pango
 # 2.34.0
 install graphviz --with-freetype --with-pangocairo
-# 1.8.5
+# 1.8.6
 install doxygen --with-dot
 
-# qgis_mapserv.fcgi; QGIS Server
+# 2.1.0
+install gd --with-freetype --with-libtiff
+
+# mapserver, qgis_mapserv.fcgi; QGIS Server
 # 2.4.0, 1.6.3, 1.1.0
 install fcgi spawn-fcgi fcgiwrap
 # lighttpd is easily configure-able for running unit tests
 # 1.4.33, port 8080
 install lighttpd
+
+# 6.2.1
+install mapserver --with-fastcgi --with-cairo --with-postgresql --with-geos --with-php
 
 # providers' support libs
 # 4.8.0
@@ -135,8 +143,8 @@ install json-c
 install libxml2
 # 1.0.0f
 install freexl
-# 1.1
-install dakcarto/osgeo4mac/minizip
+# 1.1 (in zlib 1.2.8 contrib)
+install minizip
 
 # 1.5.1, quite different from openjpeg20
 install openjpeg
