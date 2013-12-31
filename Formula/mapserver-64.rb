@@ -258,7 +258,7 @@ index edb142d..73dd42f 100644
  )
 
 -FIND_PATH(FREETYPE_INCLUDE_DIR_freetype2 freetype/config/ftheader.h 
-+FIND_PATH(FREETYPE_INCLUDE_DIR_freetype2 config/ftheader.h
++FIND_PATH(FREETYPE_INCLUDE_DIR_freetype2 freetype/config/ftheader.h config/ftheader.h
    HINTS
    $ENV{FREETYPE_DIR}/include/freetype2
    PATHS
