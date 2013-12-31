@@ -200,6 +200,13 @@ class Mapserver64 < Formula
     # TODO: not quite sure which of these headers are unnecessary to copy
     (include/'mapserver').install Dir['*.h']
 
+    prefix.install 'tests'
+    cd 'mapscript' do
+      %w[python ruby perl].each {|x|(mapscr_dir/"#{x}").install "#{x}/examples"}
+      (mapscr_dir/'php').install 'php/examples' if build.with? 'php'
+      (mapscr_dir/'java').install 'java/examples' if build.with? 'java'
+    end
+
     # write install instructions for modules
     s = ''
     mapscr_dir = opt_prefix/'mapscript'
@@ -258,8 +265,15 @@ class Mapserver64 < Formula
   def test
     system "#{bin}/mapserv", '-v'
     system 'python', '-c', '"import mapscript"'
-    system 'ruby', '-e', "\"require '#{opt_prefix}/mapscript/ruby/mapscript'\"" if build.with? 'ruby'
-    system 'perl', "-I#{opt_prefix}/mapscript/perl", '-e', '"use mapscript;"' if build.with? 'perl'
+    system 'ruby', '-e', "\"require '#{opt_prefix}/mapscript/ruby/mapscript'\""
+    system 'perl', "-I#{opt_prefix}/mapscript/perl", '-e', '"use mapscript;"'
+    cd "#{opt_prefix}/mapscript/java/examples" do
+      system "#{JavaJDK.home}/bin/javac",
+             '-classpath', '../', '-Djava.ext.dirs=../', 'RFC24.java'
+      system "#{JavaJDK.home}/bin/java",
+             '-classpath', '../', '-Djava.ext.dirs=../',
+             'RFC24', '../../../tests/test.map'
+    end if build.with? 'java'
   end
 end
 
