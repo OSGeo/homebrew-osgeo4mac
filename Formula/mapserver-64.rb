@@ -48,6 +48,7 @@ class Mapserver64 < Formula
   option 'with-librsvg', 'Build with SVG symbology support'
   option 'without-geos', 'Build without GEOS spatial operations support'
   option 'without-postgresql', 'Build without PostgreSQL data source support'
+  option 'with-xml-mapfile', 'Build with native XML mapfile support'
   option 'with-docs', 'Download and generate HTML documentation'
 
   depends_on 'cmake' => :build
@@ -67,6 +68,7 @@ class Mapserver64 < Formula
   depends_on 'fcgi' => :recommended
   depends_on 'cairo' => :recommended
   depends_on 'libxml2' unless MacOS.version >= :mountain_lion
+  depends_on 'libxslt' if build.with? 'xml-mapfile' and Formula.factory('libxml2').installed?
   depends_on 'librsvg' => :optional
   depends_on 'fribidi'
   depends_on :python => %w[sphinx] if build.with? 'docs'
@@ -128,6 +130,7 @@ class Mapserver64 < Formula
       -DWITH_SOS=ON
     ]
 
+    args << '-DWITH_XMLMAPFILE=ON' if build.with? 'xml-mapfile'
     args << '-DWITH_MYSQL=ON' if build.with? 'mysql'
     args << '-DWITH_GD=ON' if build.with? 'gd' && !build.head?
     args << '-DWITH_RSVG=ON' if build.with? 'librsvg'
