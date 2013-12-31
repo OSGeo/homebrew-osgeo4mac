@@ -1,7 +1,6 @@
 require 'formula'
 
 class JavaJDK < Requirement
-  # culled from hamsterdb.rb
   fatal true
 
   def self.home
@@ -176,7 +175,7 @@ class Mapserver64 < Formula
 
       if build.with? 'java'
         args << '-DWITH_JAVA=ON'
-        (buildpath/'cmake').install resource('findjni')
+        (buildpath/'cmake').install resource('findjni') # override cmake's
         ENV['JAVA_HOME'] = JavaJDK.home
         (mapscr_dir/'java').mkpath
         # TODO: remove this conditional on next release
@@ -191,12 +190,8 @@ class Mapserver64 < Formula
     end
 
     mkdir 'build' do
-      #python do
-        system 'cmake', '..', *args
-        system 'bbedit', 'CMakeCache.txt'
-        raise
-        system 'make install'
-      #end
+      system 'cmake', '..', *args
+      system 'make install'
     end
 
     # install devel headers
@@ -245,7 +240,7 @@ class Mapserver64 < Formula
         EOS
       end
     end
-    (prefix/'Install_Modules.txt').write s unless s.empty?
+    (prefix/'Install_Modules.txt').write s
 
     if build.with? 'docs'
       resource('docs').stage do
