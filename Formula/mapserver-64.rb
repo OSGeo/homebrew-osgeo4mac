@@ -1,5 +1,33 @@
 require 'formula'
 
+class JavaJDK < Requirement
+  # culled from hamsterdb.rb
+  fatal true
+
+  def self.home
+    [
+        `/usr/libexec/java_home`.chomp!,
+        ENV['JAVA_HOME']
+    ].find { |dir| dir && File.exist?("#{dir}/bin/javac") &&
+        (File.exist?("#{dir}/include" || File.exist?("#{dir}/bundle"))) }
+  end
+
+  satisfy :build_env => false do
+    self.class.home
+  end
+
+  def message; <<-EOS.undent
+    Could not find a JDK (i.e. not a JRE)
+
+    Do one of the following:
+    - install a JDK that is detected with /usr/libexec/java_home
+    - set the JAVA_HOME environment variable
+    - specify --without-java
+
+  EOS
+  end
+end
+
 class Mapserver64 < Formula
   homepage 'http://mapserver.org/'
   url 'http://download.osgeo.org/mapserver/mapserver-6.4.0.tar.gz'
@@ -28,6 +56,7 @@ class Mapserver64 < Formula
   depends_on :libpng
   depends_on :python
   depends_on 'swig' => :build
+  depends_on JavaJDK if build.with? 'java'
   depends_on 'giflib'
   depends_on 'gd' => [:optional, 'with-freetype'] unless build.head?
   depends_on 'proj'
@@ -145,12 +174,13 @@ class Mapserver64 < Formula
       if build.with? 'java'
         args << '-DWITH_JAVA=ON'
         (buildpath/'cmake').install resource('findjni')
-        ENV['JAVA_HOME'] = `/usr/libexec/java_home`.chomp!
+        ENV['JAVA_HOME'] = JavaJDK.home
         (mapscr_dir/'java').mkpath
         # TODO: remove this conditional on next release
         lib_dir = (build.head?) ? '${CMAKE_INSTALL_LIBDIR}' : 'lib'
         inreplace 'java/CMakeLists.txt' do |s|
-          s.gsub! "DESTINATION #{lib_dir}", %Q{DESTINATION "#{mapscr_dir}/java"}
+          s.gsub! "DESTINATION #{lib_dir}",
+                  %Q|${CMAKE_CURRENT_BINARY_DIR}/mapscript.jar DESTINATION "#{mapscr_dir}/java"|
           s.sub! '${MAPSERVER_LIBMAPSERVER}',
                  "#{rpath} ${MAPSERVER_LIBMAPSERVER}" if use_rpath
         end
@@ -184,7 +214,7 @@ class Mapserver64 < Formula
       EOS
     end
     %w[ruby perl java].each do |m|
-      if build.with? m
+      if m != 'java' or build.with? m
         cmd = []
         case m
           when 'ruby'
@@ -195,7 +225,7 @@ class Mapserver64 < Formula
             cmd << "sudo cp -f mapscript.pm #{perl_site}/"
             cmd << "sudo cp -fR auto/mapscript #{perl_site}/auto/"
           when 'java'
-            cmd << 'sudo cp -f libjavamapscript.jnilib /Library/Java/Extensions/'
+            cmd << 'sudo cp -f libjavamapscript.jnilib mapscript.jar /Library/Java/Extensions/'
         end
         s += <<-EOS.undent
           Install the built #{m.upcase} module with:
