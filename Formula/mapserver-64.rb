@@ -48,6 +48,14 @@ class Mapserver64 < Formula
     version '6.4'
   end
 
+  resource 'findjni' do
+    # replacement FindJNI.cmake module to optionally work with non-Apple Java installs
+    # see also: http://public.kitware.com/Bug/view.php?id=14508
+    url 'https://gist.github.com/dakcarto/8201389/raw/05ddab644981ab2e86580ff1be377ef8456ab426/FindJNI.cmake'
+    sha1 '14b1681d01cb08e11faa8deadf827b2ddbaabab1'
+    version '2.8.12.1'
+  end
+
   # fix ruby module's output suffix and cmake modules
   # see: https://github.com/mapserver/mapserver/pull/4826
   #      https://github.com/mapserver/mapserver/pull/4833
@@ -136,7 +144,7 @@ class Mapserver64 < Formula
 
       if build.with? 'java'
         args << '-DWITH_JAVA=ON'
-        # TODO: this is NOT adequate to set up Java paths
+        (buildpath/'cmake').install resource('findjni')
         ENV['JAVA_HOME'] = `/usr/libexec/java_home`.chomp!
         (mapscr_dir/'java').mkpath
         # TODO: remove this conditional on next release
