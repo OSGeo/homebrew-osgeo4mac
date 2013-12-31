@@ -52,7 +52,7 @@ class Mapserver64 < Formula
   # see: https://github.com/mapserver/mapserver/pull/4826
   #      https://github.com/mapserver/mapserver/pull/4833
   def patches
-    DATA
+    DATA unless build.head?
   end
 
   def png_prefix
