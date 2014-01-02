@@ -1,5 +1,17 @@
 require 'formula'
 
+class RubyVersion19 < Requirement
+  fatal true
+  satisfy(:build_env => false) { RUBY_VERSION >= '1.9' }
+
+  def message; <<-EOS.undent
+      Ruby >= 1.9 is required to run tests, which utilize Encoding class.
+      Install without `--run-tests` option.
+
+    EOS
+  end
+end
+
 class Libgpkg < Formula
   homepage 'https://bitbucket.org/luciad/libgpkg'
   head 'https://bitbucket.org/luciad/libgpkg', :using => :hg, :branch => 'default'
@@ -8,7 +20,10 @@ class Libgpkg < Formula
 
   depends_on 'cmake' => :build
   depends_on 'geos' => :recommended
-  depends_on 'bundler' => :ruby if build.include? 'run-tests'
+  if build.include? 'run-tests'
+    depends_on RubyVersion19
+    depends_on 'bundler' => :ruby
+  end
 
   def install
     args = std_cmake_args
