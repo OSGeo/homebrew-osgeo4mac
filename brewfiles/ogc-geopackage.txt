@@ -1,0 +1,38 @@
+##############################################################################
+#                                                                            #
+#  Homewbrew Brewfile for experimenting with OGC GeoPackage tools            #
+#                               -------------------                          #
+#         begin    : 2014-01-01                                              #
+#         copyright: (C) 2014 Larry Shaffer                                  #
+#         email    : larrys@dakotacarto.com                                  #
+#                                                                            #
+##############################################################################
+#                                                                            #
+#    This program is free software; you can redistribute it and/or modify    #
+#    it under the terms of the GNU General Public License as published by    #
+#    the Free Software Foundation; either version 2 of the License, or       #
+#    (at your option) any later version.                                     #
+#                                                                            #
+##############################################################################
+
+# Python should be installed up front, before running `brew bundle` on this file,
+# using either the system or brewed python
+
+# python modules, install first
+#   PIL==1.1.7
+
+# libspatialite --HEAD requires fixed fossil.rb
+install dakcarto/osgeo4mac/fossil
+
+# HEAD build offers latest geopackage updates
+upgrade dakcarto/osgeo4mac/libspatialite --HEAD --with-geopackage
+
+# switch back to stable version of libspatialite, so things don't break
+switch libspatialite 4.1.1
+
+# home: https://bitbucket.org/luciad/libgpkg
+install --HEAD -dv dakcarto/osgeo4mac/libgpkg --run-tests
+
+# home: https://launchpad.net/gpkgtools
+install --HEAD dakcarto/osgeo4mac/gpkgtools
+test -dv gpkgtools
