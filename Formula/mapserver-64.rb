@@ -180,7 +180,7 @@ class Mapserver64 < Formula
 
     mkdir 'build' do
       system 'cmake', '..', *args
-      system 'make install'
+      system 'make', 'install'
     end
 
     # install devel headers
@@ -196,12 +196,12 @@ class Mapserver64 < Formula
 
     # write install instructions for modules
     s = ''
-    mapscr_dir = opt_prefix/'mapscript'
+    mapscr_opt_dir = opt_prefix/'mapscript'
     if build.with? 'php'
       s += <<-EOS.undent
         Using the built PHP module:
           * Add the following line to php.ini:
-            extension="#{mapscr_dir}/php/php_mapscript.so"
+            extension="#{mapscr_opt_dir}/php/php_mapscript.so"
           * Execute "php -m"
           * You should see MapScript in the module list
 
@@ -211,25 +211,26 @@ class Mapserver64 < Formula
       if m != 'java' or build.with? m
         cmd = []
         case m
-          when 'ruby'
-            ruby_site = %x[ruby -r rbconfig -e 'puts RbConfig::CONFIG["sitearchdir"]'].chomp
-            cmd << "sudo cp -f mapscript.bundle #{ruby_site}/"
-          when 'perl'
-            perl_site = %x[perl -MConfig -e 'print $Config{"sitearch"};'].chomp
-            cmd << "sudo cp -f mapscript.pm #{perl_site}/"
-            cmd << "sudo cp -fR auto/mapscript #{perl_site}/auto/"
-          when 'java'
-            cmd << 'sudo cp -f libjavamapscript.jnilib mapscript.jar /Library/Java/Extensions/'
+        when 'ruby'
+          ruby_site = %x[ruby -r rbconfig -e 'puts RbConfig::CONFIG["sitearchdir"]'].chomp
+          cmd << "sudo cp -f mapscript.bundle #{ruby_site}/"
+        when 'perl'
+          perl_site = %x[perl -MConfig -e 'print $Config{"sitearch"};'].chomp
+          cmd << "sudo cp -f mapscript.pm #{perl_site}/"
+          cmd << "sudo cp -fR auto/mapscript #{perl_site}/auto/"
+        when 'java'
+          cmd << 'sudo cp -f libjavamapscript.jnilib mapscript.jar /Library/Java/Extensions/'
+        else
         end
         s += <<-EOS.undent
           Install the built #{m.upcase} module with:
-            cd #{mapscr_dir}/#{m}
+            cd #{mapscr_opt_dir}/#{m}
             #{cmd[0]}
             #{cmd[1] + "\n" if cmd[1]}
         EOS
       end
     end
-    (prefix/'Install_Modules.txt').write s
+    (mapscr_dir/'Install_Modules.txt').write s
 
     if build.with? 'docs'
       resource('docs').stage do
@@ -240,21 +241,25 @@ class Mapserver64 < Formula
     end
   end
 
-  def caveats; <<-EOS.undent
+  def caveats
+    s = <<-EOS.undent
       The Mapserver CGI executable is #{opt_prefix}/bin/mapserv
 
-      Notes on installing any built mapscript modules are listed in:
-        #{opt_prefix}/Install_Modules.txt
+      Instructions for installing any built, but uninstalled, mapscript modules:
+        #{opt_prefix}/mapscript/Install_Modules.txt
 
     EOS
+    s += python.standard_caveats if python
+    s
   end
 
   def test
+    mapscr_opt_dir = opt_prefix/'mapscript'
     system "#{bin}/mapserv", '-v'
     system 'python', '-c', '"import mapscript"'
-    system 'ruby', '-e', "\"require '#{opt_prefix}/mapscript/ruby/mapscript'\""
-    system 'perl', "-I#{opt_prefix}/mapscript/perl", '-e', '"use mapscript;"'
-    cd "#{opt_prefix}/mapscript/java/examples" do
+    system 'ruby', '-e', "\"require '#{mapscr_opt_dir}/ruby/mapscript'\""
+    system 'perl', "-I#{mapscr_opt_dir}/perl", '-e', '"use mapscript;"'
+    cd "#{mapscr_opt_dir}/java/examples" do
       system "#{JavaJDK.home}/bin/javac",
              '-classpath', '../', '-Djava.ext.dirs=../', 'RFC24.java'
       system "#{JavaJDK.home}/bin/java",
