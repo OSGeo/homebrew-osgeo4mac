@@ -29,8 +29,8 @@ end
 
 class Mapserver64 < Formula
   homepage 'http://mapserver.org/'
-  url 'http://download.osgeo.org/mapserver/mapserver-6.4.0.tar.gz'
-  sha1 '8af4883610091de7ba374ced2564ed90ca2faa5b'
+  url 'http://download.osgeo.org/mapserver/mapserver-6.4.1.tar.gz'
+  sha1 'f7d2e7f44cd9a4ff5d9483d21bb71c1cc28e09ab'
 
   head do
     url 'https://github.com/mapserver/mapserver.git', :branch => 'master'
@@ -84,13 +84,6 @@ class Mapserver64 < Formula
     url 'https://gist.github.com/dakcarto/8201389/raw/05ddab644981ab2e86580ff1be377ef8456ab426/FindJNI.cmake'
     sha1 '14b1681d01cb08e11faa8deadf827b2ddbaabab1'
     version '2.8.12.1'
-  end
-
-  # fix ruby module's output suffix and cmake modules
-  # see: https://github.com/mapserver/mapserver/pull/4826
-  #      https://github.com/mapserver/mapserver/pull/4833
-  def patches
-    DATA unless build.head?
   end
 
   def png_prefix
@@ -149,10 +142,8 @@ class Mapserver64 < Formula
       # override language extension install locations, e.g. install to prefix/'mapscript/lang'
       args << '-DWITH_RUBY=ON'
       (mapscr_dir/'ruby').mkpath
-      # TODO: remove this conditional on next release
-      site_arch = (build.head?) ? '${RUBY_SITEARCHDIR}' : '${RUBY_ARCHDIR}'
       inreplace 'ruby/CMakeLists.txt' do |s|
-        s.gsub! site_arch, %Q{"#{mapscr_dir}/ruby"}
+        s.gsub! '${RUBY_SITEARCHDIR}', %Q{"#{mapscr_dir}/ruby"}
         s.sub! '${MAPSERVER_LIBMAPSERVER}',
                "#{rpath} ${MAPSERVER_LIBMAPSERVER}" if use_rpath
       end
@@ -178,10 +169,8 @@ class Mapserver64 < Formula
         (buildpath/'cmake').install resource('findjni') # override cmake's
         ENV['JAVA_HOME'] = JavaJDK.home
         (mapscr_dir/'java').mkpath
-        # TODO: remove this conditional on next release
-        lib_dir = (build.head?) ? '${CMAKE_INSTALL_LIBDIR}' : 'lib'
         inreplace 'java/CMakeLists.txt' do |s|
-          s.gsub! "DESTINATION #{lib_dir}",
+          s.gsub! 'DESTINATION ${CMAKE_INSTALL_LIBDIR}',
                   %Q|${CMAKE_CURRENT_BINARY_DIR}/mapscript.jar DESTINATION "#{mapscr_dir}/java"|
           s.sub! '${MAPSERVER_LIBMAPSERVER}',
                  "#{rpath} ${MAPSERVER_LIBMAPSERVER}" if use_rpath
@@ -274,66 +263,3 @@ class Mapserver64 < Formula
     end if build.with? 'java'
   end
 end
-
-__END__
-diff --git a/mapscript/ruby/CMakeLists.txt b/mapscript/ruby/CMakeLists.txt
-index 95f5982..2dc084a 100644
---- a/mapscript/ruby/CMakeLists.txt
-+++ b/mapscript/ruby/CMakeLists.txt
-@@ -11,6 +11,9 @@ SWIG_LINK_LIBRARIES(rubymapscript ${RUBY_LIBRARY} ${MAPSERVER_LIBMAPSERVER})
-
- set_target_properties(${SWIG_MODULE_rubymapscript_REAL_NAME} PROPERTIES PREFIX "")
- set_target_properties(${SWIG_MODULE_rubymapscript_REAL_NAME} PROPERTIES OUTPUT_NAME mapscript)
-+if(APPLE)
-+  set_target_properties(${SWIG_MODULE_rubymapscript_REAL_NAME} PROPERTIES SUFFIX ".bundle")
-+endif(APPLE)
-
- get_target_property(LOC_MAPSCRIPT_LIB ${SWIG_MODULE_rubymapscript_REAL_NAME} LOCATION)
- execute_process(COMMAND ${RUBY_EXECUTABLE} -r rbconfig -e "puts RbConfig::CONFIG['archdir']" OUTPUT_VARIABLE RUBY_ARCHDIR OUTPUT_STRIP_TRAILING_WHITESPACE)
-diff --git a/cmake/FindFreetype.cmake b/cmake/FindFreetype.cmake
-index edb142d..73dd42f 100644
---- a/cmake/FindFreetype.cmake
-+++ b/cmake/FindFreetype.cmake
-@@ -44,7 +44,7 @@
- FIND_PATH(FREETYPE_INCLUDE_DIR_ft2build ft2build.h 
-   HINTS
-   $ENV{FREETYPE_DIR}
--  PATH_SUFFIXES include
-+  PATH_SUFFIXES include include/freetype2
-   PATHS
-   /usr/local/X11R6/include
-   /usr/local/X11/include
-@@ -54,7 +54,7 @@ FIND_PATH(FREETYPE_INCLUDE_DIR_ft2build ft2build.h
-   /usr/freeware/include
- )
-
--FIND_PATH(FREETYPE_INCLUDE_DIR_freetype2 freetype/config/ftheader.h 
-+FIND_PATH(FREETYPE_INCLUDE_DIR_freetype2 freetype/config/ftheader.h config/ftheader.h
-   HINTS
-   $ENV{FREETYPE_DIR}/include/freetype2
-   PATHS
-@@ -64,7 +64,7 @@ FIND_PATH(FREETYPE_INCLUDE_DIR_freetype2 freetype/config/ftheader.h
-   /sw/include
-   /opt/local/include
-   /usr/freeware/include
--  PATH_SUFFIXES freetype2
-+  PATH_SUFFIXES freetype freetype2
- )
-
- set(FREETYPE_NAMES ${FREETYPE_NAMES} freetype libfreetype freetype219 freetype239 freetype241MT_D freetype2411)
-diff --git a/cmake/FindMySQL.cmake b/cmake/FindMySQL.cmake
-index 1b5de7e..3bbf824 100644
---- a/cmake/FindMySQL.cmake
-+++ b/cmake/FindMySQL.cmake
-@@ -13,9 +13,10 @@ ENDIF (MYSQL_INCLUDE_DIR)
- FIND_PATH(MYSQL_INCLUDE_DIR mysql.h
-   /usr/local/include/mysql
-   /usr/include/mysql
-+  PATH_SUFFIXES mysql
- )
-
--SET(MYSQL_NAMES mysqlclient mysqlclient_r)
-+SET(MYSQL_NAMES mysqlclient mysqlclient_r libmysqlclient)
- FIND_LIBRARY(MYSQL_LIBRARY
-   NAMES ${MYSQL_NAMES}
-   PATHS /usr/lib /usr/local/lib
