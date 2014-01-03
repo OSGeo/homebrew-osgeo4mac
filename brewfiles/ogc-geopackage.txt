@@ -21,18 +21,20 @@
 # python modules, install first
 #   PIL==1.1.7
 
-# libspatialite --HEAD requires fixed fossil.rb
-install dakcarto/osgeo4mac/fossil
-
-# HEAD build offers latest geopackage updates
-upgrade dakcarto/osgeo4mac/libspatialite --HEAD --with-geopackage
-
-# switch back to stable version of libspatialite, so things don't break
-switch libspatialite 4.1.1
+# libspatialite HEAD build offers latest geopackage updates (works with gpkgtools)
+# To experiment with HEAD build, but you already have libspatialite installed,
+# do the following:
+#   `brew upgrade dakcarto/osgeo4mac/libspatialite --HEAD --with-geopackage`
+#   `brew list --versions libspatialite` (note non-HEAD version)
+#   `brew switch libspatialite <non-HEAD version>`
 
 # home: https://bitbucket.org/luciad/libgpkg
-install --HEAD -dv dakcarto/osgeo4mac/libgpkg --run-tests
+reinstall libgpkg --HEAD
+# to run ctests (from build dir), you need ruby >= 1.9
+#   (defaults 1.8.x on 10.7-8, 2.0 on 10.9)
+# comment reinstall line above and uncomment the one below
+# reinstall libgpkg -v --HEAD --run-tests
 
 # home: https://launchpad.net/gpkgtools
-install --HEAD dakcarto/osgeo4mac/gpkgtools
-test -dv gpkgtools
+reinstall gpkgtools --HEAD
+test -v gpkgtools
