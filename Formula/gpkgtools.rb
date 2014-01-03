@@ -16,7 +16,7 @@ class Gpkgtools < Formula
         Install libspatialite using --HEAD and --with-geopackage options'.
         NOTE: To experiment with the HEAD build, but already have libspatialite
               installed, do the following:
-                `brew upgrade libspatialite --HEAD --with-geopackage`
+                `brew upgrade dakcarto/osgeo4mac/libspatialite --HEAD --with-geopackage`
                 `brew list --versions libspatialite` (note non-HEAD version)
                 `brew switch libspatialite <non-HEAD version>`
       EOS
