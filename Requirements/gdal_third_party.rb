@@ -10,7 +10,7 @@ class GdalThirdParty < Requirement
     Define GDAL_THIRD_PARTY environment variable that points to a directory,
     which contains the unaltered download archive of the third-party library:
 
-      `export GDAL_THIRD_PARTY=path/to/gdal/third-party/directory`
+      `export GDAL_THIRD_PARTY=/path/to/gdal/third-party/directory`
 
   EOS
   end
