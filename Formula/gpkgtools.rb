@@ -9,14 +9,14 @@ class Gpkgtools < Formula
   depends_on 'PIL' => :python
 
   def install
-    head_ext = "#{HOMEBREW_PREFIX}/Cellar/libspatialite/HEAD/lib/spatialite.so"
+    head_ext = "#{HOMEBREW_PREFIX}/Cellar/libspatialite/HEAD/lib/spatialite.dylib"
     unless File.exist? head_ext
       odie <<-EOS.undent
-        No libspatialite HEAD build or SQLite3 extension 'spatialite.so' exists.
+        No libspatialite HEAD build or SQLite3 extension 'spatialite.dylib' exists.
         Install libspatialite using --HEAD and --with-geopackage options'.
         NOTE: To experiment with the HEAD build, but already have libspatialite
               installed, do the following:
-                `brew upgrade dakcarto/osgeo4mac/libspatialite --HEAD --with-geopackage`
+                `brew upgrade libspatialite --HEAD --with-geopackage`
                 `brew list --versions libspatialite` (note non-HEAD version)
                 `brew switch libspatialite <non-HEAD version>`
       EOS
