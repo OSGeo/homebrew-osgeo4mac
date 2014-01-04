@@ -1,22 +1,5 @@
 require 'formula'
-
-class GdalThirdParty < Requirement
-  fatal true
-
-  satisfy do
-    envar = ENV['GDAL_THIRD_PARTY']
-    envar && File.exists?(envar)
-  end
-
-  def message; <<-EOS.undent
-    Define GDAL_THIRD_PARTY environment variable that points to a directory,
-    which contains the unaltered download archive of the third-party library:
-
-      `export GDAL_THIRD_PARTY=path/to/gdal/third-party/directory`
-
-    EOS
-  end
-end
+require File.expand_path("../../Requirements/gdal_third_party", Pathname.new(__FILE__).realpath)
 
 class GdalFilegdb < Formula
   homepage 'http://www.gdal.org/ogr/drv_filegdb.html'
