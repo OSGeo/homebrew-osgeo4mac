@@ -72,6 +72,15 @@ class GdalFilegdb < Formula
     args.concat %W[-L#{gdal.lib} -lgdal -L#{fgdb}/lib -lFileGDBAPI]
 
     # build and install shared plugin
+    if ENV.compiler == :clang && MacOS.version >= :mavericks
+      # fixes to make plugin work with gdal possibly built against libc++
+      # NOTE: works, but I don't know if it is a sane fix
+      # see: http://forums.arcgis.com/threads/95958-OS-X-Mavericks
+      #      https://gist.github.com/jctull/f4d620cd5f1560577d17
+      # TODO: needs removed as soon as ESRI updates filegbd binaries for libc++
+      cxxstdlib_check :skip
+      args.unshift "-mmacosx-version-min=10.8" # better than -stdlib=libstdc++ ?
+    end
     system ENV.cxx, *args
 
   end
@@ -88,6 +97,12 @@ class GdalFilegdb < Formula
 
       CPPFLAGS: -I#{opt_prefix}/filegdb/include
       LDFLAGS:  -L#{opt_prefix}/filegdb/lib
+
+    ============================== IMPORTANT ==============================
+    If compiled using clang (default) on 10.9+ this plugin was built against
+    libstdc++ (like filegdb binaries), which may load into your GDAL, but
+    possibly be incompatible. Please report any issues to:
+        https://github.com/dakcarto/homebrew-osgeo4mac/issues
 
     EOS
   end
