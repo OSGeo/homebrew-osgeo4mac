@@ -1,31 +1,30 @@
-require 'formula'
+require "formula"
 
 class Osgearth < Formula
-  homepage 'http://osgearth.org'
-  url 'https://github.com/gwaldron/osgearth/archive/osgearth-2.5.tar.gz'
-  sha1 '97ed0075422c3efcb7b958f89ae02b32d670c48e'
+  homepage "http://osgearth.org"
+  url "https://github.com/gwaldron/osgearth/archive/osgearth-2.5.tar.gz"
+  sha1 "97ed0075422c3efcb7b958f89ae02b32d670c48e"
 
-  head 'https://github.com/gwaldron/osgearth.git', :branch => 'master'
+  head "https://github.com/gwaldron/osgearth.git", :branch => "master"
 
-  option 'without-minizip', 'Build without Google KMZ file access support'
-  option 'with-v8', 'Build with Google\'s V8 JavaScript engine support'
-  option 'with-libnoise', 'Build with coherent noise-generating terrain support'
-  option 'with-tinyxml', 'Use external libtinyxml, instead of internal'
-  option 'with-docs-examples', 'Build and install html documentation and examples'
-  option :cxx11
+  option "without-minizip", "Build without Google KMZ file access support"
+  option "with-v8", "Build with Google's V8 JavaScript engine support"
+  option "with-libnoise", "Build with coherent noise-generating terrain support"
+  option "with-tinyxml", "Use external libtinyxml, instead of internal"
+  option "with-docs-examples", "Build and install html documentation and examples"
 
-  depends_on 'cmake' => :build
-  depends_on 'open-scene-graph'
-  depends_on 'gdal'
-  depends_on 'sqlite'
-  depends_on 'qt' => :recommended
-  depends_on 'minizip' => :recommended
-  depends_on 'v8' => :optional
-  depends_on 'libnoise' => :optional
-  depends_on 'tinyxml' => :optional
-  depends_on :python => %w[sphinx] if build.with? 'docs-examples'
+  depends_on "cmake" => :build
+  depends_on "open-scene-graph"
+  depends_on "gdal"
+  depends_on "sqlite"
+  depends_on "qt" => :recommended
+  depends_on "minizip" => :recommended
+  depends_on "v8" => :optional
+  depends_on "libnoise" => :optional
+  depends_on "tinyxml" => :optional
+  depends_on :python => %w[sphinx] if build.with? "docs-examples"
 
-  # likely all merged upstream, remove on next version
+  # all merged upstream, remove on next version
   # find a v8 lib: https://github.com/gwaldron/osgearth/pull/434
   # find JavaScriptCore lib: https://github.com/gwaldron/osgearth/pull/435
   # find libnoise lib: https://github.com/gwaldron/osgearth/pull/436
@@ -34,49 +33,46 @@ class Osgearth < Formula
   end
 
   def install
-    cxxstdlib_check :skip
-    ENV.cxx11 if build.cxx11?
-
     args = std_cmake_args
     if MacOS.prefer_64_bit?
       args << "-DCMAKE_OSX_ARCHITECTURES=#{Hardware::CPU.arch_64_bit}"
     else
-      args << '-DCMAKE_OSX_ARCHITECTURES=i386'
+      args << "-DCMAKE_OSX_ARCHITECTURES=i386"
     end
 
-    args << '-DOSGEARTH_USE_QT=OFF' if build.without? 'qt'
-    args << '-DWITH_EXTERNAL_TINYXML=ON' if build.with? 'tinyxml'
+    args << "-DOSGEARTH_USE_QT=OFF" if build.without? "qt"
+    args << "-DWITH_EXTERNAL_TINYXML=ON" if build.with? "tinyxml"
 
     # v8, noise and minizip options should have empty values if not defined '--with'
-    if build.without? 'v8'
+    if build.without? "v8"
       args << "-DV8_INCLUDE_DIR=''" << "-DV8_BASE_LIBRARY=''" << "-DV8_SNAPSHOT_LIBRARY=''"
       args << "-DV8_ICUI18N_LIBRARY=''" << "-DV8_ICUUC_LIBRARY=''"
     end
-    args << "-DLIBNOISE_INCLUDE_DIR=''" << "-DLIBNOISE_LIBRARY=''" if build.without? 'libnoise'
+    args << "-DLIBNOISE_INCLUDE_DIR=''" << "-DLIBNOISE_LIBRARY=''" if build.without? "libnoise"
     # define libminizip paths (skips the only pkconfig dependency in cmake modules)
-    mzo = Formula.factory('minizip').opt_prefix
-    args << "-DMINIZIP_INCLUDE_DIR=#{(build.with? 'minizip') ? mzo/'include/minizip' : ''}"
-    args << "-DMINIZIP_LIBRARY=#{(build.with? 'minizip') ? mzo/'lib/libminizip.dylib' : ''}"
+    mzo = Formula.factory("minizip").opt_prefix
+    args << "-DMINIZIP_INCLUDE_DIR=#{(build.with? "minizip") ? mzo/"include/minizip" : "''"}"
+    args << "-DMINIZIP_LIBRARY=#{(build.with? "minizip") ? mzo/"lib/libminizip.dylib" : "''"}"
 
-    mkdir 'build' do
-      system 'cmake', '..', *args
-      system 'make install'
+    mkdir "build" do
+      system "cmake", "..", *args
+      system "make", "install"
     end
 
-    if build.with? 'docs-examples'
-      cd 'docs' do
-        inreplace 'Makefile', 'sphinx-build', "#{HOMEBREW_PREFIX}/bin/sphinx-build"
-        system 'make', 'html'
-        doc.install 'build/html' => 'html'
+    if build.with? "docs-examples"
+      cd "docs" do
+        inreplace "Makefile", "sphinx-build", "#{HOMEBREW_PREFIX}/bin/sphinx-build"
+        system "make", "html"
+        doc.install "build/html" => "html"
       end
-      doc.install 'data'
-      doc.install 'tests' => 'examples'
+      doc.install "data"
+      doc.install "tests" => "examples"
     end
   end
 
   def caveats
-    osg = Formula.factory('open-scene-graph')
-    osgver = (osg.installed?) ? osg.prefix.basename : '#.#.# (version)'
+    osg = Formula.factory("open-scene-graph")
+    osgver = (osg.installed?) ? osg.prefix.basename : "#.#.# (version)"
     <<-EOS.undent
     This formula installs Open Scene Graph plugins. To ensure access when using
     the osgEarth toolset, set the OSG_LIBRARY_PATH enviroment variable to:
