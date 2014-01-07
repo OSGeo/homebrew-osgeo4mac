@@ -69,7 +69,7 @@ class GdalFilegdb < Formula
     ]
 
     # ld flags
-    args.concat %W[-L#{gdal.lib} -lgdal -L#{fgdb}/lib -lFileGDBAPI]
+    args.concat %W[-L#{fgdb}/lib -lFileGDBAPI]
 
     # build and install shared plugin
     if ENV.compiler == :clang && MacOS.version >= :mavericks
