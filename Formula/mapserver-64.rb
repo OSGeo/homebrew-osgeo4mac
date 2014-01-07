@@ -253,7 +253,7 @@ class Mapserver64 < Formula
     s
   end
 
-  def test
+  test do
     mapscr_opt_dir = opt_prefix/'mapscript'
     system "#{bin}/mapserv", '-v'
     system 'python', '-c', '"import mapscript"'
