@@ -1,7 +1,7 @@
 require "formula"
 
 class Qwtpolar < Formula
-  homepage ""
+  homepage "http://qwtpolar.sourceforge.net/"
   url "http://downloads.sf.net/project/qwtpolar/qwtpolar-beta/1.1.0-rc1/qwtpolar-1.1.0-rc1.tar.bz2"
   sha1 "b71d6f462c857fd57f295ad97e87efa88b3b1ada"
 
@@ -39,15 +39,4 @@ class Qwtpolar < Formula
     end
   end
 
-  #test do
-  #  # `test do` will create, run in and delete a temporary directory.
-  #  #
-  #  # This test will fail and we won't accept that! It's enough to just replace
-  #  # "false" with the main program this formula installs, but it'd be nice if you
-  #  # were more thorough. Run the test with `brew test qwtpolar`.
-  #  #
-  #  # The installed folder is not in the path, so use the entire path to any
-  #  # executables being tested: `system "#{bin}/program", "--version"`.
-  #  system "false"
-  #end
 end
