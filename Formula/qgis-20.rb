@@ -1,49 +1,10 @@
 require 'formula'
 
-class BrewedPython < Requirement
-  fatal true
-
-  attr_reader :py_action
-
-  satisfy do
-    py = Formula.factory('python')
-    installed = py.installed?
-    linked = py.linked_keg.exist?
-    @py_action = (installed) ? 'link' : 'install'
-    installed && linked
-  end
-
-  def message
-    <<-EOS.undent
-        You need to #{@py_action} Hombebrew's Python, then install this formula:
-
-          brew #{@py_action} python
-
-        Or, choose the 'without-brewed-python' formula option.
-
-    EOS
-  end
-end
-
-class PythonUnlinked < Requirement
-  fatal true
-  satisfy { !Formula.factory('python').linked_keg.exist? }
-
-  def message
-    <<-EOS.undent
-        You need to unlik Hombebrew's Python, then install this formula:
-
-          brew unlink python
-
-    EOS
-  end
-end
-
 class SipBinary < Requirement
   fatal true
   #noinspection RubyResolve
   default_formula 'sip'
-  satisfy { which 'sip' }
+  satisfy(:build_env => false) { which 'sip' }
 
   def message
     <<-EOS.undent
@@ -61,7 +22,7 @@ class PyQtConfig < Requirement
   # pyqtconfig is not created with PyQt4 >= 4.10.x when using configure-ng.
   # Homebrew's `pyqt` formula corrects this. Remains an issue until QGIS project
   # adjusts FindPyQt.py in CMake setup to work with configure-ng.
-  satisfy { quiet_system 'python', '-c', 'from PyQt4 import pyqtconfig' }
+  satisfy(:build_env => false) { quiet_system 'python', '-c', 'from PyQt4 import pyqtconfig' }
 
   def message
     <<-EOS.undent
@@ -86,7 +47,6 @@ class Qgis20 < Formula
 
   option 'enable-isolation', "Isolate .app's environment to HOMEBREW_PREFIX, to coexist with other QGIS installs"
   option 'with-debug', 'Enable debug build, which outputs info to system.log or console'
-  option 'without-brewed-python', "Prefer system Python (default is Homebrew's, if linked)"
   option 'skip-stdlib-check', 'Build skips checking if dependencies are built against conflicting stdlib.'
   option 'without-server', 'Build without QGIS Server (qgis_mapserv.fcgi)'
   option 'without-postgresql', 'Build without current PostgreSQL client'
@@ -107,14 +67,9 @@ class Qgis20 < Formula
     depends_on 'graphviz' => [:build, 'with-freetype']
     depends_on 'doxygen' => [:build, 'with-dot'] # with graphviz support
   end
-  # while QGIS can be built without Python support, it is ON by default here
-  if build.with?('brewed-python') || build.include?('enable-isolation')
-    depends_on BrewedPython
-  else
-    depends_on PythonUnlinked
-  end
-  depends_on :python
+  depends_on (build.include? 'enable-isolation' || MacOS.version < :lion ) ? 'python' : :python
   depends_on 'qt'
+  depends_on 'pyqt'
   depends_on SipBinary
   depends_on PyQtConfig
   depends_on 'qscintilla2' # will probably be a C++ lib deps in near future
@@ -190,12 +145,13 @@ class Qgis20 < Formula
       -DWITH_STAGED_PLUGINS=FALSE
     ]
 
-    unless python.from_osx?
-      if python.framework?
-        args << "-DPYTHON_CUSTOM_FRAMEWORK='#{python.framework}/Python.framework'"
+    args << "-DPYTHON_EXECUTABLE='#{which("python")}'"
+    unless osx_python?
+      if brewed_python_framework?
+        args << "-DPYTHON_CUSTOM_FRAMEWORK='#{brewed_python_framework}'"
       else
-        args << "-DPYTHON_INCLUDE_DIR='#{python.incdir}'"
-        args << "-DPYTHON_LIBRARY='#{python.libdir}/lib#{python.xy}.dylib'"
+        args << "-DPYTHON_INCLUDE_DIR='#{python_incdir}'"
+        args << "-DPYTHON_LIBRARY='#{python_libdir}/libpython2.7.dylib'"
       end
     end
 
@@ -234,28 +190,27 @@ class Qgis20 < Formula
     # (https://github.com/Homebrew/homebrew-science/issues/23)
     ENV.append 'CXXFLAGS', "-F#{Formula.factory('qt').opt_prefix}/lib"
 
-    python do
-      # TODO: update .app's bundle identifier for HEAD builds
-      # (convert to using `defaults`)
-      #/usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier org.qgis.qgis-dev" "$APPTARGET/Contents/Info.plist"
+    # TODO: update .app's bundle identifier for HEAD builds
+    # (convert to using `defaults`)
+    #/usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier org.qgis.qgis-dev" "$APPTARGET/Contents/Info.plist"
 
-      # TODO: keep persistent build directory for HEAD builds
-      mkdir 'build'
+    # TODO: keep persistent build directory for HEAD builds
+    mkdir 'build'
 
-      cd 'build' do
-        system 'cmake', '..', *args
-        #system 'bbedit', 'CMakeCache.txt'
-        #raise
-        system 'make install'
-      end
+    cd 'build' do
       #Fix install fail on stdlib check for Mavericks+
       cxxstdlib_check :skip if MacOS.version >= :mavericks and build.include? 'skip-stdlib-check'
 
-      py_lib = lib/"#{python.xy}/site-packages"
-      qgis_modules = prefix/'QGIS.app/Contents/Resources/python/qgis'
-      py_lib.mkpath
-      ln_s qgis_modules, py_lib/'qgis'
+      system 'cmake', '..', *args
+      #system 'bbedit', 'CMakeCache.txt'
+      #raise
+      system 'make', 'install'
     end
+
+    py_lib = lib/"python2.7/site-packages"
+    qgis_modules = prefix/'QGIS.app/Contents/Resources/python/qgis'
+    py_lib.mkpath
+    ln_s qgis_modules, py_lib/'qgis'
 
     # symlink dev frameworks, so failed installs don't block future installs
     frameworks.mkpath
@@ -283,7 +238,7 @@ class Qgis20 < Formula
 
     # define default isolation env vars
     pthsep = File::PATH_SEPARATOR
-    pypth = "#{HOMEBREW_PREFIX}/lib/#{python.xy}/site-packages"
+    pypth = "#{python_site_packages}"
     pths = %W[#{HOMEBREW_PREFIX/'bin'} /usr/bin /bin /usr/sbin /sbin /usr/X11/bin].join(pthsep)
 
     unless build.include? 'enable-isolation'
@@ -353,7 +308,7 @@ class Qgis20 < Formula
     bin_cmds = %W[#!/bin/sh\n]
     # setup shell-prepended env vars (may result in duplication of paths)
     envars[:PATH] = "#{HOMEBREW_PREFIX}/bin" + pthsep + '$PATH'
-    envars[:PYTHONPATH] = "#{HOMEBREW_PREFIX}/lib/#{python.xy}/site-packages" + pthsep + '$PYTHONPATH'
+    envars[:PYTHONPATH] = "#{python_site_packages}" + pthsep + '$PYTHONPATH'
     envars.each { |key, value| bin_cmds << "export #{key.to_s}=#{value}" }
     bin_cmds << opt_prefix/'QGIS.app/Contents/MacOS/QGIS'
     qgis_bin.write(bin_cmds.join("\n"))
@@ -380,8 +335,10 @@ class Qgis20 < Formula
             when launching via the wrapper script, while launching QGIS.app
             bundle they are not.
 
+      For stand-alone Python development, set the following environment variable:
+        export PYTHONPATH=#{python_site_packages}
+
     EOS
-    s += python.standard_caveats if python
 
     if build.include? 'enable-isolation'
       s += <<-EOS.undent
@@ -396,7 +353,7 @@ class Qgis20 < Formula
     # check for required run-time Python module dependencies
     # TODO: add 'pyspatialite' when PyPi package supports spatialite 4.x
     xm = []
-    %w[psycopg2].each { |m| xm << m unless python.importable? m }
+    %w[psycopg2].each { |m| xm << m unless module_importable? m }
     unless xm.empty?
       s += <<-EOS.undent
         The following Python modules are needed by QGIS during run-time:
@@ -410,7 +367,7 @@ class Qgis20 < Formula
       EOS
     end
     # TODO: remove this when libqscintilla.dylib becomes core build dependency?
-    unless python.importable? 'PyQt4.Qsci'
+    unless module_importable? 'PyQt4.Qsci'
       s += <<-EOS.undent
         QScintilla Python module is needed by QGIS during run-time.
         Ensure `qscintilla2` formula is linked.
@@ -418,5 +375,42 @@ class Qgis20 < Formula
       EOS
     end
     s
+  end
+
+  private
+  # python utils (deprecated in latest Homebrew)
+  # see: https://github.com/Homebrew/homebrew/pull/24842
+
+  def brewed_python?
+    Formula.factory("python").linked_keg.exist?
+  end
+
+  def osx_python?
+    p = `python -c "import sys; print(sys.prefix)"`.strip
+    p.start_with?("/System/Library/Frameworks/Python.framework")
+  end
+
+  def brewed_python_framework
+    HOMEBREW_PREFIX/"Frameworks/Python.framework/Versions/2.7"
+  end
+
+  def brewed_python_framework?
+    brewed_python_framework.exist?
+  end
+
+  def python_incdir
+    Pathname.new(`python -c 'from distutils import sysconfig; print(sysconfig.get_python_inc())'`.strip)
+  end
+
+  def python_libdir
+    Pathname.new(`python -c "from distutils import sysconfig; print(sysconfig.get_config_var('LIBPL'))"`.strip)
+  end
+
+  def python_site_packages
+    HOMEBREW_PREFIX/"lib/python2.7/site-packages"
+  end
+
+  def module_importable?(mod)
+    quiet_system "python", "-c", "import #{mod}"
   end
 end
