@@ -15,6 +15,7 @@ class Gdal < Formula
   option 'enable-armadillo', 'Build with Armadillo accelerated TPS transforms.'
   option 'enable-unsupported', "Allow configure to drag in any library it can find. Invoke this at your own risk."
   option 'enable-mdb', 'Build with Access MDB driver (requires Java 1.6+ JDK/JRE, from Apple or Oracle).'
+  option 'skip-stdlib-check', 'Build skips checking if dependencies are built against conflicting stdlib.'
 
   depends_on :python => :recommended
   depends_on :libpng
@@ -169,9 +170,7 @@ class Gdal < Formula
     end
 
     # There is a problem with compiling and avx, so disable avx for HEAD builds
-    if build.head?
-      args << "--without-avx"
-    end
+    args << "--without-avx" if build.head?
 
     # Python is installed manually to ensure everything is properly sandboxed.
     args << '--without-python'
@@ -232,25 +231,23 @@ class Gdal < Formula
     inreplace 'configure', %r[^mandir='\$\{prefix\}/man'$], ''
 
     #Fix install fail on lib check for Mavericks
-    cxxstdlib_check :skip if MacOS.version >= :mavericks
+    cxxstdlib_check :skip if MacOS.version >= :mavericks and build.include? 'skip-stdlib-check'
 
     system "./configure", *get_configure_args
     system "make"
-    system "make install"
+    system "make", "install"
 
-    python do
-      # `python-config` may try to talk us into building bindings for more
-      # architectures than we really should.
-      if MacOS.prefer_64_bit?
-        ENV.append_to_cflags "-arch #{Hardware::CPU.arch_64_bit}"
-      else
-        ENV.append_to_cflags "-arch #{Hardware::CPU.arch_32_bit}"
-      end
+    # `python-config` may try to talk us into building bindings for more
+    # architectures than we really should.
+    if MacOS.prefer_64_bit?
+      ENV.append_to_cflags "-arch #{Hardware::CPU.arch_64_bit}"
+    else
+      ENV.append_to_cflags "-arch #{Hardware::CPU.arch_32_bit}"
+    end
 
-      cd 'swig/python' do
-        system python, "setup.py", "install", "--prefix=#{prefix}", "--record=installed.txt", "--single-version-externally-managed"
-        bin.install Dir['scripts/*']
-      end
+    cd 'swig/python' do
+      system "python", "setup.py", "install", "--prefix=#{prefix}", "--record=installed.txt", "--single-version-externally-managed"
+      bin.install Dir['scripts/*']
     end
 
     system 'make', 'man' if build.head?
@@ -260,18 +257,8 @@ class Gdal < Formula
   end
 
   def caveats
-    msg = ""
-    if python
-      msg += python.standard_caveats +
-      <<-EOS.undent
-        This version of GDAL was built with Python support. In addition to providing
-        modules that makes GDAL functions available to Python scripts, the Python
-        binding provides additional command line tools.
-      EOS
-    end
-
     if build.include? 'enable-mdb'
-      msg += <<-EOS.undent
+      <<-EOS.undent
 
       To have a functional MDB driver, install supporting .jar files in:
         `/Library/Java/Extensions/`
@@ -279,8 +266,6 @@ class Gdal < Formula
       See: `http://www.gdal.org/ogr/drv_mdb.html`
       EOS
     end
-
-    msg
   end
 end
 
