@@ -171,6 +171,8 @@ class Qgis20 < Formula
 
     # Set bundling level back to 0 (the default in all versions prior to 1.8.0)
     # so that no time and energy is wasted copying the Qt frameworks into QGIS.
+    dev_fw = lib/'qgis-dev'
+    dev_fw.mkpath
     args = %W[
       -DCMAKE_INSTALL_PREFIX=#{prefix}
       -DCMAKE_BUILD_TYPE=#{(build.with?('debug')) ? 'RelWithDebInfo' : 'None' }
@@ -180,7 +182,7 @@ class Qgis20 < Formula
       -DBISON_EXECUTABLE=#{Formula.factory('bison').opt_prefix}/bin/bison
       -DENABLE_TESTS=FALSE
       -DQGIS_MACAPP_BUNDLE=0
-      -DQGIS_MACAPP_DEV_PREFIX='#{prefix}/Frameworks'
+      -DQGIS_MACAPP_DEV_PREFIX='#{dev_fw}'
       -DQGIS_MACAPP_INSTALL_DEV=TRUE
       -DWITH_QSCIAPI=FALSE
       -DWITH_STAGED_PLUGINS=FALSE
@@ -250,6 +252,10 @@ class Qgis20 < Formula
       py_lib.mkpath
       ln_s qgis_modules, py_lib/'qgis'
     end
+
+    # symlink dev frameworks, so failed installs don't block future installs
+    frameworks.mkpath
+    ln_sf Dir["#{dev_fw}/*.framework"], frameworks
 
     ln_s 'QGIS.app/Contents/MacOS/fcgi-bin', prefix/'fcgi-bin' if build.with? 'server'
 
