@@ -2,7 +2,7 @@ require "formula"
 
 class RubyVersion19 < Requirement
   fatal true
-  satisfy(:build_env => false) { RUBY_VERSION >= "1.9" }
+  satisfy(:build_env => false) { RUBY_VERSION.to_f >= 1.9 }
 
   def message; <<-EOS.undent
       Ruby >= 1.9 is required to run tests, which utilize Encoding class.
