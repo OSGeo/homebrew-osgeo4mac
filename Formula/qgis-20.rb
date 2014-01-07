@@ -87,6 +87,7 @@ class Qgis20 < Formula
   option 'enable-isolation', "Isolate .app's environment to HOMEBRE_PREFIX, to coexist with other QGIS installs"
   option 'with-debug', 'Enable debug build, which outputs info to system.log or console'
   option 'without-brewed-python', "Prefer system Python (default is Homebrew's, if linked)"
+  option 'skip-stdlib-check', 'Build skips checking if dependencies are built against conflicting stdlib.'
   option 'without-server', 'Build without QGIS Server (qgis_mapserv.fcgi)'
   option 'without-postgresql', 'Build without current PostgreSQL client'
   option 'with-globe', 'Build with Globe plugin, based upon osgEarth'
@@ -166,9 +167,6 @@ class Qgis20 < Formula
   end
 
   def install
-    #raise
-    cxxstdlib_check :skip
-
     # Set bundling level back to 0 (the default in all versions prior to 1.8.0)
     # so that no time and energy is wasted copying the Qt frameworks into QGIS.
     dev_fw = lib/'qgis-dev'
@@ -246,6 +244,8 @@ class Qgis20 < Formula
         #raise
         system 'make install'
       end
+      #Fix install fail on stdlib check for Mavericks+
+      cxxstdlib_check :skip if MacOS.version >= :mavericks and build.include? 'skip-stdlib-check'
 
       py_lib = lib/"#{python.xy}/site-packages"
       qgis_modules = prefix/'QGIS.app/Contents/Resources/python/qgis'
