@@ -118,8 +118,8 @@ class Qgis20 < Formula
   depends_on SipBinary
   depends_on PyQtConfig
   depends_on 'qscintilla2' # will probably be a C++ lib deps in near future
-  depends_on 'qwt60' # keg_only, max of 6.0.2 works with embedded QwtPolar in QGIS 2.0.1
-  # TODO: add QwtPolar 1.1 formula for HEAD builds (then set external CMake options)
+  depends_on 'qwt'
+  depends_on 'qwtpolar'
   depends_on 'gsl'
   depends_on 'sqlite' # keg_only
   depends_on 'expat' # keg_only
@@ -169,6 +169,7 @@ class Qgis20 < Formula
   def install
     # Set bundling level back to 0 (the default in all versions prior to 1.8.0)
     # so that no time and energy is wasted copying the Qt frameworks into QGIS.
+    qwt_fw = Formula.factory('qwt').opt_prefix/"lib/qwt.framework"
     dev_fw = lib/'qgis-dev'
     dev_fw.mkpath
     args = %W[
@@ -179,6 +180,9 @@ class Qgis20 < Formula
       -Wno-dev
       -DBISON_EXECUTABLE=#{Formula.factory('bison').opt_prefix}/bin/bison
       -DENABLE_TESTS=FALSE
+      -DQWT_INCLUDE_DIR=#{qwt_fw}/Headers
+      -DQWT_LIBRARY=#{qwt_fw}/qwt
+      -DWITH_INTERNAL_QWTPOLAR=FALSE
       -DQGIS_MACAPP_BUNDLE=0
       -DQGIS_MACAPP_DEV_PREFIX='#{dev_fw}'
       -DQGIS_MACAPP_INSTALL_DEV=TRUE
