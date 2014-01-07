@@ -84,7 +84,7 @@ class Qgis20 < Formula
 
   head 'https://github.com/qgis/QGIS.git', :branch => 'master'
 
-  option 'enable-isolation', "Isolate .app's environment to HOMEBRE_PREFIX, to coexist with other QGIS installs"
+  option 'enable-isolation', "Isolate .app's environment to HOMEBREW_PREFIX, to coexist with other QGIS installs"
   option 'with-debug', 'Enable debug build, which outputs info to system.log or console'
   option 'without-brewed-python', "Prefer system Python (default is Homebrew's, if linked)"
   option 'skip-stdlib-check', 'Build skips checking if dependencies are built against conflicting stdlib.'
@@ -377,7 +377,8 @@ class Qgis20 < Formula
         #{opt_prefix}/bin/qgis
 
       NOTE: Your current PATH and PYTHONPATH environment variables are honored
-            when launching via the wrapper script, while launching QGIS.app bundle will not.
+            when launching via the wrapper script, while launching QGIS.app
+            bundle they are not.
 
     EOS
     s += python.standard_caveats if python
