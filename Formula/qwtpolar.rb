@@ -8,6 +8,11 @@ class Qwtpolar < Formula
   depends_on "qt"
   depends_on "qwt"
 
+  # fix designer plugin linking, when in non-standard prefix
+  def patches
+    DATA
+  end
+
   def install
     qwt_lib = Formula.factory('qwt').opt_prefix/"lib"
     inreplace "qwtpolarconfig.pri" do |s|
@@ -40,3 +45,20 @@ class Qwtpolar < Formula
   end
 
 end
+
+__END__
+diff --git a/designer/designer.pro b/designer/designer.pro
+index 4bca34c..208c428 100644
+--- a/designer/designer.pro
++++ b/designer/designer.pro
+@@ -58,6 +58,10 @@ contains(QWT_POLAR_CONFIG, QwtPolarDesigner) {
+
+     target.path = $${QWT_POLAR_INSTALL_PLUGINS}
+     INSTALLS += target
++
++    macx {
++        QMAKE_POST_LINK = install_name_tool -change libqwtpolar.1.dylib $${QWT_POLAR_INSTALL_PREFIX}/lib/libqwtpolar.1.dylib ${DESTDIR}/$(TARGET)
++    }
+ }
+ else {
+     TEMPLATE        = subdirs # do nothing
