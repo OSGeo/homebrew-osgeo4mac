@@ -127,6 +127,7 @@ class Qgis20 < Formula
     qwt_fw = Formula.factory('qwt').opt_prefix/"lib/qwt.framework"
     dev_fw = lib/'qgis-dev'
     dev_fw.mkpath
+    qsci_opt = Formula.factory('qscintilla2').opt_prefix
     args = %W[
       -DCMAKE_INSTALL_PREFIX=#{prefix}
       -DCMAKE_BUILD_TYPE=#{(build.with?('debug')) ? 'RelWithDebInfo' : 'None' }
@@ -137,6 +138,8 @@ class Qgis20 < Formula
       -DENABLE_TESTS=FALSE
       -DQWT_INCLUDE_DIR=#{qwt_fw}/Headers
       -DQWT_LIBRARY=#{qwt_fw}/qwt
+      -DQSCINTILLA_INCLUDE_DIR=#{qsci_opt}/include/Qsci
+      -DQSCINTILLA_LIBRARY=#{qsci_opt}/lib/libqscintilla2.dylib
       -DWITH_INTERNAL_QWTPOLAR=FALSE
       -DQGIS_MACAPP_BUNDLE=0
       -DQGIS_MACAPP_DEV_PREFIX='#{dev_fw}'
