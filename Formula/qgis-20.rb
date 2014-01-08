@@ -336,7 +336,7 @@ class Qgis20 < Formula
             bundle they are not.
 
       For stand-alone Python development, set the following environment variable:
-        export PYTHONPATH=#{python_site_packages}
+        export PYTHONPATH=#{python_site_packages}:$PYTHONPATH
 
     EOS
 
