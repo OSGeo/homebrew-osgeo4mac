@@ -51,7 +51,7 @@ Example installation session
 The following steps should result in a usable QGIS installation (QGIS 2.0 in this case) on a clean system:
 
 ```bash
-ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)”
+ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
 brew doctor
 brew tap dakcarto/homebrew-osgeo4mac
 brew tap homebrew/science
