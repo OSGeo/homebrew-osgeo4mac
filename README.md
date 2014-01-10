@@ -45,6 +45,23 @@ How do I use the Brewfiles?
 
 See: [Using OSGeo4Mac Brewfiles][brewfiles] in the wiki.
 
+Example installation session
+-----------------------------
+
+The following steps should result in a usable QGIS installation (QGIS 2.0 in this case) on a clean system:
+
+```bash
+ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)”
+brew doctor
+brew tap dakcarto/homebrew-osgeo4mac
+brew tap homebrew/science
+brew install dakcarto/osgeo4mac/qgis-20
+brew linkapps
+```
+
+You should now see QGIS 2 in Applications folder.
+
+
 Docs
 ----
 `brew help`, `man brew`, or the Homebrew [wiki][].
