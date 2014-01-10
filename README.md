@@ -57,6 +57,7 @@ brew tap dakcarto/homebrew-osgeo4mac
 brew tap homebrew/science
 brew install dakcarto/osgeo4mac/qgis-20
 brew linkapps
+sudo easy_install psycopg2
 ```
 
 You should now see QGIS 2 in Applications folder.
