@@ -8,10 +8,14 @@ SRC_DIR = HOME + '/QGIS/github.com/QGIS'
 INSTALL_PREFIX = HOME + '/QGIS/github.com/QGIS_Apps_osgeo4mac'
 
 HOMEBREW_PREFIX = '/usr/local'
+if 'HOMEBREW_PREFIX' in os.environ:
+    HOMEBREW_PREFIX = os.environ['HOMEBREW_PREFIX']
+
 GRASS_VERSION = '6.4.3'
 OSG_VERSION = '3.2.0'
 
-# NOTE: define HOMEBREW_PREFIX in your environment, and the following:
+### Qt Creator setup ###
+# define HOMEBREW_PREFIX in your environment, and the following:
 
 # set CMAKE_PREFIX_PATH env var for keg-only installs, and HOMEBREW_PREFIX
 #   CMAKE_PREFIX_PATH=${HOMEBREW_PREFIX}/opt/libxml2:${HOMEBREW_PREFIX}/opt/expat:${HOMEBREW_PREFIX}/opt/gettext:${HOMEBREW_PREFIX}/opt/sqlite:${HOMEBREW_PREFIX}
@@ -71,3 +75,4 @@ for k, v in opts.iteritems():
                                               osgv=OSG_VERSION))
 
 os.system("echo '{0}' | pbcopy".format(opts_s))
+print opts_s
