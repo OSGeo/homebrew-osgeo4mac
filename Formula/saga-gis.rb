@@ -7,7 +7,7 @@ class SagaGis < Formula
 
   head 'svn://svn.code.sf.net/p/saga-gis/code-0/trunk/saga-gis'
 
-  option "build-app", "Build SAGA.app Package"
+  option "with-app", "Build SAGA.app Package"
 
   depends_on :automake
   depends_on :autoconf
@@ -16,12 +16,15 @@ class SagaGis < Formula
   depends_on 'jasper'
   depends_on 'proj'
   depends_on 'wxmac'
+  depends_on 'unixodbc' => :recommended
   depends_on 'libharu' => :recommended
   depends_on 'postgresql' => :optional
+  depends_on :python => :optional
 
   def patches
     # Compiling on Mavericks with libc++ causes issues with LC_NUMERIC.
     # https://sourceforge.net/p/saga-gis/patches/12/
+    # Fixes issue with libio_grid.dylib. Thanks @dakcarto
     DATA
   end
 
@@ -44,11 +47,22 @@ class SagaGis < Formula
     inreplace "src/saga_core/saga_gui/Makefile.am", "aui,base,", ""
     inreplace "src/saga_core/saga_gui/Makefile.am", "propgrid,", ""
 
+    args = [
+        "--prefix=#{prefix}",
+        "--disable-dependency-tracking",
+        "--disable-openmp"
+
+    ]
+
+    args << "--disable-odbc" if build.without? "unixodbc"
+    args << "--with-postgresql" if build.with? "postgresql"
+    args << "--with-python" if build.with? "python"
+
     system "autoreconf", "-i"
-    system "./configure", "--prefix=#{prefix}"
+    system "./configure", *args
     system "make install"
 
-    if build.include? "build-app"
+    if build.include? "with-app"
       # Based on original script by Phil Hess
       # http://web.fastermac.net/~MacPgmr/
 
@@ -56,7 +70,7 @@ class SagaGis < Formula
       mkdir_p "#{buildpath}/SAGA.app/Contents/MacOS"
       mkdir_p "#{buildpath}/SAGA.app/Contents/Resources"
 
-      Pathname(buildpath/'SAGA.app/Contents/PkgInfo').write 'APPLSAGA'
+      (buildpath/'SAGA.app/Contents/PkgInfo').write 'APPLSAGA'
       cp "#{buildpath}/saga_gui.icns", "#{buildpath}/SAGA.app/Contents/Resources/"
       ln_s "#{bin}/saga_gui", "#{buildpath}/SAGA.app/Contents/MacOS/saga_gui"
 
@@ -85,16 +99,16 @@ class SagaGis < Formula
           <true/>
         </dict>
         </plist>
-    EOS
+      EOS
 
-    Pathname(buildpath/'SAGA.app/Contents/Info.plist').write config
-    prefix.install "SAGA.app"
+      (buildpath/'SAGA.app/Contents/Info.plist').write config
+      prefix.install "SAGA.app"
 
     end
   end
 
   def caveats
-    if build.include? "build-app" then <<-EOS.undent
+    if build.include? "with-app" then <<-EOS.undent
       SAGA.app was installed in:
         #{prefix}
 
@@ -103,7 +117,7 @@ class SagaGis < Formula
 
       Note that the SAGA GUI does not work very well yet.
       It has problems with creating a preferences file in the correct location and sometimes won't shut down (use Activity Monitor to force quit if necessary).
-      EOS
+    EOS
     end
   end
 end
@@ -121,22 +135,7 @@ index 0ce6d36..9f554a8 100644
  
  
  ///////////////////////////////////////////////////////////
-diff --git a/src/modules_io/grid/io_grid/xyz.cpp b/src/modules_io/grid/io_grid/xyz.cpp
-index 9b6dc3b..3efdaa1 100644
---- a/src/modules_io/grid/io_grid/xyz.cpp
-+++ b/src/modules_io/grid/io_grid/xyz.cpp
-@@ -173,6 +173,10 @@ bool CXYZ_Export::On_Execute(void)
- 	return( false );
- }
- 
-+//---------------------------------------------------------
-+CXYZ_Export::~CXYZ_Export(void)
-+{}
-+
- 
- ///////////////////////////////////////////////////////////
- //														 //
-diff --git a/src/modules_io/grid/io_grid/xyz.h b/src/modules_io/grid/io_grid/xyz.h
+ diff --git a/src/modules_io/grid/io_grid/xyz.h b/src/modules_io/grid/io_grid/xyz.h
 index ffbd194..33b62fd 100644
 --- a/src/modules_io/grid/io_grid/xyz.h
 +++ b/src/modules_io/grid/io_grid/xyz.h
@@ -145,6 +144,6 @@ index ffbd194..33b62fd 100644
  public:
  	CXYZ_Export(void);
 +	virtual ~CXYZ_Export(void);
- 
+
  	virtual CSG_String		Get_MenuPath	(void)			{	return( _TL("R:Export") );	}
- 
+
