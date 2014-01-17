@@ -356,7 +356,7 @@ class Qgis20 < Formula
     # check for required run-time Python module dependencies
     # TODO: add 'pyspatialite' when PyPi package supports spatialite 4.x
     xm = []
-    %w[psycopg2].each { |m| xm << m unless module_importable? m }
+    %w[psycopg2 matplotlib].each { |m| xm << m unless module_importable? m }
     unless xm.empty?
       s += <<-EOS.undent
         The following Python modules are needed by QGIS during run-time:
