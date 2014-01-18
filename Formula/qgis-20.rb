@@ -215,10 +215,6 @@ class Qgis20 < Formula
     py_lib.mkpath
     ln_s qgis_modules, py_lib/'qgis'
 
-    # symlink dev frameworks, so failed installs don't block future installs
-    frameworks.mkpath
-    ln_sf Dir["#{dev_fw}/*.framework"], frameworks
-
     ln_s 'QGIS.app/Contents/MacOS/fcgi-bin', prefix/'fcgi-bin' if build.with? 'server'
 
     doc.mkpath
@@ -321,16 +317,13 @@ class Qgis20 < Formula
     s = <<-EOS.undent
       QGIS is built as an application bundle. Environment variables for the
       Homebrew prefix have been embedded in QGIS.app:
-
         #{opt_prefix}/QGIS.app
 
       You may also symlink QGIS.app into ~/Applications:
-
         brew linkapps
 
       To run the `QGIS.app/Contents/MacOS/QGIS` binary use the wrapper script
       pre-defined with Homebrew prefix environment variables:
-
         #{opt_prefix}/bin/qgis
 
       NOTE: Your current PATH and PYTHONPATH environment variables are honored
@@ -339,6 +332,11 @@ class Qgis20 < Formula
 
       For stand-alone Python development, set the following environment variable:
         export PYTHONPATH=#{python_site_packages}:$PYTHONPATH
+
+      Developer frameworks are installed in:
+        #{opt_prefix}/lib/qgis-dev
+        NOTE: not symlinked to HOMEBREW_PREFIX/Frameworks, which affects isolation.
+              Use dyld -F option in CPPFLAGS/LDFLAGS when building other software.
 
     EOS
 
