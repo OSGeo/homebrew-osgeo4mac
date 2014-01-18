@@ -277,7 +277,6 @@ class Qgis20 < Formula
         #{Formula.factory('sqlite').opt_prefix}/lib
         #{Formula.factory('expat').opt_prefix}/lib
         #{Formula.factory('libxml2').opt_prefix}/lib
-        #{Formula.factory('qwt60').opt_prefix}/lib
         #{HOMEBREW_PREFIX}/lib
       ]
       envars[:DYLD_VERSIONED_LIBRARY_PATH] = versioned.join(pthsep)
