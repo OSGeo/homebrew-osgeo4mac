@@ -1,4 +1,51 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+/***************************************************************************
+ OSGeo4Mac Python startup script for setting CMake option string for use in
+ Qt Creator with dev builds and installs of QGIS when built off dependencies
+ from homebrew-osgeo4mac tap
+                              -------------------
+        begin    : January 2014
+        copyright: (C) 2014 Larry Shaffer
+        email    : larrys at dakotacarto dot com
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+"""
+
+############################# Qt Creator setup #############################
+# define HOMEBREW_PREFIX in your build environment, and the following:
+#
+# NOTE: Qt Creator does not expand variables in the build environment panel.
+#       You will have to define absolute paths for variable values.
+#
+# set CMAKE_PREFIX_PATH env var for keg-only installs, and HOMEBREW_PREFIX
+#   CMAKE_PREFIX_PATH=${HOMEBREW_PREFIX}/opt/libxml2:\
+#                     ${HOMEBREW_PREFIX}/opt/expat:\
+#                     ${HOMEBREW_PREFIX}/opt/gettext:\
+#                     ${HOMEBREW_PREFIX}/opt/sqlite:\
+#                     ${HOMEBREW_PREFIX}
+#
+# ensure libintl.h can be found
+#   CXXFLAGS=-I${HOMEBREW_PREFIX}/opt/gettext/include
+#
+# search Homebrew's Frameworks directory before those in /Library or /System
+#   LDFLAGS=-F${HOMEBREW_PREFIX}/Frameworks
+#
+# helps setup Postgres variables in CMake module
+#   POSTGRES_HOME=${HOMEBREW_PREFIX}
+#
+# if using Homebrew Python
+#   PYTHONPATH=${HOMEBREW_PREFIX}/lib/python2.7/site-packages
+
 
 import os
 from collections import OrderedDict
@@ -13,20 +60,6 @@ if 'HOMEBREW_PREFIX' in os.environ:
 
 GRASS_VERSION = '6.4.3'
 OSG_VERSION = '3.2.0'
-
-### Qt Creator setup ###
-# define HOMEBREW_PREFIX in your environment, and the following:
-
-# set CMAKE_PREFIX_PATH env var for keg-only installs, and HOMEBREW_PREFIX
-#   CMAKE_PREFIX_PATH=${HOMEBREW_PREFIX}/opt/libxml2:${HOMEBREW_PREFIX}/opt/expat:${HOMEBREW_PREFIX}/opt/gettext:${HOMEBREW_PREFIX}/opt/sqlite:${HOMEBREW_PREFIX}
-# ensure libintl.h can be found
-#   CXXFLAGS=-I${HOMEBREW_PREFIX}/opt/gettext/include
-# search Homebrew's Frameworks directory before those in /Library or /System
-#   LDFLAGS=-F${HOMEBREW_PREFIX}/Frameworks
-# helps setup Postgres variables in CMake module
-#   POSTGRES_HOME=${HOMEBREW_PREFIX}
-# if using Homebrew Python
-#   PYTHONPATH=${HOMEBREW_PREFIX}/lib/python2.7/site-packages
 
 opts = OrderedDict([
     ('CMAKE_INSTALL_PREFIX', INSTALL_PREFIX),
@@ -58,6 +91,7 @@ opts = OrderedDict([
     ('QGIS_MACAPP_BUNDLE', '0')
 ])
 
+# These should be found automatically now...
 #     ('SQLITE3_INCLUDE_DIR', '{hb}/opt/sqlite/include'),
 #     ('SQLITE3_LIBRARY', '{hb}/opt/sqlite/lib/libsqlite3.dylib'),
 #     ('QSCINTILLA_INCLUDE_DIR', '{hb}/opt/qscintilla2/include/Qsci'),
@@ -75,4 +109,5 @@ for k, v in opts.iteritems():
                                               osgv=OSG_VERSION))
 
 os.system("echo '{0}' | pbcopy".format(opts_s))
+print "The following has been copied to the clipboard:\n"
 print opts_s
