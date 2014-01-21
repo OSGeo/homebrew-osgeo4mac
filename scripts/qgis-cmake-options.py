@@ -21,32 +21,6 @@
  ***************************************************************************/
 """
 
-############################# Qt Creator setup #############################
-# define HOMEBREW_PREFIX in your build environment, and the following:
-#
-# NOTE: Qt Creator does not expand variables in the build environment panel.
-#       You will have to define absolute paths for variable values.
-#
-# set CMAKE_PREFIX_PATH env var for keg-only installs, and HOMEBREW_PREFIX
-#   CMAKE_PREFIX_PATH=${HOMEBREW_PREFIX}/opt/libxml2:\
-#                     ${HOMEBREW_PREFIX}/opt/expat:\
-#                     ${HOMEBREW_PREFIX}/opt/gettext:\
-#                     ${HOMEBREW_PREFIX}/opt/sqlite:\
-#                     ${HOMEBREW_PREFIX}
-#
-# ensure libintl.h can be found
-#   CXXFLAGS=-I${HOMEBREW_PREFIX}/opt/gettext/include
-#
-# search Homebrew's Frameworks directory before those in /Library or /System
-#   LDFLAGS=-F${HOMEBREW_PREFIX}/Frameworks
-#
-# helps setup Postgres variables in CMake module
-#   POSTGRES_HOME=${HOMEBREW_PREFIX}
-#
-# if using Homebrew Python
-#   PYTHONPATH=${HOMEBREW_PREFIX}/lib/python2.7/site-packages
-
-
 import os
 from collections import OrderedDict
 
@@ -61,10 +35,30 @@ if 'HOMEBREW_PREFIX' in os.environ:
 GRASS_VERSION = '6.4.3'
 OSG_VERSION = '3.2.0'
 
+# ensure libintl.h can be found in gettext for grass
+CXX_FLGS = "-I{hb}/opt/gettext/include"
+if 'CXXFLAGS' in os.environ:
+    CXX_FLGS += " " + os.environ['CXXFLAGS']
+
+# search Homebrew's Frameworks directory before those in /Library or /System
+LD_FLGS = "-F{hb}/Frameworks"
+if 'LDFLAGS' in os.environ:
+    LD_FLGS += " " + os.environ['LDFLAGS']
+
+# IMPORTANT: mulit-path options need the CMake list semicolon (;) delimiter,
+#            NOT the environment variable path list colon (:) separator
+
+# set CMAKE_PREFIX_PATH for keg-only installs, and HOMEBREW_PREFIX
+
 opts = OrderedDict([
     ('CMAKE_INSTALL_PREFIX', INSTALL_PREFIX),
+    ('CMAKE_PREFIX_PATH', '"{hb}/opt/libxml2;{hb}/opt/expat;{hb}/opt/gettext;{hb}/opt/sqlite;{hb}"'),
     ('CMAKE_BUILD_TYPE', 'RelWithDebInfo'),
     ('CMAKE_FIND_FRAMEWORK', 'LAST'),
+    ('CMAKE_CXX_FLAGS', '"' + CXX_FLGS + '"'),
+    ('CMAKE_EXE_LINKER_FLAGS', '"' + LD_FLGS + '"'),
+    ('CMAKE_MODULE_LINKER_FLAGS', '"' + LD_FLGS + '"'),
+    ('CMAKE_SHARED_LINKER_FLAGS', '"' + LD_FLGS + '"'),
     ('CXX_EXTRA_FLAGS', '"-isystem-prefix {hb} -Wno-unused-private-field"'),
     ('BISON_EXECUTABLE', '{hb}/opt/bison/bin/bison'),
     ('QT_QMAKE_EXECUTABLE', '{hb}/bin/qmake'),
