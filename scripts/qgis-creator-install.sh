@@ -20,8 +20,9 @@ if [ -z "$HOMEBREW_PREFIX" ]; then
   HOMEBREW_PREFIX='/usr/local'
 fi
 
-# ensure we can delete previous, then delete it QGIS.app
+# ensure we can delete previous QGIS.app, then delete it
 if [ -d "${QGIS}" ]; then
+  echo "Removing existing QGIS.app..."
   /bin/chmod -R u+w "${QGIS}"
   /bin/rm -fdR "${QGIS}"
 fi
@@ -37,19 +38,20 @@ if [ -d "${QGIS}" ]; then
 
   # ensure we can write to QGIS.app bundle components
   # NOTE: Homebrew's binaries are built as non-writable
+  echo "Making QGIS.app user-writable..."
   /bin/chmod -R u+w "${QGIS}"
 
   # write LSEnvironment entity to app's Info.plist
   # this differs from LSEnvironment in app run from build directory; see set-qgis-app-env.py
   echo "Setting QGIS.app environment variables..."
-  ${SCRIPT_DIR}/set-qgis-app-env.py -p ${HOMEBREW_PREFIX} "${QGIS}"
+  ${SCRIPT_DIR}/qgis-set-app-env.py -p ${HOMEBREW_PREFIX} "${QGIS}"
   if [ $? -gt 0 ]; then
       echo -e "\nERROR setting installed QGIS.app environment variables"
       exit 1
   fi
 
   echo "Setting QGIS Browser.app environment variables..."
-  ${SCRIPT_DIR}/set-qgis-app-env.py -p ${HOMEBREW_PREFIX} "${QGIS}/Contents/MacOS/bin/QGIS Browser.app"
+  ${SCRIPT_DIR}/qgis-set-app-env.py -p ${HOMEBREW_PREFIX} "${QGIS}/Contents/MacOS/bin/QGIS Browser.app"
   if [ $? -gt 0 ]; then
       echo -e "\nERROR setting installed QGIS Browser.app environment variables"
       exit 1

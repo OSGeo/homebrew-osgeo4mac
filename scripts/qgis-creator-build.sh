@@ -41,7 +41,7 @@ fi
 if [ -d "${BUILD_DIR}/output/bin/QGIS.app" ]; then
   # this differs from LSEnvironment in bundled app; see set-qgis-app-env.py
   echo "Setting QGIS.app environment variables..."
-  ${SCRIPT_DIR}/set-qgis-app-env.py -p ${HOMEBREW_PREFIX} -b ${BUILD_DIR} "${BUILD_DIR}/output/bin/QGIS.app"
+  ${SCRIPT_DIR}/qgis-set-app-env.py -p ${HOMEBREW_PREFIX} -b ${BUILD_DIR} "${BUILD_DIR}/output/bin/QGIS.app"
   if [ $? -gt 0 ]; then
       echo -e "\nERROR setting QGIS.app environment variables"
       exit 1
@@ -50,7 +50,7 @@ fi
 
 if [ -d "${BUILD_DIR}/output/bin/QGIS Browser.app" ]; then
   echo "Setting QGIS Browser.app environment variables..."
-  ${SCRIPT_DIR}/set-qgis-app-env.py -p ${HOMEBREW_PREFIX} -b ${BUILD_DIR} "${BUILD_DIR}/output/bin/QGIS Browser.app"
+  ${SCRIPT_DIR}/qgis-set-app-env.py -p ${HOMEBREW_PREFIX} -b ${BUILD_DIR} "${BUILD_DIR}/output/bin/QGIS Browser.app"
   if [ $? -gt 0 ]; then
       echo -e "\nERROR setting QGIS Browser.app environment variables"
       exit 1
