@@ -30,9 +30,8 @@ HOME = os.path.expanduser('~')
 GRASS_VERSION = '6.4.3'
 OSG_VERSION = '3.2.0'
 HOMEBREW_PREFIX = '/usr/local'
-QGIS_BUILD_DIR = HOME + '/QGIS/github.com/build-osgeo4mac'
 QGIS_LOG_DIR = HOME + '/Library/Logs/QGIS'
-QGIS_LOG_FILE = QGIS_LOG_DIR + '/qgis.log'
+QGIS_LOG_FILE = QGIS_LOG_DIR + '/qgis-dev.log'
 
 
 def env_vars(ap, hb, qb='', ql=''):
@@ -41,7 +40,7 @@ def env_vars(ap, hb, qb='', ql=''):
 
     dyld_path = '{hb}/opt/sqlite/lib:{hb}/opt/libxml2/lib:{hb}/lib'
     run_from_build = False
-    if qb and os.path.exists(qb):
+    if qb:
         qbr = os.path.realpath(qb)
         if qbr in ap:
             run_from_build = True
@@ -71,7 +70,7 @@ def env_vars(ap, hb, qb='', ql=''):
     options['QGIS_LOG_FILE'] = ql
 
     for k, v in options.iteritems():
-        options[k] = v.format(hb=hb, qb=QGIS_BUILD_DIR)
+        options[k] = v.format(hb=hb)
 
     return options
 
@@ -98,7 +97,7 @@ def arg_parser():
     parser.add_argument(
         '-p', '--homebrew-prefix', dest='hb',
         metavar='homebrew_prefix',
-        help='homebrew prefix path, or set HOMEBREW_PREFIX'
+        help='homebrew prefix path, or set HOMEBREW_PREFIX (/usr/local default)'
     )
     parser.add_argument(
         '-b', '--build-dir', dest='qb',
@@ -131,14 +130,32 @@ def main():
     hb_prefix = HOMEBREW_PREFIX
     if 'HOMEBREW_PREFIX' in os.environ:
         hb_prefix = os.environ['HOMEBREW_PREFIX']
-    hb = args.hb if args.hb else hb_prefix
+    hb = os.path.realpath(args.hb) if args.hb else hb_prefix
+    if not os.path.isabs(hb) or not os.path.exists(hb):
+        print 'HOMEBREW_PREFIX not resolved to existing absolute path.'
+        sys.exit(1)
 
     q_log = QGIS_LOG_FILE
     if 'QGIS_LOG_FILE' in os.environ:
         q_log = os.environ['QGIS_LOG_FILE']
-    ql = args.ql if args.ql else q_log
+    ql = os.path.realpath(args.ql) if args.ql else q_log
+    try:
+        if not os.path.exists(ql):
+            if ql == os.path.realpath(QGIS_LOG_FILE):
+                # ok to auto-create log's parent directories
+                p_dir = os.path.dirname(ql)
+                if not os.path.exists(p_dir):
+                    os.makedirs(p_dir)
+            subprocess.call(['/usr/bin/touch', ql])
+    except OSError, e:
+        print 'Could not create QGIS log file at: {0}'.format(ql)
+        print 'Create an empty file at the indicated path for logging to work.'
+        print >>sys.stderr, "Warning:", e
 
-    qb = args.qb if args.qb else ''
+    qb = os.path.realpath(args.qb) if args.qb else ''
+    if qb and (not os.path.isabs(qb) or not os.path.exists(qb)):
+        print 'QGIS build directory not resolved to existing absolute path.'
+        sys.exit(1)
 
     # write variables to Info.plist
     evars = env_vars(ap, hb, qb, ql)
@@ -167,6 +184,8 @@ def main():
     # update modification date on app bundle, or changes won't take effect
     subprocess.call(['/usr/bin/touch', ap])
 
+    print 'Done setting variables'
 
 if __name__ == '__main__':
     main()
+    sys.exit(0)
