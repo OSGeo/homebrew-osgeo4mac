@@ -29,13 +29,13 @@ if [ $? -gt 0 ]; then
     exit 1
 fi
 
-# stage/compile plugins so they are available when running from build directory
-echo "Staging plugins to QGIS build directory..."
-make -j ${CPUCORES} staged-plugins-pyc
-if [ $? -gt 0 ]; then
-    echo -e "\nERROR staging plugins to QGIS build directory"
-    exit 1
-fi
+# # stage/compile plugins so they are available when running from build directory
+# echo "Staging plugins to QGIS build directory..."
+# make -j ${CPUCORES} staged-plugins-pyc
+# if [ $? -gt 0 ]; then
+#     echo -e "\nERROR staging plugins to QGIS build directory"
+#     exit 1
+# fi
 
 # write LSEnvironment entity to app's Info.plist
 if [ -d "${BUILD_DIR}/output/bin/QGIS.app" ]; then
