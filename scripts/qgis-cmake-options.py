@@ -50,7 +50,8 @@ def cmake_opts(qi, hb):
     cm_opts = OrderedDict([
         ('CMAKE_INSTALL_PREFIX', qi),
         ('CMAKE_PREFIX_PATH', '"{hb}/opt/libxml2;{hb}/opt/expat;'
-                              '{hb}/opt/gettext;{hb}/opt/sqlite;{hb}"'),
+                              '{hb}/opt/gettext;{hb}/opt/sqlite;'
+                              '{hb}/opt/qwt/lib;{hb}/opt/qwtpolar/lib;{hb}"'),
         ('CMAKE_BUILD_TYPE', 'RelWithDebInfo'),
         ('CMAKE_FIND_FRAMEWORK', 'LAST'),
         ('CMAKE_CXX_FLAGS', '"' + cxx_flags + '"'),
@@ -65,8 +66,6 @@ def cmake_opts(qi, hb):
         ('WITH_ASTYLE', 'TRUE'),
         ('WITH_INTERNAL_SPATIALITE', 'FALSE'),
         ('WITH_PYSPATIALITE', 'FALSE'),
-        ('QWT_LIBRARY', '{hb}/opt/qwt/lib/qwt.framework/qwt'),
-        ('QWT_INCLUDE_DIR', '{hb}/opt/qwt/lib/qwt.framework/Headers'),
         ('WITH_INTERNAL_QWTPOLAR', 'FALSE'),
         ('WITH_MAPSERVER', 'TRUE'),
         ('WITH_STAGED_PLUGINS', 'FALSE'),
@@ -83,11 +82,19 @@ def cmake_opts(qi, hb):
         ('QGIS_MACAPP_BUNDLE', '0')
     ])
 
+    # ('CMAKE_FRAMEWORK_PATH', '""')
+
     # These should be found automatically now...
     # ('SQLITE3_INCLUDE_DIR', '{hb}/opt/sqlite/include'),
     # ('SQLITE3_LIBRARY', '{hb}/opt/sqlite/lib/libsqlite3.dylib'),
     # ('QSCINTILLA_INCLUDE_DIR', '{hb}/opt/qscintilla2/include/Qsci'),
     # ('QSCINTILLA_LIBRARY', '{hb}/opt/qscintilla2/lib/libqscintilla2.dylib'),
+    # ('QWT_LIBRARY', '{hb}/opt/qwt/lib/qwt.framework/qwt'),
+    # ('QWT_INCLUDE_DIR', '{hb}/opt/qwt/lib/qwt.framework/Headers'),
+    # ('QWTPOLAR_LIBRARY',
+    #  '{hb}/opt/qwtpolar/lib/qwtpolar.framework/qwt'),
+    # ('QWTPOLAR_INCLUDE_DIR',
+    #  '{hb}/opt/qwtpolar/lib/qwtpolar.framework/Headers'),
 
     if os.path.exists(hb + '/Frameworks/Python.framework'):
         cm_opts['PYTHON_EXECUTABLE'] = '{hb}/bin/python'
