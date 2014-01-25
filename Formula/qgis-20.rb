@@ -418,6 +418,6 @@ class Qgis20 < Formula
   end
 
   def module_importable?(mod)
-    quiet_system "#{python_exec}", "-c", "import #{mod}"
+    quiet_system python_exec, "-c", "import #{mod}"
   end
 end
