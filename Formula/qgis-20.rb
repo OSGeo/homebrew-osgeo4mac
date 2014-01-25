@@ -125,6 +125,7 @@ class Qgis20 < Formula
     # Set bundling level back to 0 (the default in all versions prior to 1.8.0)
     # so that no time and energy is wasted copying the Qt frameworks into QGIS.
     qwt_fw = Formula.factory('qwt').opt_prefix/"lib/qwt.framework"
+    qwtpolar_fw = Formula.factory('qwtpolar').opt_prefix/"lib/qwtpolar.framework"
     dev_fw = lib/'qgis-dev'
     dev_fw.mkpath
     qsci_opt = Formula.factory('qscintilla2').opt_prefix
@@ -138,6 +139,8 @@ class Qgis20 < Formula
       -DENABLE_TESTS=FALSE
       -DQWT_INCLUDE_DIR=#{qwt_fw}/Headers
       -DQWT_LIBRARY=#{qwt_fw}/qwt
+      -DQWTPOLAR_INCLUDE_DIR=#{qwtpolar_fw}/Headers
+      -DQWTPOLAR_LIBRARY=#{qwtpolar_fw}/qwtpolar
       -DQSCINTILLA_INCLUDE_DIR=#{qsci_opt}/include/Qsci
       -DQSCINTILLA_LIBRARY=#{qsci_opt}/lib/libqscintilla2.dylib
       -DWITH_INTERNAL_QWTPOLAR=FALSE
@@ -148,14 +151,10 @@ class Qgis20 < Formula
       -DWITH_STAGED_PLUGINS=FALSE
     ]
 
-    args << "-DPYTHON_EXECUTABLE='#{which("python")}'"
-    unless osx_python?
-      if brewed_python_framework?
-        args << "-DPYTHON_CUSTOM_FRAMEWORK='#{brewed_python_framework}'"
-      else
-        args << "-DPYTHON_INCLUDE_DIR='#{python_incdir}'"
-        args << "-DPYTHON_LIBRARY='#{python_libdir}/libpython2.7.dylib'"
-      end
+    args << "-DPYTHON_EXECUTABLE='#{python_exec}'"
+    # brewed python is used if installed
+    if brewed_python?
+      args << "-DPYTHON_CUSTOM_FRAMEWORK='#{brewed_python_framework}'"
     end
 
     # find git revision for HEAD build
@@ -201,7 +200,7 @@ class Qgis20 < Formula
     mkdir 'build'
 
     cd 'build' do
-      #Fix install fail on stdlib check for Mavericks+
+      # fix install fail on stdlib check for Mavericks+, if mixing supporting libs with different stdlibs
       cxxstdlib_check :skip if MacOS.version >= :mavericks and build.include? 'skip-stdlib-check'
 
       system 'cmake', '..', *args
@@ -381,14 +380,10 @@ class Qgis20 < Formula
   # python utils (deprecated in latest Homebrew)
   # see: https://github.com/Homebrew/homebrew/pull/24842
 
-  def brewed_python?
-    Formula.factory("python").linked_keg.exist?
-  end
-
-  def osx_python?
-    p = `python -c "import sys; print(sys.prefix)"`.strip
-    p.start_with?("/System/Library/Frameworks/Python.framework")
-  end
+  #def osx_python?
+  #  p = `python -c "import sys; print(sys.prefix)"`.strip
+  #  p.start_with?("/System/Library/Frameworks/Python.framework")
+  #end
 
   def brewed_python_framework
     HOMEBREW_PREFIX/"Frameworks/Python.framework/Versions/2.7"
@@ -398,12 +393,24 @@ class Qgis20 < Formula
     brewed_python_framework.exist?
   end
 
+  def brewed_python?
+    Formula.factory("python").linked_keg.exist? and brewed_python_framework?
+  end
+
+  def python_exec
+    if brewed_python?
+      brewed_python_framework/"bin/python"
+    else
+      which("python")
+    end
+  end
+
   def python_incdir
-    Pathname.new(`python -c 'from distutils import sysconfig; print(sysconfig.get_python_inc())'`.strip)
+    Pathname.new(`#{python_exec} -c 'from distutils import sysconfig; print(sysconfig.get_python_inc())'`.strip)
   end
 
   def python_libdir
-    Pathname.new(`python -c "from distutils import sysconfig; print(sysconfig.get_config_var('LIBPL'))"`.strip)
+    Pathname.new(`#{python_exec} -c "from distutils import sysconfig; print(sysconfig.get_config_var('LIBPL'))"`.strip)
   end
 
   def python_site_packages
@@ -411,6 +418,6 @@ class Qgis20 < Formula
   end
 
   def module_importable?(mod)
-    quiet_system "python", "-c", "import #{mod}"
+    quiet_system "#{python_exec}", "-c", "import #{mod}"
   end
 end
