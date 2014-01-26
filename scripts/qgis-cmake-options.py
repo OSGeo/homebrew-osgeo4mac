@@ -51,7 +51,8 @@ def cmake_opts(qi, hb):
         ('CMAKE_INSTALL_PREFIX', qi),
         ('CMAKE_PREFIX_PATH', '"{hb}/opt/libxml2;{hb}/opt/expat;'
                               '{hb}/opt/gettext;{hb}/opt/sqlite;'
-                              '{hb}/opt/qwt/lib;{hb}/opt/qwtpolar/lib;{hb}"'),
+                              '{hb}"'),
+        ('CMAKE_FRAMEWORK_PATH', '"{hb}/opt/qwt/lib;{hb}/opt/qwtpolar/lib"'),
         ('CMAKE_BUILD_TYPE', 'RelWithDebInfo'),
         ('CMAKE_FIND_FRAMEWORK', 'LAST'),
         ('CMAKE_CXX_FLAGS', '"' + cxx_flags + '"'),
@@ -96,9 +97,10 @@ def cmake_opts(qi, hb):
     # ('QWTPOLAR_INCLUDE_DIR',
     #  '{hb}/opt/qwtpolar/lib/qwtpolar.framework/Headers'),
 
-    if os.path.exists(hb + '/Frameworks/Python.framework'):
+    if os.path.exists(hb + '/Frameworks/Python.framework/Versions/2.7'):
         cm_opts['PYTHON_EXECUTABLE'] = '{hb}/bin/python'
-        cm_opts['PYTHON_CUSTOM_FRAMEWORK'] = '{hb}/Frameworks/Python.framework'
+        cm_opts['PYTHON_CUSTOM_FRAMEWORK'] = \
+            '{hb}/Frameworks/Python.framework/Versions/2.7'
 
     return cm_opts
 
