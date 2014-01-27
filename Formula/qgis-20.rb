@@ -117,11 +117,14 @@ class Qgis20 < Formula
   #        https://github.com/qgis/QGIS/commit/6f9795b0
   # fix for finding Qt Plugins directory when QGIS_MACAPP_BUNDLE = 0
   #   see: https://github.com/dakcarto/homebrew-osgeo4mac/issues/13
+  # backport PYQGIS_STARTUP support for isolation, or to avoid Kyngchaos.com
+  #   python modules pulling in duplicate linked *.framework libs
   def patches
     unless build.head?
       %W[
         https://gist.github.com/dakcarto/7764118/raw/6cdc678857ae773dceabe6226bfc40ead4f11837/qgis-20_sip-fixes
         https://gist.github.com/dakcarto/8642034/raw/95c3ab58086363b6d812191b0d8f517674d67f20/qgis-20_qt-plugins
+        https://gist.github.com/dakcarto/8642149/raw/6524174169fa82e31d1ade4ac8fb5a2ca8acf421/qgis-20_pyqgis-startup
       ]
     end
   end
@@ -280,9 +283,11 @@ class Qgis20 < Formula
         #{HOMEBREW_PREFIX}/lib
       ]
       envars[:DYLD_VERSIONED_LIBRARY_PATH] = versioned.join(pthsep)
+    end
+    if build.include? 'enable-isolation' or File.exist?("/Library/Frameworks/GDAL.framework")
       # TODO: is PYTHONHOME necessary for isolation, or is it set by embedded interpreter?
       #envars[:PYTHONHOME] = "#{python.framework}/Python.framework/Versions/Current"
-      envars[:PYQGIS_STARTUP] = opt_prefix/'pyqgis_startup.py' # only works with QGIS > 2.0.1
+      envars[:PYQGIS_STARTUP] = opt_prefix/'pyqgis_startup.py'
     end
 
     #envars.each { |key, value| puts "#{key.to_s}=#{value}" }
