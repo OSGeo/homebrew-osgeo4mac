@@ -112,12 +112,17 @@ class Qgis20 < Formula
   conflicts_with 'homebrew/science/qgis'
 
   # fixes for stable to work with sip 4.15, remove on release > 2.0.1
-  # see: https://github.com/qgis/QGIS/commit/d27ad33c
-  #      https://github.com/qgis/QGIS/commit/641359d3
-  #      https://github.com/qgis/QGIS/commit/6f9795b0
+  #   see: https://github.com/qgis/QGIS/commit/d27ad33c
+  #        https://github.com/qgis/QGIS/commit/641359d3
+  #        https://github.com/qgis/QGIS/commit/6f9795b0
+  # fix for finding Qt Plugins directory when QGIS_MACAPP_BUNDLE = 0
+  #   see: https://github.com/dakcarto/homebrew-osgeo4mac/issues/13
   def patches
     unless build.head?
-      'https://gist.github.com/dakcarto/7764118/raw/6cdc678857ae773dceabe6226bfc40ead4f11837/qgis-20_sip-fixes'
+      %W[
+        https://gist.github.com/dakcarto/7764118/raw/6cdc678857ae773dceabe6226bfc40ead4f11837/qgis-20_sip-fixes
+        https://gist.github.com/dakcarto/8642034/raw/95c3ab58086363b6d812191b0d8f517674d67f20/qgis-20_qt-plugins
+      ]
     end
   end
 
