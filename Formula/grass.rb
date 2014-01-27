@@ -1,6 +1,6 @@
 require 'formula'
 
-class GrassOff < Formula
+class Grass < Formula
   homepage 'http://grass.osgeo.org/'
   head 'https://svn.osgeo.org/grass/grass/trunk'
   url 'http://grass.osgeo.org/grass64/source/grass-6.4.3.tar.gz'
@@ -11,14 +11,13 @@ class GrassOff < Formula
   depends_on :macos => :lion
   depends_on 'apple-gcc42' if MacOS.version >= :mountain_lion
   depends_on "pkg-config" => :build
-  depends_on :python
   depends_on "gettext"
   depends_on "readline"
   depends_on "gdal"
   depends_on "libtiff"
   depends_on "unixodbc"
   depends_on "fftw"
-  depends_on "wxmac" => :recommended # prefer over OS X's version because of 64bit
+  depends_on "wxmac-294" => :recommended # prefer over OS X's version because of 64bit
   depends_on :postgresql => :optional
   depends_on :mysql => :optional
   depends_on "cairo"
@@ -38,12 +37,13 @@ class GrassOff < Formula
   end
 
   def headless?
-    # The GRASS GUI is based on WxPython. Unfortunately, Lion does not include
-    # this module so we have to drop it.
-    build.include? 'without-gui' or MacOS.version == :lion
+    # The GRASS GUI is based on WxPython.
+    build.include? 'without-gui'
   end
 
   def install
+    raise
+
     readline = Formula.factory('readline')
     gettext = Formula.factory('gettext')
 
@@ -79,7 +79,9 @@ class GrassOff < Formula
     if headless? or build.without? 'wxmac'
       args << "--without-wxwidgets"
     else
-      args << "--with-wxwidgets=#{Formula.factory('wxmac').opt_prefix}/bin/wx-config"
+      wxmac = Formula.factory('wxmac-294').opt_prefix
+      ENV["PYTHONPATH"] = "#{wxmac}/lib/python2.7/site-packages"
+      args << "--with-wxwidgets=#{wxmac}/bin/wx-config"
     end
 
     args << "--enable-64bit" if MacOS.prefer_64_bit?
@@ -152,6 +154,6 @@ index f1edea6..be404b0 100644
  endif
 -	@# enable OSX Help Viewer
 -	@if [ "`cat include/Make/Platform.make | grep -i '^ARCH.*darwin'`" ] ; then /bin/ln -sfh "${INST_DIR}/docs/html" /Library/Documentation/Help/GRASS-${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR} ; fi
- 
- 
+
+
  install-strip: FORCE
