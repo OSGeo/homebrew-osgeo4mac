@@ -5,17 +5,21 @@ class Qwtpolar < Formula
   url "http://downloads.sf.net/project/qwtpolar/qwtpolar-beta/1.1.0-rc1/qwtpolar-1.1.0-rc1.tar.bz2"
   sha1 "b71d6f462c857fd57f295ad97e87efa88b3b1ada"
 
+  head 'svn://svn.code.sf.net/p/qwtpolar/code/trunk'
+
   option "with-examples", "Build example apps"
 
   depends_on "qt"
   depends_on "qwt"
 
-  # fix lib search paths (typos?)
+  # fix lib search paths: https://sourceforge.net/p/qwtpolar/bugs/5/ (committed)
   def patches
-    DATA
+    DATA unless build.head?
   end
 
   def install
+    cd "qwtpolar" if build.head?
+
     qwt_opt = Formula.factory("qwt").opt_prefix
     inreplace "qwtpolarconfig.pri" do |s|
       # change_make_var won't work because there are leading spaces
