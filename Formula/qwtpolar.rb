@@ -23,13 +23,21 @@ class Qwtpolar < Formula
     qwt_opt = Formula.factory("qwt").opt_prefix
     inreplace "qwtpolarconfig.pri" do |s|
       # change_make_var won't work because there are leading spaces
-      s.gsub! /^(\s*)QWT_POLAR_INSTALL_PREFIX\s*=\s*(.*)$/, "\\1QWT_POLAR_INSTALL_PREFIX=#{prefix}"
-      s.sub! /(QWT_POLAR_CONFIG\s*\+= QwtPolarExamples)/, "#\\1" unless build.with? "examples"
+      s.gsub! /^(\s*)QWT_POLAR_INSTALL_PREFIX\s*=\s*(.*)$/,
+              "\\1QWT_POLAR_INSTALL_PREFIX=#{prefix}"
+      s.sub! /(QWT_POLAR_CONFIG\s*\+= QwtPolarExamples)/,
+             "#\\1" unless build.with? "examples"
       # add paths to installed qwt (this supports non-standard HOMEBREW_PREFIX)
       s << "\n" << "INCLUDEPATH += #{qwt_opt}/lib/qwt.framework/Headers"
       s << "\n" << "QMAKE_LFLAGS += -F#{qwt_opt}/lib"
       s << "\n" << "LIBS += -framework qwt"
     end
+
+    inreplace "qwtpolarbuild.pri" do |s|
+        # designer plugin build fails unless there is also a release binary
+        s.sub! /^(\s*CONFIG\s*\+=\s*)debug$/,
+               "\\1debug_and_release\nCONFIG += build_all"
+    end if build.head?
 
     # update designer plugin linking back to qwtpolar framework/lib
     inreplace "designer/designer.pro" do |s|
@@ -46,7 +54,7 @@ class Qwtpolar < Formula
       EOS
     end
 
-    args = %W[-config release -spec]
+    args = %W[-spec]
     # On Mavericks we want to target libc++, this requires a unsupported/macx-clang-libc++ flag
     if ENV.compiler == :clang and MacOS.version >= :mavericks
       args << "unsupported/macx-clang-libc++"
@@ -57,6 +65,9 @@ class Qwtpolar < Formula
     system "qmake", *args
     system "make"
     system "make", "install"
+
+    # remove extraneous qwtpolar.framework due to CONFIG+=build_all (Qt error?)
+    rm_r lib/"qwtpolar.framework/qwtpolar.framework" if build.head?
 
     # symlink Qt Designer plugin (note: not removed on qwtpolar formula uninstall)
     cd Formula.factory("qt").opt_prefix/"plugins/designer" do
