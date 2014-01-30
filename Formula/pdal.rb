@@ -42,8 +42,8 @@ class Pdal < Formula
   def install
     ENV.libxml2
     args = std_cmake_args
-    # unit test errors when using pdal-internal boost
-    args << "-DPDAL_EMBED_BOOST=FALSE"
+    # unit test errors when using pdal-internal boost with stable
+    args << "-DPDAL_EMBED_BOOST=FALSE" unless build.head?
     args << "-DWITH_ICONV=TRUE"
     args << "-DWITH_LIBXML2=TRUE"
 
