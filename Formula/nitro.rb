@@ -7,6 +7,8 @@ class Nitro < Formula
   version "1.0-c0c3fbb"
   sha1 "c0c3fbba2638a68d3300191cd0a204542b78fc78"
 
+  head "https://github.com/hobu/nitro.git", :branch => "master"
+
   depends_on "cmake" => :build
 
   def install
