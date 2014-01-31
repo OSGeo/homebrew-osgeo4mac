@@ -2,10 +2,10 @@ require "formula"
 
 class Hexer < Formula
   homepage "https://github.com/hobu/hexer"
-  # TODO: request a tagged release
-  url "https://github.com/hobu/hexer.git", :revision => "01f8a155f5a77ede98573686bad8994ef2fe30f0"
-  version "1.0.1-01f8a15"
-  sha1 "01f8a155f5a77ede98573686bad8994ef2fe30f0"
+  url "https://github.com/hobu/hexer/archive/1.0.1.tar.gz"
+  sha1 "dc4e817c89c44740f13f461b52b8f320ea3c7d1a"
+
+  head "https://github.com/hobu/hexer.git", :branch => "master"
 
   option "with-drawing", "Build Cairo-based SVG drawing"
 
