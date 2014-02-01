@@ -8,7 +8,7 @@ class Wxpython < Formula
   homepage 'http://www.wxpython.org'
 end
 
-class Wxmac < Formula
+class Wxmac28 < Formula
   url 'http://downloads.sourceforge.net/project/wxwindows/2.8.12/wxMac-2.8.12.tar.bz2'
   md5 '876000a9a9742c3c75a2597afbcb8856'
 
