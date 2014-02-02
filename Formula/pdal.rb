@@ -21,6 +21,7 @@ class Pdal < Formula
   depends_on "cmake" => :build
   depends_on "boost" if build.with? "external-boost"
   depends_on :python # for PLang filters
+  depends_on "numpy" => :python
   depends_on "swig" => [:build, :optional]
   depends_on "libgeotiff"
   depends_on "gdal"
