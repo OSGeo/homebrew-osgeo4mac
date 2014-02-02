@@ -35,6 +35,7 @@ class Pdal < Formula
   depends_on "soci" => :optional
 
   # TODO: add MrSID and Oracle, via HOMEBREW_LOCAL formulae
+  depends_on "mrsid-sdk" if build.with? "mrsid"
 
   if build.with? "doc"
     depends_on "doxygen"
@@ -66,12 +67,16 @@ class Pdal < Formula
     args << "-DWITH_SQLITE=TRUE" if build.with? "soci"
 
     # proprietary formats
-    args << "-DWITH_MRSID=TRUE" if build.with? "mrsid"
+    if build.with? "mrsid"
+      args << "-DWITH_MRSID=TRUE"
+      args << "-DMRSID_ROOT=#{Formula.factory('mrsid-sdk').opt_prefix}"
+    end
     args << "-DWITH_ORACLE=FALSE" if build.without? "oracle"
 
     mkdir "build" do
       system "cmake", "..", *args
       #system "bbedit", "CMakeCache.txt"
+      #raise
       system "make"
       puts %x(ctest -VV .) if build.with? "tests"
       system "make", "install"
