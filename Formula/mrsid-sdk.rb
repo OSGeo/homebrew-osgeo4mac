@@ -1,31 +1,9 @@
 require "formula"
-
-class LocalDownloadStrategyError < RuntimeError
-  def initialize
-    message = <<-EOS.undent
-    Define HOMEBREW_LOCAL_DOWNLOADS environment variable that points to a
-    directory, which contains the unaltered, already-downloaded archive(s):
-
-      export HOMEBREW_LOCAL_DOWNLOADS=/path/to/directory/of/archives
-    EOS
-    super message
-  end
-end
-
-class LocalDownloadStrategy < CurlDownloadStrategy
-  def fetch
-    ldls = ENV["HOMEBREW_LOCAL_DOWNLOADS"]
-    raise LocalDownloadStrategyError unless ldls && File.directory?(ldls)
-    @url = @url.sub(%r[^local://], "file://#{ldls}/")
-    super
-  end
-end
+require File.expand_path("../../Strategies/local-download", Pathname.new(__FILE__).realpath)
 
 class MrsidSdk < Formula
   homepage "https://www.lizardtech.com/developer/"
-  # TODO: strip :using if/when LocalDownloadStrategy is pushed upstream
-  #       https://github.com/Homebrew/homebrew/pull/26343
-  url "local://MrSID_DSDK-9.0.0.3864-darwin12.universal.gccA42.tar.gz",
+  url "MrSID_DSDK-9.0.0.3864-darwin12.universal.gccA42.tar.gz",
       :using => LocalDownloadStrategy
   sha1 "8a693cc71dbb8638f34e35efb8086f29b08fa764"
   version "9.0.0.3864"
@@ -135,6 +113,9 @@ class MrsidSdk < Formula
   end
 
   def caveats; <<-EOS.undent
+        Expected archive in OSGEO4MAC_LOCAL_ARCHIVE directory:
+          #{stable.url}
+
         To build software with the Raster SDK, add to the following environment
         variable to find the headers:
 
