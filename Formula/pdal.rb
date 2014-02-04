@@ -4,9 +4,9 @@ class Pdal < Formula
   homepage "http://pointcloud.org"
   # TODO: remove. temp url in preparation for next release
   url "https://github.com/PDAL/PDAL.git",
-      :revision => "bfdf976445582ccdc27a1a6ab1ee5ccd68988759"
-  version "1.0.0-bfdf976"
-  sha1 "bfdf976445582ccdc27a1a6ab1ee5ccd68988759"
+      :revision => "1bb641fe61c9c5a40564c985c547bd248608975d"
+  version "1.0.0-1bb641f"
+  sha1 "1bb641fe61c9c5a40564c985c547bd248608975d"
 
   head "https://github.com/PDAL/PDAL.git", :branch => "master"
 
@@ -41,10 +41,6 @@ class Pdal < Formula
     depends_on "doxygen"
     depends_on "sphinx" => :python
     depends_on "breathe" => :python
-  end
-
-  def patches
-    DATA
   end
 
   def install
@@ -131,20 +127,3 @@ class Pdal < Formula
     Formula.factory("python").linked_keg.exist? and brewed_python_framework.exist?
   end
 end
-
-__END__
-diff --git a/apps/CMakeLists.txt b/apps/CMakeLists.txt
-index 23dbc8e..6cb1530 100644
---- a/apps/CMakeLists.txt
-+++ b/apps/CMakeLists.txt
-@@ -42,6 +42,10 @@ if(PDAL_UTILITY)
-     target_link_libraries(${PDAL_UTILITY} ${PDAL_LINKAGE} ${PDAL_LIB_NAME})
- endif()
- 
-+if(NOT PDAL_EMBED_BOOST)
-+    target_link_libraries(${PDAL_UTILITY} ${BOOST_LINKAGE} ${Boost_LIBRARIES})
-+endif()
-+
- #------------------------------------------------------------------------------
- # Targets installation
- #------------------------------------------------------------------------------
