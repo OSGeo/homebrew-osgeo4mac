@@ -2,8 +2,10 @@ require 'formula'
 
 class Points2grid < Formula
   homepage 'https://github.com/CRREL/points2grid'
-  url 'https://github.com/CRREL/points2grid/archive/1.1.1.tar.gz'
-  sha1 'f0a7841f1cd804b67bf7ccd15bc5b3bcada975a7'
+  url 'https://github.com/CRREL/points2grid/archive/1.2.0.tar.gz'
+  sha1 '49fbc3016b2904ed75c67c486cba839b5ac3548c'
+
+  head "https://github.com/CRREL/points2grid.git"
 
   depends_on 'cmake' => :build
   depends_on 'boost'
@@ -20,7 +22,7 @@ class Points2grid < Formula
              "-i", prefix/"example.las",
              "-o", "example",
              "--max", "--output_format", "grid"
-      assert_equal 5, %x(grep -c '423.820000' < example.max.grid).strip.to_i
+      assert_equal 5, %x(grep -c '423.82' < example.max.grid).strip.to_i
     end
   end
 end
