@@ -4,13 +4,12 @@ class Pdal < Formula
   homepage "http://pointcloud.org"
   # TODO: remove. temp url in preparation for next release
   url "https://github.com/PDAL/PDAL.git",
-      :revision => "9be105d72e7692150628d7fcde8bea8ac795e2be"
-  version "1.0.0-9be105d"
-  sha1 "9be105d72e7692150628d7fcde8bea8ac795e2be"
+      :revision => "bfdf976445582ccdc27a1a6ab1ee5ccd68988759"
+  version "1.0.0-bfdf976"
+  sha1 "bfdf976445582ccdc27a1a6ab1ee5ccd68988759"
 
   head "https://github.com/PDAL/PDAL.git", :branch => "master"
 
-  option "with-external-boost", "Build with Homebrew Boost instead of internal"
   option "with-swig", "Build with Python bindings"
   option "with-soci", "Build with SOCI database access support"
   option "with-mrsid", "Build with proprietary MrSID format support"
@@ -19,23 +18,24 @@ class Pdal < Formula
   option "with-doc", "Install API documentation and tutorial"
 
   depends_on "cmake" => :build
-  depends_on "boost" if build.with? "external-boost"
+  depends_on "swig" => [:build, :optional]
+  depends_on "boost" # has internal boost, but external recommended by developer
   depends_on :python # for PLang filters
   depends_on "numpy" => :python
-  depends_on "swig" => [:build, :optional]
   depends_on "libgeotiff"
   depends_on "gdal"
   depends_on :postgresql => :recommended
   depends_on "laszip" => :recommended
   depends_on "msgpack" => :recommended
-  # TODO: nix tap dup once version points2grid 1.1.1 is pushed to main tap
+  # TODO: nix tap dup once version points2grid 1.2.0 is pushed to main tap
   #       why doesn't :recommended work for taps?
   depends_on "dakcarto/osgeo4mac/points2grid" # => :recommended
   depends_on "hexer" => :recommended
   depends_on "soci" => :optional
 
-  # TODO: add MrSID and Oracle, via HOMEBREW_LOCAL formulae
+  # proprietary formats
   depends_on "mrsid-sdk" if build.with? "mrsid"
+  # TODO: add Oracle, via HOMEBREW_LOCAL_ARCHIVE formulae
 
   if build.with? "doc"
     depends_on "doxygen"
@@ -43,13 +43,17 @@ class Pdal < Formula
     depends_on "breathe" => :python
   end
 
+  def patches
+    DATA
+  end
+
   def install
     ENV.libxml2
     args = std_cmake_args.concat %W[
+      -DPDAL_EMBED_BOOST=FALSE
       -DWITH_PKGCONFIG=TRUE
       -DWITH_NITRO=FALSE
     ]
-    args << "-DPDAL_EMBED_BOOST=FALSE" if build.with? "external-boost"
     args << "-DWITH_TESTS=FALSE" if build.without? "tests"
 
     if brewed_python?
@@ -61,15 +65,18 @@ class Pdal < Formula
     args << "-DWITH_PGPOINTCLOUD=FALSE" if build.without? "postgresql"
     args << "-DWITH_LASZIP=FALSE" if build.without? "laszip"
     args << "-DWITH_MSGPACK=FALSE" if build.without? "msgpack"
-    # TODO: re-add conditional once points2grid 1.1.1 is pushed to main tap
+    # TODO: re-add conditional once points2grid 1.2.0 is pushed to main tap
     args << "-DWITH_P2G=TRUE" # if build.with? "points2grid"
     args << "-DWITH_HEXER=TRUE" if build.with? "hexer"
     args << "-DWITH_SQLITE=TRUE" if build.with? "soci"
 
     # proprietary formats
     if build.with? "mrsid"
+      # TODO: remove cxxstdlib_check, after LizardTech updates binaries for libc++
+      #       https://www.lizardtech.com/forums/viewtopic.php?f=6&t=821
+      cxxstdlib_check :skip
       args << "-DWITH_MRSID=TRUE"
-      args << "-DMRSID_ROOT=#{Formula.factory('mrsid-sdk').opt_prefix}"
+      args << "-DMRSID_ROOT=#{Formula.factory("mrsid-sdk").opt_prefix}"
     end
     args << "-DWITH_ORACLE=FALSE" if build.without? "oracle"
 
@@ -124,3 +131,20 @@ class Pdal < Formula
     Formula.factory("python").linked_keg.exist? and brewed_python_framework.exist?
   end
 end
+
+__END__
+diff --git a/apps/CMakeLists.txt b/apps/CMakeLists.txt
+index 23dbc8e..6cb1530 100644
+--- a/apps/CMakeLists.txt
++++ b/apps/CMakeLists.txt
+@@ -42,6 +42,10 @@ if(PDAL_UTILITY)
+     target_link_libraries(${PDAL_UTILITY} ${PDAL_LINKAGE} ${PDAL_LIB_NAME})
+ endif()
+ 
++if(NOT PDAL_EMBED_BOOST)
++    target_link_libraries(${PDAL_UTILITY} ${BOOST_LINKAGE} ${Boost_LIBRARIES})
++endif()
++
+ #------------------------------------------------------------------------------
+ # Targets installation
+ #------------------------------------------------------------------------------
