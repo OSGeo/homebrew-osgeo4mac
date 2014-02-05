@@ -4,9 +4,9 @@ class Pdal < Formula
   homepage "http://pointcloud.org"
   # TODO: remove. temp url in preparation for next release
   url "https://github.com/PDAL/PDAL.git",
-      :revision => "1bb641fe61c9c5a40564c985c547bd248608975d"
-  version "1.0.0-1bb641f"
-  sha1 "1bb641fe61c9c5a40564c985c547bd248608975d"
+      :revision => "caa9399ffa2ff50a8543f62bd678c2ff46786b83"
+  version "0.9.9-caa9399"
+  sha1 "caa9399ffa2ff50a8543f62bd678c2ff46786b83"
 
   head "https://github.com/PDAL/PDAL.git", :branch => "master"
 
@@ -27,7 +27,7 @@ class Pdal < Formula
   depends_on :postgresql => :recommended
   depends_on "laszip" => :recommended
   depends_on "msgpack" => :recommended
-  # TODO: nix tap dup once version points2grid 1.2.0 is pushed to main tap
+  # TODO: nix tap dup once version points2grid 1.2.1 is pushed to main tap
   #       why doesn't :recommended work for taps?
   depends_on "dakcarto/osgeo4mac/points2grid" # => :recommended
   depends_on "hexer" => :recommended
@@ -35,7 +35,7 @@ class Pdal < Formula
 
   # proprietary formats
   depends_on "mrsid-sdk" if build.with? "mrsid"
-  # TODO: add Oracle, via HOMEBREW_LOCAL_ARCHIVE formulae
+  # TODO: add Oracle, via HOMEBREW_CACHE/archive formulae
 
   if build.with? "doc"
     depends_on "doxygen"
@@ -47,7 +47,6 @@ class Pdal < Formula
     ENV.libxml2
     args = std_cmake_args.concat %W[
       -DPDAL_EMBED_BOOST=FALSE
-      -DWITH_PKGCONFIG=TRUE
       -DWITH_NITRO=FALSE
     ]
     args << "-DWITH_TESTS=FALSE" if build.without? "tests"
@@ -61,7 +60,7 @@ class Pdal < Formula
     args << "-DWITH_PGPOINTCLOUD=FALSE" if build.without? "postgresql"
     args << "-DWITH_LASZIP=FALSE" if build.without? "laszip"
     args << "-DWITH_MSGPACK=FALSE" if build.without? "msgpack"
-    # TODO: re-add conditional once points2grid 1.2.0 is pushed to main tap
+    # TODO: re-add conditional once points2grid 1.2.1 is pushed to main tap
     args << "-DWITH_P2G=TRUE" # if build.with? "points2grid"
     args << "-DWITH_HEXER=TRUE" if build.with? "hexer"
     args << "-DWITH_SQLITE=TRUE" if build.with? "soci"
