@@ -35,7 +35,7 @@ class Pdal < Formula
 
   # proprietary formats
   depends_on "mrsid-sdk" if build.with? "mrsid"
-  # TODO: add Oracle, via HOMEBREW_CACHE/archive formulae
+  depends_on "oracle-client-sdk" if build.with? "oracle"
 
   if build.with? "doc"
     depends_on "doxygen"
@@ -73,7 +73,14 @@ class Pdal < Formula
       args << "-DWITH_MRSID=TRUE"
       args << "-DMRSID_ROOT=#{Formula.factory("mrsid-sdk").opt_prefix}"
     end
-    args << "-DWITH_ORACLE=FALSE" if build.without? "oracle"
+    if build.with? "oracle"
+      # TODO: remove cxxstdlib_check, after Oracle updates binaries for libc++
+      cxxstdlib_check :skip
+      args << "-DWITH_ORACLE=TRUE"
+      ENV["ORACLE_HOME"] = Formula.factory("oracle-client-sdk").opt_prefix
+    else
+      args << "-DWITH_ORACLE=FALSE"
+    end
 
     mkdir "build" do
       system "cmake", "..", *args
