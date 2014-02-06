@@ -67,19 +67,15 @@ class MrsidSdk < Formula
       end
 
       # reset install lib paths
-      quiet_system "install_name_tool", "-change",
+      install_change("libltidsdk.dylib",
                    "libtbb.dylib",
-                   "#{raster_opt_dsdk}/lib/libtbb.dylib",
-                   "libltidsdk.dylib"
-      quiet_system "install_name_tool", "-change",
+                   "#{raster_opt_dsdk}/lib/libtbb.dylib")
+      install_change("libltidsdk.dylib",
                    libgeos_c_old_path,
-                   "#{raster_opt_dsdk}/lib/libgeos_c.1.dylib",
-                   "libltidsdk.dylib"
-
-      quiet_system "install_name_tool", "-change",
+                   "#{raster_opt_dsdk}/lib/libgeos_c.1.dylib")
+      install_change("libgeos_c.dylib",
                    libgeos_old_path,
-                   "#{raster_opt_dsdk}/lib/libgeos.2.dylib",
-                   "libgeos_c.dylib"
+                   "#{raster_opt_dsdk}/lib/libgeos.2.dylib")
     end
 
     # link SDK libs, which will be fixed up by Homebrew
@@ -88,16 +84,18 @@ class MrsidSdk < Formula
     # update executables
     cd bin do
       Dir["mrsid*"].each do |exe|
-        quiet_system "install_name_tool", "-change",
+        install_change(exe,
                      "libtbb.dylib",
-                     "#{raster_opt_dsdk}/lib/libtbb.dylib",
-                     exe
-        quiet_system "install_name_tool", "-change",
+                     "#{raster_opt_dsdk}/lib/libtbb.dylib")
+        install_change(exe,
                      libgeos_c_old_path,
-                     "#{raster_opt_dsdk}/lib/libgeos_c.1.dylib",
-                     exe
+                     "#{raster_opt_dsdk}/lib/libgeos_c.1.dylib")
       end
     end
+  end
+
+  def install_change(dylib, old, new)
+    quiet_system "install_name_tool", "-change", old, new, dylib
   end
 
   def libgeos_c_old_path
