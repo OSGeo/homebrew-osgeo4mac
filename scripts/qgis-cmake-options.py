@@ -80,6 +80,9 @@ def cmake_opts(qi, hb):
         ('OSG_DIR', '{hb}'),
         ('OSGEARTH_DIR', '{hb}'),
         ('OSG_PLUGINS_PATH', '{hb}/lib/osgPlugins-' + OSG_VERSION),
+        ('WITH_ORACLE', 'TRUE'),
+        ('OCI_INCLUDE_DIR', '{hb}/opt/oracle-client-sdk/sdk/include'),
+        ('OCI_LIBRARY', '{hb}/lib/libclntsh.dylib'),
         ('QGIS_MACAPP_BUNDLE', '0')
     ])
 
