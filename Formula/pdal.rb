@@ -32,6 +32,7 @@ class Pdal < Formula
   depends_on "dakcarto/osgeo4mac/points2grid" # => :recommended
   depends_on "hexer" => :recommended
   depends_on "soci" => :optional
+  depends_on "sqlite" if build.with? "soci"
 
   # proprietary formats
   depends_on "mrsid-sdk" if build.with? "mrsid"
