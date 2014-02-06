@@ -1,8 +1,10 @@
 require "formula"
+require File.expand_path("../../Strategies/cache-download", Pathname.new(__FILE__).realpath)
 
 class MrsidSdk < Formula
   homepage "https://www.lizardtech.com/developer/"
-  url "file://#{HOMEBREW_CACHE}/MrSID_DSDK-9.0.0.3864-darwin12.universal.gccA42.tar.gz"
+  url "file://#{HOMEBREW_CACHE}/MrSID_DSDK-9.0.0.3864-darwin12.universal.gccA42.tar.gz",
+      :using => CacheDownloadStrategy
   sha1 "8a693cc71dbb8638f34e35efb8086f29b08fa764"
   version "9.0.0.3864"
 
@@ -111,15 +113,6 @@ class MrsidSdk < Formula
   end
 
   def caveats; <<-EOS.undent
-        Formula expects to locate the following archive:
-          #{Pathname.new(stable.url).basename}
-
-        In the HOMEBREW_CACHE directory:
-          #{HOMEBREW_CACHE}
-
-        Copy archive to the cache or create a symlink in cache to the archive:
-          ln -sf /path/to/archive $(brew --cache)/
-
         To build software with the Raster SDK, add to the following environment
         variable to find the headers:
 
