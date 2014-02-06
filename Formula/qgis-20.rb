@@ -53,6 +53,7 @@ class Qgis20 < Formula
   option 'with-globe', 'Build with Globe plugin, based upon osgEarth'
   option 'with-grass', 'Build with GRASS integration plugin support'
   option 'with-postgis', 'Build extra PostGIS geospatial database extender'
+  option 'with-oracle', 'Build extra Oracle geospatial database and raster support'
   option 'with-orfeo', 'Build extra Orfeo Toolbox for Processing plugin'
   option 'with-r', 'Build extra R for Processing plugin'
   option 'with-saga-gis', 'Build extra Saga GIS for Processing plugin'
@@ -87,7 +88,7 @@ class Qgis20 < Formula
   # core providers
   depends_on 'gdal'
   depends_on 'postgis' => :optional
-  # TODO: add Oracle third-party support formula, :optional
+  depends_on "oracle-client-sdk" if build.with? "oracle"
   # TODO: add MSSQL third-party support formula?, :optional
 
   # core plugins (c++ and python)
@@ -177,6 +178,13 @@ class Qgis20 < Formula
 
     pgsql = Formula.factory('postgresql')
     args << "-DPOSTGRES_CONFIG=#{pgsql.opt_prefix}/bin/pg_config" if build.with? 'postgresql'
+
+    if build.with? 'oracle'
+      args << '-DWITH_ORACLE=TRUE'
+      oracle_opt = Formula.factory('oracle-client-sdk').opt_prefix
+      args << "-DOCI_INCLUDE_DIR=#{oracle_opt}/sdk/include"
+      args << "-DOCI_LIBRARY=#{oracle_opt}/lib/libclntsh.dylib"
+    end
 
     if build.with? 'grass'
       grass = Formula.factory('grass')
