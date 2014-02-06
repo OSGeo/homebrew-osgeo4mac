@@ -249,14 +249,16 @@ class Qgis20 < Formula
   def post_install
     # configure environment variables for .app and launching binary directly.
     # having this in `post_intsall` allows it to be individually run *after* installation with:
-    #    `brew postinstall -v qgis-20 [--option --option ...]`
+    #    `brew postinstall -v qgis-20`
+
+    opts = Tab.for_formula(self).used_options
 
     # define default isolation env vars
     pthsep = File::PATH_SEPARATOR
     pypth = "#{python_site_packages}"
     pths = %W[#{HOMEBREW_PREFIX/'bin'} /usr/bin /bin /usr/sbin /sbin /usr/X11/bin].join(pthsep)
 
-    unless build.include? 'enable-isolation'
+    unless opts.include? 'enable-isolation'
       pths = ORIGINAL_PATHS.join(pthsep)
       unless pths.include? HOMEBREW_PREFIX/'bin'
         pths = HOMEBREW_PREFIX/'bin' + pthsep + pths
@@ -273,17 +275,17 @@ class Qgis20 < Formula
       :GDAL_DRIVER_PATH => "#{HOMEBREW_PREFIX}/lib/gdalplugins"
     }
 
-    if build.with? 'grass'
+    if opts.include? 'with-grass'
       grass = Formula.factory('grass')
       envars[:GRASS_PREFIX] = "#{grass.opt_prefix}/grass-#{grass.linked_keg.realpath.basename}"
     end
 
-    if build.with? 'globe'
+    if opts.include? 'with-globe'
       osg = Formula.factory('open-scene-graph')
       envars[:OSG_PLUGINS_PATH] = "#{HOMEBREW_PREFIX}/lib/osgPlugins-#{osg.linked_keg.realpath.basename}"
     end
 
-    if build.include? 'enable-isolation'
+    if opts.include? 'enable-isolation'
       envars[:DYLD_FRAMEWORK_PATH] = "#{HOMEBREW_PREFIX}/Frameworks:/System/Library/Frameworks"
       versioned = %W[
         #{Formula.factory('sqlite').opt_prefix}/lib
@@ -293,7 +295,7 @@ class Qgis20 < Formula
       ]
       envars[:DYLD_VERSIONED_LIBRARY_PATH] = versioned.join(pthsep)
     end
-    if build.include? 'enable-isolation' or File.exist?("/Library/Frameworks/GDAL.framework")
+    if opts.include? 'enable-isolation' or File.exist?("/Library/Frameworks/GDAL.framework")
       # TODO: is PYTHONHOME necessary for isolation, or is it set by embedded interpreter?
       #envars[:PYTHONHOME] = "#{python.framework}/Python.framework/Versions/Current"
       envars[:PYQGIS_STARTUP] = opt_prefix/'pyqgis_startup.py'
