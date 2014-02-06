@@ -99,6 +99,7 @@ class Qgis20 < Formula
   depends_on 'open-scene-graph' if build.with? 'globe'
   depends_on 'osgearth' if build.with? 'globe'
   # TODO: remove 'pyspatialite' when PyPi package supports spatialite 4.x
+  #       or DB Manager supports libspatialite > 4.1.1 (with mod_spatialite)
   depends_on 'pyspatialite' # for DB Manager
   depends_on 'qt-mysql' => :optional # for eVis plugin (non-functional in 2.0.1?)
 
@@ -333,7 +334,7 @@ class Qgis20 < Formula
   def caveats
     s = <<-EOS.undent
       QGIS is built as an application bundle. Environment variables for the
-      Homebrew prefix have been embedded in QGIS.app:
+      Homebrew prefix are embedded in QGIS.app:
         #{opt_prefix}/QGIS.app
 
       You may also symlink QGIS.app into ~/Applications:
@@ -347,7 +348,7 @@ class Qgis20 < Formula
             when launching via the wrapper script, while launching QGIS.app
             bundle they are not.
 
-      For stand-alone Python development, set the following environment variable:
+      For standalone Python development, set the following environment variable:
         export PYTHONPATH=#{python_site_packages}:$PYTHONPATH
 
       Developer frameworks are installed in:
