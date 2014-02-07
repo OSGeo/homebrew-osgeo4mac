@@ -8,6 +8,7 @@ class SagaGis < Formula
   head 'svn://svn.code.sf.net/p/saga-gis/code-0/trunk/saga-gis'
 
   option "with-app", "Build SAGA.app Package"
+  option "with-liblas", "Build with internal libLAS 1.2 support"
 
   depends_on :automake
   depends_on :autoconf
@@ -18,8 +19,10 @@ class SagaGis < Formula
   depends_on 'wxmac'
   depends_on 'unixodbc' => :recommended
   depends_on 'libharu' => :recommended
+  depends_on 'vigra' => :recommended
   depends_on 'postgresql' => :optional
   depends_on :python => :optional
+  depends_on "libgeotiff" if build.with? "liblas"
 
   def patches
     # Compiling on Mavericks with libc++ causes issues with LC_NUMERIC.
@@ -39,6 +42,11 @@ class SagaGis < Formula
     version '4.8.0'
   end
 
+  resource 'liblas' do
+    url 'https://github.com/libLAS/libLAS/archive/1.2.1.tar.gz'
+    sha1 '24a775484285d4e35eb8034bf298f740d7123569'
+  end
+
   def install
     (buildpath/'src/modules_projection/pj_proj4/pj_proj4/').install resource('projects')
 
@@ -47,11 +55,34 @@ class SagaGis < Formula
     inreplace "src/saga_core/saga_gui/Makefile.am", "aui,base,", ""
     inreplace "src/saga_core/saga_gui/Makefile.am", "propgrid,", ""
 
-    args = [
-        "--prefix=#{prefix}",
-        "--disable-dependency-tracking",
-        "--disable-openmp"
+    if build.with? "liblas"
+      # Saga still only works with liblas 1.2.1 (5 years old). Install in keg
+      # see: http://sourceforge.net/p/saga-gis/discussion/354013/thread/823cbde1/
+      liblas = prefix/"liblas"
+      liblas.mkpath
+      mktemp do
+        resource('liblas').stage do
+          args = %W[
+            --prefix=#{liblas}
+            --disable-dependency-tracking
+            --with-gdal=#{Formula.factory("gdal").opt_prefix}/bin/gdal-config
+            --with-geotiff=#{Formula.factory("libgeotiff").opt_prefix}
+          ]
+          system "autoreconf", "-i"
+          system "./configure", *args
+          system "make", "install"
+        end
+      end
+      ENV.prepend "CPPFLAGS", "-I#{liblas}/include"
+      ENV.prepend "LDFLAGS", "-L#{liblas}/lib"
+      # Find c lib interface for liblas
+      inreplace "configure.ac", "[las]", "[las_c]"
+    end
 
+    args = %W[
+        --prefix=#{prefix}
+        --disable-dependency-tracking
+        --disable-openmp
     ]
 
     args << "--disable-odbc" if build.without? "unixodbc"
