@@ -4,9 +4,9 @@ class Pdal < Formula
   homepage "http://pointcloud.org"
   # TODO: remove. temp url in preparation for next release
   url "https://github.com/PDAL/PDAL.git",
-      :revision => "caa9399ffa2ff50a8543f62bd678c2ff46786b83"
-  version "0.9.9-caa9399"
-  sha1 "caa9399ffa2ff50a8543f62bd678c2ff46786b83"
+      :revision => "1145c8b13782b36cbc0bcb5cd66d0ed6c50b8309"
+  version "0.9.9-1145c8b"
+  sha1 "1145c8b13782b36cbc0bcb5cd66d0ed6c50b8309"
 
   head "https://github.com/PDAL/PDAL.git", :branch => "master"
 
@@ -27,9 +27,7 @@ class Pdal < Formula
   depends_on :postgresql => :recommended
   depends_on "laszip" => :recommended
   depends_on "msgpack" => :recommended
-  # TODO: nix tap dup once version points2grid 1.2.1 is pushed to main tap
-  #       why doesn't :recommended work for taps?
-  depends_on "dakcarto/osgeo4mac/points2grid" # => :recommended
+  depends_on "points2grid" => :recommended
   depends_on "hexer" => :recommended
   depends_on "soci" => :optional
   depends_on "sqlite" if build.with? "soci"
@@ -61,8 +59,7 @@ class Pdal < Formula
     args << "-DWITH_PGPOINTCLOUD=FALSE" if build.without? "postgresql"
     args << "-DWITH_LASZIP=FALSE" if build.without? "laszip"
     args << "-DWITH_MSGPACK=FALSE" if build.without? "msgpack"
-    # TODO: re-add conditional once points2grid 1.2.1 is pushed to main tap
-    args << "-DWITH_P2G=TRUE" # if build.with? "points2grid"
+    args << "-DWITH_P2G=TRUE" if build.with? "points2grid"
     args << "-DWITH_HEXER=TRUE" if build.with? "hexer"
     args << "-DWITH_SQLITE=TRUE" if build.with? "soci"
 
