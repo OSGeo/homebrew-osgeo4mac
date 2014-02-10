@@ -22,7 +22,11 @@ class Osgearth < Formula
   depends_on "v8" => :optional
   depends_on "libnoise" => :optional
   depends_on "tinyxml" => :optional
-  depends_on :python => %w[sphinx] if build.with? "docs-examples"
+
+  resource "sphinx" do
+    url "https://pypi.python.org/packages/source/S/Sphinx/Sphinx-1.2.1.tar.gz"
+    sha1 "448cdb89d96c85993e01fe793ce7786494cbcda7"
+  end
 
   # all merged upstream, remove on next version
   # find a v8 lib: https://github.com/gwaldron/osgearth/pull/434
@@ -33,6 +37,16 @@ class Osgearth < Formula
   end
 
   def install
+    if build.with? "docs-examples" and not which("sphinx-build")
+      # temporarily vendor a local sphinx install
+      sphinx_dir = prefix/"sphinx"
+      sphinx_site = sphinx_dir/"lib/python2.7/site-packages"
+      sphinx_site.mkpath
+      ENV.prepend_create_path "PYTHONPATH", sphinx_site
+      resource("sphinx").stage {quiet_system "python2.7", "setup.py", "install", "--prefix=#{sphinx_dir}"}
+      ENV.prepend_path "PATH", sphinx_dir/"bin"
+    end
+
     args = std_cmake_args
     if MacOS.prefer_64_bit?
       args << "-DCMAKE_OSX_ARCHITECTURES=#{Hardware::CPU.arch_64_bit}"
@@ -61,18 +75,18 @@ class Osgearth < Formula
 
     if build.with? "docs-examples"
       cd "docs" do
-        inreplace "Makefile", "sphinx-build", "#{HOMEBREW_PREFIX}/bin/sphinx-build"
         system "make", "html"
         doc.install "build/html" => "html"
       end
       doc.install "data"
       doc.install "tests" => "examples"
+      rm_r prefix/"sphinx" if File.exist?(prefix/"sphinx")
     end
   end
 
   def caveats
     osg = Formula.factory("open-scene-graph")
-    osgver = (osg.installed?) ? osg.prefix.basename : "#.#.# (version)"
+    osgver = (osg.linked_keg.exist?) ? osg.version : "#.#.# (version)"
     <<-EOS.undent
     This formula installs Open Scene Graph plugins. To ensure access when using
     the osgEarth toolset, set the OSG_LIBRARY_PATH enviroment variable to:
