@@ -8,7 +8,6 @@ class Monteverdi2 < Formula
   depends_on "cmake" => :build
   depends_on "orfeo"
   depends_on "qt"
-  depends_on :x11
   depends_on "fftw"
   depends_on "gdal"
   depends_on "fltk"
@@ -22,6 +21,12 @@ class Monteverdi2 < Formula
     # http://qwt.sourceforge.net/
     url "http://sourceforge.net/projects/qwt/files/qwt/5.2.3/qwt-5.2.3.tar.bz2"
     sha1 "ff81595a1641a8b431f98d6091bb134bc94e0003"
+  end
+
+  def patches
+    # Fix issue with clang and libc++
+    #   See https://groups.google.com/forum/#!topic/otb-users/ZPlKvgImvNI
+    DATA if ENV.compiler == :clang and MacOS.version >= :mavericks
   end
 
   def install
@@ -54,9 +59,24 @@ class Monteverdi2 < Formula
     end
 
     # TODO: make .app bundle and embed some env vars
-    #       GDAL_DATA=HB/share/gdal
-    #       ITK_AUTOLOAD_PATH=HB/opt/orfeo/lib/otb/applications
+    #       export HOMEBREW_PREFIX=$(brew --prefix)
+    #       export GDAL_DATA=${HOMEBREW_PREFIX}/share/gdal
+    #       export ITK_AUTOLOAD_PATH=${HOMEBREW_PREFIX}/opt/orfeo/lib/otb/applications
     # NOTE: see <src>/Packaging for bundling scripts
   end
 
 end
+
+__END__
+diff --git a/Code/Common/Core/mvdSystemError.h b/Code/Common/Core/mvdSystemError.h
+index 8359462..9f04c6b 100644
+--- a/Code/Common/Core/mvdSystemError.h
++++ b/Code/Common/Core/mvdSystemError.h
+@@ -35,6 +35,7 @@
+ //
+ // System includes (sorted by alphabetic order)
+ #include <stdexcept>
++#include <string>
+ 
+ //
+ // ITK includes (sorted by alphabetic order)
