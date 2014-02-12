@@ -42,12 +42,12 @@ class Qscintilla2 < Formula
       system 'make', 'install'
     end
 
-    plgd = prefix/"plugins"
-    (plgd/"designer").mkpath
+    libexec.mkpath
     cd "designer-Qt4Qt5" do
+      args << %Q["INCLUDEPATH+=#{include}"]
       inreplace "designer.pro" do |s|
         s.gsub! "$$[QT_INSTALL_LIBS]", lib
-        s.gsub! "$$[QT_INSTALL_PLUGINS]", plgd
+        s.gsub! "$$[QT_INSTALL_PLUGINS]", libexec
       end
 
       system "qmake", *args
@@ -55,9 +55,8 @@ class Qscintilla2 < Formula
       system "make", "install"
     end
     # symlink QT Designer plugin (note: not removed on formula uninstall)
-    cd Formula.factory('qt').opt_prefix/"plugins/designer" do
-      ln_sf plgd/"designer/libqscintillaplugin.dylib", "."
-    end
+      ln_sf libexec/"designer/libqscintillaplugin.dylib",
+            "#{Formula.factory('qt').opt_prefix}/plugins/designer/"
   end
 
   test do
