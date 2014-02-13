@@ -339,8 +339,8 @@ class Qgis20 < Formula
       Homebrew prefix are embedded in QGIS.app:
         #{opt_prefix}/QGIS.app
 
-      You may also symlink QGIS.app into ~/Applications:
-        brew linkapps
+      You may also symlink QGIS.app into /Applications or ~/Applications:
+        brew linkapps [--local]
 
       To run the `QGIS.app/Contents/MacOS/QGIS` binary use the wrapper script
       pre-defined with Homebrew prefix environment variables:
