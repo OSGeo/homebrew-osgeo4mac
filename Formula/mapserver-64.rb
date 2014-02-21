@@ -249,7 +249,7 @@ class Mapserver64 < Formula
         #{opt_prefix}/mapscript/Install_Modules.txt
 
     EOS
-    s += python.standard_caveats if python
+    #s += python.standard_caveats if python
     s
   end
 

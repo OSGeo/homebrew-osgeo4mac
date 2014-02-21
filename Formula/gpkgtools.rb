@@ -34,10 +34,6 @@ class Gpkgtools < Formula
     prefix.install %w[tests testdata]
   end
 
-  def caveats;
-    python.standard_caveats if python
-  end
-
   def test
     cd "#{opt_prefix}" do
       system 'python', 'tests/geonames.py'

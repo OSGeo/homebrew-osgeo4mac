@@ -99,7 +99,7 @@ class Qgis18 < Formula
       You will need to log out and log in again to make environment.plist effective.
 
     EOS
-    s += python.standard_caveats if python
+    #s += python.standard_caveats if python
     s
   end
 end
