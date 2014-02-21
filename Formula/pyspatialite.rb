@@ -30,13 +30,7 @@ class Pyspatialite < Formula
       library_dirs=#{HOMEBREW_PREFIX}/lib:#{HOMEBREW_PREFIX}/opt/sqlite/lib
     EOS
 
-    python do
-      system python, 'setup.py', 'build'
-      system python, 'setup.py', 'install', "--prefix=#{prefix}"
-    end
-  end
-
-  def caveats
-    python.standard_caveats if python
+    system 'python', 'setup.py', 'build'
+    system 'python', 'setup.py', 'install', "--prefix=#{prefix}"
   end
 end
