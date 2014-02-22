@@ -1,41 +1,13 @@
 require 'formula'
+require File.expand_path("../../Requirements/qgis_requirements",
+                         Pathname.new(__FILE__).realpath)
 
-class SipBinary < Requirement
+class UnlinkedQGIS20 < UnlinkedQGIS
   fatal true
-  #noinspection RubyResolve
-  default_formula 'sip'
-  satisfy(:build_env => false) { which 'sip' }
-
-  def message
-    <<-EOS.undent
-      The `sip` binary is missing. It is needed to generate the Python bindings for QGIS.
-      Ensure `sip` formula is installed and linked.
-
-    EOS
+  def qgis_list
+    %W[qgis qgis-18 qgis-22]
   end
-end
-
-class PyQtConfig < Requirement
-  fatal true
-  #noinspection RubyResolve
-  default_formula 'pyqt'
-  # pyqtconfig is not created with PyQt4 >= 4.10.x when using configure-ng.
-  # Homebrew's `pyqt` formula corrects this. Remains an issue until QGIS project
-  # adjusts FindPyQt.py in CMake setup to work with configure-ng.
-  satisfy(:build_env => false) { quiet_system 'python', '-c', 'from PyQt4 import pyqtconfig' }
-
-  def message
-    <<-EOS.undent
-      Python could not import the PyQt4.pyqtconfig module. This will cause the QGIS build to fail.
-      The most common reason for this failure is that the PYTHONPATH needs to be adjusted.
-      The `pyqt` caveats explain this adjustment and may be reviewed using:
-
-          brew info pyqt
-
-      Ensure `pyqt` formula is installed and linked, and that it includes the `pyqtconfig` module.
-
-    EOS
-  end
+  satisfy(:build_env => false) { no_linked_qgis[0] }
 end
 
 class Qgis20 < Formula
@@ -60,6 +32,8 @@ class Qgis20 < Formula
   option 'with-qt-mysql', 'Build extra Qt MySQL plugin for eVis plugin'
   option 'with-api-docs', 'Build the API documentation with Doxygen and Graphviz'
   #option 'persistent-build', 'Maintain the build directory in HOMEBREW_TEMP (--HEAD only)'
+
+  depends_on UnlinkedQGIS20
 
   # core qgis
   depends_on 'cmake' => :build
