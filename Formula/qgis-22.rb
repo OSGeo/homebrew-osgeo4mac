@@ -85,6 +85,16 @@ class Qgis22 < Formula
   # TODO: LASTools straight build (2 reporting tools), or via `wine` (10 tools)
   # TODO: Fusion from USFS (via `wine`?)
 
+  # fix for finding Qt Plugins directory when QGIS_MACAPP_BUNDLE = 0
+  #   see: https://github.com/dakcarto/homebrew-osgeo4mac/issues/13
+  def patches
+    unless build.head?
+      %W[
+        https://gist.github.com/dakcarto/8642034/raw/95c3ab58086363b6d812191b0d8f517674d67f20/qgis-20_qt-plugins
+      ]
+    end
+  end
+
   def install
     # Set bundling level back to 0 (the default in all versions prior to 1.8.0)
     # so that no time and energy is wasted copying the Qt frameworks into QGIS.
