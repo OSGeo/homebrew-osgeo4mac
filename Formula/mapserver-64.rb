@@ -66,8 +66,8 @@ class Mapserver64 < Formula
   depends_on :mysql => :optional
   depends_on 'fcgi' => :recommended
   depends_on 'cairo' => :recommended
-  depends_on 'libxml2' unless MacOS.version >= :mountain_lion
-  depends_on 'libxslt' if build.with? 'xml-mapfile' and Formula.factory('libxml2').installed?
+  depends_on 'libxml2' if build.with? 'xml-mapfile' or MacOS.version < :mountain_lion
+  depends_on 'libxslt' if build.with? 'xml-mapfile'
   depends_on 'librsvg' => :optional
   depends_on 'fribidi'
   depends_on :python => %w[sphinx] if build.with? 'docs'
@@ -134,7 +134,7 @@ class Mapserver64 < Formula
     cd 'mapscript' do
       args << '-DWITH_PYTHON=ON'
       inreplace 'python/CMakeLists.txt' do |s|
-        s.gsub! '${PYTHON_SITE_PACKAGES}', %Q{"#{lib/python.xy/'site-packages'}"}
+        s.gsub! '${PYTHON_SITE_PACKAGES}', %Q{"#{lib/which_python/'site-packages'}"}
         s.sub! '${MAPSERVER_LIBMAPSERVER}',
                "#{rpath} ${MAPSERVER_LIBMAPSERVER}" if use_rpath
       end
@@ -266,5 +266,11 @@ class Mapserver64 < Formula
              '-classpath', '../', '-Djava.ext.dirs=../',
              'RFC24', '../../../tests/test.map'
     end if build.with? 'java'
+  end
+
+  private
+
+  def which_python
+    "python" + %x(python -c "import sys;print(sys.version[:3])").strip
   end
 end
