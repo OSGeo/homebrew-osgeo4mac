@@ -15,8 +15,6 @@ class Qgis20 < Formula
   url 'https://github.com/qgis/QGIS/archive/final-2_0_1.tar.gz'
   sha1 'd532677c1934c3faacd3036af15958b464051853'
 
-  head 'https://github.com/qgis/QGIS.git', :branch => 'master'
-
   option 'enable-isolation', "Isolate .app's environment to HOMEBREW_PREFIX, to coexist with other QGIS installs"
   option 'with-debug', 'Enable debug build, which outputs info to system.log or console'
   option 'skip-stdlib-check', 'Build skips checking if dependencies are built against conflicting stdlib.'
@@ -96,13 +94,11 @@ class Qgis20 < Formula
   # backport PYQGIS_STARTUP support for isolation, or to avoid Kyngchaos.com
   #   python modules pulling in duplicate linked *.framework libs
   def patches
-    unless build.head?
       %W[
         https://gist.github.com/dakcarto/7764118/raw/6cdc678857ae773dceabe6226bfc40ead4f11837/qgis-20_sip-fixes
         https://gist.github.com/dakcarto/8642034/raw/95c3ab58086363b6d812191b0d8f517674d67f20/qgis-20_qt-plugins
         https://gist.github.com/dakcarto/8642149/raw/6524174169fa82e31d1ade4ac8fb5a2ca8acf421/qgis-20_pyqgis-startup
       ]
-    end
   end
 
   def install
@@ -141,13 +137,7 @@ class Qgis20 < Formula
       args << "-DPYTHON_CUSTOM_FRAMEWORK='#{brewed_python_framework}'"
     end
 
-    # find git revision for HEAD build
-    if build.head? && File.exists?("#{cached_download}/.git/index")
-      args << "-DGITCOMMAND=#{Formula.factory('git').bin}/git"
-      args << "-DGIT_MARKER=#{cached_download}/.git/index"
-    else
-      args << "-DGIT_MARKER=''" # if git clone borked, or release tarball, ends up defined as 'exported'
-    end
+    args << "-DGIT_MARKER=''" # if release tarball, ends up defined as 'exported'
 
     args << '-DWITH_MAPSERVER=TRUE' unless build.without? 'server'
 
