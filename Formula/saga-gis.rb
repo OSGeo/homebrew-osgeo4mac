@@ -3,7 +3,7 @@ require 'formula'
 class SagaGis < Formula
   homepage 'http://saga-gis.org'
   url 'http://downloads.sourceforge.net/project/saga-gis/SAGA%20-%202.1/SAGA%202.1.1/saga_2.1.1.tar.gz'
-  sha1 '40ac4d0646e04187aa6728181c3954993e51dcd5'
+  sha1 '7345701b137d491bda59400a3890cda7ca433e41'
 
   head 'svn://svn.code.sf.net/p/saga-gis/code-0/trunk/saga-gis'
 
