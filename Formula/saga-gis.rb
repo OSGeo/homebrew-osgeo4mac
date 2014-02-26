@@ -160,11 +160,11 @@ index 0ce6d36..9f554a8 100644
 +++ b/src/saga_core/saga_cmd/saga_cmd.cpp
 @@ -67,6 +67,7 @@
  #include "callback.h"
- 
+
  #include "module_library.h"
 +#include <locale.h>
- 
- 
+
+
  ///////////////////////////////////////////////////////////
  diff --git a/src/modules_io/grid/io_grid/xyz.h b/src/modules_io/grid/io_grid/xyz.h
 index ffbd194..33b62fd 100644
