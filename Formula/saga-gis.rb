@@ -3,7 +3,7 @@ require 'formula'
 class SagaGis < Formula
   homepage 'http://saga-gis.org'
   url 'http://downloads.sourceforge.net/project/saga-gis/SAGA%20-%202.1/SAGA%202.1.1/saga_2.1.1.tar.gz'
-  sha1 '40ac4d0646e04187aa6728181c3954993e51dcd5'
+  sha1 '7345701b137d491bda59400a3890cda7ca433e41'
 
   head 'svn://svn.code.sf.net/p/saga-gis/code-0/trunk/saga-gis'
 
@@ -160,11 +160,11 @@ index 0ce6d36..9f554a8 100644
 +++ b/src/saga_core/saga_cmd/saga_cmd.cpp
 @@ -67,6 +67,7 @@
  #include "callback.h"
- 
+
  #include "module_library.h"
 +#include <locale.h>
- 
- 
+
+
  ///////////////////////////////////////////////////////////
  diff --git a/src/modules_io/grid/io_grid/xyz.h b/src/modules_io/grid/io_grid/xyz.h
 index ffbd194..33b62fd 100644
