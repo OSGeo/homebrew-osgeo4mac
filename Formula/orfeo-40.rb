@@ -25,7 +25,7 @@ class Orfeo40 < Formula
   option 'java', 'Enable Java support'
   option 'patented', 'Enable patented algorithms'
 
-  conflicts_with "orfeo", "orfeo is in main tap"
+  conflicts_with "orfeo", :because => "orfeo is in main tap"
 
   resource "geoid" do
     # geoid to use in elevation calculations, if no DEM defined or avialable
