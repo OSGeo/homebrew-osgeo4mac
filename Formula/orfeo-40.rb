@@ -2,8 +2,8 @@ require 'formula'
 
 class Orfeo40 < Formula
   homepage 'http://www.orfeo-toolbox.org/otb/'
-  url 'http://www.orfeo-toolbox.org/packages/OTB-4.0-rc1.tgz'
-  sha1 'bb45afa2483f968b89fb54e542d2a4a79f186637'
+  url 'http://www.orfeo-toolbox.org/packages/OTB-4.0.0.tgz'
+  sha1 'c2417cc4d11544fb477007e06d3a82a032353c95'
 
   option "with-external-boost", "Build with brewed Boost"
 
