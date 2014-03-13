@@ -6,6 +6,9 @@ class Orfeo40 < Formula
   sha1 'c2417cc4d11544fb477007e06d3a82a032353c95'
 
   option "with-external-boost", "Build with brewed Boost"
+  option 'examples', 'Compile and install various examples'
+  option 'java', 'Enable Java support'
+  option 'patented', 'Enable patented algorithms'
 
   depends_on 'cmake' => :build
   depends_on "boost" if build.with? "external-boost"
@@ -20,10 +23,6 @@ class Orfeo40 < Formula
   depends_on "opencv" => :optional
   # external libs that may work in next release:
   #depends_on "open-scene-graph" # (for libOpenThreads, now internal to osg)
-
-  option 'examples', 'Compile and install various examples'
-  option 'java', 'Enable Java support'
-  option 'patented', 'Enable patented algorithms'
 
   conflicts_with "orfeo", :because => "orfeo is in main tap"
 
@@ -54,7 +53,9 @@ class Orfeo40 < Formula
     args << '-DOTB_WRAP_JAVA=' + ((build.include? 'java') ? 'ON' : 'OFF')
     args << '-DOTB_USE_PATENTED=' + ((build.include? 'patented') ? 'ON' : 'OFF')
     args << '-DOTB_WRAP_PYTHON=OFF' if build.without? 'python'
-    args << "-DUSE_FFTWF=" + ((build.with? "fftw") ? "ON" : "OFF")
+    args << "-DITK_USE_FFTWF=" + ((build.with? "fftw") ? "ON" : "OFF")
+    args << "-DITK_USE_FFTWD=" + ((build.with? "fftw") ? "ON" : "OFF")
+    args << "-DITK_USE_SYSTEM_FFTW=" + ((build.with? "fftw") ? "ON" : "OFF")
     args << "-DOTB_USE_OPENCV=" + ((build.with? "opencv") ? "ON" : "OFF")
 
     mkdir 'build' do
