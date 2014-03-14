@@ -2,7 +2,7 @@ require 'formula'
 
 class Orfeo40 < Formula
   homepage 'http://www.orfeo-toolbox.org/otb/'
-  url 'http://www.orfeo-toolbox.org/packages/OTB-4.0.0.tgz'
+  url 'https://downloads.sf.net/project/orfeo-toolbox/OTB/OTB-4.0/OTB-4.0.0.tgz'
   sha1 'c2417cc4d11544fb477007e06d3a82a032353c95'
 
   option "with-external-boost", "Build with brewed Boost"
@@ -31,9 +31,6 @@ class Orfeo40 < Formula
     url "http://hg.orfeo-toolbox.org/OTB-Data/raw-file/dec1ce83a5f3/Input/DEM/egm96.grd"
     sha1 "034ae375ff41b87d5e964f280fde0438c8fc8983"
     version "4.0.0"
-  end
-
-  def patches
   end
 
   def install
