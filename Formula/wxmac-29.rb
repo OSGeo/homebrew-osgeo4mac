@@ -13,13 +13,14 @@ class FrameworkPython < Requirement
   end
 end
 
-class Wxmac294 < Formula
+class Wxmac29 < Formula
   homepage 'http://www.wxwidgets.org'
-  url 'http://downloads.sourceforge.net/project/wxpython/wxPython/2.9.4.0/wxPython-src-2.9.4.0.tar.bz2'
-  sha1 'c292cd45b51e29c558c4d9cacf93c4616ed738b9'
+  url 'https://downloads.sourceforge.net/project/wxpython/wxPython/2.9.5.0/wxPython-src-2.9.5.0.tar.bz2'
+  sha1 '9183b2ffc6631cb2551c51b655a9d08904aa7b52'
 
   keg_only "Conflicts with `wxmac` in main tap"
 
+  option 'disable-monolithic', "Build a non-monolithic library (split into multiple files)"
   depends_on :python => :recommended
   depends_on FrameworkPython if build.with? "python"
 
@@ -40,17 +41,15 @@ class Wxmac294 < Formula
     cd "wxPython" do
       ENV.append_to_cflags "-arch #{MacOS.preferred_arch}"
 
-      python do
-        system python, "setup.py",
-                       "build_ext",
-                       "WXPORT=osx_cocoa",
-                       *args
-        system python, "setup.py",
-                       "install",
-                       "--prefix=#{prefix}",
-                       "WXPORT=osx_cocoa",
-                       *args
-      end
+      system "python", "setup.py",
+                      "build_ext",
+                      "WXPORT=osx_cocoa",
+                      *args
+      system "python", "setup.py",
+                      "install",
+                      "--prefix=#{prefix}",
+                      "WXPORT=osx_cocoa",
+                      *args
     end
   end
 
@@ -64,7 +63,6 @@ class Wxmac294 < Formula
       "--disable-debug",
       "--prefix=#{prefix}",
       "--enable-shared",
-      "--enable-monolithic",
       "--enable-unicode",
       "--enable-std_string",
       "--enable-display",
@@ -72,6 +70,10 @@ class Wxmac294 < Formula
       "--with-osx_cocoa",
       "--with-libjpeg",
       "--with-libtiff",
+      # Otherwise, even in superenv, the internal libtiff can pick
+      # up on a nonuniversal xz and fail
+      # https://github.com/Homebrew/homebrew/issues/22732
+      "--without-liblzma",
       "--with-libpng",
       "--with-zlib",
       "--enable-dnd",
@@ -84,6 +86,7 @@ class Wxmac294 < Formula
       "--enable-universal_binary=#{Hardware::CPU.universal_archs.join(',')}",
       "--disable-precomp-headers"
     ]
+    args << "--enable-monolithic" unless build.include? 'disable-monolithic'
 
     system "./configure", *args
     system "make install"
