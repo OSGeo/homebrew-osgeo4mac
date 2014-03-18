@@ -11,7 +11,7 @@ class SpatialiteGui17 < Formula
   depends_on 'libxml2'
   depends_on 'libspatialite'
   depends_on 'libgaiagraphics'
-  depends_on 'wxmac-294'
+  depends_on 'wxmac-29'
   depends_on 'geos'
   depends_on 'proj'
   depends_on 'freexl'
