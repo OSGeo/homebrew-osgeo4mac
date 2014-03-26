@@ -246,7 +246,7 @@ class Qgis20 < Formula
 
     if opts.include? 'with-globe'
       osg = Formula.factory('open-scene-graph')
-      envars[:OSG_PLUGINS_PATH] = "#{HOMEBREW_PREFIX}/lib/osgPlugins-#{osg.linked_keg.realpath.basename}"
+      envars[:OSG_LIBRARY_PATH] = "#{HOMEBREW_PREFIX}/lib/osgPlugins-#{osg.linked_keg.realpath.basename}"
     end
 
     if opts.include? 'enable-isolation'
