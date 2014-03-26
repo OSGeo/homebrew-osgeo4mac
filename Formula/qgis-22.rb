@@ -14,6 +14,7 @@ class Qgis22 < Formula
   homepage 'http://www.qgis.org'
   url 'https://github.com/qgis/QGIS/archive/final-2_2_0.tar.gz'
   sha1 '5d043ef6b31a043aa2608a3eebdc3d7d997f2189'
+  revision 1
 
   head 'https://github.com/qgis/QGIS.git', :branch => 'master'
 
@@ -85,12 +86,12 @@ class Qgis22 < Formula
   # TODO: LASTools straight build (2 reporting tools), or via `wine` (10 tools)
   # TODO: Fusion from USFS (via `wine`?)
 
-  # fix for finding Qt Plugins directory when QGIS_MACAPP_BUNDLE = 0
-  #   see: https://github.com/dakcarto/homebrew-osgeo4mac/issues/13
+  # patch that represents all backports to release-2_2 branch,
+  # through 03e15e05b28fbab68541ba37be17e3ea6b1dfec2
   def patches
     unless build.head?
       %W[
-        https://gist.github.com/dakcarto/8642034/raw/95c3ab58086363b6d812191b0d8f517674d67f20/qgis-20_qt-plugins
+        https://gist.githubusercontent.com/dakcarto/9781934/raw/19d25932c8f0e1e89849cc8d2fc50a43dacfae42/qgis-22-backports.diff
       ]
     end
   end
