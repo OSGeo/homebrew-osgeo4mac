@@ -2,12 +2,18 @@ class UnlinkedQGIS < Requirement
   fatal true
 
   def qgis_list
-    # default: Homebrew/science's
-    %W[qgis]
+    # default: homebrew/science's
+    %W[homebrew/science/qgis]
   end
 
   def no_linked_qgis
-    qgis_list.each {|f| return false, f if Formula.factory(f).linked_keg.exist?}
+    qgis_list.each do |f|
+      begin
+        return false, f if Formula.factory(f).linked_keg.exist?
+      rescue TapFormulaUnavailableError
+        next
+      end
+    end
     return true, ""
   end
 
