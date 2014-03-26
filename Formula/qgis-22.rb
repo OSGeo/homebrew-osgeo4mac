@@ -5,7 +5,7 @@ require File.expand_path("../../Requirements/qgis_requirements",
 class UnlinkedQGIS22 < UnlinkedQGIS
   fatal true
   def qgis_list
-    %W[qgis qgis-18 qgis-20]
+    %W[homebrew/science/qgis qgis-18 qgis-20]
   end
   satisfy(:build_env => false) { no_linked_qgis[0] }
 end
@@ -71,7 +71,7 @@ class Qgis22 < Formula
   depends_on 'gettext' if build.with? 'grass'
   depends_on 'gpsbabel' => [:recommended, 'with-libusb']
   depends_on 'open-scene-graph' if build.with? 'globe'
-  depends_on 'osgearth' if build.with? 'globe'
+  depends_on 'homebrew/science/osgearth' if build.with? 'globe'
   # TODO: remove 'pyspatialite' when PyPi package supports spatialite 4.x
   #       or DB Manager supports libspatialite > 4.1.1 (with mod_spatialite)
   depends_on 'pyspatialite' # for DB Manager
@@ -80,7 +80,7 @@ class Qgis22 < Formula
   # core processing plugin extras
   # see `postgis` and `grass` above
   depends_on 'orfeo' => :optional
-  depends_on 'r' => :optional
+  depends_on 'homebrew/science/r' => :optional
   depends_on 'saga-gis' => :optional
   # TODO: LASTools straight build (2 reporting tools), or via `wine` (10 tools)
   # TODO: Fusion from USFS (via `wine`?)
