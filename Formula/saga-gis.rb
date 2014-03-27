@@ -16,7 +16,7 @@ class SagaGis < Formula
   depends_on 'gdal'
   depends_on 'jasper'
   depends_on 'proj'
-  depends_on 'wxmac'
+  depends_on 'wxmac-29'
   depends_on 'unixodbc' => :recommended
   depends_on 'libharu' => :recommended
   depends_on 'vigra' => :recommended
