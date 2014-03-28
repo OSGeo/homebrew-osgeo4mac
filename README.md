@@ -1,6 +1,9 @@
 Homebrew-osgeo4mac
 ==================
 
+_NOTE_: On March 28, 2014, this repository was moved from dakcarto's github 
+account to OSGeo's.
+
 Mac [homebrew][] formula tap for maintaining a STABLE work environment for the
 OSGeo.org geospatial toolset. This includes formulae that may not be specifically
 for an OSGeo project, but do extend the toolset's functionality.
