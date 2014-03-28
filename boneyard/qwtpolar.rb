@@ -13,7 +13,7 @@ class Qwtpolar < Formula
   #option "enable-framework", "Build as framework"
 
   depends_on "qt"
-  depends_on "dakcarto/osgeo4mac/qwt"
+  depends_on "osgeo/osgeo4mac/qwt"
 
   # fix designer plugin linking, when in non-standard prefix
   def patches

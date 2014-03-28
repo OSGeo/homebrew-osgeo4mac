@@ -90,7 +90,7 @@ class Qgis20 < Formula
   #        https://github.com/qgis/QGIS/commit/641359d3
   #        https://github.com/qgis/QGIS/commit/6f9795b0
   # fix for finding Qt Plugins directory when QGIS_MACAPP_BUNDLE = 0
-  #   see: https://github.com/dakcarto/homebrew-osgeo4mac/issues/13
+  #   see: https://github.com/osgeo/homebrew-osgeo4mac/issues/13
   # backport PYQGIS_STARTUP support for isolation, or to avoid Kyngchaos.com
   #   python modules pulling in duplicate linked *.framework libs
   def patches
@@ -204,7 +204,7 @@ class Qgis20 < Formula
     # copy PYQGIS_STARTUP file pyqgis_startup.py, even if not isolating (so tap can be untapped)
     # only works with QGIS > 2.0.1
     # TODO: change to gist resource?
-    cp HOMEBREW_PREFIX/'Library/Taps/dakcarto-osgeo4mac/enviro/python_startup.py', prefix/'pyqgis_startup.py'
+    cp HOMEBREW_PREFIX/'Library/Taps/osgeo-osgeo4mac/enviro/python_startup.py', prefix/'pyqgis_startup.py'
 
     bin.mkdir
     touch "#{bin}/qgis" # so it will be linked into HOMEBREW_PREFIX

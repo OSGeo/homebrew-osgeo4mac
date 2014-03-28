@@ -24,7 +24,7 @@
 # libspatialite HEAD build offers latest geopackage updates (works with gpkgtools)
 # To experiment with HEAD build, but you already have libspatialite installed,
 # do the following:
-#   `brew upgrade dakcarto/osgeo4mac/libspatialite --HEAD --with-geopackage`
+#   `brew upgrade osgeo/osgeo4mac/libspatialite --HEAD --with-geopackage`
 #   `brew list --versions libspatialite` (note non-HEAD version)
 #   `brew switch libspatialite <non-HEAD version>`
 

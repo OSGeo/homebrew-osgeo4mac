@@ -60,7 +60,7 @@ class GdalFilegdb < Formula
     If compiled using clang (default) on 10.9+ this plugin was built against
     libstdc++ (like filegdb binaries), which may load into your GDAL, but
     possibly be incompatible. Please report any issues to:
-        https://github.com/dakcarto/homebrew-osgeo4mac/issues
+        https://github.com/osgeo/homebrew-osgeo4mac/issues
 
     EOS
   end

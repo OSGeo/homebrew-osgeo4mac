@@ -65,7 +65,7 @@ class GdalMrsid < Formula
       If compiled using clang (default) on 10.9+ this plugin links to libc++
       (whereas MrSID libs/binaries link to libstdc++). This may lead to issues
       during usage, including crashes. Please report any issues to:
-          https://github.com/dakcarto/homebrew-osgeo4mac/issues
+          https://github.com/osgeo/homebrew-osgeo4mac/issues
 
     EOS
   end

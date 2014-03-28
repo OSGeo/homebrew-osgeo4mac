@@ -17,18 +17,18 @@ are committed, the formulae removed from this tap.
 
 How do I install these formulae?
 --------------------------------
-Just `brew tap dakcarto/osgeo4mac` and then `brew install <formula>`.
+Just `brew tap osgeo/osgeo4mac` and then `brew install <formula>`.
 
 Warnings such as the following can be **ignored**:
 
-  * _Warning_: Could not tap **dakcarto/osgeo4mac/gdal** over **Homebrew/homebrew/gdal**
+  * _Warning_: Could not tap **osgeo/osgeo4mac/gdal** over **Homebrew/homebrew/gdal**
 
 Those warnings just indicate formulae in this tap that shadow formulae in the
 main Homebrew tap, and will not overwrite them. If the formula conflicts with
 one from the main Homebrew tap or another tap you can install directly with:
 
 ```
-brew install dakcarto/osgeo4mac/<formula>
+brew install osgeo/osgeo4mac/<formula>
 ```
 
 **Important**: use the above method to install shadow formula(e) from this tap,
@@ -40,7 +40,7 @@ i.e. conflicting formulae in this tap will _not_ be used when auto-installing.
 You can also install via URL:
 
 ```
-brew install https://raw.github.com/dakcarto/homebrew-osgeo4mac/master/<formula>.rb
+brew install https://raw.github.com/osgeo/homebrew-osgeo4mac/master/<formula>.rb
 ```
 
 How do I use the Brewfiles?
@@ -55,4 +55,4 @@ Docs
 [homebrew]:http://brew.sh
 [taps]:https://github.com/Homebrew/homebrew-versions
 [wiki]:http://wiki.github.com/mxcl/homebrew
-[brewfiles]:https://github.com/dakcarto/homebrew-osgeo4mac/wiki/Using-OSGeo4Mac-Brewfiles
+[brewfiles]:https://github.com/osgeo/homebrew-osgeo4mac/wiki/Using-OSGeo4Mac-Brewfiles

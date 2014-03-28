@@ -205,7 +205,7 @@ class Qgis22 < Formula
     # copy PYQGIS_STARTUP file pyqgis_startup.py, even if not isolating (so tap can be untapped)
     # only works with QGIS > 2.0.1
     # TODO: change to gist resource?
-    cp HOMEBREW_PREFIX/'Library/Taps/dakcarto-osgeo4mac/enviro/python_startup.py', prefix/'pyqgis_startup.py'
+    cp HOMEBREW_PREFIX/'Library/Taps/osgeo-osgeo4mac/enviro/python_startup.py', prefix/'pyqgis_startup.py'
 
     bin.mkdir
     touch "#{bin}/qgis" # so it will be linked into HOMEBREW_PREFIX

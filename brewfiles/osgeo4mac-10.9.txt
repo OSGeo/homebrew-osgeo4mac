@@ -56,7 +56,7 @@ install pidof mysql
 # 4.8.6 bottle
 install qt
 # 4.8.5
-install dakcarto/osgeo4mac/qt-mysql
+install osgeo/osgeo4mac/qt-mysql
 
 # base python 2.7.x setup
 # 6.2.4 keg-only
@@ -90,7 +90,7 @@ install spatialindex
 # 2.3.2
 install unixodbc
 # 6.0.2 keg-only, QGIS GPS plugin needs qwt < 6.1.x
-install dakcarto/osgeo4mac/qwt60
+install osgeo/osgeo4mac/qwt60
 # gps tools
 # 1.4.4, 1.0.9
 install gpsbabel --with-libusb
@@ -163,7 +163,7 @@ install postgresql
 # HEAD
 install --HEAD libkml
 # 2.0.0 keg-only; PR to homebrew-versions
-install dakcarto/osgeo4mac/openjpeg20
+install osgeo/osgeo4mac/openjpeg20
 # 3.920.2
 install homebrew/science/armadillo
 # 0.24.4
@@ -196,10 +196,10 @@ install wxmac
 # globe plugin
 install open-scene-graph --with-collada-dom --with-gdal --with-jasper --with-librsvg
 install v8
-install dakcarto/osgeo4mac/libnoise
+install osgeo/osgeo4mac/libnoise
 # osgearth build in 9.6 minutes; --enable-app-bundles (doesn't work yet)
 # brew install osgearth --with-v8 --with-libnoise --with-docs-examples
-install dakcarto/osgeo4mac/osgearth --with-v8 --with-tinyxml --with-libnoise --with-docs-examples
+install osgeo/osgeo4mac/osgearth --with-v8 --with-tinyxml --with-libnoise --with-docs-examples
 
 # grass70
 install grass --with-mysql --with-postgresql
@@ -211,7 +211,7 @@ install gdal-grass
 # https://github.com/dakcarto/pyspatialite/commits/master
 # https://gist.github.com/dakcarto/7510460
 # 3.0.1
-install dakcarto/osgeo4mac/pyspatialite
+install osgeo/osgeo4mac/pyspatialite
 
 ################################ extra tools ################################
 
@@ -228,9 +228,9 @@ install --devel spatialite-gui
 
 
 # QGIS
-# install --dv --HEAD dakcarto/osgeo4mac/qgis-20 --with-grass --with-postgis --with-globe --with-orfeo --with-r --with-saga-gis --with-api-docs
+# install --dv --HEAD osgeo/osgeo4mac/qgis-20 --with-grass --with-postgis --with-globe --with-orfeo --with-r --with-saga-gis --with-api-docs
 # minimum build
-install dakcarto/osgeo4mac/qgis-20 --with-grass --with-globe
+install osgeo/osgeo4mac/qgis-20 --with-grass --with-globe
 
 
 ############################## optional installs ##############################
@@ -256,7 +256,7 @@ install dakcarto/osgeo4mac/qgis-20 --with-grass --with-globe
 # install orfeo
 
 # Saga, gui is wxmac carbon-based
-# install dakcarto/osgeo4mac/saga-gis
+# install osgeo/osgeo4mac/saga-gis
 
 # LAStools
 
