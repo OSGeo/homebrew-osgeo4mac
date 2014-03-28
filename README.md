@@ -19,6 +19,14 @@ How do I install these formulae?
 --------------------------------
 Just `brew tap osgeo/osgeo4mac` and then `brew install <formula>`.
 
+If you have _previously_ tapped the **dakcarto/osgeo4mac** repository do:
+
+```
+brew untap dakcarto/osgeo4mac
+brew tap osgeo/osgeo4mac
+brew tap --repair
+```
+
 Warnings such as the following can be **ignored**:
 
   * _Warning_: Could not tap **osgeo/osgeo4mac/gdal** over **Homebrew/homebrew/gdal**
@@ -54,5 +62,5 @@ Docs
 
 [homebrew]:http://brew.sh
 [taps]:https://github.com/Homebrew/homebrew-versions
-[wiki]:http://wiki.github.com/mxcl/homebrew
+[wiki]:https://github.com/Homebrew/homebrew/wiki
 [brewfiles]:https://github.com/osgeo/homebrew-osgeo4mac/wiki/Using-OSGeo4Mac-Brewfiles
