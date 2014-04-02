@@ -6,12 +6,14 @@ class Orfeo40 < Formula
   sha1 'c2417cc4d11544fb477007e06d3a82a032353c95'
 
   option "with-external-boost", "Build with brewed Boost"
+  option "with-external-itk", "Build with brewed Insight Segmentation and Registration Toolkit"
   option 'examples', 'Compile and install various examples'
   option 'java', 'Enable Java support'
   option 'patented', 'Enable patented algorithms'
 
   depends_on 'cmake' => :build
   depends_on "boost" if build.with? "external-boost"
+  depends_on "homebrew/science/insighttoolkit" if build.with? "external-itk"
   depends_on :python => :optional
   depends_on 'gdal'
   depends_on 'qt'
@@ -33,12 +35,13 @@ class Orfeo40 < Formula
     version "4.0.0"
   end
 
+  patch :DATA
+
   def install
     (libexec/"default_geoid").install resource("geoid")
 
     args = std_cmake_args + %W[
       -DBUILD_APPLICATIONS=ON
-      -DOTB_USE_EXTERNAL_ITK=OFF
       -DBUILD_TESTING=OFF
       -DOTB_USE_EXTERNAL_OPENTHREADS=OFF
       -DBUILD_SHARED_LIBS=ON
@@ -46,6 +49,7 @@ class Orfeo40 < Formula
     ]
 
     args << "-DOTB_USE_EXTERNAL_BOOST=" + ((build.with? "external-boost") ? 'ON' : 'OFF')
+    args << "-DOTB_USE_EXTERNAL_ITK=" + ((build.with? "external-itk") ? 'ON' : 'OFF')
     args << '-DBUILD_EXAMPLES=' + ((build.include? 'examples') ? 'ON' : 'OFF')
     args << '-DOTB_WRAP_JAVA=' + ((build.include? 'java') ? 'ON' : 'OFF')
     args << '-DOTB_USE_PATENTED=' + ((build.include? 'patented') ? 'ON' : 'OFF')
@@ -64,3 +68,18 @@ class Orfeo40 < Formula
     end
   end
 end
+
+__END__
+diff --git a/Code/ApplicationEngine/otbWrapperApplication.h b/Code/ApplicationEngine/otbWrapperApplication.h
+index 4bebf08..f977d9f 100644
+--- a/Code/ApplicationEngine/otbWrapperApplication.h
++++ b/Code/ApplicationEngine/otbWrapperApplication.h
+@@ -707,7 +707,7 @@ protected:
+     if (dynamic_cast<InputImageParameter*>(param))
+       {
+       InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param);
+-      ret = paramDown->GetImage<TImageType>();
++      ret = dynamic_cast<TImageType*>(paramDown->GetImage());
+       }
+ 
+     //TODO: exception if not found ?
