@@ -1,10 +1,26 @@
 require 'formula'
 
-class Grass < Formula
+class Grass64 < Formula
   homepage 'http://grass.osgeo.org/'
-  head 'https://svn.osgeo.org/grass/grass/trunk'
-  url 'http://grass.osgeo.org/grass64/source/grass-6.4.3.tar.gz'
-  sha1 '925da985f3291c41c7a0411eaee596763f7ff26e'
+
+  stable do
+    url "http://grass.osgeo.org/grass64/source/grass-6.4.3.tar.gz"
+    sha1 "925da985f3291c41c7a0411eaee596763f7ff26e"
+
+    # Patches that files are not installed outside of the prefix.
+    patch :DATA
+  end
+
+  head do
+    url "https://svn.osgeo.org/grass/grass/trunk"
+
+    patch do
+      url "https://gist.github.com/jctull/0fe3db92a3e7c19fa6e0/raw/42e819f0a9b144de782c94f730dbc4da136e9227/grassPatchHead.diff"
+      sha1 "ffbe31682d8a7605d5548cdafd536f1c785d3a23"
+    end
+  end
+
+  keg_only 'grass is in main tap and same-name bin utilities are installed'
 
   option "without-gui", "Build without WxPython interface. Command line tools still available."
 
@@ -17,20 +33,12 @@ class Grass < Formula
   depends_on "libtiff"
   depends_on "unixodbc"
   depends_on "fftw"
-  depends_on "wxmac-294" => :recommended # prefer over OS X's version because of 64bit
+  depends_on "wxmac-29" => :recommended # prefer over OS X's version because of 64bit
+  # depends_on "homebrew/dupes/tcl-tk"
   depends_on :postgresql => :optional
   depends_on :mysql => :optional
   depends_on "cairo"
   depends_on :x11  # needs to find at least X11/include/GL/gl.h
-
-  # Patches that files are not installed outside of the prefix.
-  def patches;
-    if build.head?
-      "https://gist.github.com/jctull/0fe3db92a3e7c19fa6e0/raw/42e819f0a9b144de782c94f730dbc4da136e9227/grassPatchHead.diff"
-    else
-      DATA
-    end
-  end
 
   fails_with :clang do
     cause "Multiple build failures while compiling GRASS tools."
@@ -38,15 +46,14 @@ class Grass < Formula
 
   def headless?
     # The GRASS GUI is based on WxPython.
-    build.include? 'without-gui'
+    build.without? 'gui'
   end
 
   def install
-    raise
+    readline = Formula["readline"].opt_prefix
+    gettext = Formula["gettext"].opt_prefix
 
-    readline = Formula.factory('readline')
-    gettext = Formula.factory('gettext')
-
+    #noinspection RubyLiteralArrayInspection
     args = [
       "--disable-debug", "--disable-dependency-tracking",
       "--enable-largefile",
@@ -58,13 +65,13 @@ class Grass < Formula
       "--with-lapack",
       "--with-sqlite",
       "--with-odbc",
-      "--with-geos=#{Formula.factory('geos').opt_prefix}/bin/geos-config",
+      "--with-geos=#{Formula["geos"].opt_bin}/geos-config",
       "--with-png",
-      "--with-readline-includes=#{readline.opt_prefix}/include",
-      "--with-readline-libs=#{readline.opt_prefix}/lib",
+      "--with-readline-includes=#{readline}/include",
+      "--with-readline-libs=#{readline}/lib",
       "--with-readline",
-      "--with-nls-includes=#{gettext.opt_prefix}/include",
-      "--with-nls-libs=#{gettext.opt_prefix}/lib",
+      "--with-nls-includes=#{gettext}/include",
+      "--with-nls-libs=#{gettext}/lib",
       "--with-nls",
       "--with-freetype",
       "--without-tcltk" # Disabled due to compatibility issues with OS X Tcl/Tk
@@ -76,10 +83,10 @@ class Grass < Formula
       args << "--with-opengl-includes=#{MacOS.sdk_path}/System/Library/Frameworks/OpenGL.framework/Headers"
     end
 
-    if headless? or build.without? 'wxmac'
+    if headless? or build.without? 'wxmac-29'
       args << "--without-wxwidgets"
     else
-      wxmac = Formula.factory('wxmac-294').opt_prefix
+      wxmac = Formula['wxmac-29'].opt_prefix
       ENV["PYTHONPATH"] = "#{wxmac}/lib/python2.7/site-packages"
       args << "--with-wxwidgets=#{wxmac}/bin/wx-config"
     end
@@ -87,7 +94,7 @@ class Grass < Formula
     args << "--enable-64bit" if MacOS.prefer_64_bit?
     args << "--with-macos-archs=#{MacOS.preferred_arch}"
 
-    cairo = Formula.factory('cairo')
+    cairo = Formula["cairo"]
     args << "--with-cairo-includes=#{cairo.include}/cairo"
     args << "--with-cairo-libs=#{cairo.lib}"
     args << "--with-cairo"
@@ -96,7 +103,7 @@ class Grass < Formula
     args << "--with-postgres" if build.with? "postgresql"
 
     if build.with? "mysql"
-      mysql = Formula.factory('mysql')
+      mysql = Formula["mysql"]
       args << "--with-mysql-includes=#{mysql.include}/mysql"
       args << "--with-mysql-libs=#{mysql.lib}"
       args << "--with-mysql"
