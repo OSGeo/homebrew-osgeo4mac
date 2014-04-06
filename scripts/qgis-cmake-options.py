@@ -59,7 +59,7 @@ def cmake_opts(qi, hb):
         ('CMAKE_EXE_LINKER_FLAGS', '"' + ld_flags + '"'),
         ('CMAKE_MODULE_LINKER_FLAGS', '"' + ld_flags + '"'),
         ('CMAKE_SHARED_LINKER_FLAGS', '"' + ld_flags + '"'),
-        ('CXX_EXTRA_FLAGS', '"-isystem-prefix {hb} -Wno-unused-private-field"'),
+        ('CXX_EXTRA_FLAGS', '"-Wno-unused-private-field"'),
         ('BISON_EXECUTABLE', '{hb}/opt/bison/bin/bison'),
         ('QT_QMAKE_EXECUTABLE', '{hb}/bin/qmake'),
         ('GITCOMMAND', '{hb}/bin/git'),
@@ -75,18 +75,20 @@ def cmake_opts(qi, hb):
         ('WITH_QSCIAPI', 'FALSE'),
         ('POSTGRES_CONFIG', '{hb}/bin/pg_config'),
         ('WITH_GRASS', 'TRUE'),
-        ('GRASS_PREFIX', '{hb}/opt/grass/grass-' + GRASS_VERSION),
+        ('GRASS_PREFIX', '{hb}/opt/grass-64/grass-' + GRASS_VERSION),
         ('WITH_GLOBE', 'TRUE'),
         ('OSG_DIR', '{hb}'),
         ('OSGEARTH_DIR', '{hb}'),
         ('OSG_PLUGINS_PATH', '{hb}/lib/osgPlugins-' + OSG_VERSION),
-        ('WITH_ORACLE', 'TRUE'),
-        ('OCI_INCLUDE_DIR', '{hb}/opt/oracle-client-sdk/sdk/include'),
-        ('OCI_LIBRARY', '{hb}/lib/libclntsh.dylib'),
+        ('WITH_ORACLE', 'FALSE'),
         ('QGIS_MACAPP_BUNDLE', '0')
     ])
 
     # ('CMAKE_FRAMEWORK_PATH', '""')
+
+    # Supplemental
+    # ('OCI_INCLUDE_DIR', '{hb}/opt/oracle-client-sdk/sdk/include'),
+    # ('OCI_LIBRARY', '{hb}/lib/libclntsh.dylib'),
 
     # These should be found automatically now...
     # ('SQLITE3_INCLUDE_DIR', '{hb}/opt/sqlite/include'),
