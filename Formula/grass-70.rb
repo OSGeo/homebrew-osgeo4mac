@@ -9,15 +9,12 @@ class Grass70 < Formula
     version "7.0.0beta1"
 
     # Patches that files are not installed outside of the prefix.
-    # patch :DATA
+    patch :DATA
   end
-
-  keg_only 'This is a GRASS beta version; also `grass` is in main tap and same-name bin utilities are installed'
 
   option "without-gui", "Build without WxPython interface. Command line tools still available."
 
   depends_on :macos => :lion
-  # depends_on 'apple-gcc42' if MacOS.version >= :mountain_lion
   depends_on "pkg-config" => :build
   depends_on "gettext"
   depends_on "readline"
@@ -30,10 +27,6 @@ class Grass70 < Formula
   depends_on :mysql => :optional
   depends_on "cairo"
   depends_on :x11  # needs to find at least X11/include/GL/gl.h
-
-  # fails_with :clang do
-  #   cause "Multiple build failures while compiling GRASS tools."
-  # end
 
   def headless?
     # The GRASS GUI is based on WxPython.
@@ -115,20 +108,20 @@ class Grass70 < Formula
 end
 
 __END__
-Remove two lines of the Makefile that try to install stuff to
-/Library/Documentation---which is outside of the prefix and usually fails due
-to permissions issues.
-
-diff --git a/Makefile b/Makefile
-index f1edea6..be404b0 100644
---- a/Makefile
-+++ b/Makefile
-@@ -304,8 +304,6 @@ ifeq ($(strip $(MINGW)),)
- 	-tar cBf - gem/skeleton | (cd ${INST_DIR}/etc ; tar xBf - ) 2>/dev/null
- 	-${INSTALL} gem/gem$(GRASS_VERSION_MAJOR)$(GRASS_VERSION_MINOR) ${BINDIR} 2>/dev/null
- endif
+diff --git a/include/Make/Install.make b/include/Make/Install.make
+index cf16788..8c0007b 100644
+--- a/include/Make/Install.make
++++ b/include/Make/Install.make
+@@ -114,11 +114,6 @@ real-install: | $(INST_DIR) $(UNIX_BIN)
+ 	-$(INSTALL) config.status $(INST_DIR)/config.status
+ 	-$(CHMOD) -R a+rX $(INST_DIR) 2>/dev/null
+ 
+-ifneq ($(findstring darwin,$(ARCH)),)
 -	@# enable OSX Help Viewer
--	@if [ "`cat include/Make/Platform.make | grep -i '^ARCH.*darwin'`" ] ; then /bin/ln -sfh "${INST_DIR}/docs/html" /Library/Documentation/Help/GRASS-${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR} ; fi
+-	@/bin/ln -sfh "$(INST_DIR)/docs/html" /Library/Documentation/Help/GRASS-$(GRASS_VERSION_MAJOR).$(GRASS_VERSION_MINOR)
+-endif
+-
+ $(INST_DIR) $(UNIX_BIN):
+ 	$(MAKE_DIR_CMD) $@
+ 
 
-
- install-strip: FORCE
