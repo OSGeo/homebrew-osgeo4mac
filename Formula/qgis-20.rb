@@ -14,6 +14,7 @@ class Qgis20 < Formula
   homepage 'http://www.qgis.org'
   url 'https://github.com/qgis/QGIS/archive/final-2_0_1.tar.gz'
   sha1 'd532677c1934c3faacd3036af15958b464051853'
+  revision 1
 
   option 'enable-isolation', "Isolate .app's environment to HOMEBREW_PREFIX, to coexist with other QGIS installs"
   option 'with-debug', 'Enable debug build, which outputs info to system.log or console'
@@ -93,12 +94,9 @@ class Qgis20 < Formula
   #   see: https://github.com/osgeo/homebrew-osgeo4mac/issues/13
   # backport PYQGIS_STARTUP support for isolation, or to avoid Kyngchaos.com
   #   python modules pulling in duplicate linked *.framework libs
-  def patches
-      %W[
-        https://gist.github.com/dakcarto/7764118/raw/6cdc678857ae773dceabe6226bfc40ead4f11837/qgis-20_sip-fixes
-        https://gist.github.com/dakcarto/8642034/raw/95c3ab58086363b6d812191b0d8f517674d67f20/qgis-20_qt-plugins
-        https://gist.github.com/dakcarto/8642149/raw/6524174169fa82e31d1ade4ac8fb5a2ca8acf421/qgis-20_pyqgis-startup
-      ]
+  patch do
+    url  "https://gist.githubusercontent.com/dakcarto/11231756/raw/8454c7bf118e5672899afadc53f61d252316ce21/qgis-20_fixes.patch"
+    sha1 "8bbc5cbca1eaa4befb04b3e8319036c5a263119b"
   end
 
   def install
