@@ -14,7 +14,7 @@ class Qgis20 < Formula
   homepage 'http://www.qgis.org'
   url 'https://github.com/qgis/QGIS/archive/final-2_0_1.tar.gz'
   sha1 'd532677c1934c3faacd3036af15958b464051853'
-  revision 1
+  revision 2
 
   option 'enable-isolation', "Isolate .app's environment to HOMEBREW_PREFIX, to coexist with other QGIS installs"
   option 'with-debug', 'Enable debug build, which outputs info to system.log or console'
@@ -54,7 +54,7 @@ class Qgis20 < Formula
   depends_on 'expat' # keg_only
   depends_on 'proj'
   depends_on 'spatialindex'
-  depends_on 'fcgi' unless build.without? 'server'
+  depends_on 'fcgi' if build.with? 'server'
   # use newer postgresql client than Apple's, also needed by `psycopg2`
   depends_on 'postgresql' => :recommended
 
@@ -84,7 +84,11 @@ class Qgis20 < Formula
   # TODO: LASTools straight build (2 reporting tools), or via `wine` (10 tools)
   # TODO: Fusion from USFS (via `wine`?)
 
-  conflicts_with 'homebrew/science/qgis'
+  resource "pyqgis-startup" do
+    url "https://gist.githubusercontent.com/dakcarto/11385561/raw/7af66d0c8885a888831da6f12298a906484a1471/pyqgis_startup.py"
+    sha1 "13d624e8ccc6bf072bbaeaf68cd6f7309abc1e74"
+    version "2.0.0"
+  end
 
   # fixes for stable to work with sip 4.15, remove on release > 2.0.1
   #   see: https://github.com/qgis/QGIS/commit/d27ad33c
@@ -137,7 +141,7 @@ class Qgis20 < Formula
 
     args << "-DGIT_MARKER=''" # if release tarball, ends up defined as 'exported'
 
-    args << '-DWITH_MAPSERVER=TRUE' unless build.without? 'server'
+    args << '-DWITH_MAPSERVER=TRUE' if build.with? 'server'
 
     pgsql = Formula.factory('postgresql')
     args << "-DPOSTGRES_CONFIG=#{pgsql.opt_prefix}/bin/pg_config" if build.with? 'postgresql'
@@ -201,8 +205,8 @@ class Qgis20 < Formula
 
     # copy PYQGIS_STARTUP file pyqgis_startup.py, even if not isolating (so tap can be untapped)
     # only works with QGIS > 2.0.1
-    # TODO: change to gist resource?
-    cp HOMEBREW_PREFIX/'Library/Taps/osgeo-osgeo4mac/enviro/python_startup.py', prefix/'pyqgis_startup.py'
+    # doesn't need executable bit set, loaded by Python runner in QGIS
+    libexec.install resource("pyqgis-startup")
 
     bin.mkdir
     touch "#{bin}/qgis" # so it will be linked into HOMEBREW_PREFIX
@@ -260,7 +264,7 @@ class Qgis20 < Formula
     if opts.include? 'enable-isolation' or File.exist?("/Library/Frameworks/GDAL.framework")
       # TODO: is PYTHONHOME necessary for isolation, or is it set by embedded interpreter?
       #envars[:PYTHONHOME] = "#{python.framework}/Python.framework/Versions/Current"
-      envars[:PYQGIS_STARTUP] = opt_prefix/'pyqgis_startup.py'
+      envars[:PYQGIS_STARTUP] = opt_libexec/'pyqgis_startup.py'
     end
 
     #envars.each { |key, value| puts "#{key.to_s}=#{value}" }
