@@ -14,7 +14,7 @@ class Qgis22 < Formula
   homepage 'http://www.qgis.org'
   url 'https://github.com/qgis/QGIS/archive/final-2_2_0.tar.gz'
   sha1 '5d043ef6b31a043aa2608a3eebdc3d7d997f2189'
-  revision 1
+  revision 2
 
   head 'https://github.com/qgis/QGIS.git', :branch => 'master'
 
@@ -56,7 +56,7 @@ class Qgis22 < Formula
   depends_on 'expat' # keg_only
   depends_on 'proj'
   depends_on 'spatialindex'
-  depends_on 'fcgi' unless build.without? 'server'
+  depends_on 'fcgi' if build.with? 'server'
   # use newer postgresql client than Apple's, also needed by `psycopg2`
   depends_on 'postgresql' => :recommended
 
@@ -86,13 +86,18 @@ class Qgis22 < Formula
   # TODO: LASTools straight build (2 reporting tools), or via `wine` (10 tools)
   # TODO: Fusion from USFS (via `wine`?)
 
+  resource "pyqgis-startup" do
+    url "https://gist.githubusercontent.com/dakcarto/11385561/raw/7af66d0c8885a888831da6f12298a906484a1471/pyqgis_startup.py"
+    sha1 "13d624e8ccc6bf072bbaeaf68cd6f7309abc1e74"
+    version "2.0.0"
+  end
+
   # patch that represents all backports to release-2_2 branch,
   # through 03e15e05b28fbab68541ba37be17e3ea6b1dfec2
-  def patches
-    unless build.head?
-      %W[
-        https://gist.githubusercontent.com/dakcarto/9781934/raw/19d25932c8f0e1e89849cc8d2fc50a43dacfae42/qgis-22-backports.diff
-      ]
+  stable do
+    patch do
+      url "https://gist.githubusercontent.com/dakcarto/9781934/raw/19d25932c8f0e1e89849cc8d2fc50a43dacfae42/qgis-22-backports.diff"
+      sha1 "5cf37ba41686c78bc71430ed4405c6b5998b09cf"
     end
   end
 
@@ -140,7 +145,7 @@ class Qgis22 < Formula
       args << "-DGIT_MARKER=''" # if git clone borked, or release tarball, ends up defined as 'exported'
     end
 
-    args << '-DWITH_MAPSERVER=TRUE' unless build.without? 'server'
+    args << '-DWITH_MAPSERVER=TRUE' if build.with? 'server'
 
     pgsql = Formula.factory('postgresql')
     args << "-DPOSTGRES_CONFIG=#{pgsql.opt_prefix}/bin/pg_config" if build.with? 'postgresql'
@@ -204,8 +209,8 @@ class Qgis22 < Formula
 
     # copy PYQGIS_STARTUP file pyqgis_startup.py, even if not isolating (so tap can be untapped)
     # only works with QGIS > 2.0.1
-    # TODO: change to gist resource?
-    cp HOMEBREW_PREFIX/'Library/Taps/osgeo-osgeo4mac/enviro/python_startup.py', prefix/'pyqgis_startup.py'
+    # doesn't need executable bit set, loaded by Python runner in QGIS
+    libexec.install resource("pyqgis-startup")
 
     bin.mkdir
     touch "#{bin}/qgis" # so it will be linked into HOMEBREW_PREFIX
@@ -214,7 +219,7 @@ class Qgis22 < Formula
   def post_install
     # configure environment variables for .app and launching binary directly.
     # having this in `post_intsall` allows it to be individually run *after* installation with:
-    #    `brew postinstall -v qgis-20`
+    #    `brew postinstall -v qgis-22`
 
     opts = Tab.for_formula(self).used_options
 
@@ -263,7 +268,7 @@ class Qgis22 < Formula
     if opts.include? 'enable-isolation' or File.exist?("/Library/Frameworks/GDAL.framework")
       # TODO: is PYTHONHOME necessary for isolation, or is it set by embedded interpreter?
       #envars[:PYTHONHOME] = "#{python.framework}/Python.framework/Versions/Current"
-      envars[:PYQGIS_STARTUP] = opt_prefix/'pyqgis_startup.py'
+      envars[:PYQGIS_STARTUP] = opt_libexec/'pyqgis_startup.py'
     end
 
     #envars.each { |key, value| puts "#{key.to_s}=#{value}" }
