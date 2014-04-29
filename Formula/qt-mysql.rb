@@ -14,7 +14,7 @@ class QtMysql < Formula
 
   def install
     cd 'src/plugins/sqldrivers/mysql' do
-      mysql = Formula.factory('mysql')
+      mysql = Formula['mysql']
       system "#{HOMEBREW_PREFIX}/bin/qmake -spec macx-g++ \"INCLUDEPATH+=#{mysql.include}/mysql\" \"LIBS+=#{mysql.lib}/libmysqlclient_r.a -lz\" mysql.pro"
       system 'make release'
       system 'make release-install'

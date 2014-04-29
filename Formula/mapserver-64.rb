@@ -87,17 +87,17 @@ class Mapserver64 < Formula
   end
 
   def png_prefix
-    png = Formula.factory('libpng')
+    png = Formula['libpng']
     (png.installed? or MacOS.version >= :mountain_lion) ? png.opt_prefix : MacOS::X11.prefix
   end
 
   def freetype_prefix
-    ft = Formula.factory('freetype')
+    ft = Formula['freetype']
     (ft.installed? or MacOS.version >= :mountain_lion) ? ft.opt_prefix : MacOS::X11.prefix
   end
 
   def fontconfig_prefix
-    fc = Formula.factory('fontconfig')
+    fc = Formula['fontconfig']
     (fc.installed? or MacOS.version >= :mountain_lion) ? fc.opt_prefix : MacOS::X11.prefix
   end
 

@@ -65,8 +65,8 @@ class SagaGis < Formula
           args = %W[
             --prefix=#{liblas}
             --disable-dependency-tracking
-            --with-gdal=#{Formula.factory("gdal").opt_prefix}/bin/gdal-config
-            --with-geotiff=#{Formula.factory("libgeotiff").opt_prefix}
+            --with-gdal=#{Formula["gdal"].opt_prefix}/bin/gdal-config
+            --with-geotiff=#{Formula["libgeotiff"].opt_prefix}
           ]
           system "autoreconf", "-i"
           system "./configure", *args

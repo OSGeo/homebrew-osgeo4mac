@@ -9,7 +9,7 @@ class GdalMrsid < Formula
   depends_on "gdal"
 
   def install
-    mrsid_sdk_opt = Formula.factory('mrsid-sdk').opt_prefix
+    mrsid_sdk_opt = Formula['mrsid-sdk'].opt_prefix
     (lib/"gdalplugins").mkpath
     plugins = {}
     lidar_args, mrsid_args = [], []

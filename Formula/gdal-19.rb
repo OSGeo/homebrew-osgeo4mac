@@ -88,7 +88,7 @@ class Gdal19 < Formula
       "--with-gif=#{HOMEBREW_PREFIX}",
       "--with-libtiff=#{HOMEBREW_PREFIX}",
       "--with-geotiff=#{HOMEBREW_PREFIX}",
-      "--with-sqlite3=#{Formula.factory('sqlite').opt_prefix}",
+      "--with-sqlite3=#{Formula['sqlite'].opt_prefix}",
       "--with-freexl=#{HOMEBREW_PREFIX}",
       "--with-spatialite=#{HOMEBREW_PREFIX}",
       "--with-geos=#{HOMEBREW_PREFIX}/bin/geos-config",

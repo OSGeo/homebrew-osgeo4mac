@@ -9,7 +9,7 @@ class GdalOracle < Formula
   depends_on "gdal"
 
   def install
-    oracle_opt = Formula.factory('oracle-client-sdk').opt_prefix
+    oracle_opt = Formula['oracle-client-sdk'].opt_prefix
     (lib/"gdalplugins").mkpath
     args = []
 

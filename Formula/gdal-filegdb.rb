@@ -9,7 +9,7 @@ class GdalFilegdb < Formula
   depends_on 'gdal'
 
   def install
-    filegdb_opt = Formula.factory('filegdb-api').opt_prefix
+    filegdb_opt = Formula['filegdb-api'].opt_prefix
     (lib/'gdalplugins').mkpath
 
     # cxx flags

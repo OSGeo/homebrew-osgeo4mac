@@ -50,13 +50,13 @@ class Qwtpolar < Formula
       args << "macx-g++"
     end
 
-    ENV["QMAKEFEATURES"] = "#{Formula.factory("qwt").opt_prefix}/features"
+    ENV["QMAKEFEATURES"] = "#{Formula["qwt"].opt_prefix}/features"
     system "qmake", *args
     system "make"
     system "make", "install"
 
     # symlink Qt Designer plugin (note: not removed on qwtpolar formula uninstall)
-    cd Formula.factory("qt").opt_prefix/"plugins/designer" do
+    cd Formula["qt"].opt_prefix/"plugins/designer" do
       ln_sf prefix/"plugins/designer/libqwt_polar_designer_plugin.dylib", "."
     end
   end

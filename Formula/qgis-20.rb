@@ -106,18 +106,18 @@ class Qgis20 < Formula
   def install
     # Set bundling level back to 0 (the default in all versions prior to 1.8.0)
     # so that no time and energy is wasted copying the Qt frameworks into QGIS.
-    qwt_fw = Formula.factory('qwt').opt_prefix/"lib/qwt.framework"
-    qwtpolar_fw = Formula.factory('qwtpolar').opt_prefix/"lib/qwtpolar.framework"
+    qwt_fw = Formula['qwt'].opt_prefix/"lib/qwt.framework"
+    qwtpolar_fw = Formula['qwtpolar'].opt_prefix/"lib/qwtpolar.framework"
     dev_fw = lib/'qgis-dev'
     dev_fw.mkpath
-    qsci_opt = Formula.factory('qscintilla2').opt_prefix
+    qsci_opt = Formula['qscintilla2'].opt_prefix
     args = %W[
       -DCMAKE_INSTALL_PREFIX=#{prefix}
       -DCMAKE_BUILD_TYPE=#{(build.with?('debug')) ? 'RelWithDebInfo' : 'None' }
       -DCMAKE_FIND_FRAMEWORK=LAST
       -DCMAKE_VERBOSE_MAKEFILE=TRUE
       -Wno-dev
-      -DBISON_EXECUTABLE=#{Formula.factory('bison').opt_prefix}/bin/bison
+      -DBISON_EXECUTABLE=#{Formula['bison'].opt_prefix}/bin/bison
       -DENABLE_TESTS=FALSE
       -DQWT_INCLUDE_DIR=#{qwt_fw}/Headers
       -DQWT_LIBRARY=#{qwt_fw}/qwt
@@ -143,26 +143,26 @@ class Qgis20 < Formula
 
     args << '-DWITH_MAPSERVER=TRUE' if build.with? 'server'
 
-    pgsql = Formula.factory('postgresql')
+    pgsql = Formula['postgresql']
     args << "-DPOSTGRES_CONFIG=#{pgsql.opt_prefix}/bin/pg_config" if build.with? 'postgresql'
 
     if build.with? 'oracle'
       args << '-DWITH_ORACLE=TRUE'
-      oracle_opt = Formula.factory('oracle-client-sdk').opt_prefix
+      oracle_opt = Formula['oracle-client-sdk'].opt_prefix
       args << "-DOCI_INCLUDE_DIR=#{oracle_opt}/sdk/include"
       args << "-DOCI_LIBRARY=#{oracle_opt}/lib/libclntsh.dylib"
     end
 
     if build.with? 'grass'
-      grass = Formula.factory('grass')
+      grass = Formula['grass']
       opoo "`grass` formula's keg not linked." unless grass.linked_keg.exist?
       args << "-DGRASS_PREFIX='#{grass.opt_prefix}/grass-#{grass.linked_keg.realpath.basename.to_s}'"
       # So that `libintl.h` can be found
-      ENV.append 'CXXFLAGS', "-I'#{Formula.factory('gettext').opt_prefix}/include'"
+      ENV.append 'CXXFLAGS', "-I'#{Formula['gettext'].opt_prefix}/include'"
     end
 
     if build.with? 'globe'
-      osg = Formula.factory('open-scene-graph')
+      osg = Formula['open-scene-graph']
       opoo "`open-scene-graph` formula's keg not linked." unless osg.linked_keg.exist?
       args << '-DWITH_GLOBE=TRUE'
       # must be HOMEBREW_PREFIX/lib/osgPlugins-#.#.#, since all osg plugins are symlinked there
@@ -173,7 +173,7 @@ class Qgis20 < Formula
 
     # Avoid ld: framework not found QtSql
     # (https://github.com/Homebrew/homebrew-science/issues/23)
-    ENV.append 'CXXFLAGS', "-F#{Formula.factory('qt').opt_prefix}/lib"
+    ENV.append 'CXXFLAGS', "-F#{Formula['qt'].opt_prefix}/lib"
 
     # TODO: update .app's bundle identifier for HEAD builds
     # (convert to using `defaults`)
@@ -242,21 +242,21 @@ class Qgis20 < Formula
     }
 
     if opts.include? 'with-grass'
-      grass = Formula.factory('grass')
+      grass = Formula['grass']
       envars[:GRASS_PREFIX] = "#{grass.opt_prefix}/grass-#{grass.linked_keg.realpath.basename}"
     end
 
     if opts.include? 'with-globe'
-      osg = Formula.factory('open-scene-graph')
+      osg = Formula['open-scene-graph']
       envars[:OSG_LIBRARY_PATH] = "#{HOMEBREW_PREFIX}/lib/osgPlugins-#{osg.linked_keg.realpath.basename}"
     end
 
     if opts.include? 'enable-isolation'
       envars[:DYLD_FRAMEWORK_PATH] = "#{HOMEBREW_PREFIX}/Frameworks:/System/Library/Frameworks"
       versioned = %W[
-        #{Formula.factory('sqlite').opt_prefix}/lib
-        #{Formula.factory('expat').opt_prefix}/lib
-        #{Formula.factory('libxml2').opt_prefix}/lib
+        #{Formula['sqlite'].opt_prefix}/lib
+        #{Formula['expat'].opt_prefix}/lib
+        #{Formula['libxml2'].opt_prefix}/lib
         #{HOMEBREW_PREFIX}/lib
       ]
       envars[:DYLD_VERSIONED_LIBRARY_PATH] = versioned.join(pthsep)
@@ -381,7 +381,7 @@ class Qgis20 < Formula
   end
 
   def brewed_python?
-    Formula.factory("python").linked_keg.exist? and brewed_python_framework?
+    Formula["python"].linked_keg.exist? and brewed_python_framework?
   end
 
   def python_exec

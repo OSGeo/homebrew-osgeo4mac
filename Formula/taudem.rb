@@ -35,7 +35,7 @@ class Taudem < Formula
     end
 
     args = std_cmake_args
-    mpi = Formula.factory("open-mpi")
+    mpi = Formula["open-mpi"]
     args << "-DCMAKE_CXX_FLAGS=-I#{mpi.opt_prefix}/include"
     args << "-DCMAKE_EXE_LINKER_FLAGS=-L#{mpi.opt_prefix}/lib -lmpi -lmpi_cxx"
 

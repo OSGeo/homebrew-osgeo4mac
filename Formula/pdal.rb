@@ -69,13 +69,13 @@ class Pdal < Formula
       #       https://www.lizardtech.com/forums/viewtopic.php?f=6&t=821
       cxxstdlib_check :skip
       args << "-DWITH_MRSID=TRUE"
-      args << "-DMRSID_ROOT=#{Formula.factory("mrsid-sdk").opt_prefix}"
+      args << "-DMRSID_ROOT=#{Formula["mrsid-sdk"].opt_prefix}"
     end
     if build.with? "oracle"
       # TODO: remove cxxstdlib_check, after Oracle updates binaries for libc++
       cxxstdlib_check :skip
       args << "-DWITH_ORACLE=TRUE"
-      ENV["ORACLE_HOME"] = Formula.factory("oracle-client-sdk").opt_prefix
+      ENV["ORACLE_HOME"] = Formula["oracle-client-sdk"].opt_prefix
     else
       args << "-DWITH_ORACLE=FALSE"
     end
@@ -128,6 +128,6 @@ class Pdal < Formula
   end
 
   def brewed_python?
-    Formula.factory("python").linked_keg.exist? and brewed_python_framework.exist?
+    Formula["python"].linked_keg.exist? and brewed_python_framework.exist?
   end
 end
