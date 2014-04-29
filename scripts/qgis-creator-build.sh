@@ -22,6 +22,10 @@ fi
 export PATH=${HOMEBREW_PREFIX}/bin:${HOMEBREW_PREFIX}/sbin:${PATH}
 export PYTHONPATH=${HOMEBREW_PREFIX}/lib/python2.7/site-packages:${PYTHONPATH}
 
+echo "PATH set to: ${PATH}"
+echo "PYTHONPATH set to: ${PYTHONPATH}"
+echo "BUILD_DIR set to: ${BUILD_DIR}"
+
 echo "Building QGIS..."
 make -j ${CPUCORES}
 if [ $? -gt 0 ]; then
