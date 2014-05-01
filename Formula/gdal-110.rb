@@ -1,21 +1,17 @@
 require 'formula'
 
-class Gdal < Formula
+class Gdal110 < Formula
   homepage 'http://www.gdal.org/'
   url 'http://download.osgeo.org/gdal/1.10.1/gdal-1.10.1.tar.gz'
   sha1 'b4df76e2c0854625d2bedce70cc1eaf4205594ae'
-  revision 1
-
-  head do
-    url 'https://svn.osgeo.org/gdal/trunk/gdal'
-    depends_on 'doxygen' => :build
-  end
 
   option 'complete', 'Use additional Homebrew libraries to provide more drivers.'
   option 'enable-opencl', 'Build with OpenCL acceleration.'
   option 'enable-armadillo', 'Build with Armadillo accelerated TPS transforms.'
   option 'enable-unsupported', "Allow configure to drag in any library it can find. Invoke this at your own risk."
   option 'enable-mdb', 'Build with Access MDB driver (requires Java 1.6+ JDK/JRE, from Apple or Oracle).'
+
+  keg_only 'gdal is in main tap and same components are installed'
 
   depends_on :python => :recommended
   if build.with? "python"
