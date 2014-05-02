@@ -9,7 +9,7 @@ class UnlinkedQGIS < Requirement
   def no_linked_qgis
     qgis_list.each do |f|
       begin
-        return false, f if Formula.factory(f).linked_keg.exist?
+        return false, f if Formula[f].linked_keg.exist?
       rescue TapFormulaUnavailableError
         next
       end
