@@ -14,12 +14,15 @@ class Pyspatialite < Formula
   depends_on 'sqlite'
   depends_on 'libspatialite'
 
-  def patches
-    # Patch to work with libspatialite 4.x, drop amalgamation support, dynamically
-    # link libspatialite and sqlite3, and fix redeclaration build error
-    # Reported upstream: http://code.google.com/p/pyspatialite/issues/detail?id=15
-    # (not tested/supported with HEAD builds)
-    'https://gist.github.com/dakcarto/7510460/raw/2e56dd217c19d8dd661e4d3ffb2b669f34da580b/pyspatialite-3.0.1-Mac-patch.diff' if build.stable?
+  stable do
+    patch do
+      # Patch to work with libspatialite 4.x, drop amalgamation support, dynamically
+      # link libspatialite and sqlite3, and fix redeclaration build error
+      # Reported upstream: http://code.google.com/p/pyspatialite/issues/detail?id=15
+      # (not tested/supported with HEAD builds)
+      url "https://gist.github.com/dakcarto/7510460/raw/2e56dd217c19d8dd661e4d3ffb2b669f34da580b/pyspatialite-3.0.1-Mac-patch.diff"
+      sha1 "bb1738391d018411a385a0c972d4b8cc92c62254"
+    end
   end
 
   def install

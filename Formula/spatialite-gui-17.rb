@@ -17,12 +17,7 @@ class SpatialiteGui17 < Formula
   depends_on 'freexl'
   depends_on 'sqlite'
 
-  def patches
-    patch_set = {
-      :p1 => DATA
-    }
-    patch_set
-  end
+  patch :p1, :DATA
 
   def install
     system "./configure", "--prefix=#{prefix}"

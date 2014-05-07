@@ -10,10 +10,8 @@ class Prepair < Formula
   depends_on "cgal"
   depends_on "gdal"
 
-  def patches
-    # Instead of lib or commandline exe, build both
-    DATA
-  end
+  # Instead of lib or commandline exe, build both
+  patch :DATA
 
   def install
     libexec.install(%W[data icon.png]) # geojson sample data and project icon

@@ -47,7 +47,7 @@ class Gdal19 < Formula
     depends_on "epsilon"
     depends_on "libdap"
     # Fix a bug in LibDAP detection: http://trac.osgeo.org/gdal/ticket/4630
-    def patches; DATA; end unless build.head?
+    patch :DATA unless build.head?
 
     # Vector libraries
     depends_on "unixodbc" # OS X version is not complete enough
