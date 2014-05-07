@@ -14,7 +14,7 @@ class Qgis22 < Formula
   homepage 'http://www.qgis.org'
   url 'https://github.com/qgis/QGIS/archive/final-2_2_0.tar.gz'
   sha1 '5d043ef6b31a043aa2608a3eebdc3d7d997f2189'
-  revision 2
+  revision 3
 
   head 'https://github.com/qgis/QGIS.git', :branch => 'master'
 
@@ -98,6 +98,14 @@ class Qgis22 < Formula
     patch do
       url "https://gist.githubusercontent.com/dakcarto/9781934/raw/19d25932c8f0e1e89849cc8d2fc50a43dacfae42/qgis-22-backports.diff"
       sha1 "5cf37ba41686c78bc71430ed4405c6b5998b09cf"
+    end
+  end
+
+  # patch to include OpenFileGDB driver in QGIS 2.2
+  stable do
+    patch do
+      url "https://gist.githubusercontent.com/cspanring/8f0c83f57b7ed68af23c/raw/add_openfilegdb_drv.diff"
+      sha1 "308de64956c9b3cff1235e281ed20291c90ae260"
     end
   end
 
