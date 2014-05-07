@@ -1,23 +1,36 @@
-require 'formula'
+require "formula"
 
 class QtMysql < Formula
-  homepage 'http://qt-project.org/'
+  homepage "http://qt-project.org/"
   # 15 KB, stripped down archive of just what's needed to compile driver
-  url 'http://qgis.dakotacarto.com/osgeo4mac/qt-4.8.5-mysql-driver.tar.gz'
-  sha1 '2aa4651510b6974c0c129cfc673b88c7f8dbeeb2'
+  url "http://qgis.dakotacarto.com/osgeo4mac/qt-4.8.6-mysql-driver.tar.gz"
+  sha1 "a45cc5c766b28c6ae276d79d26b4470a67d03478"
   # 241.5 MB, if downloading full source
-  # url 'http://download.qt-project.org/official_releases/qt/4.8/4.8.5/qt-everywhere-opensource-src-4.8.5.tar.gz'
-  # sha1 '745f9ebf091696c0d5403ce691dc28c039d77b9e'
 
-  depends_on 'qt'
+  depends_on "qt"
   depends_on :mysql
 
   def install
-    cd 'src/plugins/sqldrivers/mysql' do
-      mysql = Formula['mysql']
-      system "#{HOMEBREW_PREFIX}/bin/qmake -spec macx-g++ \"INCLUDEPATH+=#{mysql.include}/mysql\" \"LIBS+=#{mysql.lib}/libmysqlclient_r.a -lz\" mysql.pro"
-      system 'make release'
-      system 'make release-install'
+    ENV.deparallelize
+    cd "src/plugins/sqldrivers/mysql" do
+      args = %W[-spec]
+      # On Mavericks we want to target libc++, this requires a unsupported/macx-clang-libc++ flag
+      if ENV.compiler == :clang and MacOS.version >= :mavericks
+        args << "unsupported/macx-clang-libc++"
+      else
+        args << "macx-g++"
+      end
+      mysql = Formula["mysql"]
+      args << %Q[INCLUDEPATH+="#{mysql.include}/mysql"]
+      args << %Q[LIBS+="#{mysql.lib}/libmysqlclient_r.a"]
+      args << %Q[LIBS+="-L#{Formula["openssl"].opt_lib}"]
+      args << %Q[LIBS+="-lssl"]
+      args << %Q[LIBS+="-lcrypto"]
+      args << "mysql.pro"
+
+      system "#{HOMEBREW_PREFIX}/bin/qmake", *args
+      system "make", "release"
+      system "make", "release-install"
     end
   end
 end
