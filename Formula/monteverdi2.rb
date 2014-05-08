@@ -2,7 +2,7 @@ require "formula"
 
 class Monteverdi2 < Formula
   homepage "http://orfeo-toolbox.org/otb/monteverdi.html"
-  url "http://downloads.sourceforge.net/project/orfeo-toolbox/Monteverdi2-0.6.0.tgz"
+  url "https://downloads.sourceforge.net/project/orfeo-toolbox/Monteverdi2-0.6.0.tgz"
   sha1 "0b50a03ec91d166d83621701303f55529543efc9"
 
   depends_on "cmake" => :build
@@ -23,11 +23,7 @@ class Monteverdi2 < Formula
     sha1 "ff81595a1641a8b431f98d6091bb134bc94e0003"
   end
 
-  def patches
-    # Fix issue with clang and libc++
-    #   See https://groups.google.com/forum/#!topic/otb-users/ZPlKvgImvNI
-    DATA if ENV.compiler == :clang and MacOS.version >= :mavericks
-  end
+  patch :DATA if MacOS.version >= :mavericks
 
   def install
     # locally vendor older qwt 5.2.3
