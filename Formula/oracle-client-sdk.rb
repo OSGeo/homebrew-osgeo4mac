@@ -6,19 +6,19 @@ class OracleClientSdk < Formula
   option "with-basic", "Intall Oracle's Basic client, instead of Basic Lite"
 
   if build.with? "basic"
-    url "file://#{HOMEBREW_CACHE}/instantclient-basic-macos.x64-11.2.0.3.0.zip",
+    url "file://#{HOMEBREW_CACHE}/instantclient-basic-macos.x64-11.2.0.4.0.zip",
         :using => CacheDownloadStrategy
-    sha1 "451fe2e8b9e92ad45760880116792ae31a4f0174"
+    sha1 "d9b5a1d13ecf2fca0317fc7b4964576a95990f08"
   else
-    url "file://#{HOMEBREW_CACHE}/instantclient-basiclite-macos.x64-11.2.0.3.0.zip",
+    url "file://#{HOMEBREW_CACHE}/instantclient-basiclite-macos.x64-11.2.0.4.0.zip",
         :using => CacheDownloadStrategy
-    sha1 "22794c7ee551ffc3a8b21fb7c151a3e1c14833a8"
+    sha1 "79f4b3090e15c392ef85626bb24793e57d02fe24"
   end
 
   resource "sdk" do
-    url "file://#{HOMEBREW_CACHE}/instantclient-sdk-macos.x64-11.2.0.3.0.zip",
+    url "file://#{HOMEBREW_CACHE}/instantclient-sdk-macos.x64-11.2.0.4.0.zip",
         :using => CacheDownloadStrategy
-    sha1 "95875708dec52155aa6b6f66550b805fd0875c26"
+    sha1 "1c37a37e62d02bad7705d7e417810da7fda9bd0e"
   end
 
   def install
@@ -30,16 +30,16 @@ class OracleClientSdk < Formula
     lib.install "libocci.dylib.11.1" => "libocci.dylib"
     lib.install "libnnz11.dylib"
     install_change(lib/"libclntsh.dylib",
-                   "/ade/b/2649109290/oracle/ldap/lib/libnnz11.dylib",
+                   "/ade/dosulliv_ldapmac/oracle/ldap/lib/libnnz11.dylib",
                    "@loader_path/libnnz11.dylib")
 
     bin.install oracle_exes
     oracle_exes.each do |b|
       install_change(bin/"#{b}",
-                   "/ade/b/2649109290/oracle/rdbms/lib/libclntsh.dylib.11.1",
+                   "/ade/b/3071542110/oracle/rdbms/lib/libclntsh.dylib.11.1",
                    "#{oracle_opt_lib}/libclntsh.dylib")
       install_change(bin/"#{b}",
-                   "/ade/b/2649109290/oracle/ldap/lib/libnnz11.dylib",
+                   "/ade/dosulliv_ldapmac/oracle/ldap/lib/libnnz11.dylib",
                    "#{oracle_opt_lib}/libnnz11.dylib")
     end
 
