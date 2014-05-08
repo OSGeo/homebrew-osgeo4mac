@@ -2,7 +2,7 @@ require 'formula'
 
 class SagaGis < Formula
   homepage 'http://saga-gis.org'
-  url 'http://downloads.sourceforge.net/project/saga-gis/SAGA%20-%202.1/SAGA%202.1.1/saga_2.1.1.tar.gz'
+  url 'https://downloads.sourceforge.net/project/saga-gis/SAGA%20-%202.1/SAGA%202.1.1/saga_2.1.1.tar.gz'
   sha1 '7345701b137d491bda59400a3890cda7ca433e41'
 
   head 'svn://svn.code.sf.net/p/saga-gis/code-0/trunk/saga-gis'
@@ -24,12 +24,10 @@ class SagaGis < Formula
   depends_on :python => :optional
   depends_on "libgeotiff" if build.with? "liblas"
 
-  def patches
-    # Compiling on Mavericks with libc++ causes issues with LC_NUMERIC.
-    # https://sourceforge.net/p/saga-gis/patches/12/
-    # Fixes issue with libio_grid.dylib. Thanks @dakcarto
-    DATA
-  end
+  # Compiling on Mavericks with libc++ causes issues with LC_NUMERIC.
+  # https://sourceforge.net/p/saga-gis/patches/12/
+  # Fixes issue with libio_grid.dylib. Thanks @dakcarto
+  patch :DATA
 
   resource 'app_icon' do
     url 'http://web.fastermac.net/~MacPgmr/SAGA/saga_gui.icns'
@@ -93,7 +91,7 @@ class SagaGis < Formula
     system "./configure", *args
     system "make install"
 
-    if build.include? "with-app"
+    if build.with? "app"
       # Based on original script by Phil Hess
       # http://web.fastermac.net/~MacPgmr/
 
@@ -139,16 +137,14 @@ class SagaGis < Formula
   end
 
   def caveats
-    if build.include? "with-app" then <<-EOS.undent
+    if build.with? "app"
+      <<-EOS.undent
       SAGA.app was installed in:
         #{prefix}
 
-      To symlink into ~/Applications, you can do:
-        brew linkapps
-
       Note that the SAGA GUI does not work very well yet.
       It has problems with creating a preferences file in the correct location and sometimes won't shut down (use Activity Monitor to force quit if necessary).
-    EOS
+      EOS
     end
   end
 end
