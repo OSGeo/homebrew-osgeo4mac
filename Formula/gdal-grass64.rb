@@ -4,6 +4,7 @@ class GdalGrass64 < Formula
   homepage 'http://www.gdal.org'
   url 'http://download.osgeo.org/gdal/gdal-grass-1.4.3.tar.gz'
   sha1 '63b87ad1688cc365dc6bd6c3ccc854d0e6aa637a'
+  revision 1
 
   depends_on 'gdal'
   depends_on 'grass-64'
