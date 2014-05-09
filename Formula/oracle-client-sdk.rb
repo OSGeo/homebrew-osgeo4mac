@@ -4,6 +4,7 @@ require File.expand_path("../../Strategies/cache-download", Pathname.new(__FILE_
 class OracleClientSdk < Formula
   homepage "http://www.oracle.com/technetwork/topics/intel-macsoft-096467.html"
   option "with-basic", "Intall Oracle's Basic client, instead of Basic Lite"
+  revision 1
 
   if build.with? "basic"
     url "file://#{HOMEBREW_CACHE}/instantclient-basic-macos.x64-11.2.0.4.0.zip",
@@ -22,27 +23,35 @@ class OracleClientSdk < Formula
   end
 
   def install
-    oracle_opt_lib = opt_prefix/"lib"
-    oracle_exes = %W[adrci genezi uidrvci]
+    # fix permissions
+    quiet_system "chmod -R u+w,og-w ./*"
 
-    prefix.install Dir["*README"]
-    lib.install "libclntsh.dylib.11.1" => "libclntsh.dylib"
-    lib.install "libocci.dylib.11.1" => "libocci.dylib"
-    lib.install "libnnz11.dylib"
-    install_change(lib/"libclntsh.dylib",
+    # fixup libs
+    mv "libclntsh.dylib.11.1", "libclntsh.dylib"
+    mv "libocci.dylib.11.1", "libocci.dylib"
+    %W[libclntsh.dylib libocci.dylib libnnz11.dylib].each do |f|
+      quiet_system "install_name_tool", "-id", "#{f}", f
+    end
+
+    install_change("libclntsh.dylib",
                    "/ade/dosulliv_ldapmac/oracle/ldap/lib/libnnz11.dylib",
                    "@loader_path/libnnz11.dylib")
 
-    bin.install oracle_exes
-    oracle_exes.each do |b|
-      install_change(bin/"#{b}",
-                   "/ade/b/3071542110/oracle/rdbms/lib/libclntsh.dylib.11.1",
-                   "#{oracle_opt_lib}/libclntsh.dylib")
-      install_change(bin/"#{b}",
-                   "/ade/dosulliv_ldapmac/oracle/ldap/lib/libnnz11.dylib",
-                   "#{oracle_opt_lib}/libnnz11.dylib")
-    end
+    lib.install %W[libclntsh.dylib libocci.dylib libnnz11.dylib]
 
+    # fix exes
+    oracle_exes = %W[adrci genezi uidrvci]
+    oracle_exes.each do |b|
+      install_change(b,
+                     "/ade/b/3071542110/oracle/rdbms/lib/libclntsh.dylib.11.1",
+                     "#{opt_lib}/libclntsh.dylib")
+      install_change(b,
+                     "/ade/dosulliv_ldapmac/oracle/ldap/lib/libnnz11.dylib",
+                     "#{opt_lib}/libnnz11.dylib")
+    end
+    bin.install oracle_exes
+
+    prefix.install Dir["*README"]
     resource("sdk").stage {prefix.install "sdk"}
   end
 
