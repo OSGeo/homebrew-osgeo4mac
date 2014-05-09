@@ -2,8 +2,8 @@ require 'formula'
 
 class GdalFilegdb < Formula
   homepage 'http://www.gdal.org/ogr/drv_filegdb.html'
-  url 'http://download.osgeo.org/gdal/1.10.1/gdal-1.10.1.tar.gz'
-  sha1 'b4df76e2c0854625d2bedce70cc1eaf4205594ae'
+  url 'http://download.osgeo.org/gdal/1.11.0/gdal-1.11.0.tar.gz'
+  sha1 '25efd2bffdea2e841377ca8c1fd49d89d02ac87e'
 
   depends_on "filegdb-api"
   depends_on 'gdal'
@@ -13,7 +13,7 @@ class GdalFilegdb < Formula
     (lib/'gdalplugins').mkpath
 
     # cxx flags
-    args = %W[-Iport -Igcore -Iogr -Iogr/ogrsf_frmts
+    args = %W[-Iport -Igcore -Iogr -Iogr/ogrsf_frmts -Iogr/ogrsf_frmts/generic
                -Iogr/ogrsf_frmts/filegdb -I#{filegdb_opt}/include/filegdb]
 
     # source files
@@ -22,7 +22,6 @@ class GdalFilegdb < Formula
     end
 
     # plugin dylib
-    # TODO: can the compatibility_version be 1.10.0?
     args.concat %W[
       -dynamiclib
       -install_name #{HOMEBREW_PREFIX}/lib/gdalplugins/ogr_FileGDB.dylib
