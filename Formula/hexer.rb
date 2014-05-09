@@ -2,8 +2,8 @@ require "formula"
 
 class Hexer < Formula
   homepage "https://github.com/hobu/hexer"
-  url "https://github.com/hobu/hexer/archive/1.0.1.tar.gz"
-  sha1 "dc4e817c89c44740f13f461b52b8f320ea3c7d1a"
+  url "https://github.com/hobu/hexer/archive/1.2.1.tar.gz"
+  sha1 "4383216ece7a80492e4203f4224b0b41f6138303"
 
   head "https://github.com/hobu/hexer.git", :branch => "master"
 
