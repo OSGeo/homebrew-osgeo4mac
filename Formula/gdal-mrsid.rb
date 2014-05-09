@@ -2,8 +2,8 @@ require "formula"
 
 class GdalMrsid < Formula
   homepage "http://www.gdal.org/frmt_mrsid.html"
-  url "http://download.osgeo.org/gdal/1.10.1/gdal-1.10.1.tar.gz"
-  sha1 "b4df76e2c0854625d2bedce70cc1eaf4205594ae"
+  url "http://download.osgeo.org/gdal/1.11.0/gdal-1.11.0.tar.gz"
+  sha1 "25efd2bffdea2e841377ca8c1fd49d89d02ac87e"
 
   depends_on "mrsid-sdk"
   depends_on "gdal"
