@@ -14,7 +14,7 @@ class Qgis22 < Formula
   homepage 'http://www.qgis.org'
   url 'https://github.com/qgis/QGIS/archive/final-2_2_0.tar.gz'
   sha1 '5d043ef6b31a043aa2608a3eebdc3d7d997f2189'
-  revision 2
+  revision 3
 
   head 'https://github.com/qgis/QGIS.git', :branch => 'master'
 
@@ -67,8 +67,8 @@ class Qgis22 < Formula
   # TODO: add MSSQL third-party support formula?, :optional
 
   # core plugins (c++ and python)
-  depends_on 'grass' => :optional
-  depends_on 'gdal-grass' if build.with? 'grass'
+  depends_on 'grass-64' => :optional
+  depends_on 'gdal-grass64' if build.with? 'grass'
   depends_on 'gettext' if build.with? 'grass'
   depends_on 'gpsbabel' => [:recommended, 'with-libusb']
   depends_on 'open-scene-graph' if build.with? 'globe'
@@ -158,9 +158,8 @@ class Qgis22 < Formula
     end
 
     if build.with? 'grass'
-      grass = Formula['grass']
-      opoo "`grass` formula's keg not linked." unless grass.linked_keg.exist?
-      args << "-DGRASS_PREFIX='#{grass.opt_prefix}/grass-#{grass.linked_keg.realpath.basename.to_s}'"
+      grass = Formula["grass-64"]
+      args << "-DGRASS_PREFIX='#{grass.opt_prefix}/grass-#{grass.version.to_s}'"
       # So that `libintl.h` can be found
       ENV.append 'CXXFLAGS', "-I'#{Formula['gettext'].opt_prefix}/include'"
     end
@@ -246,8 +245,8 @@ class Qgis22 < Formula
     }
 
     if opts.include? 'with-grass'
-      grass = Formula['grass']
-      envars[:GRASS_PREFIX] = "#{grass.opt_prefix}/grass-#{grass.linked_keg.realpath.basename}"
+      grass = Formula["grass-64"]
+      envars[:GRASS_PREFIX] = "#{grass.opt_prefix}/grass-#{grass.version.to_s}"
     end
 
     if opts.include? 'with-globe'
