@@ -1,7 +1,7 @@
-require 'formula'
+require "formula"
 
 class Grass64 < Formula
-  homepage 'http://grass.osgeo.org/'
+  homepage "http://grass.osgeo.org/"
 
   stable do
     url "http://grass.osgeo.org/grass64/source/grass-6.4.3.tar.gz"
@@ -11,21 +11,12 @@ class Grass64 < Formula
     patch :DATA
   end
 
-  head do
-    url "https://svn.osgeo.org/grass/grass/trunk"
+  keg_only "grass is in main tap and same-name bin utilities are installed"
 
-    patch do
-      url "https://gist.github.com/jctull/0fe3db92a3e7c19fa6e0/raw/42e819f0a9b144de782c94f730dbc4da136e9227/grassPatchHead.diff"
-      sha1 "ffbe31682d8a7605d5548cdafd536f1c785d3a23"
-    end
-  end
+  # wxpython deps does not install across
+  option "with-gui", "Build with Tcl-Tk interface."
 
-  keg_only 'grass is in main tap and same-name bin utilities are installed'
-
-  option "without-gui", "Build without WxPython interface. Command line tools still available."
-
-  depends_on :macos => :lion
-  depends_on 'apple-gcc42' if MacOS.version >= :mountain_lion
+  depends_on "gcc" if MacOS.version >= :mountain_lion
   depends_on "pkg-config" => :build
   depends_on "gettext"
   depends_on "readline"
@@ -33,8 +24,7 @@ class Grass64 < Formula
   depends_on "libtiff"
   depends_on "unixodbc"
   depends_on "fftw"
-  depends_on "wxmac-29" => :recommended # prefer over OS X's version because of 64bit
-  # depends_on "homebrew/dupes/tcl-tk"
+  depends_on "homebrew/dupes/tcl-tk" if build.with? "gui"
   depends_on :postgresql => :optional
   depends_on :mysql => :optional
   depends_on "cairo"
@@ -42,11 +32,6 @@ class Grass64 < Formula
 
   fails_with :clang do
     cause "Multiple build failures while compiling GRASS tools."
-  end
-
-  def headless?
-    # The GRASS GUI is based on WxPython.
-    build.without? 'gui'
   end
 
   def install
@@ -74,22 +59,11 @@ class Grass64 < Formula
       "--with-nls-libs=#{gettext}/lib",
       "--with-nls",
       "--with-freetype",
-      "--without-tcltk" # Disabled due to compatibility issues with OS X Tcl/Tk
+      "--without-wxwidgets"
     ]
 
-    unless MacOS::CLT.installed?
-      # On Xcode-only systems (without the CLT), we have to help:
-      args << "--with-macosx-sdk=#{MacOS.sdk_path}"
-      args << "--with-opengl-includes=#{MacOS.sdk_path}/System/Library/Frameworks/OpenGL.framework/Headers"
-    end
-
-    if headless? or build.without? 'wxmac-29'
-      args << "--without-wxwidgets"
-    else
-      wxmac = Formula['wxmac-29'].opt_prefix
-      ENV["PYTHONPATH"] = "#{wxmac}/lib/python2.7/site-packages"
-      args << "--with-wxwidgets=#{wxmac}/bin/wx-config"
-    end
+    args << ((build.with? "gui") ? "--with-tcltk" : "--without-tcltk")
+    args << "--without-opengl" # just turn off NVIZ
 
     args << "--enable-64bit" if MacOS.prefer_64_bit?
     args << "--with-macos-archs=#{MacOS.preferred_arch}"
@@ -114,34 +88,23 @@ class Grass64 < Formula
     system "make GDAL_DYNAMIC= install" # GDAL_DYNAMIC set to blank for r.external compatability
   end
 
+  def post_install
+    opts = Tab.for_formula(self).used_options
+    inreplace "#{bin}/grass64",
+              %r[("\$GISBASE/etc/Init\.sh")],
+              "\\1 -#{((opts.include? "with-gui") ? "tcltk" : "text")}"
+  end
+
   def caveats
-    if headless?
+    if build.with? "gui"
       <<-EOS.undent
-        This build of GRASS has been compiled without the WxPython GUI. This is
-        done by default on Lion because there is no stable build of WxPython
-        available to compile against.
-
+        This build of GRASS does not support NVIZ visualization.
+      EOS
+    else
+      <<-EOS.undent
+        This build of GRASS has been compiled without the GUI.
         The command line tools remain fully functional.
-        EOS
-    elsif MacOS.version < :lion
-      # On Lion or above, we are very happy with our brewed wxwidgets.
-      <<-EOS.undent
-        GRASS is currently in a transition period with respect to GUI support.
-        The old Tcl/Tk GUI cannot be built using the version of Tcl/Tk provided
-        by OS X. This has the unfortunate consquence of disabling the NVIZ
-        visualization system. A keg-only Tcl/Tk brew or some deep hackery of
-        the GRASS source may be possible ways to get around this.
-
-        Tcl/Tk will eventually be deprecated in GRASS 7 and this version has
-        been built to support the newer wxPython based GUI. However, there is
-        a problem as wxWidgets does not compile as a 64 bit library on OS X
-        which affects Snow Leopard users. In order to remedy this, the GRASS
-        startup script:
-
-          #{prefix}/grass-#{version}/etc/Init.sh
-
-        has been modified to use the OS X system Python and to start it in 32 bit mode.
-        EOS
+      EOS
     end
   end
 end
