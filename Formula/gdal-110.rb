@@ -11,7 +11,7 @@ class Gdal110 < Formula
   option 'enable-unsupported', "Allow configure to drag in any library it can find. Invoke this at your own risk."
   option 'enable-mdb', 'Build with Access MDB driver (requires Java 1.6+ JDK/JRE, from Apple or Oracle).'
 
-  keg_only 'gdal is in main tap and same components are installed'
+  keg_only "Older version; gdal is in main tap and installs same components"
 
   depends_on :python => :recommended
   if build.with? "python"
