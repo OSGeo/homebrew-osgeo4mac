@@ -162,8 +162,8 @@ install postgresql
 # gdal support
 # HEAD
 install --HEAD libkml
-# 2.0.0 keg-only; PR to homebrew-versions
-install osgeo/osgeo4mac/openjpeg20
+# needed by gdal
+install homebrew/versions/openjpeg20
 # 3.920.2
 install homebrew/science/armadillo
 # 0.24.4

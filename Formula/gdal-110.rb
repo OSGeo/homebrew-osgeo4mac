@@ -35,7 +35,7 @@ class Gdal110 < Formula
 
   depends_on 'homebrew/science/armadillo' if build.include? 'enable-armadillo'
 
-  depends_on 'openjpeg20' if build.include? 'enable-unsupported'
+  depends_on "homebrew/versions/openjpeg20" if build.include? 'enable-unsupported'
 
   if build.include? 'complete'
     # Raster libraries
