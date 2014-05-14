@@ -14,7 +14,7 @@ class Pointcloud < Formula
 
   depends_on "cmake" => :build
   depends_on :postgresql
-  depends_on "libght"
+  depends_on "osgeo/osgeo4mac/libght"
   depends_on "cunit" if build.with? "tests"
 
   def install
