@@ -75,7 +75,7 @@ def cmake_opts(qi, hb):
         ('WITH_QSCIAPI', 'FALSE'),
         ('POSTGRES_CONFIG', '{hb}/bin/pg_config'),
         ('WITH_GRASS', 'TRUE'),
-        ('GRASS_PREFIX', '{hb}/opt/grass/grass-' + GRASS_VERSION),
+        ('GRASS_PREFIX', '{hb}/opt/grass-64/grass-' + GRASS_VERSION),
         ('WITH_GLOBE', 'TRUE'),
         ('OSG_DIR', '{hb}'),
         ('OSGEARTH_DIR', '{hb}'),
