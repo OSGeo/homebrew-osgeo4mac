@@ -2,7 +2,7 @@ require 'formula'
 
 class PyQtImportable < Requirement
   fatal true
-  satisfy { quiet_system 'python', '-c', 'from PyQt4 import QtCore' }
+  satisfy { quiet_system 'python', '-c', '"from PyQt4 import QtCore"' }
 
   def message
     <<-EOS.undent
