@@ -1,12 +1,11 @@
 require "formula"
 
-class Pdal < Formula
+class Pdal09dev < Formula
   homepage "http://pointcloud.org"
   # TODO: remove. temp url in preparation for next release
   url "https://github.com/PDAL/PDAL.git",
-      :revision => "1145c8b13782b36cbc0bcb5cd66d0ed6c50b8309"
-  version "0.9.9-1145c8b"
-  sha1 "1145c8b13782b36cbc0bcb5cd66d0ed6c50b8309"
+      :revision => "cc58b35f63e9ce035268d879a3333a18675d0240"
+  version "0.9.9-cc58b35"
 
   head "https://github.com/PDAL/PDAL.git", :branch => "master"
 
@@ -19,7 +18,7 @@ class Pdal < Formula
 
   depends_on "cmake" => :build
   depends_on "swig" => [:build, :optional]
-  depends_on "boost" # has internal boost, but external recommended by developer
+  depends_on "boost" => :recommended
   depends_on :python # for PLang filters
   depends_on "numpy" => :python
   depends_on "libgeotiff"
@@ -36,18 +35,22 @@ class Pdal < Formula
   depends_on "mrsid-sdk" if build.with? "mrsid"
   depends_on "oracle-client-sdk" if build.with? "oracle"
 
+  conflicts_with "pdal", :because => "pdal 0.9.8 is in main tap"
+
   if build.with? "doc"
     depends_on "doxygen"
     depends_on "sphinx" => :python
     depends_on "breathe" => :python
   end
 
+  # needs :cxx11
+
   def install
     ENV.libxml2
     args = std_cmake_args.concat %W[
-      -DPDAL_EMBED_BOOST=FALSE
       -DWITH_NITRO=FALSE
     ]
+    args << "-DPDAL_EMBED_BOOST=" + ((build.with? "boost") ? "FALSE" : "TRUE")
     args << "-DWITH_TESTS=FALSE" if build.without? "tests"
 
     if brewed_python?
@@ -81,6 +84,11 @@ class Pdal < Formula
     end
 
     mkdir "build" do
+      ENV.libcxx if MacOS.version < :mavericks
+      if ENV.compiler == :clang and MacOS.version < :mavericks
+        # ENV.append "CFLAGS", "-stdlib=libc++"
+        # ENV.append "LDFLAGS", "-stdlib=libc++"
+      end
       system "cmake", "..", *args
       #system "bbedit", "CMakeCache.txt"
       #raise
