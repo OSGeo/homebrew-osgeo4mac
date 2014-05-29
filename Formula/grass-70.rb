@@ -4,9 +4,9 @@ class Grass70 < Formula
   homepage 'http://grass.osgeo.org/'
 
   stable do
-    url "http://grass.osgeo.org/grass70/source/grass-7.0.0beta1.tar.gz"
-    sha1 "3ab5fd111b05b32b1aed0375e45052ee8963a3c1"
-    version "7.0.0beta1"
+    url "http://grass.osgeo.org/grass70/source/grass-7.0.0beta2.tar.gz"
+    sha1 "b4a87a2ab7ca9384bd563c9fcbc23b836f96a321"
+    version "7.0.0beta2"
 
     # Patches that files are not installed outside of the prefix.
     patch :DATA
@@ -22,7 +22,7 @@ class Grass70 < Formula
   depends_on "libtiff"
   depends_on "unixodbc"
   depends_on "fftw"
-  depends_on "wxmac" => :recommended # prefer over OS X's version because of 64bit
+  depends_on "wxpython"
   depends_on :postgresql => :optional
   depends_on :mysql => :optional
   depends_on "cairo"
@@ -56,7 +56,8 @@ class Grass70 < Formula
       "--with-nls-libs=#{gettext}/lib",
       "--with-nls",
       "--with-freetype",
-      "--without-tcltk" # Disabled due to compatibility issues with OS X Tcl/Tk
+      "--without-tcltk", # Disabled due to compatibility issues with OS X Tcl/Tk
+      "--with-includes=#{gettext}/include"
     ]
 
     unless MacOS::CLT.installed?
@@ -124,4 +125,3 @@ index cf16788..8c0007b 100644
  $(INST_DIR) $(UNIX_BIN):
  	$(MAKE_DIR_CMD) $@
  
-
