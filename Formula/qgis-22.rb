@@ -101,6 +101,14 @@ class Qgis22 < Formula
     end
   end
 
+  # patch to include OpenFileGDB driver in QGIS 2.2
+  stable do
+    patch do
+      url "https://gist.githubusercontent.com/cspanring/8f0c83f57b7ed68af23c/raw/add_openfilegdb_drv.diff"
+      sha1 "308de64956c9b3cff1235e281ed20291c90ae260"
+    end
+  end
+
   def install
     # Set bundling level back to 0 (the default in all versions prior to 1.8.0)
     # so that no time and energy is wasted copying the Qt frameworks into QGIS.
