@@ -5,7 +5,7 @@ require File.expand_path("../../Requirements/qgis_requirements",
 class UnlinkedQGIS20 < UnlinkedQGIS
   fatal true
   def qgis_list
-    %W[homebrew/science/qgis qgis-18 qgis-22]
+    %W[homebrew/science/qgis qgis-18 qgis-22 qgis-24]
   end
   satisfy(:build_env => false) { no_linked_qgis[0] }
 end
@@ -14,7 +14,7 @@ class Qgis20 < Formula
   homepage 'http://www.qgis.org'
   url 'https://github.com/qgis/QGIS/archive/final-2_0_1.tar.gz'
   sha1 'd532677c1934c3faacd3036af15958b464051853'
-  revision 3
+  revision 4
 
   option 'enable-isolation', "Isolate .app's environment to HOMEBREW_PREFIX, to coexist with other QGIS installs"
   option 'with-debug', 'Enable debug build, which outputs info to system.log or console'
