@@ -15,7 +15,10 @@ class Grass70 < Formula
 
   option "without-gui", "Build without WxPython interface. Command line tools still available."
 
-  depends_on :macos => :lion
+  # TODO: test on 10.6 first. may work with latest wxWidgets 3.0
+  # depends_on :macos => :lion
+  # TODO: builds with clang (has same non-fatal errors as gcc), but is it compiled correctly?
+  # depends_on "gcc" => :build
   depends_on "pkg-config" => :build
   depends_on "gettext"
   depends_on "readline"
@@ -23,20 +26,25 @@ class Grass70 < Formula
   depends_on "libtiff"
   depends_on "unixodbc"
   depends_on "fftw"
+  depends_on :python
   depends_on "wxpython"
   depends_on :postgresql => :optional
   depends_on :mysql => :optional
   depends_on "cairo"
   depends_on :x11  # needs to find at least X11/include/GL/gl.h
+  depends_on "openblas" => :optional
+  depends_on "liblas" => :optional
+  depends_on "netcdf" => :optional
+  depends_on "ffmpeg" => :optional
 
   def headless?
     # The GRASS GUI is based on WxPython.
-    build.without? 'gui'
+    build.without? "gui"
   end
 
   def install
-    readline = Formula["readline"].opt_prefix
-    gettext = Formula["gettext"].opt_prefix
+    readline = Formula["readline"]
+    gettext = Formula["gettext"]
 
     #noinspection RubyLiteralArrayInspection
     args = [
@@ -49,16 +57,17 @@ class Grass70 < Formula
       "--with-sqlite",
       "--with-odbc",
       "--with-geos=#{Formula["geos"].opt_bin}/geos-config",
+      "--with-proj-share=#{Formula["proj"].opt_share}/proj",
       "--with-png",
-      "--with-readline-includes=#{readline}/include",
-      "--with-readline-libs=#{readline}/lib",
+      "--with-readline-includes=#{readline.opt_include}",
+      "--with-readline-libs=#{readline.opt_lib}",
       "--with-readline",
-      "--with-nls-includes=#{gettext}/include",
-      "--with-nls-libs=#{gettext}/lib",
+      "--with-nls-includes=#{gettext.opt_include}",
+      "--with-nls-libs=#{gettext.opt_lib}",
       "--with-nls",
       "--with-freetype",
       "--without-tcltk", # Disabled due to compatibility issues with OS X Tcl/Tk
-      "--with-includes=#{gettext}/include"
+      "--with-includes=#{gettext.opt_include}"
     ]
 
     unless MacOS::CLT.installed?
@@ -67,20 +76,19 @@ class Grass70 < Formula
       args << "--with-opengl-includes=#{MacOS.sdk_path}/System/Library/Frameworks/OpenGL.framework/Headers"
     end
 
-    if headless? or build.without? 'wxmac'
+    if headless?
       args << "--without-wxwidgets"
     else
-      wxmac = Formula['wxmac'].opt_prefix
-      ENV["PYTHONPATH"] = "#{wxmac}/lib/python2.7/site-packages"
-      args << "--with-wxwidgets=#{wxmac}/bin/wx-config"
+      ENV["PYTHONPATH"] = "#{Formula["wxpython"].opt_lib}/python2.7/site-packages"
+      args << "--with-wxwidgets=#{Formula["wxmac"].opt_bin}/wx-config"
     end
 
     args << "--enable-64bit" if MacOS.prefer_64_bit?
     args << "--with-macos-archs=#{MacOS.preferred_arch}"
 
     cairo = Formula["cairo"]
-    args << "--with-cairo-includes=#{cairo.include}/cairo"
-    args << "--with-cairo-libs=#{cairo.lib}"
+    args << "--with-cairo-includes=#{cairo.opt_include}/cairo"
+    args << "--with-cairo-libs=#{cairo.opt_lib}"
     args << "--with-cairo"
 
     # Database support
@@ -88,9 +96,26 @@ class Grass70 < Formula
 
     if build.with? "mysql"
       mysql = Formula["mysql"]
-      args << "--with-mysql-includes=#{mysql.include}/mysql"
-      args << "--with-mysql-libs=#{mysql.lib}"
+      args << "--with-mysql-includes=#{mysql.opt_include}/mysql"
+      args << "--with-mysql-libs=#{mysql.opt_lib}"
       args << "--with-mysql"
+    end
+
+    # other optional support
+    if build.with? "openblas" # otherwise, Apple's will be found
+      openblas = Formula["openblas"]
+      args << "--with-blas-includes=#{openblas.opt_include}"
+      args << "--with-blas-libs=#{openblas.opt_lib}"
+    end
+
+    args << "--with-liblas=#{Formula["liblas"].opt_bin}/liblas-config" if build.with? "liblas"
+    args << "--with-netcdf=#{Formula["netcdf"].opt_bin}/nc-config" if build.with? "netcdf"
+
+    if build.with? "ffmpeg"
+      ffmpeg = Formula["ffmpeg"]
+      args << "--with-ffmpeg-includes=#{(Dir["#{ffmpeg.opt_include}/*"]).join(" ")}"
+      args << "--with-ffmpeg-libs=#{ffmpeg.opt_lib}"
+      args << "--with-ffmpeg"
     end
 
     system "./configure", "--prefix=#{prefix}", *args
