@@ -4,19 +4,23 @@ class Grass64 < Formula
   homepage "http://grass.osgeo.org/"
 
   stable do
-    url "http://grass.osgeo.org/grass64/source/grass-6.4.3.tar.gz"
-    sha1 "925da985f3291c41c7a0411eaee596763f7ff26e"
+    url "http://grass.osgeo.org/grass64/source/grass-6.4.4.tar.gz"
+    sha1 "0e4dac9fb3320a26e4f640f641485fde0323dd46"
 
-    # Patches that files are not installed outside of the prefix.
+    # Patches to keep files from being installed outside of the prefix.
+    # Remove lines from Makefile that try to install to /Library/Documentation.
+    # Also, quick patch for compiling with clang (as yet, unreported issue)
     patch :DATA
   end
 
   keg_only "grass is in main tap and same-name bin utilities are installed"
 
-  # wxpython deps does not install across
-  option "with-gui", "Build with Tcl-Tk interface."
+  option "without-gui", "Build without WxPython interface. Command line tools still available."
 
-  depends_on "gcc" if MacOS.version >= :mountain_lion
+  # TODO: test on 10.6 first. may work with latest wxWidgets 3.0
+  # depends_on :macos => :lion
+  # TODO: builds with clang (has same non-fatal errors as gcc), but is it compiled correctly?
+  # depends_on "gcc" => :build
   depends_on "pkg-config" => :build
   depends_on "gettext"
   depends_on "readline"
@@ -24,14 +28,20 @@ class Grass64 < Formula
   depends_on "libtiff"
   depends_on "unixodbc"
   depends_on "fftw"
-  depends_on "homebrew/dupes/tcl-tk" if build.with? "gui"
+  depends_on :python
+  depends_on "wxpython"
   depends_on :postgresql => :optional
   depends_on :mysql => :optional
   depends_on "cairo"
   depends_on :x11  # needs to find at least X11/include/GL/gl.h
 
   fails_with :clang do
-    cause "Multiple build failures while compiling GRASS tools."
+    cause "Multiple build errors while compiling GRASS tools."
+  end
+
+  def headless?
+    # The GRASS GUI is based on WxPython.
+    build.without? "gui"
   end
 
   def install
@@ -51,6 +61,7 @@ class Grass64 < Formula
       "--with-sqlite",
       "--with-odbc",
       "--with-geos=#{Formula["geos"].opt_bin}/geos-config",
+      "--with-proj-share=#{Formula["proj"].opt_share}/proj",
       "--with-png",
       "--with-readline-includes=#{readline}/include",
       "--with-readline-libs=#{readline}/lib",
@@ -59,11 +70,22 @@ class Grass64 < Formula
       "--with-nls-libs=#{gettext}/lib",
       "--with-nls",
       "--with-freetype",
-      "--without-wxwidgets"
+      "--without-tcltk", # Disabled due to compatibility issues with OS X Tcl/Tk
+      "--with-includes=#{gettext}/include"
     ]
 
-    args << ((build.with? "gui") ? "--with-tcltk" : "--without-tcltk")
-    args << "--without-opengl" # just turn off NVIZ
+    unless MacOS::CLT.installed?
+      # On Xcode-only systems (without the CLT), we have to help:
+      args << "--with-macosx-sdk=#{MacOS.sdk_path}"
+      args << "--with-opengl-includes=#{MacOS.sdk_path}/System/Library/Frameworks/OpenGL.framework/Headers"
+    end
+
+    if headless?
+      args << "--without-wxwidgets"
+    else
+      ENV["PYTHONPATH"] = "#{Formula["wxpython"].opt_prefix}/lib/python2.7/site-packages"
+      args << "--with-wxwidgets=#{Formula["wxmac"].opt_prefix}/bin/wx-config"
+    end
 
     args << "--enable-64bit" if MacOS.prefer_64_bit?
     args << "--with-macos-archs=#{MacOS.preferred_arch}"
@@ -88,32 +110,18 @@ class Grass64 < Formula
     system "make GDAL_DYNAMIC= install" # GDAL_DYNAMIC set to blank for r.external compatability
   end
 
-  def post_install
-    opts = Tab.for_formula(self).used_options
-    inreplace "#{bin}/grass64",
-              %r[("\$GISBASE/etc/Init\.sh")],
-              "\\1 -#{((opts.include? "with-gui") ? "tcltk" : "text")}"
-  end
-
   def caveats
-    if build.with? "gui"
+    if headless?
       <<-EOS.undent
-        This build of GRASS does not support NVIZ visualization.
-      EOS
-    else
-      <<-EOS.undent
-        This build of GRASS has been compiled without the GUI.
+        This build of GRASS has been compiled without the WxPython GUI.
+
         The command line tools remain fully functional.
-      EOS
+        EOS
     end
   end
 end
 
 __END__
-Remove two lines of the Makefile that try to install stuff to
-/Library/Documentation---which is outside of the prefix and usually fails due
-to permissions issues.
-
 diff --git a/Makefile b/Makefile
 index f1edea6..be404b0 100644
 --- a/Makefile
@@ -127,3 +135,49 @@ index f1edea6..be404b0 100644
 
 
  install-strip: FORCE
+diff --git a/raster/r.terraflow/direction.cc b/raster/r.terraflow/direction.cc
+index 7744518..778c225 100644
+--- a/raster/r.terraflow/direction.cc
++++ b/raster/r.terraflow/direction.cc
+@@ -53,11 +53,11 @@ encodeDirectionMFD(const genericWindow<elevation_type>& elevwin,
+   
+   if(!is_nodata(elevwin.get())) {
+     dir = 0;
+-    if (elevwin.get(5) < elevwin.get() && !is_void(elevwin.get(5))) dir |= 1;
+-    if (elevwin.get(3) < elevwin.get() && !is_void(elevwin.get(3))) dir |= 16;
++    if (elevwin.get(5) < elevwin.get() && !is_voided(elevwin.get(5))) dir |= 1;
++    if (elevwin.get(3) < elevwin.get() && !is_voided(elevwin.get(3))) dir |= 16;
+     for(int i=0; i<3; i++) {
+-      if(elevwin.get(i) < elevwin.get() && !is_void(elevwin.get(i))) dir |= 32<<i;
+-      if(elevwin.get(i+6) < elevwin.get() && !is_void(elevwin.get(6+i))) dir |= 8>>i;
++      if(elevwin.get(i) < elevwin.get() && !is_voided(elevwin.get(i))) dir |= 32<<i;
++      if(elevwin.get(i+6) < elevwin.get() && !is_voided(elevwin.get(6+i))) dir |= 8>>i;
+     }
+   }
+   
+diff --git a/raster/r.terraflow/nodata.cc b/raster/r.terraflow/nodata.cc
+index 159c66d..610ca55 100644
+--- a/raster/r.terraflow/nodata.cc
++++ b/raster/r.terraflow/nodata.cc
+@@ -73,7 +73,7 @@ is_nodata(float x) {
+ 
+ 
+ int
+-is_void(elevation_type el) {
++is_voided(elevation_type el) {
+   return (el == nodataType::ELEVATION_NODATA);
+ }
+ 
+diff --git a/raster/r.terraflow/nodata.h b/raster/r.terraflow/nodata.h
+index 1e843c5..ac56504 100644
+--- a/raster/r.terraflow/nodata.h
++++ b/raster/r.terraflow/nodata.h
+@@ -37,7 +37,7 @@
+ int is_nodata(elevation_type el);
+ int is_nodata(int x);
+ int is_nodata(float x);
+-int is_void(elevation_type el);
++int is_voided(elevation_type el);
+ 
+ 
+ class nodataType : public ijBaseType {
