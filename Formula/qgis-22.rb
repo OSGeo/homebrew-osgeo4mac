@@ -4,8 +4,8 @@ require File.expand_path("../../Requirements/qgis_requirements",
 
 class UnlinkedQGIS22 < UnlinkedQGIS
   fatal true
-  def qgis_list
-    %W[homebrew/science/qgis qgis-18 qgis-20]
+  def qgis_formula_name
+    "osgeo/osgeo4mac/qgis-22"
   end
   satisfy(:build_env => false) { no_linked_qgis[0] }
 end
@@ -14,9 +14,7 @@ class Qgis22 < Formula
   homepage 'http://www.qgis.org'
   url 'https://github.com/qgis/QGIS/archive/final-2_2_0.tar.gz'
   sha1 '5d043ef6b31a043aa2608a3eebdc3d7d997f2189'
-  revision 3
-
-  head 'https://github.com/qgis/QGIS.git', :branch => 'master'
+  revision 4
 
   option 'enable-isolation', "Isolate .app's environment to HOMEBREW_PREFIX, to coexist with other QGIS installs"
   option 'with-debug', 'Enable debug build, which outputs info to system.log or console'
@@ -32,7 +30,6 @@ class Qgis22 < Formula
   option 'with-saga-gis', 'Build extra Saga GIS for Processing plugin'
   option 'with-qt-mysql', 'Build extra Qt MySQL plugin for eVis plugin'
   option 'with-api-docs', 'Build the API documentation with Doxygen and Graphviz'
-  #option 'persistent-build', 'Maintain the build directory in HOMEBREW_TEMP (--HEAD only)'
 
   depends_on UnlinkedQGIS22
 
@@ -64,7 +61,6 @@ class Qgis22 < Formula
   depends_on 'gdal'
   depends_on 'postgis' => :optional
   depends_on "oracle-client-sdk" if build.with? "oracle"
-  # TODO: add MSSQL third-party support formula?, :optional
 
   # core plugins (c++ and python)
   depends_on 'grass-64' => :optional
@@ -73,8 +69,6 @@ class Qgis22 < Formula
   depends_on 'gpsbabel' => [:recommended, 'with-libusb']
   depends_on 'open-scene-graph' if build.with? 'globe'
   depends_on 'homebrew/science/osgearth' if build.with? 'globe'
-  # TODO: remove 'pyspatialite' when PyPi package supports spatialite 4.x
-  #       or DB Manager supports libspatialite > 4.1.1 (with mod_spatialite)
   depends_on 'pyspatialite' # for DB Manager
   depends_on 'qt-mysql' => :optional # for eVis plugin (non-functional in 2.0.1?)
 
@@ -83,8 +77,6 @@ class Qgis22 < Formula
   depends_on 'orfeo' => :optional
   depends_on 'homebrew/science/r' => :optional
   depends_on 'saga-gis' => :optional
-  # TODO: LASTools straight build (2 reporting tools), or via `wine` (10 tools)
-  # TODO: Fusion from USFS (via `wine`?)
 
   resource "pyqgis-startup" do
     url "https://gist.githubusercontent.com/dakcarto/11385561/raw/7af66d0c8885a888831da6f12298a906484a1471/pyqgis_startup.py"
@@ -137,13 +129,7 @@ class Qgis22 < Formula
       args << "-DPYTHON_CUSTOM_FRAMEWORK='#{brewed_python_framework}'"
     end
 
-    # find git revision for HEAD build
-    if build.head? && File.exists?("#{cached_download}/.git/index")
-      args << "-DGITCOMMAND=#{Formula['git'].bin}/git"
-      args << "-DGIT_MARKER=#{cached_download}/.git/index"
-    else
-      args << "-DGIT_MARKER=''" # if git clone borked, or release tarball, ends up defined as 'exported'
-    end
+    args << "-DGIT_MARKER=''" # if git clone borked, or release tarball, ends up defined as 'exported'
 
     args << '-DWITH_MAPSERVER=TRUE' if build.with? 'server'
 
@@ -178,11 +164,6 @@ class Qgis22 < Formula
     # (https://github.com/Homebrew/homebrew-science/issues/23)
     ENV.append 'CXXFLAGS', "-F#{Formula['qt'].opt_prefix}/lib"
 
-    # TODO: update .app's bundle identifier for HEAD builds
-    # (convert to using `defaults`)
-    #/usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier org.qgis.qgis-dev" "$APPTARGET/Contents/Info.plist"
-
-    # TODO: keep persistent build directory for HEAD builds
     mkdir 'build'
 
     cd 'build' do
@@ -265,8 +246,6 @@ class Qgis22 < Formula
       envars[:DYLD_VERSIONED_LIBRARY_PATH] = versioned.join(pthsep)
     end
     if opts.include? 'enable-isolation' or File.exist?("/Library/Frameworks/GDAL.framework")
-      # TODO: is PYTHONHOME necessary for isolation, or is it set by embedded interpreter?
-      #envars[:PYTHONHOME] = "#{python.framework}/Python.framework/Versions/Current"
       envars[:PYQGIS_STARTUP] = opt_libexec/'pyqgis_startup.py'
     end
 
@@ -370,12 +349,6 @@ class Qgis22 < Formula
 
   private
   # python utils (deprecated in latest Homebrew)
-  # see: https://github.com/Homebrew/homebrew/pull/24842
-
-  #def osx_python?
-  #  p = `python -c "import sys; print(sys.prefix)"`.strip
-  #  p.start_with?("/System/Library/Frameworks/Python.framework")
-  #end
 
   def brewed_python_framework
     HOMEBREW_PREFIX/"Frameworks/Python.framework/Versions/2.7"
