@@ -14,6 +14,7 @@ class Qgis24 < Formula
   homepage "http://www.qgis.org"
   url "https://github.com/qgis/QGIS/archive/final-2_4_0.tar.gz"
   sha1 "df479a4c3ffe2c0f9f4777f320aab92ae2dd08b0"
+  revision 1
 
   head "https://github.com/qgis/QGIS.git", :branch => "master"
 
@@ -23,8 +24,9 @@ class Qgis24 < Formula
   option "without-server", "Build without QGIS Server (qgis_mapserv.fcgi)"
   option "without-postgresql", "Build without current PostgreSQL client"
   option "without-globe", "Build without Globe plugin, based upon osgEarth"
-  option "without-grass", "Build without GRASS integration plugin support"
   option "without-postgis", "Build without extra PostGIS geospatial database extender"
+  option "without-grass", "Build without GRASS 6 integration plugin and Processing plugin support"
+  option "with-grass7", "Build with GRASS 7 for Processing plugin"
   option "with-oracle", "Build extra Oracle geospatial database and raster support"
   option "with-orfeo", "Build extra Orfeo Toolbox for Processing plugin"
   option "with-r", "Build extra R for Processing plugin"
@@ -71,6 +73,9 @@ class Qgis24 < Formula
     depends_on "gdal-grass64"
     depends_on "gettext"
   end
+
+  depends_on "grass-70" if build.with? "grass7"
+
   if build.with? "globe"
     depends_on "open-scene-graph"
     depends_on "homebrew/science/osgearth"
@@ -153,6 +158,7 @@ class Qgis24 < Formula
     args << "-DPOSTGRES_CONFIG=#{pgsql.opt_prefix}/bin/pg_config" if build.with? "postgresql"
 
     if build.with? "grass"
+      # this is to build the GRASS Plugin, not for Processing plugin support
       grass = Formula["grass-64"]
       args << "-DGRASS_PREFIX='#{grass.opt_prefix}/grass-#{grass.version.to_s}'"
       # So that `libintl.h` can be found
@@ -222,6 +228,7 @@ class Qgis24 < Formula
     # having this in `post_intsall` allows it to be individually run *after* installation with:
     #    `brew postinstall -v qgis-22`
 
+    app = prefix/"QGIS.app"
     opts = Tab.for_formula(self).used_options
 
     # define default isolation env vars
@@ -246,12 +253,22 @@ class Qgis24 < Formula
       :GDAL_DRIVER_PATH => "#{HOMEBREW_PREFIX}/lib/gdalplugins"
     }
 
-    if opts.include? "with-grass"
+    proc_algs = "Contents/Resources/python/plugins/processing/algs"
+    unless opts.include? "without-grass"
       grass = Formula["grass-64"]
       envars[:GRASS_PREFIX] = "#{grass.opt_prefix}/grass-#{grass.version.to_s}"
+      inreplace app/"#{proc_algs}/grass/GrassUtils.py",
+                "/Applications/GRASS-6.4.app/Contents/MacOS",
+                HOMEBREW_PREFIX/"opt/grass-64/grass-base"
     end
 
-    if opts.include? "with-globe"
+    if opts.include? "with-grass7"
+      inreplace app/"#{proc_algs}/grass7/Grass7Utils.py",
+                "/Applications/GRASS-7.0.app/Contents/MacOS",
+                HOMEBREW_PREFIX/"opt/grass-70/grass-base"
+    end
+
+    unless opts.include? "without-globe"
       osg = Formula["open-scene-graph"]
       envars[:OSG_LIBRARY_PATH] = "#{HOMEBREW_PREFIX}/lib/osgPlugins-#{osg.linked_keg.realpath.basename}"
     end
@@ -276,7 +293,6 @@ class Qgis24 < Formula
     #exit
 
     # add env vars to QGIS.app's Info.plist, in LSEnvironment section
-    app = prefix/"QGIS.app"
     plst = app/"Contents/Info.plist"
     # first delete any LSEnvironment setting, ignoring errors
     # CAUTION!: may not be what you want, if .app already has LSEnvironment settings
@@ -367,6 +383,17 @@ class Qgis24 < Formula
 
       EOS
     end
+
+    s += <<-EOS.undent
+      If you have built GRASS 6.4.x or 7.0.x support for the Processing plugin set
+      the following in QGIS:
+        Processing->Options: Providers->GRASS commands->GRASS folder to:
+           #{HOMEBREW_PREFIX}/opt/grass-64/grass-base
+        Processing->Options: Providers->GRASS GIS 7 commands->GRASS 7 folder to:
+           #{HOMEBREW_PREFIX}/opt/grass-70/grass-base
+
+    EOS
+
     s
   end
 
