@@ -27,7 +27,7 @@ import subprocess
 from collections import OrderedDict
 
 HOME = os.path.expanduser('~')
-GRASS_VERSION = '6.4.3'
+GRASS_VERSION = '6.4.4'
 OSG_VERSION = '3.2.0'
 HOMEBREW_PREFIX = '/usr/local'
 QGIS_LOG_DIR = HOME + '/Library/Logs/QGIS'
