@@ -35,10 +35,6 @@ class Grass64 < Formula
   depends_on "cairo"
   depends_on :x11  # needs to find at least X11/include/GL/gl.h
 
-  fails_with :clang do
-    cause "Multiple build errors while compiling GRASS tools."
-  end
-
   def headless?
     # The GRASS GUI is based on WxPython.
     build.without? "gui"
