@@ -106,6 +106,14 @@ class Grass64 < Formula
     system "make GDAL_DYNAMIC= install" # GDAL_DYNAMIC set to blank for r.external compatability
   end
 
+  def post_install
+    # ensure QGIS's Processing plugin recognizes install
+    ln_sf "../bin/grass64", prefix/"grass-#{version.to_s}/grass.sh"
+    # link so settings in external apps don't need updated on grass version bump
+    # in QGIS Processing options, GRASS folder = HOMEBREW_PREFIX/opt/grass-64/grass-base
+    ln_sf "grass-#{version.to_s}", prefix/"grass-base"
+  end
+
   def caveats
     if headless?
       <<-EOS.undent
