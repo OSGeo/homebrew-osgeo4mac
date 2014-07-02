@@ -12,6 +12,7 @@ class Grass64 < Formula
     # Also, quick patch for compiling with clang (as yet, unreported issue)
     patch :DATA
   end
+  revision 1
 
   keg_only "grass is in main tap and same-name bin utilities are installed"
 
