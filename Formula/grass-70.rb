@@ -12,6 +12,7 @@ class Grass70 < Formula
     # Remove lines from Makefile that try to install to /Library/Documentation.
     patch :DATA
   end
+  revision 1
 
   option "without-gui", "Build without WxPython interface. Command line tools still available."
 
