@@ -1,11 +1,11 @@
-require 'formula'
+require "formula"
 
 class SagaGis < Formula
-  homepage 'http://saga-gis.org'
-  url 'https://downloads.sourceforge.net/project/saga-gis/SAGA%20-%202.1/SAGA%202.1.1/saga_2.1.1.tar.gz'
-  sha1 '7345701b137d491bda59400a3890cda7ca433e41'
+  homepage "http://saga-gis.org"
+  url "https://downloads.sourceforge.net/project/saga-gis/SAGA%20-%202.1/SAGA%202.1.2/saga_2.1.2.tar.gz"
+  sha1 "9dddd3e03bd5f640fedd318ee8ff187785745e86"
 
-  head 'svn://svn.code.sf.net/p/saga-gis/code-0/trunk/saga-gis'
+  head "svn://svn.code.sf.net/p/saga-gis/code-0/trunk/saga-gis"
 
   option "with-app", "Build SAGA.app Package"
   option "with-liblas", "Build with internal libLAS 1.2 support"
@@ -13,57 +13,65 @@ class SagaGis < Formula
   depends_on :automake
   depends_on :autoconf
   depends_on :libtool
-  depends_on 'gdal'
-  depends_on 'jasper'
-  depends_on 'proj'
-  depends_on 'wxmac-29'
-  depends_on 'unixodbc' => :recommended
-  depends_on 'libharu' => :recommended
-  depends_on 'vigra' => :recommended
-  depends_on 'postgresql' => :optional
+  depends_on "gdal"
+  depends_on "jasper"
+  depends_on "proj"
+  depends_on "wxmac-mono"
+  depends_on "unixodbc" => :recommended
+  depends_on "libharu" => :recommended
+  # Vigra support builds, but dylib in saga shows 'failed' when loaded
+  # Also, using --with-python will trigger vigra to be built with it, which
+  # triggers a source (re)build of boost --with-python
+  depends_on "vigra" => :optional
+  depends_on "postgresql" => :optional
   depends_on :python => :optional
   depends_on "libgeotiff" if build.with? "liblas"
 
-  # Compiling on Mavericks with libc++ causes issues with LC_NUMERIC.
-  # https://sourceforge.net/p/saga-gis/patches/12/
-  # Fixes issue with libio_grid.dylib. Thanks @dakcarto
-  patch :DATA
-
-  resource 'app_icon' do
-    url 'http://web.fastermac.net/~MacPgmr/SAGA/saga_gui.icns'
-    sha1 '1ff67c6d600dd161684d3e8b33a1d138c65b00f4'
+  resource "app_icon" do
+    url "http://web.fastermac.net/~MacPgmr/SAGA/saga_gui.icns"
+    sha1 "1ff67c6d600dd161684d3e8b33a1d138c65b00f4"
   end
 
-  resource 'projects' do
-    url 'http://trac.osgeo.org/proj/export/2409/branches/4.8/proj/src/projects.h'
-    sha1 '867367a8ef097d5ff772b7f50713830d2d4bc09c'
-    version '4.8.0'
+  resource "projects" do
+    url "http://trac.osgeo.org/proj/export/2409/branches/4.8/proj/src/projects.h"
+    sha1 "867367a8ef097d5ff772b7f50713830d2d4bc09c"
+    version "4.8.0"
   end
 
-  resource 'liblas' do
-    url 'https://github.com/libLAS/libLAS/archive/1.2.1.tar.gz'
-    sha1 '24a775484285d4e35eb8034bf298f740d7123569'
+  resource "liblas" do
+    url "https://github.com/libLAS/libLAS/archive/1.2.1.tar.gz"
+    sha1 "24a775484285d4e35eb8034bf298f740d7123569"
+  end
+
+  resource "liblas_patch" do
+    # Fix for error of conflicting types for '_GTIFcalloc' between gdal 1.11 and libgeotiff
+    # https://github.com/libLAS/libLAS/issues/33
+    # This is an attempt to do it for old liblas 1.2.1
+    url "https://gist.githubusercontent.com/dakcarto/f73717dac2777262d0f0/raw/a931380c41529767544a4c0dcc645b21f9b395e7/saga-gis_liblas.patch"
+    sha1 "b76ac09e59099e3cc2365630c02efe0f335f3964"
   end
 
   def install
-    (buildpath/'src/modules_projection/pj_proj4/pj_proj4/').install resource('projects')
+    (buildpath/"src/modules/projection/pj_proj4").install resource("projects")
 
     # Need to remove unsupported libraries from various Makefiles
-    # http://sourceforge.net/apps/trac/saga-gis/wiki/Compiling%20SAGA%20on%20Mac%20OS%20X
+    # http://sourceforge.net/p/saga-gis/wiki/Compiling%20SAGA%20on%20Mac%20OS%20X
     inreplace "src/saga_core/saga_gui/Makefile.am", "aui,base,", ""
     inreplace "src/saga_core/saga_gui/Makefile.am", "propgrid,", ""
 
     if build.with? "liblas"
-      # Saga still only works with liblas 1.2.1 (5 years old). Install in keg
+      # Saga still only works with liblas 1.2.1 (5 years old). Vendor in libexec
       # see: http://sourceforge.net/p/saga-gis/discussion/354013/thread/823cbde1/
-      liblas = prefix/"liblas"
-      liblas.mkpath
       mktemp do
-        resource('liblas').stage do
+        resource("liblas").stage do
+          # patch liblas
+          (Pathname.pwd).install resource("liblas_patch")
+          safe_system "/usr/bin/patch", "-g", "0", "-f", "-d", Pathname.pwd, "-p1", "-i", "saga-gis_liblas.patch"
+
           args = %W[
-            --prefix=#{liblas}
+            --prefix=#{libexec}
             --disable-dependency-tracking
-            --with-gdal=#{Formula["gdal"].opt_prefix}/bin/gdal-config
+            --with-gdal=#{Formula["gdal"].opt_bin}/gdal-config
             --with-geotiff=#{Formula["libgeotiff"].opt_prefix}
           ]
           system "autoreconf", "-i"
@@ -71,8 +79,8 @@ class SagaGis < Formula
           system "make", "install"
         end
       end
-      ENV.prepend "CPPFLAGS", "-I#{liblas}/include"
-      ENV.prepend "LDFLAGS", "-L#{liblas}/lib"
+      ENV.prepend "CPPFLAGS", "-I#{libexec}/include"
+      ENV.prepend "LDFLAGS", "-L#{libexec}/lib"
       # Find c lib interface for liblas
       inreplace "configure.ac", "[las]", "[las_c]"
     end
@@ -89,17 +97,17 @@ class SagaGis < Formula
 
     system "autoreconf", "-i"
     system "./configure", *args
-    system "make install"
+    system "make", "install"
 
     if build.with? "app"
       # Based on original script by Phil Hess
       # http://web.fastermac.net/~MacPgmr/
 
-      (buildpath).install resource('app_icon')
+      (buildpath).install resource("app_icon")
       mkdir_p "#{buildpath}/SAGA.app/Contents/MacOS"
       mkdir_p "#{buildpath}/SAGA.app/Contents/Resources"
 
-      (buildpath/'SAGA.app/Contents/PkgInfo').write 'APPLSAGA'
+      (buildpath/"SAGA.app/Contents/PkgInfo").write "APPLSAGA"
       cp "#{buildpath}/saga_gui.icns", "#{buildpath}/SAGA.app/Contents/Resources/"
       ln_s "#{bin}/saga_gui", "#{buildpath}/SAGA.app/Contents/MacOS/saga_gui"
 
@@ -130,7 +138,7 @@ class SagaGis < Formula
         </plist>
       EOS
 
-      (buildpath/'SAGA.app/Contents/Info.plist').write config
+      (buildpath/"SAGA.app/Contents/Info.plist").write config
       prefix.install "SAGA.app"
 
     end
@@ -148,29 +156,4 @@ class SagaGis < Formula
     end
   end
 end
-
-__END__
-diff --git a/src/saga_core/saga_cmd/saga_cmd.cpp b/src/saga_core/saga_cmd/saga_cmd.cpp
-index 0ce6d36..9f554a8 100644
---- a/src/saga_core/saga_cmd/saga_cmd.cpp
-+++ b/src/saga_core/saga_cmd/saga_cmd.cpp
-@@ -67,6 +67,7 @@
- #include "callback.h"
- 
- #include "module_library.h"
-+#include <locale.h>
- 
- 
- ///////////////////////////////////////////////////////////
- diff --git a/src/modules_io/grid/io_grid/xyz.h b/src/modules_io/grid/io_grid/xyz.h
-index ffbd194..33b62fd 100644
---- a/src/modules_io/grid/io_grid/xyz.h
-+++ b/src/modules_io/grid/io_grid/xyz.h
-@@ -86,6 +86,7 @@ class CXYZ_Export : public CSG_Module_Grid
- {
- public:
- 	CXYZ_Export(void);
-+	virtual ~CXYZ_Export(void);
-
- 	virtual CSG_String		Get_MenuPath	(void)			{	return( _TL("R:Export") );	}
 
