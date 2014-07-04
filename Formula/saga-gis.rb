@@ -47,7 +47,7 @@ class SagaGis < Formula
     # Fix for error of conflicting types for '_GTIFcalloc' between gdal 1.11 and libgeotiff
     # https://github.com/libLAS/libLAS/issues/33
     # This is an attempt to do it for old liblas 1.2.1
-    url "https://gist.githubusercontent.com/dakcarto/f73717dac2777262d0f0/raw/a931380c41529767544a4c0dcc645b21f9b395e7/saga-gis_liblas.patch"
+    url "https://gist.githubusercontent.com/dakcarto/f73717dac2777262d0f0/raw/a931380c41529767544a4c0dcc645b21f9b395e7/saga-gis_liblas.diff"
     sha1 "b76ac09e59099e3cc2365630c02efe0f335f3964"
   end
 
