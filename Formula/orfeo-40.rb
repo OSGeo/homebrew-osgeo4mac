@@ -2,8 +2,12 @@ require 'formula'
 
 class Orfeo40 < Formula
   homepage 'http://www.orfeo-toolbox.org/otb/'
-  url 'https://downloads.sf.net/project/orfeo-toolbox/OTB/OTB-4.0/OTB-4.0.0.tgz'
-  sha1 'c2417cc4d11544fb477007e06d3a82a032353c95'
+  # url 'https://downloads.sf.net/project/orfeo-toolbox/OTB/OTB-4.0/OTB-4.0.0.tgz'
+  # sha1 'c2417cc4d11544fb477007e06d3a82a032353c95'
+  url "http://hg.orfeo-toolbox.org/OTB/archive/b06793664fbc.tar.gz"
+  sha1 "e848f43266dd5ad62f5cc455aa1cc211d6285f76"
+  version "4.0.0"
+  revision 1
 
   option "with-external-boost", "Build with brewed Boost"
   option "with-external-itk", "Build with brewed Insight Segmentation and Registration Toolkit"
