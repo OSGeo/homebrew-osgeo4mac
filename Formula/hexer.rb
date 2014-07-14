@@ -3,7 +3,7 @@ require "formula"
 class Hexer < Formula
   homepage "https://github.com/hobu/hexer"
   url "https://github.com/hobu/hexer/archive/1.3.0.tar.gz"
-  sha1 ""
+  sha1 "29ba6b94690ec7a2faf425c232bba460b683efcf"
 
   head "https://github.com/hobu/hexer.git", :branch => "master"
 
