@@ -5,7 +5,6 @@
 
 require "formula"
 require "formula_installer"
-require "pty"
 require "utils"
 
 def usage; <<-EOS
@@ -16,28 +15,15 @@ def usage; <<-EOS
   EOS
 end
 
-def oohai title, *sput
-  # don't truncate, like ohai
-  puts "#{Tty.blue}==>#{Tty.blue} #{title}#{Tty.reset}"
-  puts sput unless sput.empty?
-end
-
-def exec_out cmd
-  oohai cmd
-  # IO.popen(cmd).each do |line|
-  #   puts line
-  # end.close
-
-  begin
-    PTY.spawn( cmd ) do |r, w, pid|
-      begin
-        r.each { |line| print line;}
-      rescue Errno::EIO
-      end
-    end
-  rescue PTY::ChildExited => e
-    puts "The child process exited!"
-  end
+def system_out cmd, *args
+  # echo command
+  puts "#{Tty.blue}==>#{Tty.blue} #{cmd} #{args*' '}#{Tty.reset}" unless ARGV.verbose?
+  # sync output to tty
+  # stdout_prev, stderr_prev = $stdout.sync, $stderr.sync
+  # $stdout.sync, $stderr.sync = true, true
+  res = Homebrew.system cmd, *args
+  # $stdout.sync, $stderr.sync = stdout_prev, stderr_prev
+  res
 end
 
 if ARGV.formulae.length != 1 || ARGV.interactive?
@@ -50,18 +36,28 @@ if ARGV.include? "--help"
   exit 0
 end
 
-# Necessary to get dependencies to build as bottle if they install from source
-ENV["HOMEBREW_BUILD_BOTTLE"] = "1"
-
 f = ARGV.formulae[0]
 opts = ARGV.options_only
 
-# Install just dependencies
-exec_out "brew install #{f} #{(opts + ["--only-dependencies"]).join(" ")}"
+# Check if already installed
+if f.installed?
+  opoo "#{f} already installed"
+  exit 0
+end
+
+# Necessary to get dependencies to build as bottle if they install from source
+ENV["HOMEBREW_BUILD_BOTTLE"] = "1"
+
+# Install main formula's dependencies first
+unless system_out "brew", "install", "#{f}", *(opts + %W[--only-dependencies])
+  exit! 1
+end
 
 # Unset to ensure bottle for main formula is poured, if pourable
 ENV.delete "HOMEBREW_BUILD_BOTTLE"
 
+# Is main formula pourable?
+pour_bottle = false
 unless ARGV.build_bottle? # --build-bottle defined
   fi = FormulaInstaller.new(f)
   fi.options             = f.build.used_options
@@ -69,8 +65,26 @@ unless ARGV.build_bottle? # --build-bottle defined
   fi.build_from_source   = ARGV.build_from_source?
   fi.force_bottle        = ARGV.force_bottle?
 
-  opts |= ["--build-bottle"] if ARGV.build_from_source? or !fi.pour_bottle?
+  pour_bottle = fi.pour_bottle?
+  opts |= %W[--build-bottle] if ARGV.build_from_source? or !pour_bottle
 end
-exec_out "brew install #{f} #{opts.join(" ")}"
+
+# Necessary to raise error if bottle fails to pour
+ENV["HOMEBREW_DEVELOPER"] = "1" if pour_bottle
+
+# Pour or install main formula
+unless system_out "brew", "install", "#{f}", *opts
+  if pour_bottle
+    opoo "Bottle may have failed to install"
+    ohai "Attempting to build source as bottle"
+    opts |= %W[--build-bottle]
+
+    unless system_out "brew", "install", "#{f}", *opts
+      odie "Source bottle build failed"
+    end
+  else
+    odie "Source bottle build failed"
+  end
+end
 
 exit 0
