@@ -180,9 +180,6 @@ class Qgis24 < Formula
 
     # Avoid ld: framework not found QtSql
     # (https://github.com/Homebrew/homebrew-science/issues/23)
-    # TODO: update .app's bundle identifier for HEAD builds
-    # (convert to using `defaults`)
-    #/usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier org.qgis.qgis-dev" "$APPTARGET/Contents/Info.plist"
     ENV.append "CXXFLAGS", "-F#{Formula["qt"].opt_lib}"
 
 
@@ -192,6 +189,10 @@ class Qgis24 < Formula
       #raise
       system "make", "install"
     end
+
+    # Update .app's bundle identifier, so Kyngchaos.com installer doesn't get confused
+    inreplace prefix/"QGIS.app/Contents/Info.plist",
+              "org.qgis.qgis2", "org.qgis.qgis2-hb#{build.head? ? "-dev" : ""}"
 
     py_lib = lib/"python2.7/site-packages"
     qgis_modules = prefix/"QGIS.app/Contents/Resources/python/qgis"
