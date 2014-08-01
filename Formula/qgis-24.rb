@@ -125,7 +125,7 @@ class Qgis24 < Formula
       -DQWT_LIBRARY=#{qwt_fw}/qwt
       -DQWTPOLAR_INCLUDE_DIR=#{qwtpolar_fw}/Headers
       -DQWTPOLAR_LIBRARY=#{qwtpolar_fw}/qwtpolar
-      -DQSCINTILLA_INCLUDE_DIR=#{qsci_opt}/include/Qsci
+      -DQSCINTILLA_INCLUDE_DIR=#{qsci_opt}/include#{build.head? ? "" : "/Qsci"}
       -DQSCINTILLA_LIBRARY=#{qsci_opt}/lib/libqscintilla2.dylib
       -DWITH_INTERNAL_QWTPOLAR=FALSE
       -DQGIS_MACAPP_BUNDLE=0
