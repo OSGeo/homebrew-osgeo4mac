@@ -182,6 +182,9 @@ class Qgis24 < Formula
     # (https://github.com/Homebrew/homebrew-science/issues/23)
     ENV.append "CXXFLAGS", "-F#{Formula["qt"].opt_lib}"
 
+    # if using Homebrew's Python, make sure its components are always found first
+    # see: https://github.com/Homebrew/homebrew/pull/28597
+    ENV["PYTHONHOME"] = "#{python.framework}/Python.framework/Versions/Current" if brewed_python?
 
     mkdir "build" do
       system "cmake", "..", *args
