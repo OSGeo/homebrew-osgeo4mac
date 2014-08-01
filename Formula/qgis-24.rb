@@ -149,10 +149,11 @@ class Qgis24 < Formula
       args << "-DGIT_MARKER=''" # if git clone borked, or release tarball, ends up defined as 'exported'
     end
 
-    args << "-DWITH_MAPSERVER=TRUE" if build.with? "server"
+    args << "-DWITH_MAPSERVER=#{build.with?("server") ? "TRUE" : "FALSE"}"
 
     args << "-DPOSTGRES_CONFIG=#{Formula["postgresql"].opt_bin}/pg_config" if build.with? "postgresql"
 
+    args << "-DWITH_GRASS=#{build.with?("grass") ? "TRUE" : "FALSE"}"
     if build.with? "grass"
       # this is to build the GRASS Plugin, not for Processing plugin support
       grass = Formula["grass-64"]
@@ -161,22 +162,22 @@ class Qgis24 < Formula
       ENV.append "CXXFLAGS", "-I'#{Formula["gettext"].opt_include}'"
     end
 
+    args << "-DWITH_GLOBE=#{build.with?("globe") ? "TRUE" : "FALSE"}"
     if build.with? "globe"
       osg = Formula["open-scene-graph"]
       opoo "`open-scene-graph` formula's keg not linked." unless osg.linked_keg.exist?
-      args << "-DWITH_GLOBE=TRUE"
       # must be HOMEBREW_PREFIX/lib/osgPlugins-#.#.#, since all osg plugins are symlinked there
       args << "-DOSG_PLUGINS_PATH=#{HOMEBREW_PREFIX}/lib/osgPlugins-#{osg.version.to_s}"
     end
 
+    args << "-DWITH_ORACLE=#{build.with?("oracle") ? "TRUE" : "FALSE"}"
     if build.with? "oracle"
-      args << "-DWITH_ORACLE=TRUE"
       oracle_opt = Formula["oracle-client-sdk"].opt_prefix
       args << "-DOCI_INCLUDE_DIR=#{oracle_opt}/sdk/include"
       args << "-DOCI_LIBRARY=#{oracle_opt}/lib/libclntsh.dylib"
     end
 
-    args << "-DWITH_APIDOC=TRUE" if build.with? "api-docs"
+    args << "-DWITH_APIDOC=#{build.with?("api-docs") ? "TRUE" : "FALSE"}"
 
     # Avoid ld: framework not found QtSql
     # (https://github.com/Homebrew/homebrew-science/issues/23)
