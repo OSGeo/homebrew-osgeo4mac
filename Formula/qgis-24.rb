@@ -185,7 +185,7 @@ class Qgis24 < Formula
 
     # if using Homebrew's Python, make sure its components are always found first
     # see: https://github.com/Homebrew/homebrew/pull/28597
-    ENV["PYTHONHOME"] = "#{python.framework}/Python.framework/Versions/Current" if brewed_python?
+    ENV["PYTHONHOME"] = "#{brewed_python_framework}" if brewed_python?
 
     mkdir "build" do
       system "cmake", "..", *args
@@ -241,6 +241,9 @@ class Qgis24 < Formula
         pypth = (pyenv.include?(pypth)) ? pyenv : pypth + pthsep + pyenv
       end
     end
+
+    # set install's lib/python2.7/site-packages first, so app will work if unlinked
+    pypth = "#{lib}/python2.7/site-packages" + pthsep + pypth
 
     envars = {
       :PATH => "#{pths}",
