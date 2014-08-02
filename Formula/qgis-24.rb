@@ -14,7 +14,7 @@ class Qgis24 < Formula
   homepage "http://www.qgis.org"
   url "https://github.com/qgis/QGIS/archive/final-2_4_0.tar.gz"
   sha1 "df479a4c3ffe2c0f9f4777f320aab92ae2dd08b0"
-  revision 1
+  revision 2
 
   head "https://github.com/qgis/QGIS.git", :branch => "master"
 
@@ -97,13 +97,14 @@ class Qgis24 < Formula
     version "2.0.0"
   end
 
-  # Patch that represents all backports to release-2_4 branch,
-  # stable do
-  #   patch do
-  #     url ""
-  #     sha1 ""
-  #   end
-  # end
+  # patch that represents all backports to release-2_4 branch,
+  stable do
+    patch do
+      # 8fdd08a through ed14cf3, with all ms-windows subdirectory changes stripped (line endings break patch apply)
+      url "https://gist.githubusercontent.com/dakcarto/ef82c5ade74120d92339/raw/1f7a5e39d87f07da79e8185e3f4aa6b00935456f/qgis-24-backports.diff"
+      sha1 "298f6f9a853d03ae33dfe09eb4608d1aeaf8d5b8"
+    end
+  end
 
   def install
     # Set bundling level back to 0 (the default in all versions prior to 1.8.0)
