@@ -19,9 +19,9 @@ class Grass64 < Formula
   option "without-gui", "Build without WxPython interface. Command line tools still available."
 
   # TODO: test on 10.6 first. may work with latest wxWidgets 3.0
-  # depends_on :macos => :lion
+  # depends on :macos => :lion
   # TODO: builds with clang (has same non-fatal errors as gcc), but is it compiled correctly?
-  # depends_on "gcc" => :build
+  # depends on "gcc" => :build
   depends_on "pkg-config" => :build
   depends_on "gettext"
   depends_on "readline"
@@ -80,8 +80,9 @@ class Grass64 < Formula
     if headless?
       args << "--without-wxwidgets"
     else
-      ENV["PYTHONPATH"] = "#{Formula["wxpython"].opt_prefix}/lib/python2.7/site-packages"
-      args << "--with-wxwidgets=#{Formula["wxmac"].opt_prefix}/bin/wx-config"
+      wx_paths = formula_site_packages "wxpython"
+      ENV.prepend("PYTHONPATH", wx_paths, File::PATH_SEPARATOR) if wx_paths
+      args << "--with-wxwidgets=#{Formula["wxmac"].opt_bin}/wx-config"
     end
 
     args << "--enable-64bit" if MacOS.prefer_64_bit?
@@ -113,6 +114,10 @@ class Grass64 < Formula
     # link so settings in external apps don't need updated on grass version bump
     # in QGIS Processing options, GRASS folder = HOMEBREW_PREFIX/opt/grass-64/grass-base
     ln_sf "grass-#{version.to_s}", prefix/"grass-base"
+  end
+
+  def formula_site_packages f
+    `python -c "import os, sys, site; sp1 = list(sys.path); site.addsitedir('#{Formula[f].opt_lib}/python2.7/site-packages'); print(os.pathsep.join([x for x in sys.path if x not in sp1]))"`.strip
   end
 
   def caveats
