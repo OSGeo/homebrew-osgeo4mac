@@ -6,6 +6,11 @@ class GdalGrass64 < Formula
   sha1 '63b87ad1688cc365dc6bd6c3ccc854d0e6aa637a'
   revision 1
 
+  bottle do
+    root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
+    sha1 "f404547c07cdee365e5b96f71405ff304d03d91a" => :mavericks
+  end
+
   depends_on 'gdal'
   depends_on 'grass-64'
 
