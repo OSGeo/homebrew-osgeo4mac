@@ -52,7 +52,6 @@ class Mapserver64 < Formula
 
   depends_on 'cmake' => :build
   depends_on :freetype
-  depends_on :fontconfig
   depends_on :libpng
   depends_on :python
   depends_on 'swig' => :build
@@ -78,12 +77,6 @@ class Mapserver64 < Formula
     version '6.4'
   end
 
-  resource 'findjni' do
-    # replacement FindJNI.cmake module to optionally work with non-Apple Java installs
-    # see also: http://public.kitware.com/Bug/view.php?id=14508
-    url 'https://gist.github.com/dakcarto/8201389/raw/05ddab644981ab2e86580ff1be377ef8456ab426/FindJNI.cmake'
-    sha1 '14b1681d01cb08e11faa8deadf827b2ddbaabab1'
-    version '2.8.12.1'
   end
 
   def png_prefix
@@ -96,14 +89,8 @@ class Mapserver64 < Formula
     (ft.installed? or MacOS.version >= :mountain_lion) ? ft.opt_prefix : MacOS::X11.prefix
   end
 
-  def fontconfig_prefix
-    fc = Formula['fontconfig']
-    (fc.installed? or MacOS.version >= :mountain_lion) ? fc.opt_prefix : MacOS::X11.prefix
-  end
-
   def install
     ENV.prepend_path 'CMAKE_PREFIX_PATH', freetype_prefix
-    ENV.prepend_path 'CMAKE_PREFIX_PATH', fontconfig_prefix
     ENV.prepend_path 'CMAKE_PREFIX_PATH', png_prefix
 
     args = std_cmake_args
@@ -166,7 +153,6 @@ class Mapserver64 < Formula
 
       if build.with? 'java'
         args << '-DWITH_JAVA=ON'
-        (buildpath/'cmake').install resource('findjni') # override cmake's
         ENV['JAVA_HOME'] = JavaJDK.home
         (mapscr_dir/'java').mkpath
         inreplace 'java/CMakeLists.txt' do |s|
