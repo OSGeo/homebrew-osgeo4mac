@@ -14,6 +14,11 @@ class Grass64 < Formula
   end
   revision 1
 
+  bottle do
+    root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
+    sha1 "1c0c397c66ac77f68f4e0f2f4fafa32b97cf6bd5" => :mavericks
+  end
+
   keg_only "grass is in main tap and same-name bin utilities are installed"
 
   option "without-gui", "Build without WxPython interface. Command line tools still available."
