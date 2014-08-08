@@ -16,6 +16,11 @@ class Qgis24 < Formula
   sha1 "df479a4c3ffe2c0f9f4777f320aab92ae2dd08b0"
   revision 2
 
+  bottle do
+    root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
+    sha1 "98b09007e3bd4367158d82f4dd81a26256a45041" => :mavericks
+  end
+
   head "https://github.com/qgis/QGIS.git", :branch => "master"
 
   option "enable-isolation", "Isolate .app's environment to HOMEBREW_PREFIX, to coexist with other QGIS installs"
