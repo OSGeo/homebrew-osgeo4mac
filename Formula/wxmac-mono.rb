@@ -5,6 +5,11 @@ class WxmacMono < Formula
   url "https://downloads.sourceforge.net/project/wxwindows/3.0.1/wxWidgets-3.0.1.tar.bz2"
   sha1 "73e58521d6871c9f4d1e7974c6e3a81629fddcf8"
 
+  bottle do
+    root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
+    sha1 "11ad0978b5d12232f51b15b5336d7a8b0c3c6bed" => :mavericks
+  end
+
   keg_only "because wxmac (non-monolithic) is in main tap"
 
   depends_on "jpeg"
