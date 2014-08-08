@@ -71,6 +71,11 @@ class Mapserver64 < Formula
   depends_on 'fribidi'
   depends_on :python => %w[sphinx] if build.with? 'docs'
 
+  resource "sphinx" do
+    url "https://pypi.python.org/packages/source/S/Sphinx/Sphinx-1.2.2.tar.gz"
+    sha1 "9e424b03fe1f68e0326f3905738adcf27782f677"
+  end
+
   resource 'docs' do
     # NOTE: seems to be no tagged releases for `docs`, just active branches
     url 'https://github.com/mapserver/docs.git', :branch => 'branch-6-4'
@@ -218,8 +223,16 @@ class Mapserver64 < Formula
     (mapscr_dir/'Install_Modules.txt').write s
 
     if build.with? 'docs'
+      unless which("sphinx-build")
+        # vendor a local sphinx install
+        sphinx_site = libexec/"lib/python2.7/site-packages"
+        ENV.prepend_create_path "PYTHONPATH", sphinx_site
+        resource("sphinx").stage {quiet_system "python2.7", "setup.py", "install", "--prefix=#{libexec}"}
+        ENV.prepend_path "PATH", libexec/"bin"
+      end
       resource('docs').stage do
-        inreplace 'Makefile', 'sphinx-build', "#{HOMEBREW_PREFIX}/bin/sphinx-build"
+        # just build the en docs
+        inreplace "Makefile", "$(TRANSLATIONS_I18N) $(TRANSLATIONS_STATIC)", ""
         system 'make', 'html'
         doc.install 'build/html' => 'html'
       end
