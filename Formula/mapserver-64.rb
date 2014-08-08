@@ -49,6 +49,7 @@ class Mapserver64 < Formula
   option 'with-gd', 'Build with GD support (deprecated)' unless build.head?
   option 'with-librsvg', 'Build with SVG symbology support'
   option 'with-docs', 'Download and generate HTML documentation'
+  option "with-unit-tests", "Download and install full unit test suite"
 
   depends_on 'cmake' => :build
   depends_on :freetype
@@ -82,6 +83,10 @@ class Mapserver64 < Formula
     version '6.4'
   end
 
+  resource "unittests" do
+    url "https://github.com/mapserver/msautotest.git",
+        :revision => "b0ba5ccbfb6b0395820f492eb5a190cf643b5ed8"
+    version "6.4"
   end
 
   def png_prefix
@@ -95,6 +100,9 @@ class Mapserver64 < Formula
   end
 
   def install
+    # install unit tests
+    (prefix/"msautotest").install resource("unittests") if build.with? "unit-tests"
+
     ENV.prepend_path 'CMAKE_PREFIX_PATH', freetype_prefix
     ENV.prepend_path 'CMAKE_PREFIX_PATH', png_prefix
 
@@ -178,6 +186,7 @@ class Mapserver64 < Formula
     (include/'mapserver').install Dir['*.h']
 
     prefix.install 'tests'
+    (mapscr_dir/"python").install "mapscript/python/tests"
     cd 'mapscript' do
       %w[python ruby perl].each {|x|(mapscr_dir/"#{x}").install "#{x}/examples"}
       (mapscr_dir/'php').install 'php/examples' if build.with? 'php'
@@ -254,11 +263,12 @@ class Mapserver64 < Formula
     system 'python', '-c', '"import mapscript"'
     system 'ruby', '-e', "\"require '#{mapscr_opt_dir}/ruby/mapscript'\""
     system 'perl', "-I#{mapscr_opt_dir}/perl", '-e', '"use mapscript;"'
+
     cd "#{mapscr_opt_dir}/java/examples" do
       system "#{JavaJDK.home}/bin/javac",
              '-classpath', '../', '-Djava.ext.dirs=../', 'RFC24.java'
       system "#{JavaJDK.home}/bin/java",
-             '-classpath', '../', '-Djava.ext.dirs=../',
+             '-classpath', '../', '-Djava.library.path=../', '-Djava.ext.dirs=../',
              'RFC24', '../../../tests/test.map'
     end if build.with? 'java'
   end
