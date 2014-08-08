@@ -5,6 +5,12 @@ class Taudem < Formula
   url "http://hydrology.usu.edu/taudem/taudem5/TauDEM5PCsrc_511.zip"
   sha1 "7d357abcdc2bb4f28134a1a95f54b20426d6edc1"
 
+  bottle do
+    root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
+    cellar :any
+    sha1 "a810d7027dbe24ab04887f8d2f266a259882df24" => :mavericks
+  end
+
   devel do
     # multi-file (directory) support
     url "https://github.com/dtarb/TauDEM.git", :branch => "master"
