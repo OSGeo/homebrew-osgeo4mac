@@ -32,6 +32,11 @@ class Mapserver64 < Formula
   url 'http://download.osgeo.org/mapserver/mapserver-6.4.1.tar.gz'
   sha1 'f7d2e7f44cd9a4ff5d9483d21bb71c1cc28e09ab'
 
+  bottle do
+    root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
+    sha1 "aeba2a7532b88599892bff09b9aa02bcd28f801b" => :mavericks
+  end
+
   head do
     url 'https://github.com/mapserver/mapserver.git', :branch => 'master'
     depends_on 'harfbuzz'
