@@ -9,6 +9,11 @@ class Orfeo40 < Formula
   version "4.0.0"
   revision 1
 
+  bottle do
+    root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
+    sha1 "7c81e6235c700ee17281d79a7ac647d678388c0a" => :mavericks
+  end
+
   option "with-external-boost", "Build with brewed Boost"
   option "with-external-itk", "Build with brewed Insight Segmentation and Registration Toolkit"
   option 'examples', 'Compile and install various examples'
