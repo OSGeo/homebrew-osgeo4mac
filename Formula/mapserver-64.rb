@@ -40,14 +40,14 @@ class Mapserver64 < Formula
 
   conflicts_with 'mapserver', :because => 'mapserver is in main tap'
 
-  option 'with-php', 'Build PHP MapScript module'
-  option 'with-java', 'Build Java MapScript module'
+  option 'without-php', 'Build PHP MapScript module'
   option 'without-rpath', "Don't embed rpath to installed libmapserver in modules"
-  option 'with-gd', 'Build with GD support (deprecated)' unless build.head?
-  option 'with-librsvg', 'Build with SVG symbology support'
   option 'without-geos', 'Build without GEOS spatial operations support'
   option 'without-postgresql', 'Build without PostgreSQL data source support'
-  option 'with-xml-mapfile', 'Build with native XML mapfile support'
+  option 'without-xml-mapfile', 'Build with native XML mapfile support'
+  option 'with-java', 'Build Java MapScript module'
+  option 'with-gd', 'Build with GD support (deprecated)' unless build.head?
+  option 'with-librsvg', 'Build with SVG symbology support'
   option 'with-docs', 'Download and generate HTML documentation'
 
   depends_on 'cmake' => :build
@@ -57,7 +57,7 @@ class Mapserver64 < Formula
   depends_on 'swig' => :build
   depends_on JavaJDK if build.with? 'java'
   depends_on 'giflib'
-  depends_on 'gd' => [:optional, 'with-freetype'] unless build.head?
+  depends_on 'gd' => :optional unless build.head?
   depends_on 'proj'
   depends_on 'geos' => :recommended
   depends_on 'gdal'
@@ -117,7 +117,7 @@ class Mapserver64 < Formula
     mapscr_dir = prefix/'mapscript'
     mapscr_dir.mkpath
     rpath = %Q{-Wl,-rpath,"#{opt_prefix/'lib'}"}
-    use_rpath = build.with? 'rpath' && HOMEBREW_PREFIX != '/usr/local'
+    use_rpath = build.with? 'rpath'
     cd 'mapscript' do
       args << '-DWITH_PYTHON=ON'
       inreplace 'python/CMakeLists.txt' do |s|
@@ -170,7 +170,6 @@ class Mapserver64 < Formula
     end
 
     # install devel headers
-    # TODO: not quite sure which of these headers are unnecessary to copy
     (include/'mapserver').install Dir['*.h']
 
     prefix.install 'tests'
@@ -227,16 +226,13 @@ class Mapserver64 < Formula
     end
   end
 
-  def caveats
-    s = <<-EOS.undent
-      The Mapserver CGI executable is #{opt_prefix}/bin/mapserv
+  def caveats; <<-EOS.undent
+    The Mapserver CGI executable is #{opt_prefix}/bin/mapserv
 
-      Instructions for installing any built, but uninstalled, mapscript modules:
-        #{opt_prefix}/mapscript/Install_Modules.txt
+    Instructions for installing any built, but uninstalled, mapscript modules:
+      #{opt_prefix}/mapscript/Install_Modules.txt
 
     EOS
-    #s += python.standard_caveats if python
-    s
   end
 
   test do
