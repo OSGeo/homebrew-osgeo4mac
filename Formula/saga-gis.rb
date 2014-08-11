@@ -71,7 +71,7 @@ class SagaGis < Formula
         resource("liblas").stage do
           # patch liblas
           (Pathname.pwd).install resource("liblas_patch")
-          safe_system "/usr/bin/patch", "-g", "0", "-f", "-d", Pathname.pwd, "-p1", "-i", "saga-gis_liblas.patch"
+          safe_system "/usr/bin/patch", "-g", "0", "-f", "-d", Pathname.pwd, "-p1", "-i", "saga-gis_liblas.diff"
 
           args = %W[
             --prefix=#{libexec}
