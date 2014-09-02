@@ -232,7 +232,9 @@ class Qgis24 < Formula
     #    `brew postinstall -v qgis-XX` <-- where XX is formula version
 
     app = prefix/"QGIS.app"
-    opts = Tab.for_formula(self).used_options
+    tab = Tab.for_formula(self)
+    opts = tab.used_options
+    bottle_poured = tab.poured_from_bottle
 
     # define default isolation env vars
     pthsep = File::PATH_SEPARATOR
@@ -265,7 +267,7 @@ class Qgis24 < Formula
       envars[:GRASS_PREFIX] = "#{grass.opt_prefix}/grass-#{grass.version.to_s}"
       inreplace app/"#{proc_algs}/grass/GrassUtils.py",
                 "/Applications/GRASS-6.4.app/Contents/MacOS",
-                HOMEBREW_PREFIX/"opt/grass-64/grass-base"
+                HOMEBREW_PREFIX/"opt/grass-64/grass-base" unless bottle_poured
     end
 
     if opts.include? "with-grass7"
