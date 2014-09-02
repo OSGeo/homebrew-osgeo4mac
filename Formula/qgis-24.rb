@@ -109,6 +109,11 @@ class Qgis24 < Formula
       url "https://gist.githubusercontent.com/dakcarto/ef82c5ade74120d92339/raw/1f7a5e39d87f07da79e8185e3f4aa6b00935456f/qgis-24-backports.diff"
       sha1 "298f6f9a853d03ae33dfe09eb4608d1aeaf8d5b8"
     end
+    patch do
+      # ed10647 through e973c66
+      url "https://gist.githubusercontent.com/dakcarto/a0465f760dd054d2ed02/raw/53c9ec6d6c042db4cbf807a7cd3d4e93a51e738d/qgis-24-backports-2.diff"
+      sha1 "4ec068f7f2b42f680e90bb8d837f963b39f479ff"
+    end
   end
 
   def install
