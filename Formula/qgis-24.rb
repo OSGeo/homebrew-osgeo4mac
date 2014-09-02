@@ -14,11 +14,19 @@ class Qgis24 < Formula
   homepage "http://www.qgis.org"
   url "https://github.com/qgis/QGIS/archive/final-2_4_0.tar.gz"
   sha1 "df479a4c3ffe2c0f9f4777f320aab92ae2dd08b0"
-  revision 2
+  revision 3
 
   bottle do
     root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
-    sha1 "98b09007e3bd4367158d82f4dd81a26256a45041" => :mavericks
+    sha1 "0343852aee57b869ba026a579502a1b144c21660" => :mavericks
+  end
+
+  def pour_bottle?
+    brewed_python?
+  end
+
+  def bottle_caveat
+    (MacOS.version == :mavericks) ? "Bottle supports only Homebrew Python\n\n" : ""
   end
 
   head "https://github.com/qgis/QGIS.git", :branch => "master"
@@ -327,7 +335,8 @@ class Qgis24 < Formula
   end
 
   def caveats
-    s = <<-EOS.undent
+    s = bottle_caveat
+    s += <<-EOS.undent
       QGIS is built as an application bundle. Environment variables for the
       Homebrew prefix are embedded in QGIS.app:
         #{opt_prefix}/QGIS.app
