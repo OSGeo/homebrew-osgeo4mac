@@ -335,8 +335,8 @@ class Qgis24 < Formula
       You may also symlink QGIS.app into /Applications or ~/Applications:
         brew linkapps [--local]
 
-      To run the `QGIS.app/Contents/MacOS/QGIS` binary use the wrapper script
-      pre-defined with Homebrew prefix environment variables:
+      To directly run the `QGIS.app/Contents/MacOS/QGIS` binary use the wrapper
+      script pre-defined with Homebrew prefix environment variables:
         #{opt_bin}/qgis
 
       NOTE: Your current PATH and PYTHONPATH environment variables are honored
