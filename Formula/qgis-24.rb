@@ -124,12 +124,9 @@ class Qgis24 < Formula
     dev_fw = lib/"qgis-dev"
     dev_fw.mkpath
     qsci_opt = Formula["qscintilla2"].opt_prefix
-    args = %W[
-      -DCMAKE_INSTALL_PREFIX=#{prefix}
-      -DCMAKE_BUILD_TYPE=#{build.with?("debug") ? "RelWithDebInfo" : "None"}
-      -DCMAKE_FIND_FRAMEWORK=LAST
-      -DCMAKE_VERBOSE_MAKEFILE=TRUE
-      -Wno-dev
+    args = std_cmake_args
+    args << "-DCMAKE_BUILD_TYPE=RelWithDebInfo" if build.with? "debug" # override
+    args += %W[
       -DBISON_EXECUTABLE=#{Formula["bison"].opt_bin}/bison
       -DENABLE_TESTS=FALSE
       -DQWT_INCLUDE_DIR=#{qwt_fw}/Headers
