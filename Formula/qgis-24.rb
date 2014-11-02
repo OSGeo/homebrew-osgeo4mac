@@ -86,7 +86,7 @@ class Qgis24 < Formula
   end
 
   if build.with? "globe"
-    depends_on "open-scene-graph"
+    depends_on "open-scene-graph" => ["with-qt"]
     depends_on "homebrew/science/osgearth"
   end
   depends_on "gpsbabel" => [:recommended, "with-libusb"]
