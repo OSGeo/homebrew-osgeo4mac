@@ -8,11 +8,12 @@ class UnlinkedQGIS < Requirement
 
   def qgis_list
     %W[
-      homebrew/science/qgis
-      osgeo/osgeo4mac/qgis-18
-      osgeo/osgeo4mac/qgis-20
-      osgeo/osgeo4mac/qgis-22
-      osgeo/osgeo4mac/qgis-24
+      qgis
+      qgis-18
+      qgis-20
+      qgis-22
+      qgis-24
+      qgis-26
     ]
   end
 

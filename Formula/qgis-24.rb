@@ -5,7 +5,7 @@ require File.expand_path("../../Requirements/qgis_requirements",
 class UnlinkedQGIS24 < UnlinkedQGIS
   fatal true
   def qgis_formula_name
-    "osgeo/osgeo4mac/qgis-24"
+    "qgis-24"
   end
   satisfy(:build_env => false) { no_linked_qgis[0] }
 end
@@ -125,6 +125,7 @@ class Qgis24 < Formula
   end
 
   def install
+    raise
     # Set bundling level back to 0 (the default in all versions prior to 1.8.0)
     # so that no time and energy is wasted copying the Qt frameworks into QGIS.
     qwt_fw = Formula["qwt"].opt_lib/"qwt.framework"

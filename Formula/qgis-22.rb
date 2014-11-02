@@ -5,7 +5,7 @@ require File.expand_path("../../Requirements/qgis_requirements",
 class UnlinkedQGIS22 < UnlinkedQGIS
   fatal true
   def qgis_formula_name
-    "osgeo/osgeo4mac/qgis-22"
+    "qgis-22"
   end
   satisfy(:build_env => false) { no_linked_qgis[0] }
 end
