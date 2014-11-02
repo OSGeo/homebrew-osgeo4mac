@@ -125,7 +125,6 @@ class Qgis24 < Formula
   end
 
   def install
-    raise
     # Set bundling level back to 0 (the default in all versions prior to 1.8.0)
     # so that no time and energy is wasted copying the Qt frameworks into QGIS.
     qwt_fw = Formula["qwt"].opt_lib/"qwt.framework"
