@@ -162,6 +162,11 @@ class Qgis26 < Formula
     end
 
     args << "-DWITH_MAPSERVER=#{build.with?("server") ? "TRUE" : "FALSE"}"
+    if build.with? "server"
+      fcgi_opt = Formula["fcgi"].opt_prefix
+      args << "-DFCGI_INCLUDE_DIR=#{fcgi_opt}/include"
+      args << "-DFCGI_LIBRARY=#{fcgi_opt}/lib/libfcgi.dylib"
+    end
 
     args << "-DPOSTGRES_CONFIG=#{Formula["postgresql"].opt_bin}/pg_config" if build.with? "postgresql"
 
