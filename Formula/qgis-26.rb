@@ -14,10 +14,11 @@ class Qgis26 < Formula
   homepage "http://www.qgis.org"
   url "https://github.com/qgis/QGIS/archive/final-2_6_0.tar.gz"
   sha1 "d4824b86579ee7eb191240377d465ed91e8e4094"
+  revision 1
 
   bottle do
     root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
-    sha1 "539e642da8d1345863d2984b45a78cc95f25dbbb" => :mavericks
+    sha1 "a6e6776e604cc77d46f0ee8fd750b3e6b3c6ec3b" => :mavericks
   end
 
   def pour_bottle?
@@ -109,13 +110,15 @@ class Qgis26 < Formula
     version "2.0.0"
   end
 
-  # patch that represents all backports to release-2_6 branch,
-#   stable do
-#     patch do
-#       url ""
-#       sha1 ""
-#     end
-#   end
+  # patches that represent all backports to release-2_6 branch, since 5016213 (2014-10-31)
+  # see: https://github.com/qgis/QGIS/commits/release-2_6
+  stable do
+    patch do
+      # fbc47d1 (2014-11-04) through 094defc (2014-11-07)
+      url "https://gist.githubusercontent.com/dakcarto/1d16dcd7dc2596efafff/raw/01b124d6505f136c1db0ddc7859f1ffa618a7d7d/qgis-26-backports_A.diff"
+      sha1 "1c1f932f69650da008efeb431a0d1ab5ff0d529d"
+    end
+  end
 
   def install
     # Set bundling level back to 0 (the default in all versions prior to 1.8.0)
