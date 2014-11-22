@@ -17,6 +17,11 @@ class Libnoise < Formula
     sha1 "823e5c1fbe4b889190bdaf1bf6ce5500c8410384"
   end
 
+  resource "noiseutils" do
+    url "http://libnoise.sourceforge.net/downloads/noiseutils.zip"
+    sha1 "031f13dac6e3383cf9d01219e10080fafb13e45d"
+  end
+
   def install
     inreplace "doc/CMakeLists.txt", "/usr/share", share if build.with? "docs"
 
@@ -29,6 +34,25 @@ class Libnoise < Formula
     end
 
     (prefix/"examples").install resource("examples")
+
+    resource("noiseutils").stage do
+      (Pathname.pwd/"CMakeLists.txt").write <<-EOS.undent
+        set( PROJECT_NAME libnoiseutils )
+        include_directories( "${CMAKE_INSTALL_PREFIX}/include" )
+        add_library( noiseutils SHARED noiseutils.cpp )
+
+        set_target_properties( noiseutils PROPERTIES LIBNOISE_VERSION 2 )
+        target_link_libraries( noiseutils ${CMAKE_INSTALL_PREFIX}/lib/libnoise.dylib )
+        add_definitions( "-Wall -ansi -pedantic -O3" )
+
+        install( FILES "${PROJECT_SOURCE_DIR}/noiseutils.h" DESTINATION
+          "${CMAKE_INSTALL_PREFIX}/include" )
+        install( TARGETS noiseutils DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" )
+      EOS
+      mkdir "build" do
+        system "cmake", "..", *std_cmake_args
+        system "make", "install"
+      end
     end
   end
 
