@@ -64,4 +64,16 @@ class Libnoise < Formula
 
     EOS
   end
+
+  test do
+    system ENV.cxx, "#{prefix}/examples/texturejade.cpp", "-o", "test",
+           "-I#{include}", "-L#{lib}", "-lnoise", "-lnoiseutils"
+    system "./test"
+    outputs = %w[textureplane.bmp textureseamless.bmp texturesphere.bmp]
+    outputs.each_with_index do |f,i|
+      f_size = FileTest.size(f)
+      assert f_size && f_size > 102400 # > 100 KiB
+      puts "#{f} (#{i+1}/#{outputs.length}) is #{f_size/1024} KiB" if ARGV.verbose?
+    end
+  end
 end
