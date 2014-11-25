@@ -49,8 +49,20 @@ end
 ENV["HOMEBREW_BUILD_BOTTLE"] = "1"
 
 # Install main formula's dependencies first
+pre_deps_list = %x[brew list].split("\n")
 unless system_out "brew", "install", "#{f}", *(opts + %W[--only-dependencies])
   exit! 1
+end
+post_deps_list = %x[brew list].split("\n")
+
+# Run post_install for any newly installed formulae
+# (post_install is now skipped for bottle builds)
+installed_deps = post_deps_list - pre_deps_list
+if installed_deps.length > 0
+  ohai "Installed deps: " + installed_deps.join(", ")
+  installed_deps.each do |d|
+    system_out "brew", "postinstall", "#{d}"
+  end
 end
 
 # Unset to ensure bottle for main formula is poured, if pourable
@@ -73,13 +85,17 @@ end
 ENV["HOMEBREW_DEVELOPER"] = "1" if pour_bottle
 
 # Pour or install main formula
-unless system_out "brew", "install", "#{f}", *opts
+if system_out "brew", "install", "#{f}", *opts
+  system_out "brew", "postinstall", "#{f}"
+else
   if pour_bottle
     opoo "Bottle may have failed to install"
     ohai "Attempting to build source as bottle"
     opts |= %W[--build-bottle]
 
-    unless system_out "brew", "install", "#{f}", *opts
+    if system_out "brew", "install", "#{f}", *opts
+      system_out "brew", "postinstall", "#{f}"
+    else
       odie "Source bottle build failed"
     end
   else
