@@ -18,7 +18,8 @@ class Qgis26 < Formula
 
   bottle do
     root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
-    sha1 "a6e6776e604cc77d46f0ee8fd750b3e6b3c6ec3b" => :mavericks
+    sha1 "27d2b4006d7ab55cbb713e49e7dd8f745e9aa1a5" => :mavericks
+    revision 1
   end
 
   def pour_bottle?
@@ -274,15 +275,24 @@ class Qgis26 < Formula
     unless opts.include? "without-grass"
       grass = Formula["grass-64"]
       envars[:GRASS_PREFIX] = "#{grass.opt_prefix}/grass-#{grass.version.to_s}"
-      inreplace app/"#{proc_algs}/grass/GrassUtils.py",
-                "/Applications/GRASS-6.4.app/Contents/MacOS",
-                HOMEBREW_PREFIX/"opt/grass-64/grass-base" unless bottle_poured
+      begin
+        inreplace app/"#{proc_algs}/grass/GrassUtils.py",
+                  "/Applications/GRASS-6.4.app/Contents/MacOS",
+                  HOMEBREW_PREFIX/"opt/grass-64/grass-base" unless bottle_poured
+      rescue Utils::InreplaceError
+        puts "GRASS 6 GrassUtils already updated"
+      end
+
     end
 
     if opts.include? "with-grass7"
-      inreplace app/"#{proc_algs}/grass7/Grass7Utils.py",
-                "/Applications/GRASS-7.0.app/Contents/MacOS",
-                HOMEBREW_PREFIX/"opt/grass-70/grass-base"
+      begin
+        inreplace app/"#{proc_algs}/grass7/Grass7Utils.py",
+                  "/Applications/GRASS-7.0.app/Contents/MacOS",
+                  HOMEBREW_PREFIX/"opt/grass-70/grass-base"
+      rescue Utils::InreplaceError
+        puts "GRASS 7 GrassUtils already updated"
+      end
     end
 
     unless opts.include? "without-globe"
@@ -330,7 +340,7 @@ class Qgis26 < Formula
     envars[:PATH] = "#{HOMEBREW_PREFIX}/bin" + pthsep + "$PATH"
     envars[:PYTHONPATH] = "#{python_site_packages}" + pthsep + "$PYTHONPATH"
     envars.each { |key, value| bin_cmds << "export #{key.to_s}=#{value}" }
-    bin_cmds << opt_prefix/"QGIS.app/Contents/MacOS/QGIS"
+    bin_cmds << opt_prefix/"QGIS.app/Contents/MacOS/QGIS \"$@\""
     qgis_bin.write(bin_cmds.join("\n"))
     qgis_bin.chmod 0755
   end
