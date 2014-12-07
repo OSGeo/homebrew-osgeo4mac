@@ -19,7 +19,6 @@ class Qgis26 < Formula
   bottle do
     root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
     sha1 "27d2b4006d7ab55cbb713e49e7dd8f745e9aa1a5" => :mavericks
-    revision 1
   end
 
   def pour_bottle?
