@@ -54,7 +54,9 @@ brew install https://raw.github.com/osgeo/homebrew-osgeo4mac/master/<formula>.rb
 How do I use the Brewfiles?
 --------------------------------
 
-See: [Using OSGeo4Mac Brewfiles][brewfiles] in the wiki.
+If you have used `brewfiles` from this tap before, take note that the command is
+no longer in Homebrew. As such, the previously available `brewfiles` have been
+removed from this tap.
 
 Docs
 ----
@@ -63,4 +65,3 @@ Docs
 [homebrew]:http://brew.sh
 [taps]:https://github.com/Homebrew/homebrew-versions
 [wiki]:https://github.com/Homebrew/homebrew/wiki
-[brewfiles]:https://github.com/osgeo/homebrew-osgeo4mac/wiki/Using-OSGeo4Mac-Brewfiles
