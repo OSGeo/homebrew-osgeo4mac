@@ -21,6 +21,7 @@
 """
 
 import os
+import stat
 import sys
 import argparse
 import subprocess
@@ -120,6 +121,9 @@ def main():
     if not os.path.isabs(ap) or not os.path.exists(ap):
         print 'Application can not be resolved to an existing absolute path.'
         sys.exit(1)
+    
+    # QGIS Browser.app?
+    browser = 'Browser.' in ap
 
     plist = ap + '/Contents/Info.plist'
     if not os.path.exists(plist):
@@ -179,10 +183,40 @@ def main():
 
     # set bundle identifier, so package installers don't accidentally install
     # updates into dev bundles
-    plist_bud('Set :CFBundleIdentifier org.qgis.qgis-dev', plist)
+    app_id = 'qgis'
+    app_name = 'QGIS'
+    if browser:
+        app_id += '-browser'
+        app_name += ' Browser'
+    plist_bud('Set :CFBundleIdentifier org.qgis.{0}-dev'.format(app_id), plist)
 
     # update modification date on app bundle, or changes won't take effect
     subprocess.call(['/usr/bin/touch', ap])
+    
+    # add environment-wrapped launcher shell script
+    wrp_scr = ap + '/Contents/MacOS/{0}.sh'.format(app_id)
+
+    # override vars that need to prepend existing vars
+    evars['PATH'] = '{hb}/bin:{hb}/sbin:$PATH'.format(hb=hb)
+    evars['PYTHONPATH'] = \
+        '{hb}/lib/python2.7/site-packages:$PYTHONPATH'.format(hb=hb)
+    
+    if os.path.exists(wrp_scr):
+        os.remove(wrp_scr)
+    
+    with open(wrp_scr, 'a') as f:
+        f.write('#!/bin/bash\n\n')
+
+        # get runtime parent directory
+        f.write('DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")"; pwd -P)\n\n')
+        
+        # add the variables
+        for k, v in evars.iteritems():
+            f.write('export {0}={1}\n'.format(k, v))
+        
+        f.write('\n"$DIR/{0}" "$@"\n'.format(app_name))
+        
+    os.chmod(wrp_scr, stat.S_IRUSR | stat.S_IWUSR | stat.S_IEXEC)
 
     print 'Done setting variables'
 
