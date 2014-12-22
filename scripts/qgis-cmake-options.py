@@ -22,6 +22,7 @@
 """
 
 import os
+import re
 import sys
 from collections import OrderedDict
 import argparse
@@ -31,7 +32,11 @@ OSG_VERSION = '3.2.0'
 HOMEBREW_PREFIX = '/usr/local'  # default for Homebrew
 
 
-def cmake_opts(qi, hb):
+def cmake_opts(qi, hb, ver):
+    # define versions of CMake option changes
+    lt27 = int(ver[0]) <= 2 and int(ver[1]) < 7
+    w_server = 'WITH_MAPSERVER' if lt27 else 'WITH_SERVER'
+
     # ensure libintl.h can be found in gettext for grass
     cxx_flags = "-I{hb}/opt/gettext/include"
     if 'CXXFLAGS' in os.environ:
@@ -68,7 +73,7 @@ def cmake_opts(qi, hb):
         ('WITH_INTERNAL_SPATIALITE', 'FALSE'),
         ('WITH_PYSPATIALITE', 'FALSE'),
         ('WITH_INTERNAL_QWTPOLAR', 'FALSE'),
-        ('WITH_MAPSERVER', 'TRUE'),
+        (w_server, 'TRUE'),
         ('WITH_STAGED_PLUGINS', 'FALSE'),
         ('WITH_PY_COMPILE', 'TRUE'),
         ('WITH_APIDOC', 'FALSE'),
@@ -143,6 +148,24 @@ def main():
         print 'QGIS source directory not resolved to existing absolute path.'
         sys.exit(1)
 
+    # get QGIS version
+    s = ''
+    with file(os.path.join(qs, 'CMakeLists.txt')) as f:
+        for _ in range(5):
+            s += f.readline()
+    # print s
+    p = re.compile(r'CPACK_PACKAGE_VERSION_..... "(.)"')
+    ver = p.findall(s)
+    print ver
+
+    if not ver:
+        print 'QGIS version could not be resolved.'
+        sys.exit(1)
+
+    if len(ver) != 3:
+        print 'QGIS version\'s major.minor.patch could not be resolved.'
+        sys.exit(1)
+
     qi = os.path.realpath(args.qi)
     if not os.path.isabs(qi) or not os.path.exists(qi):
         print 'QGIS install directory not resolved to existing absolute path.'
@@ -158,7 +181,7 @@ def main():
         sys.exit(1)
 
     # generate cmake options
-    cm_opts = cmake_opts(qi, hb)
+    cm_opts = cmake_opts(qi, hb, ver)
 
     cm_opts_s = args.qs
     for k, v in cm_opts.iteritems():
