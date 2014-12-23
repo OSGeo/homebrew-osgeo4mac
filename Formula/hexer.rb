@@ -1,5 +1,3 @@
-require "formula"
-
 class Hexer < Formula
   homepage "https://github.com/hobu/hexer"
   url "https://github.com/hobu/hexer/archive/1.3.0.tar.gz"

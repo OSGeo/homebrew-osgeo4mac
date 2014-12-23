@@ -1,5 +1,3 @@
-require "formula"
-
 class Libght < Formula
   homepage "https://github.com/pramsey/libght/"
   url "https://github.com/pramsey/libght/archive/v0.1.0.tar.gz"

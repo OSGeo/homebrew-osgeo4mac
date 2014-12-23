@@ -1,5 +1,3 @@
-require "formula"
-
 class GdalOracle < Formula
   homepage "http://www.gdal.org/ogr/drv_oci.html"
   url 'http://download.osgeo.org/gdal/1.11.0/gdal-1.11.0.tar.gz'

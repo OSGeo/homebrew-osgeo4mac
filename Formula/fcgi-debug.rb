@@ -1,5 +1,3 @@
-require "formula"
-
 class FcgiDebug < Formula
   homepage "http://redmine.lighttpd.net/projects/fcgi-debug/wiki"
   # TODO: remove temp hash url after first tagged release

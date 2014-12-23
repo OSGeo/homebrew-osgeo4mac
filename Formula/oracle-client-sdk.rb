@@ -1,4 +1,3 @@
-require "formula"
 require File.expand_path("../../Strategies/cache-download", Pathname.new(__FILE__).realpath)
 
 class OracleClientSdk < Formula

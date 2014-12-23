@@ -1,5 +1,3 @@
-require "formula"
-
 class Fyba < Formula
   homepage "https://github.com/kartverket/fyba"
   # TODO: remove temp hash url after first tagged release

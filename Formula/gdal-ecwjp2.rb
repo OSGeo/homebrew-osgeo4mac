@@ -1,5 +1,3 @@
-require "formula"
-
 ECWJP2_SDK = "/Intergraph/ERDASEcwJpeg2000SDK5.1.1/Desktop_Read-Only"
 
 class EcwJp2Sdk < Requirement

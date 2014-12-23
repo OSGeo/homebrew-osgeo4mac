@@ -1,5 +1,3 @@
-require "formula"
-
 class CurlRefererDownloadStrategy < CurlDownloadStrategy
   def _fetch
     domain_url = @url.sub(/([^:]+:\/\/[^\/]+)(.*)/, "\\1")

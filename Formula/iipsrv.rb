@@ -1,5 +1,3 @@
-require "formula"
-
 class Iipsrv < Formula
   homepage "http://iipimage.sourceforge.net"
   url "https://github.com/ruven/iipsrv.git", :revision => "cfffce90243148a3da4a13776f3764b280acd0ce"

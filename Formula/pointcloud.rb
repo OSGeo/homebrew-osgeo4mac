@@ -1,5 +1,3 @@
-require "formula"
-
 class Pointcloud < Formula
   homepage "https://github.com/pramsey/pointcloud"
   # functioning CMake build and fixes for Mountain Lion (not in 0.1.0 release)

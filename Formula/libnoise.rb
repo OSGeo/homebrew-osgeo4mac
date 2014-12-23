@@ -1,5 +1,3 @@
-require "formula"
-
 class Libnoise < Formula
   homepage "https://github.com/qknight/libnoise"
   url "https://github.com/qknight/libnoise.git",

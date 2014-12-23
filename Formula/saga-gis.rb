@@ -1,5 +1,3 @@
-require "formula"
-
 class SagaGis < Formula
   homepage "http://saga-gis.org"
   url "https://downloads.sourceforge.net/project/saga-gis/SAGA%20-%202.1/SAGA%202.1.2/saga_2.1.2.tar.gz"

@@ -1,5 +1,3 @@
-require "formula"
-
 class Prepair < Formula
   homepage "https://github.com/tudelft-gist/prepair"
   url "https://github.com/tudelft-gist/prepair.git", :revision => "f851a14faf402536c022f1f7e136cdb05a7b9e5d"

@@ -1,5 +1,3 @@
-require "formula"
-
 class Monteverdi2 < Formula
   ORFEO = "orfeo-42"
   OREFO_F = Formula[ORFEO]

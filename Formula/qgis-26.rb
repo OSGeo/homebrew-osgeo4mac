@@ -1,4 +1,3 @@
-require "formula"
 require File.expand_path("../../Requirements/qgis_requirements",
                          Pathname.new(__FILE__).realpath)
 

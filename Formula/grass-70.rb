@@ -1,5 +1,3 @@
-require "formula"
-
 class Grass70 < Formula
   homepage "http://grass.osgeo.org/"
 

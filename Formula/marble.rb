@@ -1,5 +1,3 @@
-require "formula"
-
 class Marble < Formula
   homepage "http://marble.kde.org/"
   url "http://download.kde.org/stable/4.13.1/src/marble-4.13.1.tar.xz"

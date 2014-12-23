@@ -1,5 +1,3 @@
-require "formula"
-
 class QtMysql < Formula
   homepage "http://qt-project.org/"
   # 15 KB, stripped down archive of just what's needed to compile driver

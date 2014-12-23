@@ -1,5 +1,3 @@
-require "formula"
-
 class Pdal09dev < Formula
   homepage "http://pointcloud.org"
   # TODO: remove. temp url in preparation for next release

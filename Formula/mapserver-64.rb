@@ -1,5 +1,3 @@
-require "formula"
-
 class JavaJDK < Requirement
   fatal true
 

@@ -1,5 +1,3 @@
-require "formula"
-
 class GdalSosi < Formula
   homepage "http://trac.osgeo.org/gdal/wiki/SOSI"
   url "http://download.osgeo.org/gdal/1.11.0/gdal-1.11.0.tar.gz"

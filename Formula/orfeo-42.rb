@@ -1,5 +1,3 @@
-require "formula"
-
 class Orfeo42 < Formula
   homepage "http://www.orfeo-toolbox.org/otb/"
   url "https://downloads.sourceforge.net/project/orfeo-toolbox/OTB-4.2.1.tgz"

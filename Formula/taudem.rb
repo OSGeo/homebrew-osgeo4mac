@@ -1,5 +1,3 @@
-require "formula"
-
 class Taudem < Formula
   homepage "http://hydrology.usu.edu/taudem/taudem5/"
   url "http://hydrology.usu.edu/taudem/taudem5/TauDEM5PCsrc_511.zip"

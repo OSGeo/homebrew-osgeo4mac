@@ -1,5 +1,3 @@
-require "formula"
-
 class Nitro < Formula
   homepage "https://github.com/hobu/nitro"
   # TODO: request a tagged release

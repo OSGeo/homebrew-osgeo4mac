@@ -1,5 +1,3 @@
-require "formula"
-
 class GdalMrsid < Formula
   homepage "http://www.gdal.org/frmt_mrsid.html"
   url "http://download.osgeo.org/gdal/1.11.0/gdal-1.11.0.tar.gz"

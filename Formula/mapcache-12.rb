@@ -1,5 +1,3 @@
-require "formula"
-
 class Mapcache12 < Formula
   MAPSERVER = "mapserver-64"
 

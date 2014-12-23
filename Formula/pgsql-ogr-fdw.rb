@@ -1,5 +1,3 @@
-require "formula"
-
 class PgsqlOgrFdw < Formula
   homepage "https://github.com/pramsey/pgsql-ogr-fdw"
   url "https://github.com/pramsey/pgsql-ogr-fdw.git", :branch => "master",
