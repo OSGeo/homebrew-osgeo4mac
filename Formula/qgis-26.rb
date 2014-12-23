@@ -161,7 +161,7 @@ class Qgis26 < Formula
       args << "-DGIT_MARKER=''" # if git clone borked, or release tarball, ends up defined as 'exported'
     end
 
-    args << "-DWITH_MAPSERVER=#{build.with?("server") ? "TRUE" : "FALSE"}"
+    args << "-DWITH_#{build.head? ? "" : "MAP"}SERVER=#{build.with?("server") ? "TRUE" : "FALSE"}"
     if build.with? "server"
       fcgi_opt = Formula["fcgi"].opt_prefix
       args << "-DFCGI_INCLUDE_DIR=#{fcgi_opt}/include"
