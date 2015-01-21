@@ -2,9 +2,8 @@ class Grass70 < Formula
   homepage "http://grass.osgeo.org/"
 
   stable do
-    url "http://grass.osgeo.org/grass70/source/grass-7.0.0beta3.tar.gz"
-    sha1 "603a86b096a33f10d0b9c59918c90919cd1622c2"
-    version "7.0.0beta3"
+    url "http://grass.osgeo.org/grass70/source/grass-7.0.0RC1.tar.gz"
+    sha1 "316d638ccf4f7dfb588f7e4e69243c18cd18bd70"
 
     # Patches to keep files from being installed outside of the prefix.
     # Remove lines from Makefile that try to install to /Library/Documentation.
@@ -13,7 +12,7 @@ class Grass70 < Formula
 
   bottle do
     root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
-    sha1 "c28e8170be816a9334a9cd02fcdd533126f1c614" => :mavericks
+    sha1 "8b0243a2742aa987cf88e0a5f9c98fd3b04a3c89" => :mavericks
   end
 
   option "without-gui", "Build without WxPython interface. Command line tools still available."
