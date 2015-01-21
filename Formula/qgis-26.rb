@@ -13,10 +13,11 @@ class Qgis26 < Formula
   homepage "http://www.qgis.org"
   url "https://github.com/qgis/QGIS/archive/final-2_6_1.tar.gz"
   sha1 "44f11f227658034c96b1bb8de52e84765422308c"
+  revision 1
 
   bottle do
     root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
-    sha1 "c149eacf36355a18d026b054771140c08b03585d" => :mavericks
+    sha1 "d41a691f3bfc4360f39a513afd6f52bedcc349ec" => :mavericks
   end
 
   def pour_bottle?
@@ -108,16 +109,16 @@ class Qgis26 < Formula
     version "2.0.0"
   end
 
-  # # patches that represent all backports to release-2_6 branch, since 2.6.1 tag, e2a51df (2014-11-28)
-  # # see: https://github.com/qgis/QGIS/commits/release-2_6
-  # #      and https://github.com/qgis/QGIS/commits/final-2_6_1
-  # stable do
-  #   patch do
-  #     # SHA1HASH (date) through SHA1HASH (date)
-  #     url ""
-  #     sha1 ""
-  #   end
-  # end
+  # patches that represent all backports to release-2_6 branch, since 2.6.1 tag, e2a51df (2014-11-28)
+  # see: https://github.com/qgis/QGIS/commits/release-2_6
+  #      and https://github.com/qgis/QGIS/commits/final-2_6_1
+  stable do
+    patch do
+      # 4e78b8b (2014-25-28) through e4d34cb (2015-01-20) minus windows-formatted patches
+      url "https://gist.githubusercontent.com/dakcarto/55fa8700ca9640561b9f/raw/0da58873ce64e05f6e7add3c879c43879fa7b799/qgis-261-backports_A.diff"
+      sha1 "8c426efec3d378038effc2e59b34f03acd1bcd0e"
+    end
+  end
 
   def install
     # Set bundling level back to 0 (the default in all versions prior to 1.8.0)
@@ -138,6 +139,7 @@ class Qgis26 < Formula
       -DQWTPOLAR_LIBRARY=#{qwtpolar_fw}/qwtpolar
       -DQSCINTILLA_INCLUDE_DIR=#{qsci_opt}/include
       -DQSCINTILLA_LIBRARY=#{qsci_opt}/lib/libqscintilla2.dylib
+      -DQSCI_SIP_DIR=#{qsci_opt}/share/sip
       -DWITH_INTERNAL_QWTPOLAR=FALSE
       -DQGIS_MACAPP_BUNDLE=0
       -DQGIS_MACAPP_DEV_PREFIX='#{dev_fw}'
