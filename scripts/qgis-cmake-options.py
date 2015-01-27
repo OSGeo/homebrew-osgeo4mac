@@ -78,6 +78,7 @@ def cmake_opts(qi, hb, ver):
         ('WITH_PY_COMPILE', 'TRUE'),
         ('WITH_APIDOC', 'FALSE'),
         ('WITH_QSCIAPI', 'FALSE'),
+        ('QSCI_SIP_DIR', '{hb}/opt/qscintilla2/share/sip'),
         ('POSTGRES_CONFIG', '{hb}/bin/pg_config'),
         ('WITH_GRASS', 'TRUE'),
         ('GRASS_PREFIX', '{hb}/opt/grass-64/grass-' + GRASS_VERSION),
