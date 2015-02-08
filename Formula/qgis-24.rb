@@ -13,12 +13,7 @@ class Qgis24 < Formula
   homepage "http://www.qgis.org"
   url "https://github.com/qgis/QGIS/archive/final-2_4_0.tar.gz"
   sha1 "df479a4c3ffe2c0f9f4777f320aab92ae2dd08b0"
-  revision 3
-
-  bottle do
-    root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
-    sha1 "110f8b367b5f052861e3a8a34d3189bab63a7349" => :mavericks
-  end
+  revision 4
 
   def pour_bottle?
     brewed_python?
@@ -32,7 +27,7 @@ class Qgis24 < Formula
   option "with-debug", "Enable debug build, which outputs info to system.log or console"
   option "without-server", "Build without QGIS Server (qgis_mapserv.fcgi)"
   option "without-postgresql", "Build without current PostgreSQL client"
-  option "without-globe", "Build without Globe plugin, based upon osgEarth"
+  option "with-globe", "Build with Globe plugin, based upon osgEarth"
   option "without-postgis", "Build without extra PostGIS geospatial database extender"
   option "without-grass", "Build without GRASS 6 integration plugin and Processing plugin support"
   option "with-grass7", "Build with GRASS 7 for Processing plugin"
