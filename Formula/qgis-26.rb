@@ -13,11 +13,11 @@ class Qgis26 < Formula
   homepage "http://www.qgis.org"
   url "https://github.com/qgis/QGIS/archive/final-2_6_1.tar.gz"
   sha1 "44f11f227658034c96b1bb8de52e84765422308c"
-  revision 1
+  revision 2
 
   bottle do
     root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
-    sha1 "d41a691f3bfc4360f39a513afd6f52bedcc349ec" => :mavericks
+    sha1 "16f3990b210998f3d81e6aa13652d685ba18e897" => :mavericks
   end
 
   def pour_bottle?
@@ -34,7 +34,7 @@ class Qgis26 < Formula
   option "with-debug", "Enable debug build, which outputs info to system.log or console"
   option "without-server", "Build without QGIS Server (qgis_mapserv.fcgi)"
   option "without-postgresql", "Build without current PostgreSQL client"
-  option "without-globe", "Build without Globe plugin, based upon osgEarth"
+  option "with-globe", "Build with Globe plugin, based upon osgEarth"
   option "without-postgis", "Build without extra PostGIS geospatial database extender"
   option "without-grass", "Build without GRASS 6 integration plugin and Processing plugin support"
   option "with-grass7", "Build with GRASS 7 for Processing plugin"
