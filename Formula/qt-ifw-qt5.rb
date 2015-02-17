@@ -9,10 +9,10 @@ class QtIfwQt5 < Formula
   depends_on :xcode => :build
 
   keg_only "Qt 5 conflicts Qt 4 (which is currently much more widely used)."
-  
+
   # Wrong detection of clang version
   # see: https://bugreports.qt.io/browse/QTBUG-43279
-	patch :DATA
+  patch :DATA
 
   def install
     args = ["-prefix", prefix, "-release", "-static", "-accessibility",
@@ -73,4 +73,3 @@ __END__
  #        define Q_CC_CLANG 300
  #      else
  #        error "Unknown Apple Clang version"
- 
