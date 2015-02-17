@@ -43,13 +43,7 @@ class QtIfw < Formula
     #   ENV["MAKEFLAGS"] = makeflags
     # end
 
-    args = %W[installerfw.pro -config release -spec]
-    # On >= Mavericks we want to target libc++
-    if ENV.compiler == :clang and MacOS.version >= :mavericks
-      args << "macx-clang"
-    else
-      args << "macx-g++"
-    end
+    args = %W[installerfw.pro -config release]
     args << "PREFIX=#{prefix}"
 
     # system "#{qt5_prefix}/bin/qmake", *args
