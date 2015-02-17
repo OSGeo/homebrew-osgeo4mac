@@ -82,7 +82,7 @@ def cmake_opts(qi, hb, ver):
         ('POSTGRES_CONFIG', '{hb}/bin/pg_config'),
         ('WITH_GRASS', 'TRUE'),
         ('GRASS_PREFIX', '{hb}/opt/grass-64/grass-' + GRASS_VERSION),
-        ('WITH_GLOBE', 'TRUE'),
+        ('WITH_GLOBE', 'FALSE'),
         ('OSG_DIR', '{hb}'),
         ('OSGEARTH_DIR', '{hb}'),
         ('OSG_PLUGINS_PATH', '{hb}/lib/osgPlugins-' + OSG_VERSION),
