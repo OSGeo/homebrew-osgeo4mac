@@ -14,6 +14,7 @@ class UnlinkedQGIS < Requirement
       qgis-22
       qgis-24
       qgis-26
+      qgis-28
     ]
   end
 
