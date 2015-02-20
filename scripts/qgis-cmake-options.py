@@ -64,7 +64,7 @@ def cmake_opts(qi, hb, ver):
         ('CMAKE_EXE_LINKER_FLAGS', '"' + ld_flags + '"'),
         ('CMAKE_MODULE_LINKER_FLAGS', '"' + ld_flags + '"'),
         ('CMAKE_SHARED_LINKER_FLAGS', '"' + ld_flags + '"'),
-        ('CXX_EXTRA_FLAGS', '"-Wno-unused-private-field"'),
+        ('CXX_EXTRA_FLAGS', '"-Wno-unused-private-field -Wno-deprecated-register"'),
         ('BISON_EXECUTABLE', '{hb}/opt/bison/bin/bison'),
         ('QT_QMAKE_EXECUTABLE', '{hb}/bin/qmake'),
         ('GITCOMMAND', '{hb}/bin/git'),
