@@ -28,8 +28,6 @@ class Qgis26 < Formula
     (MacOS.version == :mavericks) ? "Bottle supports only Homebrew Python\n\n" : ""
   end
 
-  head "https://github.com/qgis/QGIS.git", :branch => "master"
-
   option "enable-isolation", "Isolate .app's environment to HOMEBREW_PREFIX, to coexist with other QGIS installs"
   option "with-debug", "Enable debug build, which outputs info to system.log or console"
   option "without-server", "Build without QGIS Server (qgis_mapserv.fcgi)"
@@ -154,15 +152,9 @@ class Qgis26 < Formula
       args << "-DPYTHON_CUSTOM_FRAMEWORK='#{brewed_python_framework}'"
     end
 
-    # find git revision for HEAD build
-    if build.head? && File.exists?("#{cached_download}/.git/index")
-      args << "-DGITCOMMAND=#{Formula["git"].opt_bin}/git"
-      args << "-DGIT_MARKER=#{cached_download}/.git/index"
-    else
-      args << "-DGIT_MARKER=''" # if git clone borked, or release tarball, ends up defined as 'exported'
-    end
+    args << "-DGIT_MARKER=''" # if git clone borked, or release tarball, ends up defined as 'exported'
 
-    args << "-DWITH_#{build.head? ? "" : "MAP"}SERVER=#{build.with?("server") ? "TRUE" : "FALSE"}"
+    args << "-DWITH_SERVER=#{build.with?("server") ? "TRUE" : "FALSE"}"
     if build.with? "server"
       fcgi_opt = Formula["fcgi"].opt_prefix
       args << "-DFCGI_INCLUDE_DIR=#{fcgi_opt}/include"
@@ -214,7 +206,7 @@ class Qgis26 < Formula
 
     # Update .app's bundle identifier, so Kyngchaos.com installer doesn't get confused
     inreplace prefix/"QGIS.app/Contents/Info.plist",
-              "org.qgis.qgis2", "org.qgis.qgis2-hb#{build.head? ? "-dev" : ""}"
+              "org.qgis.qgis2", "org.qgis.qgis2-hb"
 
     py_lib = lib/"python2.7/site-packages"
     qgis_modules = prefix/"QGIS.app/Contents/Resources/python/qgis"
