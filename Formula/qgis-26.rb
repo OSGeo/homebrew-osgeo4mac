@@ -18,14 +18,11 @@ class Qgis26 < Formula
   bottle do
     root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
     sha1 "16f3990b210998f3d81e6aa13652d685ba18e897" => :mavericks
+    sha1 "b4d5b5ee6fe443c000dd51c3c8437613aecaa3f1" => :yosemite
   end
 
   def pour_bottle?
     brewed_python?
-  end
-
-  def bottle_caveat
-    (MacOS.version == :mavericks) ? "Bottle supports only Homebrew Python\n\n" : ""
   end
 
   option "enable-isolation", "Isolate .app's environment to HOMEBREW_PREFIX, to coexist with other QGIS installs"
@@ -322,7 +319,7 @@ class Qgis26 < Formula
     # leave the plist readable; convert from binary to XML format
     system "plutil -convert xml1 -- \"#{plst}\""
     # update modification date on app bundle, or changes won't take effect
-    system "touch \"#{app}\""
+    touch "#{app}"
 
     # add env vars to launch script for QGIS app's binary
     qgis_bin = bin/"qgis"
@@ -338,8 +335,9 @@ class Qgis26 < Formula
   end
 
   def caveats
-    s = bottle_caveat
-    s += <<-EOS.undent
+    s = <<-EOS.undent
+      Bottles support only Homebrew's Python
+
       QGIS is built as an application bundle. Environment variables for the
       Homebrew prefix are embedded in QGIS.app:
         #{opt_prefix}/QGIS.app
