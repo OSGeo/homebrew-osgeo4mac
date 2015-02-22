@@ -6,6 +6,7 @@ class SagaGis < Formula
   bottle do
     root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
     sha1 "2e1e3c6f665d603d9dbac2f63e8b6f393d8130fb" => :mavericks
+    sha1 "5abac0d06395008e4028f35524b2c996a6a4026e" => :yosemite
   end
 
   head "svn://svn.code.sf.net/p/saga-gis/code-0/trunk/saga-gis"
