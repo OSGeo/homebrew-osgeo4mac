@@ -6,6 +6,7 @@ class WxmacMono < Formula
   bottle do
     root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
     sha1 "8cb77245f4f2c191e91f1c42e09bf0d32e40fc4a" => :mavericks
+    sha1 "daa1bb7f655d19527b3bc1c18e27c487768c7fde" => :yosemite
   end
 
   keg_only "because wxmac (non-monolithic) is in main tap"
