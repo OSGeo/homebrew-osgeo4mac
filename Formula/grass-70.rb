@@ -13,6 +13,7 @@ class Grass70 < Formula
   bottle do
     root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
     sha1 "0c971596cd55050c252db1d73b5f2b9fba45fd36" => :mavericks
+    sha1 "d0913ec33826d8ce8d318b51acfd5736180eae69" => :yosemite
   end
 
   option "without-gui", "Build without WxPython interface. Command line tools still available."
