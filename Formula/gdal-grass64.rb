@@ -9,6 +9,7 @@ class GdalGrass64 < Formula
   bottle do
     root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
     sha1 "f404547c07cdee365e5b96f71405ff304d03d91a" => :mavericks
+    sha1 "d5a0dffa38a112208d59c11d30085e2247813f9f" => :yosemite
   end
 
   depends_on 'gdal'
