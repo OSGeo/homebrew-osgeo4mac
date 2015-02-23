@@ -1,6 +1,6 @@
 class Orfeo42 < Formula
   homepage "http://www.orfeo-toolbox.org/otb/"
-  url "https://downloads.sourceforge.net/project/orfeo-toolbox/OTB-4.2.1.tgz"
+  url "http://downloads.sourceforge.net/project/orfeo-toolbox/OTB/OTB-4.2.1/OTB-4.2.1.tgz"
   sha1 "c4f1299a2828a6f6acb81c1e022c706b7b7f10ea"
 
   bottle do
