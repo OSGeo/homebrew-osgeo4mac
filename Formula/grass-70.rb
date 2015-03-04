@@ -2,8 +2,8 @@ class Grass70 < Formula
   homepage "http://grass.osgeo.org/"
 
   stable do
-    url "http://grass.osgeo.org/grass70/source/grass-7.0.0RC2.tar.gz"
-    sha1 "16e6d23bf8c57b80d6364d80719856f8e87edeff"
+    url "http://grass.osgeo.org/grass70/source/grass-7.0.0.tar.gz"
+    sha1 "fa3a05a19109339f00f3b63c76f5f6ed022aaa1f"
 
     # Patches to keep files from being installed outside of the prefix.
     # Remove lines from Makefile that try to install to /Library/Documentation.
