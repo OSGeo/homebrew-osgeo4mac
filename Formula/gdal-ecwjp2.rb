@@ -1,4 +1,4 @@
-ECWJP2_SDK = "/Intergraph/ERDASEcwJpeg2000SDK5.1.1/Desktop_Read-Only"
+ECWJP2_SDK = "/Hexagon/ERDASEcwJpeg2000SDK5.2.1/Desktop_Read-Only"
 
 class EcwJp2Sdk < Requirement
   fatal true
@@ -76,7 +76,7 @@ class GdalEcwjp2 < Formula
     Once plugin is installed, the ERDAS ECW/JP2 SDK can be deleted from its
     default install location of:
 
-      /Intergraph/ERDASEcwJpeg2000SDK*
+      /Hexagon/ERDASEcwJpeg2000SDK*
 
   EOS
   end
