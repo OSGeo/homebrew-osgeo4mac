@@ -14,9 +14,9 @@ class SagaGis < Formula
   option "with-app", "Build SAGA.app Package"
   option "with-liblas", "Build with internal libLAS 1.2 support"
 
-  depends_on :automake
-  depends_on :autoconf
-  depends_on :libtool
+  depends_on "automake" => :build
+  depends_on "autoconf" => :build
+  depends_on "libtool" => :build
   depends_on "gdal"
   depends_on "jasper"
   depends_on "proj"
