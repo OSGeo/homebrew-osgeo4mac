@@ -1,7 +1,7 @@
 class SagaGis < Formula
   homepage "http://saga-gis.org"
-  url "https://downloads.sourceforge.net/project/saga-gis/SAGA%20-%202.1/SAGA%202.1.2/saga_2.1.2.tar.gz"
-  sha1 "9dddd3e03bd5f640fedd318ee8ff187785745e86"
+  url "https://downloads.sourceforge.net/project/saga-gis/SAGA%20-%202.1/SAGA%202.1.4/saga_2.1.4.tar.gz"
+  sha1 "b470f183aff4aba402b08d6a55cb3d5e6078f753"
 
   bottle do
     root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
