@@ -36,12 +36,6 @@ class SagaGis < Formula
     sha1 "1ff67c6d600dd161684d3e8b33a1d138c65b00f4"
   end
 
-  resource "projects" do
-    url "http://trac.osgeo.org/proj/export/2409/branches/4.8/proj/src/projects.h"
-    sha1 "867367a8ef097d5ff772b7f50713830d2d4bc09c"
-    version "4.8.0"
-  end
-
   resource "liblas" do
     url "https://github.com/libLAS/libLAS/archive/1.2.1.tar.gz"
     sha1 "24a775484285d4e35eb8034bf298f740d7123569"
@@ -56,8 +50,6 @@ class SagaGis < Formula
   end
 
   def install
-    (buildpath/"src/modules/projection/pj_proj4").install resource("projects")
-
     # Need to remove unsupported libraries from various Makefiles
     # http://sourceforge.net/p/saga-gis/wiki/Compiling%20SAGA%20on%20Mac%20OS%20X
     inreplace "src/saga_core/saga_gui/Makefile.am", "aui,base,", ""
