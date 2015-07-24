@@ -2,13 +2,13 @@ class Pdal09dev < Formula
   homepage "http://pointcloud.org"
   # TODO: remove. temp url in preparation for next release
   url "https://github.com/PDAL/PDAL.git",
-      :revision => "cc58b35f63e9ce035268d879a3333a18675d0240"
-  version "0.9.9-cc58b35"
+      :revision => "42f66a06e9fcdca75572f44392f346ef4a8fb465"
+  version "1.0.0b1-42f66a"
 
   head "https://github.com/PDAL/PDAL.git", :branch => "master"
 
   option "with-swig", "Build with Python bindings"
-  option "with-soci", "Build with SOCI database access support"
+  option "with-icebridge", "Build with HDF5 IceBridge support"
   option "with-mrsid", "Build with proprietary MrSID format support"
   option "with-oracle", "Build with proprietary Oracle format support"
   option "with-tests", "Run unit tests after build, prior to install"
@@ -16,18 +16,19 @@ class Pdal09dev < Formula
 
   depends_on "cmake" => :build
   depends_on "swig" => [:build, :optional]
-  depends_on "boost" => :recommended
+  depends_on "boost"
   depends_on :python # for PLang filters
   depends_on "numpy" => :python
   depends_on "libgeotiff"
   depends_on "gdal"
-  depends_on :postgresql => :recommended
+  depends_on "postgresql" => :recommended
+  depends_on "nitro" => :recommended
   depends_on "laszip" => :recommended
-  depends_on "msgpack" => :recommended
   depends_on "points2grid" => :recommended
   depends_on "hexer" => :recommended
-  depends_on "soci" => :optional
-  depends_on "sqlite" if build.with? "soci"
+  depends_on "sqlite" => :recommended
+  depends_on "pcl" => :optional
+  depends_on "hdf5" => :optional
 
   # proprietary formats
   depends_on "mrsid-sdk" if build.with? "mrsid"
@@ -46,39 +47,46 @@ class Pdal09dev < Formula
   def install
     ENV.libxml2
     args = std_cmake_args.concat %W[
-      -DWITH_NITRO=FALSE
     ]
-    args << "-DPDAL_EMBED_BOOST=" + ((build.with? "boost") ? "FALSE" : "TRUE")
     args << "-DWITH_TESTS=FALSE" if build.without? "tests"
 
     if brewed_python?
+      args << "-DBUILD_PLUGIN_PYTHON=TRUE"
       args << "-DPYTHON_INCLUDE_DIR=#{brewed_python_framework}/Headers"
       args << "-DPYTHON_LIBRARY=#{brewed_python_framework}/Python"
     end
     args << "-DWITH_SWIG_PYTHON=TRUE" if build.with? "swig"
+    if build.with? "icebridge"
+        args << "-DBUILD_PLUGIN_ICEBRIDGE=ON" if build.with? "icebridge"
+    end
 
-    args << "-DWITH_PGPOINTCLOUD=FALSE" if build.without? "postgresql"
+    args << "-DBUILD_PLUGIN_PGPOINTCLOUD=FALSE" if build.without? "postgresql"
     args << "-DWITH_LASZIP=FALSE" if build.without? "laszip"
-    args << "-DWITH_MSGPACK=FALSE" if build.without? "msgpack"
-    args << "-DWITH_P2G=TRUE" if build.with? "points2grid"
-    args << "-DWITH_HEXER=TRUE" if build.with? "hexer"
-    args << "-DWITH_SQLITE=TRUE" if build.with? "soci"
+    args << "-DBUILD_PLUGIN_P2G=TRUE" if build.with? "points2grid"
+    args << "-DWITH_GEOTIFF=ON" if build.with? "points2grid"
+    args << "-DBUILD_PLUGIN_HEXBIN=ON" if build.with? "hexer"
+    args << "-DBUILD_PLUGIN_SQLITE=ON" if build.with? "sqlite"
+    args << "-DBUILD_PLUGIN_NITF=ON" if build.with? "nitro"
+    args << "-DBUILD_PLUGIN_PCL=ON" if build.with? "pcl"
+    args << "-DBUILD_PLUGIN_ICEBRIDGE=ON" if build.with? "hdf5"
+#     args << "-DBUILD_PLUGIN_ATTRIBUTE=ON"
+#     args << "-DWITH_GEOTIFF=ON"
 
     # proprietary formats
     if build.with? "mrsid"
       # TODO: remove cxxstdlib_check, after LizardTech updates binaries for libc++
       #       https://www.lizardtech.com/forums/viewtopic.php?f=6&t=821
       cxxstdlib_check :skip
-      args << "-DWITH_MRSID=TRUE"
+      args << "-DBUILD_PLUGIN_MRSID=TRUE"
       args << "-DMRSID_ROOT=#{Formula["mrsid-sdk"].opt_prefix}"
     end
     if build.with? "oracle"
       # TODO: remove cxxstdlib_check, after Oracle updates binaries for libc++
       cxxstdlib_check :skip
-      args << "-DWITH_ORACLE=TRUE"
+      args << "-DBUILD_PLUGIN_OCI=TRUE"
       ENV["ORACLE_HOME"] = Formula["oracle-client-sdk"].opt_prefix
     else
-      args << "-DWITH_ORACLE=FALSE"
+      args << "-DBUILD_PLUGIN_OCI=FALSE"
     end
 
     mkdir "build" do
