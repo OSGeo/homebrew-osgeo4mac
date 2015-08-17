@@ -28,6 +28,7 @@ from collections import OrderedDict
 import argparse
 
 GRASS_VERSION = '6.4.4'
+GRASS7_VERSION = '7.0.0'
 OSG_VERSION = '3.2.0'
 HOMEBREW_PREFIX = '/usr/local'  # default for Homebrew
 
@@ -70,7 +71,6 @@ def cmake_opts(qi, hb, ver):
         ('GITCOMMAND', '{hb}/bin/git'),
         ('ENABLE_TESTS', 'TRUE'),
         ('WITH_ASTYLE', 'TRUE'),
-        ('WITH_INTERNAL_SPATIALITE', 'FALSE'),
         ('WITH_PYSPATIALITE', 'FALSE'),
         ('WITH_INTERNAL_QWTPOLAR', 'FALSE'),
         (w_server, 'TRUE'),
@@ -82,6 +82,8 @@ def cmake_opts(qi, hb, ver):
         ('POSTGRES_CONFIG', '{hb}/bin/pg_config'),
         ('WITH_GRASS', 'TRUE'),
         ('GRASS_PREFIX', '{hb}/opt/grass-64/grass-' + GRASS_VERSION),
+        ('WITH_GRASS7', 'TRUE'),
+        ('GRASS_PREFIX7', '{hb}/opt/grass-70/grass-' + GRASS7_VERSION),
         ('WITH_GLOBE', 'FALSE'),
         ('OSG_DIR', '{hb}'),
         ('OSGEARTH_DIR', '{hb}'),
@@ -107,6 +109,7 @@ def cmake_opts(qi, hb, ver):
     #  '{hb}/opt/qwtpolar/lib/qwtpolar.framework/qwt'),
     # ('QWTPOLAR_INCLUDE_DIR',
     #  '{hb}/opt/qwtpolar/lib/qwtpolar.framework/Headers'),
+    # ('WITH_INTERNAL_SPATIALITE', 'FALSE'),
 
     if os.path.exists(hb + '/Frameworks/Python.framework/Versions/2.7'):
         cm_opts['PYTHON_EXECUTABLE'] = '{hb}/bin/python'
@@ -155,7 +158,7 @@ def main():
         for _ in range(5):
             s += f.readline()
     # print s
-    p = re.compile(r'CPACK_PACKAGE_VERSION_..... "(.)"')
+    p = re.compile(r'CPACK_PACKAGE_VERSION_..... "(..?)"')
     ver = p.findall(s)
     print ver
 
