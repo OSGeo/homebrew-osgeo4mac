@@ -11,21 +11,20 @@ end
 
 class Qgis28 < Formula
   homepage "http://www.qgis.org"
-  url "https://github.com/qgis/QGIS/archive/final-2_8_0.tar.gz"
-  sha1 "51ca7541a0a20e842f4849454b83f62b6790e051"
-  revision 2
+  url "https://github.com/qgis/QGIS/archive/final-2_8_3.tar.gz"
+  sha256 "8bb7d189a9503bc5a9ff1b2ca749853e9180a60a87952182aacc4fb2182cfd2b"
 
-  bottle do
-    root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
-    sha1 "786a4ba53154fdd9f9cee31a521aaeddf00aa5cb" => :mavericks
-    sha1 "29e8f659c3b624c8a47d360567300ed8c2a62c4f" => :yosemite
-  end
+  # bottle do
+  #   root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
+  #   sha1 "" => :mavericks
+  #   sha1 "" => :yosemite
+  # end
 
   def pour_bottle?
     brewed_python?
   end
 
-  head "https://github.com/qgis/QGIS.git", :branch => "master"
+  head "https://github.com/qgis/QGIS.git", :branch => "release-2_8"
 
   option "enable-isolation", "Isolate .app's environment to HOMEBREW_PREFIX, to coexist with other QGIS installs"
   option "with-debug", "Enable debug build, which outputs info to system.log or console"
@@ -102,19 +101,19 @@ class Qgis28 < Formula
 
   resource "pyqgis-startup" do
     url "https://gist.githubusercontent.com/dakcarto/11385561/raw/7af66d0c8885a888831da6f12298a906484a1471/pyqgis_startup.py"
-    sha1 "13d624e8ccc6bf072bbaeaf68cd6f7309abc1e74"
+    sha256 "3d0adca0c8684f3d907c626fc86d93d73165e184960d16ae883fca665ecc32e6"
     version "2.0.0"
   end
 
-  # patches that represent all backports to release-2_8 branch, since 2.8.0 tag, SHA1 (date)
+  # patches that represent all backports to release-2_8 branch, since 2.8.3 tag, SHA1 (date)
   # see: https://github.com/qgis/QGIS/commits/release-2_8
-  stable do
-    patch do
-      # SHA1 (date) through SHA1 (date) minus windows-formatted patches
-      url "https://gist.githubusercontent.com/dakcarto/715501d9fa5bae0b71ef/raw/79b9e217e6ea160a49f897f4bb40c6f76b424c04/qgis-28.diff"
-      sha1 "8256aba4d4b06ca6bfbf54c71ada79972d957dc5"
-    end
-  end
+  # stable do
+  #   patch do
+  #     # SHA1 (date) through SHA1 (date) minus windows-formatted patches
+  #     url ""
+  #     sha1 ""
+  #   end
+  # end
 
   def install
     # Set bundling level back to 0 (the default in all versions prior to 1.8.0)
@@ -213,15 +212,14 @@ class Qgis28 < Formula
               "org.qgis.qgis2", "org.qgis.qgis2-hb#{build.head? ? "-dev" : ""}"
 
     py_lib = lib/"python2.7/site-packages"
-    qgis_modules = prefix/"QGIS.app/Contents/Resources/python/qgis"
     py_lib.mkpath
-    ln_s qgis_modules, py_lib/"qgis"
+    ln_s "../../../QGIS.app/Contents/Resources/python/qgis", py_lib/"qgis"
 
     ln_s "QGIS.app/Contents/MacOS/fcgi-bin", prefix/"fcgi-bin" if build.with? "server"
 
     doc.mkpath
     mv prefix/"QGIS.app/Contents/Resources/doc/api", doc/"api" if build.with? "api-docs"
-    ln_s prefix/"QGIS.app/Contents/Resources/doc", doc/"doc"
+    ln_s "../../../QGIS.app/Contents/Resources/doc", doc/"doc"
 
     # copy PYQGIS_STARTUP file pyqgis_startup.py, even if not isolating (so tap can be untapped)
     # only works with QGIS > 2.0.1
@@ -230,6 +228,7 @@ class Qgis28 < Formula
 
     bin.mkdir
     touch "#{bin}/qgis" # so it will be linked into HOMEBREW_PREFIX
+    post_install
   end
 
   def post_install
@@ -421,13 +420,6 @@ class Qgis28 < Formula
   end
 
   private
-  # python utils (deprecated in latest Homebrew)
-  # see: https://github.com/Homebrew/homebrew/pull/24842
-
-  #def osx_python?
-  #  p = `python -c "import sys; print(sys.prefix)"`.strip
-  #  p.start_with?("/System/Library/Frameworks/Python.framework")
-  #end
 
   def brewed_python_framework
     HOMEBREW_PREFIX/"Frameworks/Python.framework/Versions/2.7"
