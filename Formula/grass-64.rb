@@ -1,4 +1,5 @@
 class Grass64 < Formula
+  desc "Geographic Resources Analysis Support System"
   homepage "http://grass.osgeo.org/"
 
   stable do
@@ -14,8 +15,9 @@ class Grass64 < Formula
 
   bottle do
     root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
-    sha1 "1c0c397c66ac77f68f4e0f2f4fafa32b97cf6bd5" => :mavericks
-    sha1 "e0d4642c233db79ff6d8ee31bac9008d46cf652c" => :yosemite
+    revision 1
+    sha256 "13723d19221024073a0e781dddf3cbb9ab30e13a3b8d4d50c6eb61d0e60c347f" => :mavericks
+    sha256 "f951bfe72e348529ebd8ee56f202872258ccd803cee472079222d68acfd70e9b" => :yosemite
   end
 
   keg_only "grass is in main tap and same-name bin utilities are installed"
