@@ -11,9 +11,11 @@ class Grass70 < Formula
     patch :DATA
   end
 
-  # bottle do
-  #   root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
-  # end
+  bottle do
+    root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
+    sha256 "6ae0417092eb55fbd2c9dbda226aea8d752befd17058c0f0750e2c46941f11b0" => :mavericks
+    sha256 "7f936053c6f9e5ef74d61a556340463e9ce020b6b4a8df502287d3d97152bc01" => :yosemite
+  end
 
   option "without-gui", "Build without WxPython interface. Command line tools still available."
 
