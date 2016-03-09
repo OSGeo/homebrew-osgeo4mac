@@ -141,7 +141,7 @@ class Qgis214 < Formula
       -DQGIS_MACAPP_DEV_PREFIX='#{dev_fw}'
       -DQGIS_MACAPP_INSTALL_DEV=TRUE
       -DWITH_QSCIAPI=FALSE
-      -DWITH_STAGED_PLUGINS=FALSE
+      -DWITH_STAGED_PLUGINS=TRUE
     ]
 
     args << "-DPYTHON_EXECUTABLE='#{python_exec}'"
