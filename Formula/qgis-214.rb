@@ -56,6 +56,7 @@ class Qgis214 < Formula
   depends_on "pyqt"
   depends_on SipBinary
   depends_on PyQtConfig
+  depends_on "qca"
   depends_on "qscintilla2" # will probably be a C++ lib deps in near future
   depends_on "qwt"
   depends_on "qwtpolar"
