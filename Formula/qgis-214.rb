@@ -15,11 +15,11 @@ class Qgis214 < Formula
   url "https://github.com/qgis/QGIS/archive/ltr-2_14.tar.gz"
   sha256 "c2127335d85741234cbfc846807eba9eaff37ca134ef1a820c1e8fd2b132372b"
 
-  bottle do
-    root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
-    sha256 "6a2d89239b8da548a765beb839d428a81d1a1b34c3e64d8fe4c8699993aff7ef" => :mavericks
-    sha256 "15210d5e07cf9bfe1de8a042c5ddee82acf41b94adb28909a9c79dd6582e91c2" => :yosemite
-  end
+#  bottle do
+#    root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
+#    sha256 "6a2d89239b8da548a765beb839d428a81d1a1b34c3e64d8fe4c8699993aff7ef" => :mavericks
+#    sha256 "15210d5e07cf9bfe1de8a042c5ddee82acf41b94adb28909a9c79dd6582e91c2" => :yosemite
+#  end
 
   def pour_bottle?
     brewed_python?
