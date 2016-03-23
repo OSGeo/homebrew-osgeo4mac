@@ -3,8 +3,8 @@ class Grass70 < Formula
   homepage "http://grass.osgeo.org/"
 
   stable do
-    url "http://grass.osgeo.org/grass70/source/grass-7.0.1.tar.gz"
-    sha256 "0987dd1618fde24b05785a502c7db8c09401a522a7a3ee50543068fab4eb405f"
+    url "http://grass.osgeo.org/grass70/source/grass-7.0.3.tar.gz"
+    sha256 "6c414938d831583b97554cb49698529310defba467b11f6a85caf6ca405680df"
 
     # Patches to keep files from being installed outside of the prefix.
     # Remove lines from Makefile that try to install to /Library/Documentation.
@@ -12,9 +12,9 @@ class Grass70 < Formula
   end
 
   bottle do
-    root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
-    sha256 "6ae0417092eb55fbd2c9dbda226aea8d752befd17058c0f0750e2c46941f11b0" => :mavericks
-    sha256 "7f936053c6f9e5ef74d61a556340463e9ce020b6b4a8df502287d3d97152bc01" => :yosemite
+    # root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
+    # sha256 "6ae0417092eb55fbd2c9dbda226aea8d752befd17058c0f0750e2c46941f11b0" => :mavericks
+    # sha256 "7f936053c6f9e5ef74d61a556340463e9ce020b6b4a8df502287d3d97152bc01" => :yosemite
   end
 
   option "without-gui", "Build without WxPython interface. Command line tools still available."
@@ -122,6 +122,12 @@ class Grass70 < Formula
       args << "--with-ffmpeg-includes=#{(Dir["#{ffmpeg.opt_include}/*"]).join(" ")}"
       args << "--with-ffmpeg-libs=#{ffmpeg.opt_lib}"
       args << "--with-ffmpeg"
+    end
+
+    if MacOS.version >= :el_capitan
+      # handle stripping of DYLD_* env vars by SIP when passed to utilities;
+      # HOME env var is .brew_home during build, so it is still checked for lib
+      ln_sf "#{buildpath}/dist.x86_64-apple-darwin#{`uname -r`.strip}/lib", ".brew_home/lib"
     end
 
     system "./configure", "--prefix=#{prefix}", *args
