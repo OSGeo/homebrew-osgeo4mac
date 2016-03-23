@@ -10,7 +10,7 @@ class Libght < Formula
   depends_on "cmake" => :build
   depends_on "proj"
   depends_on "liblas"
-  depends_on "cunit" if build.with? "tests"
+  depends_on "cunit"
 
   def install
     ENV.libxml2
