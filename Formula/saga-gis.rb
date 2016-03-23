@@ -1,7 +1,7 @@
 class SagaGis < Formula
   homepage "http://saga-gis.org"
-  url "https://downloads.sourceforge.net/project/saga-gis/SAGA%20-%202.1/SAGA%202.1.2/saga_2.1.2.tar.gz"
-  sha1 "9dddd3e03bd5f640fedd318ee8ff187785745e86"
+  url "https://downloads.sourceforge.net/project/saga-gis/SAGA%20-%202.1/SAGA%202.1.4/saga_2.1.4.tar.gz"
+  sha1 "b470f183aff4aba402b08d6a55cb3d5e6078f753"
 
   bottle do
     root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
@@ -14,9 +14,9 @@ class SagaGis < Formula
   option "with-app", "Build SAGA.app Package"
   option "with-liblas", "Build with internal libLAS 1.2 support"
 
-  depends_on :automake
-  depends_on :autoconf
-  depends_on :libtool
+  depends_on "automake" => :build
+  depends_on "autoconf" => :build
+  depends_on "libtool" => :build
   depends_on "gdal"
   depends_on "jasper"
   depends_on "proj"
@@ -36,12 +36,6 @@ class SagaGis < Formula
     sha1 "1ff67c6d600dd161684d3e8b33a1d138c65b00f4"
   end
 
-  resource "projects" do
-    url "http://trac.osgeo.org/proj/export/2409/branches/4.8/proj/src/projects.h"
-    sha1 "867367a8ef097d5ff772b7f50713830d2d4bc09c"
-    version "4.8.0"
-  end
-
   resource "liblas" do
     url "https://github.com/libLAS/libLAS/archive/1.2.1.tar.gz"
     sha1 "24a775484285d4e35eb8034bf298f740d7123569"
@@ -56,8 +50,6 @@ class SagaGis < Formula
   end
 
   def install
-    (buildpath/"src/modules/projection/pj_proj4").install resource("projects")
-
     # Need to remove unsupported libraries from various Makefiles
     # http://sourceforge.net/p/saga-gis/wiki/Compiling%20SAGA%20on%20Mac%20OS%20X
     inreplace "src/saga_core/saga_gui/Makefile.am", "aui,base,", ""
