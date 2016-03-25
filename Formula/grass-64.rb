@@ -3,21 +3,20 @@ class Grass64 < Formula
   homepage "http://grass.osgeo.org/"
 
   stable do
-    url "http://grass.osgeo.org/grass64/source/grass-6.4.4.tar.gz"
-    sha1 "0e4dac9fb3320a26e4f640f641485fde0323dd46"
+    url "https://grass.osgeo.org/grass64/source/grass-6.4.5.tar.gz"
+    sha256 "f501da62807eb08efcb85820859fe5ade9bc392e20641b606273c956bb678f3e"
 
     # Patches to keep files from being installed outside of the prefix.
     # Remove lines from Makefile that try to install to /Library/Documentation.
     # Also, quick patch for compiling with clang (as yet, unreported issue)
     patch :DATA
   end
-  revision 1
 
   bottle do
-    root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
-    revision 1
-    sha256 "13723d19221024073a0e781dddf3cbb9ab30e13a3b8d4d50c6eb61d0e60c347f" => :mavericks
-    sha256 "f951bfe72e348529ebd8ee56f202872258ccd803cee472079222d68acfd70e9b" => :yosemite
+    # root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
+    # revision 1
+    # sha256 "13723d19221024073a0e781dddf3cbb9ab30e13a3b8d4d50c6eb61d0e60c347f" => :mavericks
+    # sha256 "f951bfe72e348529ebd8ee56f202872258ccd803cee472079222d68acfd70e9b" => :yosemite
   end
 
   keg_only "grass is in main tap and same-name bin utilities are installed"
@@ -40,7 +39,8 @@ class Grass64 < Formula
   depends_on :postgresql => :optional
   depends_on :mysql => :optional
   depends_on "cairo"
-  depends_on :x11  # needs to find at least X11/include/GL/gl.h
+  # needs to find at least X11/include/GL/gl.h
+  depends_on :x11
 
   def headless?
     # The GRASS GUI is based on WxPython.
@@ -51,7 +51,7 @@ class Grass64 < Formula
     readline = Formula["readline"].opt_prefix
     gettext = Formula["gettext"].opt_prefix
 
-    #noinspection RubyLiteralArrayInspection
+    # noinspection RubyLiteralArrayInspection
     args = [
       "--disable-debug", "--disable-dependency-tracking",
       "--enable-largefile",
@@ -109,9 +109,15 @@ class Grass64 < Formula
       args << "--with-mysql"
     end
 
+    if MacOS.version >= :el_capitan
+      # handle stripping of DYLD_* env vars by SIP when passed to utilities;
+      # HOME env var is .brew_home during build, so it is still checked for lib
+      ln_sf "#{buildpath}/dist.x86_64-apple-darwin#{`uname -r`.strip}/lib", ".brew_home/lib"
+    end
+
     system "./configure", "--prefix=#{prefix}", *args
-    system "make GDAL_DYNAMIC=" # make and make install must be separate steps.
-    system "make GDAL_DYNAMIC= install" # GDAL_DYNAMIC set to blank for r.external compatability
+    system "make", "GDAL_DYNAMIC=" # make and make install must be separate steps.
+    system "make", "GDAL_DYNAMIC=", "install" # GDAL_DYNAMIC set to blank for r.external compatability
   end
 
   def post_install
