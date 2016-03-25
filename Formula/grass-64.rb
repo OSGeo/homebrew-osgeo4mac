@@ -141,7 +141,12 @@ class Grass64 < Formula
         EOS
     end
   end
+
+  test do
+    system "#{bin}/grass64", "--version"
+  end
 end
+
 
 __END__
 diff --git a/Makefile b/Makefile
