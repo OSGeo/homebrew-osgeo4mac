@@ -28,8 +28,8 @@ import subprocess
 from collections import OrderedDict
 
 HOME = os.path.expanduser('~')
-GRASS_VERSION = '6.4.4'
-OSG_VERSION = '3.2.0'
+GRASS_VERSION = '7.0.3'
+OSG_VERSION = '3.4.0'
 HOMEBREW_PREFIX = '/usr/local'
 QGIS_LOG_DIR = HOME + '/Library/Logs/QGIS'
 QGIS_LOG_FILE = QGIS_LOG_DIR + '/qgis-dev.log'
@@ -37,9 +37,9 @@ QGIS_LOG_FILE = QGIS_LOG_DIR + '/qgis-dev.log'
 
 def env_vars(ap, hb, qb='', ql=''):
     options = OrderedDict()
-    options['PATH'] = '{hb}/bin:{hb}/sbin:' + os.environ['PATH']
+    options['PATH'] = '{hb}/opt/gdal-20/bin:{hb}/bin:{hb}/sbin:' + os.environ['PATH']
 
-    dyld_path = '{hb}/opt/sqlite/lib:{hb}/opt/libxml2/lib:{hb}/lib'
+    dyld_path = '{hb}/opt/gdal-20/lib:{hb}/opt/sqlite/lib:{hb}/opt/libxml2/lib:{hb}/lib'
     run_from_build = False
     if qb:
         qbr = os.path.realpath(qb)
@@ -64,8 +64,9 @@ def env_vars(ap, hb, qb='', ql=''):
                                     '/enviro/python_startup.py'
         options['PYTHONHOME'] = '{hb}/Frameworks/Python.framework/Versions/2.7'
 
-    options['PYTHONPATH'] = '{hb}/lib/python2.7/site-packages'
-    options['GDAL_DRIVER_PATH'] = '{hb}/lib/gdalplugins'
+    options['PYTHONPATH'] = '{hb}/opt/gdal-20/lib/python2.7/site-packages:' \
+                            '{hb}/lib/python2.7/site-packages'
+    options['GDAL_DRIVER_PATH'] = '{hb}/opt/gdal-20/lib/gdalplugins'
     options['GRASS_PREFIX'] = '{hb}/opt/grass-' + GRASS_VERSION
     options['OSG_LIBRARY_PATH'] = '{hb}/lib/osgPlugins-' + OSG_VERSION
     options['QGIS_LOG_FILE'] = ql
@@ -121,7 +122,7 @@ def main():
     if not os.path.isabs(ap) or not os.path.exists(ap):
         print 'Application can not be resolved to an existing absolute path.'
         sys.exit(1)
-    
+
     # QGIS Browser.app?
     browser = 'Browser.' in ap
 
@@ -192,30 +193,31 @@ def main():
 
     # update modification date on app bundle, or changes won't take effect
     subprocess.call(['/usr/bin/touch', ap])
-    
+
     # add environment-wrapped launcher shell script
     wrp_scr = ap + '/Contents/MacOS/{0}.sh'.format(app_id)
 
     # override vars that need to prepend existing vars
-    evars['PATH'] = '{hb}/bin:{hb}/sbin:$PATH'.format(hb=hb)
+    evars['PATH'] = '{hb}/opt/gdal-20/bin:{hb}/bin:{hb}/sbin:$PATH'.format(hb=hb)
     evars['PYTHONPATH'] = \
+        '{hb}/opt/gdal-20/lib/python2.7/site-packages:' \
         '{hb}/lib/python2.7/site-packages:$PYTHONPATH'.format(hb=hb)
-    
+
     if os.path.exists(wrp_scr):
         os.remove(wrp_scr)
-    
+
     with open(wrp_scr, 'a') as f:
         f.write('#!/bin/bash\n\n')
 
         # get runtime parent directory
         f.write('DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")"; pwd -P)\n\n')
-        
+
         # add the variables
         for k, v in evars.iteritems():
             f.write('export {0}={1}\n'.format(k, v))
-        
+
         f.write('\n"$DIR/{0}" "$@"\n'.format(app_name))
-        
+
     os.chmod(wrp_scr, stat.S_IRUSR | stat.S_IWUSR | stat.S_IEXEC)
 
     print 'Done setting variables'
