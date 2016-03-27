@@ -39,7 +39,7 @@ class Grass64 < Formula
   depends_on :postgresql => :optional
   depends_on :mysql => :optional
   depends_on "cairo"
-  depends_on :x11  # needs to find at least X11/include/GL/gl.h
+  depends_on :x11 # needs to find at least X11/include/GL/gl.h
 
   def headless?
     # The GRASS GUI is based on WxPython.
@@ -50,7 +50,7 @@ class Grass64 < Formula
     readline = Formula["readline"].opt_prefix
     gettext = Formula["gettext"].opt_prefix
 
-    #noinspection RubyLiteralArrayInspection
+    # noinspection RubyLiteralArrayInspection
     args = [
       "--disable-debug", "--disable-dependency-tracking",
       "--enable-largefile",
@@ -121,13 +121,13 @@ class Grass64 < Formula
 
   def post_install
     # ensure QGIS's Processing plugin recognizes install
-    ln_sf "../bin/grass64", prefix/"grass-#{version.to_s}/grass.sh"
+    ln_sf "../bin/grass64", prefix/"grass-#{version}/grass.sh"
     # link so settings in external apps don't need updated on grass version bump
     # in QGIS Processing options, GRASS folder = HOMEBREW_PREFIX/opt/grass-64/grass-base
-    ln_sf "grass-#{version.to_s}", prefix/"grass-base"
+    ln_sf "grass-#{version}", prefix/"grass-base"
   end
 
-  def formula_site_packages f
+  def formula_site_packages(f)
     `python -c "import os, sys, site; sp1 = list(sys.path); site.addsitedir('#{Formula[f].opt_lib}/python2.7/site-packages'); print(os.pathsep.join([x for x in sys.path if x not in sp1]))"`.strip
   end
 
