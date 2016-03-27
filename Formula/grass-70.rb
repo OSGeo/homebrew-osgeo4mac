@@ -18,6 +18,7 @@ class Grass70 < Formula
   end
 
   option "without-gui", "Build without WxPython interface. Command line tools still available."
+  option "with-gdal-1", "Build with GDAL/OGR v1.x instead of v2.x"
 
   # TODO: test on 10.6 first. may work with latest wxWidgets 3.0
   # depends on :macos => :lion
@@ -26,7 +27,11 @@ class Grass70 < Formula
   depends_on "pkg-config" => :build
   depends_on "gettext"
   depends_on "readline"
-  depends_on "gdal"
+  if build.with? "gdal-1"
+    depends_on "gdal"
+  else
+    depends_on "gdal-20"
+  end
   depends_on "libtiff"
   depends_on "unixodbc"
   depends_on "fftw"
