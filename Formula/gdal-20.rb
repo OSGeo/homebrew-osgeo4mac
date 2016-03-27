@@ -9,6 +9,7 @@ class Gdal20 < Formula
     depends_on "doxygen" => :build
   end
 
+  keg_only "Older version of gdal is in main tap and installs similar components"
   option "with-complete", "Use additional Homebrew libraries to provide more drivers."
   option "with-opencl", "Build with OpenCL acceleration."
   option "with-armadillo", "Build with Armadillo accelerated TPS transforms."
