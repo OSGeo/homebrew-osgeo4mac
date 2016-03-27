@@ -16,20 +16,20 @@ while IFS= read -r file
 do
   # get the formula name
   NAME=$(echo -n "$file" | sed -E "s|^${HB}/opt/([^/]+)/INSTALL_RECEIPT.json$|\1|")
-    
+
   # get, cleanup and append used options
   OPTIONS=$(grep -l -v "\"used_options\":\[\]" "$file")
-  
+
   if [ -z "$OPTIONS" ]; then
     NAME_OPTS="${NAME}"
   else
     OPTIONS=$(sed -E -e 's/^.+"used_options":\[([^]]+)\].*$/\1/' -e 's/"//g' -e "s/,/ /g" "$file")
     NAME_OPTS="${NAME} ${OPTIONS}"
   fi
-  
+
   echo "${NAME_OPTS}" >> /tmp/not-built-bottles_w-options.txt
-  
+
 done < /tmp/not-built-bottles.txt.bkup
 
-
-open /tmp/not-built-bottles_w-options.txt
+echo "Opening /tmp/not-built-bottles_w-options.txt"
+nano /tmp/not-built-bottles_w-options.txt

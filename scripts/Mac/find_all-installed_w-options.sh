@@ -33,4 +33,5 @@ done < /tmp/homebrew-installed.txt
 printf "${NAME_OPTS}" >> /tmp/homebrew-installed-w-options.txt
 printf "${NAMES}" >> /tmp/homebrew-installed-w-options.txt
 
-open /tmp/homebrew-installed-w-options.txt
+echo "Opening /tmp/homebrew-installed-w-options.txt"
+nano /tmp/homebrew-installed-w-options.txt
