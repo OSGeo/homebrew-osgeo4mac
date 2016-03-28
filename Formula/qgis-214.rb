@@ -212,6 +212,12 @@ class Qgis214 < Formula
     # see: https://github.com/Homebrew/homebrew/pull/28597
     ENV["PYTHONHOME"] = "#{brewed_python_framework}" if brewed_python?
 
+    # handle some compiler warnings
+    ENV["CXX_EXTRA_FLAGS"] = "-Wno-unused-private-field -Wno-deprecated-register"
+    if ENV.compiler == :clang && (MacOS::Xcode.version >= "7.0" || MacOS::CLT.version >= "7.0")
+      ENV.append "CXX_EXTRA_FLAGS", "-Wno-inconsistent-missing-override"
+    end
+
     mkdir "build" do
       system "cmake", "..", *args
       #system "bbedit", "CMakeCache.txt"
