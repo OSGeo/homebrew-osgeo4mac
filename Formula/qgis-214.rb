@@ -82,7 +82,6 @@ class Qgis214 < Formula
   # core plugins (c++ and python)
   if build.with? "grass"
     depends_on "grass-64"
-    depends_on "gdal-grass64"
     depends_on "gettext"
   end
 
