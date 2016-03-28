@@ -56,6 +56,7 @@ class Gdal20 < Formula
     depends_on "epsilon"
     depends_on "libdap"
     depends_on "libxml2"
+    depends_on "homebrew/versions/openjpeg21"
 
     # Vector libraries
     depends_on "unixodbc" # OS X version is not complete enough
@@ -153,6 +154,7 @@ class Gdal20 < Formula
       dods-root
       epsilon
       webp
+      openjpeg
       podofo
       pdfium
     ]
@@ -178,7 +180,6 @@ class Gdal20 < Formula
       ogdi
       fme
       hdf4
-      openjpeg
       fgdb
       ecw
       kakadu
