@@ -12,8 +12,8 @@ end
 class Qgis214 < Formula
   desc "Open Source Geographic Information System"
   homepage "http://www.qgis.org"
-  url "https://github.com/qgis/QGIS/archive/ltr-2_14.tar.gz"
-  sha256 "c2127335d85741234cbfc846807eba9eaff37ca134ef1a820c1e8fd2b132372b"
+  url "https://github.com/qgis/QGIS/archive/final-2_14_1.tar.gz"
+  sha256 "ba665e8ee154446b8a5a62858ec814ddae438b5ca2988303184f720237a46aeb"
 
 #  bottle do
 #    root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
