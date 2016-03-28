@@ -112,8 +112,8 @@ class Qgis214 < Formula
     version "2.0.0"
   end
 
-  # patches that represent all backports to release-2_8 branch, since 2.8.3 tag, SHA1 (date)
-  # see: https://github.com/qgis/QGIS/commits/release-2_8
+  # patches that represent all backports to release-2_14 branch, since 2.14.1 tag, SHA1 (date)
+  # see: https://github.com/qgis/QGIS/commits/release-2_14
   # stable do
   #   patch do
   #     # SHA1 (date) through SHA1 (date) minus windows-formatted patches
