@@ -218,6 +218,16 @@ class Qgis214 < Formula
       ENV.append "CXX_EXTRA_FLAGS", "-Wno-inconsistent-missing-override"
     end
 
+    # Skip building heatmap plugin on 10.11, as it fails linking against gdal-20 v2.0.2:
+    # Undefined symbols for architecture x86_64:
+    # "GDALRasterBand::RasterIO(GDALRWFlag, int, int, int, int, void*, int, int, GDALDataType, int, int)", referenced from:
+    #     Heatmap::run() in heatmap.cpp.o
+    # ld: symbol(s) not found for architecture x86_64
+    if MacOS.version >= :el_capitan && build.without?("gdal-1")
+      inreplace "src/plugins/CMakeLists.txt",
+                "ADD_SUBDIRECTORY(heatmap)", "#ADD_SUBDIRECTORY(heatmap)"
+    end
+
     mkdir "build" do
       system "cmake", "..", *args
       #system "bbedit", "CMakeCache.txt"
