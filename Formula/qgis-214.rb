@@ -28,7 +28,7 @@ class Qgis214 < Formula
   head "https://github.com/qgis/QGIS.git", :branch => "release-2_14"
 
   option "enable-isolation", "Isolate .app's environment to HOMEBREW_PREFIX, to coexist with other QGIS installs"
-  option "with-debug", "Enable debug build, which outputs info to system.log or console"
+  option "without-debug", "Disable debug build, which outputs info to system.log or console"
   option "without-server", "Build without QGIS Server (qgis_mapserv.fcgi)"
   option "without-postgresql", "Build without current PostgreSQL client"
   option "with-gdal-1", "Build with GDAL/OGR v1.x instead of v2.x"
