@@ -31,6 +31,7 @@ class Qgis214 < Formula
   option "with-debug", "Enable debug build, which outputs info to system.log or console"
   option "without-server", "Build without QGIS Server (qgis_mapserv.fcgi)"
   option "without-postgresql", "Build without current PostgreSQL client"
+  option "with-gdal-1", "Build with GDAL/OGR v1.x instead of v2.x"
   option "with-globe", "Build with Globe plugin, based upon osgEarth"
   option "without-postgis", "Build without extra PostGIS geospatial database extender"
   option "without-grass", "Build without GRASS 6 integration plugin and Processing plugin support"
@@ -70,7 +71,11 @@ class Qgis214 < Formula
   depends_on "postgresql" => :recommended
 
   # core providers
-  depends_on "gdal"
+  if build.with? "gdal-1"
+    depends_on "gdal"
+  else
+    depends_on "gdal-20"
+  end
   depends_on "oracle-client-sdk" if build.with? "oracle"
   # TODO: add MSSQL third-party support formula?, :optional
 
@@ -144,6 +149,8 @@ class Qgis214 < Formula
       -DWITH_QSCIAPI=FALSE
       -DWITH_STAGED_PLUGINS=TRUE
     ]
+
+    args << "-DGDAL_CONFIG=#{Formula["gdal-20"].opt_bin}/gdal-config" if build.without? "gdal-1"
 
     args << "-DPYTHON_EXECUTABLE='#{python_exec}'"
     # brewed python is used if installed
