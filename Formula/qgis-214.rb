@@ -33,8 +33,8 @@ class Qgis214 < Formula
   option "without-postgresql", "Build without current PostgreSQL client"
   option "with-gdal-1", "Build with GDAL/OGR v1.x instead of v2.x"
   option "with-globe", "Build with Globe plugin, based upon osgEarth"
-  option "without-grass", "Build without GRASS 6 integration plugin and Processing plugin support"
-  option "with-grass7", "Build with GRASS 7 for Processing plugin"
+  option "without-grass", "Build without GRASS 7 integration plugin and Processing plugin support"
+  option "with-grass6", "Build extra GRASS 6 for Processing plugin"
   option "with-oracle", "Build extra Oracle geospatial database and raster support"
   option "with-orfeo", "Build extra Orfeo Toolbox for Processing plugin"
   option "with-r", "Build extra R for Processing plugin"
@@ -81,7 +81,7 @@ class Qgis214 < Formula
 
   # core plugins (c++ and python)
   if build.with? "grass"
-    depends_on "grass-64"
+    depends_on "grass-70"
     depends_on "gettext"
   end
 
@@ -97,8 +97,8 @@ class Qgis214 < Formula
   depends_on "qt-mysql" => :optional # for eVis plugin (non-functional in 2.x?)
 
   # core processing plugin extras
-  # see `postgis` and `grass` above
-  depends_on "grass-70" if build.with? "grass7"
+  # see `grass` above
+  depends_on "grass-64" if build.with? "grass6"
   depends_on "orfeo-42" if build.with? "orfeo"
   depends_on "homebrew/science/r" => :optional
   depends_on "saga-gis" => :optional
@@ -150,6 +150,7 @@ class Qgis214 < Formula
       -DQGIS_MACAPP_INSTALL_DEV=TRUE
       -DWITH_QSCIAPI=FALSE
       -DWITH_STAGED_PLUGINS=TRUE
+      -DWITH_GRASS=FALSE
     ]
 
     args << "-DGDAL_CONFIG=#{Formula["gdal-20"].opt_bin}/gdal-config" if build.without? "gdal-1"
@@ -175,11 +176,11 @@ class Qgis214 < Formula
 
     args << "-DPOSTGRES_CONFIG=#{Formula["postgresql"].opt_bin}/pg_config" if build.with? "postgresql"
 
-    args << "-DWITH_GRASS=#{build.with?("grass") ? "TRUE" : "FALSE"}"
+    args << "-DWITH_GRASS7=#{build.with?("grass") ? "TRUE" : "FALSE"}"
     if build.with? "grass"
       # this is to build the GRASS Plugin, not for Processing plugin support
-      grass = Formula["grass-64"]
-      args << "-DGRASS_PREFIX='#{grass.opt_prefix}/grass-#{grass.version.to_s}'"
+      grass7 = Formula["grass-70"]
+      args << "-DGRASS_PREFIX7='#{grass7.opt_prefix}/grass-#{grass7.version.to_s}'"
       # So that `libintl.h` can be found
       ENV.append "CXXFLAGS", "-I'#{Formula["gettext"].opt_include}'"
     end
@@ -279,25 +280,24 @@ class Qgis214 < Formula
 
     proc_algs = "Contents/Resources/python/plugins/processing/algs"
     unless opts.include? "without-grass"
-      grass = Formula["grass-64"]
+      grass = Formula["grass-70"]
       envars[:GRASS_PREFIX] = "#{grass.opt_prefix}/grass-#{grass.version.to_s}"
-      begin
-        inreplace app/"#{proc_algs}/grass/GrassUtils.py",
-                  "/Applications/GRASS-6.4.app/Contents/MacOS",
-                  HOMEBREW_PREFIX/"opt/grass-64/grass-base" unless bottle_poured
-      rescue Utils::InreplaceError
-        puts "GRASS 6 GrassUtils already updated"
-      end
-
-    end
-
-    if opts.include? "with-grass7"
       begin
         inreplace app/"#{proc_algs}/grass7/Grass7Utils.py",
                   "/Applications/GRASS-7.0.app/Contents/MacOS",
                   HOMEBREW_PREFIX/"opt/grass-70/grass-base"
       rescue Utils::InreplaceError
         puts "GRASS 7 GrassUtils already updated"
+      end
+    end
+
+    if opts.include? "with-grass6"
+      begin
+        inreplace app/"#{proc_algs}/grass/GrassUtils.py",
+                  "/Applications/GRASS-6.4.app/Contents/MacOS",
+                  HOMEBREW_PREFIX/"opt/grass-64/grass-base" unless bottle_poured
+      rescue Utils::InreplaceError
+        puts "GRASS 6 GrassUtils already updated"
       end
     end
 
