@@ -33,7 +33,6 @@ class Qgis214 < Formula
   option "without-postgresql", "Build without current PostgreSQL client"
   option "with-gdal-1", "Build with GDAL/OGR v1.x instead of v2.x"
   option "with-globe", "Build with Globe plugin, based upon osgEarth"
-  option "without-postgis", "Build without extra PostGIS geospatial database extender"
   option "without-grass", "Build without GRASS 6 integration plugin and Processing plugin support"
   option "with-grass7", "Build with GRASS 7 for Processing plugin"
   option "with-oracle", "Build extra Oracle geospatial database and raster support"
@@ -162,8 +161,6 @@ class Qgis214 < Formula
     if build.head? && File.exists?("#{cached_download}/.git/index")
       args << "-DGITCOMMAND=#{Formula["git"].opt_bin}/git"
       args << "-DGIT_MARKER=#{cached_download}/.git/index"
-    else
-      args << "-DGIT_MARKER=''" # if git clone borked, or release tarball, ends up defined as 'exported'
     end
 
     args << "-DWITH_SERVER=#{build.with?("server") ? "TRUE" : "FALSE"}"
