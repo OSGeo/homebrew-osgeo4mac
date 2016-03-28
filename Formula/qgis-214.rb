@@ -82,6 +82,7 @@ class Qgis214 < Formula
   end
 
   if build.with? "globe"
+    # this is pretty borked with OS X >= 10.10+
     depends_on "open-scene-graph" => ["with-qt"]
     depends_on "homebrew/science/osgearth"
   end
