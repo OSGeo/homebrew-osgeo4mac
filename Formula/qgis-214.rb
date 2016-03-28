@@ -40,6 +40,7 @@ class Qgis214 < Formula
   option "with-r", "Build extra R for Processing plugin"
   option "with-saga-gis", "Build extra Saga GIS for Processing plugin"
   option "with-qt-mysql", "Build extra Qt MySQL plugin for eVis plugin"
+  option "with-qspatialite", "Build QSpatialite Qt database driver"
   option "with-api-docs", "Build the API documentation with Doxygen and Graphviz"
 
   depends_on UnlinkedQGIS214
@@ -195,6 +196,8 @@ class Qgis214 < Formula
       args << "-DOCI_INCLUDE_DIR=#{oracle_opt}/sdk/include"
       args << "-DOCI_LIBRARY=#{oracle_opt}/lib/libclntsh.dylib"
     end
+
+    args << "-DWITH_QSPATIALITE=#{build.with?("qspatialite") ? "TRUE" : "FALSE"}"
 
     args << "-DWITH_APIDOC=#{build.with?("api-docs") ? "TRUE" : "FALSE"}"
 
