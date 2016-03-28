@@ -135,6 +135,8 @@ class Qgis214 < Formula
     args += %W[
       -DBISON_EXECUTABLE=#{Formula["bison"].opt_bin}/bison
       -DENABLE_TESTS=FALSE
+      -DENABLE_MODELTEST=FALSE
+      -DSUPPRESS_QT_WARNINGS=TRUE
       -DQWT_INCLUDE_DIR=#{qwt_fw}/Headers
       -DQWT_LIBRARY=#{qwt_fw}/qwt
       -DQWTPOLAR_INCLUDE_DIR=#{qwtpolar_fw}/Headers
@@ -142,6 +144,7 @@ class Qgis214 < Formula
       -DQSCINTILLA_INCLUDE_DIR=#{qsci_opt}/include
       -DQSCINTILLA_LIBRARY=#{qsci_opt}/lib/libqscintilla2.dylib
       -DQSCI_SIP_DIR=#{qsci_opt}/share/sip
+      -DWITH_QWTPOLAR=TRUE
       -DWITH_INTERNAL_QWTPOLAR=FALSE
       -DQGIS_MACAPP_BUNDLE=0
       -DQGIS_MACAPP_DEV_PREFIX='#{dev_fw}'
