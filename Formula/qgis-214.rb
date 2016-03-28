@@ -85,7 +85,7 @@ class Qgis214 < Formula
     depends_on "open-scene-graph" => ["with-qt"]
     depends_on "homebrew/science/osgearth"
   end
-  depends_on "gpsbabel" => [:recommended, "with-libusb"]
+  depends_on "gpsbabel"
   # TODO: remove "pyspatialite" when PyPi package supports spatialite 4.x
   #       or DB Manager supports libspatialite >= 4.2.0 (with mod_spatialite)
   depends_on "pyspatialite" # for DB Manager
