@@ -155,7 +155,10 @@ class Qgis214 < Formula
       -DWITH_GRASS=FALSE
     ]
 
-    args << "-DGDAL_CONFIG=#{Formula["gdal-20"].opt_bin}/gdal-config" if build.without? "gdal-1"
+    if build.without? "gdal-1"
+      args << "-DGDAL_LIBRARY=#{Formula["gdal-20"].opt_lib}/libgdal.dylib"
+      args << "-DGDAL_INCLUDE_DIR=#{Formula["gdal-20"].opt_include}"
+    end
 
     args << "-DPYTHON_EXECUTABLE='#{python_exec}'"
     # brewed python is used if installed
