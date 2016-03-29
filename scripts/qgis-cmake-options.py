@@ -89,12 +89,9 @@ def cmake_opts(qi, hb, ver):
         ('POSTGRES_CONFIG', '{hb}/bin/pg_config'),
         ('WITH_QSPATIALITE', 'TRUE'),
         ('WITH_GRASS', 'FALSE'),
-        ('WITH_GRASS7', 'FALSE'),
+        ('WITH_GRASS7', 'TRUE'),
         ('GRASS_PREFIX7', '{hb}/opt/grass-70/grass-' + GRASS7_VERSION),
         ('WITH_GLOBE', 'FALSE'),
-        ('OSG_DIR', '{hb}'),
-        ('OSGEARTH_DIR', '{hb}'),
-        ('OSG_PLUGINS_PATH', '{hb}/lib/osgPlugins-' + OSG_VERSION),
         ('WITH_ORACLE', 'FALSE'),
         ('QGIS_MACAPP_BUNDLE', '0')
     ])
@@ -102,6 +99,11 @@ def cmake_opts(qi, hb, ver):
     # ('CMAKE_FRAMEWORK_PATH', '""')
 
     # Supplemental
+
+    # ('OSG_DIR', '{hb}'),
+    # ('OSGEARTH_DIR', '{hb}'),
+    # ('OSG_PLUGINS_PATH', '{hb}/lib/osgPlugins-' + OSG_VERSION),
+
     # ('GRASS_PREFIX', '{hb}/opt/grass-64/grass-' + GRASS_VERSION),
 
     # ('OCI_INCLUDE_DIR', '{hb}/opt/oracle-client-sdk/sdk/include'),
