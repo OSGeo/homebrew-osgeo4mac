@@ -15,11 +15,11 @@ class Qgis214 < Formula
   url "https://github.com/qgis/QGIS/archive/final-2_14_1.tar.gz"
   sha256 "ba665e8ee154446b8a5a62858ec814ddae438b5ca2988303184f720237a46aeb"
 
-#  bottle do
-#    root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
-#    sha256 "6a2d89239b8da548a765beb839d428a81d1a1b34c3e64d8fe4c8699993aff7ef" => :mavericks
-#    sha256 "15210d5e07cf9bfe1de8a042c5ddee82acf41b94adb28909a9c79dd6582e91c2" => :yosemite
-#  end
+  # bottle do
+  #   root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
+  #   sha256 "6a2d89239b8da548a765beb839d428a81d1a1b34c3e64d8fe4c8699993aff7ef" => :mavericks
+  #   sha256 "15210d5e07cf9bfe1de8a042c5ddee82acf41b94adb28909a9c79dd6582e91c2" => :yosemite
+  # end
 
   def pour_bottle?
     brewed_python?
@@ -27,7 +27,7 @@ class Qgis214 < Formula
 
   head "https://github.com/qgis/QGIS.git", :branch => "release-2_14"
 
-  option "enable-isolation", "Isolate .app's environment to HOMEBREW_PREFIX, to coexist with other QGIS installs"
+  option "with-isolation", "Isolate .app's environment to HOMEBREW_PREFIX, to coexist with other QGIS installs"
   option "without-debug", "Disable debug build, which outputs info to system.log or console"
   option "without-server", "Build without QGIS Server (qgis_mapserv.fcgi)"
   option "without-postgresql", "Build without current PostgreSQL client"
@@ -43,6 +43,8 @@ class Qgis214 < Formula
   option "with-qspatialite", "Build QSpatialite Qt database driver"
   option "with-api-docs", "Build the API documentation with Doxygen and Graphviz"
 
+  deprecated_option "enable-isolation" => "with-isolation"
+
   depends_on UnlinkedQGIS214
 
   # core qgis
@@ -52,7 +54,7 @@ class Qgis214 < Formula
     depends_on "graphviz" => [:build, "with-freetype"]
     depends_on "doxygen" => [:build, "with-dot"] # with graphviz support
   end
-  depends_on (build.include? "enable-isolation" || MacOS.version < :lion ) ? "python" : :python
+  depends_on (build.with?("isolation") || MacOS.version < :lion) ? "python" : :python
   depends_on "qt"
   depends_on "pyqt"
   depends_on SipBinary
@@ -162,7 +164,7 @@ class Qgis214 < Formula
     end
 
     # find git revision for HEAD build
-    if build.head? && File.exists?("#{cached_download}/.git/index")
+    if build.head? && File.exist?("#{cached_download}/.git/index")
       args << "-DGITCOMMAND=#{Formula["git"].opt_bin}/git"
       args << "-DGIT_MARKER=#{cached_download}/.git/index"
     end
@@ -180,7 +182,7 @@ class Qgis214 < Formula
     if build.with? "grass"
       # this is to build the GRASS Plugin, not for Processing plugin support
       grass7 = Formula["grass-70"]
-      args << "-DGRASS_PREFIX7='#{grass7.opt_prefix}/grass-#{grass7.version.to_s}'"
+      args << "-DGRASS_PREFIX7='#{grass7.opt_prefix}/grass-#{grass7.version}'"
       # So that `libintl.h` can be found
       ENV.append "CXXFLAGS", "-I'#{Formula["gettext"].opt_include}'"
     end
@@ -190,7 +192,7 @@ class Qgis214 < Formula
       osg = Formula["open-scene-graph"]
       opoo "`open-scene-graph` formula's keg not linked." unless osg.linked_keg.exist?
       # must be HOMEBREW_PREFIX/lib/osgPlugins-#.#.#, since all osg plugins are symlinked there
-      args << "-DOSG_PLUGINS_PATH=#{HOMEBREW_PREFIX}/lib/osgPlugins-#{osg.version.to_s}"
+      args << "-DOSG_PLUGINS_PATH=#{HOMEBREW_PREFIX}/lib/osgPlugins-#{osg.version}"
     end
 
     args << "-DWITH_ORACLE=#{build.with?("oracle") ? "TRUE" : "FALSE"}"
@@ -210,7 +212,7 @@ class Qgis214 < Formula
 
     # if using Homebrew's Python, make sure its components are always found first
     # see: https://github.com/Homebrew/homebrew/pull/28597
-    ENV["PYTHONHOME"] = "#{brewed_python_framework}" if brewed_python?
+    ENV["PYTHONHOME"] = brewed_python_framework.to_s if brewed_python?
 
     # handle some compiler warnings
     ENV["CXX_EXTRA_FLAGS"] = "-Wno-unused-private-field -Wno-deprecated-register"
@@ -230,8 +232,8 @@ class Qgis214 < Formula
 
     mkdir "build" do
       system "cmake", "..", *args
-      #system "bbedit", "CMakeCache.txt"
-      #raise
+      # system "bbedit", "CMakeCache.txt"
+      # raise
       system "make", "install"
     end
 
@@ -271,17 +273,17 @@ class Qgis214 < Formula
 
     # define default isolation env vars
     pthsep = File::PATH_SEPARATOR
-    pypth = "#{python_site_packages}"
+    pypth = python_site_packages.to_s
     pths = %W[#{HOMEBREW_PREFIX/"bin"} /usr/bin /bin /usr/sbin /sbin /opt/X11/bin /usr/X11/bin].join(pthsep)
 
-    unless opts.include? "enable-isolation"
+    unless opts.include? "with-isolation"
       pths = ORIGINAL_PATHS.join(pthsep)
       unless pths.include? HOMEBREW_PREFIX/"bin"
         pths = HOMEBREW_PREFIX/"bin" + pthsep + pths
       end
       pyenv = ENV["PYTHONPATH"]
       if pyenv
-        pypth = (pyenv.include?(pypth)) ? pyenv : pypth + pthsep + pyenv
+        pypth = pyenv.include?(pypth) ? pyenv : pypth + pthsep + pyenv
       end
     end
 
@@ -289,15 +291,15 @@ class Qgis214 < Formula
     pypth = "#{lib}/python2.7/site-packages" + pthsep + pypth
 
     envars = {
-      :PATH => "#{pths}",
-      :PYTHONPATH => "#{pypth}",
-      :GDAL_DRIVER_PATH => "#{HOMEBREW_PREFIX}/lib/gdalplugins"
+      :PATH => pths.to_s,
+      :PYTHONPATH => pypth.to_s,
+      :GDAL_DRIVER_PATH => "#{HOMEBREW_PREFIX}/lib/gdalplugins",
     }
 
     proc_algs = "Contents/Resources/python/plugins/processing/algs"
     unless opts.include? "without-grass"
       grass = Formula["grass-70"]
-      envars[:GRASS_PREFIX] = "#{grass.opt_prefix}/grass-#{grass.version.to_s}"
+      envars[:GRASS_PREFIX] = "#{grass.opt_prefix}/grass-#{grass.version}"
       begin
         inreplace app/"#{proc_algs}/grass7/Grass7Utils.py",
                   "/Applications/GRASS-7.0.app/Contents/MacOS",
@@ -319,10 +321,10 @@ class Qgis214 < Formula
 
     unless opts.include? "without-globe"
       osg = Formula["open-scene-graph"]
-      envars[:OSG_LIBRARY_PATH] = "#{HOMEBREW_PREFIX}/lib/osgPlugins-#{osg.version.to_s}"
+      envars[:OSG_LIBRARY_PATH] = "#{HOMEBREW_PREFIX}/lib/osgPlugins-#{osg.version}"
     end
 
-    if opts.include? "enable-isolation"
+    if opts.include? "with-isolation"
       envars[:DYLD_FRAMEWORK_PATH] = "#{HOMEBREW_PREFIX}/Frameworks:/System/Library/Frameworks"
       versioned = %W[
         #{Formula["sqlite"].opt_lib}
@@ -332,36 +334,36 @@ class Qgis214 < Formula
       ]
       envars[:DYLD_VERSIONED_LIBRARY_PATH] = versioned.join(pthsep)
     end
-    if opts.include? "enable-isolation" or File.exist?("/Library/Frameworks/GDAL.framework")
+    if opts.include?("with-isolation") || File.exist?("/Library/Frameworks/GDAL.framework")
       envars[:PYQGIS_STARTUP] = opt_libexec/"pyqgis_startup.py"
     end
 
-    #envars.each { |key, value| puts "#{key.to_s}=#{value}" }
-    #exit
+    # envars.each { |key, value| puts "#{key.to_s}=#{value}" }
+    # exit
 
     # add env vars to QGIS.app's Info.plist, in LSEnvironment section
     plst = app/"Contents/Info.plist"
     # first delete any LSEnvironment setting, ignoring errors
     # CAUTION!: may not be what you want, if .app already has LSEnvironment settings
-    dflt = quiet_system "defaults read-type \"#{plst}\" LSEnvironment"
-    system "defaults delete \"#{plst}\" LSEnvironment" if dflt
+    dflt = quiet_system "defaults", "read-type", "\"#{plst}\"", "LSEnvironment"
+    system "defaults", "delete", "\"#{plst}\"", "LSEnvironment" if dflt
     kv = "{ "
-    envars.each { |key, value| kv += "'#{key.to_s}' = '#{value}'; " }
+    envars.each { |key, value| kv += "'#{key}' = '#{value}'; " }
     kv += "}"
-    system "defaults write \"#{plst}\" LSEnvironment \"#{kv}\""
+    system "defaults", "write", "\"#{plst}\"", "LSEnvironment \"#{kv}\""
     # leave the plist readable; convert from binary to XML format
-    system "plutil -convert xml1 -- \"#{plst}\""
+    system "plutil", "-convert", "xml1", "--", "\"#{plst}\""
     # update modification date on app bundle, or changes won't take effect
-    touch "#{app}"
+    touch app.to_s
 
     # add env vars to launch script for QGIS app's binary
     qgis_bin = bin/"qgis"
-    rm_f qgis_bin if File.exists?(qgis_bin) # install generates empty file
+    rm_f qgis_bin if File.exist?(qgis_bin) # install generates empty file
     bin_cmds = %W[#!/bin/sh\n]
     # setup shell-prepended env vars (may result in duplication of paths)
     envars[:PATH] = "#{HOMEBREW_PREFIX}/bin" + pthsep + "$PATH"
-    envars[:PYTHONPATH] = "#{python_site_packages}" + pthsep + "$PYTHONPATH"
-    envars.each { |key, value| bin_cmds << "export #{key.to_s}=#{value}" }
+    envars[:PYTHONPATH] = python_site_packages.to_s + pthsep + "$PYTHONPATH"
+    envars.each { |key, value| bin_cmds << "export #{key}=#{value}" }
     bin_cmds << opt_prefix/"QGIS.app/Contents/MacOS/QGIS \"$@\""
     qgis_bin.write(bin_cmds.join("\n"))
     qgis_bin.chmod 0755
@@ -396,7 +398,7 @@ class Qgis214 < Formula
 
     EOS
 
-    if build.include? "enable-isolation"
+    if build.with? "isolation"
       s += <<-EOS.undent
         QGIS built with isolation enabled. This allows it to coexist with other
         types of installations of QGIS on your Mac. However, on versions >= 2.0.1,
@@ -409,9 +411,9 @@ class Qgis214 < Formula
     # check for required run-time Python module dependencies
     # TODO: add "pyspatialite" when PyPi package supports spatialite 4.x
     xm = []
-    %w[psycopg2 matplotlib pyparsing].each {
-        |m| xm << m unless module_importable? m
-    }
+    %w[psycopg2 matplotlib pyparsing].each do |m|
+      xm << m unless module_importable? m
+    end
     unless xm.empty?
       s += <<-EOS.undent
         The following Python modules are needed by QGIS during run-time:
@@ -457,7 +459,7 @@ class Qgis214 < Formula
   end
 
   def brewed_python?
-    Formula["python"].linked_keg.exist? and brewed_python_framework?
+    Formula["python"].linked_keg.exist? && brewed_python_framework?
   end
 
   def python_exec
