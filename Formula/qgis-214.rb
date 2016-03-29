@@ -448,6 +448,11 @@ class Qgis214 < Formula
     s
   end
 
+  test do
+    output = `#{bin}/qgis --help 2>&1` # why does help go to stderr?
+    assert_match /^QGIS is a user friendly/, output
+  end
+
   private
 
   def brewed_python_framework
