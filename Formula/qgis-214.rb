@@ -348,14 +348,14 @@ class Qgis214 < Formula
     plst = app/"Contents/Info.plist"
     # first delete any LSEnvironment setting, ignoring errors
     # CAUTION!: may not be what you want, if .app already has LSEnvironment settings
-    dflt = quiet_system "defaults", "read-type", "\"#{plst}\"", "LSEnvironment"
-    system "defaults", "delete", "\"#{plst}\"", "LSEnvironment" if dflt
+    dflt = `defaults read-type \"#{plst}\" LSEnvironment 2> /dev/null`
+    `defaults delete \"#{plst}\" LSEnvironment` if dflt
     kv = "{ "
     envars.each { |key, value| kv += "'#{key}' = '#{value}'; " }
     kv += "}"
-    system "defaults", "write", "\"#{plst}\"", "LSEnvironment \"#{kv}\""
+    `defaults write \"#{plst}\" LSEnvironment \"#{kv}\"`
     # leave the plist readable; convert from binary to XML format
-    system "plutil", "-convert", "xml1", "--", "\"#{plst}\""
+    `plutil -convert xml1 -- \"#{plst}\"`
     # update modification date on app bundle, or changes won't take effect
     touch app.to_s
 
