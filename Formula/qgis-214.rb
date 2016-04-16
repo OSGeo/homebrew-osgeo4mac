@@ -165,6 +165,17 @@ class Qgis214 < Formula
     if build.without? "gdal-1"
       args << "-DGDAL_LIBRARY=#{Formula["gdal-20"].opt_lib}/libgdal.dylib"
       args << "-DGDAL_INCLUDE_DIR=#{Formula["gdal-20"].opt_include}"
+      # These specific includes help ensure any gdal v1 includes are not
+      # accidentally pulled from /usr/local/include
+      # In CMakeLists.txt throughout QGIS source tree these includes may come
+      # before opt/gdal-20/include; 'fixing' many CMakeLists.txt may be unwise
+      args << "-DGEOS_INCLUDE_DIR=#{Formula["geos"].opt_include}"
+      args << "-DGSL_INCLUDE_DIR=#{Formula["gsl"].opt_include}"
+      args << "-DPROJ_INCLUDE_DIR=#{Formula["proj"].opt_include}"
+      args << "-DQCA_INCLUDE_DIR=#{Formula["qca"].opt_lib}/qca.framework/Headers"
+      args << "-DSPATIALINDEX_INCLUDE_DIR=#{Formula["spatialindex"].opt_include}/spatialindex"
+      args << "-DSPATIALITE_INCLUDE_DIR=#{Formula["libspatialite"].opt_include}"
+      args << "-DSQLITE3_INCLUDE_DIR=#{Formula["sqlite"].opt_include}"
     end
 
     args << "-DPYTHON_EXECUTABLE='#{python_exec}'"
@@ -228,16 +239,6 @@ class Qgis214 < Formula
     ENV["CXX_EXTRA_FLAGS"] = "-Wno-unused-private-field -Wno-deprecated-register"
     if ENV.compiler == :clang && (MacOS::Xcode.version >= "7.0" || MacOS::CLT.version >= "7.0")
       ENV.append "CXX_EXTRA_FLAGS", "-Wno-inconsistent-missing-override"
-    end
-
-    # Skip building heatmap plugin on 10.11, as it fails linking against gdal-20 v2.0.2:
-    # Undefined symbols for architecture x86_64:
-    # "GDALRasterBand::RasterIO(GDALRWFlag, int, int, int, int, void*, int, int, GDALDataType, int, int)", referenced from:
-    #     Heatmap::run() in heatmap.cpp.o
-    # ld: symbol(s) not found for architecture x86_64
-    if MacOS.version >= :el_capitan && build.without?("gdal-1")
-      inreplace "src/plugins/CMakeLists.txt",
-                "ADD_SUBDIRECTORY(heatmap)", "#ADD_SUBDIRECTORY(heatmap)"
     end
 
     mkdir "build" do
