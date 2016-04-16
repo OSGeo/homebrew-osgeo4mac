@@ -93,6 +93,16 @@ def cmake_opts(qi, hb, ver):
         ('GRASS_PREFIX7', '{hb}/opt/grass-70/grass-' + GRASS7_VERSION),
         ('WITH_GLOBE', 'FALSE'),
         ('WITH_ORACLE', 'FALSE'),
+        ('FCGI_INCLUDE_DIR', '{hb}/opt/fcgi/include'),
+        ('GEOS_INCLUDE_DIR', '{hb}/opt/geos/include'),
+        ('GSL_INCLUDE_DIR', '{hb}/opt/gsl/include'),
+        ('PROJ_INCLUDE_DIR', '{hb}/opt/proj/include'),
+        ('QCA_INCLUDE_DIR', '{hb}/opt/qca/lib/qca.framework/Headers'),
+        ('QSCINTILLA_INCLUDE_DIR', '{hb}/opt/qscintilla2/include'),
+        ('QWT_INCLUDE_DIR', '{hb}/opt/qwt/lib/qwt.framework/Headers'),
+        ('SPATIALINDEX_INCLUDE_DIR', '{hb}/opt/spatialindex/include/spatialindex'),
+        ('SPATIALITE_INCLUDE_DIR', '{hb}/opt/libspatialite/include'),
+        ('SQLITE3_INCLUDE_DIR', '{hb}/opt/sqlite/include'),
         ('QGIS_MACAPP_BUNDLE', '0')
     ])
 
