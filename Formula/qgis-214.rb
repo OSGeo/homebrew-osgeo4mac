@@ -19,6 +19,12 @@ class Qgis214 < Formula
     url "https://github.com/qgis/QGIS/archive/final-2_14_1.tar.gz"
     sha256 "ba665e8ee154446b8a5a62858ec814ddae438b5ca2988303184f720237a46aeb"
 
+    # one-off patch to conversions.sip until backported to 2.14 branch
+    patch do
+      url "https://gist.githubusercontent.com/dakcarto/f399e7333c228618cae5062331f70c91/raw/d01dc0a56032d6ef38413755299dfe3d0c377651/sip_patch.diff"
+      sha256 "90eba48b7faea7a678e2fcec3b6ff7233ebc4f77cbe92459e6991352f379f6bd"
+    end
+
     # patches that represent all backports to release-2_14 branch, since 2.14.1 tag, git id (date)
     # see: https://github.com/qgis/QGIS/commits/release-2_14
     # patch do
