@@ -1,7 +1,7 @@
 class SagaGis < Formula
   homepage "http://saga-gis.org"
-  url "https://downloads.sourceforge.net/project/saga-gis/SAGA%20-%202.1/SAGA%202.1.4/saga_2.1.4.tar.gz"
-  sha1 "b470f183aff4aba402b08d6a55cb3d5e6078f753"
+  url "https://downloads.sourceforge.net/project/saga-gis/SAGA%20-%202.2/SAGA%202.2.7/saga_2.2.7.tar.gz"
+  sha256 "6be4b844226bc48da4f2deb39bc732767b939e72b76506abf03f8170c54cb671"
 
   bottle do
     # root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
@@ -17,10 +17,10 @@ class SagaGis < Formula
   depends_on "automake" => :build
   depends_on "autoconf" => :build
   depends_on "libtool" => :build
-  depends_on "gdal"
+  depends_on "gdal-20"
   depends_on "jasper"
   depends_on "proj"
-  depends_on "wxmac-mono"
+  depends_on "wxmac"
   depends_on "unixodbc" => :recommended
   depends_on "libharu" => :recommended
   # Vigra support builds, but dylib in saga shows 'failed' when loaded
@@ -50,11 +50,6 @@ class SagaGis < Formula
   end
 
   def install
-    # Need to remove unsupported libraries from various Makefiles
-    # http://sourceforge.net/p/saga-gis/wiki/Compiling%20SAGA%20on%20Mac%20OS%20X
-    inreplace "src/saga_core/saga_gui/Makefile.am", "aui,base,", ""
-    inreplace "src/saga_core/saga_gui/Makefile.am", "propgrid,", ""
-
     if build.with? "liblas"
       # Saga still only works with liblas 1.2.1 (5 years old). Vendor in libexec
       # see: http://sourceforge.net/p/saga-gis/discussion/354013/thread/823cbde1/
