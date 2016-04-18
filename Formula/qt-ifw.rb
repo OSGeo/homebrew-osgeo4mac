@@ -1,9 +1,8 @@
 class QtIfw < Formula
-
+  desc "Tools and utilities to create installers for Qt desktop platforms"
   homepage "http://qt-project.org/wiki/Qt-Installer-Framework"
-  url "https://gitorious.org/installer-framework/installer-framework.git",
-      :revision => "e5d2246c53a1f683de70b9f5044fe5d64704380e"
-  version "2.0.0"
+  url "https://download.qt.io/official_releases/qt-installer-framework/2.0.1/qt-installer-framework-opensource-2.0.1-src.tar.gz"
+  sha256 "9f3bdb46182cef0254920750315bb22ea83fef4b45ab19a00161175823fabd98"
 
   depends_on "qt-ifw-qt5"
 
@@ -29,4 +28,7 @@ class QtIfw < Formula
     EOS
   end
 
+  test do
+    # pass
+  end
 end
