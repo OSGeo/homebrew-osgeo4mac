@@ -1,41 +1,62 @@
 class QtIfwQt5 < Formula
+  desc "Static build of version 5 of Qt for use in Qt Installer Framework"
   homepage "http://qt-project.org"
-  url "http://qtmirror.ics.com/pub/qtproject/official_releases/qt/5.4/5.4.0/single/qt-everywhere-opensource-src-5.4.0.tar.xz"
-  mirror "http://download.qt-project.org/official_releases/qt/5.4/5.4.0/single/qt-everywhere-opensource-src-5.4.0.tar.xz"
-  sha1 "2f5558b87f8cea37c377018d9e7a7047cc800938"
-
-  depends_on :macos => :lion
-  depends_on "pkg-config" => :build
-  depends_on :xcode => :build
+  url "https://download.qt.io/official_releases/qt/5.6/5.6.0/single/qt-everywhere-opensource-src-5.6.0.tar.xz"
+  mirror "https://www.mirrorservice.org/sites/download.qt-project.org/official_releases/qt/5.6/5.6.0/single/qt-everywhere-opensource-src-5.6.0.tar.xz"
+  sha256 "76a95cf6c1503290f75a641aa25079cd0c5a8fcd7cff07ddebff80a955b07de7"
 
   keg_only "Qt 5 conflicts Qt 4 (which is currently much more widely used)."
 
-  # Wrong detection of clang version
-  # see: https://bugreports.qt.io/browse/QTBUG-43279
-  patch :DATA
+  # OS X 10.7 Lion is still supported in Qt 5.5, but is no longer a reference
+  # configuration and thus untested in practice. Builds on OS X 10.7 have been
+  # reported to fail: <https://github.com/Homebrew/homebrew/issues/45284>.
+  depends_on :macos => :mountain_lion
+  depends_on "pkg-config" => :build
+  depends_on :xcode => :build
 
   def install
     args = ["-prefix", prefix, "-release", "-static", "-accessibility",
-            "-qt-zlib", "-qt-libpng", "-qt-libjpeg",
+            "-qt-zlib", "-qt-libpng", "-qt-libjpeg", "-qt-freetype", "-qt-pcre",
             "-no-cups", "-no-sql-sqlite", "-no-qml-debug",
             "-nomake", "examples", "-nomake", "tests",
-            "-skip", "qtactiveqt", "-skip", "qtenginio", "-skip", "qtlocation",
-            "-skip", "qtmultimedia", "-skip", "qtserialport", "-skip", "qtquick1",
-            "-skip", "qtquickcontrols", "-skip", "qtscript", "-skip", "qtsensors",
-            "-skip", "qtwebkit", "-skip", "qtwebsockets", "-skip", "qtxmlpatterns",
+            "-skip", "qt3d", "-skip", "qtactiveqt", "-skip", "qtcanvas3d",
+            "-skip", "qtenginio", "-skip", "qtlocation", "-skip", "qtmultimedia",
+            "-skip", "qtserialbus", "-skip", "qtserialport",
+            "-skip", "qtquickcontrols", "-skip", "qtquickcontrols2",
+            "-skip", "qtscript", "-skip", "qtsensors",
+            "-skip", "qtwebview", "-skip", "qtwebsockets", "-skip", "qtxmlpatterns",
             "-confirm-license", "-opensource"]
 
     system "./configure", *args
     system "make"
-    ENV.deparallelize
+    ENV.j1
     system "make", "install"
+
+    # Some config scripts will only find Qt in a "Frameworks" folder
+    frameworks.install_symlink Dir["#{lib}/*.framework"]
+
+    # The pkg-config files installed suggest that headers can be found in the
+    # `include` directory. Make this so by creating symlinks from `include` to
+    # the Frameworks' Headers folders.
+    Pathname.glob("#{lib}/*.framework/Headers") do |path|
+      include.install_symlink path => path.parent.basename(".framework")
+    end
 
     # configure saved PKG_CONFIG_LIBDIR set up by superenv; remove it
     # see: https://github.com/Homebrew/homebrew/issues/27184
-    inreplace prefix/"mkspecs/qconfig.pri", /\n\n# pkgconfig/, ""
-    inreplace prefix/"mkspecs/qconfig.pri", /\nPKG_CONFIG_.*=.*$/, ""
+    inreplace prefix/"mkspecs/qconfig.pri",
+              /\n# pkgconfig\n(PKG_CONFIG_(SYSROOT_DIR|LIBDIR) = .*\n){2}\n/,
+              "\n"
 
-    Pathname.glob("#{bin}/*.app") { |app| mv app, prefix }
+    # Move `*.app` bundles into `libexec` to expose them to `brew linkapps` and
+    # because we don't like having them in `bin`. Also add a `-qt5` suffix to
+    # avoid conflict with the `*.app` bundles provided by the `qt` formula.
+    # (Note: This move/rename breaks invocation of Assistant via the Help menu
+    # of both Designer and Linguist as that relies on Assistant being in `bin`.)
+    libexec.mkpath
+    Pathname.glob("#{bin}/*.app") do |app|
+      mv app, libexec/"#{app.basename(".app")}-qt5.app"
+    end
   end
 
   def caveats; <<-EOS.undent
@@ -44,32 +65,33 @@ class QtIfwQt5 < Formula
     EOS
   end
 
-end
+  test do
+    (testpath/"hello.pro").write <<-EOS.undent
+      QT       += core
+      QT       -= gui
+      TARGET = hello
+      CONFIG   += console
+      CONFIG   -= app_bundle
+      TEMPLATE = app
+      SOURCES += main.cpp
+    EOS
 
-__END__
---- a/qtbase/src/corelib/global/qcompilerdetection.h
-+++ b/qtbase/src/corelib/global/qcompilerdetection.h
-@@ -154,17 +154,17 @@
- /* Clang also masquerades as GCC */
- #    if defined(__apple_build_version__)
- #      /* http://en.wikipedia.org/wiki/Xcode#Toolchain_Versions */
--#      if __apple_build_version__ >= 600051
-+#      if __apple_build_version__ >= 6000051
- #        define Q_CC_CLANG 305
--#      elif __apple_build_version__ >= 503038
-+#      elif __apple_build_version__ >= 5030038
- #        define Q_CC_CLANG 304
--#      elif __apple_build_version__ >= 500275
-+#      elif __apple_build_version__ >= 5000275
- #        define Q_CC_CLANG 303
--#      elif __apple_build_version__ >= 425024
-+#      elif __apple_build_version__ >= 4250024
- #        define Q_CC_CLANG 302
--#      elif __apple_build_version__ >= 318045
-+#      elif __apple_build_version__ >= 3180045
- #        define Q_CC_CLANG 301
--#      elif __apple_build_version__ >= 211101
-+#      elif __apple_build_version__ >= 2111001
- #        define Q_CC_CLANG 300
- #      else
- #        error "Unknown Apple Clang version"
+    (testpath/"main.cpp").write <<-EOS.undent
+      #include <QCoreApplication>
+      #include <QDebug>
+
+      int main(int argc, char *argv[])
+      {
+        QCoreApplication a(argc, argv);
+        qDebug() << "Hello World!";
+        return 0;
+      }
+    EOS
+
+    system bin/"qmake", testpath/"hello.pro"
+    system "make"
+    assert File.exist?("hello")
+    assert File.exist?("main.o")
+    system "./hello"
+  end
+end
