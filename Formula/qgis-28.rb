@@ -16,9 +16,9 @@ class Qgis28 < Formula
   sha256 "8bb7d189a9503bc5a9ff1b2ca749853e9180a60a87952182aacc4fb2182cfd2b"
 
   bottle do
-    root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
-    sha256 "6a2d89239b8da548a765beb839d428a81d1a1b34c3e64d8fe4c8699993aff7ef" => :mavericks
-    sha256 "15210d5e07cf9bfe1de8a042c5ddee82acf41b94adb28909a9c79dd6582e91c2" => :yosemite
+    # root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
+    # sha256 "6a2d89239b8da548a765beb839d428a81d1a1b34c3e64d8fe4c8699993aff7ef" => :mavericks
+    # sha256 "15210d5e07cf9bfe1de8a042c5ddee82acf41b94adb28909a9c79dd6582e91c2" => :yosemite
   end
 
   def pour_bottle?
