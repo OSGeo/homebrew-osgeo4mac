@@ -38,7 +38,7 @@ class SagaGis < Formula
 
   resource "liblas" do
     url "https://github.com/libLAS/libLAS/archive/1.2.1.tar.gz"
-    sha1 "24a775484285d4e35eb8034bf298f740d7123569"
+    sha256 "ad9fbc55d8a56cc3f5eec2a59dd1057ffbae02d8ec476e6fb9c94476c73b3440"
   end
 
   resource "liblas_patch" do
@@ -46,7 +46,7 @@ class SagaGis < Formula
     # https://github.com/libLAS/libLAS/issues/33
     # This is an attempt to do it for old liblas 1.2.1
     url "https://gist.githubusercontent.com/dakcarto/f73717dac2777262d0f0/raw/a931380c41529767544a4c0dcc645b21f9b395e7/saga-gis_liblas.diff"
-    sha1 "b76ac09e59099e3cc2365630c02efe0f335f3964"
+    sha256 "4c89c04e0b3c5f23fb7532f18c89ba9267e341b014ae4ec5c4e8e028f0f7cad7"
   end
 
   def install
