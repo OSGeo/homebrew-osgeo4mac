@@ -146,5 +146,10 @@ class SagaGis < Formula
       EOS
     end
   end
+
+  test do
+    output = `#{bin}/saga_cmd --help`
+    assert_match /The SAGA command line interpreter/, output
+  end
 end
 
