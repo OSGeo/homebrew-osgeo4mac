@@ -362,6 +362,10 @@ class Qgis214 < Formula
     envars.each { |key, value| kv += "'#{key}' = '#{value}'; " }
     kv += "}"
     `defaults write \"#{plst}\" LSEnvironment \"#{kv}\"`
+    # add ability to toggle high resolution in Get Info dialog for app
+    hrc = `defaults read-type \"#{plst}\" NSHighResolutionCapable 2> /dev/null`
+    `defaults delete \"#{plst}\" NSHighResolutionCapable` if hrc
+    `defaults write \"#{plst}\" NSHighResolutionCapable \"True\"`
     # leave the plist readable; convert from binary to XML format
     `plutil -convert xml1 -- \"#{plst}\"`
     # update modification date on app bundle, or changes won't take effect
