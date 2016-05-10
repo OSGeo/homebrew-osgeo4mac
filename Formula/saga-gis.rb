@@ -32,8 +32,8 @@ class SagaGis < Formula
   depends_on "libgeotiff" if build.with? "liblas"
 
   resource "app_icon" do
-    url "http://web.fastermac.net/~MacPgmr/SAGA/saga_gui.icns"
-    sha1 "1ff67c6d600dd161684d3e8b33a1d138c65b00f4"
+    url "http://qgis.dakotacarto.com/osgeo4mac/saga_gui.icns"
+    sha256 "288e589d31158b8ffb9ef76fdaa8e62dd894cf4ca76feabbae24a8e7015e321f"
   end
 
   resource "liblas" do
