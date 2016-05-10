@@ -125,6 +125,8 @@ class SagaGis < Formula
           <string>1.0</string>
           <key>CSResourcesFileMapped</key>
           <true/>
+          <key>NSHighResolutionCapable</key>
+          <string>True</string>
         </dict>
         </plist>
       EOS
