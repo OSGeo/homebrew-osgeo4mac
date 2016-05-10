@@ -1,15 +1,16 @@
 class SagaGis < Formula
+  desc "System for Automated Geoscientific Analyses"
   homepage "http://saga-gis.org"
   url "https://downloads.sourceforge.net/project/saga-gis/SAGA%20-%202.2/SAGA%202.2.7/saga_2.2.7.tar.gz"
   sha256 "6be4b844226bc48da4f2deb39bc732767b939e72b76506abf03f8170c54cb671"
+
+  head "svn://svn.code.sf.net/p/saga-gis/code-0/trunk/saga-gis"
 
   bottle do
     # root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
     # sha1 "2e1e3c6f665d603d9dbac2f63e8b6f393d8130fb" => :mavericks
     # sha1 "5abac0d06395008e4028f35524b2c996a6a4026e" => :yosemite
   end
-
-  head "svn://svn.code.sf.net/p/saga-gis/code-0/trunk/saga-gis"
 
   option "with-app", "Build SAGA.app Package"
   option "with-liblas", "Build with internal libLAS 1.2 support"
@@ -56,7 +57,7 @@ class SagaGis < Formula
       mktemp do
         resource("liblas").stage do
           # patch liblas
-          (Pathname.pwd).install resource("liblas_patch")
+          Pathname.pwd.install resource("liblas_patch")
           safe_system "/usr/bin/patch", "-g", "0", "-f", "-d", Pathname.pwd, "-p1", "-i", "saga-gis_liblas.diff"
 
           args = %W[
@@ -77,9 +78,9 @@ class SagaGis < Formula
     end
 
     args = %W[
-        --prefix=#{prefix}
-        --disable-dependency-tracking
-        --disable-openmp
+      --prefix=#{prefix}
+      --disable-dependency-tracking
+      --disable-openmp
     ]
 
     args << "--disable-odbc" if build.without? "unixodbc"
@@ -94,7 +95,7 @@ class SagaGis < Formula
       # Based on original script by Phil Hess
       # http://web.fastermac.net/~MacPgmr/
 
-      (buildpath).install resource("app_icon")
+      buildpath.install resource("app_icon")
       mkdir_p "#{buildpath}/SAGA.app/Contents/MacOS"
       mkdir_p "#{buildpath}/SAGA.app/Contents/Resources"
 
@@ -154,4 +155,3 @@ class SagaGis < Formula
     assert_match /The SAGA command line interpreter/, output
   end
 end
-
