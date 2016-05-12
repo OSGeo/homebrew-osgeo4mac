@@ -44,7 +44,7 @@ class Qgis214 < Formula
   option "without-postgresql", "Build without current PostgreSQL client"
   option "with-gdal-1", "Build with GDAL/OGR v1.x instead of v2.x"
   option "with-globe", "Build with Globe plugin, based upon osgEarth"
-  option "without-grass", "Build without GRASS 7 integration plugin and Processing plugin support"
+  option "with-grass", "Build with GRASS 7 integration plugin and Processing plugin support (or install grass-7x first)"
   option "with-grass6", "Build extra GRASS 6 for Processing plugin"
   option "with-oracle", "Build extra Oracle geospatial database and raster support"
   option "with-orfeo", "Build extra Orfeo Toolbox for Processing plugin"
@@ -193,8 +193,8 @@ class Qgis214 < Formula
 
     args << "-DPOSTGRES_CONFIG=#{Formula["postgresql"].opt_bin}/pg_config" if build.with? "postgresql"
 
-    args << "-DWITH_GRASS7=#{build.with?("grass") ? "TRUE" : "FALSE"}"
-    if build.with? "grass"
+    args << "-DWITH_GRASS7=#{(build.with?("grass") || brewed_grass7?) ? "TRUE" : "FALSE"}"
+    if build.with?("grass") || brewed_grass7?
       # this is to build the GRASS Plugin, not for Processing plugin support
       grass7 = Formula["grass-70"]
       args << "-DGRASS_PREFIX7='#{grass7.opt_prefix}/grass-#{grass7.version}'"
@@ -274,7 +274,7 @@ class Qgis214 < Formula
     app = prefix/"QGIS.app"
     tab = Tab.for_formula(self)
     opts = tab.used_options
-    bottle_poured = tab.poured_from_bottle
+    # bottle_poured = tab.poured_from_bottle
 
     # define default isolation env vars
     pthsep = File::PATH_SEPARATOR
@@ -302,23 +302,25 @@ class Qgis214 < Formula
     }
 
     proc_algs = "Contents/Resources/python/plugins/processing/algs"
-    unless opts.include? "without-grass"
-      grass = Formula["grass-70"]
-      envars[:GRASS_PREFIX] = "#{grass.opt_prefix}/grass-#{grass.version}"
+    if opts.include?("with-grass") || brewed_grass7?
+      grass7 = Formula["grass-70"]
+      # for core integration plugin support
+      envars[:GRASS_PREFIX] = "#{grass7.opt_prefix}/grass-#{grass7.version}"
       begin
         inreplace app/"#{proc_algs}/grass7/Grass7Utils.py",
                   "/Applications/GRASS-7.0.app/Contents/MacOS",
-                  HOMEBREW_PREFIX/"opt/grass-70/grass-base"
+                  "#{grass7.opt_prefix}/grass-base"
       rescue Utils::InreplaceError
         puts "GRASS 7 GrassUtils already updated"
       end
     end
 
-    if opts.include? "with-grass6"
+    if opts.include?("with-grass6") || brewed_grass6?
+      grass6 = Formula["grass-64"]
       begin
         inreplace app/"#{proc_algs}/grass/GrassUtils.py",
                   "/Applications/GRASS-6.4.app/Contents/MacOS",
-                  HOMEBREW_PREFIX/"opt/grass-64/grass-base" unless bottle_poured
+                  "#{grass6.opt_prefix}/grass-base"
       rescue Utils::InreplaceError
         puts "GRASS 6 GrassUtils already updated"
       end
@@ -463,6 +465,14 @@ class Qgis214 < Formula
   end
 
   private
+
+  def brewed_grass7?
+    Formula["grass-70"].opt_prefix.exist?
+  end
+
+  def brewed_grass6?
+    Formula["grass-64"].opt_prefix.exist?
+  end
 
   def brewed_python_framework
     HOMEBREW_PREFIX/"Frameworks/Python.framework/Versions/2.7"
