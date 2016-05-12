@@ -28,7 +28,7 @@ from collections import OrderedDict
 import argparse
 
 GRASS_VERSION = '6.4.4'
-GRASS7_VERSION = '7.0.3'
+GRASS7_VERSION = '7.0.4'
 OSG_VERSION = '3.4.0'
 HOMEBREW_PREFIX = '/usr/local'  # default for Homebrew
 
