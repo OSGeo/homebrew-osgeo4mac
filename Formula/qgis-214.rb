@@ -359,7 +359,7 @@ class Qgis214 < Formula
     # add ability to toggle high resolution in Get Info dialog for app
     hrc = `defaults read-type \"#{plst}\" NSHighResolutionCapable 2> /dev/null`
     `defaults delete \"#{plst}\" NSHighResolutionCapable` if hrc
-    `defaults write \"#{plst}\" NSHighResolutionCapable \"True\"`
+    `defaults write \"#{plst}\" NSHighResolutionCapable \"False\"`
     # leave the plist readable; convert from binary to XML format
     `plutil -convert xml1 -- \"#{plst}\"`
     # update modification date on app bundle, or changes won't take effect
