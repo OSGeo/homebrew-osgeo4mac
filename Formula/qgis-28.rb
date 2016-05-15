@@ -12,8 +12,8 @@ end
 class Qgis28 < Formula
   desc "Open Source Geographic Information System"
   homepage "http://www.qgis.org"
-  url "https://github.com/qgis/QGIS/archive/final-2_8_8.tar.gz"
-  sha256 "a79fd956384b9c506c82b8a44c424c2d1e9c3309bb4356ce80de8e0669559f23"
+  url "https://github.com/qgis/QGIS/archive/final-2_8_9.tar.gz"
+  sha256 "7bfc6fa2221ec7fc809c0cacc5ef821f6d3b6d8d8254b4cee8fd9c452731e3d6"
 
   bottle do
     # root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
@@ -108,13 +108,13 @@ class Qgis28 < Formula
 
   # patches that represent all backports to release-2_8 branch
   # see: https://github.com/qgis/QGIS/commits/release-2_8
-  stable do
-    patch do
-      # since 2.8.8 tag thru 9e1dc47, minus windows-formatted patches
-      url "https://gist.githubusercontent.com/dakcarto/299acee7b78412a7ec4795a9414ac659/raw/474cca4c13b1cab07c04871e2852ea4d7278a2b7/qgis-2.8.8-patch.diff"
-      sha256 "5aeb6b151366fda4b033db761e78e5280509c50e906430eaae96384da33928d4"
-    end
-  end
+  # stable do
+  #   patch do
+  #     # since 2.8.9 tag thru ---, minus windows-formatted patches
+  #     url ""
+  #     sha256 ""
+  #   end
+  # end
 
   def install
     # Set bundling level back to 0 (the default in all versions prior to 1.8.0)
