@@ -1,8 +1,8 @@
 class Gdal20 < Formula
   desc "GDAL: Geospatial Data Abstraction Library"
   homepage "http://www.gdal.org/"
-  url "http://download.osgeo.org/gdal/2.0.2/gdal-2.0.2.tar.gz"
-  sha256 "db7722caf8d9dd798ec18012b9cacf40a518918466126a88b9fd277bd7d40cc4"
+  url "http://download.osgeo.org/gdal/2.1.0/gdal-2.1.0.tar.gz"
+  sha256 "eb499b18e5c5262a803bb7530ae56e95c3293be7b26c74bcadf67489203bf2cd"
 
   head do
     url "https://svn.osgeo.org/gdal/trunk/gdal"
@@ -17,6 +17,7 @@ class Gdal20 < Formula
   option "with-mdb", "Build with Access MDB driver (requires Java 1.6+ JDK/JRE, from Apple or Oracle)."
   option "with-libkml", "Build with Google's libkml driver (requires libkml --HEAD or >= 1.3)"
   option "with-swig-java", "Build the swig java bindings"
+  option "with-python3", "Build with python3 support"
 
   deprecated_option "enable-opencl" => "with-opencl"
   deprecated_option "enable-armadillo" => "with-armadillo"
@@ -70,6 +71,7 @@ class Gdal20 < Formula
   end
 
   depends_on :java => ["1.7+", :optional, :build]
+  depends_on "numpy" => :python||:python3
 
   if build.with? "swig-java"
     depends_on "ant" => :build
@@ -85,11 +87,6 @@ class Gdal20 < Formula
   # see: https://trac.osgeo.org/gdal/ticket/5455
   # including prefix lib dir added by Homebrew:
   # ld: warning: directory not found for option "-L/usr/local/Cellar/gdal/1.11.0/lib"
-
-  resource "numpy" do
-    url "https://pypi.python.org/packages/source/n/numpy/numpy-1.10.4.tar.gz"
-    sha256 "7356e98fbcc529e8d540666f5a919912752e569150e9a4f8d869c686f14c720b"
-  end
 
   resource "libkml" do
     # Until 1.3 is stable, use master branch
@@ -139,7 +136,7 @@ class Gdal20 < Formula
       # Should be installed separately after GRASS installation using the
       # official GDAL GRASS plugin.
       "--without-grass",
-      "--without-libgrass",
+      "--without-libgrass"
     ]
 
     # Optional Homebrew packages supporting additional formats.
@@ -275,13 +272,8 @@ class Gdal20 < Formula
     system "make", "install"
 
     inreplace "swig/python/setup.cfg", /#(.*_dirs)/, "\\1"
+    inreplace "swig/python/setup.cfg", "include_dirs = ../../port:../../gcore:../../alg:../../ogr/","include_dirs = ../../port:../../gcore:../../alg:../../ogr/:../../apps/"
     Language::Python.each_python(build) do |python, python_version|
-      numpy_site_packages = buildpath/"homebrew-numpy/lib/python#{python_version}/site-packages"
-      numpy_site_packages.mkpath
-      ENV["PYTHONPATH"] = numpy_site_packages
-      resource("numpy").stage do
-        system python, *Language::Python.setup_install_args(buildpath/"homebrew-numpy")
-      end
       cd "swig/python" do
         system python, *Language::Python.setup_install_args(prefix)
         bin.install Dir["scripts/*"] if python == "python"
