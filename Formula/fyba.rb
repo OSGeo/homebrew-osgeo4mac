@@ -1,9 +1,9 @@
 class Fyba < Formula
+  desc "Library to read/write Norwegian National geodata standard (SOSI) files"
   homepage "https://github.com/kartverket/fyba"
   # TODO: remove temp hash url after first tagged release
-  url "https://github.com/kartverket/fyba.git",
-      :revision => "d23b92f00ad9f4b49347b490ebcb284a34c4fa3b"
-  version "0.0.1"
+  url "https://github.com/kartverket/fyba/archive/4.1.1.tar.gz"
+  sha256 "99f658d52e8fd8997118bb6207b9c121500700996d9481a736683474e2534179"
 
   depends_on "autoconf" => :build
   depends_on "automake" => :build
@@ -16,10 +16,28 @@ class Fyba < Formula
       inreplace s, "sys/vfs.h", "sys/mount.h"
     end
 
+    # fixup UT_INT64 type in include: https://github.com/kartverket/fyba/pull/19
+    # done with inreplace due to CRLF endings in files
+    inreplace "src/UT/fyut.h", %r{(/\* For UNIX \*/)},
+        "\\1\r\n#  ifdef __APPLE__\r\n#    include <stdint.h>\r\n#    define UT_INT64 int64_t\r\n#  endif\r\n"
+
     system "autoreconf", "-vfi"
 
     system "./configure", "--prefix=#{prefix}"
     system "make"
     system "make", "install"
+  end
+
+  test do
+    (testpath/"fyba_test.cpp").write <<-EOS
+    #include "fyba.h"
+    int main() {
+      SK_EntPnt_FYBA char *LC_InqVer(void);
+      return 0;
+    }
+    EOS
+    system ENV.cxx, "-I#{include}/fyba", "-L#{lib}", "-lfyba",
+           "-lfygm", "-lfyut", "-o", "fyba_test", "fyba_test.cpp"
+    system "./fyba_test"
   end
 end
