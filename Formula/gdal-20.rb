@@ -16,8 +16,8 @@ class Gdal20 < Formula
   option "with-unsupported", "Allow configure to drag in any library it can find. Invoke this at your own risk."
   option "with-mdb", "Build with Access MDB driver (requires Java 1.6+ JDK/JRE, from Apple or Oracle)."
   option "with-libkml", "Build with Google's libkml driver (requires libkml --HEAD or >= 1.3)"
+  option "without-python", "Build without python2 support"
   option "with-swig-java", "Build the swig java bindings"
-  option "with-python3", "Build with python3 support"
 
   deprecated_option "enable-opencl" => "with-opencl"
   deprecated_option "enable-armadillo" => "with-armadillo"
@@ -71,22 +71,16 @@ class Gdal20 < Formula
   end
 
   depends_on :java => ["1.7+", :optional, :build]
-  depends_on "numpy" => :python||:python3
 
   if build.with? "swig-java"
     depends_on "ant" => :build
     depends_on "swig" => :build
   end
 
-  option "without-python", "Build without python2 support"
   depends_on :python => :optional if MacOS.version <= :snow_leopard
   depends_on :python3 => :optional
-  depends_on :fortran => :build if build.with?("python") || build.with?("python3")
-
-  # Extra linking libraries in configure test of armadillo may throw warning
-  # see: https://trac.osgeo.org/gdal/ticket/5455
-  # including prefix lib dir added by Homebrew:
-  # ld: warning: directory not found for option "-L/usr/local/Cellar/gdal/1.11.0/lib"
+  depends_on "numpy" => :python if build.with? "python"
+  depends_on "numpy" => :python3 if build.with? "python3"
 
   resource "libkml" do
     # Until 1.3 is stable, use master branch
@@ -136,7 +130,7 @@ class Gdal20 < Formula
       # Should be installed separately after GRASS installation using the
       # official GDAL GRASS plugin.
       "--without-grass",
-      "--without-libgrass"
+      "--without-libgrass",
     ]
 
     # Optional Homebrew packages supporting additional formats.
@@ -271,9 +265,11 @@ class Gdal20 < Formula
     system "make"
     system "make", "install"
 
-    inreplace "swig/python/setup.cfg", /#(.*_dirs)/, "\\1"
-    inreplace "swig/python/setup.cfg", "include_dirs = ../../port:../../gcore:../../alg:../../ogr/","include_dirs = ../../port:../../gcore:../../alg:../../ogr/:../../apps/"
-    Language::Python.each_python(build) do |python, python_version|
+    inreplace "swig/python/setup.cfg" do |s|
+      s.gsub! /#(.*_dirs)/, "\\1"
+      s.sub! /(include_dirs = \S+)/, "\\1:../../apps/"
+    end
+    Language::Python.each_python(build) do |python, _python_version|
       cd "swig/python" do
         system python, *Language::Python.setup_install_args(prefix)
         bin.install Dir["scripts/*"] if python == "python"
@@ -315,5 +311,13 @@ class Gdal20 < Formula
     # basic tests to see if third-party dylibs are loading OK
     system "#{bin}/gdalinfo", "--formats"
     system "#{bin}/ogrinfo", "--formats"
+
+    # test Python support
+    Language::Python.each_python(build) do |python, python_version|
+      if (lib/"python#{python_version}/site-packages").exist?
+        ENV["PYTHONPATH"] = lib/"python#{python_version}/site-packages"
+        system python, "-c", "from osgeo import gdal, ogr, osr, gdal_array, gdalconst"
+      end
+    end
   end
 end
