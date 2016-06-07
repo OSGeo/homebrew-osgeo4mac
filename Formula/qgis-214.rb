@@ -280,6 +280,7 @@ class Qgis214 < Formula
     pthsep = File::PATH_SEPARATOR
     pypth = python_site_packages.to_s
     pths = %W[#{HOMEBREW_PREFIX/"bin"} /usr/bin /bin /usr/sbin /sbin /opt/X11/bin /usr/X11/bin].join(pthsep)
+    gdalpth = "#{Formula["gdal-20"].opt_lib}/python2.7/site-packages"
 
     unless opts.include? "with-isolation"
       pths = ORIGINAL_PATHS.join(pthsep)
@@ -293,7 +294,7 @@ class Qgis214 < Formula
     end
 
     # set install's lib/python2.7/site-packages first, so app will work if unlinked
-    pypth = "#{lib}/python2.7/site-packages" + pthsep + pypth
+    pypth = %W[#{gdalpth} #{lib}/python2.7/site-packages #{pypth}].join(pthsep)
 
     envars = {
       :PATH => pths.to_s,
@@ -373,7 +374,7 @@ class Qgis214 < Formula
     bin_cmds = %W[#!/bin/sh\n]
     # setup shell-prepended env vars (may result in duplication of paths)
     envars[:PATH] = "#{HOMEBREW_PREFIX}/bin" + pthsep + "$PATH"
-    envars[:PYTHONPATH] = python_site_packages.to_s + pthsep + "$PYTHONPATH"
+    envars[:PYTHONPATH] = %W[#{gdalpth} #{python_site_packages} $PYTHONPATH].join(pthsep)
     envars.each { |key, value| bin_cmds << "export #{key}=#{value}" }
     bin_cmds << opt_prefix/"QGIS.app/Contents/MacOS/QGIS \"$@\""
     qgis_bin.write(bin_cmds.join("\n"))
