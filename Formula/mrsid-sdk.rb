@@ -1,17 +1,18 @@
 require File.expand_path("../../Strategies/cache-download", Pathname.new(__FILE__).realpath)
 
 class MrsidSdk < Formula
+  desc "MrSID format decoder libs for MG4 (raster and LiDAR), MG3, MG2, JP2"
   homepage "https://www.lizardtech.com/developer/"
-  url "file://#{HOMEBREW_CACHE}/MrSID_DSDK-9.0.0.3864-darwin12.universal.gccA42.tar.gz",
+  url "file://#{HOMEBREW_CACHE}/MrSID_DSDK-9.5.1.4427-darwin14.universal.clang60.tar.gz",
       :using => CacheDownloadStrategy
-  sha1 "8a693cc71dbb8638f34e35efb8086f29b08fa764"
-  version "9.0.0.3864"
+  version "9.5.1.4427"
+  sha256 "286843f4a22845835a06626327eed67216e403a54e17d8b10a675663d41b9829"
 
-  option "with-bindings", "Build with Lidar Python and Ruby bindings"
+  option "with-bindings", "Include Lidar Python and Ruby bindings"
   option "with-docs", "Intall documentation and examples for SDKs"
 
   # this is an odd one: only needs the share/gdal components
-  depends_on "gdal" => :build
+  depends_on "gdal-20" => :build
 
   def install
     # first strip unnecessary installs
@@ -19,10 +20,10 @@ class MrsidSdk < Formula
     if build.without? "docs"
       rm_r "examples"
       cd "Lidar_DSDK" do
-        %W[doc examples].each {|f| rm_r f}
+        %W[doc examples].each { |f| rm_r f }
       end
       cd "Raster_DSDK" do
-        %W[doc examples].each {|f| rm_r f}
+        %W[doc examples].each { |f| rm_r f }
       end
     end
     rm_r "Lidar_DSDK/contributions" if build.without? "bindings"
@@ -30,10 +31,20 @@ class MrsidSdk < Formula
     prefix.install Dir["*"]
     lidar_dsdk = prefix/"Lidar_DSDK"
     raster_dsdk = prefix/"Raster_DSDK"
-    raster_opt_dsdk = opt_prefix/"Raster_DSDK"
+    libtbb_old_name = "@rpath/libtbb.dylib"
+    libtbb_new_name = opt_libexec/"libtbb.dylib"
+    # vendor to libexec possibly version-specific common supporting libs
+    liblas_old_name = "/data/builds/buildbot/darwin14/darwin14/build/"\
+                      "xt_lib_lastools/lib/darwin14.universal.clang60/"\
+                      "Release/liblaslib.dylib"
+    liblas_new_name = opt_libexec/"liblaslib.dylib"
+    libgeos_c_old_name = "@rpath/libgeos_c.1.dylib"
+    libgeos_c_new_name = opt_libexec/"libgeos_c.1.dylib"
+    libgeos_old_name = "@rpath/libgeos.2.dylib"
+    libgeos_new_name = opt_libexec/"libgeos.2.dylib"
 
-    # link to binary executables
-    [lidar_dsdk, raster_dsdk].each {|f| bin.install Dir[f/"bin/*"]}
+    # install binary executables
+    [lidar_dsdk, raster_dsdk].each { |f| bin.install Dir[f/"bin/*"] }
 
     # install headers
     include.install lidar_dsdk/"include/lidar"
@@ -42,53 +53,65 @@ class MrsidSdk < Formula
 
     # update libs
     cd lidar_dsdk/"lib" do
-      # convert base version to symlink again
-      rm "liblti_lidar_dsdk.dylib"
-      ln_s "liblti_lidar_dsdk.1.dylib", "liblti_lidar_dsdk.dylib"
+      # reset vendored lib ids
+      set_install_name("liblaslib.dylib", libexec)
+
+      # reset install lib ids
+      set_install_name("liblti_lidar_dsdk.1.dylib", lib)
+
+      # reset install lib names
+      install_change("liblti_lidar_dsdk.1.dylib",
+                     libtbb_old_name,
+                     libtbb_new_name)
+
+      # install vendored; libtbb.dylib installed with raster libs
+      libexec.install "liblaslib.dylib"
+
+      # install SDK lib
+      lib.install Dir["liblti*"]
     end
     cd raster_dsdk/"lib" do
-      # convert base versions to symlinks again
-      rm "libltidsdk.dylib"
-      ln_s "libltidsdk.9.dylib", "libltidsdk.dylib"
-      %W[libgeos_c.1.dylib libgeos_c.dylib].each do |f|
-        rm f
-        ln_s "libgeos_c.1.1.1.dylib", f
-      end
-      %W[libgeos.2.dylib libgeos.dylib].each do |f|
-        rm f
-        ln_s "libgeos.2.2.3.dylib", f
-      end
-
-      # reset install ids
+      # reset vendored lib ids
       %W[libgeos_c.1.dylib libgeos.2.dylib libtbb.dylib].each do |f|
-        quiet_system "install_name_tool", "-id",
-                     "#{raster_opt_dsdk}/lib/#{f}", f
+        set_install_name(f, libexec)
       end
 
-      # reset install lib paths
+      # reset install lib ids
+      set_install_name("libltidsdk.dylib", lib)
+
+      # reset vendored lib names
+      install_change("libgeos_c.1.dylib",
+                     libgeos_old_name,
+                     libgeos_new_name)
+
+      # reset install lib names
       install_change("libltidsdk.dylib",
-                   "libtbb.dylib",
-                   "#{raster_opt_dsdk}/lib/libtbb.dylib")
-      install_change("libltidsdk.dylib",
-                   libgeos_c_old_path,
-                   "#{raster_opt_dsdk}/lib/libgeos_c.1.dylib")
-      install_change("libgeos_c.dylib",
-                   libgeos_old_path,
-                   "#{raster_opt_dsdk}/lib/libgeos.2.dylib")
+                     libtbb_old_name,
+                     libtbb_new_name)
+
+      # install vendored
+      libexec.install "libtbb.dylib", Dir["libgeos*"]
+
+      # install SDK lib
+      lib.install Dir["liblti*"]
     end
 
-    # link SDK libs, which will be fixed up by Homebrew
-    [lidar_dsdk, raster_dsdk].each {|f| lib.install Dir[f/"lib/liblti*"]}
+    # cleanup
+    rm_r lidar_dsdk/"lib"
+    rm_r raster_dsdk/"lib"
 
     # update executables
     cd bin do
-      Dir["mrsid*"].each do |exe|
+      Dir["*"].each do |exe|
         install_change(exe,
-                     "libtbb.dylib",
-                     "#{raster_opt_dsdk}/lib/libtbb.dylib")
+                       libtbb_old_name,
+                       libtbb_new_name)
         install_change(exe,
-                     libgeos_c_old_path,
-                     "#{raster_opt_dsdk}/lib/libgeos_c.1.dylib")
+                       libgeos_c_old_name,
+                       libgeos_c_new_name)
+        install_change(exe,
+                       liblas_old_name,
+                       liblas_new_name)
       end
     end
   end
@@ -97,29 +120,20 @@ class MrsidSdk < Formula
     quiet_system "install_name_tool", "-change", old, new, dylib
   end
 
-  def libgeos_c_old_path
-    "/data/builds/Bob/darwin12.universal.gccA42__default/xt_lib_geos/"\
-      "darwin12.universal.gccA42/Release/src/geos-2.2.3/../../../../dist/"\
-      "darwin12.universal.gccA42/Release/lib/libgeos_c.1.dylib"
-  end
-
-  def libgeos_old_path
-    "/data/builds/Bob/darwin12.universal.gccA42__default/xt_lib_geos/"\
-      "darwin12.universal.gccA42/Release/src/geos-2.2.3/../../../../dist/"\
-      "darwin12.universal.gccA42/Release/lib/libgeos.2.dylib"
+  def set_install_name(dylib, dir)
+    quiet_system "install_name_tool", "-id", "#{dir}/#{dylib}", dylib
   end
 
   def caveats; <<-EOS.undent
-        To build software with the Raster SDK, add to the following environment
-        variable to find the headers:
+        To build software with the Raster and LiDAR SDKs, add to the following
+        environment variables to find the headers:
 
           CPPFLAGS: -I#{opt_prefix}/include/mrsid
-
-        ============================== IMPORTANT ==================================
-        If linking with other software built on 10.9+, clang links to libc++, whereas
-        MrSID libs/binaries link to libstdc++. This may lead to build failures or
-        issues during usage, including crashes.
-
+          CPPFLAGS: -I#{opt_prefix}/include/lidar
     EOS
+  end
+
+  test do
+    #
   end
 end
