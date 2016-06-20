@@ -37,17 +37,6 @@ class Gdal2Mrsid < Formula
     mrsid_args.concat %W[-L#{mrsid_sdk_opt}/lib -lltidsdk]
     plugins[:gdal_MrSID] = mrsid_args
 
-    # configure gdal
-    gdal_args = [
-      "--prefix=#{prefix}",
-      "--mandir=#{man}",
-      "--disable-debug",
-      "--with-local=#{prefix}",
-      "--with-threads",
-      "--with-libtool",
-    ]
-    system "./configure", *gdal_args
-
     # plugin dylib
     plugins.each do |key, args|
       # TODO: can the compatibility_version be 1.10.0?
