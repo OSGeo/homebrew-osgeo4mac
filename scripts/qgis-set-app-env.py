@@ -66,7 +66,7 @@ def env_vars(ap, hb, qb='', ql=''):
 
     options['PYTHONPATH'] = '{hb}/opt/gdal-20/lib/python2.7/site-packages:' \
                             '{hb}/lib/python2.7/site-packages'
-    options['GDAL_DRIVER_PATH'] = '{hb}/opt/gdal-20/lib/gdalplugins'
+    options['GDAL_DRIVER_PATH'] = '{hb}/lib/gdalplugins'
     options['GRASS_PREFIX'] = '{hb}/opt/grass-' + GRASS_VERSION
     options['OSG_LIBRARY_PATH'] = '{hb}/lib/osgPlugins-' + OSG_VERSION
     options['QGIS_LOG_FILE'] = ql
