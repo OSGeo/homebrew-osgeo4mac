@@ -19,6 +19,12 @@ class Pyspatialite < Formula
     end
   end
 
+  bottle do
+    root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
+    cellar :any
+    sha256 "c21b4675382c9fbfd3fc638b3b4bdb0d0aaf37f6aa3722fd0f3bd16121595c36" => :mavericks
+  end
+
   depends_on :python
   depends_on "geos"
   depends_on "proj"
