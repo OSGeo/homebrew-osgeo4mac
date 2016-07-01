@@ -12,9 +12,8 @@ class Grass70 < Formula
   end
 
   bottle do
-    # root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
-    # sha256 "6ae0417092eb55fbd2c9dbda226aea8d752befd17058c0f0750e2c46941f11b0" => :mavericks
-    # sha256 "7f936053c6f9e5ef74d61a556340463e9ce020b6b4a8df502287d3d97152bc01" => :yosemite
+    root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
+    sha256 "bb240ec7666eb963c4642913d067a8225b7e644d41eea14a74f441dc92c53275" => :mavericks
   end
 
   option "without-gui", "Build without WxPython interface. Command line tools still available."
@@ -41,7 +40,7 @@ class Grass70 < Formula
   depends_on :mysql => :optional
   depends_on "cairo"
   depends_on "ghostscript" # for cartographic composer previews
-  depends_on :x11  # needs to find at least X11/include/GL/gl.h
+  depends_on :x11 # needs to find at least X11/include/GL/gl.h
   depends_on "openblas" => :optional
   depends_on "liblas" => :optional
   depends_on "netcdf" => :optional
@@ -56,7 +55,7 @@ class Grass70 < Formula
     readline = Formula["readline"]
     gettext = Formula["gettext"]
 
-    #noinspection RubyLiteralArrayInspection
+    # noinspection RubyLiteralArrayInspection
     args = [
       "--disable-debug", "--disable-dependency-tracking",
       "--enable-shared",
@@ -136,17 +135,17 @@ class Grass70 < Formula
     end
 
     system "./configure", "--prefix=#{prefix}", *args
-    system "make GDAL_DYNAMIC=" # make and make install must be separate steps.
-    system "make GDAL_DYNAMIC= install" # GDAL_DYNAMIC set to blank for r.external compatability
+    system "make", "GDAL_DYNAMIC=" # make and make install must be separate steps.
+    system "make", "GDAL_DYNAMIC=", "install" # GDAL_DYNAMIC set to blank for r.external compatability
 
     # ensure QGIS's Processing plugin recognizes install
-    ln_sf "../bin/grass70", prefix/"grass-#{version.to_s}/grass70.sh"
+    ln_sf "../bin/grass70", prefix/"grass-#{version}/grass70.sh"
     # link so settings in external apps don't need updated on grass version bump
     # in QGIS Processing options, GRASS folder = HOMEBREW_PREFIX/opt/grass-70/grass-base
-    ln_sf "grass-#{version.to_s}", prefix/"grass-base"
+    ln_sf "grass-#{version}", prefix/"grass-base"
   end
 
-  def formula_site_packages f
+  def formula_site_packages(f)
     `python -c "import os, sys, site; sp1 = list(sys.path); site.addsitedir('#{Formula[f].opt_lib}/python2.7/site-packages'); print(os.pathsep.join([x for x in sys.path if x not in sp1]))"`.strip
   end
 
@@ -158,6 +157,10 @@ class Grass70 < Formula
         The command line tools remain fully functional.
         EOS
     end
+  end
+
+  test do
+    system bin/"grass70", "--version"
   end
 end
 
