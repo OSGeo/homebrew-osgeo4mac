@@ -46,7 +46,7 @@ class Orfeo54 < Formula
   depends_on "opencv" => :optional
   depends_on "glew" => :optional
 
-  conflicts_with "orfeo", :because => "orfeo provides same functionality"
+  # conflicts_with "orfeo", :because => "orfeo provides same functionality"
   conflicts_with "orfeo-42", :because => "orfeo-42 provides same functionality"
   conflicts_with "orfeo-40", :because => "orfeo-40 provides same functionality"
   conflicts_with "orfeo-32", :because => "orfeo-32 provides same functionality"

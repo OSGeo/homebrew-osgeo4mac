@@ -29,7 +29,7 @@ class Orfeo42 < Formula
   # external libs that may work in next release:
   #depends on "open-scene-graph" # (for libOpenThreads, now internal to osg)
 
-  conflicts_with "orfeo", :because => "orfeo provides same functionality"
+  # conflicts_with "orfeo", :because => "orfeo provides same functionality"
   conflicts_with "orfeo-40", :because => "orfeo-40 provides same functionality"
   conflicts_with "orfeo-32", :because => "orfeo-32 provides same functionality"
 

@@ -35,7 +35,7 @@ class Orfeo40 < Formula
   # external libs that may work in next release:
   #depends_on "open-scene-graph" # (for libOpenThreads, now internal to osg)
 
-  conflicts_with "orfeo", :because => "orfeo is in main tap"
+  # conflicts_with "orfeo", :because => "orfeo is in main tap"
 
   resource "geoid" do
     # geoid to use in elevation calculations, if no DEM defined or avialable
