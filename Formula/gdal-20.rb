@@ -189,7 +189,6 @@ class Gdal20 < Formula
       dwgdirect
       idb
       sde
-      podofo
       rasdaman
       sosi
     ]
