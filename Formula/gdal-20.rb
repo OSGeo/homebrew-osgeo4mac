@@ -9,7 +9,13 @@ class Gdal20 < Formula
     depends_on "doxygen" => :build
   end
 
+  bottle do
+    root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
+    sha256 "efc51d54d02e302fb1339b3e2520fe15e3aba7418d5accd970d1e9faee298361" => :mavericks
+  end
+
   keg_only "Older version of gdal is in main tap and installs similar components"
+
   option "with-complete", "Use additional Homebrew libraries to provide more drivers."
   option "with-opencl", "Build with OpenCL acceleration."
   option "with-armadillo", "Build with Armadillo accelerated TPS transforms."
