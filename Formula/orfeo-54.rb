@@ -14,6 +14,12 @@ class Orfeo54 < Formula
     # end
   end
 
+  bottle do
+    root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
+    cellar :any
+    sha256 "6e839262d4baeb6edf4d275eae0e97f4f2612e81e996328188928ce455a9082c" => :mavericks
+  end
+
   option "with-examples", "Compile and install various examples"
   option "with-java", "Enable Java support"
   # option "with-patented", "Enable patented algorithms"
