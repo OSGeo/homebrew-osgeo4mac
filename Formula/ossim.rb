@@ -9,6 +9,11 @@ class Ossim < Formula
       :revision => "5e8eb3f29df1565a87eac5bdbd49b125c7541617"
   version "1.9.0"
 
+  bottle do
+    root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
+    sha256 "6e505be23e7ce7cfc92e278efa0d446a243f7e4e0b9bc59eddee0a1e325c83bb" => :mavericks
+  end
+
   option "with-curl-apps", "Build curl-dependent apps"
   option "without-framework", "Generate library instead of framework"
   option "with-gui", "Build new ossimGui library and geocell application"
