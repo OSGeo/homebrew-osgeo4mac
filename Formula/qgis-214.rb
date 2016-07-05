@@ -111,7 +111,7 @@ class Qgis214 < Formula
   # core processing plugin extras
   # see `grass` above
   depends_on "grass-64" if build.with? "grass6"
-  depends_on "orfeo-42" if build.with? "orfeo"
+  depends_on "orfeo-54" if build.with? "orfeo"
   depends_on "homebrew/science/r" => :optional
   depends_on "saga-gis" => :optional
   # TODO: LASTools straight build (2 reporting tools), or via `wine` (10 tools)
