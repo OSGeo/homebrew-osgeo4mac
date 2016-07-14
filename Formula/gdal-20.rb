@@ -17,6 +17,7 @@ class Gdal20 < Formula
   keg_only "Older version of gdal is in main tap and installs similar components"
 
   option "with-complete", "Use additional Homebrew libraries to provide more drivers."
+  option "with-qhull", "Build with internal qhull libary support"
   option "with-opencl", "Build with OpenCL acceleration."
   option "with-armadillo", "Build with Armadillo accelerated TPS transforms."
   option "with-unsupported", "Allow configure to drag in any library it can find. Invoke this at your own risk."
@@ -206,6 +207,8 @@ class Gdal20 < Formula
     end
 
     args << "--with-libkml=#{libexec}" if build.with? "libkml"
+
+    args << "--with-qhull=#{build.with?("qhull") ? "internal" : "no"}"
 
     # Python is installed manually to ensure everything is properly sandboxed.
     args << "--without-python"
