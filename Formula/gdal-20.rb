@@ -4,14 +4,14 @@ class Gdal20 < Formula
   url "http://download.osgeo.org/gdal/2.1.0/gdal-2.1.0.tar.gz"
   sha256 "eb499b18e5c5262a803bb7530ae56e95c3293be7b26c74bcadf67489203bf2cd"
 
-  head do
-    url "https://svn.osgeo.org/gdal/trunk/gdal"
-    depends_on "doxygen" => :build
-  end
-
   bottle do
     root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
     sha256 "efc51d54d02e302fb1339b3e2520fe15e3aba7418d5accd970d1e9faee298361" => :mavericks
+  end
+
+  head do
+    url "https://svn.osgeo.org/gdal/trunk/gdal"
+    depends_on "doxygen" => :build
   end
 
   keg_only "Older version of gdal is in main tap and installs similar components"
