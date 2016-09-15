@@ -3,7 +3,7 @@ class Mapcache12 < Formula
 
   homepage "http://mapserver.org/mapcache/"
   url "https://github.com/mapserver/mapcache/archive/rel-1-2-1.tar.gz"
-  sha1 "20c8639de1cd2bf92a3177661198b1242a68b027"
+  sha256 "31c6c074324f609eda69743b288926c36bb23826eb6bf090f1146aaf31b59c20"
   version "1.2.1"
 
   option "with-tiff-cache", "Build with TIFFs as a cache backend"
