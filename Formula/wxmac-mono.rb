@@ -1,12 +1,12 @@
 class WxmacMono < Formula
   homepage "http://www.wxwidgets.org"
   url "https://downloads.sourceforge.net/project/wxwindows/3.0.2/wxWidgets-3.0.2.tar.bz2"
-  sha1 "6461eab4428c0a8b9e41781b8787510484dea800"
+  sha256 "346879dc554f3ab8d6da2704f651ecb504a22e9d31c17ef5449b129ed711585d"
 
   bottle do
     root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
-    sha1 "8cb77245f4f2c191e91f1c42e09bf0d32e40fc4a" => :mavericks
-    sha1 "daa1bb7f655d19527b3bc1c18e27c487768c7fde" => :yosemite
+    sha256 "5631995d76eedb6ebc6d6aa00d546415faf03aad8a6aa74b37aff9f9a097a0b7" => :mavericks
+    sha256 "ebb6a36167ab21cc957ee1cbb79fe7844b6eab52730f06fbb2dbc499a5fa0a7d" => :yosemite
   end
 
   keg_only "because wxmac (non-monolithic) is in main tap"
