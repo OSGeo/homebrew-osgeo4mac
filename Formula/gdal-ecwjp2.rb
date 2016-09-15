@@ -17,7 +17,7 @@ end
 class GdalEcwjp2 < Formula
   homepage "http://www.gdal.org/frmt_ecw.html"
   url "http://download.osgeo.org/gdal/1.11.0/gdal-1.11.0.tar.gz"
-  sha1 "25efd2bffdea2e841377ca8c1fd49d89d02ac87e"
+  sha256 "989db33ff411e2c888348e71edec5ad06c74ed68781ebfbc4e85179b9d65aafe"
 
   depends_on :macos => :lion # as per SDK docs
   depends_on EcwJp2Sdk
