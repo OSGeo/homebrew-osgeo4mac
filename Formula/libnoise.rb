@@ -12,12 +12,12 @@ class Libnoise < Formula
 
   resource "examples" do
     url "http://libnoise.sourceforge.net/downloads/examples.zip"
-    sha1 "823e5c1fbe4b889190bdaf1bf6ce5500c8410384"
+    sha256 "d6b0d36e0938a2a60d6c9d74a3fd0b7fae5cac3d8f66ffc738a215e856b4702b"
   end
 
   resource "noiseutils" do
     url "http://libnoise.sourceforge.net/downloads/noiseutils.zip"
-    sha1 "031f13dac6e3383cf9d01219e10080fafb13e45d"
+    sha256 "2c3d7adf288020b22b42d76d047b676f4e3ef33485808a3334ca062f4b52a7db"
   end
 
   def install
