@@ -3,7 +3,7 @@ require 'formula'
 class Gdal19 < Formula
   homepage 'http://www.gdal.org/'
   url 'http://download.osgeo.org/gdal/gdal-1.9.2.tar.gz'
-  sha1 '7eda6a4d735b8d6903740e0acdd702b43515e351'
+  sha256 '9f3b9ae968eaa8d06ee5448e5b65e7bfa940e2e345282a29d95275421f36c688'
 
   conflicts_with 'gdal'
 
@@ -18,7 +18,7 @@ class Gdal19 < Formula
   # For creating up to date man pages.
   depends_on 'doxygen' => :build if build.head?
 
-  depends_on :libpng
+  depends_on 'libpng'
   depends_on 'jpeg'
   depends_on 'giflib'
   depends_on 'libtiff'
