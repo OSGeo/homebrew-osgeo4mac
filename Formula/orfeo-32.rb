@@ -3,7 +3,7 @@ require 'formula'
 class Orfeo32 < Formula
   homepage 'http://www.orfeo-toolbox.org/otb/'
   url 'https://downloads.sourceforge.net/project/orfeo-toolbox/OTB/OTB-3.20/OTB-3.20.0.tgz'
-  sha1 '2af5b4eb857d0f1ecb1fd1107c6879f9d79dd0fc'
+  sha256 '0b7ae22aca430b357457b0878cf6d0c62b7a0eb27b6e3368b8012de054fd726fsha'
 
   option "with-external-boost", "Build with brewed Boost"
 
@@ -30,7 +30,7 @@ class Orfeo32 < Formula
   resource "geoid" do
     # geoid to use in elevation calculations, if no DEM defined or avialable
     url "http://hg.orfeo-toolbox.org/OTB-Data/raw-file/dec1ce83a5f3/Input/DEM/egm96.grd"
-    sha1 "034ae375ff41b87d5e964f280fde0438c8fc8983"
+    sha256 "2babe341e8e04db11447e823ac0dfe4b17f37fd24c7966bb6aeab85a30d9a733"
     version "3.20.0"
   end
 
@@ -40,7 +40,7 @@ class Orfeo32 < Formula
     #   Ensure external libOpenThreads is not used unless specified; otherwise it
     #   may use open-scene-graph's newer lib, which fails when linking with orfeo
     url "https://gist.github.com/dakcarto/8890690/raw/ab16c6cbaf7d214b786583f456d8839585a04fa7/orfeo-cmake-fixes.diff"
-    sha1 "b8c0a835fbe0ad7dd209ef5f949516927f949c88"
+    sha256 "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
   end
 
   patch do
@@ -48,7 +48,7 @@ class Orfeo32 < Formula
       # Fix for forward declaration (and other issues) with clang and libc++
       #   See https://groups.google.com/forum/#!topic/otb-users/dRjdIxlDWfs
       url "https://gist.github.com/dakcarto/8930966/raw/331cca49a8e8dd579c4c19c865b17090a7433cd6/orfeo-libc-fixes.diff"
-      sha1 "5ca9e21d272665da83cdcb37a280144cc42ab62e"
+      sha256 "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     end
   end
 
