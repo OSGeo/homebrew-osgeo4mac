@@ -2,7 +2,7 @@ class QtMysql < Formula
   homepage "http://qt-project.org/"
   # 15 KB, stripped down archive of just what's needed to compile driver
   url "http://qgis.dakotacarto.com/osgeo4mac/qt-4.8.6-mysql-driver.tar.gz"
-  sha1 "a45cc5c766b28c6ae276d79d26b4470a67d03478"
+  sha256 "8a3daebc92bf0a6bff19dd956c559d79484117d9da8e72617335077743a8ba30"
   # 241.5 MB, if downloading full source
 
   depends_on "qt"
