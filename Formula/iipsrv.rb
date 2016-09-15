@@ -8,9 +8,9 @@ class Iipsrv < Formula
   option "with-vips", "Install VIPS for creating Tiled Pyramidal TIFFs"
   option "with-imagemagick", "Install ImageMagick for creating Tiled Pyramidal TIFFs"
 
-  depends_on :autoconf
-  depends_on :automake
-  depends_on :libtool
+  depends_on "autoconf"
+  depends_on "automake"
+  depends_on "libtool"
 
   depends_on "fcgi"
   depends_on "jpeg"
@@ -31,7 +31,7 @@ class Iipsrv < Formula
 
   resource "palaisuulouvre" do
     url "http://merovingio.c2rmf.cnrs.fr/iipimage/PalaisDuLouvre.tif"
-    sha1 "ef539b5f10745cbd1ff18d47bb8c87c3e9fb7c5a"
+    sha256 "e76b75c0b16609aa85e02c13b1ccd4c85ff4b452811e7878442422ce8b23ce6b"
   end
 
   def install
