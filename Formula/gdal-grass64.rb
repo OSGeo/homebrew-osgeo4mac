@@ -3,13 +3,14 @@ require 'formula'
 class GdalGrass64 < Formula
   homepage 'http://www.gdal.org'
   url 'http://download.osgeo.org/gdal/gdal-grass-1.4.3.tar.gz'
-  sha1 '63b87ad1688cc365dc6bd6c3ccc854d0e6aa637a'
+  sha256 'ea18d1e773e8875aaf3261a6ccd2a5fa22d998f064196399dfe73d991688f1dd'
   revision 1
 
   bottle do
     root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
-    sha1 "f404547c07cdee365e5b96f71405ff304d03d91a" => :mavericks
-    sha1 "d5a0dffa38a112208d59c11d30085e2247813f9f" => :yosemite
+    sha256 "93be8a55d7855eb95e08fe888ec7ce893aa1d2e34d91f8a19669d56c9c060c27" => :mavericks
+    sha256 "30f9c487696e908e73efbf74702668ad896d68a7238e529dd19671255b15e651" => :yosemite
+    sha256 "43fdc5d8e5b6ac67f05551fca316bc5f91e36e14cb3bc5cdd698516a724748f8" => :el_capitan
   end
 
   depends_on 'gdal'
