@@ -3,7 +3,7 @@ require 'formula'
 class Gdal110 < Formula
   homepage 'http://www.gdal.org/'
   url 'http://download.osgeo.org/gdal/1.10.1/gdal-1.10.1.tar.gz'
-  sha1 'b4df76e2c0854625d2bedce70cc1eaf4205594ae'
+  sha256 '9984f0314c0bd831eb59fb646c2bc5e13cf1378be4f51499045166cbe62be6ea'
 
   option 'complete', 'Use additional Homebrew libraries to provide more drivers.'
   option 'enable-opencl', 'Build with OpenCL acceleration.'
@@ -66,13 +66,13 @@ class Gdal110 < Formula
     # Must come before DATA
     patch do
       url "https://gist.githubusercontent.com/dakcarto/6877854/raw/82ae81e558c0b6048336f0acb5d7577bd0a237d5/gdal-mdb-patch.diff"
-      sha1 "ea6c753df9e35abd90d7078f8a727eaab7f7d996"
+      sha256 "63bf3d3d984dd851856a5d61c85828978f0f0b0ed3bbff9dce01a4c38309bfb7"
     end if build.include? "enable-mdb"
   end
 
   resource 'numpy' do
     url 'http://downloads.sourceforge.net/project/numpy/NumPy/1.8.1/numpy-1.8.1.tar.gz'
-    sha1 '8fe1d5f36bab3f1669520b4c7d8ab59a21a984da'
+    sha256 'd4f85af64afe57a76e2b3a79cfcac740fb8ce8a3cd6402662f3c760abfa515e4'
   end
 
   def get_configure_args
