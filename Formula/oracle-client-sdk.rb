@@ -8,17 +8,17 @@ class OracleClientSdk < Formula
   if build.with? "basic"
     url "file://#{HOMEBREW_CACHE}/instantclient-basic-macos.x64-11.2.0.4.0.zip",
         :using => CacheDownloadStrategy
-    sha1 "d9b5a1d13ecf2fca0317fc7b4964576a95990f08"
+    sha256 "6c079713ab0a65193f7bfcbad6c90e7806fa6634a3828052f8428e1533bb89d3"
   else
     url "file://#{HOMEBREW_CACHE}/instantclient-basiclite-macos.x64-11.2.0.4.0.zip",
         :using => CacheDownloadStrategy
-    sha1 "79f4b3090e15c392ef85626bb24793e57d02fe24"
+    sha256 "8ebc4baafb40a3b7145d48a4be86747766fdb3e1e0ac7cdd397e852164fa2189"
   end
 
   resource "sdk" do
     url "file://#{HOMEBREW_CACHE}/instantclient-sdk-macos.x64-11.2.0.4.0.zip",
         :using => CacheDownloadStrategy
-    sha1 "1c37a37e62d02bad7705d7e417810da7fda9bd0e"
+    sha256 "da1aefeda37fcb06f45e7f1f6907448da2e861945109602e0af34c8d5f38acde"
   end
 
   def install
