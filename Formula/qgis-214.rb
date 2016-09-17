@@ -70,7 +70,7 @@ class Qgis214 < Formula
   depends_on SipBinary
   depends_on PyQtConfig
   depends_on "qca"
-  depends_on "qscintilla2" # will probably be a C++ lib deps in near future
+  depends_on "qscintilla2-qt4" # will probably be a C++ lib deps in near future
   depends_on "qwt"
   depends_on "qwtpolar"
   depends_on "gsl"
@@ -130,7 +130,7 @@ class Qgis214 < Formula
     qwtpolar_fw = Formula["qwtpolar"].opt_lib/"qwtpolar.framework"
     dev_fw = lib/"qgis-dev"
     dev_fw.mkpath
-    qsci_opt = Formula["qscintilla2"].opt_prefix
+    qsci_opt = Formula["qscintilla2-qt4"].opt_prefix
     args = std_cmake_args
     args << "-DCMAKE_BUILD_TYPE=RelWithDebInfo" if build.with? "debug" # override
     args += %W[
@@ -280,6 +280,8 @@ class Qgis214 < Formula
     pypth = python_site_packages.to_s
     pths = %W[#{HOMEBREW_PREFIX/"bin"} /usr/bin /bin /usr/sbin /sbin /opt/X11/bin /usr/X11/bin].join(pthsep)
     gdalpth = "#{Formula["gdal-20"].opt_lib}/python2.7/site-packages"
+    qscipth = "#{Formula["qscintilla2-qt4"].opt_lib}/python2.7/site-packages"
+
 
     unless opts.include? "with-isolation"
       pths = ORIGINAL_PATHS.join(pthsep)
@@ -293,7 +295,7 @@ class Qgis214 < Formula
     end
 
     # set install's lib/python2.7/site-packages first, so app will work if unlinked
-    pypth = %W[#{gdalpth} #{lib}/python2.7/site-packages #{pypth}].join(pthsep)
+    pypth = %W[#{qscipth} #{gdalpth} #{lib}/python2.7/site-packages #{pypth}].join(pthsep)
 
     envars = {
       :PATH => pths.to_s,
