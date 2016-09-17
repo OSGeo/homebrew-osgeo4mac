@@ -22,7 +22,7 @@ class UnlinkedQGIS < Requirement
   def no_linked_qgis
     qgis_list.each do |f|
       next if f == qgis_formula_name
-      next unless Formula.core_path(f).exist?
+      next unless Formulary.core_path(f).exist?
       begin
         return false, f if Formula[f].linked_keg.exist?
       rescue TapFormulaUnavailableError
