@@ -1,12 +1,9 @@
 class FcgiDebug < Formula
+  desc "Helps trace FastCGI programs without having to strace them"
   homepage "http://redmine.lighttpd.net/projects/fcgi-debug/wiki"
-  # TODO: remove temp hash url after first tagged release
-  url "https://github.com/lighttpd/fcgi-debug.git",
-      :revision => "88c9f6a2b098f26d53d46e3d5db5dfafc758fdf1"
-  version "0.0.0-88c9f6a"
-  sha1 "88c9f6a2b098f26d53d46e3d5db5dfafc758fdf1"
+  url "https://github.com/lighttpd/fcgi-debug/archive/fcgi-debug-0.9.3.tar.gz"
 
-  head "https://github.com/lighttpd/fcgi-debug.git", :branch => "master"
+  head "https://github.com/lighttpd/fcgi-debug.git", branch: "master"
 
   depends_on "cmake" => :build
   depends_on "libev"
