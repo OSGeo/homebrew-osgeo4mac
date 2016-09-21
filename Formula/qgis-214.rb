@@ -6,14 +6,14 @@ class UnlinkedQGIS214 < UnlinkedQGIS
   def qgis_formula_name
     "qgis-214"
   end
-  satisfy(:build_env => false) { no_linked_qgis[0] }
+  satisfy(build_env: false) { no_linked_qgis[0] }
 end
 
 class Qgis214 < Formula
   desc "Open Source Geographic Information System"
   homepage "http://www.qgis.org"
 
-  head "https://github.com/qgis/QGIS.git", :branch => "release-2_14"
+  head "https://github.com/qgis/QGIS.git", branch: "release-2_14"
 
   stable do
     url "https://github.com/qgis/QGIS/archive/final-2_14_6.tar.gz"
@@ -282,7 +282,6 @@ class Qgis214 < Formula
     gdalpth = "#{Formula["gdal-20"].opt_lib}/python2.7/site-packages"
     qscipth = "#{Formula["qscintilla2-qt4"].opt_lib}/python2.7/site-packages"
 
-
     unless opts.include? "with-isolation"
       pths = ORIGINAL_PATHS.join(pthsep)
       unless pths.include? HOMEBREW_PREFIX/"bin"
@@ -298,9 +297,9 @@ class Qgis214 < Formula
     pypth = %W[#{qscipth} #{gdalpth} #{lib}/python2.7/site-packages #{pypth}].join(pthsep)
 
     envars = {
-      :PATH => pths.to_s,
-      :PYTHONPATH => pypth.to_s,
-      :GDAL_DRIVER_PATH => "#{HOMEBREW_PREFIX}/lib/gdalplugins",
+      PATH: pths.to_s,
+      PYTHONPATH: pypth.to_s,
+      GDAL_DRIVER_PATH: "#{HOMEBREW_PREFIX}/lib/gdalplugins",
     }
 
     proc_algs = "Contents/Resources/python/plugins/processing/algs"
