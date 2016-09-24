@@ -60,7 +60,7 @@ def env_vars(ap, hb, qb='', ql=''):
     # this keeps /Library/Python/2.7/site-packages from being searched
     if (os.path.exists(hb + '/Frameworks/Python.framework') and
             os.path.exists('/Library/Frameworks/GDAL.framework')):
-        options['PYQGIS_STARTUP'] = '{hb}/Library/Taps/osgeo/homebrew-osgeo4mac' \
+        options['PYQGIS_STARTUP'] = '{hb}/Homebrew/Library/Taps/osgeo/homebrew-osgeo4mac' \
                                     '/enviro/python_startup.py'
         options['PYTHONHOME'] = '{hb}/Frameworks/Python.framework/Versions/2.7'
 
