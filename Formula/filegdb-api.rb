@@ -1,43 +1,63 @@
-require File.expand_path("../../Strategies/cache-download", Pathname.new(__FILE__).realpath)
-
 class FilegdbApi < Formula
-  homepage "http://www.esri.com/software/arcgis/geodatabase/interoperability"
-  url "file://#{HOMEBREW_CACHE}/FileGDB_API_1_3-64.zip",
-      :using => CacheDownloadStrategy
-  sha1 "95ba7e3da555508c8be10b8dbb6ad88a71b03f49"
-  version "1.3"
+  desc "ESRI File Geodatabase C++ API libraries"
+  homepage "https://github.com/Esri/file-geodatabase-api"
+  url "https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_1_4-64clang.zip"
+  version "1.4"
+  sha256 "a6c452ed5fada241c9cb3a255d1e8084cf6a5d4f97e62f5854d87e2714a36384"
 
-  option "with-docs", "Intall API documentation and examples"
+  option "with-docs", "Intall API documentation and sample code"
 
   def install
     prefix.install %W[lib license]
-    include.install "include" => "filegdb"
-    if build.with? "docs"
-      (share/"filegdb-api").install %W[samples xmlResources]
-      (share/"filegdb-api").install "doc/html" => "html"
+    # update libs
+    cd lib do
+      install_change "libFileGDBAPI.dylib",
+                     "@rpath/libfgdbunixrtl.dylib",
+                     "@loader_path/libfgdbunixrtl.dylib"
+      set_install_name("libFileGDBAPI.dylib", opt_lib)
     end
 
-    # update libs
-    install_change lib/"libFileGDBAPI.dylib",
-                   "@rpath/libfgdbunixrtl.dylib",
-                   "@loader_path/libfgdbunixrtl.dylib"
+    # build a sample for testing libs
+    # Note: Editing sample failed in test sandbox; worked in Terminal
+    mkdir_p libexec/"test/bin"
+    mkdir libexec/"test/data"
+    cp_r "samples/data/Querying.gdb", libexec/"test/data/"
+    cd "samples/Querying" do
+      inreplace "Makefile", "../../lib", lib
+      inreplace "Makefile", "../bin", "#{libexec}/test/bin"
+      system "make"
+    end
+
+    # install headers (after building test binary)
+    rm_f "include/make.include"
+    include.install "include" => "filegdb"
+
+    if build.with? "docs"
+      pkgshare.install %W[samples xmlResources]
+      pkgshare.install "doc/html" => "html"
+    end
   end
 
   def install_change(dylib, old, new)
     quiet_system "install_name_tool", "-change", old, new, dylib
   end
 
+  def set_install_name(dylib, dir)
+    quiet_system "install_name_tool", "-id", "#{dir}/#{dylib}", dylib
+  end
+
   def caveats; <<-EOS.undent
-        To build software with the File GDB API, add to the following
-        environment variable to find headers:
+      To build software with the File GDB API, add to the following
+      environment variable to find headers:
 
-          CPPFLAGS: -I#{opt_prefix}/include/filegdb
-
-        ============================== IMPORTANT ==================================
-        If linking with other software built on 10.9+, clang links to libc++, whereas
-        File GDB API libs/binaries link to libstdc++. This may lead to build
-        failures or issues during usage, including crashes.
+        CPPFLAGS: -I#{opt_prefix}/include/filegdb
 
     EOS
+  end
+
+  test do
+    cd libexec/"test/bin" do
+      system "./Querying"
+    end
   end
 end
