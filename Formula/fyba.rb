@@ -1,7 +1,6 @@
 class Fyba < Formula
   desc "Library to read/write Norwegian National geodata standard (SOSI) files"
   homepage "https://github.com/kartverket/fyba"
-  # TODO: remove temp hash url after first tagged release
   url "https://github.com/kartverket/fyba/archive/4.1.1.tar.gz"
   sha256 "99f658d52e8fd8997118bb6207b9c121500700996d9481a736683474e2534179"
 
@@ -12,6 +11,7 @@ class Fyba < Formula
   def install
     # fixup some includes: https://github.com/kartverket/fyba/issues/12
     # done with inreplace due to CRLF endings in src/UT files
+    # REMOVE ON NEXT RELEASE
     %W[configure configure.ac src/UT/DISKINFO.cpp src/UT/INQSIZE.cpp src/UT/INQTID.cpp].each do |s|
       inreplace s, "sys/vfs.h", "sys/mount.h"
     end
