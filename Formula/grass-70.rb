@@ -29,7 +29,7 @@ class Grass70 < Formula
   if build.with? "gdal-1"
     depends_on "gdal"
   else
-    depends_on "gdal-20"
+    depends_on "gdal2"
   end
   depends_on "libtiff"
   depends_on "unixodbc"

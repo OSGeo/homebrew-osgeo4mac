@@ -17,7 +17,7 @@ class SagaGis < Formula
   depends_on "automake" => :build
   depends_on "autoconf" => :build
   depends_on "libtool" => :build
-  depends_on "gdal-20"
+  depends_on "gdal2"
   depends_on "jasper"
   depends_on "proj"
   depends_on "wxmac"

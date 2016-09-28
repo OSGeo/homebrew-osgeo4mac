@@ -5,7 +5,7 @@ class Gdal2Mrsid < Formula
   sha256 "eb499b18e5c5262a803bb7530ae56e95c3293be7b26c74bcadf67489203bf2cd"
 
   depends_on "mrsid-sdk"
-  depends_on "gdal-20"
+  depends_on "gdal2"
 
   def install
     mrsid_sdk_opt = Formula["mrsid-sdk"].opt_prefix

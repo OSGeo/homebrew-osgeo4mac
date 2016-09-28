@@ -36,7 +36,7 @@ class Orfeo54 < Formula
   depends_on "open-scene-graph" # (for libOpenThreads, now internal to osg)
 
   # recommended
-  depends_on "gdal-20" => :recommended
+  depends_on "gdal2" => :recommended
   depends_on "qt" => :recommended
   depends_on "muparser" => :recommended
   depends_on "libkml" => :recommended

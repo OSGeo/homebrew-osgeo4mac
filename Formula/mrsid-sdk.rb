@@ -12,7 +12,7 @@ class MrsidSdk < Formula
   option "with-docs", "Intall documentation and examples for SDKs"
 
   # this is an odd one: only needs the share/gdal components
-  depends_on "gdal-20" => :build
+  depends_on "gdal2" => :build
 
   def install
     # first strip unnecessary installs
