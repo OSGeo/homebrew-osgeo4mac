@@ -1,24 +1,15 @@
 class Orfeo54 < Formula
   desc "Library of image processing algorithms"
   homepage "http://www.orfeo-toolbox.org/otb/"
+  url "https://github.com/orfeotoolbox/OTB/archive/5.4.0.tar.gz"
+  sha256 "d232e8099bab7d9777ab2213a8fc1bf97d6731db88dad8963aa930f2ac13e38f"
+  revision 1
 
-  stable do
-    url "https://github.com/orfeotoolbox/OTB/archive/5.4.0.tar.gz"
-    sha256 "d232e8099bab7d9777ab2213a8fc1bf97d6731db88dad8963aa930f2ac13e38f"
-    #
-    # #patch for "itksys/FundamentalType.h: No such file or directory"
-    # #see: https://bugs.orfeo-toolbox.org/view.php?id=1142
-    # patch do
-    #   url "https://gist.githubusercontent.com/dakcarto/872219fc7137845e0cab721907ee0f13/raw/dcc96ecd9c567c48e3505e56337fe52562dfc937/orfeo-50-patches.diff"
-    #   sha256 "155c61c56d2e27dd83164627a7f84307bc565405f7c4542e50794ee8e09632e3"
-    # end
-  end
-
-  bottle do
-    root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
-    cellar :any
-    sha256 "6e839262d4baeb6edf4d275eae0e97f4f2612e81e996328188928ce455a9082c" => :mavericks
-  end
+  # bottle do
+  #   root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
+  #   cellar :any
+  #   sha256 "" => :mavericks
+  # end
 
   option "with-examples", "Compile and install various examples"
   option "with-java", "Enable Java support"
@@ -46,16 +37,13 @@ class Orfeo54 < Formula
   # optional
   depends_on :python => :optional
   depends_on "mapnik" => :optional
-  depends_on "homebrew/versions/openjpeg21" => :optional
+  depends_on "openjpeg" => :optional
   depends_on "homebrew/x11/freeglut" => :optional
   depends_on "fftw" => :optional # restricts built binaries to GPL license
   depends_on "opencv" => :optional
   depends_on "glew" => :optional
 
-  # conflicts_with "orfeo", :because => "orfeo provides same functionality"
-  conflicts_with "orfeo-42", :because => "orfeo-42 provides same functionality"
-  conflicts_with "orfeo-40", :because => "orfeo-40 provides same functionality"
-  conflicts_with "orfeo-32", :because => "orfeo-32 provides same functionality"
+  conflicts_with "orfeo", :because => "orfeo provides same functionality"
 
   resource "geoid" do
     # geoid to use in elevation calculations, if no DEM defined or avialable
@@ -94,7 +82,7 @@ class Orfeo54 < Formula
     # args << "-DOTB_USE_MUPARSERX=" + (build.with?("") ? "ON" : "OFF")
     args << "-DOTB_USE_OPENCV=" + (build.with?("opencv") ? "ON" : "OFF")
     # args << "-DOTB_USE_OPENGL=" + (build.with?("examples") ? "ON" : "OFF")
-    args << "-DOTB_USE_OPENJPEG=" + (build.with?("openjpeg21") ? "ON" : "OFF")
+    args << "-DOTB_USE_OPENJPEG=" + (build.with?("openjpeg") ? "ON" : "OFF")
     args << "-DOTB_USE_QT4=" + (build.with?("qt") ? "ON" : "OFF")
     # args << "-DOTB_USE_SIFTFAST=" + (build.with?("") ? "ON" : "OFF")
 
