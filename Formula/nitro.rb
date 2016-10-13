@@ -1,9 +1,9 @@
 class Nitro < Formula
+  desc "Library reading/writing the National Imagery Transmission Format (NITF)."
   homepage "https://github.com/hobu/nitro"
-  # TODO: request a tagged release
-  url "https://github.com/hobu/nitro.git", :revision => "a3539c63128d9190fbd0043c1652d1b9397f8fcd"
-  version "1.0-a3539c6"
-  sha1 "a3539c63128d9190fbd0043c1652d1b9397f8fcd"
+  url "https://github.com/hobu/nitro/archive/2.7dev-1.tar.gz"
+  version "2.7dev-1"
+  sha256 "6c5c403ef5e90f07b3fd6bb425de97eeaefc79a9920a3970541dd9a33b46aca8"
 
   head "https://github.com/hobu/nitro.git", :branch => "master"
 
