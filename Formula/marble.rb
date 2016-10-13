@@ -1,7 +1,7 @@
 class Marble < Formula
   homepage "http://marble.kde.org/"
-  url "http://download.kde.org/stable/4.13.1/src/marble-4.13.1.tar.xz"
-  sha1 "9d7cedc13098ddf1d759b44d570b9cf68d7f3ae7"
+  url "https://quickgit.kde.org/?p=marble.git&a=snapshot&h=d6f093ced2ca8900735a0098d7b781321a8fc399&fmt=tgz"
+  sha256 "10c4abbd48daee2ce44446c191b28492310d4d1f9065d9d8eb2c0c5e5e970635"
   version "1.7.0"
 
   head "git://anongit.kde.org/marble"
