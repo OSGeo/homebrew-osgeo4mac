@@ -1,20 +1,18 @@
 class OrfeoIce < Formula
-  ORFEO = "orfeo-54"
+  ORFEO = "orfeo-54".freeze
   OREFO_F = Formula[ORFEO]
   ORFEO_OPTS = Tab.for_formula(OREFO_F).used_options
-  ITK_VER = "4.6"
+  ITK_VER = "4.10".freeze
 
+  desc "Interactive raster visualiztion library"
   homepage "http://www.orfeo-toolbox.org/otb/"
-  # url "http://hg.orfeo-toolbox.org/Ice/archive/7ebb3feefb43.tar.gz" # 2014-10-28 commit
-  # sha1 "cabab57664559cce9a444f3a8096fe7f6ec2f598"
-  url "https://downloads.sourceforge.net/project/orfeo-toolbox/Monteverdi2/Monteverdi2-0.8/Ice-bde0f85ca45d.tgz"
-  version "0.2.0"
-  sha1 "283c7b969bf345cbf9b986bdc72bbb5ee38e54f4"
+  url "https://www.orfeo-toolbox.org/packages/archives/Ice/Ice-0.4.1.tar.gz"
+  sha256 "4abb85bcd26766edee827c468e8994e8f3207ce7f1f229f9ce07eb31805ab98b"
 
-  bottle do
-    root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
-    sha1 "1c481a12af0abe84b23b913de74c491df202c931" => :mavericks
-  end
+  # bottle do
+  #   root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
+  #   sha256 "" => :mavericks
+  # end
 
   depends_on "cmake" => :build
   depends_on ORFEO
@@ -45,5 +43,9 @@ class OrfeoIce < Formula
       system "make" # keep as a separate step, or 9000+ symlinks added to orfeo formula
       system "make", "install"
     end
+  end
+
+  test do
+    #
   end
 end
