@@ -6,12 +6,12 @@ class Monteverdi2 < Formula
 
   homepage "http://orfeo-toolbox.org/otb/monteverdi.html"
   url "https://downloads.sourceforge.net/project/orfeo-toolbox/Monteverdi2/Monteverdi2-0.8/Monteverdi2-0.8.0.tgz"
-  sha1 "c68c5ad95ca99621c79fcfa794333e8ae42a1a49"
+  sha256 "efbc5c753f1d58a8aa1ed89a52d8714471feebc8ad1be1324bb61c83a6f3a86c"
 
-  bottle do
-    root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
-    sha1 "ee50c769b7abc085fc3cc98094e666a561efc45d" => :mavericks
-  end
+  # bottle do
+  #   root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
+  #   sha256 "" => :mavericks
+  # end
 
   option "without-app", "Don't bundle into application"
 
@@ -23,14 +23,14 @@ class Monteverdi2 < Formula
 
   resource "qwt5" do
     # http://qwt.sourceforge.net/
-    url "http://sourceforge.net/projects/qwt/files/qwt/5.2.3/qwt-5.2.3.tar.bz2"
-    sha1 "ff81595a1641a8b431f98d6091bb134bc94e0003"
+    url "https://sourceforge.net/projects/qwt/files/qwt/5.2.3/qwt-5.2.3.tar.bz2"
+    sha256 "37feaf306753230b0d8538b4ff9b255c6fddaa3d6609ec5a5cc39a5a4d020ab7"
   end
 
   resource "bundle" do
     # substitute CMake bundling that doesn't bundle dependencies
     url "https://gist.githubusercontent.com/dakcarto/517e4dcf0e7fc5f2711d/raw/7bc6d4d83c4df22de03690b2197c5b4b741fc60a/CMakeLists-osgeo4mac.txt"
-    sha1 "f283c7887319248cb14f85da86da49789776ee13"
+    sha256 "2e3a5e094c3a4ffe33dcfb8f71097947d93c533701114a9f61178090cb95318b"
     version "0.8.0"
   end
 
@@ -38,7 +38,7 @@ class Monteverdi2 < Formula
     # patch to fix older on_MyAction_activated deprecated signal (now is _triggered)
     patch do
       url "https://gist.githubusercontent.com/dakcarto/c64599469d0019f2ff86/raw/f9a256e1ba51712fbeda1ea863a3584ca7319377/monteverdi2-activated.diff"
-      sha1 "0582bc3c81f41f50e94a91aefb2c297253c3d016"
+      sha256 "06884c98f447f81ab6b0aa047a24d24446839dca47dc5af426cd24bbd77b17f7"
     end
   end
 
