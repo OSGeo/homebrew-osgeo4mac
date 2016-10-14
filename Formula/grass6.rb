@@ -22,8 +22,6 @@ class Grass6 < Formula
     # sha256 "f951bfe72e348529ebd8ee56f202872258ccd803cee472079222d68acfd70e9b" => :yosemite
   end
 
-  keg_only "grass is in main tap and same-name bin utilities are installed"
-
   option "without-gui", "Build without WxPython interface. Command line tools still available."
 
   depends_on UnlinkedGRASS6
