@@ -55,9 +55,17 @@ class QwtpolarQt4 < Formula
     system "qmake", *args
     system "make"
     system "make", "install"
+  end
 
-    ln_sf "#{lib}/qt-4/plugins/designer/libqwt_polar_designer_plugin.dylib",
-          "#{HOMEBREW_PREFIX}/lib/qt-4/plugins/designer/" if build.with? "plugin"
+  def post_install
+    # do symlinking of keg-only here, since `brew doctor` complains about it
+    # and user may need to re-link again after following suggestion to unlink
+    if build.with? "plugin"
+      dsubpth = "qt-4/plugins/designer"
+      dhppth = HOMEBREW_PREFIX/"lib/#{dsubpth}"
+      dhppth.mkpath
+      ln_sf "#{opt_lib.relative_path_from(dhppth)}/#{dsubpth}/libqwt_polar_designer_plugin.dylib", "#{dhppth}/"
+    end
   end
 
   test do
