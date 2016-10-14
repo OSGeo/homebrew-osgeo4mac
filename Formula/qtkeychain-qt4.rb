@@ -38,6 +38,15 @@ class QtkeychainQt4 < Formula
     end
   end
 
+  def caveats
+    if build.with? "static"
+      <<-EOS.undent
+        Static library is available at:
+          #{opt_lib}/libqtkeychain_static.a
+      EOS
+    end
+  end
+
   test do
     assert_match "Password deleted successfully",
                  shell_output(libexec/"bin/testclient delete something")
