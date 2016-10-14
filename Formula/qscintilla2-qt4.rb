@@ -3,21 +3,35 @@ class Qscintilla2Qt4 < Formula
   homepage "https://www.riverbankcomputing.com/software/qscintilla/intro"
   url "https://downloads.sf.net/project/pyqt/QScintilla2/QScintilla-2.9.3/QScintilla_gpl-2.9.3.tar.gz"
   sha256 "98aab93d73b05635867c2fc757acb383b5856a0b416e3fd7659f1879996ddb7e"
+  revision 1
 
-  keg_only "Newer version of qscintilla2 (for Qt5) is in main tap and installs similar components"
+  # bottle do
+  #   root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
+  #   sha256 "" => :mavericks
+  # end
+
+  keg_only "Newer Qt5-only version in homebrew-core"
 
   option "without-plugin", "Skip building the Qt Designer plugin"
   option "without-python", "Skip building the Python bindings"
 
   depends_on :python => :recommended
-  depends_on :python3 => :optional
 
-  if build.with? "python3"
-    depends_on "pyqt" => "with-python3"
-  elsif build.with? "python"
-    depends_on "pyqt"
+  if build.with? "python"
+    depends_on "pyqt-qt4"
   else
-    depends_on "qt"
+    depends_on "qt-4"
+  end
+
+  # Fix build with Xcode 8 "error: implicit instantiation of undefined template"
+  # Originally reported 7 Oct 2016 https://www.riverbankcomputing.com/pipermail/qscintilla/2016-October/001160.html
+  # Patch below posted 13 Oct 2016 https://www.riverbankcomputing.com/pipermail/qscintilla/2016-October/001167.html
+  # Same as Alan Garny's OpenCOR commit https://github.com/opencor/opencor/commit/70f3944e36b8b95b3ad92106aeae2f511b3f0e90
+  if DevelopmentTools.clang_build_version >= 800
+    patch do
+      url "https://raw.githubusercontent.com/Homebrew/formula-patches/a651d71/qscintilla2/xcode-8.patch"
+      sha256 "1a88309fdfd421f4458550b710a562c622d72d6e6fdd697107e4a43161d69bc9"
+    end
   end
 
   def install
@@ -51,24 +65,21 @@ class Qscintilla2Qt4 < Formula
     # Add qscintilla2 features search path, since it is not installed in Qt keg's mkspecs/features/
     ENV["QMAKEFEATURES"] = prefix/"data/mkspecs/features"
 
-    if build.with?("python") || build.with?("python3")
+    if build.with?("python")
       cd "Python" do
         Language::Python.each_python(build) do |python, version|
           (share/"sip").mkpath
+          ENV["PYTHONPATH"] = "#{HOMEBREW_PREFIX}/lib/qt-4/python#{version}/site-packages"
           system python, "configure.py", "-o", lib, "-n", include,
                            "--apidir=#{prefix}/qsci",
-                           "--destdir=#{lib}/python#{version}/site-packages/PyQt4",
-                           "--stubsdir=#{lib}/python#{version}/site-packages/PyQt4",
+                           "--destdir=#{lib}/qt-4/python#{version}/site-packages/PyQt4",
+                           "--stubsdir=#{lib}/qt-4/python#{version}/site-packages/PyQt4",
                            "--qsci-sipdir=#{share}/sip",
-                           "--pyqt-sipdir=#{HOMEBREW_PREFIX}/share/sip",
+                           "--pyqt-sipdir=#{Formula["pyqt-qt4"].opt_share}/sip",
                            "--spec=#{spec}"
           system "make"
           system "make", "install"
           system "make", "clean"
-
-          # need to symlink the Qsci.so module into PyQt5 or can't be found
-          ln_sf opt_lib/"python#{version}/site-packages/PyQt4/Qsci.so",
-                Language::Python.homebrew_site_packages(version)/"PyQt4/"
         end
       end
     end
@@ -77,7 +88,7 @@ class Qscintilla2Qt4 < Formula
       mkpath prefix/"plugins/designer"
       cd "designer-Qt4Qt5" do
         inreplace "designer.pro" do |s|
-          s.sub! "$$[QT_INSTALL_PLUGINS]", "#{lib}/qt4/plugins"
+          s.sub! "$$[QT_INSTALL_PLUGINS]", "#{lib}/qt-4/plugins"
           s.sub! "$$[QT_INSTALL_LIBS]", lib
         end
         system "qmake", "designer.pro", *args
@@ -87,12 +98,40 @@ class Qscintilla2Qt4 < Formula
     end
   end
 
+  def post_install
+    # do symlinking of keg-only here, since `brew doctor` complains about it
+    # and user may need to re-link again after following suggestion to unlink
+    Language::Python.each_python(build) do |_python, version|
+      subpth = "qt-4/python#{version}/site-packages/PyQt4"
+      hppth = HOMEBREW_PREFIX/"lib/#{subpth}"
+      hppth.mkpath
+      cd lib/subpth do
+        Dir["Qsci*"].each { |f| ln_sf "#{opt_lib.relative_path_from(hppth)}/#{subpth}/#{f}", "#{hppth}/" }
+      end
+    end
+    if build.with? "plugin"
+      dsubpth = "qt-4/plugins/designer"
+      dhppth = HOMEBREW_PREFIX/"lib/#{dsubpth}"
+      dhppth.mkpath
+      ln_sf "#{opt_lib.relative_path_from(dhppth)}/#{dsubpth}/libqscintillaplugin.dylib", "#{dhppth}/"
+    end
+  end
+
+  def caveats
+    s = "Python modules in:\n"
+    Language::Python.each_python(build) do |_python, version|
+      s += "  #{HOMEBREW_PREFIX}/lib/qt-4/python#{version}/site-packages/PyQt4"
+    end
+    s
+  end
+
   test do
-    Pathname("test.py").write <<-EOS.undent
+    Language::Python.each_python(build) do |python, version|
+      Pathname("test.py").write <<-EOS.undent
+      import site; site.addsitedir("#{HOMEBREW_PREFIX}/lib/qt-4/python#{version}/site-packages")
       import PyQt4.Qsci
       assert("QsciLexer" in dir(PyQt4.Qsci))
-    EOS
-    Language::Python.each_python(build) do |python, _version|
+      EOS
       system python, "test.py"
     end
   end
