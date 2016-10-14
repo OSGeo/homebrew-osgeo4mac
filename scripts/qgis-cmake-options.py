@@ -90,7 +90,7 @@ def cmake_opts(qi, hb, ver):
         ('WITH_QSPATIALITE', 'TRUE'),
         ('WITH_GRASS', 'FALSE'),
         ('WITH_GRASS7', 'TRUE'),
-        ('GRASS_PREFIX7', '{hb}/opt/grass-70/grass-' + GRASS7_VERSION),
+        ('GRASS_PREFIX7', '{hb}/opt/grass7/grass-' + GRASS7_VERSION),
         ('WITH_GLOBE', 'FALSE'),
         ('WITH_ORACLE', 'FALSE'),
         ('FCGI_INCLUDE_DIR', '{hb}/opt/fcgi/include'),
