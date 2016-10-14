@@ -70,10 +70,19 @@ class PyqtQt4 < Formula
       system "make"
       system "make", "install"
       system "make", "clean" # for when building against multiple Pythons
+    end
+  end
 
-      (HOMEBREW_PREFIX/"lib/qt-4/python#{version}/site-packages/PyQt4").mkpath
-      ln_sf Dir[lib/"qt-4/python#{version}/site-packages/PyQt4/*"],
-            HOMEBREW_PREFIX/"lib/qt-4/python#{version}/site-packages/PyQt4/"
+  def post_install
+    # do symlinking of keg-only here, since `brew doctor` complains about it
+    # and user may need to re-link again after following suggestion to unlink
+    Language::Python.each_python(build) do |_python, version|
+      subpth = "qt-4/python#{version}/site-packages/PyQt4"
+      hppth = HOMEBREW_PREFIX/"lib/#{subpth}"
+      hppth.mkpath
+      cd lib/subpth do
+        Dir["*"].each { |f| ln_sf "#{opt_lib.relative_path_from(hppth)}/#{subpth}/#{f}", "#{hppth}/" }
+      end
     end
   end
 
