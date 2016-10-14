@@ -135,6 +135,10 @@ class Qt4 < Formula
     Pathname.glob("#{bin}/*.app") { |app| mv app, prefix }
   end
 
+  def post_install
+    (HOMEBREW_PREFIX/"lib/qt-4/plugins/designer").mkpath
+  end
+
   def caveats; <<-EOS.undent
     We agreed to the Qt opensource license for you.
     If this is unacceptable you should uninstall.
