@@ -37,9 +37,9 @@ QGIS_LOG_FILE = QGIS_LOG_DIR + '/qgis-dev.log'
 
 def env_vars(ap, hb, qb='', ql=''):
     options = OrderedDict()
-    options['PATH'] = '{hb}/opt/gdal-20/bin:{hb}/bin:{hb}/sbin:' + os.environ['PATH']
+    options['PATH'] = '{hb}/opt/gdal2/bin:{hb}/bin:{hb}/sbin:' + os.environ['PATH']
 
-    dyld_path = '{hb}/opt/gdal-20/lib:{hb}/opt/sqlite/lib:{hb}/opt/libxml2/lib:{hb}/lib'
+    dyld_path = '{hb}/opt/gdal2/lib:{hb}/opt/sqlite/lib:{hb}/opt/libxml2/lib:{hb}/lib'
     run_from_build = False
     if qb:
         qbr = os.path.realpath(qb)
@@ -64,7 +64,7 @@ def env_vars(ap, hb, qb='', ql=''):
                                     '/enviro/python_startup.py'
         options['PYTHONHOME'] = '{hb}/Frameworks/Python.framework/Versions/2.7'
 
-    options['PYTHONPATH'] = '{hb}/opt/gdal-20/lib/python2.7/site-packages:' \
+    options['PYTHONPATH'] = '{hb}/opt/gdal2/lib/python2.7/site-packages:' \
                             '{hb}/lib/python2.7/site-packages'
     options['GDAL_DRIVER_PATH'] = '{hb}/lib/gdalplugins'
     options['GRASS_PREFIX'] = '{hb}/opt/grass-' + GRASS_VERSION
@@ -198,9 +198,9 @@ def main():
     wrp_scr = ap + '/Contents/MacOS/{0}.sh'.format(app_id)
 
     # override vars that need to prepend existing vars
-    evars['PATH'] = '{hb}/opt/gdal-20/bin:{hb}/bin:{hb}/sbin:$PATH'.format(hb=hb)
+    evars['PATH'] = '{hb}/opt/gdal2/bin:{hb}/bin:{hb}/sbin:$PATH'.format(hb=hb)
     evars['PYTHONPATH'] = \
-        '{hb}/opt/gdal-20/lib/python2.7/site-packages:' \
+        '{hb}/opt/gdal2/lib/python2.7/site-packages:' \
         '{hb}/lib/python2.7/site-packages:$PYTHONPATH'.format(hb=hb)
 
     if os.path.exists(wrp_scr):

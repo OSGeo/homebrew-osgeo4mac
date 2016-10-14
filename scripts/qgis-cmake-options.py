@@ -57,7 +57,7 @@ def cmake_opts(qi, hb, ver):
         ('CMAKE_INSTALL_PREFIX', qi),
         ('CMAKE_PREFIX_PATH', '"{hb}/opt/libxml2;{hb}/opt/expat;'
                               '{hb}/opt/gettext;{hb}/opt/sqlite;'
-                              '{hb}/opt/gdal-20;'
+                              '{hb}/opt/gdal2;'
                               '{hb}"'),
         ('CMAKE_FRAMEWORK_PATH', '"{hb}/opt/qwt/lib;{hb}/opt/qwtpolar/lib"'),
         ('CMAKE_BUILD_TYPE', 'RelWithDebInfo'),
@@ -85,7 +85,7 @@ def cmake_opts(qi, hb, ver):
         ('WITH_APIDOC', 'FALSE'),
         ('WITH_QSCIAPI', 'FALSE'),
         ('QSCI_SIP_DIR', '{hb}/opt/qscintilla2/share/sip'),
-        ('GDAL_CONFIG', '{hb}/opt/gdal-20/bin/gdal-config'),
+        ('GDAL_CONFIG', '{hb}/opt/gdal2/bin/gdal-config'),
         ('POSTGRES_CONFIG', '{hb}/bin/pg_config'),
         ('WITH_QSPATIALITE', 'TRUE'),
         ('WITH_GRASS', 'FALSE'),
