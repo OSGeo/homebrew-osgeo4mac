@@ -114,7 +114,7 @@ def cmake_opts(qi, hb, ver):
     # ('OSGEARTH_DIR', '{hb}'),
     # ('OSG_PLUGINS_PATH', '{hb}/lib/osgPlugins-' + OSG_VERSION),
 
-    # ('GRASS_PREFIX', '{hb}/opt/grass-64/grass-' + GRASS_VERSION),
+    # ('GRASS_PREFIX', '{hb}/opt/grass6/grass-' + GRASS_VERSION),
 
     # ('OCI_INCLUDE_DIR', '{hb}/opt/oracle-client-sdk/sdk/include'),
     # ('OCI_LIBRARY', '{hb}/lib/libclntsh.dylib'),
