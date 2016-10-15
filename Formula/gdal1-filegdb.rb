@@ -7,9 +7,13 @@ class Gdal1Filegdb < Formula
   depends_on "filegdb-api"
   depends_on "gdal"
 
-  def gdal_plugins_subdirectory
+  def gdal_majmin_ver
     gdal_ver_list = Formula["gdal"].version.to_s.split(".")
-    "gdalplugins/#{gdal_ver_list[0]}.#{gdal_ver_list[1]}"
+    "#{gdal_ver_list[0]}.#{gdal_ver_list[1]}"
+  end
+
+  def gdal_plugins_subdirectory
+    "gdalplugins/#{gdal_majmin_ver}"
   end
 
   def install
@@ -32,9 +36,9 @@ class Gdal1Filegdb < Formula
     dylib_name = "ogr_FileGDB.dylib"
     args.concat %W[
       -dynamiclib
-      -install_name #{opt_lib}/#{gdal_plugins}/#{dylib_name}
+      -install_name #{opt_lib}/#{gdal_plugins_subdirectory}/#{dylib_name}
       -current_version #{version}
-      -compatibility_version #{version}
+      -compatibility_version #{gdal_majmin_ver}.0
       -o #{gdal_plugins}/#{dylib_name}
       -undefined dynamic_lookup
     ]
