@@ -133,6 +133,8 @@ class Qt4 < Formula
            "#{bin}/Designer.app/Contents/Info.plist"
 
     Pathname.glob("#{bin}/*.app") { |app| mv app, prefix }
+
+    post_install
   end
 
   def post_install

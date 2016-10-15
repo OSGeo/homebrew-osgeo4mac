@@ -55,6 +55,8 @@ class QwtpolarQt4 < Formula
     system "qmake", *args
     system "make"
     system "make", "install"
+
+    post_install
   end
 
   def post_install

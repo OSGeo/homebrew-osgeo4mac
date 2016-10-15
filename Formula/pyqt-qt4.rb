@@ -71,6 +71,8 @@ class PyqtQt4 < Formula
       system "make", "install"
       system "make", "clean" # for when building against multiple Pythons
     end
+
+    post_install
   end
 
   def post_install

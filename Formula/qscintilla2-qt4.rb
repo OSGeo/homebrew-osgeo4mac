@@ -96,6 +96,8 @@ class Qscintilla2Qt4 < Formula
         system "make", "install"
       end
     end
+
+    post_install
   end
 
   def post_install

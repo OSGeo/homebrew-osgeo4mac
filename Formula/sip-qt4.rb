@@ -31,6 +31,8 @@ class SipQt4 < Formula
       system "make", "install"
       system "make", "clean"
     end
+
+    post_install
   end
 
   def post_install
