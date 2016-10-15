@@ -1,5 +1,5 @@
 class OrfeoIce < Formula
-  ORFEO = "orfeo-54".freeze
+  ORFEO = "orfeo5".freeze
   OREFO_F = Formula[ORFEO]
   ORFEO_OPTS = Tab.for_formula(OREFO_F).used_options
   ITK_VER = "4.10".freeze
