@@ -1,52 +1,27 @@
-class UnlinkedQGIS < Requirement
+class UnlinkedQGIS2 < Requirement
   fatal true
 
-  def qgis_formula_name
-    # meant to be overridden by each formula using requirement
-    ""
+  def unlinked_qgis
+    found = `readlink ${HOMEBREW_PREFIX}/bin/qgis | egrep -o '/qgis[^/]*/' | tr -d '/' | tr -d '\n'`
+    return found.empty?, found
   end
 
-  def qgis_list
-    %W[
-      qgis
-      qgis-18
-      qgis-20
-      qgis-22
-      qgis-24
-      qgis-26
-      qgis-28
-      qgis-214
-    ]
-  end
-
-  def no_linked_qgis
-    qgis_list.each do |f|
-      next if f == qgis_formula_name
-      next unless Formulary.core_path(f).exist?
-      begin
-        return false, f if Formula[f].linked_keg.exist?
-      rescue TapFormulaUnavailableError
-        next
-      rescue FormulaUnavailableError
-        next
-      end
-    end
-    return true, ""
-  end
-
-  satisfy(:build_env => false) { no_linked_qgis[0] }
+  satisfy(:build_env => false) { unlinked_qgis[0] }
 
   def message
-    qgis_f = no_linked_qgis[1]
+    qgis_f = unlinked_qgis[1]
     <<-EOS.undent
 
-      Another QGIS formula is linked: #{qgis_f}.
+      Another QGIS formula is linked: #{qgis_f}
+
       Do `brew unlink #{qgis_f}` then try installing this formula again.
       You can leave #{qgis_f} unlinked and installed as keg-only;
       however, launching it as keg-only may cause issues or crashes, since it
-      will be now be referencing Python modules of the newly linked QGIS.
+      will be now be referencing Python modules of any newly linked QGIS.
 
       Issue can be overcome by setting PYTHONPATH, e.g. in the app's Options.
+
+      Or, keep all QGIS formulae unlinked if you wish to run multiple installs.
 
     EOS
   end

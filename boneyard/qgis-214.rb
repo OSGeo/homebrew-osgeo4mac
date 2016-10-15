@@ -1,14 +1,6 @@
 require File.expand_path("../../Requirements/qgis_requirements",
                          Pathname.new(__FILE__).realpath)
 
-class UnlinkedQGIS214 < UnlinkedQGIS
-  fatal true
-  def qgis_formula_name
-    "qgis-214"
-  end
-  satisfy(build_env: false) { no_linked_qgis[0] }
-end
-
 class Qgis214 < Formula
   desc "Open Source Geographic Information System"
   homepage "http://www.qgis.org"
@@ -55,7 +47,7 @@ class Qgis214 < Formula
 
   deprecated_option "enable-isolation" => "with-isolation"
 
-  depends_on UnlinkedQGIS214
+  depends_on UnlinkedQGIS2
 
   # core qgis
   depends_on "cmake" => :build
