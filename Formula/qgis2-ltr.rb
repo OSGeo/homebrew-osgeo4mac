@@ -29,7 +29,7 @@ class Qgis2Ltr < Formula
     brewed_python?
   end
 
-  keg_only "Install as keg-only to allow multiple QGIS installs"
+  keg_only "Installed as keg-only to allow multiple QGIS installs"
 
   option "with-isolation", "Isolate .app's environment to HOMEBREW_PREFIX, to coexist with other QGIS installs"
   option "without-debug", "Disable debug build, which outputs info to system.log or console"
@@ -268,7 +268,7 @@ class Qgis2Ltr < Formula
   def post_install
     # configure environment variables for .app and launching binary directly.
     # having this in `post_intsall` allows it to be individually run *after* installation with:
-    #    `brew postinstall -v qgis-XX` <-- where XX is formula version
+    #    `brew postinstall -v <formula-name>`
 
     # symlink custom widgets plugin
     dsubpth = "plugins/designer"
@@ -379,7 +379,7 @@ class Qgis2Ltr < Formula
     touch app.to_s
 
     # add env vars to launch script for QGIS app's binary
-    qgis_bin = bin/"qgis"
+    qgis_bin = bin/name.to_s
     rm_f qgis_bin if File.exist?(qgis_bin) # install generates empty file
     bin_cmds = %W[#!/bin/sh\n]
     # setup shell-prepended env vars (may result in duplication of paths)
@@ -404,7 +404,7 @@ class Qgis2Ltr < Formula
 
       To directly run the `QGIS.app/Contents/MacOS/QGIS` binary use the wrapper
       script pre-defined with Homebrew prefix environment variables:
-        #{opt_bin}/qgis
+        #{opt_bin}/#{name}
 
       NOTE: Your current PATH and PYTHONPATH environment variables are honored
             when launching via the wrapper script, while launching QGIS.app
@@ -438,6 +438,7 @@ class Qgis2Ltr < Formula
     end
     unless xm.empty?
       s += <<-EOS.undent
+        #{Tty.red}
         The following Python modules are needed by QGIS during run-time:
 
             #{xm.join(", ")}
@@ -445,7 +446,8 @@ class Qgis2Ltr < Formula
         You can install manually, via installer package or with `pip` (if availble):
 
             pip install <module>  OR  pip-2.7 install <module>
-
+        #{Tty.red}
+        #{Tty.reset}
       EOS
     end
     # TODO: remove this when libqscintilla.dylib becomes core build dependency?
