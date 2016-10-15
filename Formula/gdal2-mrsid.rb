@@ -9,10 +9,12 @@ class Gdal2Mrsid < Formula
 
   def install
     mrsid_sdk_opt = Formula["mrsid-sdk"].opt_prefix
-    gdal_ver_list = version.to_s.split(".")
-    gdal_majmin_ver = "#{gdal_ver_list[0]}.#{gdal_ver_list[1]}"
-    gdal_plugins = lib/"gdalplugins/#{gdal_majmin_ver}"
+
+    gdal = Formula["gdal2"]
+    gdal_plugins = lib/gdal.plugins_subdirectory.to_s
     gdal_plugins.mkpath
+    (HOMEBREW_PREFIX/"lib/#{gdal.plugins_subdirectory}").mkpath
+
     plugins = {}
     lidar_args = []
     mrsid_args = []
@@ -55,7 +57,7 @@ class Gdal2Mrsid < Formula
 
   def caveats; <<-EOS.undent
       This formula provides a plugin that allows GDAL or OGR to access geospatial
-      data stored in its format. In order to use the shared plugin, you will need
+      data stored in its format. In order to use the shared plugin, you may need
       to set the following enviroment variable:
 
         export GDAL_DRIVER_PATH=#{HOMEBREW_PREFIX}/lib/gdalplugins
@@ -63,6 +65,10 @@ class Gdal2Mrsid < Formula
   end
 
   test do
-    #
+    gdal_opt_bin = Formula["gdal2"].opt_bin
+    out = `#{gdal_opt_bin}/gdalinfo --formats`
+    assert_match "MG4Lidar -raster- (ro)", out
+    assert_match "MrSID -raster- (rov)", out
+    assert_match "JP2MrSID -raster- (rov)", out
   end
 end
