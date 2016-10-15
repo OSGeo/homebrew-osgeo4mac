@@ -12,16 +12,11 @@ class Gdal2Grass7 < Formula
   depends_on "gdal2"
   depends_on "grass7"
 
-  def gdal_majmin_ver
-    gdal_ver_list = Formula["gdal2"].version.to_s.split(".")
-    "#{gdal_ver_list[0]}.#{gdal_ver_list[1]}"
-  end
-
   def install
     gdal = Formula["gdal2"]
-    gdal_plugins = lib/"gdalplugins/#{gdal_majmin_ver}"
+    gdal_plugins = lib/gdal.plugins_subdirectory.to_s
     gdal_plugins.mkpath
-    (HOMEBREW_PREFIX/"lib/gdalplugins/#{gdal_majmin_ver}").mkpath
+    (HOMEBREW_PREFIX/"lib/#{gdal.plugins_subdirectory}").mkpath
     grass = Formula["grass7"]
 
     # due to DYLD_LIBRARY_PATH no longer being setable, strictly define extension
@@ -40,11 +35,11 @@ class Gdal2Grass7 < Formula
   end
 
   def caveats; <<-EOS.undent
-    This formula provides a plugin that allows GDAL and OGR to access geospatial
-    data stored using the GRASS vector and raster formats. In order to use the
-    plugin, you will need to add the following path to the GDAL_DRIVER_PATH
-    enviroment variable:
-      #{HOMEBREW_PREFIX}/lib/gdalplugins/#{gdal_majmin_ver}
+      This formula provides a plugin that allows GDAL or OGR to access geospatial
+      data stored in its format. In order to use the shared plugin, you may need
+      to set the following enviroment variable:
+
+        export GDAL_DRIVER_PATH=#{HOMEBREW_PREFIX}/lib/gdalplugins
     EOS
   end
 
