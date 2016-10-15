@@ -27,8 +27,8 @@ import sys
 from collections import OrderedDict
 import argparse
 
-GRASS_VERSION = '6.4.4'
-GRASS7_VERSION = '7.0.4'
+GRASS_VERSION = '6.4.6'
+GRASS7_VERSION = '7.0.5'
 OSG_VERSION = '3.4.0'
 HOMEBREW_PREFIX = '/usr/local'  # default for Homebrew
 
@@ -70,6 +70,7 @@ def cmake_opts(qi, hb, ver):
                             '-Wno-unused-private-field '
                             '-Wno-deprecated-register"'),
         ('BISON_EXECUTABLE', '{hb}/opt/bison/bin/bison'),
+        ('FLEX_EXECUTABLE', '{hb}/opt/flex/bin/flex'),
         ('QT_QMAKE_EXECUTABLE', '{hb}/bin/qmake'),
         ('SUPPRESS_QT_WARNINGS', 'TRUE'),
         ('GITCOMMAND', '{hb}/bin/git'),
