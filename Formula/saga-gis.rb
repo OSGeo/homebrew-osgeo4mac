@@ -3,6 +3,7 @@ class SagaGis < Formula
   homepage "http://saga-gis.org"
   url "https://downloads.sourceforge.net/project/saga-gis/SAGA%20-%202.2/SAGA%202.2.2/saga-2.2.2.tar.gz"
   sha256 "031cd70b7ec248f32f955a9316aefc7f7ab283c5129c49aa4bd748717d20357e"
+  revision 1
 
   head "svn://svn.code.sf.net/p/saga-gis/code-0/trunk/saga-gis"
 
