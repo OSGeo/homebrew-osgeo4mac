@@ -94,7 +94,7 @@ class Qgis2Ltr < Formula
     depends_on "open-scene-graph" => ["with-qt"]
     depends_on "homebrew/science/osgearth"
   end
-  depends_on "gpsbabel"
+  depends_on "gpsbabel" => :optional
   # TODO: remove "pyspatialite" when PyPi package supports spatialite 4.x
   #       or DB Manager supports libspatialite >= 4.2.0 (with mod_spatialite)
   depends_on "pyspatialite" # for DB Manager
@@ -261,7 +261,9 @@ class Qgis2Ltr < Formula
     libexec.install resource("pyqgis-startup")
 
     bin.mkdir
-    touch "#{bin}/qgis" # so it will be linked into HOMEBREW_PREFIX
+    qgis_bin = bin/name.to_s
+    touch qgis_bin.to_s # so it will be linked into HOMEBREW_PREFIX
+    qgis_bin.chmod 0755
     post_install
   end
 
