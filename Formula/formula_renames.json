@@ -1,7 +1,7 @@
 {
-  "gdal-20": "gdal2"
-  "gdal-grass64": "gdal1-grass6"
-  "grass-64": "grass6"
-  "grass-70": "grass7"
-  "orfeo-54": "orfeo5"
+  "gdal-20": "gdal2",
+  "gdal-grass64": "gdal1-grass6",
+  "grass-64": "grass6",
+  "grass-70": "grass7",
+  "orfeo-54": "orfeo5",
 }
