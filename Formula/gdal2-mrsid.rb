@@ -7,7 +7,6 @@ class Gdal2Mrsid < Formula
   depends_on "mrsid-sdk"
   depends_on "gdal2"
 
-
   def gdal_majmin_ver
     gdal_ver_list = Formula["gdal2"].version.to_s.split(".")
     "#{gdal_ver_list[0]}.#{gdal_ver_list[1]}"
@@ -50,12 +49,11 @@ class Gdal2Mrsid < Formula
 
     # plugin dylib
     plugins.each do |key, args|
-      # TODO: can the compatibility_version be 1.10.0?
       args.concat %W[
         -dynamiclib
         -install_name #{opt_lib}/#{gdal_plugins_subdirectory}/#{key}.dylib
         -current_version #{version}
-        -compatibility_version #{version}
+        -compatibility_version #{gdal_majmin_ver}.0
         -o #{gdal_plugins}/#{key}.dylib
         -undefined dynamic_lookup
       ]
