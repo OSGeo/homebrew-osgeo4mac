@@ -1,5 +1,5 @@
 class Gdal2Mrsid < Formula
-  desc "MrSID raster and LiDAR plugins for GDAL"
+  desc "GDAL/OGR 2 plugin for MrSID raster and LiDAR drivers"
   homepage "http://www.gdal.org/frmt_mrsid.html"
   url "http://download.osgeo.org/gdal/2.1.0/gdal-2.1.0.tar.gz"
   sha256 "eb499b18e5c5262a803bb7530ae56e95c3293be7b26c74bcadf67489203bf2cd"
@@ -7,13 +7,22 @@ class Gdal2Mrsid < Formula
   depends_on "mrsid-sdk"
   depends_on "gdal2"
 
+
+  def gdal_majmin_ver
+    gdal_ver_list = Formula["gdal2"].version.to_s.split(".")
+    "#{gdal_ver_list[0]}.#{gdal_ver_list[1]}"
+  end
+
+  def gdal_plugins_subdirectory
+    "gdalplugins/#{gdal_majmin_ver}"
+  end
+
   def install
     mrsid_sdk_opt = Formula["mrsid-sdk"].opt_prefix
 
-    gdal = Formula["gdal2"]
-    gdal_plugins = lib/gdal.plugins_subdirectory.to_s
+    gdal_plugins = lib/gdal_plugins_subdirectory
     gdal_plugins.mkpath
-    (HOMEBREW_PREFIX/"lib/#{gdal.plugins_subdirectory}").mkpath
+    (HOMEBREW_PREFIX/"lib/#{gdal_plugins_subdirectory}").mkpath
 
     plugins = {}
     lidar_args = []
@@ -44,7 +53,7 @@ class Gdal2Mrsid < Formula
       # TODO: can the compatibility_version be 1.10.0?
       args.concat %W[
         -dynamiclib
-        -install_name #{gdal_plugins}/#{key}.dylib
+        -install_name #{opt_lib}/#{gdal_plugins_subdirectory}/#{key}.dylib
         -current_version #{version}
         -compatibility_version #{version}
         -o #{gdal_plugins}/#{key}.dylib
