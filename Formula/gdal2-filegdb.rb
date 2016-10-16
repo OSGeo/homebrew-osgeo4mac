@@ -12,13 +12,16 @@ class Gdal2Filegdb < Formula
     "#{gdal_ver_list[0]}.#{gdal_ver_list[1]}"
   end
 
+  def gdal_plugins_subdirectory
+    "gdalplugins/#{gdal_majmin_ver}"
+  end
+
   def install
     filegdb_opt = Formula["filegdb-api"].opt_prefix
 
-    gdal = Formula["gdal2"]
-    gdal_plugins = lib/gdal.plugins_subdirectory.to_s
+    gdal_plugins = lib/gdal_plugins_subdirectory
     gdal_plugins.mkpath
-    (HOMEBREW_PREFIX/"lib/#{gdal.plugins_subdirectory}").mkpath
+    (HOMEBREW_PREFIX/"lib/#{gdal_plugins_subdirectory}").mkpath
 
     # cxx flags
     args = %W[-Iport -Igcore -Iogr -Iogr/ogrsf_frmts -Iogr/ogrsf_frmts/generic
@@ -33,7 +36,7 @@ class Gdal2Filegdb < Formula
     dylib_name = "ogr_FileGDB.dylib"
     args.concat %W[
       -dynamiclib
-      -install_name #{opt_lib}/#{gdal.plugins_subdirectory}/#{dylib_name}
+      -install_name #{opt_lib}/#{gdal_plugins_subdirectory}/#{dylib_name}
       -current_version #{version}
       -compatibility_version #{gdal_majmin_ver}.0
       -o #{gdal_plugins}/#{dylib_name}
