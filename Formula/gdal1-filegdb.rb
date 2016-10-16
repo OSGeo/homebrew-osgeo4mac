@@ -19,7 +19,7 @@ class Gdal1Filegdb < Formula
   def install
     filegdb_opt = Formula["filegdb-api"].opt_prefix
 
-    gdal_plugins = lib/gdal_plugins_subdirectory.to_s
+    gdal_plugins = lib/gdal_plugins_subdirectory
     gdal_plugins.mkpath
     (HOMEBREW_PREFIX/"lib/#{gdal_plugins_subdirectory}").mkpath
 
