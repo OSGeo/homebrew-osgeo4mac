@@ -60,8 +60,8 @@ removed from this tap.
 
 Docs
 ----
-`brew help`, `man brew`, or the Homebrew [wiki][].
+`brew help`, `man brew`, or the Homebrew [documentation][].
 
 [homebrew]:http://brew.sh
 [taps]:https://github.com/Homebrew/homebrew-versions
-[wiki]:https://github.com/Homebrew/homebrew/wiki
+[documentation]:https://github.com/Homebrew/brew/tree/master/docs#readme
