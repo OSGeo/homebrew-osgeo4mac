@@ -144,7 +144,10 @@ class Grass7 < Formula
     system "make", "GDAL_DYNAMIC=", "install" # GDAL_DYNAMIC set to blank for r.external compatability
 
     # ensure QGIS's Processing plugin recognizes install
-    ln_sf "../bin/grass70", prefix/"grass-#{version}/grass70.sh"
+    # 2.14.8+ and other newer QGIS versions may reference just grass.sh
+    bin_grass = "../bin/grass70"
+    ln_sf bin_grass, prefix/"grass-#{version}/grass70.sh"
+    ln_sf bin_grass, prefix/"grass-#{version}/grass.sh"
     # link so settings in external apps don't need updated on grass version bump
     # in QGIS Processing options, GRASS folder = HOMEBREW_PREFIX/opt/grass7/grass-base
     ln_sf "grass-#{version}", prefix/"grass-base"
