@@ -25,27 +25,24 @@ class Ecwjp2Sdk < Formula
 
   depends_on :macos => :lion # as per SDK docs
   depends_on EcwJpeg2000SDK
-  depends_on "gdal2"
-
-  def gdal_clib
-    gdal_lib = "#{Formula["gdal2"].opt_lib}/libgdal.dylib"
-    (`otool -L #{gdal_lib}`.include? "libstdc++") ? "std" : ""
-  end
 
   def install
-    # vendor Desktop Read-Only lib, etc
-    # match c-lib that gdal was built against
     lib.mkpath
     (include/"ECWJP2").mkpath
-    cp "#{ECWJP2_SDK}/redistributable/lib#{gdal_clib}c++/libNCSEcw.dylib", "#{lib}/"
-    %w[etc Licenses].each { |f| cp_r "#{ECWJP2_SDK}/#{f}", "#{prefix}/" }
-    cp_r Dir["#{ECWJP2_SDK}/include/*"], "#{include}/ECWJP2/"
+    cd ECWJP2_SDK do
+      # vendor Desktop Read-Only libs, etc
+      # suffix only the older stdc++
+      cp "redistributable/libc++/libNCSEcw.dylib", "#{lib}/"
+      cp "redistributable/libstdc++/libNCSEcw.dylib", "#{lib}/libNCSEcw-stdcxx.dylib"
+      system "install_name_tool", "-id", opt_lib/"libNCSEcw-stdcxx.dylib", lib/"libNCSEcw-stdcxx.dylib"
+      %w[etc Licenses].each { |f| cp_r f.to_s, "#{prefix}/" }
+      cp_r Dir["include/*"], "#{include}/ECWJP2/"
 
-    # for test
-    (prefix/"test").mkpath
-    cp "#{ECWJP2_SDK}/Examples/decompression/example1/dexample1.c", prefix/"test/"
-    cp "#{ECWJP2_SDK}/TestData/RGB_8bit.ecw", prefix/"test/"
-    cp "#{ECWJP2_SDK}/TestData/RGB_8bit.jp2", prefix/"test/"
+      # for test
+      (prefix/"test").mkpath
+      cp "Examples/decompression/example1/dexample1.c", prefix/"test/"
+      %w[ecw jp2].each { |f| cp "TestData/RGB_8bit.#{f}", prefix/"test/" }
+    end
   end
 
   def caveats; <<-EOS.undent
