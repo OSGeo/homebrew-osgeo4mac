@@ -5,14 +5,14 @@ class Qgis2 < Formula
   desc "Open Source Geographic Information System"
   homepage "http://www.qgis.org"
 
-  head "https://github.com/qgis/QGIS.git", :branch => "master_2"
+  head "https://github.com/qgis/QGIS.git", :branch => "release-2_18"
 
   stable do
-    url "https://github.com/qgis/QGIS/archive/final-2_16_3.tar.gz"
-    sha256 "ab0b0c114022825368315579fe22a0c0a2748815088d3d615aa0b8469af1e220"
+    url "https://github.com/qgis/QGIS/archive/final-2_18_0.tar.gz"
+    sha256 "e368018fb78e437f4174a503d02002c7a9a845d51526e1147bcc6a1ee61fcffe"
 
-    # patches that represent all backports to release-2_16 branch, since release tag
-    # see: https://github.com/qgis/QGIS/commits/release-2_16
+    # patches that represent all backports to release-2_18 branch, since release tag
+    # see: https://github.com/qgis/QGIS/commits/release-2_18
     # patch do
     #   # git id (date) through git id (date) minus windows-formatted patches
     #   url ""
@@ -21,8 +21,8 @@ class Qgis2 < Formula
   end
 
   devel do
-    url "https://github.com/qgis/QGIS.git", :branch => "release-2_16"
-    version "2.16.3-dev"
+    url "https://github.com/qgis/QGIS.git", :branch => "release-2_18"
+    version "2.18-dev"
   end
 
   # bottle do
