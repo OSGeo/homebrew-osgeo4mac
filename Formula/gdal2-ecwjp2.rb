@@ -16,6 +16,11 @@ class Gdal2Ecwjp2 < Formula
     "gdalplugins/#{gdal_majmin_ver}"
   end
 
+  def gdal_clib
+    gdal_lib = "#{Formula["gdal2"].opt_lib}/libgdal.dylib"
+    (`otool -L #{gdal_lib}`.include? "libstdc++") ? "-stdcxx" : ""
+  end
+
   def install
     ecwjp2_opt = Formula["ecwjp2-sdk"].opt_prefix
     ecwjp2_opt_include = ecwjp2_opt/"include/ECWJP2"
@@ -46,7 +51,7 @@ class Gdal2Ecwjp2 < Formula
     ]
 
     # ld flags
-    args.concat %W[-L#{ecwjp2_opt}/lib -lNCSEcw]
+    args.concat %W[-L#{ecwjp2_opt}/lib -lNCSEcw#{gdal_clib}]
 
     # build and install shared plugin
     system ENV.cxx, *args
