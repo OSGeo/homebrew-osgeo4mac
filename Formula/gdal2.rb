@@ -29,6 +29,7 @@ class Gdal2 < Formula
   option "with-libkml", "Build with Google's libkml driver (requires libkml --HEAD or >= 1.3)"
   option "without-python", "Build without python2 support"
   option "with-swig-java", "Build the swig java bindings"
+  option "with-mongocxx", "Add MongoDB support through the C++ driver"
 
   deprecated_option "enable-opencl" => "with-opencl"
   deprecated_option "enable-armadillo" => "with-armadillo"
@@ -202,6 +203,7 @@ class Gdal2 < Formula
     # Database support.
     args << (build.with?("postgresql") ? "--with-pg=#{HOMEBREW_PREFIX}/bin/pg_config" : "--without-pg")
     args << (build.with?("mysql") ? "--with-mysql=#{HOMEBREW_PREFIX}/bin/mysql_config" : "--without-mysql")
+    args << (build.with?("mongocxx") ? "--with-mongocxx=/usr/local/opt/mongo-client-install/" : "--without-mongocxx")
 
     if build.with? "mdb"
       args << "--with-java=yes"
