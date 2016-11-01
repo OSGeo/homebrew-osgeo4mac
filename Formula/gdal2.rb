@@ -1,8 +1,8 @@
 class Gdal2 < Formula
   desc "GDAL: Geospatial Data Abstraction Library"
   homepage "http://www.gdal.org/"
-  url "http://download.osgeo.org/gdal/2.1.1/gdal-2.1.1.tar.gz"
-  sha256 "55fc6ffbe76e9d2e7e6cf637010e5d4bba6a966d065f40194ff798544198236b"
+  url "http://download.osgeo.org/gdal/2.1.2/gdal-2.1.2.tar.gz"
+  sha256 "69761c38acac8c6d3ea71304341f6982b5d66125a1a80d9088b6bfd2019125c9"
 
   # bottle do
   #   root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
