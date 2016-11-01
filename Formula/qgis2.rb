@@ -22,7 +22,7 @@ class Qgis2 < Formula
 
   devel do
     url "https://github.com/qgis/QGIS.git", :branch => "release-2_18"
-    version "2.18-dev"
+    version "2.18.0-dev"
   end
 
   # bottle do
