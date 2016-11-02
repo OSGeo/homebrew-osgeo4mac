@@ -133,6 +133,10 @@ class Mapserver6 < Formula
     args << "-DWITH_GD=ON" if build.with?("gd") && !build.head?
     args << "-DWITH_RSVG=ON" if build.with? "librsvg"
 
+    glib = Formula["glib"]
+    fribidi = Formula["fribidi"]
+    args << "-DFRIBIDI_INCLUDE_DIR=#{glib.opt_include}/glib-2.0;#{glib.opt_lib}/glib-2.0/include;#{fribidi.opt_include}"
+
     mapscr_dir = prefix/"mapscript"
     mapscr_dir.mkpath
     rpath = %Q(-Wl,-rpath,"#{opt_prefix/"lib"}")
@@ -185,8 +189,15 @@ class Mapserver6 < Formula
 
     mkdir "build" do
       system "cmake", "..", *args
+      # system 'bbedit', 'CMakeCache.txt'
+      # raise
       system "make", "install"
     end
+
+    # update Python module linking
+    system "install_name_tool", "-change",
+           "@rpath/libmapserver.1.dylib", opt_lib/"libmapserver.1.dylib",
+           lib/which_python/"site-packages/_mapscript.so"
 
     # install devel headers
     (include/"mapserver").install Dir["*.h"]
