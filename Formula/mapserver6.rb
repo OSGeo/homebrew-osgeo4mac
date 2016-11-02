@@ -3,8 +3,8 @@ class JavaJDK < Requirement
 
   def self.home
     [
-        `/usr/libexec/java_home`.chomp!,
-        ENV["JAVA_HOME"]
+      `/usr/libexec/java_home`.chomp!,
+      ENV["JAVA_HOME"]
     ].find { |dir| dir && File.exist?("#{dir}/bin/javac") &&
         (File.exist?("#{dir}/include" || File.exist?("#{dir}/bundle"))) }
   end
@@ -25,10 +25,12 @@ class JavaJDK < Requirement
   end
 end
 
-class Mapserver64 < Formula
+class Mapserver6 < Formula
+  # TODO: audit and comapare against `mapserver` in core
+  desc "Publish spatial data and interactive mapping apps to the web"
   homepage "http://mapserver.org/"
-  url "http://download.osgeo.org/mapserver/mapserver-6.4.1.tar.gz"
-  sha256 "445915fd6e31ed199ce477edd1d9f32d609d3001cd52d3e458ff159543403d64"
+  url "http://download.osgeo.org/mapserver/mapserver-6.4.3.tar.gz"
+  sha256 "1f432d4b44e7a0e4e9ce883b02c91c9a66314123028eebb0415144903b8de9c2"
 
   # bottle do
   #   root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
@@ -40,8 +42,6 @@ class Mapserver64 < Formula
     depends_on "harfbuzz"
     depends_on "v8" => :optional
   end
-
-  conflicts_with "mapserver", :because => "mapserver is in main tap"
 
   option "without-php", "Build PHP MapScript module"
   option "without-rpath", "Don't embed rpath to installed libmapserver in modules"
@@ -55,8 +55,8 @@ class Mapserver64 < Formula
   option "with-unit-tests", "Download and install full unit test suite"
 
   depends_on "cmake" => :build
-  depends_on :freetype
-  depends_on :libpng
+  depends_on "freetype"
+  depends_on "libpng"
   depends_on :python
   depends_on "swig" => :build
   depends_on JavaJDK if build.with? "java"
@@ -74,6 +74,8 @@ class Mapserver64 < Formula
   depends_on "librsvg" => :optional
   depends_on "fribidi"
   depends_on :python => %w[sphinx] if build.with? "docs"
+
+  conflicts_with "mapserver", :because => "mapserver is in main tap"
 
   resource "sphinx" do
     url "https://pypi.python.org/packages/source/S/Sphinx/Sphinx-1.2.2.tar.gz"
