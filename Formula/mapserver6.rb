@@ -4,9 +4,10 @@ class JavaJDK < Requirement
   def self.home
     [
       `/usr/libexec/java_home`.chomp!,
-      ENV["JAVA_HOME"]
-    ].find { |dir| dir && File.exist?("#{dir}/bin/javac") &&
-        (File.exist?("#{dir}/include" || File.exist?("#{dir}/bundle"))) }
+      ENV["JAVA_HOME"],
+    ].find do |dir|
+      dir && File.exist?("#{dir}/bin/javac") && (File.exist?("#{dir}/include") || File.exist?("#{dir}/bundle"))
+    end
   end
 
   satisfy :build_env => false do
@@ -69,7 +70,7 @@ class Mapserver6 < Formula
   depends_on :mysql => :optional
   depends_on "fcgi" => :recommended
   depends_on "cairo" => :recommended
-  depends_on "libxml2" if build.with? "xml-mapfile" or MacOS.version < :mountain_lion
+  depends_on "libxml2" if build.with?("xml-mapfile") || MacOS.version < :mountain_lion
   depends_on "libxslt" if build.with? "xml-mapfile"
   depends_on "librsvg" => :optional
   depends_on "fribidi"
@@ -96,12 +97,12 @@ class Mapserver6 < Formula
 
   def png_prefix
     png = Formula["libpng"]
-    (png.installed? or MacOS.version >= :mountain_lion) ? png.opt_prefix : MacOS::X11.prefix
+    (png.installed? || MacOS.version >= :mountain_lion) ? png.opt_prefix : MacOS::X11.prefix
   end
 
   def freetype_prefix
     ft = Formula["freetype"]
-    (ft.installed? or MacOS.version >= :mountain_lion) ? ft.opt_prefix : MacOS::X11.prefix
+    (ft.installed? || MacOS.version >= :mountain_lion) ? ft.opt_prefix : MacOS::X11.prefix
   end
 
   def install
@@ -119,7 +120,7 @@ class Mapserver6 < Formula
     end
 
     # defaults different than CMakeLists.txt (they don't incur extra dependencies)
-    args.concat %W[
+    args.concat %w[
       -DWITH_KML=ON
       -DWITH_CURL=ON
       -DWITH_CLIENT_WMS=ON
@@ -129,17 +130,17 @@ class Mapserver6 < Formula
 
     args << "-DWITH_XMLMAPFILE=ON" if build.with? "xml-mapfile"
     args << "-DWITH_MYSQL=ON" if build.with? "mysql"
-    args << "-DWITH_GD=ON" if build.with? "gd" && !build.head?
+    args << "-DWITH_GD=ON" if build.with?("gd") && !build.head?
     args << "-DWITH_RSVG=ON" if build.with? "librsvg"
 
     mapscr_dir = prefix/"mapscript"
     mapscr_dir.mkpath
-    rpath = %Q{-Wl,-rpath,"#{opt_prefix/"lib"}"}
+    rpath = %Q(-Wl,-rpath,"#{opt_prefix/"lib"}")
     use_rpath = build.with? "rpath"
     cd "mapscript" do
       args << "-DWITH_PYTHON=ON"
       inreplace "python/CMakeLists.txt" do |s|
-        s.gsub! "${PYTHON_SITE_PACKAGES}", %Q{"#{lib/which_python/"site-packages"}"}
+        s.gsub! "${PYTHON_SITE_PACKAGES}", %Q("#{lib/which_python/"site-packages"}")
         s.sub! "${MAPSERVER_LIBMAPSERVER}",
                "#{rpath} ${MAPSERVER_LIBMAPSERVER}" if use_rpath
       end
@@ -148,7 +149,7 @@ class Mapserver6 < Formula
       args << "-DWITH_RUBY=ON"
       (mapscr_dir/"ruby").mkpath
       inreplace "ruby/CMakeLists.txt" do |s|
-        s.gsub! "${RUBY_SITEARCHDIR}", %Q{"#{mapscr_dir}/ruby"}
+        s.gsub! "${RUBY_SITEARCHDIR}", %Q("#{mapscr_dir}/ruby")
         s.sub! "${MAPSERVER_LIBMAPSERVER}",
                "#{rpath} ${MAPSERVER_LIBMAPSERVER}" if use_rpath
       end
@@ -157,7 +158,7 @@ class Mapserver6 < Formula
         args << "-DWITH_PHP=ON"
         (mapscr_dir/"php").mkpath
         inreplace "php/CMakeLists.txt" do |s|
-          s.gsub! "${PHP5_EXTENSION_DIR}", %Q{"#{mapscr_dir}/php"}
+          s.gsub! "${PHP5_EXTENSION_DIR}", %Q("#{mapscr_dir}/php")
           s.sub! "${MAPSERVER_LIBMAPSERVER}",
                  "#{rpath} ${MAPSERVER_LIBMAPSERVER}" if use_rpath
         end
@@ -175,7 +176,7 @@ class Mapserver6 < Formula
         (mapscr_dir/"java").mkpath
         inreplace "java/CMakeLists.txt" do |s|
           s.gsub! "DESTINATION ${CMAKE_INSTALL_LIBDIR}",
-                  %Q|${CMAKE_CURRENT_BINARY_DIR}/mapscript.jar DESTINATION "#{mapscr_dir}/java"|
+                  %Q(${CMAKE_CURRENT_BINARY_DIR}/mapscript.jar DESTINATION "#{mapscr_dir}/java")
           s.sub! "${MAPSERVER_LIBMAPSERVER}",
                  "#{rpath} ${MAPSERVER_LIBMAPSERVER}" if use_rpath
         end
@@ -193,7 +194,7 @@ class Mapserver6 < Formula
     prefix.install "tests"
     (mapscr_dir/"python").install "mapscript/python/tests"
     cd "mapscript" do
-      %w[python ruby perl].each {|x|(mapscr_dir/"#{x}").install "#{x}/examples"}
+      %w[python ruby perl].each { |x| (mapscr_dir/x.to_s).install "#{x}/examples" }
       (mapscr_dir/"php").install "php/examples" if build.with? "php"
       (mapscr_dir/"java").install "java/examples" if build.with? "java"
     end
@@ -212,27 +213,26 @@ class Mapserver6 < Formula
       EOS
     end
     %w[ruby perl java].each do |m|
-      if m != "java" or build.with? m
-        cmd = []
-        case m
-        when "ruby"
-          ruby_site = %x[ruby -r rbconfig -e 'puts RbConfig::CONFIG["sitearchdir"]'].chomp
-          cmd << "sudo cp -f mapscript.bundle #{ruby_site}/"
-        when "perl"
-          perl_site = %x[perl -MConfig -e 'print $Config{"sitearch"};'].chomp
-          cmd << "sudo cp -f mapscript.pm #{perl_site}/"
-          cmd << "sudo cp -fR auto/mapscript #{perl_site}/auto/"
-        when "java"
-          cmd << "sudo cp -f libjavamapscript.jnilib mapscript.jar /Library/Java/Extensions/"
-        else
-        end
-        s += <<-EOS.undent
-          Install the built #{m.upcase} module with:
-            cd #{mapscr_opt_dir}/#{m}
-            #{cmd[0]}
-            #{cmd[1] + "\n" if cmd[1]}
-        EOS
+      next if build.without?(m)
+
+      cmd = []
+      case m
+      when "ruby"
+        ruby_site = `ruby -r rbconfig -e 'puts RbConfig::CONFIG["sitearchdir"]'`.chomp
+        cmd << "sudo cp -f mapscript.bundle #{ruby_site}/"
+      when "perl"
+        perl_site = `perl -MConfig -e 'print $Config{"sitearch"};'`.chomp
+        cmd << "sudo cp -f mapscript.pm #{perl_site}/"
+        cmd << "sudo cp -fR auto/mapscript #{perl_site}/auto/"
+      else
+        cmd << "sudo cp -f libjavamapscript.jnilib mapscript.jar /Library/Java/Extensions/"
       end
+      s += <<-EOS.undent
+        Install the built #{m.upcase} module with:
+          cd #{mapscr_opt_dir}/#{m}
+          #{cmd[0]}
+          #{cmd[1] + "\n" if cmd[1]}
+      EOS
     end
     (mapscr_dir/"Install_Modules.txt").write s
 
@@ -241,7 +241,7 @@ class Mapserver6 < Formula
         # vendor a local sphinx install
         sphinx_site = libexec/"lib/python2.7/site-packages"
         ENV.prepend_create_path "PYTHONPATH", sphinx_site
-        resource("sphinx").stage {quiet_system "python2.7", "setup.py", "install", "--prefix=#{libexec}"}
+        resource("sphinx").stage { quiet_system "python2.7", "setup.py", "install", "--prefix=#{libexec}" }
         ENV.prepend_path "PATH", libexec/"bin"
       end
       resource("docs").stage do
@@ -281,6 +281,6 @@ class Mapserver6 < Formula
   private
 
   def which_python
-    "python" + %x(python -c "import sys;print(sys.version[:3])").strip
+    "python" + `python -c "import sys;print(sys.version[:3])"`.strip
   end
 end
