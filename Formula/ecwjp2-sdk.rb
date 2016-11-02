@@ -17,7 +17,7 @@ class EcwJpeg2000SDK < Requirement
 end
 
 class Ecwjp2Sdk < Formula
-  desc "Decompression library for ECW- and JPEG2000- compressed imagery"
+  desc "Decompression library for ECW- and JPEG2000-compressed imagery"
   homepage "http://www.hexagongeospatial.com/products/provider-suite/erdas-ecw-jp2-sdk"
   url "http://qgis.dakotacarto.com/osgeo4mac/dummy.tar.gz"
   version "5.3.0"
@@ -60,14 +60,16 @@ class Ecwjp2Sdk < Formula
 
   test do
     cp prefix/"test/dexample1.c", testpath
-    system ENV.cc, "-I#{opt_include}/ECWJP2", "-L#{opt_lib}", "-lNCSEcw",
-           "-o", "test", "dexample1.c"
+    ["", "-stdcxx"].each do |s|
+      system ENV.cc, "-I#{opt_include}/ECWJP2", "-L#{opt_lib}", "-lNCSEcw#{s}",
+             "-o", "test#{s}", "dexample1.c"
 
-    %w[ecw jp2].each do |f|
-      out = `./test #{prefix}/test/RGB_8bit.#{f}`
-      assert_match "Region   99", out
-      assert_match "Region    0", out
-      assert_match "ALL    time", out
+      %w[ecw jp2].each do |f|
+        out = `./test#{s} #{prefix}/test/RGB_8bit.#{f}`
+        assert_match "Region   99", out
+        assert_match "Region    0", out
+        assert_match "ALL    time", out
+      end
     end
   end
 end
