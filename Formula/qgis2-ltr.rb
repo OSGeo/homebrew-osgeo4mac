@@ -13,11 +13,11 @@ class Qgis2Ltr < Formula
 
     # patches that represent all backports to release-2_14 branch, since release tag
     # see: https://github.com/qgis/QGIS/commits/release-2_14
-    # patch do
-    #   # git id (date) through git id (date) minus windows-formatted patches
-    #   url ""
-    #   sha256 ""
-    # end
+    patch do
+      # thru commit 053c531 minus windows-formatted patches
+      url "https://gist.githubusercontent.com/dakcarto/8a6a45737523efce13c7f1521ff85c8b/raw/de9ad2d8c23b0798c3dc5bcb2cc384d86d425e87/qgis_2-14-8_053c531.diff"
+      sha256 "97f21b29f96e31c599c804a768d05764164ff5c76f161b200d285407bd9a14bf"
+    end
   end
 
   # bottle do
@@ -377,6 +377,8 @@ class Qgis2Ltr < Formula
     `defaults write \"#{plst}\" NSHighResolutionCapable \"False\"`
     # leave the plist readable; convert from binary to XML format
     `plutil -convert xml1 -- \"#{plst}\"`
+    # make sure plist is readble by all users
+    plst.chmod 0644
     # update modification date on app bundle, or changes won't take effect
     touch app.to_s
 
@@ -475,7 +477,7 @@ class Qgis2Ltr < Formula
   end
 
   test do
-    output = `#{bin}/qgis --help 2>&1` # why does help go to stderr?
+    output = `#{bin}/#{name.to_s} --help 2>&1` # why does help go to stderr?
     assert_match /^QGIS is a user friendly/, output
   end
 
