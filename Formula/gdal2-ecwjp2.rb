@@ -22,6 +22,8 @@ class Gdal2Ecwjp2 < Formula
   end
 
   def install
+    ENV.libstdcxx if gdal_clib == "-stdcxx"
+
     ecwjp2_opt = Formula["ecwjp2-sdk"].opt_prefix
     ecwjp2_opt_include = ecwjp2_opt/"include/ECWJP2"
 
@@ -52,6 +54,7 @@ class Gdal2Ecwjp2 < Formula
 
     # ld flags
     args.concat %W[-L#{ecwjp2_opt}/lib -lNCSEcw#{gdal_clib}]
+    args << "-stdlib=libstdc++" if gdal_clib == "-stdcxx"
 
     # build and install shared plugin
     system ENV.cxx, *args
