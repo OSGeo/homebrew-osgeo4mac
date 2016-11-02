@@ -6,6 +6,7 @@
   "gdal-mrsid": "gdal1-mrsid",
   "grass-64": "grass6",
   "grass-70": "grass7",
+  "mapcache-12": "mapcache",
   "orfeo-54": "orfeo5",
   "qgis-214": "qgis2-ltr"
 }
