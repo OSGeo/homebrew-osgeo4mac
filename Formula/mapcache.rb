@@ -1,16 +1,16 @@
 class Mapcache < Formula
-  desc "A server that implements tile caching to speed up access to WMS layers."
+  desc "Server that implements tile caching to speed up access to WMS layers."
   homepage "http://mapserver.org/mapcache/"
   url "https://github.com/mapserver/mapcache/archive/rel-1-4-1.tar.gz"
-  sha256 "c050429b2259f05d406028fd0fdb4d9c59bda54cd5c0e8bdf64d7b007a463636"
   version "1.4.1"
+  sha256 "c050429b2259f05d406028fd0fdb4d9c59bda54cd5c0e8bdf64d7b007a463636"
 
   option "with-tiff-cache", "Build with TIFFs as a cache backend"
   option "without-apache-module", "Build without Apache2 module"
 
   depends_on "cmake" => :build
   depends_on "pkg-config" => :build
-  depends_on :apr => :build if build.with? "apache-module"
+  depends_on "apr-util" => :build if build.with? "apache-module"
   depends_on "libpng"
   depends_on "jpeg"
   depends_on "pcre" => :recommended
@@ -83,5 +83,9 @@ class Mapcache < Formula
       #{prefix}/
 
   EOS
+  end
+
+  test do
+    #
   end
 end
