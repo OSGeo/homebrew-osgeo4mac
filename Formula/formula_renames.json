@@ -1,6 +1,6 @@
 {
   "gdal-20": "gdal2",
-  "gdal-filegdb", "gdal1-filegdb",
+  "gdal-filegdb": "gdal1-filegdb",
   "gdal-grass64": "gdal1-grass6",
   "gdal-mrsid": "gdal1-mrsid",
   "grass-64": "grass6",
