@@ -54,7 +54,7 @@ class Orfeo5 < Formula
   def install
     (libexec/"default_geoid").install resource("geoid")
 
-    args = std_cmake_args + %W[
+    args = std_cmake_args + %w[
       -DOTB_BUILD_DEFAULT_MODULES=ON
       -DBUILD_TESTING=OFF
       -DBUILD_SHARED_LIBS=ON
