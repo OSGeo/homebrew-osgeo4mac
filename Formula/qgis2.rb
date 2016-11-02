@@ -382,6 +382,8 @@ class Qgis2 < Formula
     `defaults write \"#{plst}\" NSHighResolutionCapable \"False\"`
     # leave the plist readable; convert from binary to XML format
     `plutil -convert xml1 -- \"#{plst}\"`
+    # make sure plist is readble by all users
+    plst.chmod 0644
     # update modification date on app bundle, or changes won't take effect
     touch app.to_s
 
@@ -480,7 +482,7 @@ class Qgis2 < Formula
   end
 
   test do
-    output = `#{bin}/qgis --help 2>&1` # why does help go to stderr?
+    output = `#{bin}/#{name.to_s} --help 2>&1` # why does help go to stderr?
     assert_match /^QGIS is a user friendly/, output
   end
 
