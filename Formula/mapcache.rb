@@ -14,7 +14,7 @@ class Mapcache < Formula
   depends_on "libpng"
   depends_on "jpeg"
   depends_on "pcre" => :recommended
-  depends_on "pixman" => :recommended
+  depends_on "pixman"
   depends_on "fcgi"
   depends_on "sqlite"
   depends_on "gdal"
@@ -41,12 +41,13 @@ class Mapcache < Formula
     # option(WITH_VERSION_STRING "Show MapCache in server version string" ON)
     # option(WITH_APACHE "Build Apache Module" ON)
     if build.with? "apache-module"
+      args << "-DCMAKE_PREFIX_PATH=#{Formula["apr"].opt_libexec};#{Formula["apr-util"].opt_libexec}"
       args << "-DAPACHE_MODULE_DIR=#{libexec}"
     else
       args << "-DWITH_APACHE=OFF"
     end
     # option(WITH_PIXMAN "Use pixman for SSE optimized image manipulations" ON)
-    args << "-DWWITH_PIXMAN=" + (build.with?("pixman") ? "ON" : "OFF")
+    # args << "-DWWITH_PIXMAN=" + (build.with?("pixman") ? "ON" : "OFF")
     # option(WITH_BERKELEY_DB "Use Berkeley DB as a cache backend" OFF)
     args << "-DWITH_BERKELEY_DB=" + (build.with?("berkeley-db") ? "ON" : "OFF")
     # option(WITH_MEMCACHE "Use memcache as a cache backend (requires recent apr-util)" OFF)
@@ -70,6 +71,10 @@ class Mapcache < Formula
       system "make", "install"
     end
 
+    # update Apache module linking
+    system "install_name_tool", "-change",
+           "@rpath/libmapcache.1.dylib", opt_lib/"libmapcache.1.dylib", libexec/"mod_mapcache.so"
+
     # Add config examples
     (prefix/"config").mkpath
     cp Dir["mapcache.xml*"], prefix/"config"
@@ -86,6 +91,7 @@ class Mapcache < Formula
   end
 
   test do
-    #
+    out = `#{opt_bin}/mapcache_seed -h`
+    assert_match "tileset to seed", out
   end
 end
