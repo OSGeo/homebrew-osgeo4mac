@@ -43,7 +43,7 @@ class QwtpolarQt4 < Formula
              "\\1/lib/qt-4/\\2"
     end
 
-    args = %W[-config release -spec]
+    args = %w[-config release -spec]
     # On Mavericks we want to target libc++, this requires a unsupported/macx-clang-libc++ flag
     if ENV.compiler == :clang && MacOS.version >= :mavericks
       args << "unsupported/macx-clang-libc++"
