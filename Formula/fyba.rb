@@ -12,7 +12,7 @@ class Fyba < Formula
     # fixup some includes: https://github.com/kartverket/fyba/issues/12
     # done with inreplace due to CRLF endings in src/UT files
     # REMOVE ON NEXT RELEASE
-    %W[configure configure.ac src/UT/DISKINFO.cpp src/UT/INQSIZE.cpp src/UT/INQTID.cpp].each do |s|
+    %w[configure configure.ac src/UT/DISKINFO.cpp src/UT/INQSIZE.cpp src/UT/INQTID.cpp].each do |s|
       inreplace s, "sys/vfs.h", "sys/mount.h"
     end
 
