@@ -27,7 +27,7 @@ class PyqtQt4 < Formula
     end
 
     Language::Python.each_python(build) do |python, version|
-      ENV.append_path "PYTHONPATH", "#{Formula["sip-qt4"].opt_lib}/python#{version}/site-packages"
+      ENV["PYTHONPATH"] = "#{HOMEBREW_PREFIX}/lib/qt-4/python#{version}/site-packages"
 
       args = %W[
         --confirm-license
