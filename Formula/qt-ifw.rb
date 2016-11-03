@@ -7,7 +7,7 @@ class QtIfw < Formula
   depends_on "qt-ifw-qt5"
 
   def install
-    args = %W[installerfw.pro -config release]
+    args = %w[installerfw.pro -config release]
     args << "PREFIX=#{prefix}"
 
     system "#{Formula["qt-ifw-qt5"].opt_bin}/qmake", *args
