@@ -20,10 +20,10 @@ class MrsidSdk < Formula
     if build.without? "docs"
       rm_r "examples"
       cd "Lidar_DSDK" do
-        %W[doc examples].each { |f| rm_r f }
+        %w[doc examples].each { |f| rm_r f }
       end
       cd "Raster_DSDK" do
-        %W[doc examples].each { |f| rm_r f }
+        %w[doc examples].each { |f| rm_r f }
       end
     end
     rm_r "Lidar_DSDK/contributions" if build.without? "bindings"
@@ -72,7 +72,7 @@ class MrsidSdk < Formula
     end
     cd raster_dsdk/"lib" do
       # reset vendored lib ids
-      %W[libgeos_c.1.dylib libgeos.2.dylib libtbb.dylib].each do |f|
+      %w[libgeos_c.1.dylib libgeos.2.dylib libtbb.dylib].each do |f|
         set_install_name(f, libexec)
       end
 
