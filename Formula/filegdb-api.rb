@@ -8,7 +8,7 @@ class FilegdbApi < Formula
   option "with-docs", "Intall API documentation and sample code"
 
   def install
-    prefix.install %W[lib license]
+    prefix.install %w[lib license]
     # update libs
     cd lib do
       install_change "libFileGDBAPI.dylib",
@@ -33,7 +33,7 @@ class FilegdbApi < Formula
     include.install "include" => "filegdb"
 
     if build.with? "docs"
-      pkgshare.install %W[samples xmlResources]
+      pkgshare.install %w[samples xmlResources]
       pkgshare.install "doc/html" => "html"
     end
   end
