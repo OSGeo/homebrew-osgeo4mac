@@ -4,6 +4,7 @@ class Taudem < Formula
   url "https://github.com/dtarb/TauDEM/archive/a0335e826d579926013e2d1c33c53d413b7c04b3.tar.gz"
   version "5.3.6-dev"
   sha256 "8b82f5162af6aaa5dcc0d56d23f6a392cfe5463b317ae5286286dba5554160f3"
+  revision 1
 
   # bottle do
   #   root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
@@ -15,7 +16,7 @@ class Taudem < Formula
 
   depends_on "cmake" => :build
   depends_on :mpi => [:cc, :cxx]
-  depends_on "gdal"
+  depends_on "gdal2"
 
   resource "logan" do
     url "http://hydrology.usu.edu/taudem/taudem5/LoganDemo.zip"
