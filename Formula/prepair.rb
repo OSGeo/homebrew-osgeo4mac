@@ -12,7 +12,7 @@ class Prepair < Formula
   depends_on "gdal2"
 
   def install
-    libexec.install(%W[data icon.png]) # geojson sample data and project icon
+    libexec.install(%w[data icon.png]) # geojson sample data and project icon
     args = std_cmake_args
     mkdir "build" do
       system "cmake", "..", *args
