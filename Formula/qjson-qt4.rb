@@ -22,7 +22,8 @@ class QjsonQt4 < Formula
         return 0;
       }
     EOS
-    system ENV.cxx, "-I#{include}", "-L#{lib}", "-lqjson",
+    system ENV.cxx, "-I#{include}", "-I#{Formula["qt-4"].opt_include}",
+           "-L#{lib}", "-lqjson",
            testpath/"test.cpp", "-o", testpath/"test"
     system "./test"
   end
