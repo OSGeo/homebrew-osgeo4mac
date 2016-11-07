@@ -277,6 +277,7 @@ class Qgis2Ltr < Formula
     dhppth = hb_lib_qt4/dsubpth
     dhppth.mkpath
     rm_f dhppth/"libqgis_customwidgets.#{version}.dylib"
+    rm_f dhppth/"libqgis_customwidgets.dylib"
     ln_sf "#{opt_lib_qt4.relative_path_from(dhppth)}/#{dsubpth}/libqgis_customwidgets.#{version}.dylib", "#{dhppth}/"
     # don't add non-versioned base symlink, as it will conflict with other QGIS installs
     # cd lib_qt4/subpth do
