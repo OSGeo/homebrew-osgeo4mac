@@ -290,29 +290,41 @@ class Qgis2Ltr < Formula
     # define default isolation env vars
     pthsep = File::PATH_SEPARATOR
     pypth = python_site_packages.to_s
-    pths = %W[#{HOMEBREW_PREFIX/"bin"} /usr/bin /bin /usr/sbin /sbin /opt/X11/bin /usr/X11/bin].join(pthsep)
-    gdalpth = "#{Formula["gdal2"].opt_lib}/python2.7/site-packages"
-    qt4pth = python_qt4_site_packages.to_s
+    pths = %w[/usr/bin /bin /usr/sbin /sbin /opt/X11/bin /usr/X11/bin]
 
     unless opts.include? "with-isolation"
-      pths = ORIGINAL_PATHS.join(pthsep)
-      unless pths.include? HOMEBREW_PREFIX/"bin"
-        pths = HOMEBREW_PREFIX/"bin" + pthsep + pths
-      end
+      pths = ORIGINAL_PATHS
       pyenv = ENV["PYTHONPATH"]
       if pyenv
         pypth = pyenv.include?(pypth) ? pyenv : pypth + pthsep + pyenv
       end
     end
 
-    # set install's lib/python2.7/site-packages first, so app will work if unlinked
-    pypth = %W[#{qt4pth} #{gdalpth} #{lib}/python2.7/site-packages #{pypth}].join(pthsep)
+    unless pths.include? HOMEBREW_PREFIX/"bin"
+      pths = pths.insert(0, HOMEBREW_PREFIX/"bin")
+    end
+
+    # set qt-4's then install's lib/python2.7/site-packages first, so app will work if unlinked
+    pypths = %W[#{python_qt4_site_packages} #{opt_lib}/python2.7/site-packages #{pypth}]
+
+    if build.without? "gdal-1"
+      gdal2 = Formula["gdal2"]
+      pths.insert(0, gdal2.opt_bin.to_s)
+      pypths.insert(0, "#{gdal2.opt_lib}/python2.7/site-packages")
+    end
+
+    # prepend qt-4 based utils to PATH (reverse order)
+    pths.insert(0, Formula["qca-qt4"].opt_bin.to_s)
+    pths.insert(0, Formula["pyqt-qt4"].opt_bin.to_s)
+    pths.insert(0, Formula["sip-qt4"].opt_bin.to_s)
+    pths.insert(0, Formula["qt-4"].opt_bin.to_s)
 
     envars = {
-      :PATH => pths.to_s,
-      :PYTHONPATH => pypth.to_s,
+      :PATH => pths.join(pthsep),
+      :PYTHONPATH => pypths.join(pthsep),
       :GDAL_DRIVER_PATH => "#{HOMEBREW_PREFIX}/lib/gdalplugins",
     }
+    envars[:GDAL_DATA] = Formula[build.without?("gdal-1") ? "gdal2": "gdal"].opt_pkgshare.to_s
 
     proc_algs = "Contents/Resources/python/plugins/processing/algs"
     if opts.include?("with-grass") || brewed_grass7?
@@ -387,8 +399,14 @@ class Qgis2Ltr < Formula
     rm_f qgis_bin if File.exist?(qgis_bin) # install generates empty file
     bin_cmds = %W[#!/bin/sh\n]
     # setup shell-prepended env vars (may result in duplication of paths)
-    envars[:PATH] = "#{HOMEBREW_PREFIX}/bin" + pthsep + "$PATH"
-    envars[:PYTHONPATH] = %W[#{qt4pth} #{gdalpth} #{python_site_packages} $PYTHONPATH].join(pthsep)
+    unless pths.include? HOMEBREW_PREFIX/"bin"
+      pths.insert(0, HOMEBREW_PREFIX/"bin")
+    end
+    # even though this should be affected by with-isolation, allow local env override
+    pths << "$PATH"
+    pypths << "$PYTHONPATH"
+    envars[:PATH] = pths.join(pthsep)
+    envars[:PYTHONPATH] = pypths.join(pthsep)
     envars.each { |key, value| bin_cmds << "export #{key}=#{value}" }
     bin_cmds << opt_prefix/"QGIS.app/Contents/MacOS/QGIS \"$@\""
     qgis_bin.write(bin_cmds.join("\n"))
