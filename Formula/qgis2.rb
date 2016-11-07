@@ -99,7 +99,7 @@ class Qgis2 < Formula
     depends_on "open-scene-graph" => ["with-qt"]
     depends_on "homebrew/science/osgearth"
   end
-  depends_on "gpsbabel" => :optional
+  depends_on "gpsbabel-qt4" => :optional
   # TODO: remove "pyspatialite" when PyPi package supports spatialite 4.x
   #       or DB Manager supports libspatialite >= 4.2.0 (with mod_spatialite)
   depends_on "pyspatialite" # for DB Manager
@@ -281,6 +281,7 @@ class Qgis2 < Formula
     dsubpth = "plugins/designer"
     dhppth = hb_lib_qt4/dsubpth
     dhppth.mkpath
+    rm_f dhppth/"libqgis_customwidgets.#{version}.dylib"
     ln_sf "#{opt_lib_qt4.relative_path_from(dhppth)}/#{dsubpth}/libqgis_customwidgets.#{version}.dylib", "#{dhppth}/"
     # don't add non-versioned base symlink, as it will conflict with other QGIS installs
     # cd lib_qt4/subpth do
@@ -323,6 +324,10 @@ class Qgis2 < Formula
     pths.insert(0, Formula["pyqt-qt4"].opt_bin.to_s)
     pths.insert(0, Formula["sip-qt4"].opt_bin.to_s)
     pths.insert(0, Formula["qt-4"].opt_bin.to_s)
+
+    if opts.include? "with-gpsbabel-qt4"
+      pths.insert(0, Formula["gpsbabel-qt4"].opt_bin.to_s)
+    end
 
     envars = {
       :PATH => pths.join(pthsep),
