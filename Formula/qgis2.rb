@@ -299,7 +299,7 @@ class Qgis2 < Formula
     pypth = python_site_packages.to_s
     pths = %w[/usr/bin /bin /usr/sbin /sbin /opt/X11/bin /usr/X11/bin]
 
-    unless opts.include? "with-isolation"
+    unless opts.include?("with-isolation")
       pths = ORIGINAL_PATHS.dup
       pyenv = ENV["PYTHONPATH"]
       if pyenv
@@ -307,14 +307,14 @@ class Qgis2 < Formula
       end
     end
 
-    unless pths.include? HOMEBREW_PREFIX/"bin"
+    unless pths.include?(HOMEBREW_PREFIX/"bin")
       pths = pths.insert(0, HOMEBREW_PREFIX/"bin")
     end
 
     # set qt-4's then install's lib/python2.7/site-packages first, so app will work if unlinked
     pypths = %W[#{python_qt4_site_packages} #{opt_lib}/python2.7/site-packages #{pypth}]
 
-    if build.without? "gdal-1"
+    unless opts.include?("with-gdal-1")
       gdal2 = Formula["gdal2"]
       pths.insert(0, gdal2.opt_bin.to_s)
       pypths.insert(0, "#{gdal2.opt_lib}/python2.7/site-packages")
@@ -326,7 +326,7 @@ class Qgis2 < Formula
     pths.insert(0, Formula["sip-qt4"].opt_bin.to_s)
     pths.insert(0, Formula["qt-4"].opt_bin.to_s)
 
-    if opts.include? "with-gpsbabel-qt4"
+    if opts.include?("with-gpsbabel-qt4")
       pths.insert(0, Formula["gpsbabel-qt4"].opt_bin.to_s)
     end
 
@@ -335,13 +335,13 @@ class Qgis2 < Formula
       :PYTHONPATH => pypths.join(pthsep),
       :GDAL_DRIVER_PATH => "#{HOMEBREW_PREFIX}/lib/gdalplugins",
     }
-    envars[:GDAL_DATA] = Formula[build.without?("gdal-1") ? "gdal2": "gdal"].opt_pkgshare.to_s
+    envars[:GDAL_DATA] = Formula[opts.include?("with-gdal-1") ? "gdal": "gdal2"].opt_pkgshare.to_s
 
     proc_algs = "Contents/Resources/python/plugins/processing/algs"
     if opts.include?("with-grass") || brewed_grass7?
       grass7 = Formula["grass7"]
       # for core integration plugin support
-      envars[:GRASS_PREFIX] = "#{grass7.opt_prefix}/grass-#{grass7.version}"
+      envars[:GRASS_PREFIX] = "#{grass7.opt_prefix}/grass-base"
       begin
         inreplace app/"#{proc_algs}/grass7/Grass7Utils.py",
                   "/Applications/GRASS-7.0.app/Contents/MacOS",
@@ -362,12 +362,12 @@ class Qgis2 < Formula
       end
     end
 
-    unless opts.include? "without-globe"
+    unless opts.include?("without-globe")
       osg = Formula["open-scene-graph"]
       envars[:OSG_LIBRARY_PATH] = "#{HOMEBREW_PREFIX}/lib/osgPlugins-#{osg.version}"
     end
 
-    if opts.include? "with-isolation"
+    if opts.include?("with-isolation")
       envars[:DYLD_FRAMEWORK_PATH] = "#{HOMEBREW_PREFIX}/Frameworks:/System/Library/Frameworks"
       versioned = %W[
         #{Formula["sqlite"].opt_lib}
