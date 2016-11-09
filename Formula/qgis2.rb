@@ -300,7 +300,7 @@ class Qgis2 < Formula
     pths = %w[/usr/bin /bin /usr/sbin /sbin /opt/X11/bin /usr/X11/bin]
 
     unless opts.include? "with-isolation"
-      pths = ORIGINAL_PATHS
+      pths = ORIGINAL_PATHS.dup
       pyenv = ENV["PYTHONPATH"]
       if pyenv
         pypth = pyenv.include?(pypth) ? pyenv : pypth + pthsep + pyenv
