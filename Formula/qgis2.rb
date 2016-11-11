@@ -335,7 +335,7 @@ class Qgis2 < Formula
       :PYTHONPATH => pypths.join(pthsep),
       :GDAL_DRIVER_PATH => "#{HOMEBREW_PREFIX}/lib/gdalplugins",
     }
-    envars[:GDAL_DATA] = Formula[opts.include?("with-gdal-1") ? "gdal": "gdal2"].opt_pkgshare.to_s
+    envars[:GDAL_DATA] = "#{Formula[opts.include?("with-gdal-1") ? "gdal": "gdal2"].opt_share}/gdal"
 
     proc_algs = "Contents/Resources/python/plugins/processing/algs"
     if opts.include?("with-grass") || brewed_grass7?
