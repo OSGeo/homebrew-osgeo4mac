@@ -176,8 +176,8 @@ class Qgis2 < Formula
       args << "-DSQLITE3_INCLUDE_DIR=#{Formula["sqlite"].opt_include}"
     end
 
-    args << "-DPYTHON_EXECUTABLE='#{python_exec}'"
-    args << "-DPYTHON_CUSTOM_FRAMEWORK='#{brewed_python_framework}'"
+    args << "-DPYTHON_EXECUTABLE='#{`python -c "import sys; print(sys.executable)"`.chomp}'"
+    args << "-DPYTHON_CUSTOM_FRAMEWORK='#{`python -c "import sys; print(sys.prefix)"`.chomp}'"
 
     # find git revision for HEAD build
     if build.head? && File.exist?("#{cached_download}/.git/index")
