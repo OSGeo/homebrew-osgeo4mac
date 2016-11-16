@@ -70,6 +70,7 @@ class Qgis2 < Formula
   depends_on "qscintilla2-qt4"
   depends_on "qwt-qt4"
   depends_on "qwtpolar-qt4"
+  depends_on "qjson-qt4"
   depends_on "gsl"
   depends_on "sqlite" # keg_only
   depends_on "expat" # keg_only
