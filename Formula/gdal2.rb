@@ -236,6 +236,24 @@ class Gdal2 < Formula
   end
 
   def install
+    if build.with? "complete"
+      # patch to "Handle prefix renaming in jasper 1.900.28" (not yet reported)
+      # use inreplace due to CRLF patching issue
+      inreplace "frmts/jpeg2000/jpeg2000_vsil_io.cpp" do |s|
+        # replace order matters here!
+        s.gsub! "uchar", "jas_uchar"
+        s.gsub! "unsigned char", "jas_uchar"
+      end
+      inreplace "frmts/jpeg2000/jpeg2000_vsil_io.h" do |s|
+        s.sub! %r{(<jasper/jasper\.h>)}, "\\1\n\n" + <<-EOS.undent
+         /* Handle prefix renaming in jasper 1.900.28 */
+         #ifndef jas_uchar
+         #define jas_uchar unsigned char
+         #endif
+        EOS
+      end
+    end
+
     if build.with? "libkml"
       resource("libkml").stage do
         # See main `libkml` formula for info on patches
