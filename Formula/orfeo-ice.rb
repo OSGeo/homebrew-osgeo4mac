@@ -3,7 +3,7 @@ class OrfeoIce < Formula
   homepage "http://www.orfeo-toolbox.org/otb/"
   url "https://www.orfeo-toolbox.org/packages/archives/Ice/Ice-0.4.1.tar.gz"
   sha256 "4abb85bcd26766edee827c468e8994e8f3207ce7f1f229f9ce07eb31805ab98b"
-  revision 1
+  revision 2
 
   # bottle do
   #   root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
@@ -14,7 +14,7 @@ class OrfeoIce < Formula
   depends_on "orfeo5"
   depends_on "homebrew/science/insighttoolkit"
   depends_on "glew"
-  depends_on "glfw3"
+  depends_on "glfw"
   depends_on :x11
 
   def install
