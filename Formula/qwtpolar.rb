@@ -4,11 +4,6 @@ class Qwtpolar < Formula
   url "https://downloads.sf.net/project/qwtpolar/qwtpolar/1.1.1/qwtpolar-1.1.1.tar.bz2"
   sha256 "6168baa9dbc8d527ae1ebf2631313291a1d545da268a05f4caa52ceadbe8b295"
 
-  # bottle do
-  #   root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
-  #   sha256 "" => :mavericks
-  # end
-
   option "with-examples", "Install source code for example apps"
   option "without-plugin", "Skip building the Qt Designer plugin"
 

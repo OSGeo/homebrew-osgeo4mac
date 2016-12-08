@@ -17,13 +17,13 @@ before_install:
       echo "Changed formulae are ${CHANGED_FORMULAE}";
     fi
   - export HOMEBREW_REPOSITORY="$(brew --repo)"
-  - sudo chown -R "$USER" "$HOMEBREW_REPOSITORY"
-  - git -C "$HOMEBREW_REPOSITORY" reset --hard origin/master
-  - mkdir -p "$HOMEBREW_REPOSITORY/Library/Taps/qgis"
-  - ln -s "$TRAVIS_BUILD_DIR" "$HOMEBREW_REPOSITORY/Library/Taps/$GH_USER/$GH_REPO"
-  - cd "$HOMEBREW_REPOSITORY/Library/Taps/$GH_USER/$GH_REPO"
-  - chmod -f 0644 $HOMEBREW_REPOSITORY/Library/Taps/$GH_USER/$GH_REPO/Formula/*.rb
-  - export TRAVIS_BUILD_DIR="$HOMEBREW_REPOSITORY/Library/Taps/$GH_USER/$GH_REPO"
+  - sudo chown -R "$USER" "${HOMEBREW_REPOSITORY}"
+  - git -C "${HOMEBREW_REPOSITORY}" reset --hard origin/master
+  - mkdir -p "${HOMEBREW_REPOSITORY}/Library/Taps/${GH_USER}"
+  - ln -s "$TRAVIS_BUILD_DIR" "${HOMEBREW_REPOSITORY}/Library/Taps/${GH_USER}/${GH_REPO}"
+  - cd "${HOMEBREW_REPOSITORY}/Library/Taps/${GH_USER}/${GH_REPO}"
+  - chmod -f 0644 ${HOMEBREW_REPOSITORY}/Library/Taps/${GH_USER}/${GH_REPO}/Formula/*.rb
+  - export TRAVIS_BUILD_DIR="${HOMEBREW_REPOSITORY}/Library/Taps/${GH_USER}/${GH_REPO}"
   - export HOMEBREW_DEVELOPER="1"
   - export HOMEBREW_PREFIX=$(brew --prefix)
   - ulimit -n 1024
