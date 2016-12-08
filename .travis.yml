@@ -1,15 +1,13 @@
 language: ruby
 os: osx
+env: OSX=10.12
 osx_image: xcode8.1
 rvm: system
 sudo: required
 
-env:
-  - OSX=10.12
-  - GH_USER=osgeo
-  - GH_REPO=homebrew-osgeo4mac
-
 before_install:
+  - export GH_USER=osgeo
+  - export GH_REPO=homebrew-osgeo4mac
   - export TRAVIS_COMMIT="$(git rev-parse --verify -q HEAD)"
   - export CHANGED_FORMULAE="$(git diff --name-status $TRAVIS_COMMIT^ $TRAVIS_COMMIT | sed -n -E 's#^(A|M)[[:space:]]+Formula/(.+)\.rb$#\2#p' )"
   - if [ "${CHANGED_FORMULAE}" == "" ]; then
