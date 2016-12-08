@@ -1,0 +1,57 @@
+language: ruby
+os: osx
+osx_image: xcode8.1
+rvm: system
+sudo: required
+
+env:
+  - OSX=10.12
+  - GH_USER=osgeo
+  - GH_REPO=homebrew-osgeo4mac
+
+before_install:
+  - export TRAVIS_COMMIT="$(git rev-parse --verify -q HEAD)"
+  - export CHANGED_FORMULAE="$(git diff --name-status $TRAVIS_COMMIT^ $TRAVIS_COMMIT | sed -n -E 's#^(A|M)[[:space:]]+Formula/(.+)\.rb$#\2#p' )"
+  - if [ "${CHANGED_FORMULAE}" == "" ]; then
+      echo "Skipping CI; no changed formulae found in $TRAVIS_BUILD_DIR";
+      travis_terminate 0;
+    else
+      echo "Changed formulae are ${CHANGED_FORMULAE}";
+    fi
+  - export HOMEBREW_REPOSITORY="$(brew --repo)"
+  - sudo chown -R "$USER" "$HOMEBREW_REPOSITORY"
+  - git -C "$HOMEBREW_REPOSITORY" reset --hard origin/master
+  - mkdir -p "$HOMEBREW_REPOSITORY/Library/Taps/qgis"
+  - ln -s "$TRAVIS_BUILD_DIR" "$HOMEBREW_REPOSITORY/Library/Taps/$GH_USER/$GH_REPO"
+  - cd "$HOMEBREW_REPOSITORY/Library/Taps/$GH_USER/$GH_REPO"
+  - chmod -f 0644 $HOMEBREW_REPOSITORY/Library/Taps/$GH_USER/$GH_REPO/Formula/*.rb
+  - export TRAVIS_BUILD_DIR="$HOMEBREW_REPOSITORY/Library/Taps/$GH_USER/$GH_REPO"
+  - export HOMEBREW_DEVELOPER="1"
+  - export HOMEBREW_PREFIX=$(brew --prefix)
+  - ulimit -n 1024
+  - ./travis/before_install.sh
+
+install: ./travis/install.sh
+
+#before_script: ./travis/before_script.sh
+
+script: ./travis/script.sh
+
+#after_script: ./travis/after_script.sh
+
+before_deploy: ./travis/before_deploy.sh
+
+deploy:
+  skip_cleanup: true
+  provider: s3
+  access_key_id:
+    secure: SzRXXOu9tyoUAJNUkXfPnZN/PoNdaAiIb8aR4mCQ0dqqyIrvXRw5YeenihT4kxkRcaXWK7Yx7ZpzJBTWKaPEv+1MA4eVUccvcRK3KwfccgtD7nCWW8OYP5PTOLo4+rKZc/Wzqsmtu54jVSWdayATDyab9ZD0DQetk4KaDRk2Pjk=
+  secret_access_key:
+    secure: g9evYj59AKxE/icv8kgf4y7pfuq6z5e1V1LUhyFvhBVFszSIfviXSe19F2crixwiFtAlmwaKw/HNNt1Cztggc37PkiwpTxvFgsRUyCDtNCVi4qkflWKUx5NNN5blBY5me5xntmLkaOV4bSD/r4LLpbN/UmhuzVWPxMoKQPeACF0=
+  bucket: qgis.dakotacarto.com
+  local-dir: bottles
+  upload-dir: bottles
+  acl: public_read
+  on:
+    branch: master
+    repo: OSGeo/homebrew-osgeo4mac
