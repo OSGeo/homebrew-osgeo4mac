@@ -3,16 +3,13 @@ class Qwtpolar < Formula
   homepage "http://qwtpolar.sourceforge.net/"
   url "https://downloads.sf.net/project/qwtpolar/qwtpolar/1.1.1/qwtpolar-1.1.1.tar.bz2"
   sha256 "6168baa9dbc8d527ae1ebf2631313291a1d545da268a05f4caa52ceadbe8b295"
+  revision 1
 
   option "with-examples", "Install source code for example apps"
   option "without-plugin", "Skip building the Qt Designer plugin"
 
   depends_on "qt5"
   depends_on "qwt"
-
-  # Update designer plugin linking back to qwtpolar framework/lib after install
-  # See: https://sourceforge.net/p/qwtpolar/patches/2/
-  patch :DATA
 
   def install
     cd "doc" do
@@ -48,6 +45,17 @@ class Qwtpolar < Formula
     system Formula["qt5"].bin/"qmake", *args
     system "make"
     system "make", "install"
+
+    # Ensure designer plugin is linked back to opt_prefix
+    if build.with? "plugin"
+      plug = lib/"qt5/plugins/designer/libqwt_polar_designer_plugin.dylib"
+      plug.ensure_writable do
+        plug.dynamically_linked_libraries.each do |d|
+          next unless d.to_s =~ /qwtpolar/
+          system "install_name_tool", "-change", d, opt_lib/d.to_s, plug.to_s
+        end
+      end
+    end
   end
 
   test do
@@ -68,26 +76,3 @@ class Qwtpolar < Formula
     system "./out"
   end
 end
-
-__END__
-diff --git a/designer/designer.pro b/designer/designer.pro
-index 24770fd..3ff0761 100644
---- a/designer/designer.pro
-+++ b/designer/designer.pro
-@@ -75,6 +75,16 @@ contains(QWT_POLAR_CONFIG, QwtPolarDesigner) {
-
-     target.path = $${QWT_POLAR_INSTALL_PLUGINS}
-     INSTALLS += target
-+
-+    macx {
-+        contains(QWT_POLAR_CONFIG, QwtPolarFramework) {
-+            QWTP_LIB = qwtpolar.framework/Versions/$${QWT_POLAR_VER_MAJ}/qwtpolar
-+        }
-+        else {
-+            QWTP_LIB = libqwtpolar.$${QWT_POLAR_VER_MAJ}.dylib
-+        }
-+        QMAKE_POST_LINK = install_name_tool -change $${QWTP_LIB} $${QWT_POLAR_INSTALL_LIBS}/$${QWTP_LIB} $(DESTDIR)$(TARGET)
-+    }
- }
- else {
-     TEMPLATE        = subdirs # do nothing
