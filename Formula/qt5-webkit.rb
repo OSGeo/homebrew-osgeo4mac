@@ -111,13 +111,12 @@ class Qt5Webkit < Formula
     qt5 = Formula["qt5"]
     machos.each do |m|
       dylibs = m.dynamically_linked_libraries
-      saved_perms = m.stat.mode
-      chmod 0644, m.to_s
-      dylibs.each do |d|
-        next unless d.to_s =~ %r{^#{qt5.lib}/QtWebKit(Widgets)?\.framework}
-        system "install_name_tool", "-change", d, d.sub(qt5.lib, opt_lib), m.to_s
+      m.ensure_writable do
+        dylibs.each do |d|
+          next unless d.to_s =~ %r{^#{qt5.lib}/QtWebKit(Widgets)?\.framework}
+          system "install_name_tool", "-change", d, d.sub(qt5.lib, opt_lib), m.to_s
+        end
       end
-      chmod saved_perms, m.to_s
     end
   end
 
