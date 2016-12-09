@@ -20,11 +20,11 @@ set -e
 for f in ${CHANGED_FORMULAE};do
   echo "Installing changed formula ${f}..."
   # add verbosity to ensure Travis doesn't complain about no output
-  brew install --build-bottle -v ${GH_USER}/${GH_REPO}/${f}
+  brew install --build-bottle -v ${TRAVIS_REPO_SLUG}/${f}
 
   echo "Testing changed formula ${f}..."
   # does running postinstall mess up the bottle?
   # (mentioned that it is skipped if installing with --build-bottle)
   # brew postinstall ${f}
-  brew test ${GH_USER}/${GH_REPO}/${f}
+  brew test ${TRAVIS_REPO_SLUG}/${f}
 done

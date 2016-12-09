@@ -6,8 +6,7 @@ rvm: system
 sudo: required
 
 before_install:
-  - export GH_USER=osgeo
-  - export GH_REPO=homebrew-osgeo4mac
+  - export GH_USER=$(echo -n "${TRAVIS_REPO_SLUG}" | egrep -o '^[^/]+' | tr -d '\n')
   - export TRAVIS_COMMIT="$(git rev-parse --verify -q HEAD)"
   - export CHANGED_FORMULAE="$(git diff --name-status $TRAVIS_COMMIT^ $TRAVIS_COMMIT | sed -n -E 's#^(A|M)[[:space:]]+Formula/(.+)\.rb$#\2#p' )"
   - if [ "${CHANGED_FORMULAE}" == "" ]; then
@@ -20,10 +19,10 @@ before_install:
   - sudo chown -R "$USER" "${HOMEBREW_REPOSITORY}"
   - git -C "${HOMEBREW_REPOSITORY}" reset --hard origin/master
   - mkdir -p "${HOMEBREW_REPOSITORY}/Library/Taps/${GH_USER}"
-  - ln -s "$TRAVIS_BUILD_DIR" "${HOMEBREW_REPOSITORY}/Library/Taps/${GH_USER}/${GH_REPO}"
-  - cd "${HOMEBREW_REPOSITORY}/Library/Taps/${GH_USER}/${GH_REPO}"
-  - chmod -f 0644 ${HOMEBREW_REPOSITORY}/Library/Taps/${GH_USER}/${GH_REPO}/Formula/*.rb
-  - export TRAVIS_BUILD_DIR="${HOMEBREW_REPOSITORY}/Library/Taps/${GH_USER}/${GH_REPO}"
+  - ln -s "$TRAVIS_BUILD_DIR" "${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}"
+  - cd "${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}"
+  - chmod -f 0644 ${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}/Formula/*.rb
+  - export TRAVIS_BUILD_DIR="${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}"
   - export HOMEBREW_DEVELOPER="1"
   - export HOMEBREW_PREFIX=$(brew --prefix)
   - ulimit -n 1024

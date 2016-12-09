@@ -20,5 +20,5 @@ set -e
 for f in ${CHANGED_FORMULAE};do
   echo "Installing dependencies for changed formula ${f}..."
   # add verbosity to ensure Travis doesn't complain about no output
-  brew install -v --only-dependencies ${GH_USER}/${GH_REPO}/${f}
+  brew install -v --only-dependencies ${TRAVIS_REPO_SLUG}/${f}
 done
