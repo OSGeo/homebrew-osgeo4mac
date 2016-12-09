@@ -23,6 +23,7 @@ mkdir -p bottles
 pushd bottles
   for f in ${CHANGED_FORMULAE};do
     echo "Bottling changed formula ${f}..."
-    brew bottle --verbose --root-url=http://qgis.dakotacarto.com/bottles ${f}
+    brew bottle --verbose --root-url=http://qgis.dakotacarto.com/bottles \
+      ${GH_USER}/${GH_REPO}/${f}
   done
 popd
