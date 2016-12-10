@@ -25,6 +25,7 @@ class Gdal2 < Formula
   option "with-libkml", "Build with Google's libkml driver (requires libkml --HEAD or >= 1.3)"
   option "without-python", "Build without python2 support"
   option "with-swig-java", "Build the swig java bindings"
+  option "with-gnm", "Build with General Network Model support"
 
   deprecated_option "enable-opencl" => "with-opencl"
   deprecated_option "enable-armadillo" => "with-armadillo"
@@ -209,6 +210,7 @@ class Gdal2 < Formula
     args << "--with-libkml=#{libexec}" if build.with? "libkml"
 
     args << "--with-qhull=#{build.with?("qhull") ? "internal" : "no"}"
+    args << "--with-gnm" if build.with? "gnm"
 
     # Python is installed manually to ensure everything is properly sandboxed.
     args << "--without-python"
@@ -296,10 +298,12 @@ class Gdal2 < Formula
 
     inreplace "swig/python/setup.cfg" do |s|
       s.gsub! /#(.*_dirs)/, "\\1"
-      s.sub! /(include_dirs = \S+)/, "\\1:../../apps/"
+      s.sub! /(include_dirs = \S+)/, "\\1:../../apps"
+      s.sub! /(include_dirs = \S+)/, "\\1:../../ogr/ogrsf_frmts:../../gnm" if build.with? "gnm"
     end
     Language::Python.each_python(build) do |python, _python_version|
       cd "swig/python" do
+        system "echo 'GNM_ENABLED=yes' >> setup_vars.ini" if build.with? "gnm"
         system python, *Language::Python.setup_install_args(prefix)
         bin.install Dir["scripts/*"] if python == "python"
       end
