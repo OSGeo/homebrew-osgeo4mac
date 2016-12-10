@@ -4,10 +4,6 @@ class Gdal2 < Formula
   url "http://download.osgeo.org/gdal/2.1.2/gdal-2.1.2.tar.gz"
   sha256 "69761c38acac8c6d3ea71304341f6982b5d66125a1a80d9088b6bfd2019125c9"
 
-  # bottle do
-  #   root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
-  # end
-
   head do
     url "https://svn.osgeo.org/gdal/trunk/gdal"
     depends_on "doxygen" => :build
