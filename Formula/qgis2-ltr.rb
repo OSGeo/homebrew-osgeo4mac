@@ -8,16 +8,16 @@ class Qgis2Ltr < Formula
   head "https://github.com/qgis/QGIS.git", :branch => "release-2_14"
 
   stable do
-    url "https://github.com/qgis/QGIS/archive/final-2_14_8.tar.gz"
-    sha256 "b5729fc5393b598a8dfaa3ff551d49640b9ed52e4292f972ae1bee95a50beeec"
+    url "https://github.com/qgis/QGIS/archive/final-2_14_9.tar.gz"
+    sha256 "8cb0c38acc6f691a89bd5dcd5efe51dbab19c952050f9e86ec644ebb5cc07a51"
 
     # patches that represent all backports to release-2_14 branch, since release tag
     # see: https://github.com/qgis/QGIS/commits/release-2_14
-    patch do
-      # thru commit 053c531 minus windows-formatted patches
-      url "https://gist.githubusercontent.com/dakcarto/8a6a45737523efce13c7f1521ff85c8b/raw/de9ad2d8c23b0798c3dc5bcb2cc384d86d425e87/qgis_2-14-8_053c531.diff"
-      sha256 "97f21b29f96e31c599c804a768d05764164ff5c76f161b200d285407bd9a14bf"
-    end
+    # patch do
+    #   # thru commit ?, minus windows-formatted patches
+    #   url ""
+    #   sha256 ""
+    # end
   end
 
   # bottle do
@@ -79,6 +79,7 @@ class Qgis2Ltr < Formula
     depends_on "gdal"
   else
     depends_on "gdal2"
+    depends_on "gdal2-python"
   end
   depends_on "oracle-client-sdk" if build.with? "oracle"
   # TODO: add MSSQL third-party support formula?, :optional
@@ -170,8 +171,8 @@ class Qgis2Ltr < Formula
       args << "-DSQLITE3_INCLUDE_DIR=#{Formula["sqlite"].opt_include}"
     end
 
-    args << "-DPYTHON_EXECUTABLE='#{python_exec}'"
-    args << "-DPYTHON_CUSTOM_FRAMEWORK='#{brewed_python_framework}'"
+    args << "-DPYTHON_EXECUTABLE='#{`python -c "import sys; print(sys.executable)"`.chomp}'"
+    args << "-DPYTHON_CUSTOM_FRAMEWORK='#{`python -c "import sys; print(sys.prefix)"`.chomp}'"
 
     # find git revision for HEAD build
     if build.head? && File.exist?("#{cached_download}/.git/index")
@@ -234,8 +235,13 @@ class Qgis2Ltr < Formula
     end
 
     mkdir "build" do
+      # bbedit = "/usr/local/bin/bbedit"
+      # cmake_config = Pathname("#{Dir.pwd}/#{name}_cmake-config.txt")
+      # cmake_config.write ["cmake ..", *args].join(" \\\n")
+      # system bbedit, cmake_config.to_s
+      # raise
       system "cmake", "..", *args
-      # system "bbedit", "CMakeCache.txt"
+      # system bbedit, "CMakeCache.txt"
       # raise
       system "make"
       system "make", "install"
@@ -310,9 +316,9 @@ class Qgis2Ltr < Formula
     pypths = %W[#{python_qt4_site_packages} #{opt_lib}/python2.7/site-packages #{pypth}]
 
     unless opts.include?("with-gdal-1")
-      gdal2 = Formula["gdal2"]
-      pths.insert(0, gdal2.opt_bin.to_s)
-      pypths.insert(0, "#{gdal2.opt_lib}/python2.7/site-packages")
+      pths.insert(0, Formula["gdal2"].opt_bin.to_s)
+      pths.insert(0, Formula["gdal2-python"].opt_bin.to_s)
+      pypths.insert(0, "#{Formula["gdal2-python"].opt_lib}/python2.7/site-packages")
     end
 
     # prepend qt-4 based utils to PATH (reverse order)
