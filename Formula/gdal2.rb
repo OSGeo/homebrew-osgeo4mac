@@ -3,6 +3,7 @@ class Gdal2 < Formula
   homepage "http://www.gdal.org/"
   url "http://download.osgeo.org/gdal/2.1.2/gdal-2.1.2.tar.gz"
   sha256 "69761c38acac8c6d3ea71304341f6982b5d66125a1a80d9088b6bfd2019125c9"
+  revision 1
 
   head do
     url "https://svn.osgeo.org/gdal/trunk/gdal"
@@ -23,7 +24,6 @@ class Gdal2 < Formula
   option "with-unsupported", "Allow configure to drag in any library it can find. Invoke this at your own risk."
   option "with-mdb", "Build with Access MDB driver (requires Java 1.6+ JDK/JRE, from Apple or Oracle)."
   option "with-libkml", "Build with Google's libkml driver (requires libkml --HEAD or >= 1.3)"
-  option "without-python", "Build without python2 support"
   option "with-swig-java", "Build the swig java bindings"
 
   deprecated_option "enable-opencl" => "with-opencl"
@@ -83,11 +83,6 @@ class Gdal2 < Formula
     depends_on "ant" => :build
     depends_on "swig" => :build
   end
-
-  depends_on :python => :optional if MacOS.version <= :snow_leopard
-  depends_on :python3 => :optional
-  depends_on "numpy" => :python if build.with? "python"
-  depends_on "numpy" => :python3 if build.with? "python3"
 
   resource "libkml" do
     # Until 1.3 is stable, use master branch
@@ -211,6 +206,7 @@ class Gdal2 < Formula
     args << "--with-qhull=#{build.with?("qhull") ? "internal" : "no"}"
 
     # Python is installed manually to ensure everything is properly sandboxed.
+    # see
     args << "--without-python"
 
     # Scripting APIs that have not been re-worked to respect Homebrew prefixes.
@@ -294,17 +290,6 @@ class Gdal2 < Formula
     # Create versioned plugins path for other formulae
     (HOMEBREW_PREFIX/"lib/#{plugins_subdirectory}").mkpath
 
-    inreplace "swig/python/setup.cfg" do |s|
-      s.gsub! /#(.*_dirs)/, "\\1"
-      s.sub! /(include_dirs = \S+)/, "\\1:../../apps/"
-    end
-    Language::Python.each_python(build) do |python, _python_version|
-      cd "swig/python" do
-        system python, *Language::Python.setup_install_args(prefix)
-        bin.install Dir["scripts/*"] if python == "python"
-      end
-    end
-
     if build.with? "swig-java"
       cd "swig/java" do
         inreplace "java.opt", "linux", "darwin"
@@ -334,6 +319,8 @@ class Gdal2 < Formula
       You may need to set the following enviroment variable:
 
         export GDAL_DRIVER_PATH=#{HOMEBREW_PREFIX}/lib/gdalplugins
+
+      PYTHON BINDINGS are now built in a separate formula: gdal2-python
     EOS
 
     if build.with? "mdb"
@@ -352,13 +339,5 @@ class Gdal2 < Formula
     # basic tests to see if third-party dylibs are loading OK
     system "#{bin}/gdalinfo", "--formats"
     system "#{bin}/ogrinfo", "--formats"
-
-    # test Python support
-    Language::Python.each_python(build) do |python, python_version|
-      if (lib/"python#{python_version}/site-packages").exist?
-        ENV["PYTHONPATH"] = lib/"python#{python_version}/site-packages"
-        system python, "-c", "from osgeo import gdal, ogr, osr, gdal_array, gdalconst"
-      end
-    end
   end
 end
