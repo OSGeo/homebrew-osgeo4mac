@@ -8,13 +8,13 @@ class Qgis2 < Formula
   head "https://github.com/qgis/QGIS.git", :branch => "release-2_18"
 
   stable do
-    url "https://github.com/qgis/QGIS/archive/final-2_18_0.tar.gz"
-    sha256 "e368018fb78e437f4174a503d02002c7a9a845d51526e1147bcc6a1ee61fcffe"
+    url "https://github.com/qgis/QGIS/archive/final-2_18_1.tar.gz"
+    sha256 "939ca9dbba1c2bfd5e6a8c2b58e1387c51a893b3beccea18062293cb1ab53016"
 
     # patches that represent all backports to release-2_18 branch, since release tag
     # see: https://github.com/qgis/QGIS/commits/release-2_18
     # patch do
-    #   # git id (date) through git id (date) minus windows-formatted patches
+    #   # thru commit ?, minus windows-formatted patches
     #   url ""
     #   sha256 ""
     # end
@@ -22,7 +22,7 @@ class Qgis2 < Formula
 
   devel do
     url "https://github.com/qgis/QGIS.git", :branch => "release-2_18"
-    version "2.18.0-dev"
+    version "2.18.1-dev"
   end
 
   # bottle do
@@ -85,6 +85,7 @@ class Qgis2 < Formula
     depends_on "gdal"
   else
     depends_on "gdal2"
+    depends_on "gdal2-python"
   end
   depends_on "oracle-client-sdk" if build.with? "oracle"
   # TODO: add MSSQL third-party support formula?, :optional
@@ -240,8 +241,13 @@ class Qgis2 < Formula
     end
 
     mkdir "build" do
+      # bbedit = "/usr/local/bin/bbedit"
+      # cmake_config = Pathname("#{Dir.pwd}/#{name}_cmake-config.txt")
+      # cmake_config.write ["cmake ..", *args].join(" \\\n")
+      # system bbedit, cmake_config.to_s
+      # raise
       system "cmake", "..", *args
-      # system "bbedit", "CMakeCache.txt"
+      # system bbedit, "CMakeCache.txt"
       # raise
       system "make"
       system "make", "install"
@@ -316,9 +322,9 @@ class Qgis2 < Formula
     pypths = %W[#{python_qt4_site_packages} #{opt_lib}/python2.7/site-packages #{pypth}]
 
     unless opts.include?("with-gdal-1")
-      gdal2 = Formula["gdal2"]
-      pths.insert(0, gdal2.opt_bin.to_s)
-      pypths.insert(0, "#{gdal2.opt_lib}/python2.7/site-packages")
+      pths.insert(0, Formula["gdal2"].opt_bin.to_s)
+      pths.insert(0, Formula["gdal2-python"].opt_bin.to_s)
+      pypths.insert(0, "#{Formula["gdal2-python"].opt_lib}/python2.7/site-packages")
     end
 
     # prepend qt-4 based utils to PATH (reverse order)
