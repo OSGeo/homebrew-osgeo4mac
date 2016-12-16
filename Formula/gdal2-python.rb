@@ -4,10 +4,10 @@ class NoGdal2Python < Requirement
 
   def message
     s = "`gdal2` formula already installed with Python 2 or 3 bindings:\n"
-    s += "  #{gdal2_python("python")}\n" if Gdal2Python.gdal2_py2_exist?
-    s += "  #{gdal2_python("python3")}\n" if Gdal2Python.gdal2_py3_exist?
+    s += "  #{Gdal2Python.gdal2_python("python")}\n" if Gdal2Python.gdal2_py2_exist?
+    s += "  #{Gdal2Python.gdal2_python("python3")}\n" if Gdal2Python.gdal2_py3_exist?
     s += "`gdal2` install options:\n"
-    s += "  gdal2 #{gdal2_opts.to_a.join(" ")}\n"
+    s += "  gdal2 #{Gdal2Python.gdal2_opts.to_a.join(" ")}\n"
     s += "Install latest `gdal2`, which installs no Python bindings:\n"
     s + "  `brew reinstall gdal2` or `brew upgrade gdal2`"
   end
