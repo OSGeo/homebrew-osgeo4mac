@@ -1,74 +1,101 @@
 require File.expand_path("../../Strategies/cache-download", Pathname.new(__FILE__).realpath)
 
 class OracleClientSdk < Formula
+  desc "Oracle database C/C++ client libs, command-line tools and SDK"
   homepage "http://www.oracle.com/technetwork/topics/intel-macsoft-096467.html"
   option "with-basic", "Intall Oracle's Basic client, instead of Basic Lite"
-  revision 1
 
   if build.with? "basic"
-    url "file://#{HOMEBREW_CACHE}/instantclient-basic-macos.x64-11.2.0.4.0.zip",
+    url "file://#{HOMEBREW_CACHE}/instantclient-basic-macos.x64-12.1.0.2.0.zip",
         :using => CacheDownloadStrategy
-    sha256 "6c079713ab0a65193f7bfcbad6c90e7806fa6634a3828052f8428e1533bb89d3"
+    sha256 "ecbf84ff011fcd8981c2cd9355f958ee42b2e452ebaad2d42df7b226903679cf"
   else
-    url "file://#{HOMEBREW_CACHE}/instantclient-basiclite-macos.x64-11.2.0.4.0.zip",
+    url "file://#{HOMEBREW_CACHE}/instantclient-basiclite-macos.x64-12.1.0.2.0.zip",
         :using => CacheDownloadStrategy
-    sha256 "8ebc4baafb40a3b7145d48a4be86747766fdb3e1e0ac7cdd397e852164fa2189"
+    sha256 "ac7e97661a2bfac69b3262150641914f456c7806ba2a7850669fb83abac120e8"
   end
 
   resource "sdk" do
-    url "file://#{HOMEBREW_CACHE}/instantclient-sdk-macos.x64-11.2.0.4.0.zip",
+    url "file://#{HOMEBREW_CACHE}/instantclient-sdk-macos.x64-12.1.0.2.0.zip",
         :using => CacheDownloadStrategy
-    sha256 "da1aefeda37fcb06f45e7f1f6907448da2e861945109602e0af34c8d5f38acde"
+    sha256 "63582d9a2f4afabd7f5e678c39bf9184d51625c61e67372acdbc7b42ed8530ac"
   end
 
   def install
+    oracle_exes = %w[adrci genezi uidrvci]
+    ver_split = version.to_s.split(".")
+    maj_ver = ver_split[0]
+    min_ver = ver_split[1]
+
+    # client data shared library
+    cdslib = build.with?("basic") ? "libociei" : "libociicus"
+
     # fix permissions
-    quiet_system "chmod -R u+w,og-w ./*"
+    chmod 0644, Dir["*"]
+    chmod 0755, oracle_exes
 
-    # fixup libs
-    mv "libclntsh.dylib.11.1", "libclntsh.dylib"
-    mv "libocci.dylib.11.1", "libocci.dylib"
-    %W[libclntsh.dylib libocci.dylib libnnz11.dylib].each do |f|
-      quiet_system "install_name_tool", "-id", "#{f}", f
+    # fixup lib naming to macOS style
+    %w[libclntsh libclntshcore libocci].each do |f|
+      mv "#{f}.dylib.#{maj_ver}.#{min_ver}", "#{f}.#{maj_ver}.#{min_ver}.dylib"
+      ln_sf "#{f}.#{maj_ver}.#{min_ver}.dylib", "#{f}.dylib"
     end
 
-    install_change("libclntsh.dylib",
-                   "/ade/dosulliv_ldapmac/oracle/ldap/lib/libnnz11.dylib",
-                   "@loader_path/libnnz11.dylib")
-
-    lib.install %W[libclntsh.dylib libocci.dylib libnnz11.dylib]
-
-    # fix exes
-    oracle_exes = %W[adrci genezi uidrvci]
-    oracle_exes.each do |b|
-      install_change(b,
-                     "/ade/b/3071542110/oracle/rdbms/lib/libclntsh.dylib.11.1",
-                     "#{opt_lib}/libclntsh.dylib")
-      install_change(b,
-                     "/ade/dosulliv_ldapmac/oracle/ldap/lib/libnnz11.dylib",
-                     "#{opt_lib}/libnnz11.dylib")
+    # update install names to opt_prefix (probably done by Homebrew as well)
+    %W[libclntsh libnnz#{maj_ver} libocci #{cdslib} libons].each do |f|
+      quiet_system "install_name_tool", "-id", "#{opt_lib/f}.dylib", "#{f}.dylib"
     end
+
+    # fix @rpath cross-linkage
+    rpath_fixes = %W[libclntsh.dylib libnnz#{maj_ver}.dylib #{cdslib}.dylib] + oracle_exes
+    rpath_fixes.each do |m|
+      dylibs = (buildpath/m).dynamically_linked_libraries
+      dylibs.each do |d|
+        next unless d.to_s =~ /^@rpath/
+        system "install_name_tool", "-change",
+               d, d.sub(%r{^@rpath/([^\.]+).*$}, "#{opt_lib}/\\1.dylib"), m.to_s
+      end
+    end
+
+    # install fixed-up libs and exes
+    %W[libclntsh libnnz#{maj_ver} libocci #{cdslib} libons].each { |f| lib.install Dir["#{f}*"] }
     bin.install oracle_exes
 
-    prefix.install Dir["*README"]
-    resource("sdk").stage {prefix.install "sdk"}
-  end
-
-  def install_change(dylib, old, new)
-    quiet_system "install_name_tool", "-change", old, new, dylib
+    # install headers in a logical subdirectory (since some are too generally named)
+    resource("sdk").stage do
+      cd "sdk" do
+        Dir["**/*", "."].each do |f|
+          chmod (File.directory?(f.to_s) ? 0755 : 0644), f
+        end
+        (include/"oci").install Dir["include/*"]
+        rmdir "include"
+        ln_sf "../include", "./"
+      end
+      prefix.install "sdk"
+    end
   end
 
   def caveats; <<-EOS.undent
-        To build software with the Instant Client SDK, add to the following
-        environment variable to find headers:
+      To build software with the Instant Client SDK, add to the following
+      environment variable to find headers:
 
-          CPPFLAGS: -I#{opt_prefix}/sdk/include
-
-        ============================== IMPORTANT ==================================
-        If linking with other software built on 10.9+, clang links to libc++, whereas
-        Instant Client libs/binaries link to libstdc++. This may lead to build
-        failures or issues during usage, including crashes.
+        [CFLAGS|CPPFLAGS]: -I#{opt_include}/oci
 
     EOS
+  end
+
+  test do
+    # From GDAL 2.1.2's configure test
+    (testpath/"test.cpp").write <<-EOS.undent
+    #include <oci.h>
+    int main () {
+      OCIEnv* envh = 0;
+      OCIEnvCreate(&envh, OCI_DEFAULT, 0, 0, 0, 0, 0, 0);
+      if (envh) OCIHandleFree(envh, OCI_HTYPE_ENV);
+      return 0;
+    }
+    EOS
+    system ENV.cxx, "test.cpp",
+           "-I#{opt_include}/oci", "-L#{opt_lib}", "-lclntsh", "-o", "test"
+    system "./test"
   end
 end
