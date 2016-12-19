@@ -70,6 +70,7 @@ class Gdal2Ecwjp2 < Formula
   end
 
   test do
+    ENV["GDAL_DRIVER_PATH"] = "#{HOMEBREW_PREFIX}/lib/gdalplugins"
     gdal_opt_bin = Formula["gdal2"].opt_bin
     out = `#{gdal_opt_bin}/gdalinfo --formats`
     assert_match "ECW -raster- (rov)", out

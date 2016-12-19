@@ -60,6 +60,7 @@ class Gdal2Filegdb < Formula
   end
 
   test do
+    ENV["GDAL_DRIVER_PATH"] = "#{HOMEBREW_PREFIX}/lib/gdalplugins"
     gdal_opt_bin = Formula["gdal2"].opt_bin
     out = `#{gdal_opt_bin}/ogrinfo --formats`
     assert_match "FileGDB -vector- (rw+)", out

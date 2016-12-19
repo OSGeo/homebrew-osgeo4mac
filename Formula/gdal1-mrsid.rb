@@ -72,6 +72,7 @@ class Gdal1Mrsid < Formula
   end
 
   test do
+    ENV["GDAL_DRIVER_PATH"] = "#{HOMEBREW_PREFIX}/lib/gdalplugins"
     gdal_opt_bin = Formula["gdal"].opt_bin
     out = `#{gdal_opt_bin}/gdalinfo --formats`
     assert_match "MG4Lidar (ro)", out
