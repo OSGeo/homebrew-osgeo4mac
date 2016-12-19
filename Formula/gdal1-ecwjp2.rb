@@ -73,8 +73,8 @@ class Gdal1Ecwjp2 < Formula
     ENV["GDAL_DRIVER_PATH"] = "#{HOMEBREW_PREFIX}/lib/gdalplugins"
     gdal_opt_bin = Formula["gdal"].opt_bin
     out = `#{gdal_opt_bin}/gdalinfo --formats`
-    assert_match "ECW -raster- (rov)", out
-    assert_match "JP2ECW -raster,vector- (rov)", out
+    assert_match "ECW (rov)", out
+    assert_match "JP2ECW (rov)", out
 
     ecwjp2_test = Formula["ecwjp2-sdk"].opt_prefix/"test"
     out = `#{gdal_opt_bin}/gdalinfo #{ecwjp2_test}/RGB_8bit.ecw`
