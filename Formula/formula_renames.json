@@ -4,6 +4,7 @@
   "gdal-filegdb": "gdal1-filegdb",
   "gdal-grass64": "gdal1-grass6",
   "gdal-mrsid": "gdal1-mrsid",
+  "gdal-oracle": "gdal1-oracle",
   "grass-64": "grass6",
   "grass-70": "grass7",
   "mapcache-12": "mapcache",
