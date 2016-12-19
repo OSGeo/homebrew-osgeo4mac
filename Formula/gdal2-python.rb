@@ -27,6 +27,10 @@ class Gdal2Python < Formula
     tab.used_options
   end
 
+  def gdal2_opts
+    self.class.gdal2_opts
+  end
+
   def self.gdal2_python(python)
     py_ver = Language::Python.major_minor_version(python)
     gdal2.opt_lib/"python#{py_ver}"
@@ -68,6 +72,9 @@ class Gdal2Python < Formula
     end
     ENV.prepend "LDFLAGS", "-L#{gdal2.opt_lib}" # or gdal1 lib will be found
 
+    # Check for GNM support
+    (buildpath/"setup_vars.ini").write "GNM_ENABLED=yes\n" if gdal2_opts.include? "with-gnm"
+
     Language::Python.each_python(build) do |python, _python_version|
       system python, *Language::Python.setup_install_args(prefix)
     end
@@ -89,10 +96,11 @@ class Gdal2Python < Formula
 
   test do
     Language::Python.each_python(build) do |python, python_version|
-      if (lib/"python#{python_version}/site-packages").exist?
-        ENV["PYTHONPATH"] = lib/"python#{python_version}/site-packages"
-        system python, "-c", "from osgeo import gdal, ogr, osr, gdal_array, gdalconst"
-      end
+      next unless (lib/"python#{python_version}/site-packages").exist?
+      ENV["PYTHONPATH"] = lib/"python#{python_version}/site-packages"
+      pkgs = %w[gdal ogr osr gdal_array gdalconst]
+      pkgs << "gnm" if gdal2_opts.include? "with-gnm"
+      system python, "-c", "from osgeo import #{pkgs.join","}"
     end
   end
 end
