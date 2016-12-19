@@ -28,6 +28,7 @@ class Gdal2 < Formula
   option "with-armadillo", "Build with Armadillo accelerated TPS transforms."
   option "with-unsupported", "Allow configure to drag in any library it can find. Invoke this at your own risk."
   option "with-mdb", "Build with Access MDB driver (requires Java 1.6+ JDK/JRE, from Apple or Oracle)."
+  option "with-gnm", "Build with General Network Model support"
   option "with-libkml", "Build with Google's libkml driver (requires libkml --HEAD or >= 1.3)"
   option "with-swig-java", "Build the swig java bindings"
 
@@ -210,6 +211,8 @@ class Gdal2 < Formula
 
     args << "--with-qhull=#{build.with?("qhull") ? "internal" : "no"}"
 
+    args << "--with-gnm" if build.with? "gnm"
+
     # Python is installed manually to ensure everything is properly sandboxed.
     # see
     args << "--without-python"
@@ -291,6 +294,9 @@ class Gdal2 < Formula
     system "./configure", *configure_args
     system "make"
     system "make", "install"
+
+    # Add GNM headers for gdal2-python swig wrapping
+    include.install Dir["gnm/**/*.h"] if build.with? "gnm"
 
     # Create versioned plugins path for other formulae
     (HOMEBREW_PREFIX/"lib/#{plugins_subdirectory}").mkpath
