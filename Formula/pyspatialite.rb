@@ -1,7 +1,7 @@
 class Pyspatialite < Formula
   desc "DB-API 2.0 interface for SQLite with Spatialite"
   homepage "https://code.google.com/p/pyspatialite/"
-  revision 1
+  revision 2
 
   head "https://code.google.com/p/pyspatialite/", :using => :hg
 
