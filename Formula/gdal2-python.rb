@@ -62,6 +62,11 @@ class Gdal2Python < Formula
   depends_on "numpy" => :python if build.with? "python"
   depends_on "numpy" => :python3 if build.with? "python3"
 
+  resource "autotest" do
+    url "http://download.osgeo.org/gdal/2.1.2/gdalautotest-2.1.2.tar.gz"
+    sha256 "539fca288eb798045c4469c775cd849c6008e01b4347ba273f4d14f1a00074f1"
+  end
+
   def install
     if build.without?("python") && build.without?("python3")
       odie "Must choose a version of Python bindings to build"
@@ -91,6 +96,9 @@ class Gdal2Python < Formula
   def caveats; <<-EOS.undent
     Sample Python scripts installed to:
       #{opt_libexec}/bin
+
+    To run full test suite use:
+      `brew test -v #{name} --with-autotest`
     EOS
   end
 
@@ -101,6 +109,34 @@ class Gdal2Python < Formula
       pkgs = %w[gdal ogr osr gdal_array gdalconst]
       pkgs << "gnm" if gdal2_opts.include? "with-gnm"
       system python, "-c", "from osgeo import #{pkgs.join","}"
+    end
+
+    if ARGV.include? "--with-autotest"
+      ENV.prepend_path "PATH", gdal2.opt_bin.to_s
+      ENV["GDAL_DRIVER_PATH"] = "#{HOMEBREW_PREFIX}/lib/gdalplugins"
+      ENV["GDAL_DATA"] = "#{gdal2.opt_share}/gdal"
+      ENV["GDAL_DOWNLOAD_TEST_DATA"] = "YES"
+      # These driver tests cause hard failures, stopping test output
+      ENV["GDAL_SKIP"] = "GRASS"
+      ENV["OGR_SKIP"] = "ElasticSearch,GFT,OGR_GRASS"
+      Language::Python.each_python(build) do |python, python_version|
+        ENV["PYTHONPATH"] = opt_lib/"python#{python_version}/site-packages"
+        resource("autotest").stage do
+          # Split up tests, to reduce chance of execution expiration
+          # ogr gcore gdrivers osr alg gnm utilities pyscripts
+          %w[ogr gcore gdrivers osr alg gnm utilities pyscripts].each do |t|
+            begin
+              system python, "run_all.py", t.to_s
+            rescue
+              next
+            end
+          end
+        end
+        # Run autotest just once, with first found binding
+        break
+      end
+    else
+      ohai "To run full test suite use:\n\n    `brew test -v #{name} --with-autotest`\n"
     end
   end
 end
