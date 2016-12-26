@@ -28,7 +28,7 @@ class Gdal2 < Formula
   option "with-armadillo", "Build with Armadillo accelerated TPS transforms."
   option "with-unsupported", "Allow configure to drag in any library it can find. Invoke this at your own risk."
   option "with-mdb", "Build with Access MDB driver (requires Java 1.6+ JDK/JRE, from Apple or Oracle)."
-  option "with-gnm", "Build with General Network Model support"
+  option "with-gnm", "Build with Geographic Network Model support"
   option "with-libkml", "Build with Google's libkml driver (requires libkml --HEAD or >= 1.3)"
   option "with-swig-java", "Build the swig java bindings"
 
