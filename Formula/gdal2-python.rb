@@ -48,6 +48,7 @@ class Gdal2Python < Formula
   homepage "https://pypi.python.org/pypi/GDAL"
   url "https://pypi.python.org/packages/d1/98/27fff31ad298f3ec50db19dc3adfd8387279e158b1c6331c531c5fc7d830/GDAL-2.1.0.tar.gz"
   sha256 "eca0fb3b94168370e06dc32c8bc74b5383e73b65ca784180c434adbba35b70d9"
+  revision 1
 
   keg_only "Older version of gdal is in main tap and installs similar components"
 
