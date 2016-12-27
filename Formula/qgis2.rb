@@ -210,7 +210,7 @@ class Qgis2 < Formula
     args << "-DWITH_ORACLE=#{build.with?("oracle") ? "TRUE" : "FALSE"}"
     if build.with? "oracle"
       oracle_opt = Formula["oracle-client-sdk"].opt_prefix
-      args << "-DOCI_INCLUDE_DIR=#{oracle_opt}/sdk/include"
+      args << "-DOCI_INCLUDE_DIR=#{oracle_opt}/include/oci"
       args << "-DOCI_LIBRARY=#{oracle_opt}/lib/libclntsh.dylib"
     end
 
