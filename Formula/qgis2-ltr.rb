@@ -488,7 +488,7 @@ class Qgis2Ltr < Formula
     unless module_importable? "PyQt4.Qsci"
       s += <<-EOS.undent
         QScintilla Python module is needed by QGIS during run-time.
-        Ensure `qscintilla2` formula is linked.
+        Ensure `qscintilla2-qt4` formula is linked.
 
       EOS
     end
