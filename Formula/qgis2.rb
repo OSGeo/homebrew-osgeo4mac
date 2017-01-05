@@ -468,7 +468,7 @@ class Qgis2 < Formula
     # check for required run-time Python module dependencies
     # TODO: add "pyspatialite" when PyPi package supports spatialite 4.x
     xm = []
-    %w[psycopg2 matplotlib pyparsing future].each do |m|
+    %w[psycopg2 matplotlib pyparsing requests future].each do |m|
       xm << m unless module_importable? m
     end
     unless xm.empty?
@@ -489,7 +489,7 @@ class Qgis2 < Formula
     unless module_importable? "PyQt4.Qsci"
       s += <<-EOS.undent
         QScintilla Python module is needed by QGIS during run-time.
-        Ensure `qscintilla2` formula is linked.
+        Ensure `qscintilla2-qt4` formula is linked.
 
       EOS
     end
