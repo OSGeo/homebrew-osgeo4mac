@@ -28,7 +28,6 @@ import subprocess
 from collections import OrderedDict
 
 HOME = os.path.expanduser('~')
-GRASS_VERSION = '7.0.5'
 OSG_VERSION = '3.4.0'
 HOMEBREW_PREFIX = '/usr/local'
 QGIS_LOG_DIR = HOME + '/Library/Logs/QGIS'
@@ -68,7 +67,8 @@ def env_vars(ap, hb, qb='', ql=''):
                             '{hb}/opt/gdal2/lib/python2.7/site-packages:' \
                             '{hb}/lib/python2.7/site-packages'
     options['GDAL_DRIVER_PATH'] = '{hb}/lib/gdalplugins'
-    options['GRASS_PREFIX'] = '{hb}/opt/grass7/grass-' + GRASS_VERSION
+    options['GDAL_DATA'] = '{hb}/opt/gdal2/share/gdal'
+    options['GRASS_PREFIX'] = '{hb}/opt/grass7/grass-base'
     options['OSG_LIBRARY_PATH'] = '{hb}/lib/osgPlugins-' + OSG_VERSION
     options['QGIS_LOG_FILE'] = ql
 
