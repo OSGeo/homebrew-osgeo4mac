@@ -6,8 +6,8 @@ class Grass7 < Formula
   homepage "http://grass.osgeo.org/"
 
   stable do
-    url "https://grass.osgeo.org/grass70/source/grass-7.0.5.tar.gz"
-    sha256 "60de3ba67eaf4f05dcff4f48ef710113f9efa9367ece784c13423bc620246f3c"
+    url "https://grass.osgeo.org/grass72/source/grass-7.2.0.tar.gz"
+    sha256 "f0bc0c3cfccc98330ce01547bd86d8281f93f05a45b6115eb33044a07cf70750"
 
     # Patches to keep files from being installed outside of the prefix.
     # Remove lines from Makefile that try to install to /Library/Documentation.
@@ -31,6 +31,9 @@ class Grass7 < Formula
   depends_on "pkg-config" => :build
   depends_on "gettext"
   depends_on "readline"
+  depends_on "flex"
+  depends_on "bison"
+  depends_on "lbzip2"
   if build.with? "gdal-1"
     depends_on "gdal"
   else
@@ -56,6 +59,11 @@ class Grass7 < Formula
     build.without? "gui"
   end
 
+  def majmin_ver
+    ver_split = version.to_s.split(".")
+    ver_split[0] + ver_split[1]
+  end
+
   def install
     readline = Formula["readline"]
     gettext = Formula["gettext"]
@@ -70,6 +78,7 @@ class Grass7 < Formula
       "--with-lapack",
       "--with-sqlite",
       "--with-odbc",
+      "--with-bzlib",
       "--with-geos=#{Formula["geos"].opt_bin}/geos-config",
       "--with-proj-share=#{Formula["proj"].opt_share}/proj",
       "--with-png",
@@ -145,8 +154,8 @@ class Grass7 < Formula
 
     # ensure QGIS's Processing plugin recognizes install
     # 2.14.8+ and other newer QGIS versions may reference just grass.sh
-    bin_grass = "../bin/grass70"
-    ln_sf bin_grass, prefix/"grass-#{version}/grass70.sh"
+    bin_grass = "../bin/grass#{majmin_ver}"
+    ln_sf bin_grass, prefix/"grass-#{version}/grass#{majmin_ver}.sh"
     ln_sf bin_grass, prefix/"grass-#{version}/grass.sh"
     # link so settings in external apps don't need updated on grass version bump
     # in QGIS Processing options, GRASS folder = HOMEBREW_PREFIX/opt/grass7/grass-base
@@ -168,7 +177,7 @@ class Grass7 < Formula
   end
 
   test do
-    system bin/"grass70", "--version"
+    system bin/"grass#{majmin_ver}", "--version"
   end
 end
 
