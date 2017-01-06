@@ -14,10 +14,10 @@ class Grass7 < Formula
     patch :DATA
   end
 
-  # bottle do
-  #   root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
-  #   sha256 "" => :mavericks
-  # end
+  bottle do
+    root_url "http://qgis.dakotacarto.com/bottles"
+    sha256 "42f05ae9cda0c537da48c3494ebc0c430369ec08c7dc2d78f728460ce9dd9e5e" => :sierra
+  end
 
   option "without-gui", "Build without WxPython interface. Command line tools still available."
   option "with-gdal-1", "Build with GDAL/OGR v1.x instead of v2.x"
