@@ -27,8 +27,6 @@ import sys
 from collections import OrderedDict
 import argparse
 
-GRASS_VERSION = '6.4.6'
-GRASS7_VERSION = '7.0.5'
 OSG_VERSION = '3.4.0'
 HOMEBREW_PREFIX = '/usr/local'  # default for Homebrew
 
@@ -96,7 +94,7 @@ def cmake_opts(qi, hb, ver):
         ('WITH_QSPATIALITE', 'TRUE'),
         ('WITH_GRASS', 'FALSE'),
         ('WITH_GRASS7', 'TRUE'),
-        ('GRASS_PREFIX7', '{hb}/opt/grass7/grass-' + GRASS7_VERSION),
+        ('GRASS_PREFIX7', '{hb}/opt/grass7/grass-base'),
         ('WITH_GLOBE', 'FALSE'),
         ('WITH_ORACLE', 'FALSE'),
         ('FCGI_INCLUDE_DIR', '{hb}/opt/fcgi/include'),
@@ -122,7 +120,7 @@ def cmake_opts(qi, hb, ver):
     # ('OSGEARTH_DIR', '{hb}'),
     # ('OSG_PLUGINS_PATH', '{hb}/lib/osgPlugins-' + OSG_VERSION),
 
-    # ('GRASS_PREFIX', '{hb}/opt/grass6/grass-' + GRASS_VERSION),
+    # ('GRASS_PREFIX', '{hb}/opt/grass6/grass-base'),
 
     # ('OCI_INCLUDE_DIR', '{hb}/opt/oracle-client-sdk/sdk/include'),
     # ('OCI_LIBRARY', '{hb}/lib/libclntsh.dylib'),
