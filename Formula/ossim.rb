@@ -6,13 +6,14 @@ class Ossim < Formula
   # May 18, 2016 commit
   url "https://github.com/ossimlabs/ossim.git",
       :branch => "master",
-      :revision => "5e8eb3f29df1565a87eac5bdbd49b125c7541617"
+      :revision => "28ffd2f70e1339d1eac02ab339d3cb0094ca35d7"
   version "1.9.0"
+  revision 1
 
-  bottle do
-    root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
-    sha256 "6e505be23e7ce7cfc92e278efa0d446a243f7e4e0b9bc59eddee0a1e325c83bb" => :mavericks
-  end
+  # bottle do
+  #   root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
+  #   sha256 "" => :mavericks
+  # end
 
   option "with-curl-apps", "Build curl-dependent apps"
   option "without-framework", "Generate library instead of framework"
