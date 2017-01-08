@@ -14,6 +14,12 @@ class Qt5Webkit < Formula
   url "https://download.qt.io/community_releases/5.7/5.7.1/qtwebkit-opensource-src-5.7.1.tar.gz"
   sha256 "1a26dc2a71f7854dd0cc4d153653c0287bb7c57e32c16b55c9f51f12ebce7675"
 
+  bottle do
+    cellar :any
+    root_url "https://github.com/m-kuhn/homebrew-osgeo4mac/releases/download/main"
+    sha256 "113e0641f40e6cb6be3c5630a29cfec9fc29beb159bd3ebf1405d069ea81378d" => :el_capitan
+  end
+
   keg_only "Qt5 is keg-only"
 
   depends_on NoQt5WebKitAlreadyRequirement
