@@ -44,7 +44,7 @@ class Qt5Webkit < Formula
     mkdir "build" do
       system Formula["qt5"].bin/"qmake", "../WebKit.pro", *args
       system "make"
-      ENV.j1
+      ENV.deparallelize
       # just let it install to qt5 formula prefix
       system "make", "install"
     end
