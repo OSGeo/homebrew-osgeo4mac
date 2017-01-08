@@ -10,9 +10,9 @@ end
 
 class Qt5Webkit < Formula
   desc "QtWebit module for Qt5"
-  homepage "https://download.qt.io/community_releases/5.7/5.7.0/"
-  url "https://download.qt.io/community_releases/5.7/5.7.0/qtwebkit-opensource-src-5.7.0.tar.gz"
-  sha256 "30672ad5b5a12ef8ac1f07408f67713f9eb2e2688df77336047984326c294f74"
+  homepage "https://download.qt.io/community_releases/5.7/5.7.1/"
+  url "https://download.qt.io/community_releases/5.7/5.7.1/qtwebkit-opensource-src-5.7.1.tar.gz"
+  sha256 "1a26dc2a71f7854dd0cc4d153653c0287bb7c57e32c16b55c9f51f12ebce7675"
 
   keg_only "Qt5 is keg-only"
 
