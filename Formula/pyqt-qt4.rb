@@ -54,7 +54,14 @@ class PyqtQt4 < Formula
         cp_r(Dir.glob("*"), dir)
         cd dir do
           system python, "configure.py", *args
-          inreplace "pyqtconfig.py", Formula["qt-4"].prefix.to_s, Formula["qt-4"].opt_prefix.to_s
+          qt4 = Formula["qt-4"]
+          # can't use qt4.prefix anymore, as it is opt-relative
+          inreplace "pyqtconfig.py",
+                    "#{HOMEBREW_CELLAR}/#{qt4.name}/#{qt4.installed_version}",
+                    qt4.opt_prefix.to_s
+          inreplace "pyqtconfig.py",
+                    "#{HOMEBREW_CELLAR}/#{name}/#{installed_version}",
+                    opt_prefix.to_s
           (lib/"qt-4/python#{version}/site-packages/PyQt4").install "pyqtconfig.py"
         end
       ensure
