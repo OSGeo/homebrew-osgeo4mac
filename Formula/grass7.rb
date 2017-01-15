@@ -43,6 +43,7 @@ class Grass7 < Formula
   depends_on "unixodbc"
   depends_on "fftw"
   depends_on :python
+  depends_on "numpy" => :python
   depends_on "wxpython"
   depends_on :postgresql => :optional
   depends_on :mysql => :optional
