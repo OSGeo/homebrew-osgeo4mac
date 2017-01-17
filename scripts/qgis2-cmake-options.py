@@ -74,7 +74,7 @@ def cmake_opts(qi, hb, ver):
                             '-Wno-deprecated-register"'),
         ('BISON_EXECUTABLE', '{hb}/opt/bison/bin/bison'),
         ('FLEX_EXECUTABLE', '{hb}/opt/flex/bin/flex'),
-        ('QT_QMAKE_EXECUTABLE', '{hb}/bin/qmake'),
+        ('QT_QMAKE_EXECUTABLE', '{hb}/opt/qt-4/bin/qmake'),
         ('SUPPRESS_QT_WARNINGS', 'TRUE'),
         ('GITCOMMAND', '{hb}/bin/git'),
         ('ENABLE_TESTS', 'TRUE'),
