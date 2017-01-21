@@ -3,7 +3,7 @@ require File.expand_path("../../Strategies/cache-download", Pathname.new(__FILE_
 class OracleClientSdk < Formula
   desc "Oracle database C/C++ client libs, command-line tools and SDK"
   homepage "http://www.oracle.com/technetwork/topics/intel-macsoft-096467.html"
-  option "with-basic", "Intall Oracle's Basic client, instead of Basic Lite"
+  option "with-basic", "Install Oracle's Basic client, instead of Basic Lite"
 
   if build.with? "basic"
     url "file://#{HOMEBREW_CACHE}/instantclient-basic-macos.x64-12.1.0.2.0.zip",
