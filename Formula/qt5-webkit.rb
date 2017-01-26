@@ -10,9 +10,9 @@ end
 
 class Qt5Webkit < Formula
   desc "QtWebit module for Qt5"
-  homepage "https://download.qt.io/community_releases/5.7/5.7.0/"
-  url "https://download.qt.io/community_releases/5.7/5.7.0/qtwebkit-opensource-src-5.7.0.tar.gz"
-  sha256 "30672ad5b5a12ef8ac1f07408f67713f9eb2e2688df77336047984326c294f74"
+  homepage "https://download.qt.io/community_releases/5.8/5.8.0-final/"
+  url "https://download.qt.io/community_releases/5.8/5.8.0-final/qtwebkit-opensource-src-5.8.0.tar.xz"
+  sha256 "79ae8660086bf92ffb0008b17566270e6477c8fa0daf9bb3ac29404fb5911bec"
 
   keg_only "Qt5 is keg-only"
 
@@ -44,7 +44,7 @@ class Qt5Webkit < Formula
     mkdir "build" do
       system Formula["qt5"].bin/"qmake", "../WebKit.pro", *args
       system "make"
-      ENV.j1
+      ENV.deparallelize
       # just let it install to qt5 formula prefix
       system "make", "install"
     end
@@ -106,12 +106,13 @@ class Qt5Webkit < Formula
       prefix/"qml/QtWebKit/experimental/libqmlwebkitexperimentalplugin.dylib",
     ]
     qt5 = Formula["qt5"]
+    qt5_prefix = "#{HOMEBREW_CELLAR}/#{qt5.name}/#{qt5.installed_version}"
     machos.each do |m|
       dylibs = m.dynamically_linked_libraries
       m.ensure_writable do
         dylibs.each do |d|
-          next unless d.to_s =~ %r{^#{qt5.lib}/QtWebKit(Widgets)?\.framework}
-          system "install_name_tool", "-change", d, d.sub(qt5.lib, opt_lib), m.to_s
+          next unless d.to_s =~ %r{^#{qt5_prefix}/lib/QtWebKit(Widgets)?\.framework}
+          system "install_name_tool", "-change", d, d.sub("#{qt5_prefix}/lib", opt_lib), m.to_s
         end
       end
     end
