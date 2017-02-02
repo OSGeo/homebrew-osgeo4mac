@@ -25,8 +25,8 @@ class QtkeychainQtAT57 < Formula
       system "cmake", "..", *args
       system "make", "install"
       (libexec/"bin").install "testclient"
-      system "install_name_tool", "-change", "@rpath/libqtkeychain.1.dylib",
-             "#{opt_lib}/libqtkeychain.1.dylib",
+      system "install_name_tool", "-change", "@rpath/libqt5keychain.1.dylib",
+             "#{opt_lib}/libqt5keychain.1.dylib",
              "#{libexec}/bin/testclient"
 
       if build.with? "static"
