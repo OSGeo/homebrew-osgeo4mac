@@ -7,6 +7,12 @@ class QtkeychainQtAT57 < Formula
 
   head "https://github.com/frankosterfeld/qtkeychain.git", :using => :git
 
+  bottle do
+    root_url "http://qgis.dakotacarto.com/bottles"
+    cellar :any
+    sha256 "ca83e609900bee30417f87265e50775eaa4bf20ca82fc0ad1ff755a6632fd178" => :sierra
+  end
+
   keg_only "Qt5 is keg-only"
 
   option "with-static", "Build static in addition to shared library"
