@@ -8,6 +8,7 @@ class NoQt5WebKitAlreadyRequirement < Requirement
   end
 end
 
+
 class Qt5Webkit < Formula
   desc "QtWebit module for Qt5"
   homepage "https://download.qt.io/community_releases/5.8/5.8.0-final/"
