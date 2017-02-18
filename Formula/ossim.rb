@@ -6,9 +6,9 @@ class Ossim < Formula
   # May 18, 2016 commit
   url "https://github.com/ossimlabs/ossim.git",
       :branch => "master",
-      :revision => "28ffd2f70e1339d1eac02ab339d3cb0094ca35d7"
+      :revision => "f01c951587eeb63623b913750bec5097ece86d9a"
   version "1.9.0"
-  revision 1
+  revision 2
 
   # bottle do
   #   root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
