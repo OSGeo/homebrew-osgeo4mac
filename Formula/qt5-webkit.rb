@@ -13,6 +13,7 @@ class Qt5Webkit < Formula
   homepage "https://download.qt.io/community_releases/5.8/5.8.0-final/"
   url "https://download.qt.io/community_releases/5.8/5.8.0-final/qtwebkit-opensource-src-5.8.0.tar.xz"
   sha256 "79ae8660086bf92ffb0008b17566270e6477c8fa0daf9bb3ac29404fb5911bec"
+  revision 1
 
   keg_only "Qt5 is keg-only"
 
