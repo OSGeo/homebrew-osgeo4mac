@@ -15,6 +15,11 @@ class Qt5Webkit < Formula
   sha256 "79ae8660086bf92ffb0008b17566270e6477c8fa0daf9bb3ac29404fb5911bec"
   revision 1
 
+  bottle do
+    root_url "http://qgis.dakotacarto.com/bottles"
+    sha256 "a1831140aa624f9b7ef418f6507c43b2c074b87e5456f0fc18ce99d3ebc7e054" => :sierra
+  end
+
   keg_only "Qt5 is keg-only"
 
   depends_on NoQt5WebKitAlreadyRequirement
