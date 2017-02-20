@@ -10,10 +10,10 @@ class Ossim < Formula
   version "1.9.0"
   revision 2
 
-  # bottle do
-  #   root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
-  #   sha256 "" => :mavericks
-  # end
+  bottle do
+    root_url "http://qgis.dakotacarto.com/bottles"
+    sha256 "c2cefbf1207fceaf117eac696a198dfb0f62f436b3aeb78dd927bbb84ff8beb4" => :sierra
+  end
 
   option "with-curl-apps", "Build curl-dependent apps"
   option "without-framework", "Generate library instead of framework"
