@@ -3,6 +3,7 @@ class Gdal2 < Formula
   homepage "http://www.gdal.org/"
   url "http://download.osgeo.org/gdal/2.1.3/gdal-2.1.3.tar.gz"
   sha256 "ae6a0a0dc6eb45a981a46db27e3dfe16c644fcf04732557e2cb315776974074a"
+  revision 1
 
   bottle do
     root_url "http://qgis.dakotacarto.com/bottles"
