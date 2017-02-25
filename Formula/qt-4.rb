@@ -8,7 +8,7 @@ class Qt4 < Formula
   head "https://code.qt.io/qt/qt.git", :branch => "4.8"
 
   # bottle do
-  #   root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
+  #   root_url "http://qgis.dakotacarto.com/bottles"
   #   sha256 "" => :mavericks
   # end
 
