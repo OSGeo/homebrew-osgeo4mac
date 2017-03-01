@@ -20,10 +20,10 @@ class QcaQt4 < Formula
     end
   end
 
-  # bottle do
-  #   root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
-  #   sha256 "" => :mavericks
-  # end
+  bottle do
+    root_url "http://qgis.dakotacarto.com/bottles"
+    sha256 "61d5c196db97b6b951ad3287acc5824e02863e45e15d2901fb1c5206372bca77" => :sierra
+  end
 
   keg_only "Newer Qt5-only version in homebrew-core"
 
