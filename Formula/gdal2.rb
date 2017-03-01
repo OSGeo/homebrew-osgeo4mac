@@ -7,7 +7,7 @@ class Gdal2 < Formula
 
   bottle do
     root_url "http://qgis.dakotacarto.com/bottles"
-    sha256 "c19cdf64497eb4a8c0267df6a0df8dee509197ad57845ec57ea797c85e5a8b98" => :sierra
+    sha256 "9b818da55cd28d5b7b0e5263108e1ce9576943557d30137ce2061a5c75d7534b" => :sierra
   end
 
   head do
