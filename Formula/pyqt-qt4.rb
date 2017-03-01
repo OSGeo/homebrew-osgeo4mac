@@ -4,10 +4,10 @@ class PyqtQt4 < Formula
   url "https://downloads.sf.net/project/pyqt/PyQt4/PyQt-4.11.4/PyQt-mac-gpl-4.11.4.tar.gz"
   sha256 "f178ba12a814191df8e9f87fb95c11084a0addc827604f1a18a82944225ed918"
 
-  # bottle do
-  #   root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
-  #   sha256 "" => :mavericks
-  # end
+  bottle do
+    root_url "http://qgis.dakotacarto.com/bottles"
+    sha256 "da10e9718573e34b7d6bfb3fdc9ed4d3deb1e9f8d1bf9a60c09597e4e0c98ea8" => :sierra
+  end
 
   keg_only "Newer Qt5-only version in homebrew-core"
 
