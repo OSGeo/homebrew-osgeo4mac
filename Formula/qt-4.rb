@@ -7,10 +7,10 @@ class Qt4 < Formula
 
   head "https://code.qt.io/qt/qt.git", :branch => "4.8"
 
-  # bottle do
-  #   root_url "http://qgis.dakotacarto.com/bottles"
-  #   sha256 "" => :mavericks
-  # end
+  bottle do
+    root_url "http://qgis.dakotacarto.com/bottles"
+    sha256 "5b831d16f71c52aaf548c804b769aaa49fe5ad148bd50f8145b996f7355c5ddb" => :sierra
+  end
 
   # Backport of Qt5 commit to fix the fatal build error with Xcode 7, SDK 10.11.
   # https://code.qt.io/cgit/qt/qtbase.git/commit/?id=b06304e164ba47351fa292662c1e6383c081b5ca
