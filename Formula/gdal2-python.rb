@@ -50,6 +50,11 @@ class Gdal2Python < Formula
   sha256 "eca0fb3b94168370e06dc32c8bc74b5383e73b65ca784180c434adbba35b70d9"
   revision 1
 
+  bottle do
+    root_url "http://qgis.dakotacarto.com/bottles"
+    sha256 "37b2a6b5b1c4f195094bc411bc6f15caa3cb9ac6e3cae7131859c215ffac9f10" => :sierra
+  end
+
   keg_only "Older version of gdal is in main tap and installs similar components"
 
   option "without-python", "Build without Python2 support"
