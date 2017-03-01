@@ -1,13 +1,13 @@
 class QwtpolarQt4 < Formula
   desc "Library for displaying values on a polar coordinate system"
-  homepage "http://qwtpolar.sourceforge.net/"
+  homepage "https://qwtpolar.sourceforge.io/"
   url "https://downloads.sf.net/project/qwtpolar/qwtpolar/1.1.0/qwtpolar-1.1.0.tar.bz2"
   sha256 "e45a1019b481f52a63483c536c5ef3225f1cced04abf45d7d0ff8e06d30e2355"
 
-  # bottle do
-  #   root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
-  #   sha256 "" => :mavericks
-  # end
+  bottle do
+    root_url "http://qgis.dakotacarto.com/bottles"
+    sha256 "1e98ef9094e4e88737ebee0b1ab1c1a2c2a569f84b432c5bf9242ef9a0866b20" => :sierra
+  end
 
   keg_only "Newer Qt5-only version in homebrew-core"
 
