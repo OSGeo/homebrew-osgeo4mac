@@ -1,10 +1,15 @@
 class QjsonQt4 < Formula
   desc "Map JSON to QVariant objects"
-  homepage "http://qjson.sourceforge.net"
+  homepage "https://qjson.sourceforge.io/"
   url "https://downloads.sourceforge.net/project/qjson/qjson/0.8.1/qjson-0.8.1.tar.bz2"
   mirror "https://mirrors.kernel.org/debian/pool/main/q/qjson/qjson_0.8.1.orig.tar.bz2"
   sha256 "cd4db5b956247c4991a9c3e95512da257cd2a6bd011357e363d02300afc814d9"
   head "https://github.com/flavio/qjson.git"
+
+  bottle do
+    root_url "http://qgis.dakotacarto.com/bottles"
+    sha256 "b1c454074eb32130bb2be41f9790f8d138437ee1cdc1c29c5cf1922e25e22f0c" => :sierra
+  end
 
   depends_on "cmake" => :build
   depends_on "qt-4"
