@@ -5,10 +5,10 @@ class Qscintilla2Qt4 < Formula
   sha256 "98aab93d73b05635867c2fc757acb383b5856a0b416e3fd7659f1879996ddb7e"
   revision 1
 
-  # bottle do
-  #   root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
-  #   sha256 "" => :mavericks
-  # end
+  bottle do
+    root_url "http://qgis.dakotacarto.com/bottles"
+    sha256 "5db9b11fa02d09ba579c8df7a001c503c24cbddbead92e34c6accc081c2e1a0c" => :sierra
+  end
 
   keg_only "Newer Qt5-only version in homebrew-core"
 
