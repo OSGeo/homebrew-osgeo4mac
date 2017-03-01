@@ -1,13 +1,13 @@
 class QwtQt4 < Formula
   desc "Qt Widgets for Technical Applications"
-  homepage "http://qwt.sourceforge.net/"
+  homepage "https://qwt.sourceforge.io/"
   url "https://downloads.sourceforge.net/project/qwt/qwt/6.1.3/qwt-6.1.3.tar.bz2"
   sha256 "f3ecd34e72a9a2b08422fb6c8e909ca76f4ce5fa77acad7a2883b701f4309733"
 
-  # bottle do
-  #   root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
-  #   sha256 "" => :mavericks
-  # end
+  bottle do
+    root_url "http://qgis.dakotacarto.com/bottles"
+    sha256 "f1103a619ff0d1fc5df8708238185b2028ae645bc888f7be6ad017001a8a60f4" => :sierra
+  end
 
   keg_only "Newer Qt5-only version in homebrew-core"
 
