@@ -4,10 +4,11 @@ class SipQt4 < Formula
   url "https://downloads.sourceforge.net/project/pyqt/sip/sip-4.18.1/sip-4.18.1.tar.gz"
   sha256 "9bce7a2dbf7f105bf68ad1bab58eebc0ce33087ec40396da756463f086ffa290"
 
-  # bottle do
-  #   root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
-  #   sha256 "" => :mavericks
-  # end
+  bottle do
+    root_url "http://qgis.dakotacarto.com/bottles"
+    cellar :any_skip_relocation
+    sha256 "1b92f95ef03f583560ca206321f3369ae04781b5e1b7770893f3ab43b367d52e" => :sierra
+  end
 
   keg_only "Newer (possibly Qt5-only) version in homebrew-core"
 
