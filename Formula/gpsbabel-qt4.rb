@@ -6,6 +6,11 @@ class GpsbabelQt4 < Formula
 
   head "https://github.com/gpsbabel/gpsbabel.git"
 
+  bottle do
+    root_url "http://qgis.dakotacarto.com/bottles"
+    sha256 "2a301096e4953b7efbf3646408224bee4d3a199ea53797a265bb0f18161155a0" => :sierra
+  end
+
   keg_only "gpsbabel is in main tap and same-name bin utilities are installed"
 
   depends_on "libusb" => :optional
