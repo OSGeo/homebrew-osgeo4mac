@@ -3,7 +3,7 @@ require File.expand_path("../../Requirements/qgis_requirements",
 
 class Qgis2Ltr < Formula
   desc "Open Source Geographic Information System"
-  homepage "http://www.qgis.org"
+  homepage "https://www.qgis.org"
 
   head "https://github.com/qgis/QGIS.git", :branch => "release-2_14"
 
@@ -85,7 +85,7 @@ class Qgis2Ltr < Formula
   # TODO: add MSSQL third-party support formula?, :optional
 
   # core plugins (c++ and python)
-  if build.with? "grass"
+  if build.with?("grass") || Formula["grass7"].opt_prefix.exist?
     depends_on "grass7"
     depends_on "gettext"
   end
@@ -193,9 +193,11 @@ class Qgis2Ltr < Formula
     if build.with?("grass") || brewed_grass7?
       # this is to build the GRASS Plugin, not for Processing plugin support
       grass7 = Formula["grass7"]
-      args << "-DGRASS_PREFIX7='#{grass7.opt_prefix}/grass-#{grass7.version}'"
-      # So that `libintl.h` can be found
-      ENV.append "CXXFLAGS", "-I'#{Formula["gettext"].opt_include}'"
+      args << "-DGRASS_PREFIX7='#{grass7.opt_prefix}/grass-base'"
+      # Keep superenv from stripping (use Cellar prefix)
+      ENV.append "CXXFLAGS", "-isystem #{grass7.prefix.resolved_path}/grass-base/include"
+      # So that `libintl.h` can be found (use Cellar prefix)
+      ENV.append "CXXFLAGS", "-isystem #{Formula["gettext"].include.resolved_path}"
     end
 
     args << "-DWITH_GLOBE=#{build.with?("globe") ? "TRUE" : "FALSE"}"
