@@ -8,8 +8,8 @@ class Qgis2Ltr < Formula
   head "https://github.com/qgis/QGIS.git", :branch => "release-2_14"
 
   stable do
-    url "https://github.com/qgis/QGIS/archive/final-2_14_12.tar.gz"
-    sha256 "1a9f39095d626241c537e5fbf7a70f20a530dfdde1cd0ad22e46b4cd63b14357"
+    url "https://github.com/qgis/QGIS/archive/final-2_14_13.tar.gz"
+    sha256 "69da20d78ccab587abfb0cf7df13f6b87cc52cda8ed62ae3d23efecf443c3b93"
 
     # patches that represent all backports to release-2_14 branch, since release tag
     # see: https://github.com/qgis/QGIS/commits/release-2_14
@@ -20,10 +20,10 @@ class Qgis2Ltr < Formula
     # end
   end
 
-  bottle do
-    root_url "http://qgis.dakotacarto.com/bottles"
-    sha256 "e406ec99d9a96495b8571ce1e3918ab8a8328da537d88de0838c5f941e3a585a" => :sierra
-  end
+  # bottle do
+  #   root_url "http://qgis.dakotacarto.com/bottles"
+  #   sha256 "e406ec99d9a96495b8571ce1e3918ab8a8328da537d88de0838c5f941e3a585a" => :sierra
+  # end
 
   def pour_bottle?
     brewed_python?
