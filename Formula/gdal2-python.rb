@@ -49,10 +49,10 @@ class Gdal2Python < Formula
   url "https://pypi.python.org/packages/36/d7/f89ac1347185db56939c156330efbfa2e3be560060b74e31f41e514ee627/GDAL-2.1.3.tar.gz"
   sha256 "f99528620b710b00dbb15ed5be970bee34caf8d82e46f627180e2bf645036f0d"
 
-  bottle do
-    root_url "http://qgis.dakotacarto.com/bottles"
-    sha256 "37b2a6b5b1c4f195094bc411bc6f15caa3cb9ac6e3cae7131859c215ffac9f10" => :sierra
-  end
+  # bottle do
+  #   root_url "http://qgis.dakotacarto.com/bottles"
+  #   sha256 "37b2a6b5b1c4f195094bc411bc6f15caa3cb9ac6e3cae7131859c215ffac9f10" => :sierra
+  # end
 
   keg_only "Older version of gdal is in main tap and installs similar components"
 
