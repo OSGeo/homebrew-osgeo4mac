@@ -46,9 +46,8 @@ class Gdal2Python < Formula
 
   desc "Python bindings for GDAL: Geospatial Data Abstraction Library"
   homepage "https://pypi.python.org/pypi/GDAL"
-  url "https://pypi.python.org/packages/d1/98/27fff31ad298f3ec50db19dc3adfd8387279e158b1c6331c531c5fc7d830/GDAL-2.1.0.tar.gz"
-  sha256 "eca0fb3b94168370e06dc32c8bc74b5383e73b65ca784180c434adbba35b70d9"
-  revision 1
+  url "https://pypi.python.org/packages/36/d7/f89ac1347185db56939c156330efbfa2e3be560060b74e31f41e514ee627/GDAL-2.1.3.tar.gz"
+  sha256 "f99528620b710b00dbb15ed5be970bee34caf8d82e46f627180e2bf645036f0d"
 
   bottle do
     root_url "http://qgis.dakotacarto.com/bottles"
@@ -69,8 +68,8 @@ class Gdal2Python < Formula
   depends_on "numpy" => :python3 if build.with? "python3"
 
   resource "autotest" do
-    url "http://download.osgeo.org/gdal/2.1.2/gdalautotest-2.1.2.tar.gz"
-    sha256 "539fca288eb798045c4469c775cd849c6008e01b4347ba273f4d14f1a00074f1"
+    url "http://download.osgeo.org/gdal/2.1.3/gdalautotest-2.1.3.tar.gz"
+    sha256 "b1ed4e973c1369bd3a15761a7c20dc048b4012b66356b8b4e594f984de73af97"
   end
 
   def install
