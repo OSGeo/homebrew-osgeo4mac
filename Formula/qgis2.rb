@@ -8,8 +8,8 @@ class Qgis2 < Formula
   head "https://github.com/qgis/QGIS.git", :branch => "release-2_18"
 
   stable do
-    url "https://github.com/qgis/QGIS/archive/final-2_18_5.tar.gz"
-    sha256 "b0bcada68a0f7ff14d342b113954b8c0a9128b76b4d4a1e7e20bb98bd6494cd8"
+    url "https://github.com/qgis/QGIS/archive/final-2_18_6.tar.gz"
+    sha256 "54e82fa5afb5f2ada7230efc71e7145d70e1ceea142a3cf601a64ce23661bc62"
 
     # patches that represent all backports to release-2_18 branch, since release tag
     # see: https://github.com/qgis/QGIS/commits/release-2_18
@@ -20,10 +20,10 @@ class Qgis2 < Formula
     # end
   end
 
-  bottle do
-    root_url "http://qgis.dakotacarto.com/bottles"
-    sha256 "907f4630e0d27fe3c7f36366add2983465ff707b75825127293699efe61574a1" => :sierra
-  end
+  # bottle do
+  #   root_url "http://qgis.dakotacarto.com/bottles"
+  #   sha256 "907f4630e0d27fe3c7f36366add2983465ff707b75825127293699efe61574a1" => :sierra
+  # end
 
   def pour_bottle?
     brewed_python?
@@ -470,7 +470,7 @@ class Qgis2 < Formula
     # check for required run-time Python module dependencies
     # TODO: add "pyspatialite" when PyPi package supports spatialite 4.x
     xm = []
-    %w[psycopg2 matplotlib pyparsing requests future].each do |m|
+    %w[psycopg2 matplotlib pyparsing requests future jinja2 pygments].each do |m|
       xm << m unless module_importable? m
     end
     unless xm.empty?
@@ -482,7 +482,9 @@ class Qgis2 < Formula
 
         You can install manually, via installer package or with `pip` (if availble):
 
-            pip install <module>  OR  pip-2.7 install <module>
+            pip install #{xm.join(" ")}  
+            OR
+            pip-2.7 install #{xm.join(" ")}
         #{Tty.red}
         #{Tty.reset}
       EOS
