@@ -120,7 +120,7 @@ class Gdal2Python < Formula
       system python, "-c", "from osgeo import #{pkgs.join","}"
     end
 
-    if ARGV.include? "--with-autotest"
+    if ENV["GDAL_AUTOTEST"]
       ENV.prepend_path "PATH", gdal2.opt_bin.to_s
       ENV["GDAL_DRIVER_PATH"] = "#{HOMEBREW_PREFIX}/lib/gdalplugins"
       ENV["GDAL_DATA"] = "#{gdal2.opt_share}/gdal"
@@ -145,7 +145,7 @@ class Gdal2Python < Formula
         break
       end
     else
-      ohai "To run full test suite use:\n\n    `brew test -v #{name} --with-autotest`\n"
+      ohai "To run full test suite use:\n\n    `GDAL_AUTOTEST=1 brew test -v #{name}`\n"
     end
   end
 end
