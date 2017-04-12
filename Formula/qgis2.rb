@@ -4,6 +4,7 @@ require File.expand_path("../../Requirements/qgis_requirements",
 class Qgis2 < Formula
   desc "Open Source Geographic Information System"
   homepage "https://www.qgis.org"
+  revision 1
 
   head "https://github.com/qgis/QGIS.git", :branch => "release-2_18"
 
@@ -112,9 +113,9 @@ class Qgis2 < Formula
   # TODO: Fusion from USFS (via `wine`?)
 
   resource "pyqgis-startup" do
-    url "https://gist.githubusercontent.com/dakcarto/11385561/raw/7af66d0c8885a888831da6f12298a906484a1471/pyqgis_startup.py"
-    sha256 "3d0adca0c8684f3d907c626fc86d93d73165e184960d16ae883fca665ecc32e6"
-    version "2.0.0"
+    url "https://gist.githubusercontent.com/dakcarto/11385561/raw/e49f75ecec96ed7d6d3950f45ad3f30fe94d4fb2/pyqgis_startup.py"
+    sha256 "385dce925fc2d29f05afd6508bc1f46ec84c0bc607cc0c8dfce78a4bb93b9c4e"
+    version "2.14.0"
   end
 
   def install
@@ -482,7 +483,7 @@ class Qgis2 < Formula
 
         You can install manually, via installer package or with `pip` (if availble):
 
-            pip install #{xm.join(" ")}  
+            pip install #{xm.join(" ")}
             OR
             pip-2.7 install #{xm.join(" ")}
         #{Tty.red}
