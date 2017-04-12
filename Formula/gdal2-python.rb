@@ -46,8 +46,9 @@ class Gdal2Python < Formula
 
   desc "Python bindings for GDAL: Geospatial Data Abstraction Library"
   homepage "https://pypi.python.org/pypi/GDAL"
-  url "https://pypi.python.org/packages/36/d7/f89ac1347185db56939c156330efbfa2e3be560060b74e31f41e514ee627/GDAL-2.1.3.tar.gz"
-  sha256 "f99528620b710b00dbb15ed5be970bee34caf8d82e46f627180e2bf645036f0d"
+  url "http://download.osgeo.org/gdal/2.1.3/gdal-2.1.3.tar.gz"
+  version "2.1.3-1" # because revision 1 doesn't nix previously cached 2.1.3 download archive
+  sha256 "ae6a0a0dc6eb45a981a46db27e3dfe16c644fcf04732557e2cb315776974074a"
 
   # bottle do
   #   root_url "http://qgis.dakotacarto.com/bottles"
@@ -76,26 +77,29 @@ class Gdal2Python < Formula
     if build.without?("python") && build.without?("python3")
       odie "Must choose a version of Python bindings to build"
     end
-    # Customize to gdal2 install opt_prefix
-    inreplace "setup.cfg" do |s|
-      s.sub! "../../apps/gdal-config", "#{gdal2.opt_bin}/gdal-config"
+
+    cd "swig/python" do
+      # Customize to gdal2 install opt_prefix
+      inreplace "setup.cfg" do |s|
+        s.sub! "../../apps/gdal-config", "#{gdal2.opt_bin}/gdal-config"
+      end
+      ENV.prepend "LDFLAGS", "-L#{gdal2.opt_lib}" # or gdal1 lib will be found
+
+      # Check for GNM support
+      (Pathname.pwd/"setup_vars.ini").write "GNM_ENABLED=yes\n" if gdal2_opts.include? "with-gnm"
+
+      Language::Python.each_python(build) do |python, _python_version|
+        system python, *Language::Python.setup_install_args(prefix)
+      end
+
+      # Scripts compatible with Python3? Appear to be...
+      bin.install Dir["scripts/*"]
+      # Clean up any stray doxygen files.
+      Dir.glob("#{bin}/*.dox") { |p| rm p }
+      # Add sample Python scripts
+      (libexec/"bin").install Dir["samples/*"]
+      chmod 0555, Dir[libexec/"bin/*.py"] # some randomly have no exec bit set
     end
-    ENV.prepend "LDFLAGS", "-L#{gdal2.opt_lib}" # or gdal1 lib will be found
-
-    # Check for GNM support
-    (buildpath/"setup_vars.ini").write "GNM_ENABLED=yes\n" if gdal2_opts.include? "with-gnm"
-
-    Language::Python.each_python(build) do |python, _python_version|
-      system python, *Language::Python.setup_install_args(prefix)
-    end
-
-    # Scripts compatible with Python3? Appear to be...
-    bin.install Dir["scripts/*"]
-    # Clean up any stray doxygen files.
-    Dir.glob("#{bin}/*.dox") { |p| rm p }
-    # Add sample Python scripts
-    (libexec/"bin").install Dir["samples/*"]
-    chmod 0555, Dir[libexec/"bin/*.py"] # some randomly have no exec bit set
   end
 
   def caveats; <<-EOS.undent
