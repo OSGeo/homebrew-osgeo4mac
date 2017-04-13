@@ -21,10 +21,10 @@ class Qgis2Ltr < Formula
     # end
   end
 
-  # bottle do
-  #   root_url "http://qgis.dakotacarto.com/bottles"
-  #   sha256 "5dd5755c6ade618512fb41c24e67f59d10540ecb3fa4c68d9d9f8c6c8f694949" => :sierra
-  # end
+  bottle do
+    root_url "http://qgis.dakotacarto.com/bottles"
+    sha256 "2b537eff13d66f8ddf17d8f19603b6ce1408a6f7a80436d3351b677c3cc7f057" => :sierra
+  end
 
   def pour_bottle?
     brewed_python?
