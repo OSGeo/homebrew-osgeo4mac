@@ -4,6 +4,7 @@ require File.expand_path("../../Requirements/qgis_requirements",
 class Qgis2Ltr < Formula
   desc "Open Source Geographic Information System"
   homepage "https://www.qgis.org"
+  revision 1
 
   head "https://github.com/qgis/QGIS.git", :branch => "release-2_14"
 
@@ -20,10 +21,10 @@ class Qgis2Ltr < Formula
     # end
   end
 
-  bottle do
-    root_url "http://qgis.dakotacarto.com/bottles"
-    sha256 "5dd5755c6ade618512fb41c24e67f59d10540ecb3fa4c68d9d9f8c6c8f694949" => :sierra
-  end
+  # bottle do
+  #   root_url "http://qgis.dakotacarto.com/bottles"
+  #   sha256 "5dd5755c6ade618512fb41c24e67f59d10540ecb3fa4c68d9d9f8c6c8f694949" => :sierra
+  # end
 
   def pour_bottle?
     brewed_python?
@@ -111,9 +112,9 @@ class Qgis2Ltr < Formula
   # TODO: Fusion from USFS (via `wine`?)
 
   resource "pyqgis-startup" do
-    url "https://gist.githubusercontent.com/dakcarto/11385561/raw/7af66d0c8885a888831da6f12298a906484a1471/pyqgis_startup.py"
-    sha256 "3d0adca0c8684f3d907c626fc86d93d73165e184960d16ae883fca665ecc32e6"
-    version "2.0.0"
+    url "https://gist.githubusercontent.com/dakcarto/11385561/raw/e49f75ecec96ed7d6d3950f45ad3f30fe94d4fb2/pyqgis_startup.py"
+    sha256 "385dce925fc2d29f05afd6508bc1f46ec84c0bc607cc0c8dfce78a4bb93b9c4e"
+    version "2.14.0"
   end
 
   def install
