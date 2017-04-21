@@ -6,10 +6,10 @@ class Qtkeychain < Formula
 
   head "https://github.com/frankosterfeld/qtkeychain.git", :using => :git
 
-  # bottle do
-  #   root_url "http://qgis.dakotacarto.com/bottles"
-  #   sha256 "38782d3b3e8266ff27bee2416ea436f6cc0d1668c6a39c338f7f303ffc9b8a23" => :sierra
-  # end
+  bottle do
+    root_url "http://qgis.dakotacarto.com/bottles"
+    sha256 "6449adce0087b95b8d5c09b96f75e75720f09901a94393360e1e3946d921589c" => :sierra
+  end
 
   option "with-static", "Build static in addition to shared library"
   option "with-translations", "Generate Qt translation (.ts) files"
