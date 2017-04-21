@@ -1,22 +1,21 @@
 class Qtkeychain < Formula
   desc "Platform-independent Qt-based API for storing passwords securely"
   homepage "https://github.com/frankosterfeld/qtkeychain"
-  url "https://github.com/frankosterfeld/qtkeychain/archive/10b2a2baeb5e016d73bc3e88d188eba38466b796.tar.gz"
-  version "0.7.90"
-  sha256 "328c54450db9bf8e146d8b4abba352ab857bbef04eb8620781198ebfb614c785"
+  url "https://github.com/frankosterfeld/qtkeychain/archive/v0.8.0.tar.gz"
+  sha256 "b492f603197538bc04b2714105b1ab2b327a9a98d400d53d9a7cb70edd2db12f"
 
   head "https://github.com/frankosterfeld/qtkeychain.git", :using => :git
 
-  bottle do
-    root_url "http://qgis.dakotacarto.com/bottles"
-    sha256 "38782d3b3e8266ff27bee2416ea436f6cc0d1668c6a39c338f7f303ffc9b8a23" => :sierra
-  end
+  # bottle do
+  #   root_url "http://qgis.dakotacarto.com/bottles"
+  #   sha256 "38782d3b3e8266ff27bee2416ea436f6cc0d1668c6a39c338f7f303ffc9b8a23" => :sierra
+  # end
 
   option "with-static", "Build static in addition to shared library"
   option "with-translations", "Generate Qt translation (.ts) files"
 
   depends_on "cmake" => :build
-  depends_on "qt5"
+  depends_on "qt"
 
   def lib_name
     "libqt5keychain"
