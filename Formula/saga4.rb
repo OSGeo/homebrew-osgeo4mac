@@ -1,4 +1,4 @@
-class SagaGis < Formula
+class Saga4 < Formula
   desc "System for Automated Geoscientific Analyses"
   homepage "http://saga-gis.org"
   url "https://sourceforge.net/projects/saga-gis/files/SAGA%20-%204/SAGA%20-%204.0.1/saga-4.0.1.tar.gz"
