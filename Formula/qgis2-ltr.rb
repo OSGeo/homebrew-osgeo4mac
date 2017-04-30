@@ -43,7 +43,9 @@ class Qgis2Ltr < Formula
   option "with-oracle", "Build extra Oracle geospatial database and raster support"
   option "with-orfeo5", "Build extra Orfeo Toolbox for Processing plugin"
   option "with-r", "Build extra R for Processing plugin"
-  option "with-saga-gis", "Build extra Saga GIS for Processing plugin"
+  option "with-saga2", "Build extra Saga GIS v2 for Processing plugin"
+  option "with-saga3", "Build extra Saga GIS v3 for Processing plugin"
+  option "with-saga4", "Build extra Saga GIS v4 for Processing plugin"
   # option "with-qt-mysql", "Build extra Qt MySQL plugin for eVis plugin"
   option "with-qspatialite", "Build QSpatialite Qt database driver"
   option "with-api-docs", "Build the API documentation with Doxygen and Graphviz"
@@ -107,7 +109,9 @@ class Qgis2Ltr < Formula
   depends_on "grass6" => :optional
   depends_on "orfeo5" => :optional
   depends_on "homebrew/science/r" => :optional
-  depends_on "saga-gis" => :optional
+  depends_on "saga2" => :optional
+  depends_on "saga3" => :optional
+  depends_on "saga4" => :optional
   # TODO: LASTools straight build (2 reporting tools), or via `wine` (10 tools)
   # TODO: Fusion from USFS (via `wine`?)
 
