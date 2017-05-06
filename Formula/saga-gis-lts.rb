@@ -1,90 +1,59 @@
-class SagaGis < Formula
-  desc "System for Automated Geoscientific Analyses"
+class SagaGisLts < Formula
+  desc "System for Automated Geoscientific Analyses - Long Term Support"
   homepage "http://saga-gis.org"
-  url "https://downloads.sourceforge.net/project/saga-gis/SAGA%20-%202.2/SAGA%202.2.2/saga-2.2.2.tar.gz"
-  sha256 "031cd70b7ec248f32f955a9316aefc7f7ab283c5129c49aa4bd748717d20357e"
-  revision 1
+  url "https://downloads.sourceforge.net/project/saga-gis/SAGA%20-%202.3/SAGA%202.3.1/saga_2.3.1.tar.gz"
+  sha256 "58f5c183f839ef753261a7a83c902ba9d67f814c5f21172aae02fcd4a29b9fc0"
 
-  head "svn://svn.code.sf.net/p/saga-gis/code-0/trunk/saga-gis"
+  head "https://git.code.sf.net/p/saga-gis/code", :branch => "release-2-3-lts"
 
-  bottle do
-    root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
-    sha256 "5ebbc874d7b22b9876bfceae070baa62d87b6f8821b509131bceeca625e426db" => :mavericks
-  end
+  # bottle do
+  #   root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
+  #   sha256 "5ebbc874d7b22b9876bfceae070baa62d87b6f8821b509131bceeca625e426db" => :mavericks
+  # end
 
   option "with-app", "Build SAGA.app Package"
-  option "with-liblas", "Build with internal libLAS 1.2 support"
 
   depends_on "automake" => :build
   depends_on "autoconf" => :build
   depends_on "libtool" => :build
   depends_on "gdal2"
-  depends_on "jasper"
   depends_on "proj"
   depends_on "wxmac"
   depends_on "unixodbc" => :recommended
   depends_on "libharu" => :recommended
+  depends_on "qhull" => :recommended # instead of looking for triangle
   # Vigra support builds, but dylib in saga shows 'failed' when loaded
   # Also, using --with-python will trigger vigra to be built with it, which
   # triggers a source (re)build of boost --with-python
   depends_on "vigra" => :optional
   depends_on "postgresql" => :optional
   depends_on :python => :optional
-  depends_on "libgeotiff" if build.with? "liblas"
+  depends_on "opencv" => :optional
 
   resource "app_icon" do
     url "http://qgis.dakotacarto.com/osgeo4mac/saga_gui.icns"
     sha256 "288e589d31158b8ffb9ef76fdaa8e62dd894cf4ca76feabbae24a8e7015e321f"
   end
 
-  resource "liblas" do
-    url "https://github.com/libLAS/libLAS/archive/1.2.1.tar.gz"
-    sha256 "ad9fbc55d8a56cc3f5eec2a59dd1057ffbae02d8ec476e6fb9c94476c73b3440"
-  end
-
-  resource "liblas_patch" do
-    # Fix for error of conflicting types for '_GTIFcalloc' between gdal 1.11 and libgeotiff
-    # https://github.com/libLAS/libLAS/issues/33
-    # This is an attempt to do it for old liblas 1.2.1
-    url "https://gist.githubusercontent.com/dakcarto/f73717dac2777262d0f0/raw/a931380c41529767544a4c0dcc645b21f9b395e7/saga-gis_liblas.diff"
-    sha256 "4c89c04e0b3c5f23fb7532f18c89ba9267e341b014ae4ec5c4e8e028f0f7cad7"
-  end
-
   def install
-    if build.with? "liblas"
-      # Saga still only works with liblas 1.2.1 (5 years old). Vendor in libexec
-      # see: http://sourceforge.net/p/saga-gis/discussion/354013/thread/823cbde1/
-      mktemp do
-        resource("liblas").stage do
-          # patch liblas
-          Pathname.pwd.install resource("liblas_patch")
-          safe_system "/usr/bin/patch", "-g", "0", "-f", "-d", Pathname.pwd, "-p1", "-i", "saga-gis_liblas.diff"
+    # SKIP liblas support until SAGA supports > 1.8.1, which should support GDAL 2;
+    #      otherwise, SAGA binaries may lead to multiple GDAL versions being loaded
+    # See: https://github.com/libLAS/libLAS/issues/106
 
-          args = %W[
-            --prefix=#{libexec}
-            --disable-dependency-tracking
-            --with-gdal=#{Formula["gdal"].opt_bin}/gdal-config
-            --with-geotiff=#{Formula["libgeotiff"].opt_prefix}
-          ]
-          system "autoreconf", "-i"
-          system "./configure", *args
-          system "make", "install"
-        end
-      end
-      ENV.prepend "CPPFLAGS", "-I#{libexec}/include"
-      ENV.prepend "LDFLAGS", "-L#{libexec}/lib"
-      # Find c lib interface for liblas
-      inreplace "configure.ac", "[las]", "[las_c]"
-    end
+    # fix homebrew-specific header location for qhull
+    inreplace "src/modules/grid/grid_gridding/nn/delaunay.c", "qhull/", "libqhull/" if build.with? "qhull"
 
+    # libfire and triangle are for non-commercial use only, skip them
     args = %W[
       --prefix=#{prefix}
       --disable-dependency-tracking
       --disable-openmp
+      --disable-libfire
     ]
 
     args << "--disable-odbc" if build.without? "unixodbc"
-    args << "--with-postgresql" if build.with? "postgresql"
+    args << "--disable-triangle" if build.with? "qhull"
+    args << "--with-postgresql=#{Formula["postgresql"].opt_bin}/pg_config" if build.with? "postgresql"
     args << "--with-python" if build.with? "python"
 
     system "autoreconf", "-i"
