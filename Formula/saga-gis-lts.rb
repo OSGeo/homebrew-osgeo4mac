@@ -4,7 +4,7 @@ class SagaGisLts < Formula
   url "https://downloads.sourceforge.net/project/saga-gis/SAGA%20-%202.3/SAGA%202.3.1/saga_2.3.1.tar.gz"
   sha256 "58f5c183f839ef753261a7a83c902ba9d67f814c5f21172aae02fcd4a29b9fc0"
 
-  head "https://git.code.sf.net/p/saga-gis/code", :branch => "release-2-3-lts"
+  head "https://git.code.sf.net/p/saga-gis/code.git", :branch => "release-2-3-lts"
 
   # bottle do
   #   root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
