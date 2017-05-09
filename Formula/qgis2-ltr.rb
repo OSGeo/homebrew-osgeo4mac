@@ -107,7 +107,7 @@ class Qgis2Ltr < Formula
   depends_on "grass6" => :optional
   depends_on "orfeo5" => :optional
   depends_on "homebrew/science/r" => :optional
-  depends_on "saga-gis" => :optional
+  depends_on "saga-gis-lts" => :optional
   # TODO: LASTools straight build (2 reporting tools), or via `wine` (10 tools)
   # TODO: Fusion from USFS (via `wine`?)
 
