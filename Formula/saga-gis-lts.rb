@@ -6,10 +6,10 @@ class SagaGisLts < Formula
 
   head "https://git.code.sf.net/p/saga-gis/code.git", :branch => "release-2-3-lts"
 
-  # bottle do
-  #   root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
-  #   sha256 "5ebbc874d7b22b9876bfceae070baa62d87b6f8821b509131bceeca625e426db" => :mavericks
-  # end
+  bottle do
+    root_url "http://qgis.dakotacarto.com/bottles"
+    sha256 "7ee89e2c199e70d5a630c5ec47efc044c74853c02cb4e57c52f5b22029207a7c" => :sierra
+  end
 
   option "with-app", "Build SAGA.app Package"
 
