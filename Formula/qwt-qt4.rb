@@ -9,7 +9,7 @@ class QwtQt4 < Formula
     sha256 "f1103a619ff0d1fc5df8708238185b2028ae645bc888f7be6ad017001a8a60f4" => :sierra
   end
 
-  keg_only "Newer Qt5-only version in homebrew-core"
+  keg_only "newer Qt5-only version in homebrew-core"
 
   option "with-qwtmathml", "Build the qwtmathml library"
   option "without-plugin", "Skip building the Qt Designer plugin"
