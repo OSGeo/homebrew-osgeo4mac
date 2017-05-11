@@ -4,10 +4,10 @@ class QwtQt4AT52 < Formula
   url "https://downloads.sourceforge.net/project/qwt/qwt/5.2.3/qwt-5.2.3.tar.bz2"
   sha256 "37feaf306753230b0d8538b4ff9b255c6fddaa3d6609ec5a5cc39a5a4d020ab7"
 
-  # bottle do
-  #   root_url "http://qgis.dakotacarto.com/bottles"
-  #   sha256 "f1103a619ff0d1fc5df8708238185b2028ae645bc888f7be6ad017001a8a60f4" => :sierra
-  # end
+  bottle do
+    root_url "http://qgis.dakotacarto.com/bottles"
+    sha256 "735c1d81cdf7b4192967e3923e15c07fbb1c06200c63cadd232b573fa022a2f2" => :sierra
+  end
 
   keg_only "to avoid conflicts with newer versions"
 
