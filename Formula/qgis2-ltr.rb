@@ -30,7 +30,7 @@ class Qgis2Ltr < Formula
     brewed_python?
   end
 
-  keg_only "Installed as keg-only to allow multiple QGIS installs"
+  keg_only "to allow for multiple QGIS installs"
 
   option "with-isolation", "Isolate .app's environment to HOMEBREW_PREFIX, to coexist with other QGIS installs"
   option "without-debug", "Disable debug build, which outputs info to system.log or console"

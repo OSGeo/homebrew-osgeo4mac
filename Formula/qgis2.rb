@@ -30,7 +30,7 @@ class Qgis2 < Formula
     brewed_python?
   end
 
-  keg_only "Installed as keg-only to allow multiple QGIS installs"
+  keg_only "to allow for multiple QGIS installs"
 
   option "with-isolation", "Isolate .app's environment to HOMEBREW_PREFIX, to coexist with other QGIS installs"
   option "without-debug", "Disable debug build, which outputs info to system.log or console"
@@ -502,9 +502,7 @@ class Qgis2 < Formula
 
         You can install manually, via installer package or with `pip` (if availble):
 
-            pip install #{xm.join(" ")}
-            OR
-            pip-2.7 install #{xm.join(" ")}
+            pip install <module>  OR  pip-2.7 install <module>
         #{Tty.red}
         #{Tty.reset}
       EOS
