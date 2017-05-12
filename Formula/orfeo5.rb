@@ -1,8 +1,8 @@
 class Orfeo5 < Formula
   desc "Library of image processing algorithms"
   homepage "http://www.orfeo-toolbox.org/otb/"
-  url "https://github.com/orfeotoolbox/OTB/archive/5.4.0.tar.gz"
-  sha256 "d232e8099bab7d9777ab2213a8fc1bf97d6731db88dad8963aa930f2ac13e38f"
+  url "https://github.com/orfeotoolbox/OTB/archive/5.8.0.tar.gz"
+  sha256 "3e6b6547b119ce5e9571475620db0d5dbe220a64f835b7f6acd93ac813bbaa4f"
 
   # bottle do
   #   root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
@@ -10,6 +10,8 @@ class Orfeo5 < Formula
   #   sha256 "" => :mavericks
   # end
 
+  option "without-monteverdi", "Build without Monteverdi and Mapla applications (Qt4 required)"
+  option "with-iceviewer", "Build with ICE Viewer application (Qt4 and X11 required)"
   option "with-examples", "Compile and install various examples"
   option "with-java", "Enable Java support"
   # option "with-patented", "Enable patented algorithms"
@@ -21,13 +23,16 @@ class Orfeo5 < Formula
   depends_on "homebrew/science/vtk"
   depends_on "homebrew/science/insighttoolkit"
   depends_on "libgeotiff"
+  depends_on "libpng"
+  depends_on "pcre"
+  depends_on "openssl"
   depends_on "ossim"
+  depends_on "sqlite"
   depends_on "tinyxml"
   depends_on "open-scene-graph" # (for libOpenThreads, now internal to osg)
+  depends_on "zlib"
 
   # recommended
-  depends_on "gdal2" => :recommended
-  depends_on "qt-4" => :optional
   depends_on "muparser" => :recommended
   depends_on "libkml" => :recommended
   depends_on "libsvm" => :recommended
@@ -35,14 +40,32 @@ class Orfeo5 < Formula
 
   # optional
   depends_on :python => :optional
-  depends_on "mapnik" => :optional
-  depends_on "openjpeg" => :optional
-  depends_on "homebrew/x11/freeglut" => :optional
+  depends_on "swig" if build.with? "python"
   depends_on "fftw" => :optional # restricts built binaries to GPL license
+  depends_on "mapnik" => :optional
   depends_on "opencv" => :optional
-  depends_on "glew" => :optional
+  depends_on "openjpeg" => :optional
+  depends_on :mpi => [:cxx, :optional]
+  depends_on "homebrew/science/shark" => :optional
 
-  conflicts_with "orfeo", :because => "orfeo provides same functionality"
+  # ICE Viewer: needs X11 support
+  # apparently, GLUT is not needed by Monteverdi, which uses ICE non-gui module,
+  # but is needed for the ICE Viewer
+  depends_on "freeglut" if build.with? "iceviewer"
+
+  # Monteverdi: required deps and required/optionals shared with OTB
+  if build.with? "monteverdi"
+    depends_on "gdal2"
+    depends_on "glew"
+    depends_on "glfw"
+    depends_on "qt-4"
+    depends_on "qwt-qt4@5.2"
+  else
+    depends_on "gdal2" => :recommended
+    depends_on "glew" => :optional
+    depends_on "glfw" => :optional
+    depends_on "qt-4" => :optional
+  end
 
   resource "geoid" do
     # geoid to use in elevation calculations, if no DEM defined or avialable
@@ -61,6 +84,12 @@ class Orfeo5 < Formula
       -DCMAKE_MACOSX_RPATH=OFF
     ]
 
+    if build.with? "iceviewer"
+      fg = Formula["freeglut"]
+      args << "-DGLUT_INCLUDE_DIR=#{fg.opt_include}"
+      args << "-DGLUT_glut_LIBRARY=#{fg.opt_lib}/libglut.dylib"
+    end
+
     args << "-DBUILD_EXAMPLES=" + (build.with?("examples") ? "ON" : "OFF")
     # args << "-DOTB_USE_PATENTED=" + (build.with?("patented") ? "ON" : "OFF")
     args << "-DOTB_WRAP_JAVA=" + (build.with?("java") ? "ON" : "OFF")
@@ -68,22 +97,24 @@ class Orfeo5 < Formula
     args << "-DITK_USE_FFTWF=" + (build.with?("fftw") ? "ON" : "OFF")
     args << "-DITK_USE_FFTWD=" + (build.with?("fftw") ? "ON" : "OFF")
     args << "-DITK_USE_SYSTEM_FFTW=" + (build.with?("fftw") ? "ON" : "OFF")
-    args << "-DOTB_USE_OPENCV=" + (build.with?("opencv") ? "ON" : "OFF")
 
-    args << "-DOTB_USE_CURL=" + (build.with?("examples") ? "ON" : "OFF")
-    args << "-DOTB_USE_GLEW=" + (build.with?("glew") ? "ON" : "OFF")
-    # args << "-DOTB_USE_GLFW=" + (build.with?("") ? "ON" : "OFF")
-    args << "-DOTB_USE_GLUT=" + (build.with?("freeglut") ? "ON" : "OFF")
+    args << "-DOTB_USE_CURL=ON"
+    args << "-DOTB_USE_GLEW=" + (build.with?("glew") || build.with?("monteverdi") ? "ON" : "OFF")
+    args << "-DOTB_USE_GLFW=" + (build.with?("glfw") || build.with?("monteverdi") ? "ON" : "OFF")
+    args << "-DOTB_USE_GLUT=" + (build.with?("iceviewer") ? "ON" : "OFF")
     args << "-DOTB_USE_LIBKML=" + (build.with?("libkml") ? "ON" : "OFF")
     args << "-DOTB_USE_LIBSVM=" + (build.with?("libsvm") ? "ON" : "OFF")
     args << "-DOTB_USE_MAPNIK=" + (build.with?("mapnik") ? "ON" : "OFF")
     args << "-DOTB_USE_MUPARSER=" + (build.with?("muparser") ? "ON" : "OFF")
     # args << "-DOTB_USE_MUPARSERX=" + (build.with?("") ? "ON" : "OFF")
     args << "-DOTB_USE_OPENCV=" + (build.with?("opencv") ? "ON" : "OFF")
-    # args << "-DOTB_USE_OPENGL=" + (build.with?("examples") ? "ON" : "OFF")
+    args << "-DOTB_USE_OPENGL=" + (build.with?("examples") || build.with?("iceviewer") || build.with?("monteverdi") ? "ON" : "OFF")
+    args << "-DOTB_USE_MPI=" + (build.with?("mpi") ? "ON" : "OFF")
     args << "-DOTB_USE_OPENJPEG=" + (build.with?("openjpeg") ? "ON" : "OFF")
-    args << "-DOTB_USE_QT4=" + (build.with?("qt-4") ? "ON" : "OFF")
-    # args << "-DOTB_USE_SIFTFAST=" + (build.with?("") ? "ON" : "OFF")
+    args << "-DOTB_USE_QT4=" + (build.with?("qt-4") || build.with?("monteverdi") ? "ON" : "OFF")
+    args << "-DOTB_USE_QWT=" + (build.with?("qt-4") || build.with?("monteverdi") ? "ON" : "OFF")
+    args << "-DOTB_USE_SIFTFAST=ON"
+    args << "-DOTB_USE_SHARK=" + (build.with?("homebrew/science/shark") ? "ON" : "OFF")
 
     mkdir "build" do
       system "cmake", "..", *args
@@ -96,6 +127,26 @@ class Orfeo5 < Formula
       system "make"
       system "make", "install"
     end
+
+    # clean up any unneeded otbgui script wrappers
+    unless (bin/"otbgui").exist?
+      rm_f Dir["#{bin}/otbgui*"]
+    end
+
+    # make env-wrapped command line utility launcher scripts
+    envars = {
+      :GDAL_DATA => "#{Formula["gdal2"].opt_share}/gdal",
+      :OTB_APPLICATION_PATH => "#{opt_lib}/otb/applications",
+    }
+    bin.env_script_all_files(libexec/"bin", envars)
+  end
+
+  def caveats; <<-EOS.undent
+      The default geoid to use in elevation calculations is available in:
+
+        #{opt_libexec}/default_geoid/egm96.grd
+
+  EOS
   end
 
   test do
@@ -105,7 +156,7 @@ class Orfeo5 < Formula
     puts "Testing Rescale CLI app"
     out = `#{opt_bin}/otbcli_Rescale 2>&1`
     assert_match "Rescale the image between two given values", out
-    if build.with? "qt-4"
+    if (opt_bin/"otbgui").exist?
       puts "Testing Qt GUI wrapper"
       out = `#{opt_bin}/otbgui 2>&1`
       assert_match "module_name [module_path]", out
