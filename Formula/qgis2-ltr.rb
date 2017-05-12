@@ -105,7 +105,7 @@ class Qgis2Ltr < Formula
   # core processing plugin extras
   # see `grass` above
   depends_on "grass6" => :optional
-  depends_on "orfeo5" => :optional
+  depends_on "orfeo5@5.4" if build.with? "orfeo5"
   depends_on "homebrew/science/r" => :optional
   depends_on "saga-gis-lts" => :optional
   # TODO: LASTools straight build (2 reporting tools), or via `wine` (10 tools)
@@ -366,6 +366,20 @@ class Qgis2Ltr < Formula
       end
     end
 
+    if opts.include?("with-orfeo5") || brewed_orfeo5?
+      orfeo5 = Formula["orfeo5@5.4"]
+      begin
+        inreplace app/"#{proc_algs}/otb/OTBUtils.py" do |s|
+          # default bin and lib path
+          s.gsub! "/usr/local", orfeo5.opt_prefix.to_s
+          # default geoid path
+          s.sub! "OTB_GEOID_FILE) or ''", "OTB_GEOID_FILE) or '#{orfeo5.opt_libexec}/default_geoid/egm96.grd'"
+        end
+      rescue Utils::InreplaceError
+        puts "ORFEO 5's OTBUtils already updated"
+      end
+    end
+
     unless opts.include?("without-globe")
       osg = Formula["open-scene-graph"]
       envars[:OSG_LIBRARY_PATH] = "#{HOMEBREW_PREFIX}/lib/osgPlugins-#{osg.version}"
@@ -522,6 +536,10 @@ class Qgis2Ltr < Formula
 
   def brewed_grass6?
     Formula["grass6"].opt_prefix.exist?
+  end
+
+  def brewed_orfeo5?
+    Formula["orfeo5@5.4"].opt_prefix.exist?
   end
 
   def brewed_python_framework
