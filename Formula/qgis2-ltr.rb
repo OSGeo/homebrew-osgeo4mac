@@ -350,8 +350,9 @@ class Qgis2Ltr < Formula
         inreplace app/"#{proc_algs}/grass7/Grass7Utils.py",
                   "/Applications/GRASS-7.0.app/Contents/MacOS",
                   "#{grass7.opt_prefix}/grass-base"
+        puts "GRASS 7 GrassUtils.py has been updated"
       rescue Utils::InreplaceError
-        puts "GRASS 7 GrassUtils already updated"
+        puts "GRASS 7 GrassUtils.py already updated"
       end
     end
 
@@ -361,8 +362,9 @@ class Qgis2Ltr < Formula
         inreplace app/"#{proc_algs}/grass/GrassUtils.py",
                   "/Applications/GRASS-6.4.app/Contents/MacOS",
                   "#{grass6.opt_prefix}/grass-base"
+        puts "GRASS 6 GrassUtils.py has been updated"
       rescue Utils::InreplaceError
-        puts "GRASS 6 GrassUtils already updated"
+        puts "GRASS 6 GrassUtils.py already updated"
       end
     end
 
@@ -370,13 +372,16 @@ class Qgis2Ltr < Formula
       orfeo5 = Formula["orfeo5@5.4"]
       begin
         inreplace app/"#{proc_algs}/otb/OTBUtils.py" do |s|
-          # default bin and lib path
-          s.gsub! "/usr/local", orfeo5.opt_prefix.to_s
           # default geoid path
+          # try to replace first, so it fails (if already done) before global replaces
           s.sub! "OTB_GEOID_FILE) or ''", "OTB_GEOID_FILE) or '#{orfeo5.opt_libexec}/default_geoid/egm96.grd'"
+          # default bin and lib path
+          s.gsub! "/usr/local/bin", orfeo5.opt_bin.to_s
+          s.gsub! "/usr/local/lib", orfeo5.opt_lib.to_s
         end
+        puts "ORFEO 5 OTBUtils.py has been updated"
       rescue Utils::InreplaceError
-        puts "ORFEO 5's OTBUtils already updated"
+        puts "ORFEO 5 OTBUtils.py already updated"
       end
     end
 
