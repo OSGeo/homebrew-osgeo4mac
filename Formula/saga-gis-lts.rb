@@ -21,14 +21,14 @@ class SagaGisLts < Formula
   depends_on "wxmac"
   depends_on "unixodbc" => :recommended
   depends_on "libharu" => :recommended
-  depends_on "qhull" => :recommended # instead of looking for triangle
+  depends_on "homebrew/science/qhull" => :recommended # instead of looking for triangle
   # Vigra support builds, but dylib in saga shows 'failed' when loaded
   # Also, using --with-python will trigger vigra to be built with it, which
   # triggers a source (re)build of boost --with-python
-  depends_on "vigra" => :optional
+  depends_on "homebrew/science/vigra" => :optional
   depends_on "postgresql" => :optional
   depends_on :python => :optional
-  depends_on "opencv" => :optional
+  depends_on "homebrew/science/opencv" => :optional
 
   resource "app_icon" do
     url "http://qgis.dakotacarto.com/osgeo4mac/saga_gui.icns"
