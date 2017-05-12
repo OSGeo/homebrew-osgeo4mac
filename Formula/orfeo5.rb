@@ -4,11 +4,10 @@ class Orfeo5 < Formula
   url "https://github.com/orfeotoolbox/OTB/archive/5.8.0.tar.gz"
   sha256 "3e6b6547b119ce5e9571475620db0d5dbe220a64f835b7f6acd93ac813bbaa4f"
 
-  # bottle do
-  #   root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
-  #   cellar :any
-  #   sha256 "" => :mavericks
-  # end
+  bottle do
+    root_url "http://qgis.dakotacarto.com/bottles"
+    sha256 "8d6c674fe701351710df14d316f525741a816b2f8875c1c0224cb002b9b5eee3" => :sierra
+  end
 
   option "without-monteverdi", "Build without Monteverdi and Mapla applications (Qt4 required)"
   option "with-iceviewer", "Build with ICE Viewer application (Qt4 and X11 required)"
