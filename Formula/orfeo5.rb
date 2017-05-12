@@ -43,7 +43,7 @@ class Orfeo5 < Formula
   depends_on "swig" if build.with? "python"
   depends_on "fftw" => :optional # restricts built binaries to GPL license
   depends_on "mapnik" => :optional
-  depends_on "opencv" => :optional
+  depends_on "homebrew/science/opencv" => :optional
   depends_on "openjpeg" => :optional
   depends_on :mpi => [:cxx, :optional]
   depends_on "homebrew/science/shark" => :optional
