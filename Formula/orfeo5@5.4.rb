@@ -4,11 +4,10 @@ class Orfeo5AT54 < Formula
   url "https://github.com/orfeotoolbox/OTB/archive/5.4.0.tar.gz"
   sha256 "d232e8099bab7d9777ab2213a8fc1bf97d6731db88dad8963aa930f2ac13e38f"
 
-  # bottle do
-  #   root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
-  #   cellar :any
-  #   sha256 "" => :mavericks
-  # end
+  bottle do
+    root_url "http://qgis.dakotacarto.com/bottles"
+    sha256 "41187da6cafbc580f1eb05d75f3491581cc53903d87d2e24052abc07d708ec9e" => :sierra
+  end
 
   keg_only "to avoid conflict with newer OTB installs"
 
