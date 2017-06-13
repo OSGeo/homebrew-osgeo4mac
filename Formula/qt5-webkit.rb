@@ -10,15 +10,17 @@ end
 
 class Qt5Webkit < Formula
   desc "QtWebit module for Qt5"
-  homepage "https://download.qt.io/community_releases/5.8/5.8.0-final/"
-  url "https://download.qt.io/community_releases/5.8/5.8.0-final/qtwebkit-opensource-src-5.8.0.tar.xz"
-  sha256 "79ae8660086bf92ffb0008b17566270e6477c8fa0daf9bb3ac29404fb5911bec"
+  homepage "https://download.qt.io/community_releases/5.9/5.9.0-final/"
+  url "https://download.qt.io/community_releases/5.9/5.9.0-final/qtwebkit-opensource-src-5.9.0.tar.xz"
+  sha256 "8dad193b740055a998312e04a040f2e32a923c0823b2d239b24eab08276a4e04"
   revision 1
 
+#if 0
   bottle do
     root_url "http://qgis.dakotacarto.com/bottles"
     sha256 "a1831140aa624f9b7ef418f6507c43b2c074b87e5456f0fc18ce99d3ebc7e054" => :sierra
   end
+#endif
 
   keg_only "Qt5 is keg-only"
 
