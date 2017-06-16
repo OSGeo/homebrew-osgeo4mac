@@ -46,9 +46,8 @@ class Gdal2Python < Formula
 
   desc "Python bindings for GDAL: Geospatial Data Abstraction Library"
   homepage "https://pypi.python.org/pypi/GDAL"
-  url "http://download.osgeo.org/gdal/2.1.3/gdal-2.1.3.tar.gz"
-  version "2.1.3-1" # because revision 1 doesn't nix previously cached 2.1.3 download archive
-  sha256 "ae6a0a0dc6eb45a981a46db27e3dfe16c644fcf04732557e2cb315776974074a"
+  url "http://download.osgeo.org/gdal/2.2.0/gdal-2.2.0.tar.gz"
+  sha256 "d06546a6e34b77566512a2559e9117402320dd9487de9aa95cb8a377815dc360"
 
   bottle do
     root_url "http://qgis.dakotacarto.com/bottles"
@@ -69,8 +68,8 @@ class Gdal2Python < Formula
   depends_on "numpy" => :python3 if build.with? "python3"
 
   resource "autotest" do
-    url "http://download.osgeo.org/gdal/2.1.3/gdalautotest-2.1.3.tar.gz"
-    sha256 "b1ed4e973c1369bd3a15761a7c20dc048b4012b66356b8b4e594f984de73af97"
+    url "http://download.osgeo.org/gdal/2.2.0/gdalautotest-2.2.0.tar.gz"
+    sha256 "dfb6ae03b67dd41ef59899aede54f8e249c75c8cccb862671e990843fb36a0fa"
   end
 
   def install
@@ -86,7 +85,7 @@ class Gdal2Python < Formula
       ENV.prepend "LDFLAGS", "-L#{gdal2.opt_lib}" # or gdal1 lib will be found
 
       # Check for GNM support
-      (Pathname.pwd/"setup_vars.ini").write "GNM_ENABLED=yes\n" if gdal2_opts.include? "with-gnm"
+      (Pathname.pwd/"setup_vars.ini").write "GNM_ENABLED=yes\n" unless gdal2_opts.include? "without-gnm"
 
       Language::Python.each_python(build) do |python, _python_version|
         system python, *Language::Python.setup_install_args(prefix)
@@ -116,7 +115,7 @@ class Gdal2Python < Formula
       next unless (lib/"python#{python_version}/site-packages").exist?
       ENV["PYTHONPATH"] = lib/"python#{python_version}/site-packages"
       pkgs = %w[gdal ogr osr gdal_array gdalconst]
-      pkgs << "gnm" if gdal2_opts.include? "with-gnm"
+      pkgs << "gnm" unless gdal2_opts.include? "without-gnm"
       system python, "-c", "from osgeo import #{pkgs.join","}"
     end
 
