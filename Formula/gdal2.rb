@@ -1,8 +1,8 @@
 class Gdal2 < Formula
   desc "GDAL: Geospatial Data Abstraction Library"
   homepage "http://www.gdal.org/"
-  url "http://download.osgeo.org/gdal/2.1.3/gdal-2.1.3.tar.gz"
-  sha256 "ae6a0a0dc6eb45a981a46db27e3dfe16c644fcf04732557e2cb315776974074a"
+  url "http://download.osgeo.org/gdal/2.2.0/gdal-2.2.0.tar.gz"
+  sha256 "d06546a6e34b77566512a2559e9117402320dd9487de9aa95cb8a377815dc360"
   revision 3
 
   bottle do
@@ -28,7 +28,7 @@ class Gdal2 < Formula
   option "with-armadillo", "Build with Armadillo accelerated TPS transforms."
   option "with-unsupported", "Allow configure to drag in any library it can find. Invoke this at your own risk."
   option "with-mdb", "Build with Access MDB driver (requires Java 1.6+ JDK/JRE, from Apple or Oracle)."
-  option "with-gnm", "Build with Geographic Network Model support"
+  option "without-gnm", "Build without Geographic Network Model support"
   option "with-libkml", "Build with Google's libkml driver (requires libkml --HEAD or >= 1.3)"
   option "with-swig-java", "Build the swig java bindings"
 
@@ -212,7 +212,7 @@ class Gdal2 < Formula
 
     args << "--with-qhull=#{build.with?("qhull") ? "internal" : "no"}"
 
-    args << "--with-gnm" if build.with? "gnm"
+    args << "--without-gnm" if build.without? "gnm"
 
     # Python is installed manually to ensure everything is properly sandboxed.
     # see
