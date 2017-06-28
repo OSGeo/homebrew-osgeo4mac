@@ -49,12 +49,12 @@ class Gdal2Python < Formula
   url "http://download.osgeo.org/gdal/2.2.0/gdal-2.2.0.tar.gz"
   sha256 "d06546a6e34b77566512a2559e9117402320dd9487de9aa95cb8a377815dc360"
 
-  bottle do
-    root_url "http://qgis.dakotacarto.com/bottles"
-    sha256 "7fc7c43e24223d7eb167e6dd343eb837963ea347006121b4aa0f981626ce5744" => :sierra
-  end
+  # bottle do
+  #   root_url "http://qgis.dakotacarto.com/bottles"
+  #   sha256 "7fc7c43e24223d7eb167e6dd343eb837963ea347006121b4aa0f981626ce5744" => :sierra
+  # end
 
-  keg_only "Older version of gdal is in main tap and installs similar components"
+  keg_only "older version of gdal is in main tap and installs similar components"
 
   option "without-python", "Build without Python2 support"
   option "with-python3", "Build with Python3 support"
@@ -116,7 +116,7 @@ class Gdal2Python < Formula
       ENV["PYTHONPATH"] = lib/"python#{python_version}/site-packages"
       pkgs = %w[gdal ogr osr gdal_array gdalconst]
       pkgs << "gnm" unless gdal2_opts.include? "without-gnm"
-      system python, "-c", "from osgeo import #{pkgs.join","}"
+      system python, "-c", "from osgeo import #{pkgs.join ","}"
     end
 
     if ENV["GDAL_AUTOTEST"]
