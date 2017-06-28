@@ -1,9 +1,8 @@
 class Gdal2Grass7 < Formula
   desc "GDAL/OGR 2.x plugin for GRASS 7"
   homepage "http://www.gdal.org"
-  url "http://download.osgeo.org/gdal/2.1.0/gdal-grass-2.1.0.tar.gz"
-  sha256 "1faa5d244ebcb5295cab7814c661ba1dee72b27c0e3848677e34b0c97c8111d0"
-  revision 1
+  url "http://download.osgeo.org/gdal/2.2.0/gdal-grass-2.2.0.tar.gz"
+  sha256 "0eb2b541e87db4c0d1b3cdc61512b88631e6f7d39db5986eeb773aada0a7995f"
 
   # bottle do
   #   root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
@@ -30,7 +29,7 @@ class Gdal2Grass7 < Formula
                           "--with-grass=#{grass.prefix}/grass-#{grass.version}",
                           "--with-autoload=#{gdal_plugins}"
 
-    inreplace "Makefile", "mkdir", "mkdir -p"
+    # inreplace "Makefile", "mkdir", "mkdir -p"
 
     system "make", "install"
   end
@@ -47,9 +46,9 @@ class Gdal2Grass7 < Formula
   test do
     ENV["GDAL_DRIVER_PATH"] = "#{HOMEBREW_PREFIX}/lib/gdalplugins"
     gdal_opt_bin = Formula["gdal2"].opt_bin
-    out = `#{gdal_opt_bin}/gdalinfo --formats`
+    out = shell_output("#{gdal_opt_bin}/gdalinfo --formats")
     assert_match "GRASS -raster- (ro)", out
-    out = `#{gdal_opt_bin}/ogrinfo --formats`
+    out = shell_output("#{gdal_opt_bin}/ogrinfo --formats")
     assert_match "OGR_GRASS -vector- (ro)", out
   end
 end
