@@ -1,8 +1,8 @@
 class Gdal2Ecwjp2 < Formula
   desc "GDAL/OGR 2.x plugin for ECW driver"
   homepage "http://www.gdal.org/frmt_ecw.html"
-  url "http://download.osgeo.org/gdal/2.1.2/gdal-2.1.2.tar.gz"
-  sha256 "69761c38acac8c6d3ea71304341f6982b5d66125a1a80d9088b6bfd2019125c9"
+  url "http://download.osgeo.org/gdal/2.2.0/gdal-2.2.0.tar.gz"
+  sha256 "d06546a6e34b77566512a2559e9117402320dd9487de9aa95cb8a377815dc360"
 
   depends_on "ecwjp2-sdk"
   depends_on "gdal2"
@@ -18,7 +18,7 @@ class Gdal2Ecwjp2 < Formula
 
   def gdal_clib
     gdal_lib = "#{Formula["gdal2"].opt_lib}/libgdal.dylib"
-    (`otool -L #{gdal_lib}`.include? "libstdc++") ? "-stdcxx" : ""
+    `otool -L #{gdal_lib}`.include?("libstdc++") ? "-stdcxx" : ""
   end
 
   def install
@@ -72,15 +72,15 @@ class Gdal2Ecwjp2 < Formula
   test do
     ENV["GDAL_DRIVER_PATH"] = "#{HOMEBREW_PREFIX}/lib/gdalplugins"
     gdal_opt_bin = Formula["gdal2"].opt_bin
-    out = `#{gdal_opt_bin}/gdalinfo --formats`
+    out = shell_output("#{gdal_opt_bin}/gdalinfo --formats")
     assert_match "ECW -raster- (rov)", out
     assert_match "JP2ECW -raster,vector- (rov)", out
 
     ecwjp2_test = Formula["ecwjp2-sdk"].opt_prefix/"test"
-    out = `#{gdal_opt_bin}/gdalinfo #{ecwjp2_test}/RGB_8bit.ecw`
+    out = shell_output("#{gdal_opt_bin}/gdalinfo #{ecwjp2_test}/RGB_8bit.ecw")
     assert_match "Driver: ECW/ERDAS Compressed Wavelets", out
     assert_match "Size is 4320, 2160", out
-    out = `#{gdal_opt_bin}/gdalinfo #{ecwjp2_test}/RGB_8bit.jp2`
+    out = shell_output("#{gdal_opt_bin}/gdalinfo #{ecwjp2_test}/RGB_8bit.jp2")
     assert_match "Driver: JP2ECW/ERDAS JPEG2000", out
     assert_match "Size is 4320, 2160", out
   end
