@@ -54,10 +54,10 @@ class MrsidSdk < Formula
     # update libs
     cd lidar_dsdk/"lib" do
       # reset vendored lib ids
-      set_install_name("liblaslib.dylib", libexec)
+      set_install_name("liblaslib.dylib", opt_libexec)
 
       # reset install lib ids
-      set_install_name("liblti_lidar_dsdk.1.dylib", lib)
+      set_install_name("liblti_lidar_dsdk.1.dylib", opt_lib)
 
       # reset install lib names
       install_change("liblti_lidar_dsdk.1.dylib",
@@ -73,11 +73,11 @@ class MrsidSdk < Formula
     cd raster_dsdk/"lib" do
       # reset vendored lib ids
       %w[libgeos_c.1.dylib libgeos.2.dylib libtbb.dylib].each do |f|
-        set_install_name(f, libexec)
+        set_install_name(f, opt_libexec)
       end
 
       # reset install lib ids
-      set_install_name("libltidsdk.dylib", lib)
+      set_install_name("libltidsdk.dylib", opt_lib)
 
       # reset vendored lib names
       install_change("libgeos_c.1.dylib",
@@ -117,11 +117,17 @@ class MrsidSdk < Formula
   end
 
   def install_change(dylib, old, new)
-    quiet_system "install_name_tool", "-change", old, new, dylib
+    if MachO::Tools.dylibs(dylib).include?(old)
+      puts "install_change: from #{old} to #{new} in #{dylib}" if ARGV.debug?
+      MachO::Tools.change_install_name(dylib.to_s, old.to_s, new.to_s, :strict => false)
+    elsif ARGV.debug?
+      puts "install_change: #{old} name not found in #{dylib}"
+    end
   end
 
   def set_install_name(dylib, dir)
-    quiet_system "install_name_tool", "-id", "#{dir}/#{dylib}", dylib
+    puts "set_install_name to #{dir}/#{dylib}" if ARGV.debug?
+    MachO::Tools.change_dylib_id(dylib.to_s, "#{dir}/#{dylib}", :strict => false)
   end
 
   def caveats; <<-EOS.undent
