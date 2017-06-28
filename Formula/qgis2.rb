@@ -4,13 +4,12 @@ require File.expand_path("../../Requirements/qgis_requirements",
 class Qgis2 < Formula
   desc "Open Source Geographic Information System"
   homepage "https://www.qgis.org"
-  revision 1
 
   head "https://github.com/qgis/QGIS.git", :branch => "release-2_18"
 
   stable do
-    url "https://github.com/qgis/QGIS/archive/final-2_18_7.tar.gz"
-    sha256 "6f333a73d9789d8eb8c873e61d3e95dc39b0aec23cf011c52f05d78ac0283f12"
+    url "https://github.com/qgis/QGIS/archive/final-2_18_10.tar.gz"
+    sha256 "587cadd1940e7ededde05e9dc22089256598df270baa093317771b28e7214c98"
 
     # patches that represent all backports to release-2_18 branch, since release tag
     # see: https://github.com/qgis/QGIS/commits/release-2_18
@@ -21,10 +20,10 @@ class Qgis2 < Formula
     # end
   end
 
-  bottle do
-    root_url "http://qgis.dakotacarto.com/bottles"
-    sha256 "0376e8c19137b5adff67e21da2d630aa736d143e335d30877594299f1583adae" => :sierra
-  end
+  # bottle do
+  #   root_url "http://qgis.dakotacarto.com/bottles"
+  #   sha256 "0376e8c19137b5adff67e21da2d630aa736d143e335d30877594299f1583adae" => :sierra
+  # end
 
   def pour_bottle?
     brewed_python?
@@ -55,8 +54,8 @@ class Qgis2 < Formula
   depends_on "bison" => :build
   depends_on "flex" => :build
   if build.with? "api-docs"
-    depends_on "graphviz" => [:build, "with-freetype"]
-    depends_on "doxygen" => [:build, "with-dot"] # with graphviz support
+    depends_on "graphviz" => :build
+    depends_on "doxygen" => :build
   end
   depends_on (build.with?("isolation") || MacOS.version < :lion) ? "python" : :python
   depends_on "qt-4"
@@ -87,7 +86,7 @@ class Qgis2 < Formula
   # TODO: add MSSQL third-party support formula?, :optional
 
   # core plugins (c++ and python)
-  if build.with?("grass") || Formula["grass7"].opt_prefix.exist?
+  if build.with?("grass") || (HOMEBREW_PREFIX/"opt/grass7").exist?
     depends_on "grass7"
     depends_on "gettext"
   end
