@@ -5,6 +5,12 @@ class LibkmlDev < Formula
   version "1.3-dev"
   sha256 "5661de8d1f662e5ee117543ffb325bad36bc6a2ac6f2d16f02a4d8acf4bb936e"
 
+  bottle do
+    root_url "http://qgis.dakotacarto.com/bottles"
+    cellar :any
+    sha256 "cdc3359b7b7142399d310454743f9c1eb2bf45a8b9d1da2b812cf212931bae25" => :sierra
+  end
+
   keg_only "older version is in main tap and installs similar components"
 
   depends_on "autoconf" => :build
