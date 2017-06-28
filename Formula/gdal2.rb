@@ -28,7 +28,7 @@ class Gdal2 < Formula
   option "with-unsupported", "Allow configure to drag in any library it can find. Invoke this at your own risk."
   option "with-mdb", "Build with Access MDB driver (requires Java 1.6+ JDK/JRE, from Apple or Oracle)."
   option "without-gnm", "Build without Geographic Network Model support"
-  option "with-libkml", "Build with Google's libkml driver (requires libkml --HEAD or >= 1.3)"
+  option "with-libkml", "Build with Google's libkml driver (requires libkml-dev >= 1.3)"
   option "with-swig-java", "Build the swig java bindings"
   option "with-sfcgal", "Build with CGAL C++ wrapper support"
   option "with-pdfium", "Build with PDFium support (non-Homebrew install required)"
@@ -57,11 +57,7 @@ class Gdal2 < Formula
 
   depends_on "homebrew/science/armadillo" if build.with? "armadillo"
 
-  if build.with? "libkml"
-    depends_on "autoconf" => :build
-    depends_on "automake" => :build
-    depends_on "libtool" => :build
-  end
+  depends_on "osgeo/osgeo4mac/libkml-dev" if build.with? "libkml"
 
   if build.with? "complete"
     # Raster libraries
@@ -92,12 +88,6 @@ class Gdal2 < Formula
     depends_on "swig" => :build
   end
 
-  resource "libkml" do
-    # Until 1.3 is stable, use master branch
-    url "https://github.com/google/libkml.git",
-        :revision => "9b50572641f671194e523ad21d0171ea6537426e"
-    version "1.3-dev"
-  end
   depends_on "sfcgal" => :optional
 
   def configure_args
@@ -206,7 +196,7 @@ class Gdal2 < Formula
       args << "--with-mdb=yes"
     end
 
-    args << "--with-libkml=#{libexec}" if build.with? "libkml"
+    args << "--with-libkml=#{Formula["libkml-dev"].opt_prefix}" if build.with? "libkml"
 
     args << "--with-qhull=#{build.with?("qhull") ? "internal" : "no"}"
 
@@ -256,24 +246,6 @@ class Gdal2 < Formula
       end
     end
 
-    if build.with? "libkml"
-      resource("libkml").stage do
-        # See main `libkml` formula for info on patches
-        inreplace "configure.ac", "-Werror", ""
-        inreplace "third_party/Makefile.am" do |s|
-          s.sub! /(lib_LTLIBRARIES =) libminizip.la liburiparser.la/, "\\1"
-          s.sub! /(noinst_LTLIBRARIES = libgtest.la libgtest_main.la)/,
-                 "\\1 libminizip.la liburiparser.la"
-          s.sub! /(libminizip_la_LDFLAGS =)/, "\\1 -static"
-          s.sub! /(liburiparser_la_LDFLAGS =)/, "\\1 -static"
-        end
-
-        system "./autogen.sh"
-        system "./configure", "--prefix=#{libexec}"
-        system "make", "install"
-      end
-    end
-
     # Linking flags for SQLite are not added at a critical moment when the GDAL
     # library is being assembled. This causes the build to fail due to missing
     # symbols. Also, ensure Homebrew SQLite is used so that Spatialite is
@@ -290,7 +262,7 @@ class Gdal2 < Formula
     # Fix hardcoded mandir: http://trac.osgeo.org/gdal/ticket/5092
     inreplace "configure", %r[^mandir='\$\{prefix\}/man'$], ""
 
-    # These libs are statically linked in vendored libkml and libkml formula
+    # These libs are statically linked in libkml-dev and libkml formula
     inreplace "configure", " -lminizip -luriparser", "" if build.with? "libkml"
 
     system "./configure", *configure_args
