@@ -1,8 +1,8 @@
 class Gdal2Sosi < Formula
   desc "GDAL/OGR 2.x plugin for SOSI driver"
-  homepage "http://trac.osgeo.org/gdal/wiki/SOSI"
-  url "http://download.osgeo.org/gdal/2.1.2/gdal-2.1.2.tar.gz"
-  sha256 "69761c38acac8c6d3ea71304341f6982b5d66125a1a80d9088b6bfd2019125c9"
+  homepage "https://trac.osgeo.org/gdal/wiki/SOSI"
+  url "http://download.osgeo.org/gdal/2.2.0/gdal-2.2.0.tar.gz"
+  sha256 "d06546a6e34b77566512a2559e9117402320dd9487de9aa95cb8a377815dc360"
 
   depends_on "fyba"
   depends_on "gdal2"
@@ -63,7 +63,7 @@ class Gdal2Sosi < Formula
   test do
     ENV["GDAL_DRIVER_PATH"] = "#{HOMEBREW_PREFIX}/lib/gdalplugins"
     gdal_opt_bin = Formula["gdal2"].opt_bin
-    out = `#{gdal_opt_bin}/ogrinfo --formats`
+    out = shell_output("#{gdal_opt_bin}/ogrinfo --formats")
     assert_match "SOSI -vector- (ro)", out
   end
 end
