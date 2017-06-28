@@ -3,12 +3,11 @@ class Gdal2 < Formula
   homepage "http://www.gdal.org/"
   url "http://download.osgeo.org/gdal/2.2.0/gdal-2.2.0.tar.gz"
   sha256 "d06546a6e34b77566512a2559e9117402320dd9487de9aa95cb8a377815dc360"
-  revision 3
 
-  bottle do
-    root_url "http://qgis.dakotacarto.com/bottles"
-    sha256 "4e7e0038e5dbc7b1d4bacf9fc78b847cc793f39dad696cc03a717571fbb9e984" => :sierra
-  end
+  # bottle do
+  #   root_url "http://qgis.dakotacarto.com/bottles"
+  #   sha256 "4e7e0038e5dbc7b1d4bacf9fc78b847cc793f39dad696cc03a717571fbb9e984" => :sierra
+  # end
 
   head do
     url "https://svn.osgeo.org/gdal/trunk/gdal"
@@ -20,7 +19,7 @@ class Gdal2 < Formula
     "gdalplugins/#{gdal_ver_list[0]}.#{gdal_ver_list[1]}"
   end
 
-  keg_only "Older version of gdal is in main tap and installs similar components"
+  keg_only "older version of gdal is in main tap and installs similar components"
 
   option "with-complete", "Use additional Homebrew libraries to provide more drivers."
   option "with-qhull", "Build with internal qhull libary support"
@@ -31,6 +30,8 @@ class Gdal2 < Formula
   option "without-gnm", "Build without Geographic Network Model support"
   option "with-libkml", "Build with Google's libkml driver (requires libkml --HEAD or >= 1.3)"
   option "with-swig-java", "Build the swig java bindings"
+  option "with-sfcgal", "Build with CGAL C++ wrapper support"
+  option "with-pdfium", "Build with PDFium support (non-Homebrew install required)"
 
   deprecated_option "enable-opencl" => "with-opencl"
   deprecated_option "enable-armadillo" => "with-armadillo"
@@ -97,6 +98,7 @@ class Gdal2 < Formula
         :revision => "9b50572641f671194e523ad21d0171ea6537426e"
     version "1.3-dev"
   end
+  depends_on "sfcgal" => :optional
 
   def configure_args
     args = [
@@ -156,13 +158,10 @@ class Gdal2 < Formula
       webp
       openjpeg
       podofo
-      pdfium
     ]
     if build.with? "complete"
       supported_backends.delete "liblzma"
       args << "--with-liblzma=yes"
-      supported_backends.delete "pdfium"
-      args << "--with-pdfium=yes"
       args.concat supported_backends.map { |b| "--with-" + b + "=" + HOMEBREW_PREFIX }
     elsif build.without? "unsupported"
       args.concat supported_backends.map { |b| "--without-" + b }
@@ -189,7 +188,6 @@ class Gdal2 < Formula
       msg
       oci
       ingres
-      dwgdirect
       idb
       sde
       rasdaman
@@ -214,6 +212,10 @@ class Gdal2 < Formula
 
     args << "--without-gnm" if build.without? "gnm"
 
+    args << "--with-pdfium=yes" if build.with? "pdfium"
+
+    args << "--with-sfcgal=#{build.with?("sfcgal") ? HOMEBREW_PREFIX/"bin/sfcgal-config" : "no"}"
+
     # Python is installed manually to ensure everything is properly sandboxed.
     # see
     args << "--without-python"
@@ -228,7 +230,6 @@ class Gdal2 < Formula
     # Homebrew prefix.
     args << "--without-perl"
     args << "--without-php"
-    args << "--without-ruby"
 
     args << (build.with?("opencl") ? "--with-opencl" : "--without-opencl")
     args << (build.with?("armadillo") ? "--with-armadillo=#{Formula["armadillo"].opt_prefix}" : "--with-armadillo=no")
