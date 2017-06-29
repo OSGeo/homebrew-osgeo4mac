@@ -3,11 +3,12 @@ class Orfeo5 < Formula
   homepage "http://www.orfeo-toolbox.org/otb/"
   url "https://github.com/orfeotoolbox/OTB/archive/5.8.0.tar.gz"
   sha256 "3e6b6547b119ce5e9571475620db0d5dbe220a64f835b7f6acd93ac813bbaa4f"
+  revision 1
 
-  bottle do
-    root_url "http://qgis.dakotacarto.com/bottles"
-    sha256 "8d6c674fe701351710df14d316f525741a816b2f8875c1c0224cb002b9b5eee3" => :sierra
-  end
+  # bottle do
+  #   root_url "http://qgis.dakotacarto.com/bottles"
+  #   sha256 "8d6c674fe701351710df14d316f525741a816b2f8875c1c0224cb002b9b5eee3" => :sierra
+  # end
 
   option "without-monteverdi", "Build without Monteverdi and Mapla applications (Qt4 required)"
   option "with-iceviewer", "Build with ICE Viewer application (Qt4 and X11 required)"
@@ -98,8 +99,8 @@ class Orfeo5 < Formula
     args << "-DITK_USE_SYSTEM_FFTW=" + (build.with?("fftw") ? "ON" : "OFF")
 
     args << "-DOTB_USE_CURL=ON"
-    args << "-DOTB_USE_GLEW=" + (build.with?("glew") || build.with?("monteverdi") ? "ON" : "OFF")
-    args << "-DOTB_USE_GLFW=" + (build.with?("glfw") || build.with?("monteverdi") ? "ON" : "OFF")
+    args << "-DOTB_USE_GLEW=" + ((build.with?("glew") || build.with?("monteverdi")) ? "ON" : "OFF")
+    args << "-DOTB_USE_GLFW=" + ((build.with?("glfw") || build.with?("monteverdi")) ? "ON" : "OFF")
     args << "-DOTB_USE_GLUT=" + (build.with?("iceviewer") ? "ON" : "OFF")
     args << "-DOTB_USE_LIBKML=" + (build.with?("libkml") ? "ON" : "OFF")
     args << "-DOTB_USE_LIBSVM=" + (build.with?("libsvm") ? "ON" : "OFF")
@@ -107,11 +108,11 @@ class Orfeo5 < Formula
     args << "-DOTB_USE_MUPARSER=" + (build.with?("muparser") ? "ON" : "OFF")
     # args << "-DOTB_USE_MUPARSERX=" + (build.with?("") ? "ON" : "OFF")
     args << "-DOTB_USE_OPENCV=" + (build.with?("opencv") ? "ON" : "OFF")
-    args << "-DOTB_USE_OPENGL=" + (build.with?("examples") || build.with?("iceviewer") || build.with?("monteverdi") ? "ON" : "OFF")
+    args << "-DOTB_USE_OPENGL=" + ((build.with?("examples") || build.with?("iceviewer") || build.with?("monteverdi")) ? "ON" : "OFF")
     args << "-DOTB_USE_MPI=" + (build.with?("mpi") ? "ON" : "OFF")
     args << "-DOTB_USE_OPENJPEG=" + (build.with?("openjpeg") ? "ON" : "OFF")
-    args << "-DOTB_USE_QT4=" + (build.with?("qt-4") || build.with?("monteverdi") ? "ON" : "OFF")
-    args << "-DOTB_USE_QWT=" + (build.with?("qt-4") || build.with?("monteverdi") ? "ON" : "OFF")
+    args << "-DOTB_USE_QT4=" + ((build.with?("qt-4") || build.with?("monteverdi")) ? "ON" : "OFF")
+    args << "-DOTB_USE_QWT=" + ((build.with?("qt-4") || build.with?("monteverdi")) ? "ON" : "OFF")
     args << "-DOTB_USE_SIFTFAST=ON"
     args << "-DOTB_USE_SHARK=" + (build.with?("homebrew/science/shark") ? "ON" : "OFF")
 
@@ -128,9 +129,7 @@ class Orfeo5 < Formula
     end
 
     # clean up any unneeded otbgui script wrappers
-    unless (bin/"otbgui").exist?
-      rm_f Dir["#{bin}/otbgui*"]
-    end
+    rm_f Dir["#{bin}/otbgui*"] unless (bin/"otbgui").exist?
 
     # make env-wrapped command line utility launcher scripts
     envars = {
