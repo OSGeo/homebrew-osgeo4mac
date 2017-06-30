@@ -77,7 +77,6 @@ class Gdal2 < Formula
     # Other libraries
     depends_on "xz" # get liblzma compression algorithm library from XZutils
     depends_on "poppler"
-    depends_on "podofo"
     depends_on "json-c"
   end
 
@@ -147,7 +146,7 @@ class Gdal2 < Formula
       epsilon
       webp
       openjpeg
-      podofo
+      poppler
     ]
     if build.with? "complete"
       supported_backends.delete "liblzma"
@@ -182,6 +181,7 @@ class Gdal2 < Formula
       sde
       rasdaman
       sosi
+      podofo
     ]
     args.concat unsupported_backends.map { |b| "--without-" + b } if build.without? "unsupported"
 
