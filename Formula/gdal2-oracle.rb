@@ -1,8 +1,8 @@
 class Gdal2Oracle < Formula
   desc "GDAL/OGR 2.x plugin for Oracle Spatial driver"
   homepage "http://www.gdal.org/drv_oci.html"
-  url "http://download.osgeo.org/gdal/2.2.0/gdal-2.2.0.tar.gz"
-  sha256 "d06546a6e34b77566512a2559e9117402320dd9487de9aa95cb8a377815dc360"
+  url "http://download.osgeo.org/gdal/2.2.1/gdal-2.2.1.tar.gz"
+  sha256 "61837706abfa3e493f3550236efc2c14bd6b24650232f9107db50a944abf8b2f"
 
   depends_on "oracle-client-sdk"
   depends_on "gdal2"
