@@ -41,7 +41,7 @@ for f in ${CHANGED_FORMULAE};do
 
     # Set up Python .pth files
     # get python short version (major.minor)
-    PY_VER=$(${HOMEBREW_PREFIX}/bin/python -c "import sys;print('{0}.{1}'.format(sys.version_info[0],sys.version_info[1]).strip())")
+    PY_VER=$(${HOMEBREW_PREFIX}/bin/python2 -c "import sys;print('{0}.{1}'.format(sys.version_info[0],sys.version_info[1]).strip())")
     mkdir -p ${HOME}/Library/Python/${PY_VER}/lib/python/site-packages
     echo 'import site; site.addsitedir("${HOMEBREW_PREFIX}/lib/python${PY_VER}/site-packages")' \
       >> ${HOME}/Library/Python/${PY_VER}/lib/python/site-packages/homebrew.pth
