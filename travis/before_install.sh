@@ -50,11 +50,11 @@ for f in ${CHANGED_FORMULAE};do
 
     if [[ "${f}" =~ "gdal2" ]];then
       echo "Installing GDAL 2 Python dependencies"
-      ${HOMEBREW_PREFIX}/bin/pip install numpy
+      ${HOMEBREW_PREFIX}/bin/pip2 install numpy
     fi
     if [[ "${f}" =~ "qgis" ]];then
       echo "Installing QGIS Python dependencies for testing"
-      ${HOMEBREW_PREFIX}/bin/pip install future mock nose2 numpy psycopg2 pyyaml
+      ${HOMEBREW_PREFIX}/bin/pip2 install future mock nose2 numpy psycopg2 pyyaml
     fi
   fi
 
