@@ -1,8 +1,8 @@
 class Gdal2Mrsid < Formula
   desc "GDAL/OGR 2 plugin for MrSID raster and LiDAR drivers"
   homepage "http://www.gdal.org/frmt_mrsid.html"
-  url "http://download.osgeo.org/gdal/2.2.0/gdal-2.2.0.tar.gz"
-  sha256 "d06546a6e34b77566512a2559e9117402320dd9487de9aa95cb8a377815dc360"
+  url "http://download.osgeo.org/gdal/2.2.1/gdal-2.2.1.tar.gz"
+  sha256 "61837706abfa3e493f3550236efc2c14bd6b24650232f9107db50a944abf8b2f"
 
   depends_on "mrsid-sdk"
   depends_on "gdal2"
