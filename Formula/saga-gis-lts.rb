@@ -1,7 +1,7 @@
 class SagaGisLts < Formula
   desc "System for Automated Geoscientific Analyses - Long Term Support"
   homepage "http://saga-gis.org"
-  url "https://downloads.sourceforge.net/project/saga-gis/SAGA%20-%202.3/SAGA%202.3.1/saga_2.3.1.tar.gz"
+  url "https://downloads.sourceforge.net/project/saga-gis/SAGA%20-%202/SAGA%202.3.1/saga_2.3.1.tar.gz"
   sha256 "58f5c183f839ef753261a7a83c902ba9d67f814c5f21172aae02fcd4a29b9fc0"
 
   head "https://git.code.sf.net/p/saga-gis/code.git", :branch => "release-2-3-lts"
