@@ -99,10 +99,10 @@ class Qt5Webkit < Formula
         s.gsub! "$$QT_MODULE_LIB_BASE", opt_lib.to_s
         next if pri.end_with? "_private.pri"
         s.gsub! "$$QT_MODULE_BIN_BASE", opt_bin.to_s
-        s.gsub! "$$QT_MODULE_LIBEXEC_BASE", opt_libexec.to_s
-        s.gsub! "$$QT_MODULE_PLUGIN_BASE", (opt_prefix/"plugins/webkit").to_s
+        # s.gsub! "$$QT_MODULE_LIBEXEC_BASE", opt_libexec.to_s
+        # s.gsub! "$$QT_MODULE_PLUGIN_BASE", (opt_prefix/"plugins/webkit").to_s
         # s.gsub! "$$QT_MODULE_IMPORT_BASE", (opt_prefix/"imports").to_s
-        s.gsub! "$$QT_MODULE_QML_BASE", (opt_prefix/"qml").to_s
+        # s.gsub! "$$QT_MODULE_QML_BASE", (opt_prefix/"qml").to_s
       end
     end
 
