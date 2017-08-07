@@ -26,7 +26,7 @@ class Pdfium < Formula
   end
 
   def install
-    # need to move git checkout into gclient solutions drectory
+    # need to move git checkout into gclient solutions directory
     base_install = Dir[".*", "*"] - [".", "..", ".brew_home"]
     (buildpath/"pdfium/").mkpath
     base_install.each { |f| mv f, buildpath/"pdfium/" }
