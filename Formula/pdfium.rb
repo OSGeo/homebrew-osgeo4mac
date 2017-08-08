@@ -7,6 +7,12 @@ class Pdfium < Formula
       :branch => "chromium/#{ver}"
   version ver
 
+  bottle do
+    root_url "http://qgis.dakotacarto.com/bottles"
+    cellar :any_skip_relocation
+    sha256 "8b7cb75edddfdc2335c6cfe5478cb78b3acfa668e103b27e18d018d366341d96" => :sierra
+  end
+
   depends_on :python => :build # gyp doesn't run under 2.6 or lower
 
   resource "depot_tools" do
