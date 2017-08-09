@@ -1,9 +1,9 @@
 class FilegdbApi < Formula
   desc "ESRI File Geodatabase C++ API libraries"
   homepage "https://github.com/Esri/file-geodatabase-api"
-  url "https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_1.4/FileGDB_API_1_4-64clang.zip"
-  version "1.4"
-  sha256 "a6c452ed5fada241c9cb3a255d1e8084cf6a5d4f97e62f5854d87e2714a36384"
+  url "https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_1.5.1/FileGDB_API_1_5_1-64clang.zip"
+  version "1.5.1"
+  sha256 "78b52650b3be72eacb985fd744f6766e8d57f60a3317055c5a23b1d181ae8ab2"
 
   option "with-docs", "Intall API documentation and sample code"
 
