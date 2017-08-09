@@ -46,13 +46,13 @@ class Gdal2Python < Formula
 
   desc "Python bindings for GDAL: Geospatial Data Abstraction Library"
   homepage "https://pypi.python.org/pypi/GDAL"
-  url "http://download.osgeo.org/gdal/2.2.0/gdal-2.2.0.tar.gz"
-  sha256 "d06546a6e34b77566512a2559e9117402320dd9487de9aa95cb8a377815dc360"
+  url "http://download.osgeo.org/gdal/2.2.1/gdal-2.2.1.tar.gz"
+  sha256 "61837706abfa3e493f3550236efc2c14bd6b24650232f9107db50a944abf8b2f"
 
-  bottle do
-    root_url "http://qgis.dakotacarto.com/bottles"
-    sha256 "56e0414060ed93452c41528beaa646d4472e2a8ed8995bd8eee63c0697c2e94d" => :sierra
-  end
+  # bottle do
+  #   root_url "http://qgis.dakotacarto.com/bottles"
+  #   sha256 "56e0414060ed93452c41528beaa646d4472e2a8ed8995bd8eee63c0697c2e94d" => :sierra
+  # end
 
   keg_only "older version of gdal is in main tap and installs similar components"
 
