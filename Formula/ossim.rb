@@ -8,7 +8,7 @@ class Ossim < Formula
       :branch => "master",
       :revision => "f01c951587eeb63623b913750bec5097ece86d9a"
   version "1.9.0"
-  revision 3
+  revision 4
 
   # bottle do
   #   root_url "http://qgis.dakotacarto.com/bottles"
