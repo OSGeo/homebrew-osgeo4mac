@@ -3,14 +3,13 @@ class SipQt4 < Formula
   homepage "https://www.riverbankcomputing.com/software/sip/intro"
   url "https://downloads.sourceforge.net/project/pyqt/sip/sip-4.18.1/sip-4.18.1.tar.gz"
   sha256 "9bce7a2dbf7f105bf68ad1bab58eebc0ce33087ec40396da756463f086ffa290"
+  revision 1
 
-  bottle do
-    root_url "http://qgis.dakotacarto.com/bottles"
-    cellar :any_skip_relocation
-    sha256 "1b92f95ef03f583560ca206321f3369ae04781b5e1b7770893f3ab43b367d52e" => :sierra
-  end
-
-  keg_only "Newer (possibly Qt5-only) version in homebrew-core"
+  # bottle do
+  #   root_url "http://qgis.dakotacarto.com/bottles"
+  #   cellar :any_skip_relocation
+  #   sha256 "1b92f95ef03f583560ca206321f3369ae04781b5e1b7770893f3ab43b367d52e" => :sierra
+  # end
 
   depends_on :python => :recommended
 
@@ -25,34 +24,24 @@ class SipQt4 < Formula
       system python, "configure.py",
                      "--deployment-target=#{MacOS.version}",
                      "--destdir=#{lib}/qt-4/python#{version}/site-packages",
-                     "--bindir=#{bin}",
-                     "--incdir=#{include}",
-                     "--sipdir=#{HOMEBREW_PREFIX}/share/sip"
+                     "--bindir=#{libexec}/bin",
+                     "--incdir=#{libexec}/include",
+                     "--sipdir=#{HOMEBREW_PREFIX}/share/#{name}"
       system "make"
       system "make", "install"
       system "make", "clean"
     end
-
-    post_install
   end
 
   def post_install
-    (HOMEBREW_PREFIX/"share/sip").mkpath
-    # do symlinking of keg-only here, since `brew doctor` complains about it
-    # and user may need to re-link again after following suggestion to unlink
-    Language::Python.each_python(build) do |_python, version|
-      subpth = "qt-4/python#{version}/site-packages"
-      hppth = HOMEBREW_PREFIX/"lib/#{subpth}"
-      hppth.mkpath
-      cd lib/subpth do
-        Dir["sip*"].each { |f| ln_sf "#{opt_lib.relative_path_from(hppth)}/#{subpth}/#{f}", "#{hppth}/" }
-      end
-    end
+    (HOMEBREW_PREFIX/"share/#{name}").mkpath
   end
 
   def caveats
-    s = "The sip-dir for Python is #{HOMEBREW_PREFIX}/share/sip.\n\n"
-    s += "Python modules in:\n"
+    s = "sip executable installed in #{opt_libexec}/bin\n\n"
+    s += "sip headers installed in #{opt_libexec}/include\n\n"
+    s += "sip-dir for Python installed at #{HOMEBREW_PREFIX}/share/#{name}\n\n"
+    s += "Python modules installed in:\n"
     Language::Python.each_python(build) do |_python, version|
       s += "  #{HOMEBREW_PREFIX}/lib/qt-4/python#{version}/site-packages/PyQt4"
     end
@@ -88,27 +77,25 @@ class SipQt4 < Formula
         void test();
       };
     EOS
-    system ENV.cxx, "-shared", "-Wl,-install_name,#{testpath}/libtest.dylib",
-                    "-o", "libtest.dylib", "test.cpp"
-    system bin/"sip", "-b", "test.build", "-c", ".", "test.sip"
-    Language::Python.each_python(build) do |python, version|
-      site_pkgs = "#{HOMEBREW_PREFIX}/lib/qt-4/python#{version}/site-packages"
-      (testpath/"generate.py").write <<-EOS.undent
-      import site; site.addsitedir("#{site_pkgs}")
+    (testpath/"generate.py").write <<-EOS.undent
       from sipconfig import SIPModuleMakefile, Configuration
       m = SIPModuleMakefile(Configuration(), "test.build")
       m.extra_libs = ["test"]
       m.extra_lib_dirs = ["."]
       m.generate()
-      EOS
-      system python, "generate.py"
-      system "make", "-j1", "clean", "all"
-      (testpath/"run.py").write <<-EOS.undent
-      import site; site.addsitedir("#{site_pkgs}")
+    EOS
+    (testpath/"run.py").write <<-EOS.undent
       from test import Test
       t = Test()
       t.test()
-      EOS
+    EOS
+    system ENV.cxx, "-shared", "-Wl,-install_name,#{testpath}/libtest.dylib",
+                    "-o", "libtest.dylib", "test.cpp"
+    system libexec/"bin/sip", "-b", "test.build", "-c", ".", "test.sip"
+    Language::Python.each_python(build) do |python, version|
+      ENV["PYTHONPATH"] = lib/"qt-4/python#{version}/site-packages"
+      system python, "generate.py"
+      system "make", "-j1", "clean", "all"
       system python, "run.py"
     end
   end
