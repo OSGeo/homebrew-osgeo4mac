@@ -5,10 +5,10 @@ class PyqtQt4 < Formula
   sha256 "f178ba12a814191df8e9f87fb95c11084a0addc827604f1a18a82944225ed918"
   revision 1
 
-  # bottle do
-  #   root_url "http://qgis.dakotacarto.com/bottles"
-  #   sha256 "da10e9718573e34b7d6bfb3fdc9ed4d3deb1e9f8d1bf9a60c09597e4e0c98ea8" => :sierra
-  # end
+  bottle do
+    root_url "http://qgis.dakotacarto.com/bottles"
+    sha256 "1268f3898ae7a208521f2a05d57b529e7573b7b539977bd42ae46479e94e7a22" => :sierra
+  end
 
   depends_on :python => :recommended
   depends_on "qt-4"
