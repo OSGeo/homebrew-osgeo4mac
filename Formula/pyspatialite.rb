@@ -1,7 +1,7 @@
 class Pyspatialite < Formula
   desc "DB-API 2.0 interface for SQLite with Spatialite"
   homepage "https://code.google.com/p/pyspatialite/"
-  revision 2
+  revision 3
 
   head "https://code.google.com/p/pyspatialite/", :using => :hg
 
@@ -19,11 +19,11 @@ class Pyspatialite < Formula
     end
   end
 
-  bottle do
-    root_url "http://qgis.dakotacarto.com/bottles"
-    cellar :any
-    sha256 "5c541f3cc28d93ecc56f873e0931bd39904c7c0f011a86e442fa512297fd2da4" => :sierra
-  end
+  # bottle do
+  #   root_url "http://qgis.dakotacarto.com/bottles"
+  #   cellar :any
+  #   sha256 "5c541f3cc28d93ecc56f873e0931bd39904c7c0f011a86e442fa512297fd2da4" => :sierra
+  # end
 
   depends_on :python
   depends_on "geos"
