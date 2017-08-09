@@ -4,6 +4,12 @@ class Gdal2Filegdb < Formula
   url "http://download.osgeo.org/gdal/2.2.1/gdal-2.2.1.tar.gz"
   sha256 "61837706abfa3e493f3550236efc2c14bd6b24650232f9107db50a944abf8b2f"
 
+  bottle do
+    root_url "http://qgis.dakotacarto.com/bottles"
+    cellar :any
+    sha256 "06e813011fbbc3e6ad0b1a91334a69a17595e0dec1f17bc40b7834216dc502da" => :sierra
+  end
+
   depends_on "filegdb-api"
   depends_on "gdal2"
 
