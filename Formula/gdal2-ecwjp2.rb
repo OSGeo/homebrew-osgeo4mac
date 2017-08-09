@@ -1,8 +1,8 @@
 class Gdal2Ecwjp2 < Formula
   desc "GDAL/OGR 2.x plugin for ECW driver"
   homepage "http://www.gdal.org/frmt_ecw.html"
-  url "http://download.osgeo.org/gdal/2.2.0/gdal-2.2.0.tar.gz"
-  sha256 "d06546a6e34b77566512a2559e9117402320dd9487de9aa95cb8a377815dc360"
+  url "http://download.osgeo.org/gdal/2.2.1/gdal-2.2.1.tar.gz"
+  sha256 "61837706abfa3e493f3550236efc2c14bd6b24650232f9107db50a944abf8b2f"
 
   depends_on "ecwjp2-sdk"
   depends_on "gdal2"
@@ -16,20 +16,15 @@ class Gdal2Ecwjp2 < Formula
     "gdalplugins/#{gdal_majmin_ver}"
   end
 
-  def gdal_clib
-    gdal_lib = "#{Formula["gdal2"].opt_lib}/libgdal.dylib"
-    `otool -L #{gdal_lib}`.include?("libstdc++") ? "-stdcxx" : ""
-  end
-
   def install
-    ENV.libstdcxx if gdal_clib == "-stdcxx"
+    ENV.cxx11
 
     ecwjp2_opt = Formula["ecwjp2-sdk"].opt_prefix
     ecwjp2_opt_include = ecwjp2_opt/"include/ECWJP2"
 
     gdal_plugins = lib/gdal_plugins_subdirectory
     gdal_plugins.mkpath
-    (HOMEBREW_PREFIX/"lib/#{gdal_plugins_subdirectory}").mkpath
+    #(HOMEBREW_PREFIX/"lib/#{gdal_plugins_subdirectory}").mkpath
 
     # cxx flags
     args = %W[-Iport -Igcore -Ifrmts -DFRMT_ecw -DECWSDK_VERSION=53 -Ifrmts/ecw -DDO_NOT_USE_DEBUG_BOOL
@@ -53,8 +48,7 @@ class Gdal2Ecwjp2 < Formula
     ]
 
     # ld flags
-    args.concat %W[-L#{ecwjp2_opt}/lib -lNCSEcw#{gdal_clib}]
-    args << "-stdlib=libstdc++" if gdal_clib == "-stdcxx"
+    args.concat %W[-L#{ecwjp2_opt}/lib -lNCSEcw]
 
     # build and install shared plugin
     system ENV.cxx, *args
