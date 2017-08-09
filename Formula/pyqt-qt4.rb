@@ -3,13 +3,12 @@ class PyqtQt4 < Formula
   homepage "https://www.riverbankcomputing.com/software/pyqt/intro"
   url "https://downloads.sf.net/project/pyqt/PyQt4/PyQt-4.11.4/PyQt-mac-gpl-4.11.4.tar.gz"
   sha256 "f178ba12a814191df8e9f87fb95c11084a0addc827604f1a18a82944225ed918"
+  revision 1
 
-  bottle do
-    root_url "http://qgis.dakotacarto.com/bottles"
-    sha256 "da10e9718573e34b7d6bfb3fdc9ed4d3deb1e9f8d1bf9a60c09597e4e0c98ea8" => :sierra
-  end
-
-  keg_only "Newer Qt5-only version in homebrew-core"
+  # bottle do
+  #   root_url "http://qgis.dakotacarto.com/bottles"
+  #   sha256 "da10e9718573e34b7d6bfb3fdc9ed4d3deb1e9f8d1bf9a60c09597e4e0c98ea8" => :sierra
+  # end
 
   depends_on :python => :recommended
   depends_on "qt-4"
@@ -26,6 +25,8 @@ class PyqtQt4 < Formula
       ENV.append "QMAKESPEC", "unsupported/macx-clang-libc++"
     end
 
+    ENV.prepend_path "PATH", "#{Formula["sip-qt4"].opt_libexec}/bin"
+
     Language::Python.each_python(build) do |python, version|
       ENV["PYTHONPATH"] = "#{HOMEBREW_PREFIX}/lib/qt-4/python#{version}/site-packages"
 
@@ -33,7 +34,7 @@ class PyqtQt4 < Formula
         --confirm-license
         --bindir=#{bin}
         --destdir=#{lib}/qt-4/python#{version}/site-packages
-        --sipdir=#{share}/sip
+        --sipdir=#{share}/sip-qt4
       ]
 
       # We need to run "configure.py" so that pyqtconfig.py is generated, which
@@ -73,25 +74,12 @@ class PyqtQt4 < Formula
         args << "--spec" << "unsupported/macx-clang-libc++"
       end
 
+      args << "--sip-incdir=#{Formula["sip-qt4"].opt_libexec}/include"
+
       system python, "configure-ng.py", *args
       system "make"
       system "make", "install"
       system "make", "clean" # for when building against multiple Pythons
-    end
-
-    post_install
-  end
-
-  def post_install
-    # do symlinking of keg-only here, since `brew doctor` complains about it
-    # and user may need to re-link again after following suggestion to unlink
-    Language::Python.each_python(build) do |_python, version|
-      subpth = "qt-4/python#{version}/site-packages/PyQt4"
-      hppth = HOMEBREW_PREFIX/"lib/#{subpth}"
-      hppth.mkpath
-      cd lib/subpth do
-        Dir["*"].each { |f| ln_sf "#{opt_lib.relative_path_from(hppth)}/#{subpth}/#{f}", "#{hppth}/" }
-      end
     end
   end
 
@@ -106,12 +94,29 @@ class PyqtQt4 < Formula
 
   test do
     Language::Python.each_python(build) do |python, version|
-      Pathname("test.py").write <<-EOS.undent
-      import site; site.addsitedir("#{HOMEBREW_PREFIX}/lib/qt-4/python#{version}/site-packages")
-      from PyQt4 import QtNetwork
-      QtNetwork.QNetworkAccessManager().networkAccessible()
-      EOS
-      system python, "test.py"
+      ENV["PYTHONPATH"] = HOMEBREW_PREFIX/"lib/qt-4/python#{version}/site-packages"
+      system "#{bin}/pyuic4", "--version"
+      system "#{bin}/pylupdate4", "-version"
+      system python, "-c", "import PyQt4"
+      %w[
+        Qt
+        QtCore
+        QtDeclarative
+        QtDesigner
+        QtGui
+        QtHelp
+        QtMultimedia
+        QtNetwork
+        QtOpenGL
+        QtScript
+        QtScriptTools
+        QtSql
+        QtSvg
+        QtTest
+        QtWebKit
+        QtXml
+        QtXmlPatterns
+      ].each { |mod| system python, "-c", "import PyQt4.#{mod}" }
     end
   end
 end
