@@ -3,14 +3,12 @@ class Qscintilla2Qt4 < Formula
   homepage "https://www.riverbankcomputing.com/software/qscintilla/intro"
   url "https://downloads.sf.net/project/pyqt/QScintilla2/QScintilla-2.9.3/QScintilla_gpl-2.9.3.tar.gz"
   sha256 "98aab93d73b05635867c2fc757acb383b5856a0b416e3fd7659f1879996ddb7e"
-  revision 1
+  revision 2
 
-  bottle do
-    root_url "http://qgis.dakotacarto.com/bottles"
-    sha256 "5db9b11fa02d09ba579c8df7a001c503c24cbddbead92e34c6accc081c2e1a0c" => :sierra
-  end
-
-  keg_only "Newer Qt5-only version in homebrew-core"
+  # bottle do
+  #   root_url "http://qgis.dakotacarto.com/bottles"
+  #   sha256 "5db9b11fa02d09ba579c8df7a001c503c24cbddbead92e34c6accc081c2e1a0c" => :sierra
+  # end
 
   option "without-plugin", "Skip building the Qt Designer plugin"
   option "without-python", "Skip building the Python bindings"
@@ -46,15 +44,15 @@ class Qscintilla2Qt4 < Formula
 
     cd "Qt4Qt5" do
       inreplace "qscintilla.pro" do |s|
-        s.gsub! "$$[QT_INSTALL_LIBS]", lib
-        s.gsub! "$$[QT_INSTALL_HEADERS]", include
+        s.gsub! "$$[QT_INSTALL_LIBS]", libexec/"lib"
+        s.gsub! "$$[QT_INSTALL_HEADERS]", libexec/"include"
         s.gsub! "$$[QT_INSTALL_TRANSLATIONS]", prefix/"trans"
         s.gsub! "$$[QT_INSTALL_DATA]", prefix/"data"
       end
 
       inreplace "features/qscintilla2.prf" do |s|
-        s.gsub! "$$[QT_INSTALL_LIBS]", lib
-        s.gsub! "$$[QT_INSTALL_HEADERS]", include
+        s.gsub! "$$[QT_INSTALL_LIBS]", libexec/"lib"
+        s.gsub! "$$[QT_INSTALL_HEADERS]", libexec/"include"
       end
 
       system "qmake", "qscintilla.pro", *args
@@ -66,16 +64,21 @@ class Qscintilla2Qt4 < Formula
     ENV["QMAKEFEATURES"] = prefix/"data/mkspecs/features"
 
     if build.with?("python")
+      sip_f = Formula["sip-qt4"]
+      ENV.prepend_path "PATH", "#{sip_f.opt_libexec}/bin"
+      sip_dir = sip_f.name
       cd "Python" do
         Language::Python.each_python(build) do |python, version|
-          (share/"sip").mkpath
+          lib.mkpath
+          (share/sip_dir).mkpath
           ENV["PYTHONPATH"] = "#{HOMEBREW_PREFIX}/lib/qt-4/python#{version}/site-packages"
-          system python, "configure.py", "-o", lib, "-n", include,
+          system python, "configure.py", "-o", libexec/"lib", "-n", libexec/"include",
                            "--apidir=#{prefix}/qsci",
                            "--destdir=#{lib}/qt-4/python#{version}/site-packages/PyQt4",
                            "--stubsdir=#{lib}/qt-4/python#{version}/site-packages/PyQt4",
-                           "--qsci-sipdir=#{share}/sip",
-                           "--pyqt-sipdir=#{Formula["pyqt-qt4"].opt_share}/sip",
+                           "--sip-incdir=#{sip_f.opt_libexec}/include",
+                           "--qsci-sipdir=#{share}/#{sip_dir}",
+                           "--pyqt-sipdir=#{Formula["pyqt-qt4"].opt_share}/#{sip_dir}",
                            "--spec=#{spec}"
           system "make"
           system "make", "install"
@@ -89,38 +92,19 @@ class Qscintilla2Qt4 < Formula
       cd "designer-Qt4Qt5" do
         inreplace "designer.pro" do |s|
           s.sub! "$$[QT_INSTALL_PLUGINS]", "#{lib}/qt-4/plugins"
-          s.sub! "$$[QT_INSTALL_LIBS]", lib
+          s.sub! "$$[QT_INSTALL_LIBS]", libexec/"lib"
         end
         system "qmake", "designer.pro", *args
         system "make"
         system "make", "install"
       end
     end
-
-    post_install
-  end
-
-  def post_install
-    # do symlinking of keg-only here, since `brew doctor` complains about it
-    # and user may need to re-link again after following suggestion to unlink
-    Language::Python.each_python(build) do |_python, version|
-      subpth = "qt-4/python#{version}/site-packages/PyQt4"
-      hppth = HOMEBREW_PREFIX/"lib/#{subpth}"
-      hppth.mkpath
-      cd lib/subpth do
-        Dir["Qsci*"].each { |f| ln_sf "#{opt_lib.relative_path_from(hppth)}/#{subpth}/#{f}", "#{hppth}/" }
-      end
-    end
-    if build.with? "plugin"
-      dsubpth = "qt-4/plugins/designer"
-      dhppth = HOMEBREW_PREFIX/"lib/#{dsubpth}"
-      dhppth.mkpath
-      ln_sf "#{opt_lib.relative_path_from(dhppth)}/#{dsubpth}/libqscintillaplugin.dylib", "#{dhppth}/"
-    end
   end
 
   def caveats
-    s = "Python modules in:\n"
+    s = "Libraries installed in #{opt_libexec}/lib\n\n"
+    s += "Headers installed in #{opt_libexec}/include\n\n"
+    s += "Python modules installed in:\n"
     Language::Python.each_python(build) do |_python, version|
       s += "  #{HOMEBREW_PREFIX}/lib/qt-4/python#{version}/site-packages/PyQt4"
     end
@@ -129,8 +113,8 @@ class Qscintilla2Qt4 < Formula
 
   test do
     Language::Python.each_python(build) do |python, version|
+      ENV["PYTHONPATH"] = "#{HOMEBREW_PREFIX}/lib/qt-4/python#{version}/site-packages"
       Pathname("test.py").write <<-EOS.undent
-      import site; site.addsitedir("#{HOMEBREW_PREFIX}/lib/qt-4/python#{version}/site-packages")
       import PyQt4.Qsci
       assert("QsciLexer" in dir(PyQt4.Qsci))
       EOS
