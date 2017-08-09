@@ -4,6 +4,11 @@ class Gdal2Mysql < Formula
   url "http://download.osgeo.org/gdal/2.2.1/gdal-2.2.1.tar.gz"
   sha256 "61837706abfa3e493f3550236efc2c14bd6b24650232f9107db50a944abf8b2f"
 
+  bottle do
+    root_url "http://qgis.dakotacarto.com/bottles"
+    sha256 "ce6355acacb64c0af3762ff22c6b44438279ed654330e8ca0b3dd59e20ae60ca" => :sierra
+  end
+
   depends_on "mysql" => :build # adds openssl
   depends_on "gdal2"
 
