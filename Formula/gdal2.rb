@@ -181,6 +181,7 @@ class Gdal2 < Formula
       sde
       rasdaman
       sosi
+      podofo
     ]
     args.concat unsupported_backends.map { |b| "--without-" + b } if build.without? "unsupported"
 
