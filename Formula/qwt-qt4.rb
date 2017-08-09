@@ -46,19 +46,6 @@ class QwtQt4 < Formula
     system "qmake", *args
     system "make"
     system "make", "install"
-
-    post_install
-  end
-
-  def post_install
-    # do symlinking of keg-only here, since `brew doctor` complains about it
-    # and user may need to re-link again after following suggestion to unlink
-    if build.with? "plugin"
-      dsubpth = "qt-4/plugins/designer"
-      dhppth = HOMEBREW_PREFIX/"lib/#{dsubpth}"
-      dhppth.mkpath
-      ln_sf "#{opt_lib.relative_path_from(dhppth)}/#{dsubpth}/libqwt_designer_plugin.dylib", "#{dhppth}/"
-    end
   end
 
   def caveats
@@ -68,7 +55,14 @@ class QwtQt4 < Formula
       s += <<-EOS.undent
         The qwtmathml library contains code of the MML Widget from the Qt solutions package.
         Beside the Qwt license you also have to take care of its license:
-        #{opt_prefix}/qtmmlwidget-license
+          #{opt_prefix}/qtmmlwidget-license
+      EOS
+    end
+
+    if build.with? "plugin"
+      s += <<-EOS.undent
+        Qt Designer plugin is not installed, but available at:
+          #{opt_lib}/qt-4/plugins/designer/libqwt_designer_plugin.dylib
       EOS
     end
 
