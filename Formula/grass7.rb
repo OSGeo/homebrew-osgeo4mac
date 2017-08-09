@@ -6,18 +6,18 @@ class Grass7 < Formula
   homepage "http://grass.osgeo.org/"
 
   stable do
-    url "https://grass.osgeo.org/grass72/source/grass-7.2.0.tar.gz"
-    sha256 "f0bc0c3cfccc98330ce01547bd86d8281f93f05a45b6115eb33044a07cf70750"
+    url "https://grass.osgeo.org/grass72/source/grass-7.2.1.tar.gz"
+    sha256 "4bccf6676bb3546fb4de0a20d79316666abee56b92cafc96e8e8563cc07b5a3d"
 
     # Patches to keep files from being installed outside of the prefix.
     # Remove lines from Makefile that try to install to /Library/Documentation.
     patch :DATA
   end
 
-  bottle do
-    root_url "http://qgis.dakotacarto.com/bottles"
-    sha256 "42f05ae9cda0c537da48c3494ebc0c430369ec08c7dc2d78f728460ce9dd9e5e" => :sierra
-  end
+  # bottle do
+  #   root_url "http://qgis.dakotacarto.com/bottles"
+  #   sha256 "42f05ae9cda0c537da48c3494ebc0c430369ec08c7dc2d78f728460ce9dd9e5e" => :sierra
+  # end
 
   option "without-gui", "Build without WxPython interface. Command line tools still available."
   option "with-gdal-1", "Build with GDAL/OGR v1.x instead of v2.x"
@@ -161,10 +161,12 @@ class Grass7 < Formula
     # link so settings in external apps don't need updated on grass version bump
     # in QGIS Processing options, GRASS folder = HOMEBREW_PREFIX/opt/grass7/grass-base
     ln_sf "grass-#{version}", prefix/"grass-base"
+    # ensure python2 is used
+    bin.env_script_all_files(libexec/"bin", :GRASS_PYTHON => "python2")
   end
 
   def formula_site_packages(f)
-    `python -c "import os, sys, site; sp1 = list(sys.path); site.addsitedir('#{Formula[f].opt_lib}/python2.7/site-packages'); print(os.pathsep.join([x for x in sys.path if x not in sp1]))"`.strip
+    `python2 -c "import os, sys, site; sp1 = list(sys.path); site.addsitedir('#{Formula[f].opt_lib}/python2.7/site-packages'); print(os.pathsep.join([x for x in sys.path if x not in sp1]))"`.strip
   end
 
   def caveats
