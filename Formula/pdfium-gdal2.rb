@@ -6,11 +6,11 @@ class PdfiumGdal2 < Formula
       :revision => "b5009c4df5aa4ff923ede1c5deba1aa4be43199b"
   version "0.0.1"
 
-  # bottle do
-  #   root_url "http://qgis.dakotacarto.com/bottles"
-  #   cellar :any_skip_relocation
-  #   sha256 "" => :sierra
-  # end
+  bottle do
+    root_url "http://qgis.dakotacarto.com/bottles"
+    cellar :any_skip_relocation
+    sha256 "fe5fdc234a1c6486bd3d9d4a559574cdc4125462d4a1e04a2a42286e775b2c3c" => :sierra
+  end
 
   keg_only "newer version of pdfium may be installed"
 
