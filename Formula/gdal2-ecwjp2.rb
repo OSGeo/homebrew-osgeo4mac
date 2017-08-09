@@ -24,7 +24,7 @@ class Gdal2Ecwjp2 < Formula
 
     gdal_plugins = lib/gdal_plugins_subdirectory
     gdal_plugins.mkpath
-    #(HOMEBREW_PREFIX/"lib/#{gdal_plugins_subdirectory}").mkpath
+    # (HOMEBREW_PREFIX/"lib/#{gdal_plugins_subdirectory}").mkpath
 
     # cxx flags
     args = %W[-Iport -Igcore -Ifrmts -DFRMT_ecw -DECWSDK_VERSION=53 -Ifrmts/ecw -DDO_NOT_USE_DEBUG_BOOL
