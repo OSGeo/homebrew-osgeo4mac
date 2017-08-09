@@ -14,10 +14,10 @@ class Grass7 < Formula
     patch :DATA
   end
 
-  # bottle do
-  #   root_url "http://qgis.dakotacarto.com/bottles"
-  #   sha256 "42f05ae9cda0c537da48c3494ebc0c430369ec08c7dc2d78f728460ce9dd9e5e" => :sierra
-  # end
+  bottle do
+    root_url "http://qgis.dakotacarto.com/bottles"
+    sha256 "ee20af73325d1d3593c1f80297b4d1033c289390882a0d22689bed62b9b497c3" => :sierra
+  end
 
   option "without-gui", "Build without WxPython interface. Command line tools still available."
   option "with-gdal-1", "Build with GDAL/OGR v1.x instead of v2.x"
