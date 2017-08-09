@@ -6,12 +6,13 @@ class Pdfium < Formula
   url "https://pdfium.googlesource.com/pdfium.git",
       :branch => "chromium/#{ver}"
   version ver
+  revision 1
 
-  bottle do
-    root_url "http://qgis.dakotacarto.com/bottles"
-    cellar :any_skip_relocation
-    sha256 "8b7cb75edddfdc2335c6cfe5478cb78b3acfa668e103b27e18d018d366341d96" => :sierra
-  end
+  # bottle do
+  #   root_url "http://qgis.dakotacarto.com/bottles"
+  #   cellar :any_skip_relocation
+  #   sha256 "8b7cb75edddfdc2335c6cfe5478cb78b3acfa668e103b27e18d018d366341d96" => :sierra
+  # end
 
   depends_on :python => :build # gyp doesn't run under 2.6 or lower
 
@@ -75,6 +76,7 @@ class Pdfium < Formula
         pdf_enable_xfa=false
         pdf_enable_v8=false
         pdf_is_standalone=true
+        pdf_is_complete_lib=true
         is_component_build=false
         clang_use_chrome_plugins=false
         clang=false
@@ -88,7 +90,7 @@ class Pdfium < Formula
       # copy header files into a pdfium directory
       copy_file_and_dir_path("core/**/*.h", include/"pdfium")
       copy_file_and_dir_path("fpdfsdk/**/*.h", include/"pdfium")
-      copy_file_and_dir_path("public/**/*.h", include/"pdfium")
+      (include/"pdfium").install Dir["public/**/*.h"]
 
       # and 3rd party dependency headers
       (include/"pdfium/third_party/base/numerics").install Dir["third_party/base/numerics/*.h"]
