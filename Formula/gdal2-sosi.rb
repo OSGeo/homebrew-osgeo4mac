@@ -4,6 +4,12 @@ class Gdal2Sosi < Formula
   url "http://download.osgeo.org/gdal/2.2.1/gdal-2.2.1.tar.gz"
   sha256 "61837706abfa3e493f3550236efc2c14bd6b24650232f9107db50a944abf8b2f"
 
+  bottle do
+    root_url "http://qgis.dakotacarto.com/bottles"
+    cellar :any
+    sha256 "423d355c613332e5704a6ec16084c592c2dd5b9d1ff0546dd07dab0d13c91b3a" => :sierra
+  end
+
   depends_on "fyba"
   depends_on "gdal2"
 
