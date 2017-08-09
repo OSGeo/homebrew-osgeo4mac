@@ -5,10 +5,10 @@ class Qscintilla2Qt4 < Formula
   sha256 "98aab93d73b05635867c2fc757acb383b5856a0b416e3fd7659f1879996ddb7e"
   revision 2
 
-  # bottle do
-  #   root_url "http://qgis.dakotacarto.com/bottles"
-  #   sha256 "5db9b11fa02d09ba579c8df7a001c503c24cbddbead92e34c6accc081c2e1a0c" => :sierra
-  # end
+  bottle do
+    root_url "http://qgis.dakotacarto.com/bottles"
+    sha256 "439806ac04e3fc9174332f5725af02743216669ce13aa48f6b4ea6e743e7eb2f" => :sierra
+  end
 
   option "without-plugin", "Skip building the Qt Designer plugin"
   option "without-python", "Skip building the Python bindings"
