@@ -1,13 +1,13 @@
 class Gdal2 < Formula
   desc "GDAL: Geospatial Data Abstraction Library"
   homepage "http://www.gdal.org/"
-  url "http://download.osgeo.org/gdal/2.2.0/gdal-2.2.0.tar.gz"
-  sha256 "d06546a6e34b77566512a2559e9117402320dd9487de9aa95cb8a377815dc360"
+  url "http://download.osgeo.org/gdal/2.2.1/gdal-2.2.1.tar.gz"
+  sha256 "61837706abfa3e493f3550236efc2c14bd6b24650232f9107db50a944abf8b2f"
 
-  bottle do
-    root_url "http://qgis.dakotacarto.com/bottles"
-    sha256 "db8f421f6f0fa62769a26e76848c36d048d71bfc9b99014837130fef99bf7cd5" => :sierra
-  end
+  # bottle do
+  #   root_url "http://qgis.dakotacarto.com/bottles"
+  #   sha256 "db8f421f6f0fa62769a26e76848c36d048d71bfc9b99014837130fef99bf7cd5" => :sierra
+  # end
 
   head do
     url "https://svn.osgeo.org/gdal/trunk/gdal"
@@ -31,7 +31,7 @@ class Gdal2 < Formula
   option "with-libkml", "Build with Google's libkml driver (requires libkml-dev >= 1.3)"
   option "with-swig-java", "Build the swig java bindings"
   option "with-sfcgal", "Build with CGAL C++ wrapper support"
-  option "with-pdfium", "Build with PDFium support (non-Homebrew install required)"
+  option "with-podofo", "Build with PoDoFo support (in addition to Poppler support)"
 
   deprecated_option "enable-opencl" => "with-opencl"
   deprecated_option "enable-armadillo" => "with-armadillo"
@@ -55,13 +55,15 @@ class Gdal2 < Formula
   depends_on "postgresql" => :optional
   depends_on "mysql" => :optional
 
+  depends_on "podofo" => :optional
+
   depends_on "homebrew/science/armadillo" if build.with? "armadillo"
 
   depends_on "osgeo/osgeo4mac/libkml-dev" if build.with? "libkml"
 
   if build.with? "complete"
     # Raster libraries
-    depends_on "homebrew/science/netcdf" # Also brings in HDF5
+    depends_on "netcdf" # Also brings in HDF5
     depends_on "jasper"
     depends_on "webp"
     depends_on "homebrew/science/cfitsio"
@@ -77,7 +79,6 @@ class Gdal2 < Formula
     # Other libraries
     depends_on "xz" # get liblzma compression algorithm library from XZutils
     depends_on "poppler"
-    depends_on "podofo"
     depends_on "json-c"
   end
 
@@ -147,7 +148,7 @@ class Gdal2 < Formula
       epsilon
       webp
       openjpeg
-      podofo
+      poppler
     ]
     if build.with? "complete"
       supported_backends.delete "liblzma"
@@ -161,9 +162,7 @@ class Gdal2 < Formula
     # download or have no stable version in the Homebrew core that is
     # compatible with GDAL. Interested users will have to install such software
     # manually and most likely have to tweak the install routine.
-    #
-    # Podofo is disabled because Poppler provides the same functionality and
-    # then some.
+
     unsupported_backends = %w[
       gta
       ogdi
@@ -202,7 +201,13 @@ class Gdal2 < Formula
 
     args << "--without-gnm" if build.without? "gnm"
 
-    args << "--with-pdfium=yes" if build.with? "pdfium"
+    # Older pdfium (for gdal driver) is still built against libstdc++ and
+    #   causes the build to be built like that as well.
+    # See: https://github.com/rouault/pdfium
+    # Prefer loading it as a plugin
+    args << "--with-pdfium=no"
+
+    args << "--with-podofo=#{build.with?("podofo") ? Formula["podofo"].opt_prefix : "no"}"
 
     args << "--with-sfcgal=#{build.with?("sfcgal") ? HOMEBREW_PREFIX/"bin/sfcgal-config" : "no"}"
 
@@ -272,9 +277,6 @@ class Gdal2 < Formula
     # Add GNM headers for gdal2-python swig wrapping
     include.install Dir["gnm/**/*.h"] if build.with? "gnm"
 
-    # Create versioned plugins path for other formulae
-    (HOMEBREW_PREFIX/"lib/#{plugins_subdirectory}").mkpath
-
     if build.with? "swig-java"
       cd "swig/java" do
         inreplace "java.opt", "linux", "darwin"
@@ -292,6 +294,11 @@ class Gdal2 < Formula
     system "make", "install-man"
     # Clean up any stray doxygen files.
     Dir.glob("#{bin}/*.dox") { |p| rm p }
+  end
+
+  def post_install
+    # Create versioned plugins path for other formulae
+    (HOMEBREW_PREFIX/"lib/#{plugins_subdirectory}").mkpath
   end
 
   def caveats
