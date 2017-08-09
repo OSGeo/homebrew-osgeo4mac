@@ -8,11 +8,11 @@ class Pdfium < Formula
   version ver
   revision 1
 
-  # bottle do
-  #   root_url "http://qgis.dakotacarto.com/bottles"
-  #   cellar :any_skip_relocation
-  #   sha256 "8b7cb75edddfdc2335c6cfe5478cb78b3acfa668e103b27e18d018d366341d96" => :sierra
-  # end
+  bottle do
+    root_url "http://qgis.dakotacarto.com/bottles"
+    cellar :any_skip_relocation
+    sha256 "7529a9b9c0856ea9df9182c8801a47e4e9116217b81a3a4e9945eda390245fae" => :sierra
+  end
 
   depends_on :python => :build # gyp doesn't run under 2.6 or lower
 
