@@ -9,7 +9,7 @@ class QwtpolarQt4 < Formula
     sha256 "1e98ef9094e4e88737ebee0b1ab1c1a2c2a569f84b432c5bf9242ef9a0866b20" => :sierra
   end
 
-  keg_only "Newer Qt5-only version in homebrew-core"
+  keg_only "newer Qt5-only version in homebrew-core"
 
   option "with-examples", "Install source code for example apps"
   option "without-plugin", "Skip building the Qt Designer plugin"
@@ -55,19 +55,17 @@ class QwtpolarQt4 < Formula
     system "qmake", *args
     system "make"
     system "make", "install"
-
-    post_install
   end
 
-  def post_install
-    # do symlinking of keg-only here, since `brew doctor` complains about it
-    # and user may need to re-link again after following suggestion to unlink
+  def caveats
+    s = ""
     if build.with? "plugin"
-      dsubpth = "qt-4/plugins/designer"
-      dhppth = HOMEBREW_PREFIX/"lib/#{dsubpth}"
-      dhppth.mkpath
-      ln_sf "#{opt_lib.relative_path_from(dhppth)}/#{dsubpth}/libqwt_polar_designer_plugin.dylib", "#{dhppth}/"
+      s += <<-EOS.undent
+        Qt Designer plugin is not installed, but available at:
+          #{opt_lib}/qt-4/plugins/designer/libqwt_polar_designer_plugin.dylib
+      EOS
     end
+    s
   end
 
   test do
