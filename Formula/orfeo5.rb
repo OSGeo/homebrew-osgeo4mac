@@ -3,7 +3,7 @@ class Orfeo5 < Formula
   homepage "http://www.orfeo-toolbox.org/otb/"
   url "https://github.com/orfeotoolbox/OTB/archive/5.8.0.tar.gz"
   sha256 "3e6b6547b119ce5e9571475620db0d5dbe220a64f835b7f6acd93ac813bbaa4f"
-  revision 1
+  revision 2
 
   # bottle do
   #   root_url "http://qgis.dakotacarto.com/bottles"
@@ -20,7 +20,7 @@ class Orfeo5 < Formula
 
   # required
   depends_on "boost"
-  depends_on "homebrew/science/vtk"
+  depends_on "vtk"
   depends_on "homebrew/science/insighttoolkit"
   depends_on "libgeotiff"
   depends_on "libpng"
