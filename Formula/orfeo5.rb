@@ -5,10 +5,10 @@ class Orfeo5 < Formula
   sha256 "3e6b6547b119ce5e9571475620db0d5dbe220a64f835b7f6acd93ac813bbaa4f"
   revision 2
 
-  # bottle do
-  #   root_url "http://qgis.dakotacarto.com/bottles"
-  #   sha256 "8d6c674fe701351710df14d316f525741a816b2f8875c1c0224cb002b9b5eee3" => :sierra
-  # end
+  bottle do
+    root_url "http://qgis.dakotacarto.com/bottles"
+    sha256 "c041cd46a636e112c49c04db00c2a54d1164d57d63feb087dc058174649c856c" => :sierra
+  end
 
   option "without-monteverdi", "Build without Monteverdi and Mapla applications (Qt4 required)"
   option "with-iceviewer", "Build with ICE Viewer application (Qt4 and X11 required)"
