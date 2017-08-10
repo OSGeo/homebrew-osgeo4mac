@@ -29,6 +29,13 @@ brew tap homebrew/science || true
 
 brew update || brew update
 
+# Set up ccache
+brew install ccache
+export PATH="/usr/local/opt/ccache/libexec:$PATH"
+
+ccache -M 500M
+ccache -z
+
 for f in ${CHANGED_FORMULAE};do
   echo "Homebrew setup for changed formula ${f}..."
   deps=$(brew deps -1 --include-build ${f})

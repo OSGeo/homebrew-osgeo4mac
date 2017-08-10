@@ -5,6 +5,16 @@ osx_image: xcode8.1
 rvm: system
 sudo: required
 
+cache:
+  directories:
+    - $HOME/.ccache
+    - $HOME/Library/Caches/pip
+    - $HOME/Library/Caches/Homebrew
+    - /usr/local
+  timeout: 900
+before_cache:
+  - brew cleanup
+
 before_install:
   - export GH_USER=$(echo -n "${TRAVIS_REPO_SLUG}" | egrep -o '^[^/]+' | tr -d '\n')
   - export TRAVIS_COMMIT="$(git rev-parse --verify -q HEAD)"
@@ -23,7 +33,8 @@ before_install:
   - cd "${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}"
   - chmod -f 0644 ${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}/Formula/*.rb
   - export TRAVIS_BUILD_DIR="${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}"
-  - export HOMEBREW_DEVELOPER="1"
+  - export HOMEBREW_DEVELOPER=1
+  - export HOMEBREW_NO_AUTO_UPDATE=1
   - export HOMEBREW_PREFIX=$(brew --prefix)
   - ulimit -n 1024
   - ./travis/before_install.sh
@@ -34,7 +45,7 @@ install: ./travis/install.sh
 
 script: ./travis/script.sh
 
-#after_script: ./travis/after_script.sh
+after_script: ./travis/after_script.sh
 
 before_deploy: ./travis/before_deploy.sh
 
