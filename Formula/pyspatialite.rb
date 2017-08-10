@@ -19,11 +19,11 @@ class Pyspatialite < Formula
     end
   end
 
-  # bottle do
-  #   root_url "http://qgis.dakotacarto.com/bottles"
-  #   cellar :any
-  #   sha256 "5c541f3cc28d93ecc56f873e0931bd39904c7c0f011a86e442fa512297fd2da4" => :sierra
-  # end
+  bottle do
+    root_url "http://qgis.dakotacarto.com/bottles"
+    cellar :any
+    sha256 "ec55ca6b391698248bb0caca31aac13ad5441b632065ea8a9a0693d77b7d7565" => :sierra
+  end
 
   depends_on :python
   depends_on "geos"
