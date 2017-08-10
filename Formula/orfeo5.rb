@@ -14,7 +14,6 @@ class Orfeo5 < Formula
   option "with-iceviewer", "Build with ICE Viewer application (Qt4 and X11 required)"
   option "with-examples", "Compile and install various examples"
   option "with-java", "Enable Java support"
-  # option "with-patented", "Enable patented algorithms"
 
   depends_on "cmake" => :build
 
