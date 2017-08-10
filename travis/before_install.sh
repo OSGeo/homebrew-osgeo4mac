@@ -24,10 +24,8 @@ fi
 # Remove unneeded default formula installs provided by travis
 nix_f="
 carthage
-dirmngr
 gdal
 go
-libassuan
 libyaml
 md5deep
 mercurial
