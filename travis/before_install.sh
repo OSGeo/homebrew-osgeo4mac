@@ -21,20 +21,35 @@ if [ -n "${DEBUG_TRAVIS}" ];then
   brew list --versions
 fi
 
-# Remove default gdal provided by travis (we will replace it with gdal2)
-brew remove gdal || true
+# Remove unneeded default formula installs provided by travis
+nix_f="
+carthage
+dirmngr
+gdal
+go
+libassuan
+libyaml
+md5deep
+mercurial
+node
+tmate
+"
+
+for f in ${nix_f}; do
+  brew uninstall ${f} || true
+done
 
 # Add taps
 brew tap homebrew/science || true
 
 brew update || brew update
 
-# Set up ccache
-brew install ccache
-export PATH="/usr/local/opt/ccache/libexec:$PATH"
-
-ccache -M 500M
-ccache -z
+# Set up ccache (doesn't work with `brew install <formula>`)
+#brew install ccache
+#export PATH="/usr/local/opt/ccache/libexec:$PATH"
+#
+#ccache -M 500M
+#ccache -z
 
 for f in ${CHANGED_FORMULAE};do
   echo "Homebrew setup for changed formula ${f}..."

@@ -18,6 +18,8 @@
 set -e
 
 for f in ${CHANGED_FORMULAE};do
+  echo "Clearing any previously installed/cached formula ${f}..."
+  brew uninstall ${f} || true
   echo "Installing changed formula ${f}..."
   brew install --build-bottle ${TRAVIS_REPO_SLUG}/${f}&
   PID=$!

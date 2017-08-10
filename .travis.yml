@@ -7,9 +7,7 @@ sudo: required
 
 cache:
   directories:
-    - $HOME/.ccache
     - $HOME/Library/Caches/pip
-    - $HOME/Library/Caches/Homebrew
     - /usr/local
   timeout: 900
 before_cache:
