@@ -29,7 +29,7 @@ class TravisCacheSeed < Formula
   depends_on "glew"
   depends_on "glfw"
   # depends on "gnupg"
-  depends_on "gpg-agent"
+  # depends on "gpg-agent"
   depends_on "gpsbabel-qt4"
   depends_on "gsl"
   depends_on "homebrew/science/insighttoolkit"

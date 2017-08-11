@@ -1,6 +1,5 @@
 language: ruby
-rvm:
-  - 2.0
+rvm: system
 #language: python
 #python:
 #  - "2.7"
