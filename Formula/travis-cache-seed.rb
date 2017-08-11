@@ -62,7 +62,7 @@ class TravisCacheSeed < Formula
   depends_on "pyqt-qt4"
   depends_on "pyspatialite"
   depends_on "python"
-  depends_on "python3"
+  # depends on "python3"
   depends_on "qca-qt4"
   depends_on "qhull"
   depends_on "qjson-qt4"
