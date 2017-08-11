@@ -28,7 +28,7 @@ class TravisCacheSeed < Formula
   depends_on "git"
   depends_on "glew"
   depends_on "glfw"
-  depends_on "gnupg"
+  # depends on "gnupg"
   depends_on "gpg-agent"
   depends_on "gpsbabel-qt4"
   depends_on "gsl"
