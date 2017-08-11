@@ -56,3 +56,6 @@ for f in ${non_dep_f};do
 done
 
 brew cleanup
+
+# Let's see what's actually being cached
+brew list --versions

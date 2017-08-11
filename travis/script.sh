@@ -18,10 +18,10 @@
 set -e
 
 for f in ${CHANGED_FORMULAE};do
-  if [[ $(brew list --versions ${f}) ]]; then
-    echo "Clearing previously installed/cached formula ${f}..."
-    brew uninstall --force --ignore-dependencies ${f} || true
-  fi
+#  if [[ $(brew list --versions ${f}) ]]; then
+#    echo "Clearing previously installed/cached formula ${f}..."
+#    brew uninstall --force --ignore-dependencies ${f} || true
+#  fi
   echo "Installing changed formula ${f}..."
   brew install --build-bottle ${TRAVIS_REPO_SLUG}/${f}&
   PID=$!

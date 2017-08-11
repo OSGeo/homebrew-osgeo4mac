@@ -9,22 +9,22 @@ osx_image: xcode8.3
 sudo: required
 
 # /usr/local subdirs are Homebrew components
-cache:
-  directories:
-    - $HOME/Library/Caches/pip
-    - /usr/local/Cellar
-    - /usr/local/Frameworks
-    - /usr/local/Homebrew
-    - /usr/local/bin
-    - /usr/local/etc
-    - /usr/local/include
-    - /usr/local/lib
-    - /usr/local/opt
-    - /usr/local/share
-    - /usr/local/var
-  timeout: 900
-before_cache:
-  - ./travis/before_cache.sh
+#cache:
+#  directories:
+#    - $HOME/Library/Caches/pip
+#    - /usr/local/Cellar
+#    - /usr/local/Frameworks
+#    - /usr/local/Homebrew
+#    - /usr/local/bin
+#    - /usr/local/etc
+#    - /usr/local/include
+#    - /usr/local/lib
+#    - /usr/local/opt
+#    - /usr/local/share
+#    - /usr/local/var
+#  timeout: 900
+#before_cache:
+#  - ./travis/before_cache.sh
 
 before_install:
   - export GH_USER=$(echo -n "${TRAVIS_REPO_SLUG}" | egrep -o '^[^/]+' | tr -d '\n')
