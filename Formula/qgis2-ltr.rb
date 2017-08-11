@@ -4,13 +4,12 @@ require File.expand_path("../../Requirements/qgis_requirements",
 class Qgis2Ltr < Formula
   desc "Open Source Geographic Information System"
   homepage "https://www.qgis.org"
-  revision 1
 
   head "https://github.com/qgis/QGIS.git", :branch => "release-2_14"
 
   stable do
-    url "https://github.com/qgis/QGIS/archive/final-2_14_14.tar.gz"
-    sha256 "9e992b5e34c5595d78d969e77ce9446b57f19251d33ba743513511a3ee4ad5b8"
+    url "https://github.com/qgis/QGIS/archive/final-2_14_17.tar.gz"
+    sha256 "66789aece730a37ef359f2bd624c15a5a28b4bb1543bbf66148d69adf39c6cf9"
 
     # patches that represent all backports to release-2_14 branch, since release tag
     # see: https://github.com/qgis/QGIS/commits/release-2_14
@@ -21,16 +20,14 @@ class Qgis2Ltr < Formula
     # end
   end
 
-  bottle do
-    root_url "http://qgis.dakotacarto.com/bottles"
-    sha256 "b4cf7bf042e8dee40e06976568ec8e5180a1dd088263e23637a6e9b1ac80c9d7" => :sierra
-  end
+  # bottle do
+  #   root_url "http://qgis.dakotacarto.com/bottles"
+  #   sha256 "b4cf7bf042e8dee40e06976568ec8e5180a1dd088263e23637a6e9b1ac80c9d7" => :sierra
+  # end
 
   def pour_bottle?
     brewed_python?
   end
-
-  keg_only "to allow for multiple QGIS installs"
 
   option "with-isolation", "Isolate .app's environment to HOMEBREW_PREFIX, to coexist with other QGIS installs"
   option "without-debug", "Disable debug build, which outputs info to system.log or console"
@@ -48,15 +45,15 @@ class Qgis2Ltr < Formula
   option "with-qspatialite", "Build QSpatialite Qt database driver"
   option "with-api-docs", "Build the API documentation with Doxygen and Graphviz"
 
-  depends_on UnlinkedQGIS2
+  # depends on UnlinkedQGIS2
 
   # core qgis
   depends_on "cmake" => :build
   depends_on "bison" => :build
   depends_on "flex" => :build
   if build.with? "api-docs"
-    depends_on "graphviz" => [:build, "with-freetype"]
-    depends_on "doxygen" => [:build, "with-dot"] # with graphviz support
+    depends_on "graphviz" => :build
+    depends_on "doxygen" => :build
   end
   depends_on (build.with?("isolation") || MacOS.version < :lion) ? "python" : :python
   depends_on "qt-4"
@@ -86,14 +83,15 @@ class Qgis2Ltr < Formula
   # TODO: add MSSQL third-party support formula?, :optional
 
   # core plugins (c++ and python)
-  if build.with?("grass") || Formula["grass7"].opt_prefix.exist?
+  if build.with?("grass") || (HOMEBREW_PREFIX/"opt/grass7").exist?
     depends_on "grass7"
     depends_on "gettext"
   end
 
   if build.with? "globe"
     # this is pretty borked with OS X >= 10.10+
-    depends_on "open-scene-graph" => ["with-qt"]
+    # depends on "open-scene-graph" => ["with-qt"]
+    depends_on "open-scene-graph"
     depends_on "homebrew/science/osgearth"
   end
   depends_on "gpsbabel-qt4" => :optional
@@ -106,7 +104,7 @@ class Qgis2Ltr < Formula
   # see `grass` above
   depends_on "grass6" => :optional
   depends_on "orfeo5@5.4" if build.with? "orfeo5"
-  depends_on "homebrew/science/r" => :optional
+  depends_on "r" => :optional
   depends_on "saga-gis-lts" => :optional
   # TODO: LASTools straight build (2 reporting tools), or via `wine` (10 tools)
   # TODO: Fusion from USFS (via `wine`?)
@@ -121,14 +119,23 @@ class Qgis2Ltr < Formula
     # Set bundling level back to 0 (the default in all versions prior to 1.8.0)
     # so that no time and energy is wasted copying the Qt frameworks into QGIS.
 
-    # Install custom widgets Designer plugin to prefix (symlinked in post_install)
+    # Install custom widgets Designer plugin to local qt-4 plugins prefix
     inreplace "src/customwidgets/CMakeLists.txt",
               "${QT_PLUGINS_DIR}/designer", lib_qt4/"plugins/designer".to_s
 
+    # Fix custom widgets designer module install path
+    # TODO: add for QtWebkit bindings and PYQT5_MOD_DIR in qgis-dev
+    inreplace "CMakeLists.txt",
+              "${PYQT4_MOD_DIR}", lib_qt4/"python2.7/site-packages/PyQt4".to_s
+
+    # Install qspatialite db plugin to local qt-4 plugins prefix
+    if build.with? "qspatialite"
+      inreplace "src/providers/spatialite/qspatialite/CMakeLists.txt",
+                "${QT_PLUGINS_DIR}/sqldrivers", lib_qt4/"plugins/sqldrivers".to_s
+    end
+
     qwt_fw = Formula["qwt-qt4"].opt_lib/"qwt.framework"
     qwtpolar_fw = Formula["qwtpolar-qt4"].opt_lib/"qwtpolar.framework"
-    dev_fw = lib/"qgis-dev"
-    dev_fw.mkpath
     qsci_opt = Formula["qscintilla2-qt4"].opt_prefix
     args = std_cmake_args
     args << "-DCMAKE_BUILD_TYPE=RelWithDebInfo" if build.with? "debug" # override
@@ -142,14 +149,13 @@ class Qgis2Ltr < Formula
       -DQWT_LIBRARY=#{qwt_fw}/qwt
       -DQWTPOLAR_INCLUDE_DIR=#{qwtpolar_fw}/Headers
       -DQWTPOLAR_LIBRARY=#{qwtpolar_fw}/qwtpolar
-      -DQSCINTILLA_INCLUDE_DIR=#{qsci_opt}/include
-      -DQSCINTILLA_LIBRARY=#{qsci_opt}/lib/libqscintilla2.dylib
-      -DQSCI_SIP_DIR=#{qsci_opt}/share/sip
+      -DQSCINTILLA_INCLUDE_DIR=#{qsci_opt}/libexec/include
+      -DQSCINTILLA_LIBRARY=#{qsci_opt}/libexec/lib/libqscintilla2.dylib
+      -DQSCI_SIP_DIR=#{qsci_opt}/share/sip-qt4
       -DWITH_QWTPOLAR=TRUE
       -DWITH_INTERNAL_QWTPOLAR=FALSE
       -DQGIS_MACAPP_BUNDLE=0
-      -DQGIS_MACAPP_DEV_PREFIX='#{dev_fw}'
-      -DQGIS_MACAPP_INSTALL_DEV=TRUE
+      -DQGIS_MACAPP_INSTALL_DEV=FALSE
       -DWITH_QSCIAPI=FALSE
       -DWITH_STAGED_PLUGINS=TRUE
       -DWITH_GRASS=FALSE
@@ -172,8 +178,8 @@ class Qgis2Ltr < Formula
       args << "-DSQLITE3_INCLUDE_DIR=#{Formula["sqlite"].opt_include}"
     end
 
-    args << "-DPYTHON_EXECUTABLE='#{`python -c "import sys; print(sys.executable)"`.chomp}'"
-    args << "-DPYTHON_CUSTOM_FRAMEWORK='#{`python -c "import sys; print(sys.prefix)"`.chomp}'"
+    args << "-DPYTHON_EXECUTABLE='#{`python2 -c "import sys; print(sys.executable)"`.chomp}'"
+    args << "-DPYTHON_CUSTOM_FRAMEWORK='#{`python2 -c "import sys; print(sys.prefix)"`.chomp}'"
 
     # find git revision for HEAD build
     if build.head? && File.exist?("#{cached_download}/.git/index")
@@ -250,11 +256,29 @@ class Qgis2Ltr < Formula
       system "make", "install"
     end
 
+    # Fixup some errant lib linking
+    # TODO: fix upstream in CMake
+    dy_libs = [lib_qt4/"plugins/designer/libqgis_customwidgets.dylib"]
+    dy_libs << lib_qt4/"plugins/sqldrivers/libqsqlspatialite.dylib" if build.with? "qspatialite"
+    dy_libs.each do |dy_lib|
+      MachO::Tools.dylibs(dy_lib.to_s).each do |i_n|
+        %w[core gui].each do |f_n|
+          sufx = i_n[/(qgis_#{f_n}\.framework.*)/, 1]
+          next if sufx.nil?
+          i_n_to = "#{opt_prefix}/QGIS.app/Contents/Frameworks/#{sufx}"
+          puts "Changing install name #{i_n} to #{i_n_to} in #{dy_lib}" if ARGV.debug?
+          dy_lib.ensure_writable do
+            MachO::Tools.change_install_name(dy_lib.to_s, i_n.to_s, i_n_to, :strict => false)
+          end
+        end
+      end
+    end
+
     # Update .app's bundle identifier, so Kyngchaos.com installer doesn't get confused
     inreplace prefix/"QGIS.app/Contents/Info.plist",
               "org.qgis.qgis2", "org.qgis.qgis2-hb#{build.head? ? "-dev" : ""}"
 
-    py_lib = lib/"python2.7/site-packages"
+    py_lib = libexec/"python2.7/site-packages"
     py_lib.mkpath
     ln_s "../../../QGIS.app/Contents/Resources/python/qgis", py_lib/"qgis"
 
@@ -281,18 +305,6 @@ class Qgis2Ltr < Formula
     # having this in `post_intsall` allows it to be individually run *after* installation with:
     #    `brew postinstall -v <formula-name>`
 
-    # symlink custom widgets plugin
-    dsubpth = "plugins/designer"
-    dhppth = hb_lib_qt4/dsubpth
-    dhppth.mkpath
-    rm_f dhppth/"libqgis_customwidgets.#{version}.dylib"
-    rm_f dhppth/"libqgis_customwidgets.dylib"
-    ln_sf "#{opt_lib_qt4.relative_path_from(dhppth)}/#{dsubpth}/libqgis_customwidgets.#{version}.dylib", "#{dhppth}/"
-    # don't add non-versioned base symlink, as it will conflict with other QGIS installs
-    # cd lib_qt4/subpth do
-    #   Dir["libqgis_customwidgets*"].each { |f| ln_sf "#{opt_lib_qt4.relative_path_from(dhppth)}/#{dsubpth}/#{f}", "#{dhppth}/" }
-    # end
-
     app = prefix/"QGIS.app"
     tab = Tab.for_formula(self)
     opts = tab.used_options
@@ -315,8 +327,8 @@ class Qgis2Ltr < Formula
       pths = pths.insert(0, HOMEBREW_PREFIX/"bin")
     end
 
-    # set qt-4's then install's lib/python2.7/site-packages first, so app will work if unlinked
-    pypths = %W[#{python_qt4_site_packages} #{opt_lib}/python2.7/site-packages #{pypth}]
+    # set qt-4's then install's libexec/python2.7/site-packages first, so app will work if unlinked
+    pypths = %W[#{python_qt4_site_packages} #{opt_libexec}/python2.7/site-packages #{pypth}]
 
     unless opts.include?("with-gdal-1")
       pths.insert(0, Formula["gdal2"].opt_bin.to_s)
@@ -327,7 +339,7 @@ class Qgis2Ltr < Formula
     # prepend qt-4 based utils to PATH (reverse order)
     pths.insert(0, Formula["qca-qt4"].opt_bin.to_s)
     pths.insert(0, Formula["pyqt-qt4"].opt_bin.to_s)
-    pths.insert(0, Formula["sip-qt4"].opt_bin.to_s)
+    pths.insert(0, "#{Formula["sip-qt4"].opt_libexec}/bin")
     pths.insert(0, Formula["qt-4"].opt_bin.to_s)
 
     if opts.include?("with-gpsbabel-qt4")
@@ -467,12 +479,7 @@ class Qgis2Ltr < Formula
             bundle they are not.
 
       For standalone Python development, set the following environment variable:
-        export PYTHONPATH=#{python_qt4_site_packages}:#{python_site_packages}:$PYTHONPATH
-
-      Developer frameworks are installed in:
-        #{opt_lib}/qgis-dev
-        NOTE: not symlinked to HOMEBREW_PREFIX/Frameworks, which affects isolation.
-              Use dyld -F option in CPPFLAGS/LDFLAGS when building other software.
+        export PYTHONPATH=#{libexec/"python2.7/site-packages"}:#{python_qt4_site_packages}:#{python_site_packages}:$PYTHONPATH
 
     EOS
 
@@ -561,7 +568,7 @@ class Qgis2Ltr < Formula
 
   def python_exec
     if brewed_python?
-      brewed_python_framework/"bin/python"
+      brewed_python_framework/"bin/python2"
     else
       which("python")
     end
