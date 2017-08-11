@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ###########################################################################
-#    homebrew-qgisdev travis ci - before_install.sh
+#    homebrew-osgeo4mac travis ci - before_install.sh
 #    ---------------------
 #    Date                 : Dec 2016
 #    Copyright            : (C) 2016 by Boundless Spatial, Inc.
@@ -21,14 +21,14 @@ if [ -n "${DEBUG_TRAVIS}" ];then
   brew list --versions
 fi
 
-# Remove unneeded default formula installs provided by travis
+# Forcibly remove all versions of unneeded default formula provided by travis or pre-cached
 nix_f="
 gdal
 mercurial
 "
 
 for f in ${nix_f}; do
-  brew uninstall ${f} || true
+  brew uninstall --force --ignore-dependencies ${f} || true
 done
 
 # Add taps

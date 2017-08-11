@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ###########################################################################
-#    homebrew-qgisdev travis ci - script.sh
+#    homebrew-osgeo4mac travis ci - script.sh
 #    ---------------------
 #    Date                 : Dec 2016
 #    Copyright            : (C) 2016 by Boundless Spatial, Inc.
@@ -18,8 +18,10 @@
 set -e
 
 for f in ${CHANGED_FORMULAE};do
-  echo "Clearing any previously installed/cached formula ${f}..."
-  brew uninstall ${f} || true
+  if [[ $(brew list --versions ${f}) ]]; then
+    echo "Clearing previously installed/cached formula ${f}..."
+    brew uninstall --force --ignore-dependencies ${f} || true
+  fi
   echo "Installing changed formula ${f}..."
   brew install --build-bottle ${TRAVIS_REPO_SLUG}/${f}&
   PID=$!

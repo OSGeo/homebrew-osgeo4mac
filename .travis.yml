@@ -24,8 +24,7 @@ cache:
     - /usr/local/var
   timeout: 900
 before_cache:
-  - rm -Rf $HOME/Library/Caches/Homebrew/*
-  - brew cleanup
+  - ./travis/before_cache.sh
 
 before_install:
   - export GH_USER=$(echo -n "${TRAVIS_REPO_SLUG}" | egrep -o '^[^/]+' | tr -d '\n')

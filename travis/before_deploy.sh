@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ###########################################################################
-#    homebrew-qgisdev travis ci - before_deploy.sh
+#    homebrew-osgeo4mac travis ci - before_deploy.sh
 #    ---------------------
 #    Date                 : Dec 2016
 #    Copyright            : (C) 2016 by Boundless Spatial, Inc.

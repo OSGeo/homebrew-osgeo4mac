@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ###########################################################################
-#    homebrew-qgisdev travis ci - after_script.sh
+#    homebrew-osgeo4mac travis ci - after_script.sh
 #    ---------------------
 #    Date                 : Dec 2016
 #    Copyright            : (C) 2016 by Boundless Spatial, Inc.

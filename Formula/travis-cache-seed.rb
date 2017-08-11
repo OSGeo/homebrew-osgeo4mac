@@ -25,14 +25,14 @@ class TravisCacheSeed < Formula
   depends_on "geos"
   depends_on "gettext"
   depends_on "ghostscript"
-  depends_on "git"
+  # depends on "git"
   depends_on "glew"
   depends_on "glfw"
   # depends on "gnupg"
   # depends on "gpg-agent"
   depends_on "gpsbabel-qt4"
   depends_on "gsl"
-  depends_on "homebrew/science/insighttoolkit"
+  # depends on "homebrew/science/insighttoolkit"
   # depends on "homebrew/science/osgearth"
   depends_on "jpeg"
   depends_on "lbzip2"
@@ -55,7 +55,7 @@ class TravisCacheSeed < Formula
   depends_on "ossim"
   depends_on "pcre"
   depends_on "pkg-config" => :build
-  depends_on "postgis"
+  # depends on "postgis" # creates dep on gdal 1.x
   depends_on "postgresql"
   depends_on "proj"
   depends_on "pyenv"
@@ -78,9 +78,9 @@ class TravisCacheSeed < Formula
   depends_on "swig" => :build
   depends_on "tinyxml"
   depends_on "unixodbc"
-  depends_on "vtk"
-  depends_on "wxmac"
-  depends_on "wxpython"
+  # depends on "vtk"
+  # depends on "wxmac"
+  # depends on "wxpython"
   depends_on "zlib"
 
   def install
