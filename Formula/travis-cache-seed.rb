@@ -36,7 +36,7 @@ class TravisCacheSeed < Formula
   # depends on "homebrew/science/osgearth"
   depends_on "jpeg"
   depends_on "lbzip2"
-  depends_on "libevent"
+  # depends on "libevent"
   depends_on "libgeotiff"
   depends_on "libgpg-error"
   depends_on "libharu"

@@ -23,14 +23,8 @@ fi
 
 # Remove unneeded default formula installs provided by travis
 nix_f="
-carthage
 gdal
-go
-libyaml
-md5deep
 mercurial
-node
-tmate
 "
 
 for f in ${nix_f}; do
