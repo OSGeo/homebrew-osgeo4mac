@@ -48,7 +48,7 @@ class TravisCacheSeed < Formula
   depends_on "libtool" => :build
   depends_on "minizip"
   depends_on "muparser"
-  depends_on "mysql"
+  # depends on "mysql"
   # depends on "numpy"
   depends_on "open-scene-graph"
   depends_on "openssl"
