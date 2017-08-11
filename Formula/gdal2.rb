@@ -66,7 +66,7 @@ class Gdal2 < Formula
     depends_on "netcdf" # Also brings in HDF5
     depends_on "jasper"
     depends_on "webp"
-    depends_on "homebrew/science/cfitsio"
+    depends_on "cfitsio"
     depends_on "epsilon"
     depends_on "libdap"
     depends_on "libxml2"
@@ -248,6 +248,18 @@ class Gdal2 < Formula
          #define jas_uchar unsigned char
          #endif
         EOS
+      end
+
+      # Temp fix for GDAL 2.2.1 not supporting new OpenJPEG 2.2, which is backwards compatible
+      # TODO: remove on GDAL 2.2.2 or whenever OpenJPEG 2.2 is supported
+      opj_ver_list = Formula["openjpeg"].version.to_s.split(".")
+      opj_ver = "#{opj_ver_list[0]}.#{opj_ver_list[1]}"
+      if opj_ver == "2.2"
+        inreplace "configure" do |s|
+          s.gsub! "openjpeg-2.1", "openjpeg-2.2"
+          s.gsub! "OPENJPEG_VERSION=20100", "OPENJPEG_VERSION=20200"
+        end
+        inreplace "frmts/openjpeg/openjpegdataset.cpp", "openjpeg-2.1", "openjpeg-2.2"
       end
     end
 
