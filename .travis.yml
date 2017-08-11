@@ -11,6 +11,7 @@ cache:
     - /usr/local
   timeout: 900
 before_cache:
+  - rm -Rf $HOME/Library/Caches/Homebrew/*
   - brew cleanup
 
 before_install:

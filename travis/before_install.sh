@@ -39,6 +39,10 @@ done
 
 # Add taps
 brew tap homebrew/science || true
+brew tap caskroom/cask || true
+
+# Keeps gcc from being installed
+brew cask uninstall oclint || true
 
 brew update || brew update
 
