@@ -20,6 +20,11 @@ class Qt5Webkit < Formula
     sha256 "a1831140aa624f9b7ef418f6507c43b2c074b87e5456f0fc18ce99d3ebc7e054" => :sierra
   end
 
+  bottle do
+    root_url "https://github.com/OSGeo/homebrew-osgeo4mac/releases/download/qt5-webkit-5.8.0_1"
+    sha256 "afb17b4532b3fa1885739ae9f57f2783546f39600330c76a90d20fdbf24a80aa" => :el_capitan
+  end
+
   keg_only "Qt5 is keg-only"
 
   depends_on NoQt5WebKitAlreadyRequirement
