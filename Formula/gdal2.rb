@@ -5,10 +5,10 @@ class Gdal2 < Formula
   sha256 "61837706abfa3e493f3550236efc2c14bd6b24650232f9107db50a944abf8b2f"
   revision 1
 
-  # bottle do
-  #   root_url "http://qgis.dakotacarto.com/bottles"
-  #   sha256 "63d30c9d78fdaa0c6ac52c3c3f5b5370d5f66dad426fbc04fd8e91baadca4d68" => :sierra
-  # end
+  bottle do
+    root_url "http://qgis.dakotacarto.com/bottles"
+    sha256 "8e362e9715a4437581a31459144bd0e99910a01b547e910b5a0258775e374ff1" => :sierra
+  end
 
   head do
     url "https://svn.osgeo.org/gdal/trunk/gdal"
