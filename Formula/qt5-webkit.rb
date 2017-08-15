@@ -24,10 +24,10 @@ class Qt5Webkit < Formula
   url "https://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtwebkit-opensource-src-5.9.1.tar.xz"
   sha256 "28a560becd800a4229bfac317c2e5407cd3cc95308bc4c3ca90dba2577b052cf"
 
-  # bottle do
-  #   root_url "http://qgis.dakotacarto.com/bottles"
-  #   sha256 "a1831140aa624f9b7ef418f6507c43b2c074b87e5456f0fc18ce99d3ebc7e054" => :sierra
-  # end
+  bottle do
+    root_url "http://qgis.dakotacarto.com/bottles"
+    sha256 "19f0e8d90c876ad81a021af8ad07159e42d3434aa101e9fc17318a65cb7e685b" => :sierra
+  end
 
   keg_only "because Qt5 is keg-only"
 
