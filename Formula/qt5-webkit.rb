@@ -3,7 +3,17 @@ class NoQt5WebKitAlreadyRequirement < Requirement
   satisfy(:build_env => false) { !(Formula["qt5"].lib/"QtWebKit.framework").exist? }
 
   def message; <<-EOS.undent
-    Qt5 formula already has QtWebKit installed (e.g. built `--with-webkit``)
+    Qt5 formula already has QtWebKit installed (e.g. built `--with-webkit`)
+  EOS
+  end
+end
+
+class NoQt5WebKitSandboxRequirement < Requirement
+  fatal true
+  satisfy(:build_env => false) { ARGV.no_sandbox? }
+
+  def message; <<-EOS.undent
+    Must be built with `brew install --no-sandbox ...`, or install steps will fail.
   EOS
   end
 end
@@ -22,6 +32,7 @@ class Qt5Webkit < Formula
   keg_only "because Qt5 is keg-only"
 
   depends_on NoQt5WebKitAlreadyRequirement
+  depends_on NoQt5WebKitSandboxRequirement
   # depends on "pkg-config" => :build
 
   depends_on "qt"
@@ -53,6 +64,7 @@ class Qt5Webkit < Formula
       system "make"
       ENV.deparallelize
       # just let it install to qt5 formula prefix
+      # NOTE: this violates sandboxing, so --no-sandbox during install required
       system "make", "install"
     end
 
@@ -120,6 +132,12 @@ class Qt5Webkit < Formula
         end
       end
     end
+  end
+
+  def caveats; <<-EOS.undent
+    Must be built with `brew install --no-sandbox ...`, or install steps will fail.
+
+  EOS
   end
 
   test do
@@ -202,7 +220,7 @@ class Qt5Webkit < Formula
       int main(int argc, char *argv[])
       {
         QApplication app(argc, argv);
-        Client c("#{testpath/"test.html"}", app.instance());
+        Client c("file://#{testpath/"test.html"}", app.instance());
         qDebug() << "Running application";
         QTimer::singleShot(1000, &c, SLOT(loadUrl()));
         return app.exec();
