@@ -10,22 +10,21 @@ end
 
 class Qt5Webkit < Formula
   desc "QtWebit module for Qt5"
-  homepage "https://download.qt.io/community_releases/5.8/5.8.0-final/"
-  url "https://download.qt.io/community_releases/5.8/5.8.0-final/qtwebkit-opensource-src-5.8.0.tar.xz"
-  sha256 "79ae8660086bf92ffb0008b17566270e6477c8fa0daf9bb3ac29404fb5911bec"
-  revision 1
+  homepage "https://download.qt.io/official_releases/qt/5.9"
+  url "https://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtwebkit-opensource-src-5.9.1.tar.xz"
+  sha256 "28a560becd800a4229bfac317c2e5407cd3cc95308bc4c3ca90dba2577b052cf"
 
-  bottle do
-    root_url "http://qgis.dakotacarto.com/bottles"
-    sha256 "a1831140aa624f9b7ef418f6507c43b2c074b87e5456f0fc18ce99d3ebc7e054" => :sierra
-  end
+  # bottle do
+  #   root_url "http://qgis.dakotacarto.com/bottles"
+  #   sha256 "a1831140aa624f9b7ef418f6507c43b2c074b87e5456f0fc18ce99d3ebc7e054" => :sierra
+  # end
 
-  keg_only "Qt5 is keg-only"
+  keg_only "because Qt5 is keg-only"
 
   depends_on NoQt5WebKitAlreadyRequirement
   # depends on "pkg-config" => :build
 
-  depends_on "qt5"
+  depends_on "qt"
   # TODO: main qt5 formula does not use these, should we here?
   #       the .pro setup seems to opportunistically check for them,
   #       but depending upon the formulae does not help find them
@@ -47,8 +46,10 @@ class Qt5Webkit < Formula
     end
     args = %W[-config release -spec #{spec}]
 
+    qt5 = Formula["qt"]
+
     mkdir "build" do
-      system Formula["qt5"].bin/"qmake", "../WebKit.pro", *args
+      system qt5.bin/"qmake", "../WebKit.pro", *args
       system "make"
       ENV.deparallelize
       # just let it install to qt5 formula prefix
@@ -64,7 +65,6 @@ class Qt5Webkit < Formula
     (prefix/"qml").mkpath
     libexec.mkpath
 
-    qt5 = Formula["qt5"]
     mv Dir["#{qt5.opt_lib}/QtWebKit*.framework"], "#{lib}/"
     mv Dir["#{qt5.opt_lib}/cmake/Qt5WebKit*"], "#{lib}/cmake/"
     mv Dir["#{qt5.opt_lib}/pkgconfig/Qt5WebKit*.pc"], "#{lib}/pkgconfig/"
@@ -97,10 +97,6 @@ class Qt5Webkit < Formula
         s.gsub! "$$QT_MODULE_LIB_BASE", opt_lib.to_s
         next if pri.end_with? "_private.pri"
         s.gsub! "$$QT_MODULE_BIN_BASE", opt_bin.to_s
-        s.gsub! "$$QT_MODULE_LIBEXEC_BASE", opt_libexec.to_s
-        s.gsub! "$$QT_MODULE_PLUGIN_BASE", (opt_prefix/"plugins/webkit").to_s
-        # s.gsub! "$$QT_MODULE_IMPORT_BASE", (opt_prefix/"imports").to_s
-        s.gsub! "$$QT_MODULE_QML_BASE", (opt_prefix/"qml").to_s
       end
     end
 
@@ -111,14 +107,16 @@ class Qt5Webkit < Formula
       prefix/"qml/QtWebKit/libqmlwebkitplugin.dylib",
       prefix/"qml/QtWebKit/experimental/libqmlwebkitexperimentalplugin.dylib",
     ]
-    qt5 = Formula["qt5"]
     qt5_prefix = "#{HOMEBREW_CELLAR}/#{qt5.name}/#{qt5.installed_version}"
     machos.each do |m|
       dylibs = m.dynamically_linked_libraries
       m.ensure_writable do
         dylibs.each do |d|
           next unless d.to_s =~ %r{^#{qt5_prefix}/lib/QtWebKit(Widgets)?\.framework}
-          system "install_name_tool", "-change", d, d.sub("#{qt5_prefix}/lib", opt_lib), m.to_s
+          MachO::Tools.change_install_name(m.to_s,
+                                           d.to_s,
+                                           d.sub("#{qt5_prefix}/lib", opt_lib),
+                                           :strict => false)
         end
       end
     end
@@ -127,6 +125,7 @@ class Qt5Webkit < Formula
   test do
     (testpath/"hello.pro").write <<-EOS.undent
       QT        += core webkitwidgets
+      QT        -= gui
       TARGET     = hello
       CONFIG    += console
       CONFIG    -= app_bundle
@@ -203,11 +202,19 @@ class Qt5Webkit < Formula
       int main(int argc, char *argv[])
       {
         QApplication app(argc, argv);
-        Client c("http://www.example.com/", app.instance());
+        Client c("#{testpath/"test.html"}", app.instance());
         qDebug() << "Running application";
         QTimer::singleShot(1000, &c, SLOT(loadUrl()));
         return app.exec();
       }
+    EOS
+
+    (testpath/"test.html").write <<-EOS.undent
+      <!DOCTYPE html>
+      <html lang="en">
+      <head><meta charset="utf-8" /><title>My title</title></head>
+      <body>Body content</body>
+      </html>
     EOS
 
     cd testpath do
