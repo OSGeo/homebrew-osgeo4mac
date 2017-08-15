@@ -5,6 +5,7 @@ class Qgis2 < Formula
   desc "Open Source Geographic Information System"
   homepage "https://www.qgis.org"
 
+  revision 1
   head "https://github.com/qgis/QGIS.git", :branch => "release-2_18"
 
   stable do
