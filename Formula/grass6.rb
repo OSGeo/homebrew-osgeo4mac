@@ -16,10 +16,8 @@ class Grass6 < Formula
   end
 
   bottle do
-    # root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
-    # revision 1
-    # sha256 "13723d19221024073a0e781dddf3cbb9ab30e13a3b8d4d50c6eb61d0e60c347f" => :mavericks
-    # sha256 "f951bfe72e348529ebd8ee56f202872258ccd803cee472079222d68acfd70e9b" => :yosemite
+    root_url "http://qgis.dakotacarto.com/bottles"
+    sha256 "3b3257f5fcc7c3d4eb3997c658e8965fbdbda67f5068a6465eeeeea38c025134" => :sierra
   end
 
   option "without-gui", "Build without WxPython interface. Command line tools still available."
