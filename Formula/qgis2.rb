@@ -13,11 +13,12 @@ class Qgis2 < Formula
 
     # patches that represent all backports to release-2_18 branch, since release tag
     # see: https://github.com/qgis/QGIS/commits/release-2_18
-    # patch do
-    #   # thru commit ?, minus windows-formatted patches
-    #   url ""
-    #   sha256 ""
-    # end
+    patch do
+      # thru commit ?, minus windows-formatted patches
+      # (just commit https://github.com/qgis/QGIS/commit/5e1e441 for now)
+      url "https://gist.githubusercontent.com/dakcarto/cc7f7324b01cd71dc79aca58289cbfbe/raw/8e3c6b181fc156b92ebb2048873c8807d43b4220/release-2_18_patch1.diff"
+      sha256 "e8a6f8a66d7eabfefc680770bde38526b8d576f15be2ea6e43eb7a953c5a792c"
+    end
   end
 
   # bottle do
