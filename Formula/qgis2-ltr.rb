@@ -5,6 +5,7 @@ class Qgis2Ltr < Formula
   desc "Open Source Geographic Information System"
   homepage "https://www.qgis.org"
 
+  revision 1
   head "https://github.com/qgis/QGIS.git", :branch => "release-2_14"
 
   stable do
@@ -13,11 +14,12 @@ class Qgis2Ltr < Formula
 
     # patches that represent all backports to release-2_14 branch, since release tag
     # see: https://github.com/qgis/QGIS/commits/release-2_14
-    # patch do
-    #   # thru commit ?, minus windows-formatted patches
-    #   url ""
-    #   sha256 ""
-    # end
+    patch do
+      # thru commit ?, minus windows-formatted patches
+      # (just commit https://github.com/qgis/QGIS/commit/5746b9d for now)
+      url "https://gist.githubusercontent.com/dakcarto/15b047b3b775d5063e034ce74dc571ec/raw/11d7f591784f9e484163287c617e955b97aa9de7/release-2_14_patch1.diff"
+      sha256 "512dbd0d73d4f039fee2400ff847e4c5bc02b3b8e82cb3274c132796ad1cce38"
+    end
   end
 
   # bottle do
@@ -152,6 +154,7 @@ class Qgis2Ltr < Formula
       -DQSCINTILLA_INCLUDE_DIR=#{qsci_opt}/libexec/include
       -DQSCINTILLA_LIBRARY=#{qsci_opt}/libexec/lib/libqscintilla2.dylib
       -DQSCI_SIP_DIR=#{qsci_opt}/share/sip-qt4
+      -DSPATIALITE_INCLUDE_DIR=#{Formula["libspatialite"].opt_include}
       -DWITH_QWTPOLAR=TRUE
       -DWITH_INTERNAL_QWTPOLAR=FALSE
       -DQGIS_MACAPP_BUNDLE=0
@@ -174,7 +177,6 @@ class Qgis2Ltr < Formula
       args << "-DPROJ_INCLUDE_DIR=#{Formula["proj"].opt_include}"
       args << "-DQCA_INCLUDE_DIR=#{Formula["qca-qt4"].opt_lib}/qca.framework/Headers"
       args << "-DSPATIALINDEX_INCLUDE_DIR=#{Formula["spatialindex"].opt_include}/spatialindex"
-      args << "-DSPATIALITE_INCLUDE_DIR=#{Formula["libspatialite"].opt_include}"
       args << "-DSQLITE3_INCLUDE_DIR=#{Formula["sqlite"].opt_include}"
     end
 
