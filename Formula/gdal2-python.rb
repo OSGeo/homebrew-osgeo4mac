@@ -48,28 +48,29 @@ class Gdal2Python < Formula
   homepage "https://pypi.python.org/pypi/GDAL"
   url "http://download.osgeo.org/gdal/2.2.1/gdal-2.2.1.tar.gz"
   sha256 "61837706abfa3e493f3550236efc2c14bd6b24650232f9107db50a944abf8b2f"
+  revision 1
 
-  bottle do
-    root_url "http://qgis.dakotacarto.com/bottles"
-    sha256 "48e2e0328f635e17cfd4507ab6404e601c5c0e4336381f9bdd205e0de0c680b6" => :sierra
-  end
+  # bottle do
+  #   root_url "http://qgis.dakotacarto.com/bottles"
+  #   sha256 "48e2e0328f635e17cfd4507ab6404e601c5c0e4336381f9bdd205e0de0c680b6" => :sierra
+  # end
 
   keg_only "older version of gdal is in main tap and installs similar components"
 
   option "without-python", "Build without Python2 support"
-  option "with-python3", "Build with Python3 support"
+  option "without-python3", "Build without Python3 support"
 
   depends_on "swig" => :build
   depends_on "gdal2"
   depends_on NoGdal2Python
   depends_on :python => :recommended
-  depends_on :python3 => :optional
+  depends_on :python3 => :recommended
   depends_on "numpy" => :python if build.with? "python"
   depends_on "numpy" => :python3 if build.with? "python3"
 
   resource "autotest" do
-    url "http://download.osgeo.org/gdal/2.2.0/gdalautotest-2.2.0.tar.gz"
-    sha256 "dfb6ae03b67dd41ef59899aede54f8e249c75c8cccb862671e990843fb36a0fa"
+    url "http://download.osgeo.org/gdal/2.2.1/gdalautotest-2.2.1.tar.gz"
+    sha256 "c0ee73b5f6336def92305b0a350351e29dafe3e8f9fbd0607243eea77efb42ab"
   end
 
   def install
