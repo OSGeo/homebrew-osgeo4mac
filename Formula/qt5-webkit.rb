@@ -10,7 +10,17 @@ end
 
 class NoQt5WebKitSandboxRequirement < Requirement
   fatal true
-  satisfy(:build_env => false) { ARGV.no_sandbox? }
+
+  def pour_bottle?
+    # versions of macOS that have a bottle to install
+    # if there is no bottle, --no-sandbox is required, since it will default to source install
+    # TODO: handle case where pouring bottle fails (tricky here)
+    MacOS.version == :sierra
+  end
+
+  satisfy(:build_env => false) do
+    (ARGV.build_all_from_source? || ARGV.build_from_source? || ARGV.build_bottle?) ? ARGV.no_sandbox? : ARGV.no_sandbox? || pour_bottle?
+  end
 
   def message; <<-EOS.undent
     Must be built with `brew install --no-sandbox ...`, or install steps will fail.
