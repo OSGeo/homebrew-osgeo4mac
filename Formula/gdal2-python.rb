@@ -50,10 +50,10 @@ class Gdal2Python < Formula
   sha256 "61837706abfa3e493f3550236efc2c14bd6b24650232f9107db50a944abf8b2f"
   revision 1
 
-  # bottle do
-  #   root_url "http://qgis.dakotacarto.com/bottles"
-  #   sha256 "48e2e0328f635e17cfd4507ab6404e601c5c0e4336381f9bdd205e0de0c680b6" => :sierra
-  # end
+  bottle do
+    root_url "http://qgis.dakotacarto.com/bottles"
+    sha256 "3cbf64070872f53b560869d4ce79b78766d36a0ed4b1b2e36acef8e5f0fa7f22" => :sierra
+  end
 
   keg_only "older version of gdal is in main tap and installs similar components"
 
