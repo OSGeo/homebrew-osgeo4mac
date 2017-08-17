@@ -49,11 +49,12 @@ class Grass7 < Formula
   depends_on :mysql => :optional
   depends_on "cairo"
   depends_on "ghostscript" # for cartographic composer previews
-  depends_on :x11 # needs to find at least X11/include/GL/gl.h
   depends_on "openblas" => :optional
   depends_on "liblas" => :optional
   depends_on "netcdf" => :optional
   depends_on "ffmpeg" => :optional
+  depends_on "tcl-tk"
+  depends_on "freetype"
 
   def headless?
     # The GRASS GUI is based on WxPython.
@@ -71,6 +72,7 @@ class Grass7 < Formula
 
     # noinspection RubyLiteralArrayInspection
     args = [
+#      "--enable-macosx-app",
       "--disable-debug", "--disable-dependency-tracking",
       "--enable-shared",
       "--with-cxx",
@@ -83,14 +85,19 @@ class Grass7 < Formula
       "--with-geos=#{Formula["geos"].opt_bin}/geos-config",
       "--with-proj-share=#{Formula["proj"].opt_share}/proj",
       "--with-png",
+      "--with-opengl=aqua",
+      "--without-glw",
+      "--without-motif",
       "--with-readline-includes=#{readline.opt_include}",
       "--with-readline-libs=#{readline.opt_lib}",
       "--with-readline",
       "--with-nls-includes=#{gettext.opt_include}",
       "--with-nls-libs=#{gettext.opt_lib}",
       "--with-nls",
+      "--with-freetype-includes=#{Formula["freetype"].opt_include}/freetype2",
+      "--with-freetype-libs=#{Formula["freetype"].opt_lib}",
       "--with-freetype",
-      "--without-tcltk", # Disabled due to compatibility issues with OS X Tcl/Tk
+      "--with-tcltk", 
       "--with-includes=#{gettext.opt_include}"
     ]
 
