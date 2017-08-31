@@ -1,6 +1,6 @@
 class Ogdi < Formula
   desc "Open Geographic Datastore Interface - client/server API for GIS"
-  homepage "http://www.gdal.org/drv_ogdi.html"
+  homepage "http://ogdi.sourceforge.net/"
   url "https://github.com/libogdi/ogdi/archive/ogdi_3_2_0.tar.gz"
   sha256 "4645da4bf0ab3a848ecf2a1d77a35f5bccf89fbf1cccf42c40c66cd0d1f1dcee"
 
