@@ -48,10 +48,10 @@ class Ogdi < Formula
     ENV.deparallelize
     ENV["TOPDIR"] = Dir.pwd
 
-    # fix
-    # inreplace "#{Dir.pwd}/configure",
-    #           %r{(rpc/pmap_clnt\.h)},
-    #           "rpc/types.h \\1"
+    # FIXME: ./configure fails on ogdi test compilation due to missing rpc/types.h include
+    # use: https://www.gnu.org/software/autoconf/manual/autoconf-2.64/html_node/Present-But-Cannot-Be-Compiled.html
+    # then, run autoconf
+    # see below fixes for rpc/types.h (does the same for ./configure)
 
     # rename overridden rules, to avoid copius warnings
     inreplace "#{Dir.pwd}/config/unix.mak" do |s|
