@@ -32,6 +32,7 @@ class Gdal2 < Formula
   option "with-libkml", "Build with Google's libkml driver (requires libkml-dev >= 1.3)"
   option "with-swig-java", "Build the swig java bindings"
   option "with-sfcgal", "Build with CGAL C++ wrapper support"
+  option "with-ogdi", "Build with OGDI support (consider gdal2-ogdi instead)"
 
   deprecated_option "enable-opencl" => "with-opencl"
   deprecated_option "enable-armadillo" => "with-armadillo"
@@ -55,6 +56,7 @@ class Gdal2 < Formula
   depends_on "postgresql" => :optional
   depends_on "mysql" => :optional
 
+  depends_on "ogdi" => :optional
 
   depends_on "homebrew/science/armadillo" if build.with? "armadillo"
 
@@ -163,7 +165,6 @@ class Gdal2 < Formula
 
     unsupported_backends = %w[
       gta
-      ogdi
       fme
       hdf4
       fgdb
@@ -206,6 +207,8 @@ class Gdal2 < Formula
     args << "--with-pdfium=no"
     args << "--with-poppler=no"
     args << "--with-podofo=no"
+
+    args << "--with-ogdi=#{build.with?("ogdi") ? Formula["ogdi"].opt_prefix.to_s : "no"}"
 
     args << "--with-sfcgal=#{build.with?("sfcgal") ? HOMEBREW_PREFIX/"bin/sfcgal-config" : "no"}"
 
@@ -270,6 +273,8 @@ class Gdal2 < Formula
     sqlite = Formula["sqlite"]
     ENV.append "LDFLAGS", "-L#{sqlite.opt_lib} -lsqlite3"
     ENV.append "CFLAGS", "-I#{sqlite.opt_include}"
+
+    ENV.append "LDFLAGS", "-L#{Formula["ogdi"].opt_lib}/ogdi" if build.with? "ogdi"
 
     # Reset ARCHFLAGS to match how we build.
     ENV["ARCHFLAGS"] = "-arch #{MacOS.preferred_arch}"
