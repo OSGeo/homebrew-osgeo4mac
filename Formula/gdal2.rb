@@ -3,7 +3,7 @@ class Gdal2 < Formula
   homepage "http://www.gdal.org/"
   url "http://download.osgeo.org/gdal/2.2.1/gdal-2.2.1.tar.gz"
   sha256 "61837706abfa3e493f3550236efc2c14bd6b24650232f9107db50a944abf8b2f"
-  revision 2
+  revision 3
 
   # bottle do
   #   root_url "http://qgis.dakotacarto.com/bottles"
@@ -127,7 +127,7 @@ class Gdal2 < Formula
       "--with-geos=#{HOMEBREW_PREFIX}/bin/geos-config",
       "--with-static-proj4=#{HOMEBREW_PREFIX}",
       "--with-libjson-c=#{Formula["json-c"].opt_prefix}",
-      "--with-xml2=#{Formula["libxml2"].opt_prefix}",
+      "--with-xml2=#{Formula["libxml2"].opt_bin}/xml2-config",
 
       # GRASS backend explicitly disabled.  Creates a chicken-and-egg problem.
       # Should be installed separately after GRASS installation using the
