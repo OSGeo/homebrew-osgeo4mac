@@ -32,7 +32,6 @@ class Gdal2 < Formula
   option "with-libkml", "Build with Google's libkml driver (requires libkml-dev >= 1.3)"
   option "with-swig-java", "Build the swig java bindings"
   option "with-sfcgal", "Build with CGAL C++ wrapper support"
-  option "with-podofo", "Build with PoDoFo support (in addition to Poppler support)"
 
   deprecated_option "enable-opencl" => "with-opencl"
   deprecated_option "enable-armadillo" => "with-armadillo"
@@ -56,7 +55,6 @@ class Gdal2 < Formula
   depends_on "postgresql" => :optional
   depends_on "mysql" => :optional
 
-  depends_on "podofo" => :optional
 
   depends_on "homebrew/science/armadillo" if build.with? "armadillo"
 
@@ -79,7 +77,6 @@ class Gdal2 < Formula
 
     # Other libraries
     depends_on "xz" # get liblzma compression algorithm library from XZutils
-    depends_on "poppler"
     depends_on "json-c"
   end
 
@@ -150,7 +147,6 @@ class Gdal2 < Formula
       epsilon
       webp
       openjpeg
-      poppler
     ]
     if build.with? "complete"
       supported_backends.delete "liblzma"
@@ -203,13 +199,13 @@ class Gdal2 < Formula
 
     args << "--without-gnm" if build.without? "gnm"
 
+    # All PDF driver functionality moved to gdal2-pdf plugin
     # Older pdfium (for gdal driver) is still built against libstdc++ and
-    #   causes the build to be built like that as well.
+    #   causes the base build to be built like that as well.
     # See: https://github.com/rouault/pdfium
-    # Prefer loading it as a plugin
     args << "--with-pdfium=no"
-
-    args << "--with-podofo=#{build.with?("podofo") ? Formula["podofo"].opt_prefix : "no"}"
+    args << "--with-poppler=no"
+    args << "--with-podofo=no"
 
     args << "--with-sfcgal=#{build.with?("sfcgal") ? HOMEBREW_PREFIX/"bin/sfcgal-config" : "no"}"
 
@@ -283,6 +279,11 @@ class Gdal2 < Formula
 
     # These libs are statically linked in libkml-dev and libkml formula
     inreplace "configure", " -lminizip -luriparser", "" if build.with? "libkml"
+
+    # All PDF driver functionality moved to gdal2-pdf plugin,
+    # so nix default internal-built PDF w+ driver, which keeps plugin from loading.
+    # Just using --enable-pdf-plugin isn't enough (we don't want the plugin built here)
+    inreplace "GDALmake.opt.in", "PDF_PLUGIN),yes", "PDF_PLUGIN),no"
 
     system "./configure", *configure_args
     system "make"
