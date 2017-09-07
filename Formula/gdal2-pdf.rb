@@ -4,10 +4,10 @@ class Gdal2Pdf < Formula
   url "http://download.osgeo.org/gdal/2.2.1/gdal-2.2.1.tar.gz"
   sha256 "61837706abfa3e493f3550236efc2c14bd6b24650232f9107db50a944abf8b2f"
 
-  # bottle do
-  #   root_url "http://qgis.dakotacarto.com/bottles"
-  #   sha256 "" => :sierra
-  # end
+  bottle do
+    root_url "http://qgis.dakotacarto.com/bottles"
+    sha256 "d10e06ed3fb9d5a8a817094e170e887eb31795137a59ace577e220fe23ddd07c" => :sierra
+  end
 
   option "without-poppler", "Build without additional Poppler support"
   option "with-pdfium", "Build without PDFium support (stdlib for C++ issues)"
