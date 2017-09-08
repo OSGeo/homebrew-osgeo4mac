@@ -65,8 +65,7 @@ class Gdal2Python < Formula
   depends_on NoGdal2Python
   depends_on :python => :recommended
   depends_on :python3 => :recommended
-  depends_on "numpy" => :python if build.with? "python"
-  depends_on "numpy" => :python3 if build.with? "python3"
+  depends_on "numpy"
 
   resource "autotest" do
     url "http://download.osgeo.org/gdal/2.2.1/gdalautotest-2.2.1.tar.gz"
