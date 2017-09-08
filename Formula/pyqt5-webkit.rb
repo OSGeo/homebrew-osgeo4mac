@@ -4,10 +4,10 @@ class Pyqt5Webkit < Formula
   url "https://downloads.sourceforge.net/project/pyqt/PyQt5/PyQt-5.9/PyQt5_gpl-5.9.tar.gz"
   sha256 "ab0e7999cf202cc72962c78aefe461d16497b3c1a8282ab966ad90b6cb271096"
 
-  # bottle do
-  #   root_url "http://qgis.dakotacarto.com/bottles"
-  #   sha256 "" => :sierra
-  # end
+  bottle do
+    root_url "http://qgis.dakotacarto.com/bottles"
+    sha256 "b969d8feec95070c8ef5f1bf4be73c49b7728afbf86398f8d38f171bf31edf4d" => :sierra
+  end
 
   option "with-debug", "Build with debug symbols"
 
