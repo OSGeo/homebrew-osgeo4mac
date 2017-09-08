@@ -12,7 +12,7 @@ class Pyqt5Webkit < Formula
   option "with-debug", "Build with debug symbols"
 
   depends_on "qt"
-  depends_on "qt5-webkit"
+  depends_on "osgeo/osgeo4mac/qt5-webkit"
   depends_on "sip"
   depends_on "pyqt"
   depends_on :python => :recommended
