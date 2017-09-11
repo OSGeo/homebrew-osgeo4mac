@@ -58,11 +58,11 @@ class PyqtQt4 < Formula
           qt4 = Formula["qt-4"]
           # can't use qt4.prefix anymore, as it is opt-relative
           inreplace "pyqtconfig.py",
-                    "#{HOMEBREW_CELLAR}/#{qt4.name}/#{qt4.installed_version}",
-                    qt4.opt_prefix.to_s
+                    qt4.opt_prefix.realpath,
+                    qt4.opt_prefix
           inreplace "pyqtconfig.py",
                     "#{HOMEBREW_CELLAR}/#{name}/#{installed_version}",
-                    opt_prefix.to_s
+                    opt_prefix
           (lib/"qt-4/python#{version}/site-packages/PyQt4").install "pyqtconfig.py"
         end
       ensure
