@@ -3,7 +3,7 @@ require File.expand_path("../../Requirements/grass_requirements",
 
 class Grass7 < Formula
   desc "Geographic Resources Analysis Support System"
-  homepage "http://grass.osgeo.org/"
+  homepage "https://grass.osgeo.org/"
 
   stable do
     url "https://grass.osgeo.org/grass72/source/grass-7.2.1.tar.gz"
@@ -37,13 +37,13 @@ class Grass7 < Formula
   if build.with? "gdal-1"
     depends_on "gdal"
   else
-    depends_on "gdal2"
+    depends_on "osgeo/osgeo4mac/gdal2"
   end
   depends_on "libtiff"
   depends_on "unixodbc"
   depends_on "fftw"
   depends_on :python
-  depends_on "numpy" => :python
+  depends_on "numpy"
   depends_on "wxpython"
   depends_on :postgresql => :optional
   depends_on :mysql => :optional
