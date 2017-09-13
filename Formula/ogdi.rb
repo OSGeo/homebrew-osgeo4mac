@@ -1,13 +1,14 @@
 class Ogdi < Formula
   desc "Open Geographic Datastore Interface - client/server API for GIS"
-  homepage "http://ogdi.sourceforge.net/"
+  homepage "https://ogdi.sourceforge.io/"
   url "https://github.com/libogdi/ogdi/archive/ogdi_3_2_0.tar.gz"
   sha256 "4645da4bf0ab3a848ecf2a1d77a35f5bccf89fbf1cccf42c40c66cd0d1f1dcee"
+  revision 1
 
-  bottle do
-    root_url "http://qgis.dakotacarto.com/bottles"
-    sha256 "76e5d1a22c5f659dad323dc0b864ed5ba2bb01db342e7e4b50a1e97acb3b3155" => :sierra
-  end
+  # bottle do
+  #   root_url "http://qgis.dakotacarto.com/bottles"
+  #   sha256 "76e5d1a22c5f659dad323dc0b864ed5ba2bb01db342e7e4b50a1e97acb3b3155" => :sierra
+  # end
 
   # depends on "autoconf" => :build
   # depends on "automake" => :build
@@ -104,9 +105,12 @@ class Ogdi < Formula
 
     # TODO: fix up for test suite:
     #  'ogdi_info'; use install_name_tool to add rpath to opt_lib/ogdi (OR, link all .dylibs directly?)
-    #  create symlinks from .dylib files to .so (ogdi_info dynamically finds only .so files)
-    #  (pseudo) ln_sf opt_lib/ogdi/*.dylib opt_lib/ogdi/*.so
-    #     e.g. (in bash) for f in $(find . -name '*.dylib' -type f -print);do  ln -sf $(basename $f) ${f%.dylib}.so; done
+
+    # create symlinks from .so to .dylib files
+    # (ogdi_info and libs dynamically finds only .so files)
+    Pathname.glob("#{lib}/ogdi/*.dylib") do |dl|
+      (lib/"ogdi").install_symlink dl.basename => "#{dl.basename(".dylib")}.so"
+    end
 
     # FIXME: ogdi_info crashes with:
     # ogdi_info(52269,0x...) malloc: *** error for object 0x...: pointer being freed was not allocated
