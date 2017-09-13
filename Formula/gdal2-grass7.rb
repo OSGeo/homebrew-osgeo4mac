@@ -13,11 +13,20 @@ class Gdal2Grass7 < Formula
   depends_on "gdal2"
   depends_on "grass7"
 
+  def gdal_majmin_ver
+    gdal_ver_list = Formula["gdal2"].version.to_s.split(".")
+    "#{gdal_ver_list[0]}.#{gdal_ver_list[1]}"
+  end
+
+  def gdal_plugins_subdirectory
+    "gdalplugins/#{gdal_majmin_ver}"
+  end
+
   def install
     gdal = Formula["gdal2"]
-    gdal_plugins = lib/gdal.plugins_subdirectory.to_s
+    gdal_plugins = lib/gdal_plugins_subdirectory
     gdal_plugins.mkpath
-    (HOMEBREW_PREFIX/"lib/#{gdal.plugins_subdirectory}").mkpath
+
     grass = Formula["grass7"]
 
     # due to DYLD_LIBRARY_PATH no longer being setable, strictly define extension
