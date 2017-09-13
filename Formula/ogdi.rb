@@ -5,10 +5,10 @@ class Ogdi < Formula
   sha256 "4645da4bf0ab3a848ecf2a1d77a35f5bccf89fbf1cccf42c40c66cd0d1f1dcee"
   revision 1
 
-  # bottle do
-  #   root_url "http://qgis.dakotacarto.com/bottles"
-  #   sha256 "76e5d1a22c5f659dad323dc0b864ed5ba2bb01db342e7e4b50a1e97acb3b3155" => :sierra
-  # end
+  bottle do
+    root_url "http://qgis.dakotacarto.com/bottles"
+    sha256 "0675a1e4fddbb503d60729e70b1b4bab0d9c07857a5833d84c27a61e185c5584" => :sierra
+  end
 
   # depends on "autoconf" => :build
   # depends on "automake" => :build
