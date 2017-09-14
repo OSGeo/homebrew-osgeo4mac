@@ -3,7 +3,7 @@ class LibkmlDev < Formula
   homepage "https://code.google.com/archive/p/libkml/"
   url "https://github.com/google/libkml/archive/8609edf7c8d13ae2ddb6eac2bca7c8e49c67a5f8.tar.gz"
   version "1.3-dev"
-  sha256 "5661de8d1f662e5ee117543ffb325bad36bc6a2ac6f2d16f02a4d8acf4bb936e"
+  sha256 "667cd86b7e66e38c71c054526e49c6ee9558b506c9ddec9e6de14b87e18c0072"
 
   bottle do
     root_url "http://qgis.dakotacarto.com/bottles"
