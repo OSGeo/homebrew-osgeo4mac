@@ -58,7 +58,7 @@ class Gdal2 < Formula
 
   depends_on "ogdi" => :optional
 
-  depends_on "homebrew/science/armadillo" if build.with? "armadillo"
+  depends_on "armadillo" if build.with? "armadillo"
 
   depends_on "osgeo/osgeo4mac/libkml-dev" if build.with? "libkml"
 
