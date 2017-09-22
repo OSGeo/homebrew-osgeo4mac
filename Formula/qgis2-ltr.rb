@@ -5,27 +5,26 @@ class Qgis2Ltr < Formula
   desc "Open Source Geographic Information System"
   homepage "https://www.qgis.org"
 
-  revision 1
+  # revision 1
   head "https://github.com/qgis/QGIS.git", :branch => "release-2_14"
 
   stable do
-    url "https://github.com/qgis/QGIS/archive/final-2_14_17.tar.gz"
-    sha256 "66789aece730a37ef359f2bd624c15a5a28b4bb1543bbf66148d69adf39c6cf9"
+    url "https://github.com/qgis/QGIS/archive/final-2_14_19.tar.gz"
+    sha256 "a7c34f0ad63f3625da1c041db44a81f04869783d7549cda18659e92f241de4ae"
 
     # patches that represent all backports to release-2_14 branch, since release tag
     # see: https://github.com/qgis/QGIS/commits/release-2_14
-    patch do
-      # thru commit ?, minus windows-formatted patches
-      # (just commit https://github.com/qgis/QGIS/commit/5746b9d for now)
-      url "https://gist.githubusercontent.com/dakcarto/15b047b3b775d5063e034ce74dc571ec/raw/11d7f591784f9e484163287c617e955b97aa9de7/release-2_14_patch1.diff"
-      sha256 "512dbd0d73d4f039fee2400ff847e4c5bc02b3b8e82cb3274c132796ad1cce38"
-    end
+    # patch do
+    #   # thru commit ?, minus windows-formatted patches
+    #   url ""
+    #   sha256 ""
+    # end
   end
 
-  bottle do
-    root_url "http://qgis.dakotacarto.com/bottles"
-    sha256 "16b9067c9d5051943d9bf3ba93c0fba9f8206a1065765de08b2ee2508b5d083b" => :sierra
-  end
+  # bottle do
+  #   root_url "http://qgis.dakotacarto.com/bottles"
+  #   sha256 "16b9067c9d5051943d9bf3ba93c0fba9f8206a1065765de08b2ee2508b5d083b" => :sierra
+  # end
 
   def pour_bottle?
     brewed_python?
