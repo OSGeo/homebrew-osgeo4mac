@@ -1,14 +1,13 @@
 class Gdal2 < Formula
   desc "GDAL: Geospatial Data Abstraction Library"
   homepage "http://www.gdal.org/"
-  url "http://download.osgeo.org/gdal/2.2.1/gdal-2.2.1.tar.gz"
-  sha256 "61837706abfa3e493f3550236efc2c14bd6b24650232f9107db50a944abf8b2f"
-  revision 3
+  url "http://download.osgeo.org/gdal/2.2.2/gdal-2.2.2.tar.gz"
+  sha256 "14c1f78a60f429ad51c08d75cbf49771f1e6b20e7385c6e8379b40e8dfa39544"
 
-  bottle do
-    root_url "http://qgis.dakotacarto.com/bottles"
-    sha256 "26a1871aa163a5cb76e5d99b9025f4ed2e54e358178b91ab54fea5a8a4579a1f" => :sierra
-  end
+  # bottle do
+  #   root_url "http://qgis.dakotacarto.com/bottles"
+  #   sha256 "26a1871aa163a5cb76e5d99b9025f4ed2e54e358178b91ab54fea5a8a4579a1f" => :sierra
+  # end
 
   head do
     url "https://svn.osgeo.org/gdal/trunk/gdal"
@@ -249,18 +248,6 @@ class Gdal2 < Formula
          #define jas_uchar unsigned char
          #endif
         EOS
-      end
-
-      # Temp fix for GDAL 2.2.1 not supporting new OpenJPEG 2.2, which is backwards compatible
-      # TODO: remove on GDAL 2.2.2 or whenever OpenJPEG 2.2 is supported
-      opj_ver_list = Formula["openjpeg"].version.to_s.split(".")
-      opj_ver = "#{opj_ver_list[0]}.#{opj_ver_list[1]}"
-      if opj_ver == "2.2"
-        inreplace "configure" do |s|
-          s.gsub! "openjpeg-2.1", "openjpeg-2.2"
-          s.gsub! "OPENJPEG_VERSION=20100", "OPENJPEG_VERSION=20200"
-        end
-        inreplace "frmts/openjpeg/openjpegdataset.cpp", "openjpeg-2.1", "openjpeg-2.2"
       end
     end
 
