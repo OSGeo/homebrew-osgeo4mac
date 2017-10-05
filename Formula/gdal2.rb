@@ -244,6 +244,18 @@ class Gdal2 < Formula
     ENV.append "LDFLAGS", "-L#{sqlite.opt_lib} -lsqlite3"
     ENV.append "CFLAGS", "-I#{sqlite.opt_include}"
 
+    # Temp fix for GDAL 2.2.2 not supporting new OpenJPEG 2.3, which is API/ABI compatible with OpenJPEG 2.2
+    # TODO: remove on GDAL 2.2.3 or whenever OpenJPEG 2.3 is supported
+    opj_ver_list = Formula["openjpeg"].version.to_s.split(".")
+    opj_ver = "#{opj_ver_list[0]}.#{opj_ver_list[1]}"
+    if opj_ver == "2.3"
+      inreplace "configure" do |s|
+        s.gsub! "openjpeg-2.2", "openjpeg-2.3"
+        s.gsub! "OPENJPEG_VERSION=20200", "OPENJPEG_VERSION=20300"
+      end
+      inreplace "frmts/openjpeg/openjpegdataset.cpp", "openjpeg-2.2", "openjpeg-2.3"
+    end
+
     ENV.append "LDFLAGS", "-L#{Formula["ogdi"].opt_lib}/ogdi" if build.with? "ogdi"
 
     # Reset ARCHFLAGS to match how we build.
