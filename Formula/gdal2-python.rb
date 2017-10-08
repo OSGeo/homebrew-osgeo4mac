@@ -46,14 +46,13 @@ class Gdal2Python < Formula
 
   desc "Python bindings for GDAL: Geospatial Data Abstraction Library"
   homepage "https://pypi.python.org/pypi/GDAL"
-  url "http://download.osgeo.org/gdal/2.2.1/gdal-2.2.1.tar.gz"
-  sha256 "61837706abfa3e493f3550236efc2c14bd6b24650232f9107db50a944abf8b2f"
-  revision 1
+  url "http://download.osgeo.org/gdal/2.2.2/gdal-2.2.2.tar.gz"
+  sha256 "14c1f78a60f429ad51c08d75cbf49771f1e6b20e7385c6e8379b40e8dfa39544"
 
-  bottle do
-    root_url "http://qgis.dakotacarto.com/bottles"
-    sha256 "3cbf64070872f53b560869d4ce79b78766d36a0ed4b1b2e36acef8e5f0fa7f22" => :sierra
-  end
+  # bottle do
+  #   root_url "http://qgis.dakotacarto.com/bottles"
+  #   sha256 "3cbf64070872f53b560869d4ce79b78766d36a0ed4b1b2e36acef8e5f0fa7f22" => :sierra
+  # end
 
   keg_only "older version of gdal is in main tap and installs similar components"
 
@@ -68,8 +67,8 @@ class Gdal2Python < Formula
   depends_on "numpy"
 
   resource "autotest" do
-    url "http://download.osgeo.org/gdal/2.2.1/gdalautotest-2.2.1.tar.gz"
-    sha256 "c0ee73b5f6336def92305b0a350351e29dafe3e8f9fbd0607243eea77efb42ab"
+    url "http://download.osgeo.org/gdal/2.2.2/gdalautotest-2.2.2.tar.gz"
+    sha256 "102b3980bbfa079eed6e3d77d70d2f48f2700f5078ad31c42e93cf35d0680f0d"
   end
 
   def install
