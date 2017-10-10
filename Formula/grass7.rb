@@ -6,18 +6,18 @@ class Grass7 < Formula
   homepage "https://grass.osgeo.org/"
 
   stable do
-    url "https://grass.osgeo.org/grass72/source/grass-7.2.1.tar.gz"
-    sha256 "4bccf6676bb3546fb4de0a20d79316666abee56b92cafc96e8e8563cc07b5a3d"
+    url "https://grass.osgeo.org/grass72/source/grass-7.2.2.tar.gz"
+    sha256 "bbbfb37c2e39a1027d27ce05471f7a93d74d6add2d5804f8e2e462daf392f47b"
 
     # Patches to keep files from being installed outside of the prefix.
     # Remove lines from Makefile that try to install to /Library/Documentation.
     patch :DATA
   end
 
-  bottle do
-    root_url "http://qgis.dakotacarto.com/bottles"
-    sha256 "ee20af73325d1d3593c1f80297b4d1033c289390882a0d22689bed62b9b497c3" => :sierra
-  end
+  # bottle do
+  #   root_url "http://qgis.dakotacarto.com/bottles"
+  #   sha256 "ee20af73325d1d3593c1f80297b4d1033c289390882a0d22689bed62b9b497c3" => :sierra
+  # end
 
   option "without-gui", "Build without WxPython interface. Command line tools still available."
   option "with-gdal-1", "Build with GDAL/OGR v1.x instead of v2.x"
