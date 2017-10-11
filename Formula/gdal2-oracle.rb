@@ -1,8 +1,14 @@
 class Gdal2Oracle < Formula
   desc "GDAL/OGR 2.x plugin for Oracle Spatial driver"
   homepage "http://www.gdal.org/drv_oci.html"
-  url "http://download.osgeo.org/gdal/2.2.0/gdal-2.2.0.tar.gz"
-  sha256 "d06546a6e34b77566512a2559e9117402320dd9487de9aa95cb8a377815dc360"
+  url "http://download.osgeo.org/gdal/2.2.2/gdal-2.2.2.tar.gz"
+  sha256 "14c1f78a60f429ad51c08d75cbf49771f1e6b20e7385c6e8379b40e8dfa39544"
+
+  # bottle do
+  #   root_url "http://qgis.dakotacarto.com/bottles"
+  #   sha256 "" => :sierra
+  #   sha256 "" => :high_sierra
+  # end
 
   depends_on "oracle-client-sdk"
   depends_on "gdal2"
@@ -21,7 +27,6 @@ class Gdal2Oracle < Formula
 
     gdal_plugins = lib/gdal_plugins_subdirectory
     gdal_plugins.mkpath
-    (HOMEBREW_PREFIX/"lib/#{gdal_plugins_subdirectory}").mkpath
 
     # cxx flags
     args = %W[-Iport -Igcore -Iogr -Iogr/ogrsf_frmts -Iogr/ogrsf_frmts/generic
