@@ -28,7 +28,6 @@ class Gdal2Filegdb < Formula
 
     gdal_plugins = lib/gdal_plugins_subdirectory
     gdal_plugins.mkpath
-    # (HOMEBREW_PREFIX/"lib/#{gdal_plugins_subdirectory}").mkpath
 
     # cxx flags
     args = %W[-Iport -Igcore -Iogr -Iogr/ogrsf_frmts -Iogr/ogrsf_frmts/generic
