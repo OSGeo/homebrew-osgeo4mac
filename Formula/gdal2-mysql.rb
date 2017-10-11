@@ -1,13 +1,14 @@
 class Gdal2Mysql < Formula
   desc "GDAL/OGR 2 plugin for MySQL driver"
   homepage "http://www.gdal.org/drv_mysql.html"
-  url "http://download.osgeo.org/gdal/2.2.1/gdal-2.2.1.tar.gz"
-  sha256 "61837706abfa3e493f3550236efc2c14bd6b24650232f9107db50a944abf8b2f"
+  url "http://download.osgeo.org/gdal/2.2.2/gdal-2.2.2.tar.gz"
+  sha256 "14c1f78a60f429ad51c08d75cbf49771f1e6b20e7385c6e8379b40e8dfa39544"
 
-  bottle do
-    root_url "http://qgis.dakotacarto.com/bottles"
-    sha256 "ce6355acacb64c0af3762ff22c6b44438279ed654330e8ca0b3dd59e20ae60ca" => :sierra
-  end
+  # bottle do
+  #   root_url "http://qgis.dakotacarto.com/bottles"
+  #   sha256 "" => :sierra
+  #   sha256 "" => :high_sierra
+  # end
 
   depends_on "mysql" => :build # adds openssl
   depends_on "gdal2"
@@ -27,7 +28,6 @@ class Gdal2Mysql < Formula
 
     gdal_plugins = lib/gdal_plugins_subdirectory
     gdal_plugins.mkpath
-    # (HOMEBREW_PREFIX/"lib/#{gdal_plugins_subdirectory}").mkpath
 
     # cxx flags
     args = %W[-Iport -Igcore -Iogr -Iogr/ogrsf_frmts -Iogr/ogrsf_frmts/generic
