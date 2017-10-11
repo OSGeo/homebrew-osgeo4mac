@@ -3,7 +3,7 @@ class Gdal2Grass7 < Formula
   homepage "http://www.gdal.org"
   url "http://download.osgeo.org/gdal/2.2.0/gdal-grass-2.2.0.tar.gz"
   sha256 "0eb2b541e87db4c0d1b3cdc61512b88631e6f7d39db5986eeb773aada0a7995f"
-  revision 1
+  revision 2
 
   # bottle do
   #   root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
