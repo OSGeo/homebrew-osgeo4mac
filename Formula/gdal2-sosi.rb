@@ -1,14 +1,14 @@
 class Gdal2Sosi < Formula
   desc "GDAL/OGR 2.x plugin for SOSI driver"
   homepage "https://trac.osgeo.org/gdal/wiki/SOSI"
-  url "http://download.osgeo.org/gdal/2.2.1/gdal-2.2.1.tar.gz"
-  sha256 "61837706abfa3e493f3550236efc2c14bd6b24650232f9107db50a944abf8b2f"
+  url "http://download.osgeo.org/gdal/2.2.2/gdal-2.2.2.tar.gz"
+  sha256 "14c1f78a60f429ad51c08d75cbf49771f1e6b20e7385c6e8379b40e8dfa39544"
 
-  bottle do
-    root_url "http://qgis.dakotacarto.com/bottles"
-    cellar :any
-    sha256 "423d355c613332e5704a6ec16084c592c2dd5b9d1ff0546dd07dab0d13c91b3a" => :sierra
-  end
+  # bottle do
+  #   root_url "http://qgis.dakotacarto.com/bottles"
+  #   sha256 "" => :sierra
+  #   sha256 "" => :high_sierra
+  # end
 
   depends_on "fyba"
   depends_on "gdal2"
@@ -28,7 +28,6 @@ class Gdal2Sosi < Formula
 
     gdal_plugins = lib/gdal_plugins_subdirectory
     gdal_plugins.mkpath
-    # (HOMEBREW_PREFIX/"lib/#{gdal_plugins_subdirectory}").mkpath
 
     # cxx flags
     args = %W[-DLINUX -DUNIX -Iport -Igcore -Iogr
