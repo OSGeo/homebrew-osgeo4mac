@@ -9,6 +9,7 @@ class SipQt4 < Formula
     root_url "http://qgis.dakotacarto.com/bottles"
     cellar :any_skip_relocation
     sha256 "89707434e7db3a26ff167bdae484388df20d41f1765a75471d6159eeb39b4be3" => :sierra
+    sha256 "89707434e7db3a26ff167bdae484388df20d41f1765a75471d6159eeb39b4be3" => :high_sierra
   end
 
   depends_on :python => :recommended

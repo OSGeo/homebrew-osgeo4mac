@@ -23,6 +23,7 @@ class Pyspatialite < Formula
     root_url "http://qgis.dakotacarto.com/bottles"
     cellar :any
     sha256 "ec55ca6b391698248bb0caca31aac13ad5441b632065ea8a9a0693d77b7d7565" => :sierra
+    sha256 "ec55ca6b391698248bb0caca31aac13ad5441b632065ea8a9a0693d77b7d7565" => :high_sierra
   end
 
   depends_on :python

@@ -37,6 +37,7 @@ class Qt5Webkit < Formula
   bottle do
     root_url "http://qgis.dakotacarto.com/bottles"
     sha256 "19f0e8d90c876ad81a021af8ad07159e42d3434aa101e9fc17318a65cb7e685b" => :sierra
+    sha256 "19f0e8d90c876ad81a021af8ad07159e42d3434aa101e9fc17318a65cb7e685b" => :high_sierra
   end
 
   keg_only "because Qt5 is keg-only"

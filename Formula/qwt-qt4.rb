@@ -7,6 +7,7 @@ class QwtQt4 < Formula
   bottle do
     root_url "http://qgis.dakotacarto.com/bottles"
     sha256 "f1103a619ff0d1fc5df8708238185b2028ae645bc888f7be6ad017001a8a60f4" => :sierra
+    sha256 "f1103a619ff0d1fc5df8708238185b2028ae645bc888f7be6ad017001a8a60f4" => :high_sierra
   end
 
   keg_only "newer Qt5-only version in homebrew-core"

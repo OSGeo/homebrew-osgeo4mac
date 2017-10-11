@@ -8,6 +8,7 @@ class Ogdi < Formula
   bottle do
     root_url "http://qgis.dakotacarto.com/bottles"
     sha256 "0675a1e4fddbb503d60729e70b1b4bab0d9c07857a5833d84c27a61e185c5584" => :sierra
+    sha256 "0675a1e4fddbb503d60729e70b1b4bab0d9c07857a5833d84c27a61e185c5584" => :high_sierra
   end
 
   # depends on "autoconf" => :build

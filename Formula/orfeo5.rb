@@ -8,6 +8,7 @@ class Orfeo5 < Formula
   bottle do
     root_url "http://qgis.dakotacarto.com/bottles"
     sha256 "c041cd46a636e112c49c04db00c2a54d1164d57d63feb087dc058174649c856c" => :sierra
+    sha256 "c041cd46a636e112c49c04db00c2a54d1164d57d63feb087dc058174649c856c" => :high_sierra
   end
 
   option "without-monteverdi", "Build without Monteverdi and Mapla applications (Qt4 required)"

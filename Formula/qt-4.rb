@@ -10,6 +10,7 @@ class Qt4 < Formula
   bottle do
     root_url "http://qgis.dakotacarto.com/bottles"
     sha256 "5b831d16f71c52aaf548c804b769aaa49fe5ad148bd50f8145b996f7355c5ddb" => :sierra
+    sha256 "5b831d16f71c52aaf548c804b769aaa49fe5ad148bd50f8145b996f7355c5ddb" => :high_sierra
   end
 
   # Backport of Qt5 commit to fix the fatal build error with Xcode 7, SDK 10.11.

@@ -9,6 +9,7 @@ class SagaGisLts < Formula
   bottle do
     root_url "http://qgis.dakotacarto.com/bottles"
     sha256 "7ee89e2c199e70d5a630c5ec47efc044c74853c02cb4e57c52f5b22029207a7c" => :sierra
+    sha256 "7ee89e2c199e70d5a630c5ec47efc044c74853c02cb4e57c52f5b22029207a7c" => :high_sierra
   end
 
   option "with-app", "Build SAGA.app Package"

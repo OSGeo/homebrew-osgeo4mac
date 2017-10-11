@@ -8,6 +8,7 @@ class PyqtQt4 < Formula
   bottle do
     root_url "http://qgis.dakotacarto.com/bottles"
     sha256 "1268f3898ae7a208521f2a05d57b529e7573b7b539977bd42ae46479e94e7a22" => :sierra
+    sha256 "1268f3898ae7a208521f2a05d57b529e7573b7b539977bd42ae46479e94e7a22" => :high_sierra
   end
 
   depends_on :python => :recommended

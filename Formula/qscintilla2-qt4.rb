@@ -8,6 +8,7 @@ class Qscintilla2Qt4 < Formula
   bottle do
     root_url "http://qgis.dakotacarto.com/bottles"
     sha256 "439806ac04e3fc9174332f5725af02743216669ce13aa48f6b4ea6e743e7eb2f" => :sierra
+    sha256 "439806ac04e3fc9174332f5725af02743216669ce13aa48f6b4ea6e743e7eb2f" => :high_sierra
   end
 
   option "without-plugin", "Skip building the Qt Designer plugin"

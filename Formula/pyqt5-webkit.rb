@@ -7,6 +7,7 @@ class Pyqt5Webkit < Formula
   bottle do
     root_url "http://qgis.dakotacarto.com/bottles"
     sha256 "b969d8feec95070c8ef5f1bf4be73c49b7728afbf86398f8d38f171bf31edf4d" => :sierra
+    sha256 "b969d8feec95070c8ef5f1bf4be73c49b7728afbf86398f8d38f171bf31edf4d" => :high_sierra
   end
 
   option "with-debug", "Build with debug symbols"
