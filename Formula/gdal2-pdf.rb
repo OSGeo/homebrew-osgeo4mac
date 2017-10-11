@@ -1,13 +1,14 @@
 class Gdal2Pdf < Formula
   desc "GDAL/OGR 2.x plugin for PDF driver"
   homepage "http://www.gdal.org/frmt_pdf.html"
-  url "http://download.osgeo.org/gdal/2.2.1/gdal-2.2.1.tar.gz"
-  sha256 "61837706abfa3e493f3550236efc2c14bd6b24650232f9107db50a944abf8b2f"
+  url "http://download.osgeo.org/gdal/2.2.2/gdal-2.2.2.tar.gz"
+  sha256 "14c1f78a60f429ad51c08d75cbf49771f1e6b20e7385c6e8379b40e8dfa39544"
 
-  bottle do
-    root_url "http://qgis.dakotacarto.com/bottles"
-    sha256 "d10e06ed3fb9d5a8a817094e170e887eb31795137a59ace577e220fe23ddd07c" => :sierra
-  end
+  # bottle do
+  #   root_url "http://qgis.dakotacarto.com/bottles"
+  #   sha256 "" => :sierra
+  #   sha256 "" => :high_sierra
+  # end
 
   option "without-poppler", "Build without additional Poppler support"
   option "with-pdfium", "Build without PDFium support (stdlib for C++ issues)"
@@ -110,7 +111,10 @@ class Gdal2Pdf < Formula
     if build.with? "poppler"
       # locally vendor dependency
       resource("poppler").stage do
-        ENV["LIBOPENJPEG_CFLAGS"] = "-I#{Formula["openjpeg"].opt_include}/openjpeg-2.2"
+        # Temp fix for supporting new OpenJPEG 2.x version, which is API/ABI compatible with OpenJPEG 2.2
+        opj_ver_list = Formula["openjpeg"].version.to_s.split(".")
+        opj_ver = "#{opj_ver_list[0]}.#{opj_ver_list[1]}"
+        ENV["LIBOPENJPEG_CFLAGS"] = "-I#{Formula["openjpeg"].opt_include}/openjpeg-#{opj_ver}"
 
         inreplace "poppler.pc.in", "Cflags: -I${includedir}/poppler",
                   "Cflags: -I${includedir}/poppler -I${includedir}"
