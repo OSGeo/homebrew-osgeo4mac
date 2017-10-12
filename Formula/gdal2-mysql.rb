@@ -7,7 +7,6 @@ class Gdal2Mysql < Formula
   # bottle do
   #   root_url "http://qgis.dakotacarto.com/bottles"
   #   sha256 "" => :sierra
-  #   sha256 "" => :high_sierra
   # end
 
   depends_on "mysql" => :build # adds openssl
