@@ -5,7 +5,7 @@ class Qgis2 < Formula
   desc "Open Source Geographic Information System"
   homepage "https://www.qgis.org"
 
-  # revision 1
+  revision 1
   head "https://github.com/qgis/QGIS.git", :branch => "release-2_18"
 
   stable do
@@ -22,11 +22,11 @@ class Qgis2 < Formula
     # end
   end
 
-  bottle do
-    root_url "http://qgis.dakotacarto.com/bottles"
-    sha256 "cb76323d18b524d9f4ffec5cb380daf0ca0b2d20b1068aa03320881d11f6a5d0" => :sierra
-    sha256 "cb76323d18b524d9f4ffec5cb380daf0ca0b2d20b1068aa03320881d11f6a5d0" => :high_sierra
-  end
+  # bottle do
+  #   root_url "http://qgis.dakotacarto.com/bottles"
+  #   sha256 "cb76323d18b524d9f4ffec5cb380daf0ca0b2d20b1068aa03320881d11f6a5d0" => :sierra
+  #   sha256 "cb76323d18b524d9f4ffec5cb380daf0ca0b2d20b1068aa03320881d11f6a5d0" => :high_sierra
+  # end
 
   def pour_bottle?
     brewed_python?
