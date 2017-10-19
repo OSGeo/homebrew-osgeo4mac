@@ -3,13 +3,13 @@ class PyqtQt4 < Formula
   homepage "https://www.riverbankcomputing.com/software/pyqt/intro"
   url "https://downloads.sf.net/project/pyqt/PyQt4/PyQt-4.11.4/PyQt-mac-gpl-4.11.4.tar.gz"
   sha256 "f178ba12a814191df8e9f87fb95c11084a0addc827604f1a18a82944225ed918"
-  revision 1
+  revision 2
 
-  bottle do
-    root_url "http://qgis.dakotacarto.com/bottles"
-    sha256 "1268f3898ae7a208521f2a05d57b529e7573b7b539977bd42ae46479e94e7a22" => :sierra
-    sha256 "1268f3898ae7a208521f2a05d57b529e7573b7b539977bd42ae46479e94e7a22" => :high_sierra
-  end
+  # bottle do
+  #   root_url "http://qgis.dakotacarto.com/bottles"
+  #   sha256 "1268f3898ae7a208521f2a05d57b529e7573b7b539977bd42ae46479e94e7a22" => :sierra
+  #   sha256 "1268f3898ae7a208521f2a05d57b529e7573b7b539977bd42ae46479e94e7a22" => :high_sierra
+  # end
 
   depends_on :python => :recommended
   depends_on "qt-4"
@@ -50,12 +50,14 @@ class PyqtQt4 < Formula
       # interfere with the build using configure-ng.py, we run configure.py in a
       # temporary directory and only retain the pyqtconfig.py from that.
 
+      oldargs = args + %W[--plugin-destdir=#{lib}/qt-4/plugins]
+
       require "tmpdir"
       dir = Dir.mktmpdir
       begin
         cp_r(Dir.glob("*"), dir)
         cd dir do
-          system python, "configure.py", *args
+          system python, "configure.py", *oldargs
           qt4 = Formula["qt-4"]
           # can't use qt4.prefix anymore, as it is opt-relative
           inreplace "pyqtconfig.py",
@@ -75,9 +77,12 @@ class PyqtQt4 < Formula
         args << "--spec" << "unsupported/macx-clang-libc++"
       end
 
-      args << "--sip-incdir=#{Formula["sip-qt4"].opt_libexec}/include"
+      ngargs = args + %W[
+        --sip-incdir=#{Formula["sip-qt4"].opt_libexec}/include
+        --designer-plugindir=#{lib}/qt-4/plugins/designer
+      ]
 
-      system python, "configure-ng.py", *args
+      system python, "configure-ng.py", *ngargs
       system "make"
       system "make", "install"
       system "make", "clean" # for when building against multiple Pythons
