@@ -31,6 +31,9 @@ class Gdal2Pdf < Formula
   depends_on "podofo" => :optional
   depends_on "gdal2"
 
+  # various deps needed for configuring
+  depends_on "json-c"
+
   # upstream poppler 0.59.0 incompatibility
   resource "poppler" do
     url "https://poppler.freedesktop.org/poppler-0.57.0.tar.xz"
@@ -60,6 +63,9 @@ class Gdal2Pdf < Formula
       "--with-local=#{prefix}",
       "--with-threads",
       "--with-libtool",
+
+      # various deps needed for configuring
+      "--with-libjson-c=#{Formula["json-c"].opt_prefix}",
 
       # force correction of dylib setup, even though we are not building framework here
       "--with-macosx-framework",
