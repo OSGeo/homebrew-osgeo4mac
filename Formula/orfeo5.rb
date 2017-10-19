@@ -1,9 +1,15 @@
 class Orfeo5 < Formula
   desc "Library of image processing algorithms"
   homepage "http://www.orfeo-toolbox.org/otb/"
-  url "https://github.com/orfeotoolbox/OTB/archive/5.8.0.tar.gz"
-  sha256 "3e6b6547b119ce5e9571475620db0d5dbe220a64f835b7f6acd93ac813bbaa4f"
   revision 2
+
+  stable do
+    url "https://github.com/orfeotoolbox/OTB/archive/5.8.0.tar.gz"
+    sha256 "3e6b6547b119ce5e9571475620db0d5dbe220a64f835b7f6acd93ac813bbaa4f"
+
+    # Patch to fix OSSIM adaptor compilation
+    patch :DATA
+  end
 
   bottle do
     root_url "http://qgis.dakotacarto.com/bottles"
@@ -77,11 +83,14 @@ class Orfeo5 < Formula
   def install
     (libexec/"default_geoid").install resource("geoid")
 
+    ENV.cxx11
+
     args = std_cmake_args + %w[
       -DOTB_BUILD_DEFAULT_MODULES=ON
       -DBUILD_TESTING=OFF
       -DBUILD_SHARED_LIBS=ON
       -DCMAKE_MACOSX_RPATH=OFF
+      -DCMAKE_CXX_STANDARD=11
     ]
 
     if build.with? "iceviewer"
@@ -161,3 +170,19 @@ class Orfeo5 < Formula
     end
   end
 end
+
+__END__
+diff --git a/Modules/Adapters/OSSIMAdapters/src/otbRPCSolverAdapter.cxx b/Modules/Adapters/OSSIMAdapters/src/otbRPCSolverAdapter.cxx
+index d20e208..92796dd 100644
+--- a/Modules/Adapters/OSSIMAdapters/src/otbRPCSolverAdapter.cxx
++++ b/Modules/Adapters/OSSIMAdapters/src/otbRPCSolverAdapter.cxx
+@@ -109,7 +109,8 @@ RPCSolverAdapter::Solve(const GCPsContainerType& gcpContainer,
+   rmsError = rpcSolver->getRmsError();
+ 
+   // Retrieve the output RPC projection
+-  ossimRefPtr<ossimRpcProjection> rpcProjection = dynamic_cast<ossimRpcProjection*>(rpcSolver->createRpcProjection()->getProjection());
++  ossimRefPtr<ossimImageGeometry> outputProj = dynamic_cast<ossimImageGeometry*>(rpcSolver->createRpcProjection());
++  ossimRefPtr<ossimRpcProjection> rpcProjection = dynamic_cast<ossimRpcProjection*>(outputProj->getProjection());
+ 
+   // Export the sensor model in an ossimKeywordlist
+   ossimKeywordlist geom_kwl;
