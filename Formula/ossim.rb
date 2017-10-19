@@ -32,6 +32,8 @@ class Ossim < Formula
   depends_on :mpi => [:cc, :cxx, :optional]
 
   def install
+    ENV.cxx11
+
     # build setup expects the checkout to be in subdir named 'ossim'
     cur_dir = Dir["*", ".git*"]
     mkdir "ossim"
