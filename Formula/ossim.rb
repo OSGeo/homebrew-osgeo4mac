@@ -10,11 +10,11 @@ class Ossim < Formula
   version "1.9.0"
   revision 5
 
-  # bottle do
-  #   root_url "http://qgis.dakotacarto.com/bottles"
-  #   sha256 "686d736f2334b7bbba25b7fa76de59aa15c866c7d355ec70d3a7a278967f4ac1" => :sierra
-  #   sha256 "686d736f2334b7bbba25b7fa76de59aa15c866c7d355ec70d3a7a278967f4ac1" => :high_sierra
-  # end
+  bottle do
+    root_url "http://qgis.dakotacarto.com/bottles"
+    sha256 "5377c220a9e7448445989e9b3f89e9dd38710e81bc8936291161d846303a4e58" => :sierra
+    sha256 "5377c220a9e7448445989e9b3f89e9dd38710e81bc8936291161d846303a4e58" => :high_sierra
+  end
 
   option "with-curl-apps", "Build curl-dependent apps"
   option "without-framework", "Generate library instead of framework"
