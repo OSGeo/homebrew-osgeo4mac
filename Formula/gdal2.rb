@@ -273,6 +273,10 @@ class Gdal2 < Formula
     # Just using --enable-pdf-plugin isn't enough (we don't want the plugin built here)
     inreplace "GDALmake.opt.in", "PDF_PLUGIN),yes", "PDF_PLUGIN),no"
 
+    # Temporary fix for Xcode/CLT 9.0.x issue of missing header files
+    # See: https://github.com/OSGeo/homebrew-osgeo4mac/issues/276
+    ENV.delete("SDKROOT") if DevelopmentTools.clang_build_version >= 900
+
     system "./configure", *configure_args
     system "make"
     system "make", "install"
