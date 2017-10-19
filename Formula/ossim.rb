@@ -8,13 +8,13 @@ class Ossim < Formula
       :branch => "master",
       :revision => "f01c951587eeb63623b913750bec5097ece86d9a"
   version "1.9.0"
-  revision 4
+  revision 5
 
-  bottle do
-    root_url "http://qgis.dakotacarto.com/bottles"
-    sha256 "686d736f2334b7bbba25b7fa76de59aa15c866c7d355ec70d3a7a278967f4ac1" => :sierra
-    sha256 "686d736f2334b7bbba25b7fa76de59aa15c866c7d355ec70d3a7a278967f4ac1" => :high_sierra
-  end
+  # bottle do
+  #   root_url "http://qgis.dakotacarto.com/bottles"
+  #   sha256 "686d736f2334b7bbba25b7fa76de59aa15c866c7d355ec70d3a7a278967f4ac1" => :sierra
+  #   sha256 "686d736f2334b7bbba25b7fa76de59aa15c866c7d355ec70d3a7a278967f4ac1" => :high_sierra
+  # end
 
   option "with-curl-apps", "Build curl-dependent apps"
   option "without-framework", "Generate library instead of framework"
@@ -23,10 +23,12 @@ class Ossim < Formula
   depends_on "cmake" => :build
   depends_on "open-scene-graph" # just for its OpenThreads lib
   depends_on "jpeg"
+  depends_on "jsoncpp"
   depends_on "libtiff"
   depends_on "libgeotiff"
   depends_on "geos"
   depends_on "freetype"
+  depends_on "zlib"
   depends_on :mpi => [:cc, :cxx, :optional]
 
   def install
@@ -42,6 +44,7 @@ class Ossim < Formula
 
     # TODO: add options and deps for plugins
     args = std_cmake_args + %W[
+      -DCMAKE_CXX_STANDARD=11
       -DOSSIM_DEV_HOME=#{ENV["OSSIM_DEV_HOME"]}
       -DINSTALL_LIBRARY_DIR=lib
       -DBUILD_OSSIM_APPS=ON
@@ -73,6 +76,12 @@ class Ossim < Formula
     args << "-DBUILD_OSSIM_MPI_SUPPORT=" + (build.with?("mpi") ? "ON" : "OFF")
     args << "-DBUILD_OSSIM_CURL_APPS=" + (build.with?("curl-apps") ? "ON" : "OFF")
     args << "-DBUILD_OSSIM_GUI=" + (build.with?("gui") ? "ON" : "OFF")
+
+    # fix up include/ossim/base/ossimRefPtr.h
+    inreplace "ossim/include/ossim/base/ossimRefPtr.h" do |s|
+      s.sub! /(#include <stddef.h>)/, "\\1\n#include <cstddef>"
+      s.gsub! "nullptr_t", "std::nullptr_t"
+    end
 
     cd "build" do
       system "cmake", "../ossim/cmake", *args
