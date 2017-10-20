@@ -5,11 +5,11 @@ class PyqtQt4 < Formula
   sha256 "f178ba12a814191df8e9f87fb95c11084a0addc827604f1a18a82944225ed918"
   revision 2
 
-  # bottle do
-  #   root_url "http://qgis.dakotacarto.com/bottles"
-  #   sha256 "1268f3898ae7a208521f2a05d57b529e7573b7b539977bd42ae46479e94e7a22" => :sierra
-  #   sha256 "1268f3898ae7a208521f2a05d57b529e7573b7b539977bd42ae46479e94e7a22" => :high_sierra
-  # end
+  bottle do
+    root_url "http://qgis.dakotacarto.com/bottles"
+    sha256 "f4582a7afebc1bea20feabc3f70ffeb87d25d6a9f4c6492f66a8e8c7f0cd2eb6" => :sierra
+    sha256 "f4582a7afebc1bea20feabc3f70ffeb87d25d6a9f4c6492f66a8e8c7f0cd2eb6" => :high_sierra
+  end
 
   depends_on :python => :recommended
   depends_on "qt-4"
