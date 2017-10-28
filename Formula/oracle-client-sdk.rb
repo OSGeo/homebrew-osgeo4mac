@@ -3,62 +3,76 @@ require File.expand_path("../../Strategies/cache-download", Pathname.new(__FILE_
 class OracleClientSdk < Formula
   desc "Oracle database C/C++ client libs, command-line tools and SDK"
   homepage "http://www.oracle.com/technetwork/topics/intel-macsoft-096467.html"
+  url "http://qgis.dakotacarto.com/osgeo4mac/dummy.tar.gz"
+  version "12.1.0.2.0-2"
+  sha256 "e7776e2ff278d6460300bd69a26d7383e6c5e2fbeb17ff12998255e7fc4c9511"
+
   option "with-basic", "Install Oracle's Basic client, instead of Basic Lite"
 
-  if build.with? "basic"
+  resource "basic" do
     url "file://#{HOMEBREW_CACHE}/instantclient-basic-macos.x64-12.1.0.2.0.zip",
         :using => CacheDownloadStrategy
-    sha256 "ecbf84ff011fcd8981c2cd9355f958ee42b2e452ebaad2d42df7b226903679cf"
-  else
+    sha256 "71aa366c961166fb070eb6ee9e5905358c61d5ede9dffd5fb073301d32cbd20c"
+  end
+
+  resource "basic-lite" do
     url "file://#{HOMEBREW_CACHE}/instantclient-basiclite-macos.x64-12.1.0.2.0.zip",
         :using => CacheDownloadStrategy
-    sha256 "ac7e97661a2bfac69b3262150641914f456c7806ba2a7850669fb83abac120e8"
+    sha256 "c39d498fa6eb08d46014283a3a79bcaf63060cdbd0f58f97322da012350d4c39"
   end
 
   resource "sdk" do
     url "file://#{HOMEBREW_CACHE}/instantclient-sdk-macos.x64-12.1.0.2.0.zip",
         :using => CacheDownloadStrategy
-    sha256 "63582d9a2f4afabd7f5e678c39bf9184d51625c61e67372acdbc7b42ed8530ac"
+    sha256 "950153e53e1c163c51ef34eb8eb9b60b7f0da21120a86f7070c0baff44ef4ab9"
+  end
+
+  resource "sqlplus" do
+    url "file://#{HOMEBREW_CACHE}/instantclient-sqlplus-macos.x64-12.1.0.2.0.zip",
+        :using => CacheDownloadStrategy
+    sha256 "a663937e2e32c237bb03df1bda835f2a29bc311683087f2d82eac3a8ea569f81"
+  end
+
+  def fixup_rpaths(mach_bins) # as [Pathname]
+    mach_bins.each do |m|
+      m = Pathname.new(m) if m.is_a?(String)
+      next if m.symlink?
+      m.ensure_writable do
+        MachO::Tools.add_rpath(m.to_s, opt_lib.to_s, :strict => false)
+        # will only affect dylibs
+        MachO::Tools.change_dylib_id(m.to_s, (opt_lib/m.basename).to_s)
+      end
+    end
+  end
+
+  def oracle_env_vars
+    {
+      :ORACLE_HOME => opt_prefix,
+      :OCI_LIB => opt_lib,
+      :TNS_ADMIN => opt_prefix/"network/admin",
+    }
   end
 
   def install
-    oracle_exes = %w[adrci genezi uidrvci]
-    ver_split = version.to_s.split(".")
-    maj_ver = ver_split[0]
-    min_ver = ver_split[1]
+    resource(build.with?("basic") ? "basic" : "basic-lite").stage do
+      oracle_exes = %w[adrci genezi uidrvci]
+      ver_split = version.to_s.split(".")
+      maj_ver = ver_split[0]
+      min_ver = ver_split[1]
 
-    # client data shared library
-    cdslib = build.with?("basic") ? "libociei" : "libociicus"
+      # fix permissions
+      chmod 0644, Dir["*"]
+      chmod 0755, oracle_exes
 
-    # fix permissions
-    chmod 0644, Dir["*"]
-    chmod 0755, oracle_exes
-
-    # fixup lib naming to macOS style
-    %w[libclntsh libclntshcore libocci].each do |f|
-      mv "#{f}.dylib.#{maj_ver}.#{min_ver}", "#{f}.#{maj_ver}.#{min_ver}.dylib"
-      ln_sf "#{f}.#{maj_ver}.#{min_ver}.dylib", "#{f}.dylib"
-    end
-
-    # update install names to opt_prefix (probably done by Homebrew as well)
-    %W[libclntsh libnnz#{maj_ver} libocci #{cdslib} libons].each do |f|
-      quiet_system "install_name_tool", "-id", "#{opt_lib/f}.dylib", "#{f}.dylib"
-    end
-
-    # fix @rpath cross-linkage
-    rpath_fixes = %W[libclntsh.dylib libnnz#{maj_ver}.dylib #{cdslib}.dylib] + oracle_exes
-    rpath_fixes.each do |m|
-      dylibs = (buildpath/m).dynamically_linked_libraries
-      dylibs.each do |d|
-        next unless d.to_s =~ /^@rpath/
-        system "install_name_tool", "-change",
-               d, d.sub(%r{^@rpath/([^\.]+).*$}, "#{opt_lib}/\\1.dylib"), m.to_s
+      # fixup lib naming to macOS style with some symlinks
+      %w[libclntsh libclntshcore libocci].each do |f|
+        ln_sf "#{f}.dylib.#{maj_ver}.#{min_ver}", "#{f}.dylib"
       end
-    end
 
-    # install fixed-up libs and exes
-    %W[libclntsh libnnz#{maj_ver} libocci #{cdslib} libons].each { |f| lib.install Dir["#{f}*"] }
-    bin.install oracle_exes
+      # install fixed-up libs and exes
+      lib.install Dir["*.dylib*"]
+      bin.install oracle_exes
+    end
 
     # install headers in a logical subdirectory (since some are too generally named)
     resource("sdk").stage do
@@ -72,15 +86,45 @@ class OracleClientSdk < Formula
       end
       prefix.install "sdk"
     end
+
+    resource("sqlplus").stage do
+      # fix permissions
+      chmod 0644, Dir["*"]
+      chmod 0755, "sqlplus"
+
+      lib.install Dir["*.dylib"]
+      bin.install "sqlplus"
+
+      # Site Profile goes in $ORACLE_HOME/sqlplus/admin/glogin.sql
+      (prefix/"sqlplus/admin").install "glogin.sql"
+    end
+
+    # fixup @rpath locations
+    # update install names to opt_prefix (probably done by Homebrew as well)
+    fixup_rpaths Dir[lib/"lib*", bin/"*"]
+
+    # make any extra client paths
+    (prefix/"network/admin").mkpath
+
+    # wrap cmd line tools with Oracle env vars
+    envvars = oracle_env_vars
+    envvars[:NLS_LANG] = "AMERICAN_AMERICA.UTF8" if build.without? "basic"
+    bin.env_script_all_files(libexec/"bin", envvars)
   end
 
-  def caveats; <<-EOS.undent
+  def caveats
+    s = <<-EOS.undent
       To build software with the Instant Client SDK, add to the following
       environment variable to find headers:
 
         [CFLAGS|CPPFLAGS]: -I#{opt_include}/oci
 
+      Executables are wrapped with environ:
     EOS
+    envvars = oracle_env_vars
+    envvars[:NLS_LANG] = "AMERICAN_AMERICA.UTF8" if build.without? "basic"
+    envvars.each { |k, v| s += "  #{k}=#{v}\n" }
+    s += "\n"
   end
 
   test do
