@@ -13,24 +13,28 @@ class OracleClientSdk < Formula
     url "file://#{HOMEBREW_CACHE}/instantclient-basic-macos.x64-12.1.0.2.0.zip",
         :using => CacheDownloadStrategy
     sha256 "71aa366c961166fb070eb6ee9e5905358c61d5ede9dffd5fb073301d32cbd20c"
+    version "12.1.0.2.0-2"
   end
 
   resource "basic-lite" do
     url "file://#{HOMEBREW_CACHE}/instantclient-basiclite-macos.x64-12.1.0.2.0.zip",
         :using => CacheDownloadStrategy
     sha256 "c39d498fa6eb08d46014283a3a79bcaf63060cdbd0f58f97322da012350d4c39"
+    version "12.1.0.2.0-2"
   end
 
   resource "sdk" do
     url "file://#{HOMEBREW_CACHE}/instantclient-sdk-macos.x64-12.1.0.2.0.zip",
         :using => CacheDownloadStrategy
     sha256 "950153e53e1c163c51ef34eb8eb9b60b7f0da21120a86f7070c0baff44ef4ab9"
+    version "12.1.0.2.0-2"
   end
 
   resource "sqlplus" do
     url "file://#{HOMEBREW_CACHE}/instantclient-sqlplus-macos.x64-12.1.0.2.0.zip",
         :using => CacheDownloadStrategy
     sha256 "a663937e2e32c237bb03df1bda835f2a29bc311683087f2d82eac3a8ea569f81"
+    version "12.1.0.2.0-2"
   end
 
   def fixup_rpaths(mach_bins) # as [Pathname]
