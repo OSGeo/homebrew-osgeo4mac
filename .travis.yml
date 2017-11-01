@@ -67,7 +67,7 @@ deploy:
     secure: SzRXXOu9tyoUAJNUkXfPnZN/PoNdaAiIb8aR4mCQ0dqqyIrvXRw5YeenihT4kxkRcaXWK7Yx7ZpzJBTWKaPEv+1MA4eVUccvcRK3KwfccgtD7nCWW8OYP5PTOLo4+rKZc/Wzqsmtu54jVSWdayATDyab9ZD0DQetk4KaDRk2Pjk=
   secret_access_key:
     secure: g9evYj59AKxE/icv8kgf4y7pfuq6z5e1V1LUhyFvhBVFszSIfviXSe19F2crixwiFtAlmwaKw/HNNt1Cztggc37PkiwpTxvFgsRUyCDtNCVi4qkflWKUx5NNN5blBY5me5xntmLkaOV4bSD/r4LLpbN/UmhuzVWPxMoKQPeACF0=
-  bucket: qgis.dakotacarto.com
+  bucket: osgeo4mac
   local-dir: bottles
   upload-dir: bottles
   acl: public_read
