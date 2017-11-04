@@ -71,6 +71,8 @@ def env_vars(ap, hb, qb='', ql=''):
     options['GRASS_PREFIX'] = '{hb}/opt/grass7/grass-base'
     options['OSG_LIBRARY_PATH'] = '{hb}/lib/osgPlugins-' + OSG_VERSION
     options['QGIS_LOG_FILE'] = ql
+    if run_from_build:
+        options['QT_PLUGIN_PATH'] = '{hb}﻿/opt/qt-4/plugins:{hb}/lib/qt-4/plugins'
 
     for k, v in options.iteritems():
         options[k] = v.format(hb=hb)
