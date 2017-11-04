@@ -287,11 +287,6 @@ class Qgis2Ltr < Formula
     py_lib.mkpath
     ln_s "../../../QGIS.app/Contents/Resources/python/qgis", py_lib/"qgis"
 
-    # Fix QT_PLUGIN_PATH resolution (currently not honored as env var on macOS)
-    # Only Qt's base plugin path and QGIS.app/Plugins/qgis are available,
-    # so symlink in any custom Qt plugin subdirectories needing parsed by QGIS
-    ln_s "../../../../lib/qt-4/plugins/sqldrivers", prefix/"QGIS.app/Contents/Plugins/qgis/".to_s
-
     ln_s "QGIS.app/Contents/MacOS/fcgi-bin", prefix/"fcgi-bin" if build.with? "server"
 
     doc.mkpath
@@ -365,8 +360,9 @@ class Qgis2Ltr < Formula
 
     # handle multiple Qt plugins directories
     qtplgpths = %W[
-      #{Formula["qt-4"].opt_prefix}/plugins
+      #{opt_lib}/qt-4/plugins
       #{hb_lib_qt4}/plugins
+      #{Formula["qt-4"].opt_prefix}/plugins
     ]
     envars[:QT_PLUGIN_PATH] = qtplgpths.join(pthsep)
 
