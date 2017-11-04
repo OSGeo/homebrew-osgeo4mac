@@ -11,5 +11,6 @@
   "mapserver-64": "mapserver6",
   "orfeo-54": "orfeo5",
   "qgis-214": "qgis2-ltr",
+  "qt-mysql": "qt4-mysql",
   "saga-gis": "saga-gis-lts"
 }
