@@ -19,8 +19,8 @@ if [ -z "$HOMEBREW_PREFIX" ]; then
 fi
 
 # set up environment
-export PATH=${HOMEBREW_PREFIX}/opt/gdal2/bin:${HOMEBREW_PREFIX}/opt/sip-qt4/bin:${HOMEBREW_PREFIX}/opt/qt-4/bin:${HOMEBREW_PREFIX}/bin:${HOMEBREW_PREFIX}/sbin:${PATH}
-export PYTHONPATH=${HOMEBREW_PREFIX}/lib/qt-4/python2.7/site-packages:${HOMEBREW_PREFIX}/opt/gdal2/lib/python2.7/site-packages:${HOMEBREW_PREFIX}/lib/python2.7/site-packages:${PYTHONPATH}
+export PATH=${HOMEBREW_PREFIX}/opt/gdal2/bin:${HOMEBREW_PREFIX}/opt/gdal2-python/bin:${HOMEBREW_PREFIX}/opt/sip-qt4/bin:${HOMEBREW_PREFIX}/opt/qt-4/bin:${HOMEBREW_PREFIX}/bin:${HOMEBREW_PREFIX}/sbin:${PATH}
+export PYTHONPATH=${HOMEBREW_PREFIX}/lib/qt-4/python2.7/site-packages:${HOMEBREW_PREFIX}/opt/gdal2-python/lib/python2.7/site-packages:${HOMEBREW_PREFIX}/lib/python2.7/site-packages:${PYTHONPATH}
 
 echo "PATH set to: ${PATH}"
 echo "PYTHONPATH set to: ${PYTHONPATH}"

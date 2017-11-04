@@ -27,6 +27,10 @@ if [ -d "${QGIS}" ]; then
   /bin/rm -fdR "${QGIS}"
 fi
 
+# set up environment
+export PATH=${HOMEBREW_PREFIX}/opt/sip-qt4/bin:${HOMEBREW_PREFIX}/opt/qt-4/bin:${HOMEBREW_PREFIX}/opt/qca-qt4/bin:${HOMEBREW_PREFIX}/bin:${HOMEBREW_PREFIX}/sbin:${PATH}
+echo "PATH set to: ${PATH}"
+
 echo "Installing QGIS..."
 make -j ${CPUCORES} install
 if [ $? -gt 0 ]; then
