@@ -15,6 +15,12 @@ class Qt4Mysql < Formula
   url "https://osgeo4mac.s3.amazonaws.com/src/qt-4.8.7-mysql-driver.tar.gz"
   sha256 "fd542bb8502308e615aef68c76727091786cdd02f298e5b6e0c168d2ee49be85"
 
+  bottle do
+    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
+    sha256 "a32644c5b499c448eb426d19bcc9276f33f377cd199010946b1f85fa83dcb788" => :sierra
+    sha256 "a32644c5b499c448eb426d19bcc9276f33f377cd199010946b1f85fa83dcb788" => :high_sierra
+  end
+
   depends_on NoQt4MysqlAlreadyRequirement
 
   depends_on "mysql" => :build # just needs static client lib and headers
