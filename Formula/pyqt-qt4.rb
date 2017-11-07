@@ -6,7 +6,7 @@ class PyqtQt4 < Formula
   revision 2
 
   bottle do
-    root_url "http://qgis.dakotacarto.com/bottles"
+    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
     sha256 "f4582a7afebc1bea20feabc3f70ffeb87d25d6a9f4c6492f66a8e8c7f0cd2eb6" => :sierra
     sha256 "f4582a7afebc1bea20feabc3f70ffeb87d25d6a9f4c6492f66a8e8c7f0cd2eb6" => :high_sierra
   end

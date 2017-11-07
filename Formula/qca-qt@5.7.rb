@@ -21,7 +21,7 @@ class QcaQtAT57 < Formula
   end
 
   bottle do
-    root_url "http://qgis.dakotacarto.com/bottles"
+    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
     sha256 "f478153f18c3640a42d0dbe22495e194d2ddeb8c55ab8d67d08a9b850a4b9ed3" => :sierra
   end
 

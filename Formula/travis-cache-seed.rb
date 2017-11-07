@@ -1,7 +1,7 @@
 class TravisCacheSeed < Formula
   desc "Trigger update of Travis CI cache with geospatial dependencies"
   homepage "https://github.com/OSGeo/homebrew-osgeo4mac"
-  url "http://qgis.dakotacarto.com/osgeo4mac/dummy.tar.gz"
+  url "https://osgeo4mac.s3.amazonaws.com/src/dummy.tar.gz"
   version "0.0.1"
   sha256 "e7776e2ff278d6460300bd69a26d7383e6c5e2fbeb17ff12998255e7fc4c9511"
 

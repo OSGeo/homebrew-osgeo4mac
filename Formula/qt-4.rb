@@ -8,7 +8,7 @@ class Qt4 < Formula
   head "https://code.qt.io/qt/qt.git", :branch => "4.8"
 
   bottle do
-    root_url "http://qgis.dakotacarto.com/bottles"
+    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
     sha256 "5b831d16f71c52aaf548c804b769aaa49fe5ad148bd50f8145b996f7355c5ddb" => :sierra
     sha256 "5b831d16f71c52aaf548c804b769aaa49fe5ad148bd50f8145b996f7355c5ddb" => :high_sierra
   end

@@ -11,7 +11,7 @@ class Ossim < Formula
   revision 5
 
   bottle do
-    root_url "http://qgis.dakotacarto.com/bottles"
+    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
     sha256 "5377c220a9e7448445989e9b3f89e9dd38710e81bc8936291161d846303a4e58" => :sierra
     sha256 "5377c220a9e7448445989e9b3f89e9dd38710e81bc8936291161d846303a4e58" => :high_sierra
   end

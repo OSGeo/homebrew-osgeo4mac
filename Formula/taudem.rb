@@ -7,7 +7,7 @@ class Taudem < Formula
   revision 1
 
   # bottle do
-  #   root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
+  #   root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
   #   cellar :any
   #   sha256 "" => :mavericks
   # end

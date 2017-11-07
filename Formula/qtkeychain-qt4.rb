@@ -8,7 +8,7 @@ class QtkeychainQt4 < Formula
   head "https://github.com/frankosterfeld/qtkeychain.git", :using => :git
 
   bottle do
-    root_url "http://qgis.dakotacarto.com/bottles"
+    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
     sha256 "1baa17282d8777f0b6bd66cd5486a7c397d686cff51116cae7671401f2a4ece6" => :sierra
     sha256 "1baa17282d8777f0b6bd66cd5486a7c397d686cff51116cae7671401f2a4ece6" => :high_sierra
   end

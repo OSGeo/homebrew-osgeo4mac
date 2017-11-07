@@ -9,7 +9,7 @@ class Pdfium < Formula
   revision 1
 
   bottle do
-    root_url "http://qgis.dakotacarto.com/bottles"
+    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
     cellar :any_skip_relocation
     sha256 "7529a9b9c0856ea9df9182c8801a47e4e9116217b81a3a4e9945eda390245fae" => :sierra
   end

@@ -15,7 +15,7 @@ class Grass7 < Formula
   end
 
   bottle do
-    root_url "http://qgis.dakotacarto.com/bottles"
+    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
     sha256 "19bae05fa152f28df121c5988c5ba01760004a3c38700caa3de139ca44e5be0c" => :sierra
     sha256 "19bae05fa152f28df121c5988c5ba01760004a3c38700caa3de139ca44e5be0c" => :high_sierra
   end

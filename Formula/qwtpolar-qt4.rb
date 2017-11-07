@@ -5,7 +5,7 @@ class QwtpolarQt4 < Formula
   sha256 "e45a1019b481f52a63483c536c5ef3225f1cced04abf45d7d0ff8e06d30e2355"
 
   bottle do
-    root_url "http://qgis.dakotacarto.com/bottles"
+    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
     sha256 "1e98ef9094e4e88737ebee0b1ab1c1a2c2a569f84b432c5bf9242ef9a0866b20" => :sierra
     sha256 "1e98ef9094e4e88737ebee0b1ab1c1a2c2a569f84b432c5bf9242ef9a0866b20" => :high_sierra
   end

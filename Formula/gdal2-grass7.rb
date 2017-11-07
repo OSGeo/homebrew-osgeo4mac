@@ -6,7 +6,7 @@ class Gdal2Grass7 < Formula
   revision 2
 
   # bottle do
-  #   root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
+  #   root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
   #   sha256 "" => :mavericks
   # end
 

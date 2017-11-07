@@ -7,7 +7,7 @@ class Pyspatialite < Formula
 
   stable do
     # temporary download of source, prior to pyspatialite move to github
-    url "http://qgis.dakotacarto.com/osgeo4mac/pyspatialite-3.0.1.tar.gz"
+    url "https://osgeo4mac.s3.amazonaws.com/src/pyspatialite-3.0.1.tar.gz"
     sha256 "81a3e4966fb6348802a985486cbf62e019a0fcb0a1e006b9522e8b02dc08f238"
     patch do
       # Patch to work with libspatialite 4.x, drop amalgamation support, dynamically
@@ -20,7 +20,7 @@ class Pyspatialite < Formula
   end
 
   bottle do
-    root_url "http://qgis.dakotacarto.com/bottles"
+    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
     cellar :any
     sha256 "ec55ca6b391698248bb0caca31aac13ad5441b632065ea8a9a0693d77b7d7565" => :sierra
     sha256 "ec55ca6b391698248bb0caca31aac13ad5441b632065ea8a9a0693d77b7d7565" => :high_sierra

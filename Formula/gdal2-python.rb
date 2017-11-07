@@ -50,7 +50,7 @@ class Gdal2Python < Formula
   sha256 "14c1f78a60f429ad51c08d75cbf49771f1e6b20e7385c6e8379b40e8dfa39544"
 
   bottle do
-    root_url "http://qgis.dakotacarto.com/bottles"
+    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
     sha256 "ac6a8c56aad16ce47126747e9685b95de3f527105407f863b8dbc98c26bbff4e" => :sierra
     sha256 "ac6a8c56aad16ce47126747e9685b95de3f527105407f863b8dbc98c26bbff4e" => :high_sierra
   end

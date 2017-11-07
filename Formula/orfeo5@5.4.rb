@@ -5,7 +5,7 @@ class Orfeo5AT54 < Formula
   sha256 "d232e8099bab7d9777ab2213a8fc1bf97d6731db88dad8963aa930f2ac13e38f"
 
   bottle do
-    root_url "http://qgis.dakotacarto.com/bottles"
+    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
     sha256 "41187da6cafbc580f1eb05d75f3491581cc53903d87d2e24052abc07d708ec9e" => :sierra
   end
 

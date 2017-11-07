@@ -5,7 +5,7 @@ class Gdal2Pdf < Formula
   sha256 "14c1f78a60f429ad51c08d75cbf49771f1e6b20e7385c6e8379b40e8dfa39544"
 
   bottle do
-    root_url "http://qgis.dakotacarto.com/bottles"
+    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
     sha256 "73ba41f887ea917067d794d023594e739ee01009fab610e129020ef03860fb20" => :sierra
     sha256 "73ba41f887ea917067d794d023594e739ee01009fab610e129020ef03860fb20" => :high_sierra
   end

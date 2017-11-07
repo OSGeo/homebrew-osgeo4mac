@@ -7,7 +7,7 @@ class QjsonQt4 < Formula
   head "https://github.com/flavio/qjson.git"
 
   bottle do
-    root_url "http://qgis.dakotacarto.com/bottles"
+    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
     sha256 "b1c454074eb32130bb2be41f9790f8d138437ee1cdc1c29c5cf1922e25e22f0c" => :sierra
     sha256 "b1c454074eb32130bb2be41f9790f8d138437ee1cdc1c29c5cf1922e25e22f0c" => :high_sierra
   end

@@ -35,7 +35,7 @@ class Qt5Webkit < Formula
   sha256 "28a560becd800a4229bfac317c2e5407cd3cc95308bc4c3ca90dba2577b052cf"
 
   bottle do
-    root_url "http://qgis.dakotacarto.com/bottles"
+    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
     sha256 "19f0e8d90c876ad81a021af8ad07159e42d3434aa101e9fc17318a65cb7e685b" => :sierra
     sha256 "19f0e8d90c876ad81a021af8ad07159e42d3434aa101e9fc17318a65cb7e685b" => :high_sierra
   end

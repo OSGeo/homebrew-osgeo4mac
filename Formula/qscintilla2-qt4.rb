@@ -6,7 +6,7 @@ class Qscintilla2Qt4 < Formula
   revision 2
 
   bottle do
-    root_url "http://qgis.dakotacarto.com/bottles"
+    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
     sha256 "439806ac04e3fc9174332f5725af02743216669ce13aa48f6b4ea6e743e7eb2f" => :sierra
     sha256 "439806ac04e3fc9174332f5725af02743216669ce13aa48f6b4ea6e743e7eb2f" => :high_sierra
   end

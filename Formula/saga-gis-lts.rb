@@ -7,7 +7,7 @@ class SagaGisLts < Formula
   head "https://git.code.sf.net/p/saga-gis/code.git", :branch => "release-2-3-lts"
 
   bottle do
-    root_url "http://qgis.dakotacarto.com/bottles"
+    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
     sha256 "427ddaa1c2cfa1c9d2040909996d9a3fcf78dff3bc9fe5247814bc9528b3d192" => :sierra
     sha256 "427ddaa1c2cfa1c9d2040909996d9a3fcf78dff3bc9fe5247814bc9528b3d192" => :high_sierra
   end
@@ -32,7 +32,7 @@ class SagaGisLts < Formula
   depends_on "homebrew/science/opencv" => :optional
 
   resource "app_icon" do
-    url "http://qgis.dakotacarto.com/osgeo4mac/saga_gui.icns"
+    url "https://osgeo4mac.s3.amazonaws.com/src/saga_gui.icns"
     sha256 "288e589d31158b8ffb9ef76fdaa8e62dd894cf4ca76feabbae24a8e7015e321f"
   end
 

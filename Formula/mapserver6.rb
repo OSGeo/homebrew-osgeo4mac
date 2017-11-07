@@ -34,7 +34,7 @@ class Mapserver6 < Formula
   sha256 "1f432d4b44e7a0e4e9ce883b02c91c9a66314123028eebb0415144903b8de9c2"
 
   # bottle do
-  #   root_url "http://qgis.dakotacarto.com/osgeo4mac/bottles"
+  #   root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
   #   sha256 "" => :mavericks
   # end
 

@@ -12,7 +12,7 @@ class Orfeo5 < Formula
   end
 
   bottle do
-    root_url "http://qgis.dakotacarto.com/bottles"
+    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
     sha256 "11f78f654772e13fd82a4dc9da1f1136ba06571fbd662df19d7d1c0263414360" => :sierra
     sha256 "11f78f654772e13fd82a4dc9da1f1136ba06571fbd662df19d7d1c0263414360" => :high_sierra
   end

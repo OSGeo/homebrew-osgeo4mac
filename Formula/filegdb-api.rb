@@ -6,7 +6,7 @@ class FilegdbApi < Formula
   sha256 "78b52650b3be72eacb985fd744f6766e8d57f60a3317055c5a23b1d181ae8ab2"
 
   bottle do
-    root_url "http://qgis.dakotacarto.com/bottles"
+    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
     cellar :any
     sha256 "6e31f7c3e07afddb7d86f136ccb9cde1cfc6a639afc88b864945fd305abeb84d" => :sierra
     sha256 "6e31f7c3e07afddb7d86f136ccb9cde1cfc6a639afc88b864945fd305abeb84d" => :high_sierra

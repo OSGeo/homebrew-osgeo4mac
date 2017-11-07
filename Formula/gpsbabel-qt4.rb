@@ -7,7 +7,7 @@ class GpsbabelQt4 < Formula
   head "https://github.com/gpsbabel/gpsbabel.git"
 
   bottle do
-    root_url "http://qgis.dakotacarto.com/bottles"
+    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
     sha256 "2a301096e4953b7efbf3646408224bee4d3a199ea53797a265bb0f18161155a0" => :sierra
     sha256 "2a301096e4953b7efbf3646408224bee4d3a199ea53797a265bb0f18161155a0" => :high_sierra
   end

@@ -5,7 +5,7 @@ class Gdal2Mrsid < Formula
   sha256 "14c1f78a60f429ad51c08d75cbf49771f1e6b20e7385c6e8379b40e8dfa39544"
 
   # bottle do
-  #   root_url "http://qgis.dakotacarto.com/bottles"
+  #   root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
   #   sha256 "" => :sierra
   #   sha256 "" => :high_sierra
   # end
