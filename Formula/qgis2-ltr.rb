@@ -381,16 +381,15 @@ class Qgis2Ltr < Formula
       end
     end
 
-    if opts.include?("with-grass6") || brewed_grass6?
-      grass6 = Formula["grass6"]
-      begin
-        inreplace app/"#{proc_algs}/grass/GrassUtils.py",
-                  "/Applications/GRASS-6.4.app/Contents/MacOS",
-                  "#{grass6.opt_prefix}/grass-base"
-        puts "GRASS 6 GrassUtils.py has been updated"
-      rescue Utils::InreplaceError
-        puts "GRASS 6 GrassUtils.py already updated"
-      end
+    grass6 = Formula["grass6"]
+    grass6_rpl = (opts.include?("with-grass6") || brewed_grass6?) ? "#{grass6.opt_prefix}/grass-base" : ""
+    begin
+      inreplace app/"#{proc_algs}/grass/GrassUtils.py",
+                "/Applications/GRASS-6.4.app/Contents/MacOS",
+                grass6_rpl
+      puts "GRASS 6 GrassUtils.py has been updated"
+    rescue Utils::InreplaceError
+      puts "GRASS 6 GrassUtils.py already updated"
     end
 
     if opts.include?("with-orfeo5") || brewed_orfeo5?
