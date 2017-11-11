@@ -8,7 +8,7 @@ class SagaGisLts < Formula
 
   bottle do
     root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
-    sha256 "427ddaa1c2cfa1c9d2040909996d9a3fcf78dff3bc9fe5247814bc9528b3d192" => :sierra
+    sha256 "7ee89e2c199e70d5a630c5ec47efc044c74853c02cb4e57c52f5b22029207a7c" => :sierra
     sha256 "427ddaa1c2cfa1c9d2040909996d9a3fcf78dff3bc9fe5247814bc9528b3d192" => :high_sierra
   end
 
