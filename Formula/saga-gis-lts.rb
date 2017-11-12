@@ -8,11 +8,11 @@ class SagaGisLts < Formula
 
   head "https://git.code.sf.net/p/saga-gis/code.git", :branch => "release-2-3-lts"
 
-  # bottle do
-  #   root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
-  #   sha256 "427ddaa1c2cfa1c9d2040909996d9a3fcf78dff3bc9fe5247814bc9528b3d192" => :sierra
-  #   sha256 "427ddaa1c2cfa1c9d2040909996d9a3fcf78dff3bc9fe5247814bc9528b3d192" => :high_sierra
-  # end
+  bottle do
+    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
+    sha256 "bb468b9ca0a256a4887b511b05cee25b535f85f4fbadd181f894641c1c57c491" => :sierra
+    sha256 "bb468b9ca0a256a4887b511b05cee25b535f85f4fbadd181f894641c1c57c491" => :high_sierra
+  end
 
   option "with-app", "Build SAGA.app Package"
 
