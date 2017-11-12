@@ -1,7 +1,7 @@
 class Orfeo5 < Formula
   desc "Library of image processing algorithms"
-  homepage "http://www.orfeo-toolbox.org/otb/"
-  revision 3
+  homepage "https://www.orfeo-toolbox.org/otb/"
+  revision 4
 
   stable do
     url "https://github.com/orfeotoolbox/OTB/archive/5.8.0.tar.gz"
@@ -11,11 +11,11 @@ class Orfeo5 < Formula
     patch :DATA
   end
 
-  bottle do
-    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
-    sha256 "11f78f654772e13fd82a4dc9da1f1136ba06571fbd662df19d7d1c0263414360" => :sierra
-    sha256 "11f78f654772e13fd82a4dc9da1f1136ba06571fbd662df19d7d1c0263414360" => :high_sierra
-  end
+  # bottle do
+  #   root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
+  #   sha256 "11f78f654772e13fd82a4dc9da1f1136ba06571fbd662df19d7d1c0263414360" => :sierra
+  #   sha256 "11f78f654772e13fd82a4dc9da1f1136ba06571fbd662df19d7d1c0263414360" => :high_sierra
+  # end
 
   option "without-monteverdi", "Build without Monteverdi and Mapla applications (Qt4 required)"
   option "with-iceviewer", "Build with ICE Viewer application (Qt4 and X11 required)"
@@ -65,7 +65,6 @@ class Orfeo5 < Formula
     depends_on "glew"
     depends_on "glfw"
     depends_on "qt-4"
-    depends_on "qwt-qt4@5.2"
   else
     depends_on "gdal2" => :recommended
     depends_on "glew" => :optional
@@ -80,10 +79,14 @@ class Orfeo5 < Formula
     version "5.0.0"
   end
 
+  resource "qwt5" do
+    # http://qwt.sourceforge.net/
+    url "https://downloads.sourceforge.net/project/qwt/qwt/5.2.3/qwt-5.2.3.tar.bz2"
+    sha256 "37feaf306753230b0d8538b4ff9b255c6fddaa3d6609ec5a5cc39a5a4d020ab7"
+  end
+
   def install
     (libexec/"default_geoid").install resource("geoid")
-
-    ENV.cxx11
 
     args = std_cmake_args + %w[
       -DOTB_BUILD_DEFAULT_MODULES=ON
@@ -92,6 +95,25 @@ class Orfeo5 < Formula
       -DCMAKE_MACOSX_RPATH=OFF
       -DCMAKE_CXX_STANDARD=11
     ]
+
+    if build.with? "monteverdi"
+      # locally vendor older qwt 5.2.3
+      qwt5 = libexec/"qwt5"
+      qwt5.mkpath
+      resource("qwt5").stage do
+        inreplace "qwtconfig.pri" do |s|
+          s.sub! "/usr/local/qwt-$$VERSION", qwt5
+          s.sub! /(doc.path)/, "#\\1"
+          s.sub! /\+(=\s*QwtDesigner)/, "-\\1"
+        end
+        system "#{Formula["qt-4"].opt_bin}/qmake", "-config", "release"
+        system "make", "install"
+        MachO::Tools.change_dylib_id("#{qwt5}/lib/libqwt.5.dylib", "#{qwt5}/lib/libqwt.5.dylib")
+      end
+      args << "-DCMAKE_PREFIX_PATH=#{qwt5}"
+    end
+
+    ENV.cxx11
 
     if build.with? "iceviewer"
       fg = Formula["freeglut"]
