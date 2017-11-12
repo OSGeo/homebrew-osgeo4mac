@@ -1,16 +1,18 @@
 class SagaGisLts < Formula
   desc "System for Automated Geoscientific Analyses - Long Term Support"
   homepage "http://saga-gis.org"
-  url "https://downloads.sourceforge.net/project/saga-gis/SAGA%20-%202/SAGA%202.3.1/saga_2.3.1.tar.gz"
-  sha256 "58f5c183f839ef753261a7a83c902ba9d67f814c5f21172aae02fcd4a29b9fc0"
+  url "https://git.code.sf.net/p/saga-gis/code.git",
+      :branch => "release-2-3-lts",
+      :revision => "b6f474f8af4af7f0ff82548cc6f88c53547d91f5"
+  version "2.3.2"
 
   head "https://git.code.sf.net/p/saga-gis/code.git", :branch => "release-2-3-lts"
 
-  bottle do
-    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
-    sha256 "427ddaa1c2cfa1c9d2040909996d9a3fcf78dff3bc9fe5247814bc9528b3d192" => :sierra
-    sha256 "427ddaa1c2cfa1c9d2040909996d9a3fcf78dff3bc9fe5247814bc9528b3d192" => :high_sierra
-  end
+  # bottle do
+  #   root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
+  #   sha256 "427ddaa1c2cfa1c9d2040909996d9a3fcf78dff3bc9fe5247814bc9528b3d192" => :sierra
+  #   sha256 "427ddaa1c2cfa1c9d2040909996d9a3fcf78dff3bc9fe5247814bc9528b3d192" => :high_sierra
+  # end
 
   option "with-app", "Build SAGA.app Package"
 
@@ -40,6 +42,8 @@ class SagaGisLts < Formula
     # SKIP liblas support until SAGA supports > 1.8.1, which should support GDAL 2;
     #      otherwise, SAGA binaries may lead to multiple GDAL versions being loaded
     # See: https://github.com/libLAS/libLAS/issues/106
+
+    cd "saga-gis"
 
     # fix homebrew-specific header location for qhull
     inreplace "src/modules/grid/grid_gridding/nn/delaunay.c", "qhull/", "libqhull/" if build.with? "qhull"
