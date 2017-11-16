@@ -48,7 +48,7 @@ i.e. conflicting formulae in this tap will _not_ be used when auto-installing.
 You can also install via URL:
 
 ```
-brew install https://raw.github.com/osgeo/homebrew-osgeo4mac/master/<formula>.rb
+brew install https://raw.githubusercontent.com/OSGeo/homebrew-osgeo4mac/master/Formula/<formula>.rb
 ```
 
 How do I use the Brewfiles?
