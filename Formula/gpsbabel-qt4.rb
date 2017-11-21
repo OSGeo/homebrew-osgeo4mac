@@ -6,16 +6,22 @@ class GpsbabelQt4 < Formula
 
   head "https://github.com/gpsbabel/gpsbabel.git"
 
-  bottle do
-    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
-    sha256 "2a301096e4953b7efbf3646408224bee4d3a199ea53797a265bb0f18161155a0" => :sierra
-    sha256 "2a301096e4953b7efbf3646408224bee4d3a199ea53797a265bb0f18161155a0" => :high_sierra
-  end
+  # bottle do
+  #   root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
+  #   sha256 "2a301096e4953b7efbf3646408224bee4d3a199ea53797a265bb0f18161155a0" => :sierra
+  #   sha256 "2a301096e4953b7efbf3646408224bee4d3a199ea53797a265bb0f18161155a0" => :high_sierra
+  # end
 
   keg_only "gpsbabel is in main tap and same-name bin utilities are installed"
 
   depends_on "libusb" => :optional
   depends_on "qt-4"
+
+  # Fix build with Xcode 9, remove for next version
+  patch do
+    url "https://github.com/gpsbabel/gpsbabel/commit/b7365b93.patch?full_index=1"
+    sha256 "e949182def36fef99889e43ba4bc4d61e36d6b95badc74188a8cd3da5156d341"
+  end
 
   def install
     args = ["--disable-debug", "--disable-dependency-tracking",
@@ -36,6 +42,6 @@ class GpsbabelQt4 < Formula
       </loc>
     EOS
     system bin/"gpsbabel", "-i", "geo", "-f", "test.loc", "-o", "gpx", "-F", "test.gpx"
-    assert File.exist? "test.gpx"
+    assert_predicate testpath/"test.gpx", :exist?
   end
 end
