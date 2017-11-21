@@ -64,9 +64,9 @@ deploy:
   skip_cleanup: true
   provider: s3
   access_key_id:
-    secure: SzRXXOu9tyoUAJNUkXfPnZN/PoNdaAiIb8aR4mCQ0dqqyIrvXRw5YeenihT4kxkRcaXWK7Yx7ZpzJBTWKaPEv+1MA4eVUccvcRK3KwfccgtD7nCWW8OYP5PTOLo4+rKZc/Wzqsmtu54jVSWdayATDyab9ZD0DQetk4KaDRk2Pjk=
+    secure: JxG4/zxgbYvKqX4kJTZdQxvAL+EHqmmi4OEjAOY+KUFAP4t9l5aLEYh6brjHF07kDyFyjMt8G7Hf+SZeznA/JGe8NaliXfCnxLH7ftApCP3l/Tl73z3wXnGL1L7EljiO0EbwlsJUM23B+01BMalzBfyLYOEc61LfSuJsEFFa/ck=
   secret_access_key:
-    secure: g9evYj59AKxE/icv8kgf4y7pfuq6z5e1V1LUhyFvhBVFszSIfviXSe19F2crixwiFtAlmwaKw/HNNt1Cztggc37PkiwpTxvFgsRUyCDtNCVi4qkflWKUx5NNN5blBY5me5xntmLkaOV4bSD/r4LLpbN/UmhuzVWPxMoKQPeACF0=
+    secure: ZdsR1FsY6ER6w6KvF9rjxY4s7GjLXRkT9Rmv4GWyL9+pcHI/4/2KMfab6gj1sQdbc2ocfBgGXR8hQZHi+NZPyTnHbIXf5n2YenLo9NyOHwNs1qiJgxXgtYvhtI/NXCcD9JgX5i5BRR3jkPqJBRe70CmoTwv29kR5Tp158tr3gIg=
   bucket: osgeo4mac
   local-dir: bottles
   upload-dir: bottles
