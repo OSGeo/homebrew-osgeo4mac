@@ -3,6 +3,7 @@ class GpsbabelQt4 < Formula
   homepage "https://www.gpsbabel.org/"
   url "https://github.com/gpsbabel/gpsbabel/archive/gpsbabel_1_5_3.tar.gz"
   sha256 "10b7aaca44ce557fa1175fec37297b8df55611ab2c51cb199753a22dbf2d3997"
+  revision 1
 
   head "https://github.com/gpsbabel/gpsbabel.git"
 
