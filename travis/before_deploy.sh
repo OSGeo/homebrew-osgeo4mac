@@ -26,4 +26,13 @@ pushd bottles
     brew bottle --verbose --json --root-url=https://osgeo4mac.s3.amazonaws.com/bottles \
       ${TRAVIS_REPO_SLUG}/${f}
   done
+
+  # temporary duplication of 10.2-Xcode-8.x-built bottles to 10.3 bottles
+  for art in *.sierra.bottle.*; do
+    new_name=${art/.sierra./.high_sierra.}
+    cp -a ${art} ${new_name}
+  done
+  for json in *.high_sierra.bottle*.json; do
+    sed -i '' s@sierra@high_sierra@g ${json}
+  done
 popd
