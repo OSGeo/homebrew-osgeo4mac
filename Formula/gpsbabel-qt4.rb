@@ -7,11 +7,11 @@ class GpsbabelQt4 < Formula
 
   head "https://github.com/gpsbabel/gpsbabel.git"
 
-  # bottle do
-  #   root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
-  #   sha256 "2a301096e4953b7efbf3646408224bee4d3a199ea53797a265bb0f18161155a0" => :sierra
-  #   sha256 "2a301096e4953b7efbf3646408224bee4d3a199ea53797a265bb0f18161155a0" => :high_sierra
-  # end
+  bottle do
+    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
+    sha256 "6d25eda9d6eca9e834c56a2d05dc5049ede3a7ee8988422f145d7075664a470d" => :sierra
+    sha256 "6d25eda9d6eca9e834c56a2d05dc5049ede3a7ee8988422f145d7075664a470d" => :high_sierra
+  end
 
   keg_only "gpsbabel is in main tap and same-name bin utilities are installed"
 
