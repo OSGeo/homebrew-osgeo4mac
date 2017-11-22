@@ -21,6 +21,7 @@ class Grass7 < Formula
   end
 
   option "without-gui", "Build without WxPython interface. Command line tools still available."
+  option "with-liblas", "Build with LibLAS-with-GDAL2 support"
   option "with-gdal-1", "Build with GDAL/OGR v1.x instead of v2.x"
 
   depends_on UnlinkedGRASS7
@@ -52,7 +53,7 @@ class Grass7 < Formula
   depends_on "ghostscript" # for cartographic composer previews
   depends_on :x11 # needs to find at least X11/include/GL/gl.h
   depends_on "openblas" => :optional
-  depends_on "liblas" => :optional
+  depends_on "osgeo/osgeo4mac/liblas-gdal2" if build.with? "liblas"
   depends_on "netcdf" => :optional
   depends_on "ffmpeg" => :optional
 
@@ -134,7 +135,7 @@ class Grass7 < Formula
       args << "--with-blas-libs=#{openblas.opt_lib}"
     end
 
-    args << "--with-liblas=#{Formula["liblas"].opt_bin}/liblas-config" if build.with? "liblas"
+    args << "--with-liblas=#{Formula["liblas-gdal2"].opt_bin}/liblas-config" if build.with? "liblas"
     args << "--with-netcdf=#{Formula["netcdf"].opt_bin}/nc-config" if build.with? "netcdf"
 
     if build.with? "ffmpeg"
