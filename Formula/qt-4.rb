@@ -47,6 +47,13 @@ class Qt4 < Formula
   end
 
   def install
+    if ENV.compiler == :clang && (MacOS::Xcode.version >= "9.0" || MacOS::CLT.version >= "9.0")
+      odie <<-EOS.undent
+        Compilation not supported with Xcode/CLT 9.0 or higher.
+        Use no formula or source-build options and install available bottle.
+      EOS
+    end
+
     args = %W[
       -prefix #{prefix}
       -release
