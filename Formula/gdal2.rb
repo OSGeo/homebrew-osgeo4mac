@@ -1,15 +1,14 @@
 class Gdal2 < Formula
   desc "GDAL: Geospatial Data Abstraction Library"
   homepage "http://www.gdal.org/"
-  url "http://download.osgeo.org/gdal/2.2.2/gdal-2.2.2.tar.gz"
-  sha256 "14c1f78a60f429ad51c08d75cbf49771f1e6b20e7385c6e8379b40e8dfa39544"
-  revision 1
+  url "http://download.osgeo.org/gdal/2.2.3/gdal-2.2.3.tar.gz"
+  sha256 "52f01bda8968643633016769607e6082a8ba1c746fadc2c1abe12cf7dc8f61dd"
 
-  bottle do
-    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
-    sha256 "e43817dd690d4f758f45b1656e92281e0e36d61cb44a8f945eeda8a90bd12e6f" => :sierra
-    sha256 "e43817dd690d4f758f45b1656e92281e0e36d61cb44a8f945eeda8a90bd12e6f" => :high_sierra
-  end
+  # bottle do
+  #   root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
+  #   sha256 "e43817dd690d4f758f45b1656e92281e0e36d61cb44a8f945eeda8a90bd12e6f" => :sierra
+  #   sha256 "e43817dd690d4f758f45b1656e92281e0e36d61cb44a8f945eeda8a90bd12e6f" => :high_sierra
+  # end
 
   head do
     url "https://svn.osgeo.org/gdal/trunk/gdal"
@@ -154,9 +153,9 @@ class Gdal2 < Formula
     if build.with? "complete"
       supported_backends.delete "liblzma"
       args << "--with-liblzma=yes"
-      args.concat supported_backends.map { |b| "--with-" + b + "=" + HOMEBREW_PREFIX }
+      args.concat(supported_backends.map { |b| "--with-" + b + "=" + HOMEBREW_PREFIX })
     elsif build.without? "unsupported"
-      args.concat supported_backends.map { |b| "--without-" + b }
+      args.concat(supported_backends.map { |b| "--without-" + b })
     end
 
     # The following libraries are either proprietary, not available for public
@@ -182,7 +181,7 @@ class Gdal2 < Formula
       rasdaman
       sosi
     ]
-    args.concat unsupported_backends.map { |b| "--without-" + b } if build.without? "unsupported"
+    args.concat(unsupported_backends.map { |b| "--without-" + b }) if build.without? "unsupported"
 
     # Database support.
     args << (build.with?("postgresql") ? "--with-pg=#{HOMEBREW_PREFIX}/bin/pg_config" : "--without-pg")
@@ -244,18 +243,6 @@ class Gdal2 < Formula
     sqlite = Formula["sqlite"]
     ENV.append "LDFLAGS", "-L#{sqlite.opt_lib} -lsqlite3"
     ENV.append "CFLAGS", "-I#{sqlite.opt_include}"
-
-    # Temp fix for GDAL 2.2.2 not supporting new OpenJPEG 2.3, which is API/ABI compatible with OpenJPEG 2.2
-    # TODO: remove on GDAL 2.2.3 or whenever OpenJPEG 2.3 is supported
-    opj_ver_list = Formula["openjpeg"].version.to_s.split(".")
-    opj_ver = "#{opj_ver_list[0]}.#{opj_ver_list[1]}"
-    if opj_ver == "2.3"
-      inreplace "configure" do |s|
-        s.gsub! "openjpeg-2.2", "openjpeg-2.3"
-        s.gsub! "OPENJPEG_VERSION=20200", "OPENJPEG_VERSION=20300"
-      end
-      inreplace "frmts/openjpeg/openjpegdataset.cpp", "openjpeg-2.2", "openjpeg-2.3"
-    end
 
     ENV.append "LDFLAGS", "-L#{Formula["ogdi"].opt_lib}/ogdi" if build.with? "ogdi"
 
