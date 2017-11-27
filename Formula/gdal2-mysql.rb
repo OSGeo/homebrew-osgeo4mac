@@ -1,14 +1,14 @@
 class Gdal2Mysql < Formula
   desc "GDAL/OGR 2 plugin for MySQL driver"
   homepage "http://www.gdal.org/drv_mysql.html"
-  url "http://download.osgeo.org/gdal/2.2.2/gdal-2.2.2.tar.gz"
-  sha256 "14c1f78a60f429ad51c08d75cbf49771f1e6b20e7385c6e8379b40e8dfa39544"
+  url "http://download.osgeo.org/gdal/2.2.3/gdal-2.2.3.tar.gz"
+  sha256 "52f01bda8968643633016769607e6082a8ba1c746fadc2c1abe12cf7dc8f61dd"
 
-  bottle do
-    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
-    sha256 "826b07db55496e75732db8edfa65524a4edffd446d8dc71f31bd9daaf5721169" => :sierra
-    sha256 "826b07db55496e75732db8edfa65524a4edffd446d8dc71f31bd9daaf5721169" => :high_sierra
-  end
+  # bottle do
+  #   root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
+  #   sha256 "826b07db55496e75732db8edfa65524a4edffd446d8dc71f31bd9daaf5721169" => :sierra
+  #   sha256 "826b07db55496e75732db8edfa65524a4edffd446d8dc71f31bd9daaf5721169" => :high_sierra
+  # end
 
   depends_on "mysql" => :build # adds openssl
   depends_on "gdal2"
