@@ -5,8 +5,6 @@ class Qt4 < Formula
   mirror "https://www.mirrorservice.org/sites/download.qt-project.org/official_releases/qt/4.8/4.8.7/qt-everywhere-opensource-src-4.8.7.tar.gz"
   sha256 "e2882295097e47fe089f8ac741a95fef47e0a73a3f3cdf21b56990638f626ea0"
 
-  head "https://code.qt.io/qt/qt.git", :branch => "4.8"
-
   bottle do
     root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
     sha256 "5b831d16f71c52aaf548c804b769aaa49fe5ad148bd50f8145b996f7355c5ddb" => :sierra
