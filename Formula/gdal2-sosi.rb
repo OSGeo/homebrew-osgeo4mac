@@ -1,14 +1,14 @@
 class Gdal2Sosi < Formula
   desc "GDAL/OGR 2.x plugin for SOSI driver"
   homepage "https://trac.osgeo.org/gdal/wiki/SOSI"
-  url "http://download.osgeo.org/gdal/2.2.2/gdal-2.2.2.tar.gz"
-  sha256 "14c1f78a60f429ad51c08d75cbf49771f1e6b20e7385c6e8379b40e8dfa39544"
+  url "http://download.osgeo.org/gdal/2.2.3/gdal-2.2.3.tar.gz"
+  sha256 "52f01bda8968643633016769607e6082a8ba1c746fadc2c1abe12cf7dc8f61dd"
 
-  bottle do
-    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
-    sha256 "a03417b1bf21b07f450d9554182a23a3c559308cf99c4e9e252ded330fa4f9e4" => :sierra
-    sha256 "a03417b1bf21b07f450d9554182a23a3c559308cf99c4e9e252ded330fa4f9e4" => :high_sierra
-  end
+  # bottle do
+  #   root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
+  #   sha256 "a03417b1bf21b07f450d9554182a23a3c559308cf99c4e9e252ded330fa4f9e4" => :sierra
+  #   sha256 "a03417b1bf21b07f450d9554182a23a3c559308cf99c4e9e252ded330fa4f9e4" => :high_sierra
+  # end
 
   depends_on "fyba"
   depends_on "gdal2"
