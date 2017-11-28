@@ -4,11 +4,11 @@ class Gdal2 < Formula
   url "http://download.osgeo.org/gdal/2.2.3/gdal-2.2.3.tar.gz"
   sha256 "52f01bda8968643633016769607e6082a8ba1c746fadc2c1abe12cf7dc8f61dd"
 
-  # bottle do
-  #   root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
-  #   sha256 "e43817dd690d4f758f45b1656e92281e0e36d61cb44a8f945eeda8a90bd12e6f" => :sierra
-  #   sha256 "e43817dd690d4f758f45b1656e92281e0e36d61cb44a8f945eeda8a90bd12e6f" => :high_sierra
-  # end
+  bottle do
+    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
+    sha256 "4041b35db4dd7615cc8b90b2a7f3af0decfd4a9659af68673104d6c88f8326c9" => :sierra
+    sha256 "4041b35db4dd7615cc8b90b2a7f3af0decfd4a9659af68673104d6c88f8326c9" => :high_sierra
+  end
 
   head do
     url "https://svn.osgeo.org/gdal/trunk/gdal"
