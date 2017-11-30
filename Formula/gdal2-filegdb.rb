@@ -4,11 +4,11 @@ class Gdal2Filegdb < Formula
   url "http://download.osgeo.org/gdal/2.2.3/gdal-2.2.3.tar.gz"
   sha256 "52f01bda8968643633016769607e6082a8ba1c746fadc2c1abe12cf7dc8f61dd"
 
-  # bottle do
-  #   root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
-  #   sha256 "a75f3a07aae0c0d27c7208d605dc8bd84cfc7d37bd857d0ba9f72e16d3f577d2" => :sierra
-  #   sha256 "a75f3a07aae0c0d27c7208d605dc8bd84cfc7d37bd857d0ba9f72e16d3f577d2" => :high_sierra
-  # end
+  bottle do
+    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
+    sha256 "a06153cf6220a595b8cbc534562720efe5ce150f0273b9548b1d61a5620a0dcd" => :sierra
+    sha256 "a06153cf6220a595b8cbc534562720efe5ce150f0273b9548b1d61a5620a0dcd" => :high_sierra
+  end
 
   depends_on "filegdb-api"
   depends_on "gdal2"
