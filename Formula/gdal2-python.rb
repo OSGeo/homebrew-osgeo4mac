@@ -49,11 +49,11 @@ class Gdal2Python < Formula
   url "http://download.osgeo.org/gdal/2.2.3/gdal-2.2.3.tar.gz"
   sha256 "52f01bda8968643633016769607e6082a8ba1c746fadc2c1abe12cf7dc8f61dd"
 
-  # bottle do
-  #   root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
-  #   sha256 "ac6a8c56aad16ce47126747e9685b95de3f527105407f863b8dbc98c26bbff4e" => :sierra
-  #   sha256 "ac6a8c56aad16ce47126747e9685b95de3f527105407f863b8dbc98c26bbff4e" => :high_sierra
-  # end
+  bottle do
+    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
+    sha256 "c930b0f5d806387980d6e372f9cf7c2fdecc5ca937f33f44d678472ebbf634e2" => :sierra
+    sha256 "c930b0f5d806387980d6e372f9cf7c2fdecc5ca937f33f44d678472ebbf634e2" => :high_sierra
+  end
 
   keg_only "older version of gdal is in main tap and installs similar components"
 
@@ -68,8 +68,8 @@ class Gdal2Python < Formula
   depends_on "numpy"
 
   resource "autotest" do
-    url "http://download.osgeo.org/gdal/2.2.2/gdalautotest-2.2.2.tar.gz"
-    sha256 "102b3980bbfa079eed6e3d77d70d2f48f2700f5078ad31c42e93cf35d0680f0d"
+    url "http://download.osgeo.org/gdal/2.2.3/gdalautotest-2.2.3.tar.gz"
+    sha256 "acc1ec2c8c51830a41557b6c1605f027666a0e2a78898fb9590e75018f57dea6"
   end
 
   def install
