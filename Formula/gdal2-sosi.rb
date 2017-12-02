@@ -7,7 +7,6 @@ class Gdal2Sosi < Formula
   # bottle do
   #   root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
   #   sha256 "a03417b1bf21b07f450d9554182a23a3c559308cf99c4e9e252ded330fa4f9e4" => :sierra
-  #   sha256 "a03417b1bf21b07f450d9554182a23a3c559308cf99c4e9e252ded330fa4f9e4" => :high_sierra
   # end
 
   depends_on "fyba"
