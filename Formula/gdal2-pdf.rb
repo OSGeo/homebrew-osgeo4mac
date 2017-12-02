@@ -4,11 +4,11 @@ class Gdal2Pdf < Formula
   url "http://download.osgeo.org/gdal/2.2.3/gdal-2.2.3.tar.gz"
   sha256 "52f01bda8968643633016769607e6082a8ba1c746fadc2c1abe12cf7dc8f61dd"
 
-  # bottle do
-  #   root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
-  #   sha256 "73ba41f887ea917067d794d023594e739ee01009fab610e129020ef03860fb20" => :sierra
-  #   sha256 "73ba41f887ea917067d794d023594e739ee01009fab610e129020ef03860fb20" => :high_sierra
-  # end
+  bottle do
+    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
+    sha256 "ee260fb3d333297b081f0f4c01f6c7075cb540137817180d0b9726076f8f1934" => :sierra
+    sha256 "ee260fb3d333297b081f0f4c01f6c7075cb540137817180d0b9726076f8f1934" => :high_sierra
+  end
 
   option "without-poppler", "Build without additional Poppler support"
   option "with-pdfium", "Build without PDFium support (stdlib for C++ issues)"
