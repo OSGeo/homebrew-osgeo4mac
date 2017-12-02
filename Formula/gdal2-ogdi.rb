@@ -7,7 +7,6 @@ class Gdal2Ogdi < Formula
   # bottle do
   #   root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
   #   sha256 "bd40792669fdca893dda8beada60ad513eaac0ef795573a546bcdcab4846546d" => :sierra
-  #   sha256 "bd40792669fdca893dda8beada60ad513eaac0ef795573a546bcdcab4846546d" => :high_sierra
   # end
 
   depends_on "ogdi"
