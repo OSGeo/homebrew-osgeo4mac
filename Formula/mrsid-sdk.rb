@@ -1,9 +1,14 @@
 require File.expand_path("../../Strategies/cache-download", Pathname.new(__FILE__).realpath)
+#require 'shellwords'
+require 'open-uri'
 
 class MrsidSdk < Formula
   desc "MrSID format decoder libs for MG4 (raster and LiDAR), MG3, MG2, JP2"
   homepage "https://www.lizardtech.com/developer/"
-  url "file://#{HOMEBREW_CACHE}/MrSID_DSDK-9.5.1.4427-darwin14.universal.clang60.tar.gz",
+  escapedurl = URI::encode("file://#{HOMEBREW_CACHE}/MrSID_DSDK-9.5.1.4427-darwin14.universal.clang60.tar.gz")
+  opoo escapedurl
+  #url "file://#{HOMEBREW_CACHE}/MrSID_DSDK-9.5.1.4427-darwin14.universal.clang60.tar.gz",
+  url escapedurl,
       :using => CacheDownloadStrategy
   version "9.5.1.4427"
   sha256 "286843f4a22845835a06626327eed67216e403a54e17d8b10a675663d41b9829"
