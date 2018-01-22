@@ -32,7 +32,7 @@ class Gdal2Ogdi < Formula
     # add external plugin registration
     inreplace "#{Dir.pwd}/ogr/ogrsf_frmts/ogdi/ogrogdi.h",
               %r{(#endif /\* OGDOGDI_H_INCLUDED \*/)},
-              <<-EOS.undent
+              <<~EOS
 
               CPL_C_START
               void CPL_DLL RegisterOGROGDI();
@@ -72,7 +72,7 @@ class Gdal2Ogdi < Formula
     system ENV.cxx, *args
   end
 
-  def caveats; <<-EOS.undent
+  def caveats; <<~EOS
     This formula provides a plugin that allows GDAL or OGR to access geospatial
     data stored in its format. In order to use the shared plugin, you may need
     to set the following enviroment variable:

@@ -18,7 +18,7 @@ class Osm2po < Formula
     (libexec/"demo.sh").chmod 0755
   end
 
-  def caveats; <<-EOS.undent
+  def caveats; <<~EOS
       The generated executable:
         osm2po <my-params>
       executes:

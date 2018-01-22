@@ -34,7 +34,7 @@ class Libnoise < Formula
     (prefix/"examples").install resource("examples")
 
     resource("noiseutils").stage do
-      (Pathname.pwd/"CMakeLists.txt").write <<-EOS.undent
+      (Pathname.pwd/"CMakeLists.txt").write <<~EOS
         set( PROJECT_NAME libnoiseutils )
         include_directories( "${CMAKE_INSTALL_PREFIX}/include" )
         add_library( noiseutils SHARED noiseutils.cpp )
@@ -54,7 +54,7 @@ class Libnoise < Formula
     end
   end
 
-  def caveats; <<-EOS.undent
+  def caveats; <<~EOS
     This formula is installed from a fork of the main project, which offers a
     a CMake-based install. Original project is located here:
 

@@ -133,7 +133,7 @@ class Grass64 < Formula
 
   def caveats
     if headless?
-      <<-EOS.undent
+      <<~EOS
         This build of GRASS has been compiled without the WxPython GUI.
 
         The command line tools remain fully functional.

@@ -257,7 +257,7 @@ class Gdal110 < Formula
 
   def caveats
     if build.include? 'enable-mdb'
-      <<-EOS.undent
+      <<~EOS
 
       To have a functional MDB driver, install supporting .jar files in:
         `/Library/Java/Extensions/`

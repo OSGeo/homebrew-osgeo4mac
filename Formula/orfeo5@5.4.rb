@@ -132,7 +132,7 @@ class Orfeo5AT54 < Formula
     bin.env_script_all_files(libexec/"bin", envars)
   end
 
-  def caveats; <<-EOS.undent
+  def caveats; <<~EOS
       The default geoid to use in elevation calculations is available in:
 
         #{opt_libexec}/default_geoid/egm96.grd

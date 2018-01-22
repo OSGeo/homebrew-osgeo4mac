@@ -10,7 +10,7 @@ class UnlinkedQGIS2 < Requirement
 
   def message
     qgis_f = unlinked_qgis[1]
-    <<-EOS.undent
+    <<~EOS
 
       Another QGIS formula is linked: #{qgis_f}
 
@@ -34,7 +34,7 @@ class SipBinary < Requirement
   satisfy(:build_env => false) { which 'sip' }
 
   def message
-    <<-EOS.undent
+    <<~EOS
       The `sip` binary is missing. It is needed to generate the Python bindings for QGIS.
       Ensure `sip` formula is installed and linked.
 
@@ -52,7 +52,7 @@ class PyQtConfig < Requirement
   satisfy(:build_env => false) { quiet_system 'python', '-c', 'from PyQt4 import pyqtconfig' }
 
   def message
-    <<-EOS.undent
+    <<~EOS
       Python could not import the PyQt4.pyqtconfig module. This will cause the QGIS build to fail.
       The most common reason for this failure is that the PYTHONPATH needs to be adjusted.
       The `pyqt` caveats explain this adjustment and may be reviewed using:

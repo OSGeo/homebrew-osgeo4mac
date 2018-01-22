@@ -13,7 +13,7 @@ class JavaJDK < Requirement
     self.class.home
   end
 
-  def message; <<-EOS.undent
+  def message; <<~EOS
     Could not find a JDK (i.e. not a JRE)
 
     Do one of the following:
@@ -202,7 +202,7 @@ class Mapserver64 < Formula
     s = ""
     mapscr_opt_dir = opt_prefix/"mapscript"
     if build.with? "php"
-      s += <<-EOS.undent
+      s += <<~EOS
         Using the built PHP module:
           * Add the following line to php.ini:
             extension="#{mapscr_opt_dir}/php/php_mapscript.so"
@@ -226,7 +226,7 @@ class Mapserver64 < Formula
           cmd << "sudo cp -f libjavamapscript.jnilib mapscript.jar /Library/Java/Extensions/"
         else
         end
-        s += <<-EOS.undent
+        s += <<~EOS
           Install the built #{m.upcase} module with:
             cd #{mapscr_opt_dir}/#{m}
             #{cmd[0]}
@@ -253,7 +253,7 @@ class Mapserver64 < Formula
     end
   end
 
-  def caveats; <<-EOS.undent
+  def caveats; <<~EOS
     The Mapserver CGI executable is #{opt_prefix}/bin/mapserv
 
     Instructions for installing any built, but uninstalled, mapscript modules:

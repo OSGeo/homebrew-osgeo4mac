@@ -115,7 +115,7 @@ class Qscintilla2Qt4 < Formula
   test do
     Language::Python.each_python(build) do |python, version|
       ENV["PYTHONPATH"] = "#{HOMEBREW_PREFIX}/lib/qt-4/python#{version}/site-packages"
-      Pathname("test.py").write <<-EOS.undent
+      Pathname("test.py").write <<~EOS
       import PyQt4.Qsci
       assert("QsciLexer" in dir(PyQt4.Qsci))
       EOS

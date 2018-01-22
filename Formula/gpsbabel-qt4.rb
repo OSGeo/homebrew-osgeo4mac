@@ -33,7 +33,7 @@ class GpsbabelQt4 < Formula
   end
 
   test do
-    (testpath/"test.loc").write <<-EOS.undent
+    (testpath/"test.loc").write <<~EOS
       <?xml version="1.0"?>
       <loc version="1.0">
         <waypoint>

@@ -34,7 +34,7 @@ class Pyspatialite < Formula
 
   def install
     # write setup.cfg
-    (buildpath/"setup.cfg").write <<-EOS.undent
+    (buildpath/"setup.cfg").write <<~EOS
       [build_ext]
       include_dirs=#{HOMEBREW_PREFIX}/include/:#{HOMEBREW_PREFIX}/opt/sqlite/include/
       library_dirs=#{HOMEBREW_PREFIX}/lib:#{HOMEBREW_PREFIX}/opt/sqlite/lib

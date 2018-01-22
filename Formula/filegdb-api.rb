@@ -53,7 +53,7 @@ class FilegdbApi < Formula
     quiet_system "install_name_tool", "-id", "#{dir}/#{dylib}", dylib
   end
 
-  def caveats; <<-EOS.undent
+  def caveats; <<~EOS
       To build software with the File GDB API, add to the following
       environment variable to find headers:
 

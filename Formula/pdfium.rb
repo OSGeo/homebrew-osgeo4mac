@@ -66,7 +66,7 @@ class Pdfium < Formula
       # system "./build/install-build-deps.sh" # Linux-only
       (cwdir/pdfium_build_dir).mkpath
       # write out config args
-      (cwdir/"#{pdfium_build_dir}/args.gn").write <<-EOS.undent
+      (cwdir/"#{pdfium_build_dir}/args.gn").write <<~EOS
         # Build arguments go here.
         # See "gn args <out_dir> --list" for available build arguments.
         use_goma=false
@@ -107,7 +107,7 @@ class Pdfium < Formula
     end
   end
 
-  def caveats; <<-EOS.undent
+  def caveats; <<~EOS
     For building other software, static libs are located in
       #{opt_lib}/pdfium
 

@@ -114,7 +114,7 @@ class PdfiumGdal2 < Formula
     end
   end
 
-  def caveats; <<-EOS.undent
+  def caveats; <<~EOS
     For building other software, static libs are located in
       #{opt_lib}/pdfium
 

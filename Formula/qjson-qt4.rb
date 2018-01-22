@@ -21,7 +21,7 @@ class QjsonQt4 < Formula
   end
 
   test do
-    (testpath/"test.cpp").write <<-EOS.undent
+    (testpath/"test.cpp").write <<~EOS
       #include <qjson/parser.h>
       int main() {
         QJson::Parser parser;

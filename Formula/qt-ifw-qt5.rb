@@ -59,14 +59,14 @@ class QtIfwQt5 < Formula
     end
   end
 
-  def caveats; <<-EOS.undent
+  def caveats; <<~EOS
       We agreed to the Qt5 opensource license for you.
       If this is unacceptable you should uninstall.
     EOS
   end
 
   test do
-    (testpath/"hello.pro").write <<-EOS.undent
+    (testpath/"hello.pro").write <<~EOS
       QT       += core
       QT       -= gui
       TARGET = hello
@@ -76,7 +76,7 @@ class QtIfwQt5 < Formula
       SOURCES += main.cpp
     EOS
 
-    (testpath/"main.cpp").write <<-EOS.undent
+    (testpath/"main.cpp").write <<~EOS
       #include <QCoreApplication>
       #include <QDebug>
 

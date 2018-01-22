@@ -49,7 +49,7 @@ class SipQt4 < Formula
   end
 
   test do
-    (testpath/"test.h").write <<-EOS.undent
+    (testpath/"test.h").write <<~EOS
       #pragma once
       class Test {
       public:
@@ -57,7 +57,7 @@ class SipQt4 < Formula
         void test();
       };
     EOS
-    (testpath/"test.cpp").write <<-EOS.undent
+    (testpath/"test.cpp").write <<~EOS
       #include "test.h"
       #include <iostream>
       Test::Test() {}
@@ -66,7 +66,7 @@ class SipQt4 < Formula
         std::cout << "Hello World!" << std::endl;
       }
     EOS
-    (testpath/"test.sip").write <<-EOS.undent
+    (testpath/"test.sip").write <<~EOS
       %Module test
       class Test {
       %TypeHeaderCode
@@ -77,14 +77,14 @@ class SipQt4 < Formula
         void test();
       };
     EOS
-    (testpath/"generate.py").write <<-EOS.undent
+    (testpath/"generate.py").write <<~EOS
       from sipconfig import SIPModuleMakefile, Configuration
       m = SIPModuleMakefile(Configuration(), "test.build")
       m.extra_libs = ["test"]
       m.extra_lib_dirs = ["."]
       m.generate()
     EOS
-    (testpath/"run.py").write <<-EOS.undent
+    (testpath/"run.py").write <<~EOS
       from test import Test
       t = Test()
       t.test()

@@ -2,7 +2,7 @@ class NoQt5WebKitAlreadyRequirement < Requirement
   fatal true
   satisfy(:build_env => false) { !(Formula["qt5"].lib/"QtWebKit.framework").exist? }
 
-  def message; <<-EOS.undent
+  def message; <<~EOS
     Qt5 formula already has QtWebKit installed (e.g. built `--with-webkit`)
   EOS
   end
@@ -22,7 +22,7 @@ class NoQt5WebKitSandboxRequirement < Requirement
     (ARGV.build_all_from_source? || ARGV.build_from_source? || ARGV.build_bottle?) ? ARGV.no_sandbox? : ARGV.no_sandbox? || pour_bottle?
   end
 
-  def message; <<-EOS.undent
+  def message; <<~EOS
     Must be built with `brew install --no-sandbox ...`, or install steps will fail.
   EOS
   end
@@ -145,14 +145,14 @@ class Qt5Webkit < Formula
     end
   end
 
-  def caveats; <<-EOS.undent
+  def caveats; <<~EOS
     Must be built with `brew install --no-sandbox ...`, or install steps will fail.
 
   EOS
   end
 
   test do
-    (testpath/"hello.pro").write <<-EOS.undent
+    (testpath/"hello.pro").write <<~EOS
       QT        += core webkitwidgets
       QT        -= gui
       TARGET     = hello
@@ -165,7 +165,7 @@ class Qt5Webkit < Formula
       include(#{prefix}/mkspecs/modules/qt_lib_webkitwidgets.pri)
     EOS
 
-    (testpath/"client.h").write <<-EOS.undent
+    (testpath/"client.h").write <<~EOS
     #ifndef CLIENT_H
     #define CLIENT_H
     #include <QWebPage>
@@ -190,7 +190,7 @@ class Qt5Webkit < Formula
     #endif // CLIENT_H
     EOS
 
-    (testpath/"client.cpp").write <<-EOS.undent
+    (testpath/"client.cpp").write <<~EOS
     #include "client.h"
     #include <QCoreApplication>
     #include <QDebug>
@@ -221,7 +221,7 @@ class Qt5Webkit < Formula
     }
     EOS
 
-    (testpath/"main.cpp").write <<-EOS.undent
+    (testpath/"main.cpp").write <<~EOS
       #include <QApplication>
       #include <QDebug>
       #include <QTimer>
@@ -238,7 +238,7 @@ class Qt5Webkit < Formula
       }
     EOS
 
-    (testpath/"test.html").write <<-EOS.undent
+    (testpath/"test.html").write <<~EOS
       <!DOCTYPE html>
       <html lang="en">
       <head><meta charset="utf-8" /><title>My title</title></head>

@@ -4,7 +4,7 @@ class EcwJp2Sdk < Requirement
   fatal true
   satisfy(:build_env => false) { File.exist? ECWJP2_SDK }
 
-  def message; <<-EOS.undent
+  def message; <<~EOS
     ERDAS ECW/JP2 SDK was not found at:
       #{ECWJP2_SDK}
 
@@ -66,7 +66,7 @@ class GdalEcwjp2 < Formula
 
   end
 
-  def caveats; <<-EOS.undent
+  def caveats; <<~EOS
     This formula provides a plugin that allows GDAL or OGR to access geospatial
     data stored in its format. In order to use the shared plugin, you will need
     to set the following enviroment variable:

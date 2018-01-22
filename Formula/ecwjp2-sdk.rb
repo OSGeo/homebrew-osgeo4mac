@@ -6,7 +6,7 @@ class EcwJpeg2000SDK < Requirement
   fatal true
   satisfy(:build_env => false) { File.exist? ECWJP2_SDK }
 
-  def message; <<-EOS.undent
+  def message; <<~EOS
     ERDAS ECW/JP2 SDK was not found at:
       #{ECWJP2_SDK}
 
@@ -45,7 +45,7 @@ class Ecwjp2Sdk < Formula
     end
   end
 
-  def caveats; <<-EOS.undent
+  def caveats; <<~EOS
     Once formula is installed, the ERDAS ECW/JP2 SDK can be deleted from its
     default install location of:
 

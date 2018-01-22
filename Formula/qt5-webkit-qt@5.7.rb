@@ -2,7 +2,7 @@ class NoQt5WebKitAlreadyRequirement < Requirement
   fatal true
   satisfy(:build_env => false) { !(Formula["qt@5.7"].lib/"QtWebKit.framework").exist? }
 
-  def message; <<-EOS.undent
+  def message; <<~EOS
     Qt5 formula already has QtWebKit installed (e.g. built `--with-webkit``)
   EOS
   end
@@ -121,7 +121,7 @@ class Qt5WebkitQtAT57 < Formula
   end
 
   test do
-    (testpath/"hello.pro").write <<-EOS.undent
+    (testpath/"hello.pro").write <<~EOS
       QT        += core webkitwidgets
       TARGET     = hello
       CONFIG    += console
@@ -133,7 +133,7 @@ class Qt5WebkitQtAT57 < Formula
       include(#{prefix}/mkspecs/modules/qt_lib_webkitwidgets.pri)
     EOS
 
-    (testpath/"client.h").write <<-EOS.undent
+    (testpath/"client.h").write <<~EOS
     #ifndef CLIENT_H
     #define CLIENT_H
     #include <QWebPage>
@@ -158,7 +158,7 @@ class Qt5WebkitQtAT57 < Formula
     #endif // CLIENT_H
     EOS
 
-    (testpath/"client.cpp").write <<-EOS.undent
+    (testpath/"client.cpp").write <<~EOS
     #include "client.h"
     #include <QCoreApplication>
     #include <QDebug>
@@ -189,7 +189,7 @@ class Qt5WebkitQtAT57 < Formula
     }
     EOS
 
-    (testpath/"main.cpp").write <<-EOS.undent
+    (testpath/"main.cpp").write <<~EOS
       #include <QApplication>
       #include <QDebug>
       #include <QTimer>

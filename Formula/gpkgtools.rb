@@ -11,7 +11,7 @@ class Gpkgtools < Formula
   def install
     head_ext = "#{HOMEBREW_PREFIX}/Cellar/libspatialite/HEAD/lib/spatialite.dylib"
     unless File.exist? head_ext
-      odie <<-EOS.undent
+      odie <<~EOS
         No libspatialite HEAD build or SQLite3 extension 'spatialite.dylib' exists.
         Install libspatialite using --HEAD and --with-geopackage options'.
         NOTE: To experiment with the HEAD build, but already have libspatialite

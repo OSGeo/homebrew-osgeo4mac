@@ -103,7 +103,7 @@ class Gdal2Python < Formula
     end
   end
 
-  def caveats; <<-EOS
+  def caveats; <<~EOS
     Sample Python scripts installed to:
       #{opt_libexec}/bin
 
