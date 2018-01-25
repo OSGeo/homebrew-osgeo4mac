@@ -29,8 +29,8 @@ class Qt5WebkitQtAT57 < Formula
   depends_on "libxslt"
   depends_on "sqlite"
 
-  depends_on :macos => :mountain_lion
-  depends_on :xcode => :build
+  depends_on "macos" => :mountain_lion
+  depends_on "xcode" => :build
 
   def install
     # On Mavericks we want to target libc++, this requires a macx-clang flag.

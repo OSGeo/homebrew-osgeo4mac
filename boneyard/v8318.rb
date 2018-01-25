@@ -14,7 +14,7 @@ class V8318 < Formula
 
   # gyp currently depends on a full xcode install
   # https://code.google.com/p/gyp/issues/detail?id=292
-  depends_on :xcode
+  depends_on "xcode"
 
   def install
     system 'make dependencies'

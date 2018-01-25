@@ -66,8 +66,8 @@ class Mapserver6 < Formula
   depends_on "proj"
   depends_on "geos" => :recommended
   depends_on "gdal"
-  depends_on :postgresql => :recommended
-  depends_on :mysql => :optional
+  depends_on "postgresql" => :recommended
+  depends_on "mysql" => :optional
   depends_on "fcgi" => :recommended
   depends_on "cairo" => :recommended
   depends_on "libxml2" if build.with?("xml-mapfile") || MacOS.version < :mountain_lion

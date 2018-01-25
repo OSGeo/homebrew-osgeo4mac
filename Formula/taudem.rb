@@ -15,7 +15,7 @@ class Taudem < Formula
   head "https://github.com/dtarb/TauDEM.git", :branch => "master"
 
   depends_on "cmake" => :build
-  depends_on :mpi => [:cc, :cxx]
+  depends_on "mpi" => [:cc, :cxx]
   depends_on "gdal2"
 
   resource "logan" do

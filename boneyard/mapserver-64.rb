@@ -57,8 +57,8 @@ class Mapserver64 < Formula
   option "with-unit-tests", "Download and install full unit test suite"
 
   depends_on "cmake" => :build
-  depends_on :freetype
-  depends_on :libpng
+  depends_on "freetype"
+  depends_on "libpng"
   depends_on :python
   depends_on "swig" => :build
   depends_on JavaJDK if build.with? "java"
@@ -67,8 +67,8 @@ class Mapserver64 < Formula
   depends_on "proj"
   depends_on "geos" => :recommended
   depends_on "gdal"
-  depends_on :postgresql => :recommended
-  depends_on :mysql => :optional
+  depends_on "postgresql" => :recommended
+  depends_on "mysql" => :optional
   depends_on "fcgi" => :recommended
   depends_on "cairo" => :recommended
   depends_on "libxml2" if build.with? "xml-mapfile" or MacOS.version < :mountain_lion

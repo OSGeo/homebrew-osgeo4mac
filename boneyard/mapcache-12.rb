@@ -11,7 +11,7 @@ class Mapcache12 < Formula
 
   depends_on "cmake" => :build
   depends_on "pkg-config" => :build
-  depends_on :apr => :build if build.with? "apache-module"
+  depends_on "apr" => :build if build.with? "apache-module"
   depends_on "libpng"
   depends_on "jpeg"
   depends_on "pcre" => :recommended

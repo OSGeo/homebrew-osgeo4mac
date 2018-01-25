@@ -24,7 +24,7 @@ class Libgpkg < Formula
   depends_on "geos" => :recommended
   if build.with? "tests"
     depends_on RubyVersion19
-    depends_on :ruby => :build
+    depends_on "ruby" => :build
     depends_on "bundler" => :ruby
   end
 

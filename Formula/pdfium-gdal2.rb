@@ -15,7 +15,7 @@ class PdfiumGdal2 < Formula
   keg_only "newer version of pdfium may be installed"
 
   depends_on :python => :build # gyp doesn't run under 2.6 or lower
-  depends_on :xcode => :build
+  depends_on "xcode" => :build
 
   resource "depot_tools" do
     url "https://chromium.googlesource.com/chromium/tools/depot_tools.git"

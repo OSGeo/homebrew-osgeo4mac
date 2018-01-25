@@ -23,7 +23,7 @@ class Ecwjp2Sdk < Formula
   version "5.3.0"
   sha256 "e7776e2ff278d6460300bd69a26d7383e6c5e2fbeb17ff12998255e7fc4c9511"
 
-  depends_on :macos => :lion # as per SDK docs
+  depends_on "macos" => :lion # as per SDK docs
   depends_on EcwJpeg2000SDK
 
   def install

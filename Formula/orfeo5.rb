@@ -51,7 +51,7 @@ class Orfeo5 < Formula
   depends_on "mapnik" => :optional
   depends_on "homebrew/science/opencv" => :optional
   depends_on "openjpeg" => :optional
-  depends_on :mpi => [:cxx, :optional]
+  depends_on "mpi" => [:cxx, :optional]
   depends_on "homebrew/science/shark" => :optional
 
   # ICE Viewer: needs X11 support

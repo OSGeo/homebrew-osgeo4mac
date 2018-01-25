@@ -19,7 +19,7 @@ class GdalEcwjp2 < Formula
   url "http://download.osgeo.org/gdal/1.11.0/gdal-1.11.0.tar.gz"
   sha256 "989db33ff411e2c888348e71edec5ad06c74ed68781ebfbc4e85179b9d65aafe"
 
-  depends_on :macos => :lion # as per SDK docs
+  depends_on "macos" => :lion # as per SDK docs
   depends_on EcwJp2Sdk
   depends_on "gdal"
 

@@ -15,7 +15,7 @@ class Gdal110 < Formula
 
   depends_on :python => :recommended
   if build.with? "python"
-    depends_on :fortran => :build
+    depends_on "fortran" => :build
   end
 
   depends_on 'libpng'

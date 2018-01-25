@@ -47,11 +47,11 @@ class Grass7 < Formula
   depends_on :python
   depends_on "numpy"
   depends_on "wxpython"
-  depends_on :postgresql => :optional
-  depends_on :mysql => :optional
+  depends_on "postgresql" => :optional
+  depends_on "mysql" => :optional
   depends_on "cairo"
   depends_on "ghostscript" # for cartographic composer previews
-  depends_on :x11 # needs to find at least X11/include/GL/gl.h
+  depends_on "x11" # needs to find at least X11/include/GL/gl.h
   depends_on "openblas" => :optional
   depends_on "osgeo/osgeo4mac/liblas-gdal2" if build.with? "liblas"
   depends_on "netcdf" => :optional
