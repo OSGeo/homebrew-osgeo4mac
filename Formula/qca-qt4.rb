@@ -40,7 +40,7 @@ class QcaQt4 < Formula
   depends_on "openssl" # qca-ossl
   depends_on "botan" => :optional # qca-botan
   depends_on "libgcrypt" => :optional # qca-gcrypt
-  depends_on :gpg => [:optional, :run] # qca-gnupg
+  depends_on "gnupg" => [:optional, :run] # qca-gnupg
   depends_on "nss" => :optional # qca-nss
   depends_on "pkcs11-helper" => :optional # qca-pkcs11
 
