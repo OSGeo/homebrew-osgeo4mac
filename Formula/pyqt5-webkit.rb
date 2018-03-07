@@ -16,7 +16,7 @@ class Pyqt5Webkit < Formula
   depends_on "osgeo/osgeo4mac/qt5-webkit"
   depends_on "sip"
   depends_on "pyqt"
-  epends_on "python@2"
+  depends_on "python@2"
   depends_on "python"
 
   def install
