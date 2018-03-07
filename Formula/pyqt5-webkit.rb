@@ -16,8 +16,8 @@ class Pyqt5Webkit < Formula
   depends_on "osgeo/osgeo4mac/qt5-webkit"
   depends_on "sip"
   depends_on "pyqt"
-  depends_on :python => :recommended
-  depends_on :python3 => :recommended
+  epends_on "python@2"
+  depends_on "python"
 
   def install
     if build.without?("python3") && build.without?("python")
