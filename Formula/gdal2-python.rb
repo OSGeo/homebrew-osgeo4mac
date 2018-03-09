@@ -63,8 +63,8 @@ class Gdal2Python < Formula
   depends_on "swig" => :build
   depends_on "gdal2"
   depends_on NoGdal2Python
+  depends_on :python@2 => :recommended
   depends_on :python => :recommended
-  depends_on :python3 => :recommended
   depends_on "numpy"
 
   resource "autotest" do
