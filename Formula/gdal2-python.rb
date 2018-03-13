@@ -63,8 +63,8 @@ class Gdal2Python < Formula
   depends_on "swig" => :build
   depends_on "gdal2"
   depends_on NoGdal2Python
-  depends_on :python => :recommended
-  depends_on :python3 => :recommended
+  depends_on "python" => :recommended
+  depends_on "python3" => :recommended
   depends_on "numpy"
 
   resource "autotest" do
@@ -89,6 +89,8 @@ class Gdal2Python < Formula
 
       Language::Python.each_python(build) do |python, _python_version|
         system python, *Language::Python.setup_install_args(prefix)
+        system "echo", "#{opt_prefix}/lib/python#{_python_version}/site-packages",
+                ">", "#{lib}/python#{_python_version}/site-packages/#{name}.pth"
       end
 
       # Scripts compatible with Python3? Appear to be...
@@ -101,7 +103,7 @@ class Gdal2Python < Formula
     end
   end
 
-  def caveats; <<-EOS.undent
+  def caveats; <<-EOS
     Sample Python scripts installed to:
       #{opt_libexec}/bin
 
