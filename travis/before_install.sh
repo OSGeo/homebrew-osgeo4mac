@@ -55,7 +55,7 @@ for f in ${CHANGED_FORMULAE};do
   deps=$(brew deps -1 --include-build ${f})
   echo "${f} dependencies: ${deps}"
 
-  if [ "$(echo ${deps} | grep -c 'python')" != "0" ];then
+  if [ "$(echo ${deps} | grep -c 'python@2')" != "0" ];then
     echo "Installing and configuring Homebrew Python"
     # Already installed, upgrade, if necessary
     # brew outdated python@2 || brew upgrade python@2
@@ -82,7 +82,7 @@ for f in ${CHANGED_FORMULAE};do
     fi
   fi
 
-  if [ "$(echo ${deps} | grep -c 'python3')" != "0" ];then
+  if [ "$(echo ${deps} | grep -c 'python')" != "0" ];then
     echo "Installing and configuring Homebrew Python3"
     # brew outdated python || brew upgrade python
     brew unlink python@2
