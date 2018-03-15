@@ -54,7 +54,7 @@ for f in ${CHANGED_FORMULAE};do
   if [ "$(echo ${deps} | grep -c 'python')" != "0" ];then
     echo "Installing and configuring Homebrew Python"
     # Already installed, upgrade, if necessary
-    brew outdated python@2 || brew upgrade python@2
+    brew outdated python || brew upgrade python
 
     # Set up Python .pth files
     # get python short version (major.minor)
