@@ -44,14 +44,14 @@ class Grass7 < Formula
   depends_on "libtiff"
   depends_on "unixodbc"
   depends_on "fftw"
-  depends_on "python@2"
+  depends_on :python
   depends_on "numpy"
   depends_on "wxpython"
-  depends_on "postgresql" => :optional
-  depends_on "mysql" => :optional
+  depends_on :postgresql => :optional
+  depends_on :mysql => :optional
   depends_on "cairo"
   depends_on "ghostscript" # for cartographic composer previews
-  depends_on "x11" # needs to find at least X11/include/GL/gl.h
+  depends_on :x11 # needs to find at least X11/include/GL/gl.h
   depends_on "openblas" => :optional
   depends_on "osgeo/osgeo4mac/liblas-gdal2" if build.with? "liblas"
   depends_on "netcdf" => :optional
@@ -194,7 +194,7 @@ index cf16788..8c0007b 100644
 @@ -114,11 +114,6 @@ real-install: | $(INST_DIR) $(UNIX_BIN)
  	-$(INSTALL) config.status $(INST_DIR)/config.status
  	-$(CHMOD) -R a+rX $(INST_DIR) 2>/dev/null
-
+ 
 -ifneq ($(findstring darwin,$(ARCH)),)
 -	@# enable OSX Help Viewer
 -	@/bin/ln -sfh "$(INST_DIR)/docs/html" /Library/Documentation/Help/GRASS-$(GRASS_VERSION_MAJOR).$(GRASS_VERSION_MINOR)
@@ -202,4 +202,4 @@ index cf16788..8c0007b 100644
 -
  $(INST_DIR) $(UNIX_BIN):
  	$(MAKE_DIR_CMD) $@
-
+ 
