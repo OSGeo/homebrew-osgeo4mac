@@ -4,8 +4,8 @@ class NoGdal2Python < Requirement
 
   def message
     s = "`gdal2` formula already installed with Python 2 or 3 bindings:\n"
-    s += "  #{Gdal2Python.gdal2_python("python")}\n" if Gdal2Python.gdal2_py2_exist?
-    s += "  #{Gdal2Python.gdal2_python("python3")}\n" if Gdal2Python.gdal2_py3_exist?
+    s += "  #{Gdal2Python.gdal2_python("python@2")}\n" if Gdal2Python.gdal2_py2_exist?
+    s += "  #{Gdal2Python.gdal2_python("python")}\n" if Gdal2Python.gdal2_py3_exist?
     s += "`gdal2` install options:\n"
     s += "  gdal2 #{Gdal2Python.gdal2_opts.to_a.join(" ")}\n"
     s += "Install latest `gdal2`, which installs no Python bindings:\n"
@@ -37,11 +37,11 @@ class Gdal2Python < Formula
   end
 
   def self.gdal2_py2_exist?
-    gdal2_python("python").exist?
+    gdal2_python("python@2").exist?
   end
 
   def self.gdal2_py3_exist?
-    gdal2_python("python3").exist?
+    gdal2_python("python").exist?
   end
 
   desc "Python bindings for GDAL: Geospatial Data Abstraction Library"
@@ -54,17 +54,22 @@ class Gdal2Python < Formula
     sha256 "c930b0f5d806387980d6e372f9cf7c2fdecc5ca937f33f44d678472ebbf634e2" => :sierra
     sha256 "c930b0f5d806387980d6e372f9cf7c2fdecc5ca937f33f44d678472ebbf634e2" => :high_sierra
   end
+  
+  head do
+    url "https://svn.osgeo.org/gdal/trunk/gdal"
+    depends_on "doxygen" => :build
+  end
 
   keg_only "older version of gdal is in main tap and installs similar components"
 
-  option "without-python", "Build without Python2 support"
-  option "without-python3", "Build without Python3 support"
+  option "without-python@2", "Build without python@2 support"
+  option "without-python", "Build without Python 3 support"
 
   depends_on "swig" => :build
   depends_on "gdal2"
   depends_on NoGdal2Python
+  depends_on "python@2" => :recommended
   depends_on "python" => :recommended
-  depends_on "python3" => :recommended
   depends_on "numpy"
 
   resource "autotest" do
@@ -73,7 +78,7 @@ class Gdal2Python < Formula
   end
 
   def install
-    if build.without?("python") && build.without?("python3")
+    if build.without?("python@2") && build.without?("python")
       odie "Must choose a version of Python bindings to build"
     end
 

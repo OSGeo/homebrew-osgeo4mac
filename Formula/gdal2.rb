@@ -214,6 +214,7 @@ class Gdal2 < Formula
 
     # Python is installed manually to ensure everything is properly sandboxed.
     # see
+    args << "--without-python@2"
     args << "--without-python"
 
     # Scripting APIs that have not been re-worked to respect Homebrew prefixes.

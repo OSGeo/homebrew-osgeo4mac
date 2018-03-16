@@ -17,9 +17,11 @@
 
 set -e
 
+echo "travis_fold:start:brew_list_version"
 if [ -n "${DEBUG_TRAVIS}" ];then
   brew list --versions
 fi
+echo "travis_fold:end:brew_list_version"
 
 # Forcibly remove all versions of unneeded default formula provided by travis or pre-cached
 nix_f="
@@ -37,7 +39,9 @@ brew tap homebrew/science || true
 # Keeps gcc from being linked
 brew cask uninstall oclint || true
 
+echo "travis_fold:start:brew_update"
 brew update || brew update
+echo "travis_fold:end:brew_update"
 
 # Set up ccache (doesn't work with `brew install <formula>`)
 #brew install ccache
@@ -51,10 +55,13 @@ for f in ${CHANGED_FORMULAE};do
   deps=$(brew deps -1 --include-build ${f})
   echo "${f} dependencies: ${deps}"
 
-  if [ "$(echo ${deps} | grep -c 'python')" != "0" ];then
+  if [ "$(echo ${deps} | grep -c 'python@2')" != "0" ];then
     echo "Installing and configuring Homebrew Python"
     # Already installed, upgrade, if necessary
-    brew outdated python@2 || brew upgrade python@2
+    # brew outdated python@2 || brew upgrade python@2
+    brew unlink python
+    brew install python@2
+    brew link --overwrite python@2
 
     # Set up Python .pth files
     # get python short version (major.minor)
@@ -75,9 +82,12 @@ for f in ${CHANGED_FORMULAE};do
     fi
   fi
 
-  if [ "$(echo ${deps} | grep -c 'python3')" != "0" ];then
+  if [ "$(echo ${deps} | grep -c 'python')" != "0" ];then
     echo "Installing and configuring Homebrew Python3"
-    brew install python3
+    # brew outdated python || brew upgrade python
+    brew unlink python@2
+    brew install python
+    brew link --overwrite python
 
     # Set up Python .pth files
     # get python short version (major.minor)
