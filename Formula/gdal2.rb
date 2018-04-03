@@ -47,6 +47,7 @@ class Gdal2 < Formula
   depends_on "libgeotiff"
   depends_on "proj"
   depends_on "geos"
+  depends_on "json-c"
 
   depends_on "sqlite" # To ensure compatibility with SpatiaLite.
   depends_on "pcre" # for REGEXP operator in SQLite/Spatialite driver
