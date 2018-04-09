@@ -8,7 +8,7 @@ class Gdal2Mdb < Formula
   #   never (runtime JAVA version may change too much, or be different from Travis CI)
   # end
 
-  depends_on "java"
+  depends_on :java
   depends_on "gdal2"
 
   # various deps needed for configuring

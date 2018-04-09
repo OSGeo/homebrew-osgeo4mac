@@ -57,7 +57,7 @@ class Qgis2Ltr < Formula
     depends_on "graphviz" => :build
     depends_on "doxygen" => :build
   end
-  depends_on (build.with?("isolation") || MacOS.version < :lion) ? "python" : :python
+  depends_on "python@2"
   depends_on "qt-4"
   depends_on "sip-qt4"
   depends_on "pyqt-qt4"

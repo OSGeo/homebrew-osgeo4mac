@@ -56,8 +56,8 @@ class Qt5Webkit < Formula
   # depends on "libxslt"
   # depends on "sqlite"
 
-  depends_on "macos" => :mountain_lion
-  depends_on "xcode" => :build
+  depends_on :macos => :mountain_lion
+  depends_on :xcode => :build
 
   def install
     # On Mavericks we want to target libc++, this requires a macx-clang flag.
@@ -249,10 +249,10 @@ class Qt5Webkit < Formula
     cd testpath do
       system Formula["qt5"].bin/"qmake", "hello.pro"
       system "make"
-      assert File.exist?("client.o")
-      assert File.exist?("moc_client.o")
-      assert File.exist?("main.o")
-      assert File.exist?("hello")
+      assert_predicate "client.o", :exists?
+      assert_predicate "moc_client.o", :exists?
+      assert_predicate "main.o", :exists?
+      assert_predicate "hello", :exists?
       system "./hello"
     end
   end

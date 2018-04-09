@@ -23,7 +23,7 @@ class Ecwjp2Sdk < Formula
   version "5.3.0"
   sha256 "e7776e2ff278d6460300bd69a26d7383e6c5e2fbeb17ff12998255e7fc4c9511"
 
-  depends_on "macos" => :lion # as per SDK docs
+  depends_on :macos => :lion # as per SDK docs
   depends_on EcwJpeg2000SDK
 
   def install
@@ -34,7 +34,9 @@ class Ecwjp2Sdk < Formula
       # suffix only the older stdc++
       cp "redistributable/libc++/libNCSEcw.dylib", "#{lib}/"
       cp "redistributable/libstdc++/libNCSEcw.dylib", "#{lib}/libNCSEcw-stdcxx.dylib"
-      system "install_name_tool", "-id", opt_lib/"libNCSEcw-stdcxx.dylib", lib/"libNCSEcw-stdcxx.dylib"
+      # Calling install_name_tool is deprecated, so we're switching to using the MachO tools
+#      system "install_name_tool", "-id", opt_lib/"libNCSEcw-stdcxx.dylib", lib/"libNCSEcw-stdcxx.dylib"
+      MachO::Tools.change_dylib_id(opt_lib/"libNCSEcw-stdcxx.dylib", lib/"libNCSEcw-stdcxx.dylib")
       %w[etc Licenses].each { |f| cp_r f.to_s, "#{prefix}/" }
       cp_r Dir["include/*"], "#{include}/ECWJP2/"
 

@@ -10,9 +10,9 @@ class QtIfwQt5 < Formula
   # OS X 10.7 Lion is still supported in Qt 5.5, but is no longer a reference
   # configuration and thus untested in practice. Builds on OS X 10.7 have been
   # reported to fail: <https://github.com/Homebrew/homebrew/issues/45284>.
-  depends_on "macos" => :mountain_lion
+  depends_on :macos => :mountain_lion
   depends_on "pkg-config" => :build
-  depends_on "xcode" => :build
+  depends_on :xcode => :build
 
   def install
     args = ["-prefix", prefix, "-release", "-static", "-accessibility",
@@ -90,8 +90,8 @@ class QtIfwQt5 < Formula
 
     system bin/"qmake", testpath/"hello.pro"
     system "make"
-    assert File.exist?("hello")
-    assert File.exist?("main.o")
+    assert_predicate "hello", :exists?
+    assert_predicate "main.o", :exists?
     system "./hello"
   end
 end

@@ -60,7 +60,7 @@ class Mapserver6 < Formula
   depends_on "libpng"
   depends_on "python@2"
   depends_on "swig" => :build
-  depends_on JavaJDK if build.with? "java"
+  depends_on :java => :optional
   depends_on "giflib"
   depends_on "gd" => :optional unless build.head?
   depends_on "proj"
@@ -195,9 +195,12 @@ class Mapserver6 < Formula
     end
 
     # update Python module linking
-    system "install_name_tool", "-change",
-           "@rpath/libmapserver.1.dylib", opt_lib/"libmapserver.1.dylib",
-           lib/which_python/"site-packages/_mapscript.so"
+    # Deprecated: Using MachO::Tools
+#    system "install_name_tool", "-change",
+#           "@rpath/libmapserver.1.dylib", opt_lib/"libmapserver.1.dylib",
+#           lib/which_python/"site-packages/_mapscript.so"
+    MachO::Tools.change_dylib_name( "@rpath/libmapserver.1.dylib", opt_lib/"libmapserver.1.dylib",
+           lib/which_python/"site-packages/_mapscript.so")
 
     # install devel headers
     (include/"mapserver").install Dir["*.h"]

@@ -29,8 +29,8 @@ class Qt5WebkitQtAT57 < Formula
   depends_on "libxslt"
   depends_on "sqlite"
 
-  depends_on "macos" => :mountain_lion
-  depends_on "xcode" => :build
+  depends_on :macos => :mountain_lion
+  depends_on :xcode => :build
 
   def install
     # On Mavericks we want to target libc++, this requires a macx-clang flag.
@@ -114,7 +114,9 @@ class Qt5WebkitQtAT57 < Formula
       m.ensure_writable do
         dylibs.each do |d|
           next unless d.to_s =~ %r{^#{qt5_prefix}/lib/QtWebKit(Widgets)?\.framework}
-          system "install_name_tool", "-change", d, d.sub("#{qt5_prefix}/lib", opt_lib), m.to_s
+          # Deprecated: Using MachO::Tools
+#          system "install_name_tool", "-change", d, d.sub("#{qt5_prefix}/lib", opt_lib), m.to_s
+          MachO::Tools.change_dylib_name(d, d.sub("#{qt5_prefix}/lib", opt_lib), m.to_s)
         end
       end
     end
@@ -209,10 +211,10 @@ class Qt5WebkitQtAT57 < Formula
     cd testpath do
       system Formula["qt@5.7"].bin/"qmake", "hello.pro"
       system "make"
-      assert File.exist?("client.o")
-      assert File.exist?("moc_client.o")
-      assert File.exist?("main.o")
-      assert File.exist?("hello")
+      assert_predicate "client.o", :exists?
+      assert_predicate "moc_client.o", :exists?
+      assert_predicate "main.o", :exists?
+      assert_predicate "hello", :exists?
       system "./hello"
     end
   end
