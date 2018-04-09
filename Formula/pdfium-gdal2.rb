@@ -14,7 +14,7 @@ class PdfiumGdal2 < Formula
 
   keg_only "newer version of pdfium may be installed"
 
-  depends_on :python => :build # gyp doesn't run under 2.6 or lower
+  depends_on "python@2" => :build # gyp doesn't run under 2.6 or lower
   depends_on "xcode" => :build
 
   resource "depot_tools" do

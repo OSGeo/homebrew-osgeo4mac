@@ -44,7 +44,7 @@ class Grass7 < Formula
   depends_on "libtiff"
   depends_on "unixodbc"
   depends_on "fftw"
-  depends_on :python
+  depends_on "python@2"
   depends_on "numpy"
   depends_on "wxpython"
   depends_on "postgresql" => :optional

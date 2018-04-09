@@ -30,7 +30,7 @@ class SagaGisLts < Formula
   # triggers a source (re)build of boost --with-python
   depends_on "homebrew/science/vigra" => :optional
   depends_on "postgresql" => :optional
-  depends_on :python => :optional
+  depends_on "python@2" => :optional
   depends_on "homebrew/science/opencv" => :optional
 
   resource "app_icon" do

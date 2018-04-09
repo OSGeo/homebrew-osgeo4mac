@@ -39,7 +39,7 @@ class Orfeo5AT54 < Formula
   depends_on "minizip" => :recommended
 
   # optional
-  depends_on :python => :optional
+  depends_on "python@2" => :optional
   depends_on "swig" if build.with? "python"
   depends_on "fftw" => :optional # restricts built binaries to GPL license
   depends_on "mapnik" => :optional

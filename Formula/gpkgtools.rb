@@ -5,7 +5,7 @@ class Gpkgtools < Formula
   head 'bzr://http://bazaar.launchpad.net/~bradh/gpkgtools/trunk'
 
   depends_on 'libspatialite'
-  depends_on :python
+  depends_on "python@2"
 
   resource "Pillow" do
     url "https://files.pythonhosted.org/packages/0f/57/25be1a4c2d487942c3ed360f6eee7f41c5b9196a09ca71c54d1a33c968d9/Pillow-5.0.0.tar.gz"

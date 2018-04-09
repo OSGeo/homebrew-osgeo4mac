@@ -17,7 +17,7 @@ class Pdal09dev < Formula
   depends_on "cmake" => :build
   depends_on "swig" => [:build, :optional]
   depends_on "boost" => :recommended
-  depends_on :python # for PLang filters
+  depends_on "python@2" # for PLang filters
   depends_on "numpy" => :python
   depends_on "libgeotiff"
   depends_on "gdal"

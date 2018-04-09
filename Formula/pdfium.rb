@@ -14,7 +14,7 @@ class Pdfium < Formula
     sha256 "7529a9b9c0856ea9df9182c8801a47e4e9116217b81a3a4e9945eda390245fae" => :sierra
   end
 
-  depends_on :python => :build # gyp doesn't run under 2.6 or lower
+  depends_on "python@2" => :build # gyp doesn't run under 2.6 or lower
 
   resource "depot_tools" do
     url "https://chromium.googlesource.com/chromium/tools/depot_tools.git"

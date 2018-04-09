@@ -11,7 +11,7 @@ class SipQt4 < Formula
     sha256 "540ba1b9ac60135d64acfe089af1fdf0e049e3ac06771c6b8773282884cb4f5c" => :high_sierra
   end
 
-  depends_on :python => :recommended
+  depends_on "python@2" => :recommended
 
   def install
     if build.without? "python"
