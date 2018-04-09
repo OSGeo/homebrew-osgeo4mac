@@ -46,7 +46,7 @@ class Orfeo5 < Formula
 
   # optional
   depends_on "python@2" => :optional
-  depends_on "swig" if build.with? "python"
+  depends_on "swig" if build.with? "python@2"
   depends_on "fftw" => :optional # restricts built binaries to GPL license
   depends_on "mapnik" => :optional
   depends_on "homebrew/science/opencv" => :optional
@@ -124,7 +124,7 @@ class Orfeo5 < Formula
     args << "-DBUILD_EXAMPLES=" + (build.with?("examples") ? "ON" : "OFF")
     # args << "-DOTB_USE_PATENTED=" + (build.with?("patented") ? "ON" : "OFF")
     args << "-DOTB_WRAP_JAVA=" + (build.with?("java") ? "ON" : "OFF")
-    args << "-DOTB_WRAP_PYTHON=OFF" if build.without? "python"
+    args << "-DOTB_WRAP_PYTHON=OFF" if build.without? "python@2"
     args << "-DITK_USE_FFTWF=" + (build.with?("fftw") ? "ON" : "OFF")
     args << "-DITK_USE_FFTWD=" + (build.with?("fftw") ? "ON" : "OFF")
     args << "-DITK_USE_SYSTEM_FFTW=" + (build.with?("fftw") ? "ON" : "OFF")

@@ -16,7 +16,7 @@ class PyqtQt4 < Formula
   depends_on "sip-qt4"
 
   def install
-    if build.without? "python"
+    if build.without? "python@2"
       # this is a flaw in Homebrew, where `depends on :python` alone does not work
       odie "Must be built with Python2"
     end
