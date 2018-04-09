@@ -15,7 +15,7 @@ class OrfeoIce < Formula
   depends_on "homebrew/science/insighttoolkit"
   depends_on "glew"
   depends_on "glfw"
-  depends_on "x11"
+  depends_on :x11
 
   def install
     args = std_cmake_args
