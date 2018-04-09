@@ -11,7 +11,7 @@ class PyqtQt4 < Formula
     sha256 "f4582a7afebc1bea20feabc3f70ffeb87d25d6a9f4c6492f66a8e8c7f0cd2eb6" => :high_sierra
   end
 
-  depends_on :python => :recommended
+  depends_on "python@2"
   depends_on "qt-4"
   depends_on "sip-qt4"
 
