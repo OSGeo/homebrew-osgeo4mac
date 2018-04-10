@@ -57,8 +57,8 @@ class Gdal2Python < Formula
 
   keg_only "older version of gdal is in main tap and installs similar components"
 
-  option "without-python", "Build without Python2 support"
-  option "without-python3", "Build without Python3 support"
+  option "without-python@2", "Build without Python2 support"
+  option "without-python", "Build without Python3 support"
 
   depends_on "swig" => :build
   depends_on "gdal2"
@@ -73,7 +73,7 @@ class Gdal2Python < Formula
   end
 
   def install
-    if build.without?("python") && build.without?("python3")
+    if build.without?("python@2") && build.without?("python")
       odie "Must choose a version of Python bindings to build"
     end
 
