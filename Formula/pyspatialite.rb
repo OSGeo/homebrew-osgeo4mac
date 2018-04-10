@@ -26,7 +26,7 @@ class Pyspatialite < Formula
     sha256 "ec55ca6b391698248bb0caca31aac13ad5441b632065ea8a9a0693d77b7d7565" => :high_sierra
   end
 
-  depends_on :python
+  depends_on "python@2"
   depends_on "geos"
   depends_on "proj"
   depends_on "sqlite"
@@ -34,7 +34,7 @@ class Pyspatialite < Formula
 
   def install
     # write setup.cfg
-    (buildpath/"setup.cfg").write <<-EOS.undent
+    (buildpath/"setup.cfg").write <<~EOS
       [build_ext]
       include_dirs=#{HOMEBREW_PREFIX}/include/:#{HOMEBREW_PREFIX}/opt/sqlite/include/
       library_dirs=#{HOMEBREW_PREFIX}/lib:#{HOMEBREW_PREFIX}/opt/sqlite/lib

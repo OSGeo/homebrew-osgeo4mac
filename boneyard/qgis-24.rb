@@ -331,7 +331,7 @@ class Qgis24 < Formula
 
   def caveats
     s = bottle_caveat
-    s += <<-EOS.undent
+    s += <<~EOS
       QGIS is built as an application bundle. Environment variables for the
       Homebrew prefix are embedded in QGIS.app:
         #{opt_prefix}/QGIS.app
@@ -358,7 +358,7 @@ class Qgis24 < Formula
     EOS
 
     if build.include? "enable-isolation"
-      s += <<-EOS.undent
+      s += <<~EOS
         QGIS built with isolation enabled. This allows it to coexist with other
         types of installations of QGIS on your Mac. However, on versions >= 2.0.1,
         this also means Python modules installed in the *system* Python will NOT
@@ -374,7 +374,7 @@ class Qgis24 < Formula
         |m| xm << m unless module_importable? m
     }
     unless xm.empty?
-      s += <<-EOS.undent
+      s += <<~EOS
         The following Python modules are needed by QGIS during run-time:
 
             #{xm.join(", ")}
@@ -387,14 +387,14 @@ class Qgis24 < Formula
     end
     # TODO: remove this when libqscintilla.dylib becomes core build dependency?
     unless module_importable? "PyQt4.Qsci"
-      s += <<-EOS.undent
+      s += <<~EOS
         QScintilla Python module is needed by QGIS during run-time.
         Ensure `qscintilla2` formula is linked.
 
       EOS
     end
 
-    s += <<-EOS.undent
+    s += <<~EOS
       If you have built GRASS 6.4.x or 7.0.x support for the Processing plugin set
       the following in QGIS:
         Processing->Options: Providers->GRASS commands->GRASS folder to:

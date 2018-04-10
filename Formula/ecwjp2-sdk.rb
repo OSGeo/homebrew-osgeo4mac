@@ -6,7 +6,7 @@ class EcwJpeg2000SDK < Requirement
   fatal true
   satisfy(:build_env => false) { File.exist? ECWJP2_SDK }
 
-  def message; <<-EOS.undent
+  def message; <<~EOS
     ERDAS ECW/JP2 SDK was not found at:
       #{ECWJP2_SDK}
 
@@ -34,7 +34,9 @@ class Ecwjp2Sdk < Formula
       # suffix only the older stdc++
       cp "redistributable/libc++/libNCSEcw.dylib", "#{lib}/"
       cp "redistributable/libstdc++/libNCSEcw.dylib", "#{lib}/libNCSEcw-stdcxx.dylib"
-      system "install_name_tool", "-id", opt_lib/"libNCSEcw-stdcxx.dylib", lib/"libNCSEcw-stdcxx.dylib"
+      # Calling install_name_tool is deprecated, so we're switching to using the MachO tools
+#      system "install_name_tool", "-id", opt_lib/"libNCSEcw-stdcxx.dylib", lib/"libNCSEcw-stdcxx.dylib"
+      MachO::Tools.change_dylib_id(opt_lib/"libNCSEcw-stdcxx.dylib", lib/"libNCSEcw-stdcxx.dylib")
       %w[etc Licenses].each { |f| cp_r f.to_s, "#{prefix}/" }
       cp_r Dir["include/*"], "#{include}/ECWJP2/"
 
@@ -45,7 +47,7 @@ class Ecwjp2Sdk < Formula
     end
   end
 
-  def caveats; <<-EOS.undent
+  def caveats; <<~EOS
     Once formula is installed, the ERDAS ECW/JP2 SDK can be deleted from its
     default install location of:
 

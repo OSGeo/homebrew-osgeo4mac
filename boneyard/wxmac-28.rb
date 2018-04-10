@@ -22,7 +22,7 @@ class Wxmac28 < Formula
       system "arch -i386 python --version"
     rescue
       onoe "No python on path or default python does not support 32-bit."
-      puts <<-EOS.undent
+      puts <<~EOS
         Your default python (if any) does not support 32-bit execution, which is
         required for the wxmac python bindings. You can install the Homebrew
         python with 32-bit support by running:
@@ -101,14 +101,14 @@ class Wxmac28 < Formula
 
   def caveats
     s = ''
-    s += <<-EOS.undent
+    s += <<~EOS
       wxWidgets 2.8.x builds 32-bit only, so you probably won't be able to use it
       for other Homebrew-installed software. You can try to build with --devel to
       get the wxWidgets 2.9.x (unstable) for 64-bit and cocoa support.
 
     EOS
     if build.include? 'python'
-      s += <<-EOS.undent
+      s += <<~EOS
         You will also need run python in 32-bit mode for wx. If you are on a 64-bit
         platform, you will need to run Python in 32-bit mode:
 
@@ -122,7 +122,7 @@ class Wxmac28 < Formula
     end
 
     if build.include? 'python'
-      s += <<-EOS.undent
+      s += <<~EOS
         Python bindings require that Python be built as a Framework; this is the
         default for Mac OS provided Python but not (yet) for Homebrew Python.
         Build python with `--framework`.

@@ -45,13 +45,13 @@ class Orfeo5 < Formula
   depends_on "minizip" => :recommended
 
   # optional
-  depends_on :python => :optional
-  depends_on "swig" if build.with? "python"
+  depends_on "python@2" => :optional
+  depends_on "swig" if build.with? "python@2"
   depends_on "fftw" => :optional # restricts built binaries to GPL license
   depends_on "mapnik" => :optional
   depends_on "homebrew/science/opencv" => :optional
   depends_on "openjpeg" => :optional
-  depends_on :mpi => [:cxx, :optional]
+  depends_on "mpi" => [:cxx, :optional]
   depends_on "homebrew/science/shark" => :optional
 
   # ICE Viewer: needs X11 support
@@ -124,7 +124,7 @@ class Orfeo5 < Formula
     args << "-DBUILD_EXAMPLES=" + (build.with?("examples") ? "ON" : "OFF")
     # args << "-DOTB_USE_PATENTED=" + (build.with?("patented") ? "ON" : "OFF")
     args << "-DOTB_WRAP_JAVA=" + (build.with?("java") ? "ON" : "OFF")
-    args << "-DOTB_WRAP_PYTHON=OFF" if build.without? "python"
+    args << "-DOTB_WRAP_PYTHON=OFF" if build.without? "python@2"
     args << "-DITK_USE_FFTWF=" + (build.with?("fftw") ? "ON" : "OFF")
     args << "-DITK_USE_FFTWD=" + (build.with?("fftw") ? "ON" : "OFF")
     args << "-DITK_USE_SYSTEM_FFTW=" + (build.with?("fftw") ? "ON" : "OFF")
@@ -170,7 +170,7 @@ class Orfeo5 < Formula
     bin.env_script_all_files(libexec/"bin", envars)
   end
 
-  def caveats; <<-EOS.undent
+  def caveats; <<~EOS
       The default geoid to use in elevation calculations is available in:
 
         #{opt_libexec}/default_geoid/egm96.grd

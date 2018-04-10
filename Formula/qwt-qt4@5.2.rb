@@ -31,7 +31,7 @@ class QwtQt4AT52 < Formula
   end
 
   test do
-    (testpath/"test.cpp").write <<-EOS.undent
+    (testpath/"test.cpp").write <<~EOS
       #include <qwt_plot_curve.h>
       int main() {
         QwtPlotCurve *curve1 = new QwtPlotCurve("Curve 1");

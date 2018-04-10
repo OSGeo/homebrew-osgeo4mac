@@ -46,7 +46,7 @@ class QtkeychainQtAT57 < Formula
 
   def caveats
     if build.with? "static"
-      <<-EOS.undent
+      <<~EOS
         Static library is available at:
           #{opt_lib}/libqtkeychain_static.a
       EOS

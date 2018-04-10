@@ -46,7 +46,7 @@ class Qt4 < Formula
 
   def install
     if ENV.compiler == :clang && (MacOS::Xcode.version >= "9.0" || MacOS::CLT.version >= "9.0")
-      odie <<-EOS.undent
+      odie <<~EOS
         Compilation not supported with Xcode/CLT 9.0 or higher.
         Use no formula or source-build options and install available bottle.
       EOS
@@ -147,7 +147,7 @@ class Qt4 < Formula
     (HOMEBREW_PREFIX/"lib/qt-4/plugins/designer").mkpath
   end
 
-  def caveats; <<-EOS.undent
+  def caveats; <<~EOS
     We agreed to the Qt opensource license for you.
     If this is unacceptable you should uninstall.
 

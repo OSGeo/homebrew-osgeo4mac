@@ -12,7 +12,7 @@ class Pointcloud < Formula
   deprecated_option "with-tests" => "with-test"
 
   depends_on "cmake" => :build
-  depends_on :postgresql
+  depends_on "postgresql"
   depends_on "libght"
   depends_on "libxml2"
   # depends on "lazperf" => :optional

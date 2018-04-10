@@ -87,7 +87,7 @@ class TravisCacheSeed < Formula
     (share/"blank").write "blank"
   end
 
-  def caveats; <<-EOS.undent
+  def caveats; <<~EOS
     Formula does not install anything per se. Just updates cache at Travis CI
     with geospatial dependencies to reduce build times of larger formulae.
 

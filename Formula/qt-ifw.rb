@@ -22,7 +22,7 @@ class QtIfw < Formula
     # doc.install "doc/html", "doc/ifw.qch"
   end
 
-  def caveats; <<-EOS.undent
+  def caveats; <<~EOS
       We agreed to the Qt5 opensource license for you.
       If this is unacceptable you should uninstall.
     EOS

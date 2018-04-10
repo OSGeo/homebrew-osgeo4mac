@@ -53,7 +53,7 @@ class QwtQt4 < Formula
     s = ""
 
     if build.with? "qwtmathml"
-      s += <<-EOS.undent
+      s += <<~EOS
         The qwtmathml library contains code of the MML Widget from the Qt solutions package.
         Beside the Qwt license you also have to take care of its license:
           #{opt_prefix}/qtmmlwidget-license
@@ -61,7 +61,7 @@ class QwtQt4 < Formula
     end
 
     if build.with? "plugin"
-      s += <<-EOS.undent
+      s += <<~EOS
         Qt Designer plugin is not installed, but available at:
           #{opt_lib}/qt-4/plugins/designer/libqwt_designer_plugin.dylib
       EOS
@@ -71,7 +71,7 @@ class QwtQt4 < Formula
   end
 
   test do
-    (testpath/"test.cpp").write <<-EOS.undent
+    (testpath/"test.cpp").write <<~EOS
       #include <qwt_plot_curve.h>
       int main() {
         QwtPlotCurve *curve1 = new QwtPlotCurve("Curve 1");

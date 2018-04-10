@@ -77,7 +77,7 @@ class Gdal20 < Formula
     depends_on "json-c"
   end
 
-  depends_on :java => ["1.7+", :optional, :build]
+  depends_on "java" => ["1.7+", :optional, :build]
 
   if build.with? "swig-java"
     depends_on "ant" => :build
@@ -305,7 +305,7 @@ class Gdal20 < Formula
 
   def caveats
     if build.with? "mdb"
-      <<-EOS.undent
+      <<~EOS
 
       To have a functional MDB driver, install supporting .jar files in:
         `/Library/Java/Extensions/`

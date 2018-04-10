@@ -60,7 +60,7 @@ class Iipsrv < Formula
     (bin/"iipsrv-spawn").write(spawn_script)
   end
 
-  def spawn_script; <<-EOS.undent
+  def spawn_script; <<~EOS
     #!/bin/bash
 
     export LOGFILE=#{iipsrv_log}
@@ -76,7 +76,7 @@ class Iipsrv < Formula
 
   plist_options :manual => "iipsrv-spawn"
 
-  def plist; <<-EOS.undent
+  def plist; <<~EOS
     <?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
     <plist version="1.0">
@@ -134,7 +134,7 @@ class Iipsrv < Formula
 
     conf_s = conf_dir/"lighttpd_iipsrv_spawn.conf.sample"
     rm_f conf_s
-    conf_s.write <<-EOS.undent
+    conf_s.write <<~EOS
       server.modules += ( "mod_fastcgi" )
       fastcgi.server = ( "/fcgi-bin/iipsrv.fcgi" =>
         (( "socket" => "#{iipsrv_sock}",
@@ -145,7 +145,7 @@ class Iipsrv < Formula
 
     conf_s = conf_dir/"lighttpd_iipsrv.conf.sample"
     rm_f conf_s
-    conf_s.write <<-EOS.undent
+    conf_s.write <<~EOS
       server.modules += ( "mod_fastcgi" )
       fastcgi.server = ( "/fcgi-bin/iipsrv.fcgi" =>
         (( "socket" => "#{iipsrv_sock}",
@@ -180,7 +180,7 @@ class Iipsrv < Formula
 
     conf_s = conf_dir/"apache_iipsrv.conf.sample"
     rm_f conf_s
-    conf_s.write <<-EOS.undent
+    conf_s.write <<~EOS
       # Set the options on that directory
       <Directory "#{opt_prefix}/fcgi-bin">
         AllowOverride None
@@ -204,7 +204,7 @@ class Iipsrv < Formula
 
     conf_s = conf_dir/"nginx_iipsrv.conf.sample"
     rm_f conf_s
-    conf_s.write <<-EOS.undent
+    conf_s.write <<~EOS
       location /fcgi-bin/iipsrv.fcgi {
         include fastcgi_params;
         fastcgi_pass unix:#{iipsrv_sock};
@@ -217,7 +217,7 @@ class Iipsrv < Formula
     end
   end
 
-  def caveats; <<-EOS.undent
+  def caveats; <<~EOS
     When IIPImage Server is launched from its plist or iipsrv-spawn script, the
     FastCGI process with be available at:
       #{iipsrv_sock}

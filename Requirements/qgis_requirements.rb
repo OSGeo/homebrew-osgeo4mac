@@ -10,7 +10,7 @@ class UnlinkedQGIS2 < Requirement
 
   def message
     qgis_f = unlinked_qgis[1]
-    <<-EOS.undent
+    <<~EOS
 
       Another QGIS formula is linked: #{qgis_f}
 
@@ -30,11 +30,11 @@ end
 class SipBinary < Requirement
   fatal true
   #noinspection RubyResolve
-  default_formula 'sip'
+#  default_formula 'sip'
   satisfy(:build_env => false) { which 'sip' }
 
   def message
-    <<-EOS.undent
+    <<~EOS
       The `sip` binary is missing. It is needed to generate the Python bindings for QGIS.
       Ensure `sip` formula is installed and linked.
 
@@ -45,14 +45,14 @@ end
 class PyQtConfig < Requirement
   fatal true
   #noinspection RubyResolve
-  default_formula 'pyqt'
+#  default_formula 'pyqt'
   # pyqtconfig is not created with PyQt4 >= 4.10.x when using configure-ng.
   # Homebrew's `pyqt` formula corrects this. Remains an issue until QGIS project
   # adjusts FindPyQt.py in CMake setup to work with configure-ng.
   satisfy(:build_env => false) { quiet_system 'python', '-c', 'from PyQt4 import pyqtconfig' }
 
   def message
-    <<-EOS.undent
+    <<~EOS
       Python could not import the PyQt4.pyqtconfig module. This will cause the QGIS build to fail.
       The most common reason for this failure is that the PYTHONPATH needs to be adjusted.
       The `pyqt` caveats explain this adjustment and may be reviewed using:

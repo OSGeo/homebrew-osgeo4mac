@@ -4,8 +4,8 @@ class NoGdal2Python < Requirement
 
   def message
     s = "`gdal2` formula already installed with Python 2 or 3 bindings:\n"
-    s += "  #{Gdal2Python.gdal2_python("python")}\n" if Gdal2Python.gdal2_py2_exist?
-    s += "  #{Gdal2Python.gdal2_python("python3")}\n" if Gdal2Python.gdal2_py3_exist?
+    s += "  #{Gdal2Python.gdal2_python("python@2")}\n" if Gdal2Python.gdal2_py2_exist?
+    s += "  #{Gdal2Python.gdal2_python("python")}\n" if Gdal2Python.gdal2_py3_exist?
     s += "`gdal2` install options:\n"
     s += "  gdal2 #{Gdal2Python.gdal2_opts.to_a.join(" ")}\n"
     s += "Install latest `gdal2`, which installs no Python bindings:\n"
@@ -37,11 +37,11 @@ class Gdal2Python < Formula
   end
 
   def self.gdal2_py2_exist?
-    gdal2_python("python").exist?
+    gdal2_python("python@2").exist?
   end
 
   def self.gdal2_py3_exist?
-    gdal2_python("python3").exist?
+    gdal2_python("python").exist?
   end
 
   desc "Python bindings for GDAL: Geospatial Data Abstraction Library"
@@ -63,8 +63,8 @@ class Gdal2Python < Formula
   depends_on "swig" => :build
   depends_on "gdal2"
   depends_on NoGdal2Python
-  depends_on :python => :recommended
-  depends_on :python3 => :recommended
+  depends_on "python@2" => :recommended
+  depends_on "python" => :recommended
   depends_on "numpy"
 
   resource "autotest" do
@@ -89,6 +89,8 @@ class Gdal2Python < Formula
 
       Language::Python.each_python(build) do |python, _python_version|
         system python, *Language::Python.setup_install_args(prefix)
+        system "echo", "#{opt_prefix}/lib/python#{_python_version}/site-packages",
+                ">", "#{lib}/python#{_python_version}/site-packages/#{name}.pth"
       end
 
       # Scripts compatible with Python3? Appear to be...
@@ -101,7 +103,7 @@ class Gdal2Python < Formula
     end
   end
 
-  def caveats; <<-EOS.undent
+  def caveats; <<~EOS
     Sample Python scripts installed to:
       #{opt_libexec}/bin
 

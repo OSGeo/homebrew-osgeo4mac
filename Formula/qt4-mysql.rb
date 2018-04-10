@@ -2,7 +2,7 @@ class NoQt4MysqlAlreadyRequirement < Requirement
   fatal true
   satisfy(:build_env => false) { !(Formula["qt-4"].prefix/"plugins/sqldrivers/libqsqlmysql.dylib").exist? }
 
-  def message; <<-EOS.undent
+  def message; <<~EOS
     Qt5 formula already has QtWebKit installed (e.g. built `--with-webkit`)
   EOS
   end
@@ -57,7 +57,7 @@ class Qt4Mysql < Formula
   end
 
   test do
-    (testpath/"hello.pro").write <<-EOS.undent
+    (testpath/"hello.pro").write <<~EOS
       QT        += core sql
       QT        -= gui
       TARGET     = hello
@@ -68,7 +68,7 @@ class Qt4Mysql < Formula
       SOURCES   += client.cpp main.cpp
     EOS
 
-    (testpath/"client.h").write <<-EOS.undent
+    (testpath/"client.h").write <<~EOS
     #ifndef CLIENT_H
     #define CLIENT_H
     #include <QObject>
@@ -88,7 +88,7 @@ class Qt4Mysql < Formula
     #endif // CLIENT_H
     EOS
 
-    (testpath/"client.cpp").write <<-EOS.undent
+    (testpath/"client.cpp").write <<~EOS
     #include "client.h"
     #include <QCoreApplication>
     #include <QDebug>
@@ -109,7 +109,7 @@ class Qt4Mysql < Formula
     }
     EOS
 
-    (testpath/"main.cpp").write <<-EOS.undent
+    (testpath/"main.cpp").write <<~EOS
       #include <QCoreApplication>
       #include <QDebug>
       #include <QTimer>

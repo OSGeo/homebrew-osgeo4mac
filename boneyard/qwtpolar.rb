@@ -29,7 +29,7 @@ class Qwtpolar < Formula
 
     # update designer plugin linking back to qwtpolar framework/lib
     inreplace "designer/designer.pro" do |s|
-      s.sub! /(INSTALLS \+= target)/, "\\1\n" + <<-EOS.undent
+      s.sub! /(INSTALLS \+= target)/, "\\1\n" + <<~EOS
         macx {
             contains(QWT_POLAR_CONFIG, QwtPolarFramework) {
                 QWTP_LIB = qwtpolar.framework/Versions/$${QWT_POLAR_VER_MAJ}/qwtpolar

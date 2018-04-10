@@ -33,7 +33,7 @@ class PgsqlOgrFdw < Formula
 
   def caveats;
     pg = Formula["postgresql"].opt_prefix
-    <<-EOS.undent
+    <<~EOS
       For info on using extension, read the included REAMDE.md or visit:
         https://github.com/pramsey/pgsql-ogr-fdw
 
@@ -47,7 +47,7 @@ class PgsqlOgrFdw < Formula
   test do
     # test the sql generator for the extension
     data_sub = "data".upcase # or brew audit thinks there is a D A T A section
-    sql_out = <<-EOS.undent
+    sql_out = <<~EOS
       CREATE SERVER myserver
         FOREIGN #{data_sub} WRAPPER ogr_fdw
         OPTIONS (

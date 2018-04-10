@@ -36,10 +36,10 @@ class Grass64 < Formula
   depends_on "fftw"
   depends_on :python
   depends_on "wxpython"
-  depends_on :postgresql => :optional
-  depends_on :mysql => :optional
+  depends_on "postgresql" => :optional
+  depends_on "mysql" => :optional
   depends_on "cairo"
-  depends_on :x11 # needs to find at least X11/include/GL/gl.h
+  depends_on "x11" # needs to find at least X11/include/GL/gl.h
 
   def headless?
     # The GRASS GUI is based on WxPython.
@@ -133,7 +133,7 @@ class Grass64 < Formula
 
   def caveats
     if headless?
-      <<-EOS.undent
+      <<~EOS
         This build of GRASS has been compiled without the WxPython GUI.
 
         The command line tools remain fully functional.

@@ -29,7 +29,7 @@ class Ossim < Formula
   depends_on "geos"
   depends_on "freetype"
   depends_on "zlib"
-  depends_on :mpi => [:cc, :cxx, :optional]
+  depends_on "mpi" => [:cc, :cxx, :optional]
 
   def install
     ENV.cxx11

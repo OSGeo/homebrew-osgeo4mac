@@ -53,7 +53,7 @@ class Qt4Oracle < Formula
   end
 
   def caveats
-    s = <<-EOS.undent
+    s = <<~EOS
     Oracle client SDK environ:
     EOS
     oracle_env_vars.each { |k, v| s += "  #{k}=#{v}\n" }
@@ -61,7 +61,7 @@ class Qt4Oracle < Formula
   end
 
   test do
-    (testpath/"hello.pro").write <<-EOS.undent
+    (testpath/"hello.pro").write <<~EOS
       QT        += core sql
       QT        -= gui
       TARGET     = hello
@@ -72,7 +72,7 @@ class Qt4Oracle < Formula
       SOURCES   += client.cpp main.cpp
     EOS
 
-    (testpath/"client.h").write <<-EOS.undent
+    (testpath/"client.h").write <<~EOS
     #ifndef CLIENT_H
     #define CLIENT_H
     #include <QObject>
@@ -92,7 +92,7 @@ class Qt4Oracle < Formula
     #endif // CLIENT_H
     EOS
 
-    (testpath/"client.cpp").write <<-EOS.undent
+    (testpath/"client.cpp").write <<~EOS
     #include "client.h"
     #include <QCoreApplication>
     #include <QDebug>
@@ -113,7 +113,7 @@ class Qt4Oracle < Formula
     }
     EOS
 
-    (testpath/"main.cpp").write <<-EOS.undent
+    (testpath/"main.cpp").write <<~EOS
       #include <QCoreApplication>
       #include <QDebug>
       #include <QTimer>
