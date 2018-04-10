@@ -144,7 +144,7 @@ class OracleClientSdk < Formula
   end
 
   def caveats
-    s = <<-EOS.undent
+    s = <<~EOS
       To build software with the Instant Client SDK, add to the following
       environment variable to find headers:
 
@@ -160,7 +160,7 @@ class OracleClientSdk < Formula
 
   test do
     # From GDAL 2.1.2's configure test
-    (testpath/"test.cpp").write <<-EOS.undent
+    (testpath/"test.cpp").write <<~EOS
     #include <oci.h>
     int main () {
       OCIEnv* envh = 0;

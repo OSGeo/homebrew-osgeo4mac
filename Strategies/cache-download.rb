@@ -2,7 +2,7 @@ class CacheDownloadStrategy < CurlDownloadStrategy
   def fetch
     archive = @url.sub(%r[^file://], "")
     unless File.exists?(archive)
-      odie <<-EOS.undent
+      odie <<~EOS
         Formula expects to locate the following archive:
           #{Pathname.new(archive).basename}
 

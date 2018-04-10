@@ -14,7 +14,7 @@ class PdfiumGdal2 < Formula
 
   keg_only "newer version of pdfium may be installed"
 
-  depends_on :python => :build # gyp doesn't run under 2.6 or lower
+  depends_on "python@2" => :build # gyp doesn't run under 2.6 or lower
   depends_on :xcode => :build
 
   resource "depot_tools" do
@@ -37,7 +37,7 @@ class PdfiumGdal2 < Formula
     (buildpath/"pdfium_deps/depot_tools").install resource("depot_tools")
     ENV.prepend_path "PATH", buildpath/"pdfium_deps/depot_tools"
 
-    ENV["GYP_DEFINES"] = "clang=0 mac_deployment_target=#{MacOS.version}"
+    ENV["GYP_DEFINES"] = "#{ENV.cc} mac_deployment_target=#{MacOS.version}"
     (buildpath/"pdfium_deps/gyp").install resource("gyp")
     ENV.prepend_path "PATH", buildpath/"pdfium_deps/gyp"
     ENV.prepend_create_path "PYTHONPATH", buildpath/"pdfium_deps/gyp/pylib"
@@ -114,7 +114,7 @@ class PdfiumGdal2 < Formula
     end
   end
 
-  def caveats; <<-EOS.undent
+  def caveats; <<~EOS
     For building other software, static libs are located in
       #{opt_lib}/pdfium
 

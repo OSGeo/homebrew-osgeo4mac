@@ -6,7 +6,7 @@ class GdalThirdParty < Requirement
     envar && File.exists?(envar)
   end
 
-  def message; <<-EOS.undent
+  def message; <<~EOS
     Define GDAL_THIRD_PARTY environment variable that points to a directory,
     which contains the unaltered download archive of the third-party library:
 

@@ -10,9 +10,9 @@ class Minizip < Formula
 
   option :universal
 
-  depends_on :autoconf => :build
-  depends_on :automake => :build
-  depends_on :libtool => :build
+  depends_on "autoconf" => :build
+  depends_on "automake" => :build
+  depends_on "libtool" => :build
 
   def patches
     # configure script fails to detect the right compiler when "cc" is
@@ -42,7 +42,7 @@ class Minizip < Formula
   end
 
   def caveats
-    <<-EOS.undent
+    <<~EOS
       Minizip headers installed in 'minizip' subdirectory, since they conflict
       with the venerable 'unzip' library.
     EOS

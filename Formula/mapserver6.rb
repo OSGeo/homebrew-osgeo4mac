@@ -14,7 +14,7 @@ class JavaJDK < Requirement
     self.class.home
   end
 
-  def message; <<-EOS.undent
+  def message; <<~EOS
     Could not find a JDK (i.e. not a JRE)
 
     Do one of the following:
@@ -58,23 +58,23 @@ class Mapserver6 < Formula
   depends_on "cmake" => :build
   depends_on "freetype"
   depends_on "libpng"
-  depends_on :python
+  depends_on "python@2"
   depends_on "swig" => :build
-  depends_on JavaJDK if build.with? "java"
+  depends_on :java => :optional
   depends_on "giflib"
   depends_on "gd" => :optional unless build.head?
   depends_on "proj"
   depends_on "geos" => :recommended
   depends_on "gdal"
-  depends_on :postgresql => :recommended
-  depends_on :mysql => :optional
+  depends_on "postgresql" => :recommended
+  depends_on "mysql" => :optional
   depends_on "fcgi" => :recommended
   depends_on "cairo" => :recommended
   depends_on "libxml2" if build.with?("xml-mapfile") || MacOS.version < :mountain_lion
   depends_on "libxslt" if build.with? "xml-mapfile"
   depends_on "librsvg" => :optional
   depends_on "fribidi"
-  depends_on :python => %w[sphinx] if build.with? "docs"
+  depends_on "python@2" => %w[sphinx] if build.with? "docs"
 
   conflicts_with "mapserver", :because => "mapserver is in main tap"
 
@@ -195,9 +195,12 @@ class Mapserver6 < Formula
     end
 
     # update Python module linking
-    system "install_name_tool", "-change",
-           "@rpath/libmapserver.1.dylib", opt_lib/"libmapserver.1.dylib",
-           lib/which_python/"site-packages/_mapscript.so"
+    # Deprecated: Using MachO::Tools
+#    system "install_name_tool", "-change",
+#           "@rpath/libmapserver.1.dylib", opt_lib/"libmapserver.1.dylib",
+#           lib/which_python/"site-packages/_mapscript.so"
+    MachO::Tools.change_dylib_name( "@rpath/libmapserver.1.dylib", opt_lib/"libmapserver.1.dylib",
+           lib/which_python/"site-packages/_mapscript.so")
 
     # install devel headers
     (include/"mapserver").install Dir["*.h"]
@@ -214,7 +217,7 @@ class Mapserver6 < Formula
     s = ""
     mapscr_opt_dir = opt_prefix/"mapscript"
     if build.with? "php"
-      s += <<-EOS.undent
+      s += <<~EOS
         Using the built PHP module:
           * Add the following line to php.ini:
             extension="#{mapscr_opt_dir}/php/php_mapscript.so"
@@ -238,7 +241,7 @@ class Mapserver6 < Formula
       else
         cmd << "sudo cp -f libjavamapscript.jnilib mapscript.jar /Library/Java/Extensions/"
       end
-      s += <<-EOS.undent
+      s += <<~EOS
         Install the built #{m.upcase} module with:
           cd #{mapscr_opt_dir}/#{m}
           #{cmd[0]}
@@ -264,7 +267,7 @@ class Mapserver6 < Formula
     end
   end
 
-  def caveats; <<-EOS.undent
+  def caveats; <<~EOS
     The Mapserver CGI executable is #{opt_prefix}/bin/mapserv
 
     Instructions for installing any built, but uninstalled, mapscript modules:

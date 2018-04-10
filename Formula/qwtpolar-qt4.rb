@@ -61,7 +61,7 @@ class QwtpolarQt4 < Formula
   def caveats
     s = ""
     if build.with? "plugin"
-      s += <<-EOS.undent
+      s += <<~EOS
         Qt Designer plugin is not installed, but available at:
           #{opt_lib}/qt-4/plugins/designer/libqwt_polar_designer_plugin.dylib
       EOS
@@ -70,7 +70,7 @@ class QwtpolarQt4 < Formula
   end
 
   test do
-    (testpath/"test.cpp").write <<-EOS.undent
+    (testpath/"test.cpp").write <<~EOS
       #include <qwt_polar_renderer.h>
       int main() {
         QwtPolarRenderer *curve1 = new QwtPolarRenderer();

@@ -2,7 +2,7 @@ class NoQt5WebKitAlreadyRequirement < Requirement
   fatal true
   satisfy(:build_env => false) { !(Formula["qt@5.7"].lib/"QtWebKit.framework").exist? }
 
-  def message; <<-EOS.undent
+  def message; <<~EOS
     Qt5 formula already has QtWebKit installed (e.g. built `--with-webkit``)
   EOS
   end
@@ -114,14 +114,16 @@ class Qt5WebkitQtAT57 < Formula
       m.ensure_writable do
         dylibs.each do |d|
           next unless d.to_s =~ %r{^#{qt5_prefix}/lib/QtWebKit(Widgets)?\.framework}
-          system "install_name_tool", "-change", d, d.sub("#{qt5_prefix}/lib", opt_lib), m.to_s
+          # Deprecated: Using MachO::Tools
+#          system "install_name_tool", "-change", d, d.sub("#{qt5_prefix}/lib", opt_lib), m.to_s
+          MachO::Tools.change_dylib_name(d, d.sub("#{qt5_prefix}/lib", opt_lib), m.to_s)
         end
       end
     end
   end
 
   test do
-    (testpath/"hello.pro").write <<-EOS.undent
+    (testpath/"hello.pro").write <<~EOS
       QT        += core webkitwidgets
       TARGET     = hello
       CONFIG    += console
@@ -133,7 +135,7 @@ class Qt5WebkitQtAT57 < Formula
       include(#{prefix}/mkspecs/modules/qt_lib_webkitwidgets.pri)
     EOS
 
-    (testpath/"client.h").write <<-EOS.undent
+    (testpath/"client.h").write <<~EOS
     #ifndef CLIENT_H
     #define CLIENT_H
     #include <QWebPage>
@@ -158,7 +160,7 @@ class Qt5WebkitQtAT57 < Formula
     #endif // CLIENT_H
     EOS
 
-    (testpath/"client.cpp").write <<-EOS.undent
+    (testpath/"client.cpp").write <<~EOS
     #include "client.h"
     #include <QCoreApplication>
     #include <QDebug>
@@ -189,7 +191,7 @@ class Qt5WebkitQtAT57 < Formula
     }
     EOS
 
-    (testpath/"main.cpp").write <<-EOS.undent
+    (testpath/"main.cpp").write <<~EOS
       #include <QApplication>
       #include <QDebug>
       #include <QTimer>
@@ -209,10 +211,10 @@ class Qt5WebkitQtAT57 < Formula
     cd testpath do
       system Formula["qt@5.7"].bin/"qmake", "hello.pro"
       system "make"
-      assert File.exist?("client.o")
-      assert File.exist?("moc_client.o")
-      assert File.exist?("main.o")
-      assert File.exist?("hello")
+      assert_predicate "client.o", :exists?
+      assert_predicate "moc_client.o", :exists?
+      assert_predicate "main.o", :exists?
+      assert_predicate "hello", :exists?
       system "./hello"
     end
   end

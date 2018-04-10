@@ -5,7 +5,7 @@ class PyQtImportable < Requirement
   satisfy { quiet_system 'python', '-c', '"from PyQt4 import QtCore"' }
 
   def message
-    <<-EOS.undent
+    <<~EOS
       Python could not import the PyQt4 module. This will cause the QGIS build to fail.
       The most common reason for this failure is that the PYTHONPATH needs to be adjusted.
       The pyqt caveats explain this adjustment and may be reviewed using:
@@ -74,7 +74,7 @@ class Qgis18 < Formula
       ln_s qgis_modules, py_lib + 'qgis'
 
       # Create script to launch QGIS app
-      (bin + 'qgis').write <<-EOS.undent
+      (bin + 'qgis').write <<~EOS
         #!/bin/sh
         # Ensure Python modules can be found when QGIS is running.
         env PATH='#{HOMEBREW_PREFIX}/bin':$PATH PYTHONPATH='#{HOMEBREW_PREFIX}/lib/#{python.xy}/site-packages':$PYTHONPATH\\
@@ -84,7 +84,7 @@ class Qgis18 < Formula
   end
 
   def caveats
-    s = <<-EOS.undent
+    s = <<~EOS
       QGIS has been built as an application bundle. To make it easily available, a
       wrapper script has been written that launches the app with environment
       variables set so that Python modules will be functional:

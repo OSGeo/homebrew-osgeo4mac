@@ -12,7 +12,7 @@ class Openjpeg20 < Formula
   depends_on 'cmake' => :build
   depends_on 'little-cms2'
   depends_on 'libtiff'
-  depends_on :libpng
+  depends_on "libpng"
 
   def install
     system 'cmake', '.', *std_cmake_args

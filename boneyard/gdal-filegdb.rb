@@ -48,7 +48,7 @@ class GdalFilegdb < Formula
 
   end
 
-  def caveats; <<-EOS.undent
+  def caveats; <<~EOS
     This formula provides a plugin that allows GDAL or OGR to access geospatial
     data stored in its format. In order to use the shared plugin, you will need
     to set the following enviroment variable:

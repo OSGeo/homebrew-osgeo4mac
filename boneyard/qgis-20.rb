@@ -299,7 +299,7 @@ class Qgis20 < Formula
   end
 
   def caveats
-    s = <<-EOS.undent
+    s = <<~EOS
       QGIS is built as an application bundle. Environment variables for the
       Homebrew prefix are embedded in QGIS.app:
         #{opt_prefix}/QGIS.app
@@ -326,7 +326,7 @@ class Qgis20 < Formula
     EOS
 
     if build.include? 'enable-isolation'
-      s += <<-EOS.undent
+      s += <<~EOS
         QGIS built with isolation enabled. This allows it to coexist with other
         types of installations of QGIS on your Mac. However, on versions >= 2.0.1,
         this also means Python modules installed in the *system* Python will NOT
@@ -340,7 +340,7 @@ class Qgis20 < Formula
     xm = []
     %w[psycopg2 matplotlib].each { |m| xm << m unless module_importable? m }
     unless xm.empty?
-      s += <<-EOS.undent
+      s += <<~EOS
         The following Python modules are needed by QGIS during run-time:
 
             #{xm.join(', ')}
@@ -353,7 +353,7 @@ class Qgis20 < Formula
     end
     # TODO: remove this when libqscintilla.dylib becomes core build dependency?
     unless module_importable? 'PyQt4.Qsci'
-      s += <<-EOS.undent
+      s += <<~EOS
         QScintilla Python module is needed by QGIS during run-time.
         Ensure `qscintilla2` formula is linked.
 

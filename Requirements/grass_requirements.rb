@@ -10,7 +10,7 @@ class UnlinkedGRASS7 < Requirement
 
   def message
     grass_f = unlinked_grass[1]
-    <<-EOS.undent
+    <<~EOS
 
       Another GRASS 7.x formula is linked: #{grass_f}
 
@@ -37,7 +37,7 @@ class UnlinkedGRASS6 < Requirement
 
   def message
     grass_f = unlinked_grass[1]
-    <<-EOS.undent
+    <<~EOS
 
       Another GRASS 6.x formula is linked: #{grass_f}
 

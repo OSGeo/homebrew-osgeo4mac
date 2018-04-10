@@ -57,7 +57,8 @@ class Qgis2 < Formula
     depends_on "graphviz" => :build
     depends_on "doxygen" => :build
   end
-  depends_on (build.with?("isolation") || MacOS.version < :lion) ? "python" : :python
+  depends_on :x11
+  depends_on "python@2"
   depends_on "qt-4"
   depends_on "sip-qt4"
   depends_on "pyqt-qt4"
@@ -473,7 +474,7 @@ class Qgis2 < Formula
   end
 
   def caveats
-    s = <<-EOS.undent
+    s = <<~EOS
       Bottles support only Homebrew's Python
 
       QGIS is built as an application bundle. Environment variables for the
@@ -497,7 +498,7 @@ class Qgis2 < Formula
     EOS
 
     if build.with? "isolation"
-      s += <<-EOS.undent
+      s += <<~EOS
         QGIS built with isolation enabled. This allows it to coexist with other
         types of installations of QGIS on your Mac. However, on versions >= 2.0.1,
         this also means Python modules installed in the *system* Python will NOT
@@ -513,7 +514,7 @@ class Qgis2 < Formula
       xm << m unless module_importable? m
     end
     unless xm.empty?
-      s += <<-EOS.undent
+      s += <<~EOS
         #{Tty.red}
         The following Python modules are needed by QGIS during run-time:
 
@@ -528,14 +529,14 @@ class Qgis2 < Formula
     end
     # TODO: remove this when libqscintilla.dylib becomes core build dependency?
     unless module_importable? "PyQt4.Qsci"
-      s += <<-EOS.undent
+      s += <<~EOS
         QScintilla Python module is needed by QGIS during run-time.
         Ensure `qscintilla2-qt4` formula is linked.
 
       EOS
     end
 
-    s += <<-EOS.undent
+    s += <<~EOS
       If you have built GRASS 6.4.x or 7.0.x support for the Processing plugin set
       the following in QGIS:
         Processing->Options: Providers->GRASS commands->GRASS folder to:

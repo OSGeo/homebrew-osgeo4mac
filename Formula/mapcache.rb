@@ -80,7 +80,7 @@ class Mapcache < Formula
     cp Dir["mapcache.xml*"], prefix/"config"
   end
 
-  def caveats; <<-EOS.undent
+  def caveats; <<~EOS
     The MapCache FCGI executable and Apache module are located in:
       #{libexec}/
 

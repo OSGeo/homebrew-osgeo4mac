@@ -30,7 +30,7 @@ class SagaGisLts < Formula
   # triggers a source (re)build of boost --with-python
   depends_on "homebrew/science/vigra" => :optional
   depends_on "postgresql" => :optional
-  depends_on :python => :optional
+  depends_on "python@2" => :optional
   depends_on "homebrew/science/opencv" => :optional
 
   resource "app_icon" do
@@ -77,7 +77,7 @@ class SagaGisLts < Formula
       cp "#{buildpath}/saga_gui.icns", "#{buildpath}/SAGA.app/Contents/Resources/"
       ln_s "#{bin}/saga_gui", "#{buildpath}/SAGA.app/Contents/MacOS/saga_gui"
 
-      config = <<-EOS.undent
+      config = <<~EOS
         <?xml version="1.0" encoding="UTF-8"?>
         <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
         <plist version="1.0">
@@ -114,7 +114,7 @@ class SagaGisLts < Formula
 
   def caveats
     if build.with? "app"
-      <<-EOS.undent
+      <<~EOS
       SAGA.app was installed in:
         #{prefix}
 

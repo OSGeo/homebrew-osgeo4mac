@@ -34,7 +34,7 @@ class GdalGrass64 < Formula
     system "make install"
   end
 
-  def caveats; <<-EOS.undent
+  def caveats; <<~EOS
     This formula provides a plugin that allows GDAL and OGR to access geospatial
     data stored using the GRASS vector and raster formats. In order to use the
     plugin, you will need to add the following path to the GDAL_DRIVER_PATH

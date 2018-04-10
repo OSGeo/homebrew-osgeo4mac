@@ -130,7 +130,7 @@ class MrsidSdk < Formula
     MachO::Tools.change_dylib_id(dylib.to_s, "#{dir}/#{dylib}", :strict => false)
   end
 
-  def caveats; <<-EOS.undent
+  def caveats; <<~EOS
         To build software with the Raster and LiDAR SDKs, add to the following
         environment variables to find the headers:
 
