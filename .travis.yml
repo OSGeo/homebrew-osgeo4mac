@@ -25,6 +25,9 @@ sudo: required
 #  timeout: 900
 #before_cache:
 #  - ./travis/before_cache.sh
+env:
+  global:
+    - ENCRYPTION_LABEL: 561d5ee436cc
 
 before_install:
   - export TRAVIS_MANUAL_FORMULAE=gdal2
