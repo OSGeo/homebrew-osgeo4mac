@@ -64,7 +64,7 @@ class Qscintilla2Qt4 < Formula
     # Add qscintilla2 features search path, since it is not installed in Qt keg's mkspecs/features/
     ENV["QMAKEFEATURES"] = prefix/"data/mkspecs/features"
 
-    if build.with?("python")
+    if build.with?("python@2")
       sip_f = Formula["sip-qt4"]
       ENV.prepend_path "PATH", "#{sip_f.opt_libexec}/bin"
       sip_dir = sip_f.name
