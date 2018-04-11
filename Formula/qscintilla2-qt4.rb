@@ -16,7 +16,7 @@ class Qscintilla2Qt4 < Formula
 
   depends_on "python@2" => :recommended
 
-  if build.with? "python"
+  if build.with? "python@2"
     depends_on "pyqt-qt4"
   else
     depends_on "qt-4"
