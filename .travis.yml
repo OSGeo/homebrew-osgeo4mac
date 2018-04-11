@@ -27,7 +27,7 @@ sudo: required
 #  - ./travis/before_cache.sh
 env:
   global:
-    - ENCRYPTION_LABEL: 561d5ee436cc
+    - ENCRYPTION_LABEL: 85815bd62c7b
 
 before_install:
   - export TRAVIS_MANUAL_FORMULAE=gdal2

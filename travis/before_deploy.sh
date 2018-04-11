@@ -21,8 +21,8 @@ cd ${TRAVIS_BUILD_DIR}
 # Setup Git configuration
 COMMIT_USER=$(git log --format='%an' ${TRAVIS_COMMIT}^\!)
 COMMIT_EMAIL=$(git log --format='%ae' ${TRAVIS_COMMIT}^\!)
-git config user.name "Travis CI"
-git config user.email "nick@nickrobison.com"
+git config user.name "Geo Ninja"
+git config user.email "qgisninja@gmail.com"
 REPO=$(git config remote.origin.url)
 SSH_REPO=${REPO/https:\/\/github.com\//git@github.com:}
 
