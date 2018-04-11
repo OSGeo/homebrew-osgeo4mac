@@ -18,10 +18,11 @@
 set -e
 
 cd ${TRAVIS_BUILD_DIR}
-
 # Setup Git configuration
-git config user.name "Travis CI (for $(git log --format='%an' $(TRAVIS_COMMIT)^!))"
-git config user.email "$(git log --format='%ae' $(TRAVIS_COMMIT)^!)"
+COMMIT_USER=$(git log --format='%an' ${TRAVIS_COMMIT}^\!)
+COMMIT_EMAIL=$(git log --format='%ae' ${TRAVIS_COMMIT}^\!)
+git config user.name "Travis CI (for ${COMMIT_USER})"
+git config user.email "${COMMIT_EMAIL}"
 REPO=$(git config remote.origin.url)
 SSH_REPO=${REPO/https:\/\/github.com\//git@github.com:}
 
@@ -41,7 +42,7 @@ pushd bottles
       new_name=${art/.sierra./.high_sierra.}
       cp -a ${art} ${new_name}
     done
-    for json in *.high_sierra.bottle*.json; do
+    for json in ${f}*.high_sierra.bottle*.json; do
       sed -i '' s@sierra@high_sierra@g ${json}
     done
 
@@ -56,6 +57,7 @@ popd
 git add -vA Formula/*.rb
 git commit -m "Updated bottles for: ${CHANGED_FORMULAE}
 
+Committed for ${COMMIT_USER}<${COMMIT_EMAIL}>
 [ci skip]"
 
 # Get the deploy key by using Travis's stored variables to decrypt deploy_key.enc
