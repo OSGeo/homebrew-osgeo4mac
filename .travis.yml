@@ -27,6 +27,7 @@ sudo: required
 #  - ./travis/before_cache.sh
 
 before_install:
+  - export TRAVIS_MANUAL_FORMULAE=gdal2
   - export GH_USER=$(echo -n "${TRAVIS_REPO_SLUG}" | egrep -o '^[^/]+' | tr -d '\n')
   - export TRAVIS_COMMIT="$(git rev-parse --verify -q HEAD)"
   - export CHANGED_FORMULAE="$(git diff --name-status $TRAVIS_COMMIT^ $TRAVIS_COMMIT | sed -n -E 's#^(A|M)[[:space:]]+Formula/(.+)\.rb$#\2#p' )"
@@ -77,3 +78,6 @@ deploy:
   on:
     branch: master
     repo: OSGeo/homebrew-osgeo4mac
+  on:
+      branch: automated_bottling
+      repo: OSGeo/homebrew-osgeo4mac
