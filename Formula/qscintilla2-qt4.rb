@@ -12,7 +12,7 @@ class Qscintilla2Qt4 < Formula
   end
 
   option "without-plugin", "Skip building the Qt Designer plugin"
-  option "without-python", "Skip building the Python bindings"
+  option "without-python@2", "Skip building the Python bindings"
 
   depends_on "python@2" => :recommended
 
