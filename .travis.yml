@@ -32,7 +32,7 @@ before_install:
   - export TRAVIS_COMMIT="$(git rev-parse --verify -q HEAD)"
   - export CHANGED_FORMULAE="$(git diff --name-status $TRAVIS_COMMIT^ $TRAVIS_COMMIT | sed -n -E 's#^(A|M)[[:space:]]+Formula/(.+)\.rb$#\2#p' )"
   - if [ "${CHANGED_FORMULAE}" == "" ]; then
-      CHANGED_FORMULAE = ${TRAVIS_MANUAL_FORMULAE}
+      CHANGED_FORMULAE=${TRAVIS_MANUAL_FORMULAE}
     fi
   - if [ "${CHANGED_FORMULAE}" == "" ]; then
       echo "Skipping CI; no changed formulae found in $TRAVIS_BUILD_DIR";
