@@ -14,7 +14,7 @@ class SipQt4 < Formula
   depends_on "python@2" => :recommended
 
   def install
-    if build.without? "python"
+    if build.without? "python@2"
       # this is a flaw in Homebrew, where `depends on :python` alone does not work
       odie "Must be built with Python2"
     end
