@@ -26,6 +26,28 @@ git config user.email "qgisninja@gmail.com"
 REPO=$(git config remote.origin.url)
 SSH_REPO=${REPO/https:\/\/github.com\//git@github.com:}
 
+# Checkout on the proper branch
+# see https://gist.github.com/mitchellkrogza/a296ab5102d7e7142cc3599fca634203
+head_ref=$(git rev-parse HEAD)
+if [[ $? -ne 0 || ! $head_ref ]]; then
+    err "failed to get HEAD reference"
+    return 1
+fi
+branch_ref=$(git rev-parse "$TRAVIS_BRANCH")
+if [[ $? -ne 0 || ! $branch_ref ]]; then
+    err "failed to get $TRAVIS_BRANCH reference"
+    return 1
+fi
+if [[ $head_ref != $branch_ref ]]; then
+    msg "HEAD ref ($head_ref) does not match $TRAVIS_BRANCH ref ($branch_ref)"
+    err "someone may have pushed new commits before this build cloned the repo"
+    return 1
+fi
+if ! git checkout "$TRAVIS_BRANCH"; then
+    err "failed to checkout $TRAVIS_BRANCH"
+    return 1
+fi
+
 
 # Build the bottles
 mkdir -p bottles
