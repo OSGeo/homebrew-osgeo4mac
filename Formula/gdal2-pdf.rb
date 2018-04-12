@@ -1,8 +1,8 @@
 class Gdal2Pdf < Formula
   desc "GDAL/OGR 2.x plugin for PDF driver"
   homepage "http://www.gdal.org/frmt_pdf.html"
-  url "http://download.osgeo.org/gdal/2.2.3/gdal-2.2.3.tar.gz"
-  sha256 "52f01bda8968643633016769607e6082a8ba1c746fadc2c1abe12cf7dc8f61dd"
+  url "http://download.osgeo.org/gdal/2.2.4/gdal-2.2.4.tar.gz"
+  sha256 "b9d5a723787f3006a82cb276db171c721187b048b866c0e20e6df464d671a1a4"
 
   bottle do
     root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
