@@ -54,10 +54,6 @@ mkdir -p bottles
 
 pushd bottles
   for f in ${CHANGED_FORMULAE};do
-    if grep -Fxq "$f" travis/skip-formulas.txt; then
-      echo "skipping $f"
-      continue
-    fi
     echo "Bottling changed formula ${f}..."
     brew bottle --verbose --json --root-url=https://osgeo4mac.s3.amazonaws.com/bottles \
       ${TRAVIS_REPO_SLUG}/${f}
