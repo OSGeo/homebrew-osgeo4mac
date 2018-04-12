@@ -54,7 +54,7 @@ mkdir -p bottles
 
 pushd bottles
   for f in ${CHANGED_FORMULAE};do
-    if [[ grep -Fxq "$f" travis/skip-formulas.txt ]]; then
+    if grep -Fxq "$f" travis/skip-formulas.txt; then
       echo "skipping $f"
       continue
     fi
