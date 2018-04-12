@@ -36,7 +36,7 @@ before_install:
   - export TRAVIS_MANUAL_FORMULAE=gdal2
   - export GH_USER=$(echo -n "${TRAVIS_REPO_SLUG}" | egrep -o '^[^/]+' | tr -d '\n')
   - export TRAVIS_COMMIT="$(git rev-parse --verify -q HEAD)"
-  - export CHANGED_FORMULAE="$(git diff --name-status $TRAVIS_COMMIT^ $TRAVIS_COMMIT | sed -n -E 's#^(A|M)[[:space:]]+Formula/(.+)\.rb$#\2#p' )"
+  - export CHANGED_FORMULAE=$( if [[ -n ${TRAVIS_MANUAL_FORMULAE} ]]; then echo "${TRAVIS_MANUAL_FORMULAE}"; fi && echo "$(git diff --name-status $TRAVIS_COMMIT^ $TRAVIS_COMMIT | sed -n -E 's#^(A|M)[[:space:]]+Formula/(.+)\.rb$#\2#p' )" )
   - if [ "${CHANGED_FORMULAE}" == "" ]; then
       CHANGED_FORMULAE=${TRAVIS_MANUAL_FORMULAE};
     fi
@@ -84,6 +84,3 @@ deploy:
   on:
     branch: master
     repo: OSGeo/homebrew-osgeo4mac
-  on:
-      branch: automated_bottling
-      repo: OSGeo/homebrew-osgeo4mac
