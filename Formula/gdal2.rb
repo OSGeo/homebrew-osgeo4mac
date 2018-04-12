@@ -67,6 +67,7 @@ class Gdal2 < Formula
   if build.with? "complete"
     # Raster libraries
     depends_on "netcdf" # Also brings in HDF5
+    depends_on "hdf4"
     depends_on "jasper"
     depends_on "webp"
     depends_on "cfitsio"
@@ -81,7 +82,6 @@ class Gdal2 < Formula
 
     # Other libraries
     depends_on "xz" # get liblzma compression algorithm library from XZutils
-    depends_on "json-c"
   end
 
   depends_on :java => ["1.7+", :optional, :build]
@@ -141,8 +141,9 @@ class Gdal2 < Formula
     # Optional Homebrew packages supporting additional formats.
     supported_backends = %w[
       liblzma
-      cfitsio
+      hdf4
       hdf5
+      cfitsio
       netcdf
       jasper
       xerces
@@ -168,7 +169,6 @@ class Gdal2 < Formula
     unsupported_backends = %w[
       gta
       fme
-      hdf4
       fgdb
       ecw
       kakadu
@@ -247,6 +247,9 @@ class Gdal2 < Formula
     ENV.append "CFLAGS", "-I#{sqlite.opt_include}"
 
     ENV.append "LDFLAGS", "-L#{Formula["ogdi"].opt_lib}/ogdi" if build.with? "ogdi"
+
+    # GDAL looks for the renamed hdf4 library, which is an artifact of old builds, so we need to repoint it
+    inreplace "configure", "-ldf", "-lhdf" if build.with? "complete"
 
     # Reset ARCHFLAGS to match how we build.
     ENV["ARCHFLAGS"] = "-arch #{MacOS.preferred_arch}"
