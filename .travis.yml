@@ -29,6 +29,9 @@ env:
   global:
     - ENCRYPTION_LABEL: 85815bd62c7b
 
+addons:
+  ssh_known_hosts: github.com
+
 before_install:
   - export TRAVIS_MANUAL_FORMULAE=gdal2
   - export GH_USER=$(echo -n "${TRAVIS_REPO_SLUG}" | egrep -o '^[^/]+' | tr -d '\n')
