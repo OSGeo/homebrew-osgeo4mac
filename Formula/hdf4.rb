@@ -13,6 +13,11 @@ class Hdf4 < Formula
   depends_on "jpeg"
   depends_on "gcc" if build.with? "fortran"
 
+  resource "test_file" do
+    url "https://gamma.hdfgroup.org/ftp/pub/outgoing/h4map/data/CT01_Rank6ArraysTablesAttributesGroups.hdf"
+    sha256 "e4a610c95ddd1f2247038adf46de354fe902e72b5b72757322d19c362c0d415a"
+  end
+
   def install
     ENV.O0 # Per the release notes, -O2 can cause memory corruption
     ENV["SZIP_INSTALL"] = HOMEBREW_PREFIX
@@ -61,4 +66,11 @@ class Hdf4 < Formula
       to function.
     EOS
   end
+
+  test do
+    resource("test_file").stage do
+      system "#{opt_prefix}/bin/vshow", "CT01_Rank6ArraysTablesAttributesGroups.hdf"
+    end
+  end
+
 end
