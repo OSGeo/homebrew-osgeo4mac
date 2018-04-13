@@ -48,7 +48,7 @@ brew update || brew update
 
 for f in ${CHANGED_FORMULAE};do
   echo "Homebrew setup for changed formula ${f}..."
-  deps=$(brew deps -1 --include-build ${f})
+  deps=$(brew deps --include-build ${f})
   echo "${f} dependencies: ${deps}"
 
   # Upgrade Python3 to the latest version, before installing Python2. Per the discussion here
