@@ -13,6 +13,10 @@ class Hdf4 < Formula
   depends_on "jpeg"
   depends_on "gcc" if build.with? "fortran"
 
+  bottle do
+
+  end
+
   resource "test_file" do
     url "https://gamma.hdfgroup.org/ftp/pub/outgoing/h4map/data/CT01_Rank6ArraysTablesAttributesGroups.hdf"
     sha256 "e4a610c95ddd1f2247038adf46de354fe902e72b5b72757322d19c362c0d415a"
