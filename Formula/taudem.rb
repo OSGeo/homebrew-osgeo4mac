@@ -4,7 +4,6 @@ class Taudem < Formula
   url "https://github.com/dtarb/TauDEM/archive/a0335e826d579926013e2d1c33c53d413b7c04b3.tar.gz"
   version "5.3.6-dev"
   sha256 "8b82f5162af6aaa5dcc0d56d23f6a392cfe5463b317ae5286286dba5554160f3"
-  revision 1
 
   # bottle do
   #   root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
@@ -15,7 +14,7 @@ class Taudem < Formula
   head "https://github.com/dtarb/TauDEM.git", :branch => "master"
 
   depends_on "cmake" => :build
-  depends_on "mpi" => [:cc, :cxx]
+  depends_on "open-mpi"
   depends_on "gdal2"
 
   resource "logan" do
