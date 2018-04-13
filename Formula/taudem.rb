@@ -4,11 +4,8 @@ class Taudem < Formula
   url "https://github.com/dtarb/TauDEM/archive/v5.3.7.tar.gz"
   sha256 "12a3cc1f43bd4ba9fd518ed82e524e386c1eb28891dfd3ed4329e8ad0a390245"
 
-  # bottle do
-  #   root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
-  #   cellar :any
-  #   sha256 "" => :mavericks
-  # end
+  bottle do
+  end
 
   devel do
     url "https://github.com/dtarb/TauDEM/archive/v5.3.8.tar.gz"
