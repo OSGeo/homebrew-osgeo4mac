@@ -16,7 +16,12 @@ else
   FILES=
 fi
 
+FORMULAS=
+for f in $FILES;do
+  FORMULAS="$FORMULAS $(echo $f | sed -n -E 's#^Formula/(.+)\.rb$#\1#p')"
+done
+
 # keep formulas only
-FORMULAS=$(sed -n -E 's#^Formula/(.+)\.rb$#\1#p' <<< $FILES)
+#FORMULAS=$(sed -n -E 's#^Formula/(.+)\.rb$#\1#p' <<< $FILES)
 # skip formulas
 comm -1 -3 travis/skip-formulas.txt <(echo ${FORMULAS} | tr ' ' '\n' )
