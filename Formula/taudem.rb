@@ -5,6 +5,10 @@ class Taudem < Formula
   sha256 "12a3cc1f43bd4ba9fd518ed82e524e386c1eb28891dfd3ed4329e8ad0a390245"
 
   bottle do
+    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
+    cellar :any
+    sha256 "fe1fa48a7db5876570f330eceb41f3ebc53d7e02250b7d78cf20ad14ccef2b67" => :high_sierra
+    sha256 "fe1fa48a7db5876570f330eceb41f3ebc53d7e02250b7d78cf20ad14ccef2b67" => :sierra
   end
 
   devel do
