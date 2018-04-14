@@ -49,7 +49,10 @@ brew update || brew update
 for f in ${CHANGED_FORMULAE};do
   echo "Homebrew setup for changed formula ${f}..."
   deps=$(brew deps --include-build ${f})
-  echo "${f} dependencies: ${deps}"
+  echo "${f} dependencies: 
+  echo "travis_fold:start:deps"
+  echo "${deps}"
+  echo "travis_fold:end:deps"
 
   # Upgrade Python3 to the latest version, before installing Python2. Per the discussion here
   # https://discourse.brew.sh/t/brew-install-python3-fails/1756/3
@@ -110,4 +113,3 @@ for f in ${CHANGED_FORMULAE};do
     fi
   fi
 done
-
