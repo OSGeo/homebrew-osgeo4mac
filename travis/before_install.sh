@@ -49,7 +49,7 @@ brew update || brew update
 for f in ${CHANGED_FORMULAE};do
   echo "Homebrew setup for changed formula ${f}..."
   deps=$(brew deps --include-build ${f})
-  echo "${f} dependencies: 
+  echo "${f} dependencies:"
   echo "travis_fold:start:deps"
   echo "${deps}"
   echo "travis_fold:end:deps"
