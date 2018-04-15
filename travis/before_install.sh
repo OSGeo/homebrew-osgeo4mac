@@ -120,5 +120,3 @@ brew cleanup
 find /usr/local/var -name '*.lock'
 echo "Cache"
 find $(brew --cache) -name '*.brewing'
-echo "Doctor"
-brew doctor
