@@ -39,7 +39,7 @@ class Grass7 < Formula
   if build.with? "gdal-1"
     depends_on "gdal"
   else
-    depends_on "osgeo/osgeo4mac/gdal2"
+    depends_on "gdal2"
   end
   depends_on "libtiff"
   depends_on "unixodbc"
