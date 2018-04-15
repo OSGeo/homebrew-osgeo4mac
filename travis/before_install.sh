@@ -116,4 +116,6 @@ done
 
 # Remove any left over lock or stray cache files
 brew cleanup
+# Any lock files?
+ls -lah /usr/local/var/homebrew/locks
 
