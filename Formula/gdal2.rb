@@ -40,6 +40,7 @@ class Gdal2 < Formula
   deprecated_option "enable-unsupported" => "with-unsupported"
   deprecated_option "enable-mdb" => "with-mdb"
   deprecated_option "complete" => "with-complete"
+  deprecated_option "with-java" => "with-swig-java"
 
   depends_on "libpng"
   depends_on "jpeg"
@@ -84,9 +85,8 @@ class Gdal2 < Formula
     depends_on "xz" # get liblzma compression algorithm library from XZutils
   end
 
-  depends_on :java => ["1.7+", :optional, :build]
-
   if build.with? "swig-java"
+    depends_on :java => ["1.8", :build]
     depends_on "ant" => :build
     depends_on "swig" => :build
   end
@@ -277,9 +277,11 @@ class Gdal2 < Formula
     include.install Dir["gnm/**/*.h"] if build.with? "gnm"
 
     if build.with? "swig-java"
+      cmd = Language::Java.java_home_cmd("1.8")
+      ENV["JAVA_HOME"] = Utils.popen_read(cmd).chomp
       cd "swig/java" do
         inreplace "java.opt", "linux", "darwin"
-        inreplace "java.opt", "#JAVA_HOME = /usr/lib/jvm/java-6-openjdk/", "JAVA_HOME=$(shell echo $$JAVA_HOME)"
+        inreplace "java.opt", "#JAVA_HOME = /usr/lib/jvm/java-6-openjdk/", "JAVA_HOME=#{ENV["JAVA_HOME"]}"
         system "make"
         system "make", "install"
 
@@ -316,6 +318,8 @@ class Gdal2 < Formula
 
     if build.with? "mdb"
       s += <<~EOS
+
+      MDB is no longer supported in the main GDAL formula, please use gdal2-mdb instead.
 
       To have a functional MDB driver, install supporting .jar files in:
         `/Library/Java/Extensions/`

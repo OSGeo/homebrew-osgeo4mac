@@ -56,7 +56,7 @@ class Gdal2Mdb < Formula
       "--with-macosx-framework",
     ]
 
-    cmd = Language::Java.java_home_cmd("1.8+")
+    cmd = Language::Java.java_home_cmd("1.8")
     ENV["JAVA_HOME"] = Utils.popen_read(cmd).chomp
     args << "--with-java=yes"
     args << "--with-jvm-lib=#{ENV["JAVA_HOME"]}/jre/lib/server"
