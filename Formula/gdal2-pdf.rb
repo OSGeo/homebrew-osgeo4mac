@@ -6,8 +6,9 @@ class Gdal2Pdf < Formula
 
   bottle do
     root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
-    sha256 "ee260fb3d333297b081f0f4c01f6c7075cb540137817180d0b9726076f8f1934" => :sierra
-    sha256 "ee260fb3d333297b081f0f4c01f6c7075cb540137817180d0b9726076f8f1934" => :high_sierra
+    rebuild 1
+    sha256 "7ab051ce67fcd203fc8447af661543a9aa0152cdad5ceffe8c9549b278f63be0" => :high_sierra
+    sha256 "7ab051ce67fcd203fc8447af661543a9aa0152cdad5ceffe8c9549b278f63be0" => :sierra
   end
 
   option "without-poppler", "Build without additional Poppler support"

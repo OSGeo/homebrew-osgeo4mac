@@ -6,8 +6,10 @@ class Gdal2Filegdb < Formula
 
   bottle do
     root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
-    sha256 "a06153cf6220a595b8cbc534562720efe5ce150f0273b9548b1d61a5620a0dcd" => :sierra
-    sha256 "a06153cf6220a595b8cbc534562720efe5ce150f0273b9548b1d61a5620a0dcd" => :high_sierra
+    cellar :any
+    rebuild 1
+    sha256 "5eeb49b814b259082b4cb1e7a02ba9e50910e1689255443e39ff2e5f2eeaa0bc" => :high_sierra
+    sha256 "5eeb49b814b259082b4cb1e7a02ba9e50910e1689255443e39ff2e5f2eeaa0bc" => :sierra
   end
 
   depends_on "filegdb-api"
