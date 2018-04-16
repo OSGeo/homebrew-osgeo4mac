@@ -5,7 +5,10 @@ class Fyba < Formula
   sha256 "99f658d52e8fd8997118bb6207b9c121500700996d9481a736683474e2534179"
 
   bottle do
-
+    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
+    cellar :any
+    sha256 "6c6c9a8e03026eb8c9b696bb9001207ab23baa9b549fa1c33016af2cb08162cb" => :high_sierra
+    sha256 "6c6c9a8e03026eb8c9b696bb9001207ab23baa9b549fa1c33016af2cb08162cb" => :sierra
   end
 
   depends_on "autoconf" => :build
