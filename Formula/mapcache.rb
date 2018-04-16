@@ -5,6 +5,10 @@ class Mapcache < Formula
   version "1.4.1"
   sha256 "c050429b2259f05d406028fd0fdb4d9c59bda54cd5c0e8bdf64d7b007a463636"
 
+  bottle do
+
+  end
+
   option "with-tiff-cache", "Build with TIFFs as a cache backend"
   option "without-apache-module", "Build without Apache2 module"
 
@@ -72,8 +76,10 @@ class Mapcache < Formula
     end
 
     # update Apache module linking
-    system "install_name_tool", "-change",
-           "@rpath/libmapcache.1.dylib", opt_lib/"libmapcache.1.dylib", libexec/"mod_mapcache.so"
+    # Deprecated, switching to MachO::Tools
+#    system "install_name_tool", "-change",
+#           "@rpath/libmapcache.1.dylib", opt_lib/"libmapcache.1.dylib", libexec/"mod_mapcache.so"
+    MachO::Tools.change_install_name("@rpath/libmapcache.1.dylib", opt_lib/"libmapcache.1.dylib", libexec/"mod_mapcache.so")
 
     # Add config examples
     (prefix/"config").mkpath

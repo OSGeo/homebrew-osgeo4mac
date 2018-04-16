@@ -1,7 +1,11 @@
 class Iipsrv < Formula
-  homepage "http://iipimage.sourceforge.net"
+  homepage "https://iipimage.sourceforge.net"
   url "https://github.com/ruven/iipsrv.git", :revision => "cfffce90243148a3da4a13776f3764b280acd0ce"
   version "0.9.9-dev"
+
+  bottle do
+
+  end
 
   option "with-lighttpd", "Install lighttpd and iipsrv configuration file"
   option "with-nginx", "Install nginx and iipsrv configuration file"

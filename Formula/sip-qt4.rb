@@ -3,7 +3,6 @@ class SipQt4 < Formula
   homepage "https://www.riverbankcomputing.com/software/sip/intro"
   url "https://downloads.sourceforge.net/project/pyqt/sip/sip-4.18.1/sip-4.18.1.tar.gz"
   sha256 "9bce7a2dbf7f105bf68ad1bab58eebc0ce33087ec40396da756463f086ffa290"
-  revision 2
 
   bottle do
     root_url "https://osgeo4mac.s3.amazonaws.com/bottles"

@@ -2,7 +2,7 @@ require 'formula'
 
 class Gpkgtools < Formula
   homepage 'https://launchpad.net/gpkgtools'
-  head 'bzr://http://bazaar.launchpad.net/~bradh/gpkgtools/trunk'
+  head "lp:gpkgtools", :using => :bzr
 
   depends_on 'libspatialite'
   depends_on "python@2"
@@ -41,7 +41,7 @@ class Gpkgtools < Formula
     prefix.install %w[tests testdata]
   end
 
-  def test
+  test do
     cd "#{opt_prefix}" do
       system 'python', 'tests/geonames.py'
     end

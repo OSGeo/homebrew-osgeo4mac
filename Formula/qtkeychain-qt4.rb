@@ -31,9 +31,13 @@ class QtkeychainQt4 < Formula
       system "cmake", "..", *args
       system "make", "install"
       (libexec/"bin").install "testclient"
-      system "install_name_tool", "-change", "@rpath/libqtkeychain.1.dylib",
+      # Deprecated: Using MachO::Tools
+#      system "install_name_tool", "-change", "@rpath/libqtkeychain.1.dylib",
+#             "#{opt_lib}/libqtkeychain.1.dylib",
+#             "#{libexec}/bin/testclient"
+      MachO::Tools.change_dylib_name("@rpath/libqtkeychain.1.dylib",
              "#{opt_lib}/libqtkeychain.1.dylib",
-             "#{libexec}/bin/testclient"
+             "#{libexec}/bin/testclient")
 
       if build.with? "static"
         args << "-DQTKEYCHAIN_STATIC=ON"

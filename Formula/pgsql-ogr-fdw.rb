@@ -11,7 +11,6 @@ class PgsqlOgrFdw < Formula
     false
   end
 
-  # depends_on "pkg-config" => :build
   depends_on "postgis"
   depends_on "gdal"
 
