@@ -50,6 +50,7 @@ fi
 
 
 # Build the bottles
+BUILT_BOTTLES=
 mkdir -p bottles
 
 pushd bottles
@@ -70,14 +71,24 @@ pushd bottles
 
 #    Do Merge bottles with the formula
 #    Don't commit anything, we'll do that after updating all the formulae
-    brew bottle --merge --write --no-commit ${f}*.json
+#    Catch the eror and store it to a variable
+    {bottle_error=$(brew bottle --merge --write --no-commit ${f}*.json 2>&1 1>&3) ;} 3>&1
+#   If there's an error, remove the json and bottle files, we don't want them anymore.
+    if [[ -n $bottle_error ]]; then
+      echo "Unable bottle ${f}"
+      echo $bottle_error
+      rm ${f}*.json
+      rm ${f}*.tar.gz
+    else
+      BUILT_BOTTLES="$BUILT_BOTTLES ${f}"
+    fi
   done
 popd
 
 # Now do the commit and push
 
 git add -vA Formula/*.rb
-git commit -m "Updated bottles for: ${CHANGED_FORMULAE}
+git commit -m "Updated bottles for: ${BUILT_BOTTLES}
 
 Committed for ${COMMIT_USER}<${COMMIT_EMAIL}>
 [ci skip]"
