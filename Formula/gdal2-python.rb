@@ -57,9 +57,6 @@ class Gdal2Python < Formula
 
   keg_only "older version of gdal is in main tap and installs similar components"
 
-  option "without-python@2", "Build without Python2 support"
-  option "without-python", "Build without Python3 support"
-
   depends_on "swig" => :build
   depends_on "gdal2"
   depends_on NoGdal2Python

@@ -7,11 +7,11 @@ class LiblasGdal2 < Formula
 
   head "https://github.com/libLAS/libLAS.git"
 
-  # bottle do
-  #   root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
-  #   sha256 "ffdce4c282c815439a5e2109d7113e6feea3a95a9692f28e464923aa5deef33f" => :sierra
-  #   sha256 "ffdce4c282c815439a5e2109d7113e6feea3a95a9692f28e464923aa5deef33f" => :high_sierra
-  # end
+   bottle do
+     root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
+     sha256 "ffdce4c282c815439a5e2109d7113e6feea3a95a9692f28e464923aa5deef33f" => :sierra
+     sha256 "ffdce4c282c815439a5e2109d7113e6feea3a95a9692f28e464923aa5deef33f" => :high_sierra
+   end
 
   keg_only "other version built against older gdal is in main tap"
 
