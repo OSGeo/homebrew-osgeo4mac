@@ -48,12 +48,15 @@ brew update || brew update
 
 for f in ${CHANGED_FORMULAE};do
   echo "Homebrew setup for changed formula ${f}..."
-  deps=$(brew deps -1 --include-build ${f})
-  echo "${f} dependencies: ${deps}"
+  deps=$(brew deps --include-build ${f})
+  echo "${f} dependencies:"
+  echo "travis_fold:start:deps"
+  echo "${deps}"
+  echo "travis_fold:end:deps"
 
   # Upgrade Python3 to the latest version, before installing Python2. Per the discussion here
   # https://discourse.brew.sh/t/brew-install-python3-fails/1756/3
-  if [ "$(echo ${deps} | grep -c 'python3')" != "0" ];then
+  if [ "$(echo ${deps} | grep -c '[python|python3]')" != "0" ];then
     echo "Installing and configuring Homebrew Python3"
     brew outdated python || brew upgrade python
 
@@ -79,15 +82,15 @@ for f in ${CHANGED_FORMULAE};do
     fi
   fi
 
-  if [ "$(echo ${deps} | grep -c 'python')" != "0" ];then
+  if [ "$(echo ${deps} | grep -c 'python@2')" != "0" ];then
     echo "Installing and configuring Homebrew Python2"
     # If we just upgraded to Python3, install python2, otherwise, update it
-    if [ "$(echo ${deps} | grep -c 'python3')" != "0" ];then
+    if [ "$(echo ${deps} | grep -c '[python3|python]')" != "0" ];then
       brew install python@2
     else
       brew outdated python@2 || brew upgrade python@2
-    fi
 
+    fi
     # Set up Python .pth files
     # get python short version (major.minor)
     PY_VER=$(${HOMEBREW_PREFIX}/bin/python2 -c "import sys;print('{0}.{1}'.format(sys.version_info[0],sys.version_info[1]).strip())")
@@ -111,3 +114,5 @@ for f in ${CHANGED_FORMULAE};do
   fi
 done
 
+# Remove any left over lock or stray cache files
+brew cleanup

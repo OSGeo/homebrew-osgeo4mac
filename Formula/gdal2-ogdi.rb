@@ -4,10 +4,10 @@ class Gdal2Ogdi < Formula
   url "http://download.osgeo.org/gdal/2.2.4/gdal-2.2.4.tar.gz"
   sha256 "b9d5a723787f3006a82cb276db171c721187b048b866c0e20e6df464d671a1a4"
 
-  # bottle do
-  #   root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
-  #   sha256 "bd40792669fdca893dda8beada60ad513eaac0ef795573a546bcdcab4846546d" => :sierra
-  # end
+   bottle do
+     root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
+     sha256 "bd40792669fdca893dda8beada60ad513eaac0ef795573a546bcdcab4846546d" => :sierra
+   end
 
   depends_on "ogdi"
   depends_on "gdal2"
