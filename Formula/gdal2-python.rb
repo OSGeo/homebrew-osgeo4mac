@@ -51,8 +51,10 @@ class Gdal2Python < Formula
 
   bottle do
     root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
-    sha256 "c930b0f5d806387980d6e372f9cf7c2fdecc5ca937f33f44d678472ebbf634e2" => :sierra
-    sha256 "c930b0f5d806387980d6e372f9cf7c2fdecc5ca937f33f44d678472ebbf634e2" => :high_sierra
+    cellar :any
+    rebuild 1
+    sha256 "ca2844b0de49cd966f5b484ce74e9b6b5e10f388564792f778cff002ccaddf05" => :high_sierra
+    sha256 "ca2844b0de49cd966f5b484ce74e9b6b5e10f388564792f778cff002ccaddf05" => :sierra
   end
 
   keg_only "older version of gdal is in main tap and installs similar components"
