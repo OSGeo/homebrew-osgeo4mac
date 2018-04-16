@@ -62,7 +62,7 @@ class Gdal2 < Formula
 
   depends_on "armadillo" => :optional
 
-  depends_on "osgeo/osgeo4mac/libkml-dev" if build.with? "libkml"
+  depends_on "libkml-dev" if build.with? "libkml"
 
   if build.with? "complete"
     # Raster libraries
