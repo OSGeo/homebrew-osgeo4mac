@@ -23,8 +23,9 @@ class Qgis2 < Formula
 
   bottle do
     root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
-    sha256 "2cc6457000cbee661a6df0801322bcf17432834b87fe1ddef6c0709c84b10951" => :sierra
-    sha256 "2cc6457000cbee661a6df0801322bcf17432834b87fe1ddef6c0709c84b10951" => :high_sierra
+    rebuild 1
+    sha256 "711227ab8eaaf529d5be89911ff6111f7d53fce147d452a1327d36d81464fbb1" => :high_sierra
+    sha256 "711227ab8eaaf529d5be89911ff6111f7d53fce147d452a1327d36d81464fbb1" => :sierra
   end
 
   def pour_bottle?
