@@ -4,6 +4,10 @@ class Gpkgtools < Formula
   homepage 'https://launchpad.net/gpkgtools'
   head "lp:gpkgtools", :using => :bzr
 
+  bottle do
+
+  end
+
   depends_on 'libspatialite'
   depends_on "python@2"
 
