@@ -12,6 +12,7 @@ class Iipsrv < Formula
   option "with-nginx", "Install nginx and iipsrv configuration file"
   option "with-vips", "Install VIPS for creating Tiled Pyramidal TIFFs"
   option "with-imagemagick", "Install ImageMagick for creating Tiled Pyramidal TIFFs"
+  option "without-tests", "Do not run test suite"
 
   depends_on "autoconf"
   depends_on "automake"
@@ -46,8 +47,9 @@ class Iipsrv < Formula
       "--disable-dependency-tracking"
 
     system "make"
+    system "make", "check" if build.with? "tests"
     (prefix/"fcgi-bin").install "src/iipsrv.fcgi"
-    man8.install "man/iipsrv.8"
+    man1.install "man/iipsrv.8"
 
     # Out-of-htdocs directory for images
     iipimage = var/"iipimage"
@@ -270,6 +272,5 @@ class Iipsrv < Formula
   end
 
   test do
-    system "#{prefix}/fcgi-bin/iipsrv.fcgi"
   end
 end
