@@ -94,7 +94,7 @@ class Qgis2Ltr < Formula
     # this is pretty borked with OS X >= 10.10+
     # depends on "open-scene-graph" => ["with-qt"]
     depends_on "open-scene-graph"
-    depends_on "homebrew/science/osgearth"
+    depends_on "brewsci/science/osgearth"
   end
   depends_on "gpsbabel-qt4" => :optional
   # TODO: remove "pyspatialite" when PyPi package supports spatialite 4.x

@@ -28,10 +28,10 @@ class SagaGisLts < Formula
   # Vigra support builds, but dylib in saga shows 'failed' when loaded
   # Also, using --with-python will trigger vigra to be built with it, which
   # triggers a source (re)build of boost --with-python
-  depends_on "homebrew/science/vigra" => :optional
+  depends_on "brewsci/science/vigra" => :optional
   depends_on "postgresql" => :optional
   depends_on "python@2" => :optional
-  depends_on "homebrew/science/opencv" => :optional
+  depends_on "brewsci/science/opencv" => :optional
 
   resource "app_icon" do
     url "https://osgeo4mac.s3.amazonaws.com/src/saga_gui.icns"
