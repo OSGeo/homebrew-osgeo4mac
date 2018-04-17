@@ -1,7 +1,8 @@
 class Iipsrv < Formula
   homepage "https://iipimage.sourceforge.net"
-  url "https://github.com/ruven/iipsrv.git", :revision => "cfffce90243148a3da4a13776f3764b280acd0ce"
-  version "0.9.9-dev"
+  url "https://github.com/ruven/iipsrv.git",
+  :revision => "eb8602ae40ff03aadf6abdc9fb8ef0f54c71c577"
+  version "1.1-dev"
 
   bottle do
 
@@ -29,7 +30,8 @@ class Iipsrv < Formula
   depends_on "imagemagick" => :optional
 
   resource "iipmooviewer" do
-    url "https://github.com/ruven/iipmooviewer.git", :revision => "21b7b92d9c8187e7239ff98d4cc36c3e03d950c4"
+    url "https://github.com/ruven/iipmooviewer.git",
+    :revision => "60f807d53afcd80d5ed3891c65caf2718db307dd"
     version "2.0-dev"
   end
 
