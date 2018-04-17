@@ -59,8 +59,8 @@ pushd bottles
     brew bottle --verbose --json --root-url=https://osgeo4mac.s3.amazonaws.com/bottles \
       ${TRAVIS_REPO_SLUG}/${f}
 
-#    temporary duplication of 10.2-Xcode-8.x-built bottles to 10.3 bottles
-#    Do the bottle duplication per formula, so we can merge the changes
+    # temporary duplication of 10.2-Xcode-8.x-built bottles to 10.3 bottles
+    # Do the bottle duplication per formula, so we can merge the changes
     for art in ${f}*.sierra.bottle.*; do
       new_name=${art/.sierra./.high_sierra.}
       cp -a ${art} ${new_name}
@@ -69,18 +69,17 @@ pushd bottles
       sed -i '' s@sierra@high_sierra@g ${json}
     done
 
-#    Do Merge bottles with the formula
-#    Don't commit anything, we'll do that after updating all the formulae
-#    Catch the eror and store it to a variable
-    {bottle_error=$(brew bottle --merge --write --no-commit ${f}*.json 2>&1 1>&3) ;} 3>&1
-#   If there's an error, remove the json and bottle files, we don't want them anymore.
-    if [[ -n $bottle_error ]]; then
-      echo "Unable bottle ${f}"
-      echo $bottle_error
+    # Do Merge bottles with the formula
+    # Don't commit anything, we'll do that after updating all the formulae
+    # Catch the eror and store it to a variable
+    if result=$(brew bottle --merge --write --no-commit ${f}*.json 2>&1); then
+      BUILT_BOTTLES="$BUILT_BOTTLES ${f}"
+    else
+      # If there's an error, remove the json and bottle files, we don't want them anymore.
+      echo "Unable to bottle ${f}"
+      echo $result
       rm ${f}*.json
       rm ${f}*.tar.gz
-    else
-      BUILT_BOTTLES="$BUILT_BOTTLES ${f}"
     fi
   done
 popd
