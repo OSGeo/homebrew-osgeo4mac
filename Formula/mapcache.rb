@@ -32,6 +32,10 @@ class Mapcache < Formula
   depends_on "memcached" => :optional
   depends_on "mapserver" => :optional
 
+  def lib_name
+    "libmapcache"
+  end
+
   def install
     args = std_cmake_args
     # option(WITH_SQLITE "Use sqlite as a cache backend" ON)
@@ -76,10 +80,11 @@ class Mapcache < Formula
     end
 
     # update Apache module linking
-    # Deprecated, switching to MachO::Tools
-#    system "install_name_tool", "-change",
-#           "@rpath/libmapcache.1.dylib", opt_lib/"libmapcache.1.dylib", libexec/"mod_mapcache.so"
-    MachO::Tools.change_install_name("@rpath/libmapcache.1.dylib", opt_lib/"libmapcache.1.dylib", libexec/"mod_mapcache.so")
+    so_ver = 1
+    lib_name_ver = "#{lib_name}.#{so_ver}"
+    MachO::Tools.change_install_name("#{libexec}/mod_mapcache.so",
+                                     "@rpath/#{lib_name_ver}.dylib",
+                                     "#{opt_lib}/#{lib_name_ver}.dylib")
 
     # Add config examples
     (prefix/"config").mkpath
