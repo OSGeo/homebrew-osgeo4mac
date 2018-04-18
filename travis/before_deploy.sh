@@ -92,11 +92,5 @@ git commit -m "Updated bottles for: ${BUILT_BOTTLES}
 Committed for ${COMMIT_USER}<${COMMIT_EMAIL}>
 [ci skip]"
 
-# Get the deploy key by using Travis's stored variables to decrypt deploy_key.enc
-openssl aes-256-cbc -K $encrypted_85815bd62c7b_key -iv $encrypted_85815bd62c7b_iv deploy_key.enc -out deploy_key -d
-chmod 600 ./deploy_key
-eval `ssh-agent -s`
-ssh-add deploy_key
-
 # Now that we're all set up, we can push.
 git push ${SSH_REPO} $TRAVIS_BRANCH

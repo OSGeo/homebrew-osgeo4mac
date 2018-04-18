@@ -25,9 +25,6 @@ sudo: required
 #  timeout: 900
 #before_cache:
 #  - ./travis/before_cache.sh
-env:
-  global:
-    - ENCRYPTION_LABEL: 85815bd62c7b
 
 addons:
   ssh_known_hosts: github.com
@@ -64,7 +61,13 @@ script: ./travis/script.sh
 
 after_script: ./travis/after_script.sh
 
-before_deploy: ./travis/before_deploy.sh
+before_deploy: |
+  # Get the deploy key by using Travis's stored variables to decrypt deploy_key.enc
+  openssl aes-256-cbc -K $encrypted_85815bd62c7b_key -iv $encrypted_85815bd62c7b_iv deploy_key.enc -out deploy_key -d
+  chmod 600 ./deploy_key
+  eval `ssh-agent -s`
+  ssh-add deploy_key
+  ./travis/before_deploy.sh
 
 deploy:
   skip_cleanup: true
