@@ -45,7 +45,7 @@ class Mapcache < Formula
     # option(WITH_VERSION_STRING "Show MapCache in server version string" ON)
     # option(WITH_APACHE "Build Apache Module" ON)
     if build.with? "apache-module"
-      args << "-DCMAKE_PREFIX_PATH=#{Formula["apr"].opt_libexec};#{Formula["apr-util"].opt_libexec}"
+      args << "-DCMAKE_PREFIX_PATH=#{Formula["apr"].opt_libexec}:#{Formula["apr-util"].opt_libexec}"
       args << "-DAPACHE_MODULE_DIR=#{libexec}"
     else
       args << "-DWITH_APACHE=OFF"
