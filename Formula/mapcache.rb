@@ -1,9 +1,9 @@
 class Mapcache < Formula
   desc "Server that implements tile caching to speed up access to WMS layers."
   homepage "http://mapserver.org/mapcache/"
-  url "https://github.com/mapserver/mapcache/archive/rel-1-4-1.tar.gz"
-  version "1.4.1"
-  sha256 "c050429b2259f05d406028fd0fdb4d9c59bda54cd5c0e8bdf64d7b007a463636"
+  url "https://github.com/mapserver/mapcache/archive/rel-1-6-1.tar.gz"
+  version "1.6.1"
+  sha256 "1b3de277173100e89655b7c1361468c67727895a94152931e222a48b45a48caa"
 
   bottle do
 
