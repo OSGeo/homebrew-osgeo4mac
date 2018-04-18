@@ -93,11 +93,7 @@ Committed for ${COMMIT_USER}<${COMMIT_EMAIL}>
 [ci skip]"
 
 # Get the deploy key by using Travis's stored variables to decrypt deploy_key.enc
-ENCRYPTED_KEY_VAR="encrypted_${ENCRYPTION_LABEL}_key"
-ENCRYPTED_IV_VAR="encrypted_${ENCRYPTION_LABEL}_iv"
-ENCRYPTED_KEY=${!ENCRYPTED_KEY_VAR}
-ENCRYPTED_IV=${!ENCRYPTED_IV_VAR}
-openssl aes-256-cbc -K $ENCRYPTED_KEY -iv $ENCRYPTED_IV -in ${TRAVIS_BUILD_DIR}/deploy_key.enc -out ${TRAVIS_BUILD_DIR}/deploy_key -d
+openssl aes-256-cbc -K $encrypted_85815bd62c7b_key -iv $encrypted_85815bd62c7b_iv ${TRAVIS_BUILD_DIR}/deploy_key.enc -out ${TRAVIS_BUILD_DIR}/deploy_key -d
 chmod 600 ./deploy_key
 eval `ssh-agent -s`
 ssh-add deploy_key
