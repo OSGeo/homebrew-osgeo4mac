@@ -38,6 +38,7 @@ class Orfeo5 < Formula
   depends_on "tinyxml"
   depends_on "open-scene-graph" # (for libOpenThreads, now internal to osg)
   depends_on "zlib"
+  depends_on "qwt-qt4@5.2"
 
   # recommended
   depends_on "muparser" => :recommended
