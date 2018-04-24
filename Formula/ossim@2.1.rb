@@ -8,6 +8,9 @@ class OssimAT21 < Formula
   end
 
   bottle do
+    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
+    sha256 "43e9246f1f478864ce0fe46a591fb72a610506024266fe3cfb4ba553504249b4" => :high_sierra
+    sha256 "43e9246f1f478864ce0fe46a591fb72a610506024266fe3cfb4ba553504249b4" => :sierra
   end
 
   keg_only :versioned_formula
