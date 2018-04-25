@@ -1,3 +1,6 @@
 gdal2-ecwjp2
 gpkgtools
+monteverdi2
+orfeo5
 orfeo5@5.4
+orfeo-ice
