@@ -31,7 +31,7 @@ for f in ${nix_f}; do
 done
 
 # Add taps
-brew tap homebrew/science || true
+brew tap brewsci/science || true
 #brew tap caskroom/cask || true
 
 # Keeps gcc from being linked
