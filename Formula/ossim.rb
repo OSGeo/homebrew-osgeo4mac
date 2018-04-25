@@ -2,18 +2,12 @@ class Ossim < Formula
   desc "Geospatial libs and apps to process imagery, terrain, and vector data"
   homepage "https://trac.osgeo.org/ossim/"
 
-  # TODO: request a tagged release
-  # May 18, 2016 commit
-  url "https://github.com/ossimlabs/ossim.git",
-      :branch => "master",
-      :revision => "f01c951587eeb63623b913750bec5097ece86d9a"
-  version "1.9.0"
-  revision 5
+  stable do
+    url "https://github.com/ossimlabs/ossim/archive/Gasparilla-2.3.1.tar.gz"
+    sha256 "f928544b4dfc6a1c93c55afb244d04e9a33b368fd5e6c3fe552f43b5da4e7c6e"
+  end
 
   bottle do
-    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
-    sha256 "5377c220a9e7448445989e9b3f89e9dd38710e81bc8936291161d846303a4e58" => :sierra
-    sha256 "5377c220a9e7448445989e9b3f89e9dd38710e81bc8936291161d846303a4e58" => :high_sierra
   end
 
   option "with-curl-apps", "Build curl-dependent apps"
@@ -29,16 +23,10 @@ class Ossim < Formula
   depends_on "geos"
   depends_on "freetype"
   depends_on "zlib"
-  depends_on "mpi" => [:cc, :cxx, :optional]
+  depends_on "open-mpi" => :optional
 
   def install
     ENV.cxx11
-
-    # build setup expects the checkout to be in subdir named 'ossim'
-    cur_dir = Dir["*", ".git*"]
-    mkdir "ossim"
-    (buildpath/"ossim").install cur_dir
-    mkdir "build"
 
     ENV["OSSIM_DEV_HOME"] = buildpath.to_s
     ENV["OSSIM_BUILD_DIR"] = (buildpath/"build").to_s
@@ -79,20 +67,10 @@ class Ossim < Formula
     args << "-DBUILD_OSSIM_CURL_APPS=" + (build.with?("curl-apps") ? "ON" : "OFF")
     args << "-DBUILD_OSSIM_GUI=" + (build.with?("gui") ? "ON" : "OFF")
 
-    # fix up include/ossim/base/ossimRefPtr.h
-    inreplace "ossim/include/ossim/base/ossimRefPtr.h" do |s|
-      s.sub! /(#include <stddef.h>)/, "\\1\n#include <cstddef>"
-      s.gsub! "nullptr_t", "std::nullptr_t"
-    end
-
-    cd "build" do
-      system "cmake", "../ossim/cmake", *args
-      # bbedit = "/usr/local/bin/bbedit"
-      # system bbedit, "CMakeCache.txt"
-      # raise
+    mkdir "build" do
+      system "cmake", "..", *args
       system "make"
       system "make", "install"
-      File.rename (prefix/"lib64").to_s, lib.to_s
     end
   end
 
@@ -100,3 +78,4 @@ class Ossim < Formula
     system bin/"ossim-cli", "--version"
   end
 end
+
