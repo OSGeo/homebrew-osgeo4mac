@@ -28,7 +28,7 @@ class Orfeo6 < Formula
   depends_on "libpng"
   depends_on "pcre"
   depends_on "openssl"
-  depends_on "ossim"
+  depends_on "ossim@2.1"
   depends_on "sqlite"
   depends_on "tinyxml"
   depends_on "open-scene-graph" # (for libOpenThreads, now internal to osg)
@@ -87,8 +87,8 @@ class Orfeo6 < Formula
       -DCMAKE_CXX_STANDARD=11
       -DQWT_LIBRARY=#{Formula['qwt-qt4'].lib}
       -DQWT_INCLUDE_DIR=#{Formula['qwt-qt4'].lib}/qwt.framework/Headers
-      -DOSSIM_LIBRARY=#{Formula['ossim'].lib}
-      -DOSSIM_INCLUDE_DIR=#{Formula['ossim'].include}
+      -DOSSIM_LIBRARY=#{Formula['ossim@2.1'].lib}
+      -DOSSIM_INCLUDE_DIR=#{Formula['ossim@2.1'].include}
 
     ]
 
