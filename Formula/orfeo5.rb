@@ -1,11 +1,10 @@
 class Orfeo5 < Formula
   desc "Library of image processing algorithms"
   homepage "https://www.orfeo-toolbox.org/otb/"
-  revision 4
 
   stable do
-    url "https://github.com/orfeotoolbox/OTB/archive/5.8.0.tar.gz"
-    sha256 "3e6b6547b119ce5e9571475620db0d5dbe220a64f835b7f6acd93ac813bbaa4f"
+    url "https://github.com/orfeotoolbox/OTB/archive/5.10.1.tar.gz"
+    sha256 "01b40747f0afba51af1aa5e696a7205c2177b0f99f5208d9db8369acc984fe39"
 
     # Patch to fix OSSIM adaptor compilation
     patch :DATA
@@ -13,8 +12,8 @@ class Orfeo5 < Formula
 
   bottle do
     root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
-    sha256 "a36188750d625def34b35df9651953eb95b48ab1de3442ad7c84e2ec2dfc3b05" => :sierra
-    sha256 "a36188750d625def34b35df9651953eb95b48ab1de3442ad7c84e2ec2dfc3b05" => :high_sierra
+    sha256 "8d6c674fe701351710df14d316f525741a816b2f8875c1c0224cb002b9b5eee3" => :sierra
+    sha256 "8d6c674fe701351710df14d316f525741a816b2f8875c1c0224cb002b9b5eee3" => :high_sierra
   end
 
   option "without-monteverdi", "Build without Monteverdi and Mapla applications (Qt4 required)"
@@ -27,12 +26,12 @@ class Orfeo5 < Formula
   # required
   depends_on "boost"
   depends_on "vtk"
-  depends_on "homebrew/science/insighttoolkit"
+  depends_on "brewsci/science/insighttoolkit"
   depends_on "libgeotiff"
   depends_on "libpng"
   depends_on "pcre"
   depends_on "openssl"
-  depends_on "ossim"
+  depends_on "ossim@2.1"
   depends_on "sqlite"
   depends_on "tinyxml"
   depends_on "open-scene-graph" # (for libOpenThreads, now internal to osg)
@@ -49,10 +48,10 @@ class Orfeo5 < Formula
   depends_on "swig" if build.with? "python@2"
   depends_on "fftw" => :optional # restricts built binaries to GPL license
   depends_on "mapnik" => :optional
-  depends_on "homebrew/science/opencv" => :optional
+  depends_on "brewsci/science/opencv" => :optional
   depends_on "openjpeg" => :optional
-  depends_on "mpi" => [:cxx, :optional]
-  depends_on "homebrew/science/shark" => :optional
+  depends_on "open-mpi" => :optional
+  depends_on "brewsci/science/shark" => :optional
 
   # ICE Viewer: needs X11 support
   # apparently, GLUT is not needed by Monteverdi, which uses ICE non-gui module,
@@ -65,6 +64,7 @@ class Orfeo5 < Formula
     depends_on "glew"
     depends_on "glfw"
     depends_on "qt-4"
+    depends_on "qwt-qt4@5.2"
   else
     depends_on "gdal2" => :recommended
     depends_on "glew" => :optional
@@ -74,44 +74,23 @@ class Orfeo5 < Formula
 
   resource "geoid" do
     # geoid to use in elevation calculations, if no DEM defined or avialable
-    url "https://git.orfeo-toolbox.org/otb-data.git/blob_plain/88264d17dffd4269d36a4fb93a236a915f729515:/Input/DEM/egm96.grd"
+    url "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-data/raw/master/Input/DEM/egm96.grd"
     sha256 "2babe341e8e04db11447e823ac0dfe4b17f37fd24c7966bb6aeab85a30d9a733"
     version "5.0.0"
-  end
-
-  resource "qwt5" do
-    # http://qwt.sourceforge.net/
-    url "https://downloads.sourceforge.net/project/qwt/qwt/5.2.3/qwt-5.2.3.tar.bz2"
-    sha256 "37feaf306753230b0d8538b4ff9b255c6fddaa3d6609ec5a5cc39a5a4d020ab7"
   end
 
   def install
     (libexec/"default_geoid").install resource("geoid")
 
-    args = std_cmake_args + %w[
+    args = std_cmake_args + %W[
       -DOTB_BUILD_DEFAULT_MODULES=ON
       -DBUILD_TESTING=OFF
       -DBUILD_SHARED_LIBS=ON
       -DCMAKE_MACOSX_RPATH=OFF
       -DCMAKE_CXX_STANDARD=11
+      -DQWT_LIB=#{Formula['qwt-qt4@5.2'].lib}
+      -DQWT_INCLUDE_DIR=#{Formula['qwt-qt4@5.2'].include}
     ]
-
-    if build.with? "monteverdi"
-      # locally vendor older qwt 5.2.3
-      qwt5 = libexec/"qwt5"
-      qwt5.mkpath
-      resource("qwt5").stage do
-        inreplace "qwtconfig.pri" do |s|
-          s.sub! "/usr/local/qwt-$$VERSION", qwt5
-          s.sub! /(doc.path)/, "#\\1"
-          s.sub! /\+(=\s*QwtDesigner)/, "-\\1"
-        end
-        system "#{Formula["qt-4"].opt_bin}/qmake", "-config", "release"
-        system "make", "install"
-        MachO::Tools.change_dylib_id("#{qwt5}/lib/libqwt.5.dylib", "#{qwt5}/lib/libqwt.5.dylib")
-      end
-      args << "-DCMAKE_PREFIX_PATH=#{qwt5}"
-    end
 
     ENV.cxx11
 
@@ -145,16 +124,10 @@ class Orfeo5 < Formula
     args << "-DOTB_USE_QT4=" + ((build.with?("qt-4") || build.with?("monteverdi")) ? "ON" : "OFF")
     args << "-DOTB_USE_QWT=" + ((build.with?("qt-4") || build.with?("monteverdi")) ? "ON" : "OFF")
     args << "-DOTB_USE_SIFTFAST=ON"
-    args << "-DOTB_USE_SHARK=" + (build.with?("homebrew/science/shark") ? "ON" : "OFF")
+    args << "-DOTB_USE_SHARK=" + (build.with?("brewsci/science/shark") ? "ON" : "OFF")
 
     mkdir "build" do
       system "cmake", "..", *args
-      # bbedit = "/usr/local/bin/bbedit"
-      # cmake_config = Pathname("#{Dir.pwd}/orfeo5_cmake-config.txt")
-      # cmake_config.write ["cmake ..", *args].join(" \\\n")
-      # system bbedit, cmake_config.to_s
-      # system bbedit, "CMakeCache.txt"
-      # raise
       system "make"
       system "make", "install"
     end
@@ -200,11 +173,11 @@ index d20e208..92796dd 100644
 +++ b/Modules/Adapters/OSSIMAdapters/src/otbRPCSolverAdapter.cxx
 @@ -109,7 +109,8 @@ RPCSolverAdapter::Solve(const GCPsContainerType& gcpContainer,
    rmsError = rpcSolver->getRmsError();
- 
+
    // Retrieve the output RPC projection
 -  ossimRefPtr<ossimRpcProjection> rpcProjection = dynamic_cast<ossimRpcProjection*>(rpcSolver->createRpcProjection()->getProjection());
 +  ossimRefPtr<ossimImageGeometry> outputProj = dynamic_cast<ossimImageGeometry*>(rpcSolver->createRpcProjection());
 +  ossimRefPtr<ossimRpcProjection> rpcProjection = dynamic_cast<ossimRpcProjection*>(outputProj->getProjection());
- 
+
    // Export the sensor model in an ossimKeywordlist
    ossimKeywordlist geom_kwl;

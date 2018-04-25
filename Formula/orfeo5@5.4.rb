@@ -20,13 +20,13 @@ class Orfeo5AT54 < Formula
 
   # required
   depends_on "boost"
-  depends_on "homebrew/science/vtk"
-  depends_on "homebrew/science/insighttoolkit"
+  depends_on "vtk"
+  depends_on "brewsci/science/insighttoolkit"
   depends_on "libgeotiff"
   depends_on "libpng"
   depends_on "pcre"
   depends_on "openssl"
-  depends_on "ossim"
+  depends_on "ossim@2.1"
   depends_on "sqlite"
   depends_on "tinyxml"
   depends_on "open-scene-graph" # (for libOpenThreads, now internal to osg)
@@ -43,7 +43,7 @@ class Orfeo5AT54 < Formula
   depends_on "swig" if build.with? "python@2"
   depends_on "fftw" => :optional # restricts built binaries to GPL license
   depends_on "mapnik" => :optional
-  depends_on "homebrew/science/opencv" => :optional
+  depends_on "brewsci/science/opencv" => :optional
   depends_on "openjpeg" => :optional
 
   # ICE Viewer: needs X11 support
@@ -62,7 +62,7 @@ class Orfeo5AT54 < Formula
 
   resource "geoid" do
     # geoid to use in elevation calculations, if no DEM defined or avialable
-    url "https://git.orfeo-toolbox.org/otb-data.git/blob_plain/88264d17dffd4269d36a4fb93a236a915f729515:/Input/DEM/egm96.grd"
+    url "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-data/raw/master/Input/DEM/egm96.grd"
     sha256 "2babe341e8e04db11447e823ac0dfe4b17f37fd24c7966bb6aeab85a30d9a733"
     version "5.0.0"
   end
