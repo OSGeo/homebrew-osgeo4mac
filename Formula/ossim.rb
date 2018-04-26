@@ -34,6 +34,7 @@ class Ossim < Formula
 
     # TODO: add options and deps for plugins
     args = std_cmake_args + %W[
+      -DCMAKE_CXX_FLAGS="-std=c++11"
       -DCMAKE_CXX_STANDARD=11
       -DOSSIM_DEV_HOME=#{ENV["OSSIM_DEV_HOME"]}
       -DINSTALL_LIBRARY_DIR=lib
