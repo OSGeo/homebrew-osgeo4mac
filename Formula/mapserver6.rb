@@ -30,19 +30,23 @@ class Mapserver6 < Formula
   # TODO: audit and comapare against `mapserver` in core
   desc "Publish spatial data and interactive mapping apps to the web"
   homepage "http://mapserver.org/"
-  url "http://download.osgeo.org/mapserver/mapserver-6.4.3.tar.gz"
-  sha256 "1f432d4b44e7a0e4e9ce883b02c91c9a66314123028eebb0415144903b8de9c2"
+  url "http://download.osgeo.org/mapserver/mapserver-6.4.5.tar.gz"
+  sha256 "b62c5c0cce2ea7da1d70553197926c14ef46bfb030a736e588367fc881b01a9a"
 
-  # bottle do
-  #   root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
-  #   sha256 "" => :mavericks
-  # end
+  bottle do
+    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
+    sha256 "" => :mavericks
+  end
 
   head do
     url "https://github.com/mapserver/mapserver.git", :branch => "master"
     depends_on "harfbuzz"
     depends_on "v8" => :optional
   end
+
+  # Backport patch to support compiling with gif_lib >= 5.1: https://github.com/mapserver/mapserver/pull/5144
+  # Also applies a patch to build on versions of PHP5 > 5.6.25: https://github.com/mapserver/mapserver/pull/5318
+  patch :DATA
 
   option "without-php", "Build PHP MapScript module"
   option "without-rpath", "Don't embed rpath to installed libmapserver in modules"
@@ -75,6 +79,7 @@ class Mapserver6 < Formula
   depends_on "librsvg" => :optional
   depends_on "fribidi"
   depends_on "python@2" => %w[sphinx] if build.with? "docs"
+  depends_on "php@5.6" if build.with? "php"
 
   conflicts_with "mapserver", :because => "mapserver is in main tap"
 
@@ -298,3 +303,51 @@ class Mapserver6 < Formula
     "python" + `python -c "import sys;print(sys.version[:3])"`.strip
   end
 end
+__END__
+diff --git a/mapimageio.c b/mapimageio.c
+index 35d134f..eb63aa3 100644
+--- a/mapimageio.c
++++ b/mapimageio.c
+@@ -1307,6 +1307,12 @@ int readGIF(char *path, rasterBufferObj *rb)
+
+   } while (recordType != TERMINATE_RECORD_TYPE);
+
++#if defined GIFLIB_MAJOR && GIFLIB_MINOR && ((GIFLIB_MAJOR == 5 && GIFLIB_MINOR >= 1) || (GIFLIB_MAJOR > 5))
++  if (DGifCloseFile(image, &errcode) == GIF_ERROR) {
++    msSetError(MS_MISCERR,"failed to close gif after loading: %s","readGIF()", gif_error_msg(errcode));
++    return MS_FAILURE;
++  }
++#else
+   if (DGifCloseFile(image) == GIF_ERROR) {
+ #if defined GIFLIB_MAJOR && GIFLIB_MAJOR >= 5
+     msSetError(MS_MISCERR,"failed to close gif after loading: %s","readGIF()", gif_error_msg(image->Error));
+@@ -1315,6 +1321,7 @@ int readGIF(char *path, rasterBufferObj *rb)
+ #endif
+     return MS_FAILURE;
+   }
++#endif
+
+   return MS_SUCCESS;
+ }
+diff --git a/mapscript/php/error.c b/mapscript/php/error.c
+index a13de647f..2e96eea27 100644
+--- a/mapscript/php/error.c
++++ b/mapscript/php/error.c
+@@ -31,6 +31,17 @@
+ 
+ #include "php_mapscript.h"
+ 
++#if PHP_VERSION_ID >= 50625
++#undef ZVAL_STRING
++#define ZVAL_STRING(z, s, duplicate) do {       \
++    const char *__s=(s);                            \
++    zval *__z = (z);                                        \
++    Z_STRLEN_P(__z) = strlen(__s);          \
++    Z_STRVAL_P(__z) = (duplicate?estrndup(__s, Z_STRLEN_P(__z)):(char*)__s);\
++    Z_TYPE_P(__z) = IS_STRING;                      \
++} while (0)
++#endif
++
+ zend_class_entry *mapscript_ce_error;
+ 
+ ZEND_BEGIN_ARG_INFO_EX(error___get_args, 0, 0, 1)
