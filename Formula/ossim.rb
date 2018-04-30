@@ -10,6 +10,8 @@ class Ossim < Formula
   bottle do
   end
 
+  # This patch is required in order to build on XCode 8.3
+  # It's been submitted upstream as: https://github.com/ossimlabs/ossim/pull/199
   patch :DATA
 
   option "with-curl-apps", "Build curl-dependent apps"
