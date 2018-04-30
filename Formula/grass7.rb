@@ -6,8 +6,8 @@ class Grass7 < Formula
   homepage "https://grass.osgeo.org/"
 
   stable do
-    url "https://grass.osgeo.org/grass72/source/grass-7.2.2.tar.gz"
-    sha256 "bbbfb37c2e39a1027d27ce05471f7a93d74d6add2d5804f8e2e462daf392f47b"
+    url "https://grass.osgeo.org/grass74/source/grass-7.4.0.tar.gz"
+    sha256 "cb6fa188e030a3a447fc5451fbe0ecbeb4069ee2fd1bf52ed8e40e9b89e293cc"
 
     # Patches to keep files from being installed outside of the prefix.
     # Remove lines from Makefile that try to install to /Library/Documentation.
@@ -23,7 +23,6 @@ class Grass7 < Formula
 
   option "without-gui", "Build without WxPython interface. Command line tools still available."
   option "with-liblas", "Build with LibLAS-with-GDAL2 support"
-  option "with-gdal-1", "Build with GDAL/OGR v1.x instead of v2.x"
 
   depends_on UnlinkedGRASS7
 
@@ -37,11 +36,7 @@ class Grass7 < Formula
   depends_on "flex"
   depends_on "bison"
   depends_on "lbzip2"
-  if build.with? "gdal-1"
-    depends_on "gdal"
-  else
-    depends_on "gdal2"
-  end
+  depends_on "gdal2"
   depends_on "libtiff"
   depends_on "unixodbc"
   depends_on "fftw"
