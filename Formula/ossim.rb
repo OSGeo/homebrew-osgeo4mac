@@ -10,6 +10,8 @@ class Ossim < Formula
   bottle do
   end
 
+  patch :DATA
+
   option "with-curl-apps", "Build curl-dependent apps"
   option "without-framework", "Generate library instead of framework"
   option "with-gui", "Build new ossimGui library and geocell application"
@@ -34,8 +36,6 @@ class Ossim < Formula
 
     # TODO: add options and deps for plugins
     args = std_cmake_args + %W[
-      -DCMAKE_CXX_FLAGS="-std=c++11"
-      -DCMAKE_CXX_STANDARD=11
       -DOSSIM_DEV_HOME=#{ENV["OSSIM_DEV_HOME"]}
       -DINSTALL_LIBRARY_DIR=lib
       -DBUILD_OSSIM_APPS=ON
@@ -79,4 +79,41 @@ class Ossim < Formula
     system bin/"ossim-cli", "--version"
   end
 end
-
+__END__
+diff --git a/include/ossim/base/ossimRefPtr.h b/include/ossim/base/ossimRefPtr.h
+index fef5824..dbe015a 100644
+--- a/include/ossim/base/ossimRefPtr.h
++++ b/include/ossim/base/ossimRefPtr.h
+@@ -8,6 +8,7 @@
+ #define ossimRefPtr_HEADER
+ #include <ossim/base/ossimConstants.h>
+ #include <stddef.h>
++#include <cstddef>
+ 
+ template<class T> class ossimRefPtr
+ {
+@@ -100,20 +101,20 @@ template<typename _Tp1, typename _Tp2> inline bool
+   operator==(const ossimRefPtr<_Tp1>& __a, const ossimRefPtr<_Tp2>& __b) noexcept
+   { return __a.get() == __b.get(); }
+ 
+-template<typename _Tp> inline bool operator==(const ossimRefPtr<_Tp>& __a, nullptr_t) noexcept
++template<typename _Tp> inline bool operator==(const ossimRefPtr<_Tp>& __a, std::nullptr_t) noexcept
+   { return !__a; }
+ 
+-template<typename _Tp> inline bool operator==(nullptr_t, const ossimRefPtr<_Tp>& __a) noexcept
++template<typename _Tp> inline bool operator==(std::nullptr_t, const ossimRefPtr<_Tp>& __a) noexcept
+   { return !__a; }
+ 
+ template<typename _Tp1, typename _Tp2>  inline bool
+   operator!=(const ossimRefPtr<_Tp1>& __a, const ossimRefPtr<_Tp2>& __b) noexcept
+   { return __a.get() != __b.get(); }
+ 
+-template<typename _Tp> inline bool operator!=(const ossimRefPtr<_Tp>& __a, nullptr_t) noexcept
++template<typename _Tp> inline bool operator!=(const ossimRefPtr<_Tp>& __a, std::nullptr_t) noexcept
+   { return (bool)__a; }
+ 
+-template<typename _Tp> inline bool operator!=(nullptr_t, const ossimRefPtr<_Tp>& __a) noexcept
++template<typename _Tp> inline bool operator!=(std::nullptr_t, const ossimRefPtr<_Tp>& __a) noexcept
+   { return (bool)__a; }
+ 
+ 
