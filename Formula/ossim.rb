@@ -8,6 +8,9 @@ class Ossim < Formula
   end
 
   bottle do
+    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
+    sha256 "bada06e2e468f8398c623b24a581933bb22e5bfeb43a4867c7a71a861f133cd5" => :high_sierra
+    sha256 "bada06e2e468f8398c623b24a581933bb22e5bfeb43a4867c7a71a861f133cd5" => :sierra
   end
 
   # This patch is required in order to build on XCode 8.3
