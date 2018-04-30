@@ -16,9 +16,8 @@ class Grass7 < Formula
 
   bottle do
     root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
-    rebuild 1
-    sha256 "7e1b3121553ef31b3efd38e114554422700f1cc7d5be44c8b09437519bcb8450" => :high_sierra
-    sha256 "7e1b3121553ef31b3efd38e114554422700f1cc7d5be44c8b09437519bcb8450" => :sierra
+    sha256 "c9d96ba658b5faf90a760a4e9103a6d4b15321dc7148eaea892c99d35dbc6b7e" => :high_sierra
+    sha256 "c9d96ba658b5faf90a760a4e9103a6d4b15321dc7148eaea892c99d35dbc6b7e" => :sierra
   end
 
   option "without-gui", "Build without WxPython interface. Command line tools still available."
