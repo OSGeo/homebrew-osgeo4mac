@@ -24,6 +24,7 @@ class PgsqlOgrFdw < Formula
     # Right now, no items installed to Postgres keg need to be installed to `prefix`.
     # In the future, if `make install` installs things that should be in `prefix`
     # consult postgis formula to see how to split it up.
+    mkdir "stage"
     system "make", "install", "DESTDIR=#{buildpath}/stage"
 
     bin.install Dir["stage/**/bin/*"]
@@ -33,7 +34,7 @@ class PgsqlOgrFdw < Formula
     (share/"postgresql/extension").install Dir["stage/**/share/postgresql/extension/*"]
     pkgshare.install Dir["stage/**/contrib/ogr_fdw-*/*"]
 
-    # bin.install "ogr_fdw_info"
+    bin.install "ogr_fdw_info"
     prefix.install "data"
   end
 
