@@ -38,18 +38,11 @@ class Mapserver6 < Formula
     sha256 "" => :mavericks
   end
 
-  head do
-    url "https://github.com/mapserver/mapserver.git", :branch => "master"
-    depends_on "harfbuzz"
-    depends_on "v8" => :optional
-  end
-
   # Backport patch to support compiling with gif_lib >= 5.1: https://github.com/mapserver/mapserver/pull/5144
   # Also applies a patch to build on versions of PHP5 > 5.6.25: https://github.com/mapserver/mapserver/pull/5318
   patch :DATA
 
   option "without-php", "Build PHP MapScript module"
-  option "without-rpath", "Don't embed rpath to installed libmapserver in modules"
   option "without-geos", "Build without GEOS spatial operations support"
   option "without-postgresql", "Build without PostgreSQL data source support"
   option "without-xml-mapfile", "Build with native XML mapfile support"
@@ -149,18 +142,16 @@ class Mapserver6 < Formula
     cd "mapscript" do
       args << "-DWITH_PYTHON=ON"
       inreplace "python/CMakeLists.txt" do |s|
-        s.gsub! "${PYTHON_SITE_PACKAGES}", %Q("#{lib/which_python/"site-packages"}")
-        s.sub! "${MAPSERVER_LIBMAPSERVER}",
-               "#{rpath} ${MAPSERVER_LIBMAPSERVER}" if use_rpath
+        s.gsub! "${PYTHON_SITE_PACKAGES}", lib/"python2.7/site-packages"
+        s.gsub! "${PYTHON_LIBRARIES}", "-Wl,-undefined,dynamic_lookup"
       end
+      args << "-DCMAKE_SKIP_RPATH=ON"
 
       # override language extension install locations, e.g. install to prefix/"mapscript/lang"
       args << "-DWITH_RUBY=ON"
       (mapscr_dir/"ruby").mkpath
       inreplace "ruby/CMakeLists.txt" do |s|
         s.gsub! "${RUBY_SITEARCHDIR}", %Q("#{mapscr_dir}/ruby")
-        s.sub! "${MAPSERVER_LIBMAPSERVER}",
-               "#{rpath} ${MAPSERVER_LIBMAPSERVER}" if use_rpath
       end
 
       if build.with? "php"
@@ -168,16 +159,12 @@ class Mapserver6 < Formula
         (mapscr_dir/"php").mkpath
         inreplace "php/CMakeLists.txt" do |s|
           s.gsub! "${PHP5_EXTENSION_DIR}", %Q("#{mapscr_dir}/php")
-          s.sub! "${MAPSERVER_LIBMAPSERVER}",
-                 "#{rpath} ${MAPSERVER_LIBMAPSERVER}" if use_rpath
         end
       end
 
       args << "-DWITH_PERL=ON"
       (mapscr_dir/"perl").mkpath
       args << "-DCUSTOM_PERL_SITE_ARCH_DIR=#{mapscr_dir}/perl"
-      inreplace "perl/CMakeLists.txt", "${MAPSERVER_LIBMAPSERVER}",
-                "#{rpath} ${MAPSERVER_LIBMAPSERVER}" if use_rpath
 
       if build.with? "java"
         args << "-DWITH_JAVA=ON"
@@ -186,26 +173,14 @@ class Mapserver6 < Formula
         inreplace "java/CMakeLists.txt" do |s|
           s.gsub! "DESTINATION ${CMAKE_INSTALL_LIBDIR}",
                   %Q(${CMAKE_CURRENT_BINARY_DIR}/mapscript.jar DESTINATION "#{mapscr_dir}/java")
-          s.sub! "${MAPSERVER_LIBMAPSERVER}",
-                 "#{rpath} ${MAPSERVER_LIBMAPSERVER}" if use_rpath
         end
       end
     end
 
     mkdir "build" do
       system "cmake", "..", *args
-      # system 'bbedit', 'CMakeCache.txt'
-      # raise
       system "make", "install"
     end
-
-    # update Python module linking
-    # Deprecated: Using MachO::Tools
-#    system "install_name_tool", "-change",
-#           "@rpath/libmapserver.1.dylib", opt_lib/"libmapserver.1.dylib",
-#           lib/which_python/"site-packages/_mapscript.so"
-    MachO::Tools.change_install_name( "@rpath/libmapserver.1.dylib", opt_lib/"libmapserver.1.dylib",
-           lib/which_python/"site-packages/_mapscript.so")
 
     # install devel headers
     (include/"mapserver").install Dir["*.h"]
@@ -284,7 +259,7 @@ class Mapserver6 < Formula
   test do
     mapscr_opt_dir = opt_prefix/"mapscript"
     system "#{bin}/mapserv", "-v"
-    system "python", "-c", '"import mapscript"'
+    system "python2.7", "-c", '"import mapscript"'
     system "ruby", "-e", "\"require '#{mapscr_opt_dir}/ruby/mapscript'\""
     system "perl", "-I#{mapscr_opt_dir}/perl", "-e", '"use mapscript;"'
 
@@ -295,12 +270,6 @@ class Mapserver6 < Formula
              "-classpath", "../", "-Djava.library.path=../", "-Djava.ext.dirs=../",
              "RFC24", "../../../tests/test.map"
     end if build.with? "java"
-  end
-
-  private
-
-  def which_python
-    "python" + `python -c "import sys;print(sys.version[:3])"`.strip
   end
 end
 __END__
