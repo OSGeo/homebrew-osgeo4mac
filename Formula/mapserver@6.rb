@@ -137,8 +137,6 @@ class MapserverAT6 < Formula
 
     mapscr_dir = prefix/"mapscript"
     mapscr_dir.mkpath
-    rpath = %Q(-Wl,-rpath,"#{opt_prefix/"lib"}")
-    use_rpath = build.with? "rpath"
     cd "mapscript" do
       args << "-DWITH_PYTHON=ON"
       inreplace "python/CMakeLists.txt" do |s|
