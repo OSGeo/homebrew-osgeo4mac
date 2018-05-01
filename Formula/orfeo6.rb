@@ -11,6 +11,10 @@ class Orfeo6 < Formula
   end
 
   bottle do
+    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
+    cellar :any
+    sha256 "d41935bdca5bcf7740c2ed470688698b61c26915398270b2600f4c7123ebb413" => :high_sierra
+    sha256 "d41935bdca5bcf7740c2ed470688698b61c26915398270b2600f4c7123ebb413" => :sierra
   end
 
   option "without-monteverdi", "Build without Monteverdi and Mapla applications (Qt4 required)"
