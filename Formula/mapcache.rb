@@ -6,7 +6,10 @@ class Mapcache < Formula
   sha256 "1b3de277173100e89655b7c1361468c67727895a94152931e222a48b45a48caa"
 
   bottle do
-
+    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
+    cellar :any
+    sha256 "48db39a4b97d78a01b20b5458fb7bed8e3eb2550f2d191ba6d08a30b1760662b" => :high_sierra
+    sha256 "48db39a4b97d78a01b20b5458fb7bed8e3eb2550f2d191ba6d08a30b1760662b" => :sierra
   end
 
   option "with-tiff-cache", "Build with TIFFs as a cache backend"

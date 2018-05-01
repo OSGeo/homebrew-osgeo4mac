@@ -5,7 +5,10 @@ class Prepair < Formula
   sha256 "2abc69588880e595552af363580e38c1a4a63c9d51549f6450ab6f96ee1ad67f"
 
   bottle do
-
+    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
+    cellar :any
+    sha256 "25ac4f4cdb1282e662718e7bf6cb1419d9ae586af842db3ac26bfb9ce1d8848c" => :high_sierra
+    sha256 "25ac4f4cdb1282e662718e7bf6cb1419d9ae586af842db3ac26bfb9ce1d8848c" => :sierra
   end
 
   option "with-library", "Build library in addition to executable"

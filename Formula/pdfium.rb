@@ -10,7 +10,9 @@ class Pdfium < Formula
   bottle do
     root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
     cellar :any_skip_relocation
-    sha256 "7529a9b9c0856ea9df9182c8801a47e4e9116217b81a3a4e9945eda390245fae" => :sierra
+    rebuild 1
+    sha256 "332ef647af5a932370a0938b669a6db40e290ea728b0ee51f6b887c899ea88b8" => :high_sierra
+    sha256 "332ef647af5a932370a0938b669a6db40e290ea728b0ee51f6b887c899ea88b8" => :sierra
   end
 
   depends_on "python@2" => :build # gyp doesn't run under 2.6 or lower
