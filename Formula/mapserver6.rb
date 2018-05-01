@@ -27,7 +27,6 @@ class JavaJDK < Requirement
 end
 
 class Mapserver6 < Formula
-  # TODO: audit and comapare against `mapserver` in core
   desc "Publish spatial data and interactive mapping apps to the web"
   homepage "http://mapserver.org/"
   url "http://download.osgeo.org/mapserver/mapserver-6.4.5.tar.gz"
@@ -43,8 +42,6 @@ class Mapserver6 < Formula
   patch :DATA
 
   conflicts_with "mapserver", :because => "Homebrew core includes newer version of mapserver"
-
-  keg_only :versioned_formula
 
   option "without-php", "Build PHP MapScript module"
   option "with-rpath", "Don't embed rpath to installed libmapserver in modules"
