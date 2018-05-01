@@ -174,9 +174,12 @@ class Mapserver6 < Formula
       system "make", "install"
     end
 
-    system "install_name_tool", "-change",
-           "@rpath/libmapserver.1.dylib", opt_lib/"libmapserver.1.dylib",
-           lib/which_python/"site-packages/_mapscript.so"
+    MachO::Tools.change_install_name(lib/"python2.7/site-packages/_mapscript.so",
+                                     "@rpath/libmapserver.1.dylib", opt_lib/"libmapserver.1.dylib")
+
+#    system "install_name_tool", "-change",
+#           "@rpath/libmapserver.1.dylib", opt_lib/"libmapserver.1.dylib",
+#           lib/"python2.7/site-packages/_mapscript.so"
 
     # install devel headers
     (include/"mapserver").install Dir["*.h"]
