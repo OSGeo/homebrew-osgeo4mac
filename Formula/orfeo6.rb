@@ -85,7 +85,7 @@ class Orfeo6 < Formula
       -DBUILD_SHARED_LIBS=ON
       -DCMAKE_MACOSX_RPATH=OFF
       -DCMAKE_CXX_STANDARD=11
-      -DQWT_LIBRARY=#{Formula['qwt-qt4'].lib}
+      -DQWT_LIBRARY=#{Formula['qwt-qt4'].lib}/qwt.framework
       -DQWT_INCLUDE_DIR=#{Formula['qwt-qt4'].lib}/qwt.framework/Headers
       -DOSSIM_LIBRARY=#{Formula['ossim'].opt_prefix}/Frameworks/ossim.framework
       -DOSSIM_INCLUDE_DIR=#{Formula['ossim'].include}
