@@ -26,7 +26,7 @@ class JavaJDK < Requirement
   end
 end
 
-class MapserverAT6 < Formula
+class Mapserver6 < Formula
   # TODO: audit and comapare against `mapserver` in core
   desc "Publish spatial data and interactive mapping apps to the web"
   homepage "http://mapserver.org/"
