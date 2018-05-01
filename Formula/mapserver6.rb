@@ -147,13 +147,13 @@ class Mapserver6 < Formula
 
       # override language extension install locations, e.g. install to prefix/"mapscript/lang"
       args << "-DWITH_RUBY=ON"
-#      (mapscr_dir/"ruby").mkpath
-#      inreplace "#{mapscr_dir}/ruby/CMakeLists.txt", "${RUBY_SITEARCHDIR}", %Q("#{mapscr_dir}/ruby")
+      (mapscr_dir/"ruby").mkpath
+      inreplace "ruby/CMakeLists.txt", "${RUBY_SITEARCHDIR}", %Q("#{mapscr_dir}/ruby")
 
       if build.with? "php"
         args << "-DWITH_PHP=ON"
-#        (mapscr_dir/"php").mkpath
-#        inreplace "php/CMakeLists.txt", "${PHP5_EXTENSION_DIR}", %Q("#{mapscr_dir}/php")
+        (mapscr_dir/"php").mkpath
+        inreplace "php/CMakeLists.txt", "${PHP5_EXTENSION_DIR}", %Q("#{mapscr_dir}/php")
       end
 
       args << "-DWITH_PERL=ON"
@@ -163,9 +163,9 @@ class Mapserver6 < Formula
       if build.with? "java"
         args << "-DWITH_JAVA=ON"
         ENV["JAVA_HOME"] = JavaJDK.home
-#        (mapscr_dir/"java").mkpath
-#        inreplace "java/CMakeLists.txt," "DESTINATION ${CMAKE_INSTALL_LIBDIR}",
-#                  %Q(${CMAKE_CURRENT_BINARY_DIR}/mapscript.jar DESTINATION "#{mapscr_dir}/java")
+        (mapscr_dir/"java").mkpath
+        inreplace "java/CMakeLists.txt", "DESTINATION ${CMAKE_INSTALL_LIBDIR}",
+                  %Q(${CMAKE_CURRENT_BINARY_DIR}/mapscript.jar DESTINATION "#{mapscr_dir}/java")
       end
     end
 
