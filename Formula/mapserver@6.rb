@@ -26,7 +26,7 @@ class JavaJDK < Requirement
   end
 end
 
-class Mapserver6 < Formula
+class MapserverAT6 < Formula
   # TODO: audit and comapare against `mapserver` in core
   desc "Publish spatial data and interactive mapping apps to the web"
   homepage "http://mapserver.org/"
@@ -41,6 +41,8 @@ class Mapserver6 < Formula
   # Backport patch to support compiling with gif_lib >= 5.1: https://github.com/mapserver/mapserver/pull/5144
   # Also applies a patch to build on versions of PHP5 > 5.6.25: https://github.com/mapserver/mapserver/pull/5318
   patch :DATA
+
+  keg_only :verisoned_formula
 
   option "without-php", "Build PHP MapScript module"
   option "without-geos", "Build without GEOS spatial operations support"
@@ -74,10 +76,8 @@ class Mapserver6 < Formula
   depends_on "python@2" => %w[sphinx] if build.with? "docs"
   depends_on "php@5.6" if build.with? "php"
 
-  conflicts_with "mapserver", :because => "mapserver is in main tap"
-
   resource "sphinx" do
-    url "https://pypi.python.org/packages/source/S/Sphinx/Sphinx-1.2.2.tar.gz"
+    url "https://files.pythonhosted.org/packages/source/S/Sphinx/Sphinx-1.2.2.tar.gz"
     sha256 "2d3415f5b3e6b7535877f4c84fe228bdb802a8993c239b2d02c23169d67349bd"
   end
 
@@ -149,17 +149,13 @@ class Mapserver6 < Formula
 
       # override language extension install locations, e.g. install to prefix/"mapscript/lang"
       args << "-DWITH_RUBY=ON"
-      (mapscr_dir/"ruby").mkpath
-      inreplace "ruby/CMakeLists.txt" do |s|
-        s.gsub! "${RUBY_SITEARCHDIR}", %Q("#{mapscr_dir}/ruby")
-      end
+#      (mapscr_dir/"ruby").mkpath
+#      inreplace "#{mapscr_dir}/ruby/CMakeLists.txt", "${RUBY_SITEARCHDIR}", %Q("#{mapscr_dir}/ruby")
 
       if build.with? "php"
         args << "-DWITH_PHP=ON"
-        (mapscr_dir/"php").mkpath
-        inreplace "php/CMakeLists.txt" do |s|
-          s.gsub! "${PHP5_EXTENSION_DIR}", %Q("#{mapscr_dir}/php")
-        end
+#        (mapscr_dir/"php").mkpath
+#        inreplace "php/CMakeLists.txt", "${PHP5_EXTENSION_DIR}", %Q("#{mapscr_dir}/php")
       end
 
       args << "-DWITH_PERL=ON"
@@ -169,11 +165,9 @@ class Mapserver6 < Formula
       if build.with? "java"
         args << "-DWITH_JAVA=ON"
         ENV["JAVA_HOME"] = JavaJDK.home
-        (mapscr_dir/"java").mkpath
-        inreplace "java/CMakeLists.txt" do |s|
-          s.gsub! "DESTINATION ${CMAKE_INSTALL_LIBDIR}",
-                  %Q(${CMAKE_CURRENT_BINARY_DIR}/mapscript.jar DESTINATION "#{mapscr_dir}/java")
-        end
+#        (mapscr_dir/"java").mkpath
+#        inreplace "java/CMakeLists.txt," "DESTINATION ${CMAKE_INSTALL_LIBDIR}",
+#                  %Q(${CMAKE_CURRENT_BINARY_DIR}/mapscript.jar DESTINATION "#{mapscr_dir}/java")
       end
     end
 
