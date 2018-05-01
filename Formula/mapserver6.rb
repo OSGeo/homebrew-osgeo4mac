@@ -34,7 +34,9 @@ class Mapserver6 < Formula
 
   bottle do
     root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
-    sha256 "" => :mavericks
+    rebuild 1
+    sha256 "41e3893bda0cf9570562f330b995a381c611a4acf319942a7f17c284c29265a5" => :high_sierra
+    sha256 "41e3893bda0cf9570562f330b995a381c611a4acf319942a7f17c284c29265a5" => :sierra
   end
 
   # Backport patch to support compiling with gif_lib >= 5.1: https://github.com/mapserver/mapserver/pull/5144
