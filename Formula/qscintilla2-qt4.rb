@@ -3,7 +3,6 @@ class Qscintilla2Qt4 < Formula
   homepage "https://www.riverbankcomputing.com/software/qscintilla/intro"
   url "https://downloads.sf.net/project/pyqt/QScintilla2/QScintilla-2.9.3/QScintilla_gpl-2.9.3.tar.gz"
   sha256 "98aab93d73b05635867c2fc757acb383b5856a0b416e3fd7659f1879996ddb7e"
-  revision 2
 
   bottle do
     root_url "https://osgeo4mac.s3.amazonaws.com/bottles"

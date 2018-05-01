@@ -1,8 +1,8 @@
 class PgsqlOgrFdw < Formula
   homepage "https://github.com/pramsey/pgsql-ogr-fdw"
-  url "https://github.com/pramsey/pgsql-ogr-fdw.git", :branch => "master",
-      :revision => "a0df7d1512b4b94ee26733d85481b69851047a46"
-  version "0.0.0"
+  url "https://github.com/pramsey/pgsql-ogr-fdw/archive/v1.0.5.tar.gz", :branch => "master",
+      :revision => "4ff63731cf58ea5564d6b3b7dad23023ab3d43a5"
+  version "1.0.5"
 
   def pour_bottle?
     # Postgres extensions must live in the Postgres prefix, which precludes
@@ -11,7 +11,6 @@ class PgsqlOgrFdw < Formula
     false
   end
 
-  # depends_on "pkg-config" => :build
   depends_on "postgis"
   depends_on "gdal"
 

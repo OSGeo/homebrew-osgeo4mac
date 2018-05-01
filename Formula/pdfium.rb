@@ -6,7 +6,6 @@ class Pdfium < Formula
   url "https://pdfium.googlesource.com/pdfium.git",
       :branch => "chromium/#{ver}"
   version ver
-  revision 1
 
   bottle do
     root_url "https://osgeo4mac.s3.amazonaws.com/bottles"

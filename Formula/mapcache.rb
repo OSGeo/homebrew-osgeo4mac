@@ -1,9 +1,13 @@
 class Mapcache < Formula
   desc "Server that implements tile caching to speed up access to WMS layers."
   homepage "http://mapserver.org/mapcache/"
-  url "https://github.com/mapserver/mapcache/archive/rel-1-4-1.tar.gz"
-  version "1.4.1"
-  sha256 "c050429b2259f05d406028fd0fdb4d9c59bda54cd5c0e8bdf64d7b007a463636"
+  url "https://github.com/mapserver/mapcache/archive/rel-1-6-1.tar.gz"
+  version "1.6.1"
+  sha256 "1b3de277173100e89655b7c1361468c67727895a94152931e222a48b45a48caa"
+
+  bottle do
+
+  end
 
   option "with-tiff-cache", "Build with TIFFs as a cache backend"
   option "without-apache-module", "Build without Apache2 module"
@@ -28,6 +32,10 @@ class Mapcache < Formula
   depends_on "memcached" => :optional
   depends_on "mapserver" => :optional
 
+  def lib_name
+    "libmapcache"
+  end
+
   def install
     args = std_cmake_args
     # option(WITH_SQLITE "Use sqlite as a cache backend" ON)
@@ -41,7 +49,7 @@ class Mapcache < Formula
     # option(WITH_VERSION_STRING "Show MapCache in server version string" ON)
     # option(WITH_APACHE "Build Apache Module" ON)
     if build.with? "apache-module"
-      args << "-DCMAKE_PREFIX_PATH=#{Formula["apr"].opt_libexec};#{Formula["apr-util"].opt_libexec}"
+      args << "-DCMAKE_PREFIX_PATH=#{Formula["apr"].opt_libexec}:#{Formula["apr-util"].opt_libexec}"
       args << "-DAPACHE_MODULE_DIR=#{libexec}"
     else
       args << "-DWITH_APACHE=OFF"
@@ -72,8 +80,11 @@ class Mapcache < Formula
     end
 
     # update Apache module linking
-    system "install_name_tool", "-change",
-           "@rpath/libmapcache.1.dylib", opt_lib/"libmapcache.1.dylib", libexec/"mod_mapcache.so"
+    so_ver = 1
+    lib_name_ver = "#{lib_name}.#{so_ver}"
+    MachO::Tools.change_install_name("#{libexec}/mod_mapcache.so",
+                                     "@rpath/#{lib_name_ver}.dylib",
+                                     "#{opt_lib}/#{lib_name_ver}.dylib")
 
     # Add config examples
     (prefix/"config").mkpath
