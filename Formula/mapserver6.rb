@@ -27,30 +27,28 @@ class JavaJDK < Requirement
 end
 
 class Mapserver6 < Formula
-  # TODO: audit and comapare against `mapserver` in core
   desc "Publish spatial data and interactive mapping apps to the web"
   homepage "http://mapserver.org/"
-  url "http://download.osgeo.org/mapserver/mapserver-6.4.3.tar.gz"
-  sha256 "1f432d4b44e7a0e4e9ce883b02c91c9a66314123028eebb0415144903b8de9c2"
+  url "http://download.osgeo.org/mapserver/mapserver-6.4.5.tar.gz"
+  sha256 "b62c5c0cce2ea7da1d70553197926c14ef46bfb030a736e588367fc881b01a9a"
 
-  # bottle do
-  #   root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
-  #   sha256 "" => :mavericks
-  # end
-
-  head do
-    url "https://github.com/mapserver/mapserver.git", :branch => "master"
-    depends_on "harfbuzz"
-    depends_on "v8" => :optional
+  bottle do
+    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
+    sha256 "" => :mavericks
   end
 
+  # Backport patch to support compiling with gif_lib >= 5.1: https://github.com/mapserver/mapserver/pull/5144
+  # Also applies a patch to build on versions of PHP5 > 5.6.25: https://github.com/mapserver/mapserver/pull/5318
+  patch :DATA
+
+  conflicts_with "mapserver", :because => "Homebrew core includes newer version of mapserver"
+
   option "without-php", "Build PHP MapScript module"
-  option "without-rpath", "Don't embed rpath to installed libmapserver in modules"
+  option "with-rpath", "Don't embed rpath to installed libmapserver in modules"
   option "without-geos", "Build without GEOS spatial operations support"
   option "without-postgresql", "Build without PostgreSQL data source support"
   option "without-xml-mapfile", "Build with native XML mapfile support"
   option "with-java", "Build Java MapScript module"
-  option "with-gd", "Build with GD support (deprecated)" unless build.head?
   option "with-librsvg", "Build with SVG symbology support"
   option "with-docs", "Download and generate HTML documentation"
   option "with-unit-tests", "Download and install full unit test suite"
@@ -62,7 +60,6 @@ class Mapserver6 < Formula
   depends_on "swig" => :build
   depends_on :java => :optional
   depends_on "giflib"
-  depends_on "gd" => :optional unless build.head?
   depends_on "proj"
   depends_on "geos" => :recommended
   depends_on "gdal"
@@ -75,11 +72,11 @@ class Mapserver6 < Formula
   depends_on "librsvg" => :optional
   depends_on "fribidi"
   depends_on "python@2" => %w[sphinx] if build.with? "docs"
-
-  conflicts_with "mapserver", :because => "mapserver is in main tap"
+  depends_on "php@5.6" if build.with? "php"
+  depends_on "perl"
 
   resource "sphinx" do
-    url "https://pypi.python.org/packages/source/S/Sphinx/Sphinx-1.2.2.tar.gz"
+    url "https://files.pythonhosted.org/packages/source/S/Sphinx/Sphinx-1.2.2.tar.gz"
     sha256 "2d3415f5b3e6b7535877f4c84fe228bdb802a8993c239b2d02c23169d67349bd"
   end
 
@@ -130,7 +127,6 @@ class Mapserver6 < Formula
 
     args << "-DWITH_XMLMAPFILE=ON" if build.with? "xml-mapfile"
     args << "-DWITH_MYSQL=ON" if build.with? "mysql"
-    args << "-DWITH_GD=ON" if build.with?("gd") && !build.head?
     args << "-DWITH_RSVG=ON" if build.with? "librsvg"
 
     glib = Formula["glib"]
@@ -144,7 +140,8 @@ class Mapserver6 < Formula
     cd "mapscript" do
       args << "-DWITH_PYTHON=ON"
       inreplace "python/CMakeLists.txt" do |s|
-        s.gsub! "${PYTHON_SITE_PACKAGES}", %Q("#{lib/which_python/"site-packages"}")
+        s.gsub! "${PYTHON_SITE_PACKAGES}", lib/"python2.7/site-packages"
+        s.gsub! "${PYTHON_LIBRARIES}", "-Wl,-undefined,dynamic_lookup"
         s.sub! "${MAPSERVER_LIBMAPSERVER}",
                "#{rpath} ${MAPSERVER_LIBMAPSERVER}" if use_rpath
       end
@@ -179,7 +176,7 @@ class Mapserver6 < Formula
         ENV["JAVA_HOME"] = JavaJDK.home
         (mapscr_dir/"java").mkpath
         inreplace "java/CMakeLists.txt" do |s|
-          s.gsub! "DESTINATION ${CMAKE_INSTALL_LIBDIR}",
+          s.gsub!  "DESTINATION ${CMAKE_INSTALL_LIBDIR}",
                   %Q(${CMAKE_CURRENT_BINARY_DIR}/mapscript.jar DESTINATION "#{mapscr_dir}/java")
           s.sub! "${MAPSERVER_LIBMAPSERVER}",
                  "#{rpath} ${MAPSERVER_LIBMAPSERVER}" if use_rpath
@@ -189,18 +186,16 @@ class Mapserver6 < Formula
 
     mkdir "build" do
       system "cmake", "..", *args
-      # system 'bbedit', 'CMakeCache.txt'
-      # raise
+      system "make"
       system "make", "install"
     end
 
-    # update Python module linking
-    # Deprecated: Using MachO::Tools
+#    MachO::Tools.change_install_name(lib/"python2.7/site-packages/_mapscript.so",
+#                                     "@rpath/libmapserver.1.dylib", opt_lib/"libmapserver.1.dylib")
+
 #    system "install_name_tool", "-change",
 #           "@rpath/libmapserver.1.dylib", opt_lib/"libmapserver.1.dylib",
-#           lib/which_python/"site-packages/_mapscript.so"
-    MachO::Tools.change_dylib_name( "@rpath/libmapserver.1.dylib", opt_lib/"libmapserver.1.dylib",
-           lib/which_python/"site-packages/_mapscript.so")
+#           lib/"python2.7/site-packages/_mapscript.so"
 
     # install devel headers
     (include/"mapserver").install Dir["*.h"]
@@ -279,7 +274,7 @@ class Mapserver6 < Formula
   test do
     mapscr_opt_dir = opt_prefix/"mapscript"
     system "#{bin}/mapserv", "-v"
-    system "python", "-c", '"import mapscript"'
+    system "python2.7", "-c", '"import mapscript"'
     system "ruby", "-e", "\"require '#{mapscr_opt_dir}/ruby/mapscript'\""
     system "perl", "-I#{mapscr_opt_dir}/perl", "-e", '"use mapscript;"'
 
@@ -292,9 +287,52 @@ class Mapserver6 < Formula
     end if build.with? "java"
   end
 
-  private
-
-  def which_python
-    "python" + `python -c "import sys;print(sys.version[:3])"`.strip
-  end
 end
+__END__
+diff --git a/mapimageio.c b/mapimageio.c
+index 35d134f..eb63aa3 100644
+--- a/mapimageio.c
++++ b/mapimageio.c
+@@ -1307,6 +1307,12 @@ int readGIF(char *path, rasterBufferObj *rb)
+
+   } while (recordType != TERMINATE_RECORD_TYPE);
+
++#if defined GIFLIB_MAJOR && GIFLIB_MINOR && ((GIFLIB_MAJOR == 5 && GIFLIB_MINOR >= 1) || (GIFLIB_MAJOR > 5))
++  if (DGifCloseFile(image, &errcode) == GIF_ERROR) {
++    msSetError(MS_MISCERR,"failed to close gif after loading: %s","readGIF()", gif_error_msg(errcode));
++    return MS_FAILURE;
++  }
++#else
+   if (DGifCloseFile(image) == GIF_ERROR) {
+ #if defined GIFLIB_MAJOR && GIFLIB_MAJOR >= 5
+     msSetError(MS_MISCERR,"failed to close gif after loading: %s","readGIF()", gif_error_msg(image->Error));
+@@ -1315,6 +1321,7 @@ int readGIF(char *path, rasterBufferObj *rb)
+ #endif
+     return MS_FAILURE;
+   }
++#endif
+
+   return MS_SUCCESS;
+ }
+diff --git a/mapscript/php/error.c b/mapscript/php/error.c
+index a13de647f..2e96eea27 100644
+--- a/mapscript/php/error.c
++++ b/mapscript/php/error.c
+@@ -31,6 +31,17 @@
+ 
+ #include "php_mapscript.h"
+ 
++#if PHP_VERSION_ID >= 50625
++#undef ZVAL_STRING
++#define ZVAL_STRING(z, s, duplicate) do {       \
++    const char *__s=(s);                            \
++    zval *__z = (z);                                        \
++    Z_STRLEN_P(__z) = strlen(__s);          \
++    Z_STRVAL_P(__z) = (duplicate?estrndup(__s, Z_STRLEN_P(__z)):(char*)__s);\
++    Z_TYPE_P(__z) = IS_STRING;                      \
++} while (0)
++#endif
++
+ zend_class_entry *mapscript_ce_error;
+ 
+ ZEND_BEGIN_ARG_INFO_EX(error___get_args, 0, 0, 1)
