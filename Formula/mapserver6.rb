@@ -82,6 +82,7 @@ class Mapserver6 < Formula
   depends_on "fribidi"
   depends_on "python@2" => %w[sphinx] if build.with? "docs"
   depends_on "php@5.6" if build.with? "php"
+  depends_on "perl"
 
   resource "sphinx" do
     url "https://files.pythonhosted.org/packages/source/S/Sphinx/Sphinx-1.2.2.tar.gz"
@@ -149,7 +150,7 @@ class Mapserver6 < Formula
     cd "mapscript" do
       args << "-DWITH_PYTHON=ON"
       inreplace "python/CMakeLists.txt" do |s|
-        s.gsub! "${PYTHON_SITE_PACKAGES}", %Q("#{lib/which_python/"site-packages"}")
+        s.gsub! "${PYTHON_SITE_PACKAGES}", %Q("#{lib}/python2.7/site-packages")
         s.sub! "${MAPSERVER_LIBMAPSERVER}",
                "#{rpath} ${MAPSERVER_LIBMAPSERVER}" if use_rpath
       end
@@ -194,13 +195,12 @@ class Mapserver6 < Formula
 
     mkdir "build" do
       system "cmake", "..", *args
-      # system 'bbedit', 'CMakeCache.txt'
-      # raise
+      system "make"
       system "make", "install"
     end
 
-    MachO::Tools.change_install_name(lib/"python2.7/site-packages/_mapscript.so",
-                                     "@rpath/libmapserver.1.dylib", opt_lib/"libmapserver.1.dylib")
+#    MachO::Tools.change_install_name(lib/"python2.7/site-packages/_mapscript.so",
+#                                     "@rpath/libmapserver.1.dylib", opt_lib/"libmapserver.1.dylib")
 
 #    system "install_name_tool", "-change",
 #           "@rpath/libmapserver.1.dylib", opt_lib/"libmapserver.1.dylib",
@@ -296,11 +296,6 @@ class Mapserver6 < Formula
     end if build.with? "java"
   end
 
-  private
-
-  def which_python
-    "python" + `python -c "import sys;print(sys.version[:3])"`.strip
-  end
 end
 __END__
 diff --git a/mapimageio.c b/mapimageio.c
