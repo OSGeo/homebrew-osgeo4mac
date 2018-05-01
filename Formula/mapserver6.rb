@@ -42,7 +42,7 @@ class Mapserver6 < Formula
   # Also applies a patch to build on versions of PHP5 > 5.6.25: https://github.com/mapserver/mapserver/pull/5318
   patch :DATA
 
-  keg_only :verisoned_formula
+  keg_only :versioned_formula
 
   option "without-php", "Build PHP MapScript module"
   option "without-geos", "Build without GEOS spatial operations support"
@@ -173,6 +173,10 @@ class Mapserver6 < Formula
       system "cmake", "..", *args
       system "make", "install"
     end
+
+    system "install_name_tool", "-change",
+           "@rpath/libmapserver.1.dylib", opt_lib/"libmapserver.1.dylib",
+           lib/which_python/"site-packages/_mapscript.so"
 
     # install devel headers
     (include/"mapserver").install Dir["*.h"]
