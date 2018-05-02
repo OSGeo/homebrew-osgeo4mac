@@ -6,8 +6,10 @@ class Qscintilla2Qt4 < Formula
 
   bottle do
     root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
-    sha256 "439806ac04e3fc9174332f5725af02743216669ce13aa48f6b4ea6e743e7eb2f" => :sierra
-    sha256 "439806ac04e3fc9174332f5725af02743216669ce13aa48f6b4ea6e743e7eb2f" => :high_sierra
+    cellar :any
+    rebuild 1
+    sha256 "4901834123c98962f50c4fa4fd7c48b46c926e846cd0b4390a2cd79d45e93e2b" => :high_sierra
+    sha256 "4901834123c98962f50c4fa4fd7c48b46c926e846cd0b4390a2cd79d45e93e2b" => :sierra
   end
 
   option "without-plugin", "Skip building the Qt Designer plugin"
