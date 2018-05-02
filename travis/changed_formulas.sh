@@ -5,7 +5,7 @@ set -e
 # manually added by env var. Will not be filtered by skip-formulas.txt
 if [[ -n ${TRAVIS_MANUAL_FORMULAE} ]]; then
   echo "${TRAVIS_MANUAL_FORMULAE}"
-fi
+else
 
 if [[ ! -z  $TRAVIS_PULL_REQUEST_BRANCH  ]]; then
   # if on a PR, just analyze the changed files
@@ -25,3 +25,4 @@ done
 #FORMULAS=$(sed -n -E 's#^Formula/(.+)\.rb$#\1#p' <<< $FILES)
 # skip formulas
 comm -1 -3 travis/skip-formulas.txt <(echo ${FORMULAS} | tr ' ' '\n' )
+fi
