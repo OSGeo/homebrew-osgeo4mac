@@ -22,8 +22,9 @@ class QcaQt4 < Formula
 
   bottle do
     root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
-    sha256 "61d5c196db97b6b951ad3287acc5824e02863e45e15d2901fb1c5206372bca77" => :sierra
-    sha256 "61d5c196db97b6b951ad3287acc5824e02863e45e15d2901fb1c5206372bca77" => :high_sierra
+    rebuild 1
+    sha256 "b36a88ea9d3f7d2588341e37e9b2c6d4580cb1de1cdafa2a09a4571d5afe722f" => :high_sierra
+    sha256 "b36a88ea9d3f7d2588341e37e9b2c6d4580cb1de1cdafa2a09a4571d5afe722f" => :sierra
   end
 
   keg_only "newer Qt5-only version in homebrew-core"
