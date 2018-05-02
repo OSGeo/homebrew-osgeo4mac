@@ -10,13 +10,13 @@ class QcaQt4 < Formula
     # Fix for linking CoreFoundation and removing deprecated code; already in HEAD).
     patch do
       url "https://github.com/KDE/qca/commit/f223ce03d4b94ffbb093fc8be5adf8d968f54434.diff?full_index=1"
-      sha256 "78f0239c7007f7bf74c94c90f142f49d4b748a2c7a2d56eaed38dc5ee3fd6ee1"
+      sha256 "e882bfa4a290d62a7ddea8c05019d5e616234027c95f7f8339072af03a2e6bc7"
     end
 
     # Fix for framework installation; already in HEAD).
     patch do
       url "https://github.com/KDE/qca/commit/9e4bf795434304bce32626fe0f6887c10fec0824.diff?full_index=1"
-      sha256 "952e1fc4f96db0ee11e7dca0013e81e512fe79ac0c4b3cf993ce8c7f0061a016"
+      sha256 "a7dc91e0d68b38712fbe2228f3c028090e6e2f8ba3a74b334b46bae4276430ee"
     end
   end
 
