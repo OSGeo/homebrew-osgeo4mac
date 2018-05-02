@@ -20,6 +20,11 @@ class Pyspatialite < Formula
   end
 
   bottle do
+    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
+    cellar :any
+    rebuild 1
+    sha256 "39971bed725dfc173fa81a28cc0996bdbe9c44f33d8b144b0de7327042136b46" => :high_sierra
+    sha256 "39971bed725dfc173fa81a28cc0996bdbe9c44f33d8b144b0de7327042136b46" => :sierra
   end
 
   depends_on "python@2"
