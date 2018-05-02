@@ -7,9 +7,8 @@ class SipQt4 < Formula
   bottle do
     root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
     cellar :any_skip_relocation
-    rebuild 2
-    sha256 "4761b0e489c415f5ad02f5d14fcead4bc061597cc9ec2d81d1647d4de680b048" => :high_sierra
-    sha256 "4761b0e489c415f5ad02f5d14fcead4bc061597cc9ec2d81d1647d4de680b048" => :sierra
+    sha256 "4c95142a42599fb0b6668e50e49913f19d0462ee05590aa9844cbc41cba6e350" => :high_sierra
+    sha256 "4c95142a42599fb0b6668e50e49913f19d0462ee05590aa9844cbc41cba6e350" => :sierra
   end
 
   depends_on "python@2" => :recommended
