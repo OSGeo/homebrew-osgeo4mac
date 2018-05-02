@@ -56,6 +56,11 @@ class Gdal2Python < Formula
     sha256 "ca2844b0de49cd966f5b484ce74e9b6b5e10f388564792f778cff002ccaddf05" => :high_sierra
     sha256 "ca2844b0de49cd966f5b484ce74e9b6b5e10f388564792f778cff002ccaddf05" => :sierra
   end
+  
+  head do
+    url "https://svn.osgeo.org/gdal/trunk/gdal"
+    depends_on "doxygen" => :build
+  end
 
   keg_only "older version of gdal is in main tap and installs similar components"
 
