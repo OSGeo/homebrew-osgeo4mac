@@ -6,9 +6,9 @@ class Gdal2 < Formula
 
   bottle do
     root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
-    rebuild 6
-    sha256 "dde971925d3f9e86226c6a2e4ad44b98a83883ac0b5f22b5770b4aa949483063" => :high_sierra
-    sha256 "dde971925d3f9e86226c6a2e4ad44b98a83883ac0b5f22b5770b4aa949483063" => :sierra
+    rebuild 7
+    sha256 "091332a8bc118b9e1ae59dcce7e173fb4e5863f37701a3eda743cf0d561c5ba4" => :high_sierra
+    sha256 "091332a8bc118b9e1ae59dcce7e173fb4e5863f37701a3eda743cf0d561c5ba4" => :sierra
   end
 
   head do
