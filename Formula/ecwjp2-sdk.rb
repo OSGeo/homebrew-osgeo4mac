@@ -1,6 +1,6 @@
 require File.expand_path("../../Strategies/cache-download", Pathname.new(__FILE__).realpath)
 
-ECWJP2_SDK = "/Hexagon/ERDASEcwJpeg2000SDK5.3.0/Desktop_Read-Only".freeze
+ECWJP2_SDK = "/Hexagon/ERDASEcwJpeg2000SDK5.4.0/Desktop_Read-Only".freeze
 
 class EcwJpeg2000SDK < Requirement
   fatal true
@@ -20,7 +20,7 @@ class Ecwjp2Sdk < Formula
   desc "Decompression library for ECW- and JPEG2000-compressed imagery"
   homepage "http://www.hexagongeospatial.com/products/provider-suite/erdas-ecw-jp2-sdk"
   url "https://osgeo4mac.s3.amazonaws.com/src/dummy.tar.gz"
-  version "5.3.0"
+  version "5.4.0"
   sha256 "e7776e2ff278d6460300bd69a26d7383e6c5e2fbeb17ff12998255e7fc4c9511"
 
   depends_on :macos => :lion # as per SDK docs
@@ -33,10 +33,11 @@ class Ecwjp2Sdk < Formula
       # vendor Desktop Read-Only libs, etc
       # suffix only the older stdc++
       cp "redistributable/libc++/libNCSEcw.dylib", "#{lib}/"
-      cp "redistributable/libstdc++/libNCSEcw.dylib", "#{lib}/libNCSEcw-stdcxx.dylib"
+      # libstdc++ is not longer bundled in the distribution
+#      cp "redistributable/libstdc++/libNCSEcw.dylib", "#{lib}/libNCSEcw-stdcxx.dylib"
       # Calling install_name_tool is deprecated, so we're switching to using the MachO tools
 #      system "install_name_tool", "-id", opt_lib/"libNCSEcw-stdcxx.dylib", lib/"libNCSEcw-stdcxx.dylib"
-      MachO::Tools.change_dylib_id(opt_lib/"libNCSEcw-stdcxx.dylib", lib/"libNCSEcw-stdcxx.dylib")
+#      MachO::Tools.change_dylib_id(opt_lib/"libNCSEcw-stdcxx.dylib", lib/"libNCSEcw-stdcxx.dylib")
       %w[etc Licenses].each { |f| cp_r f.to_s, "#{prefix}/" }
       cp_r Dir["include/*"], "#{include}/ECWJP2/"
 
@@ -62,16 +63,14 @@ class Ecwjp2Sdk < Formula
 
   test do
     cp prefix/"test/dexample1.c", testpath
-    ["", "-stdcxx"].each do |s|
-      system ENV.cc, "-I#{opt_include}/ECWJP2", "-L#{opt_lib}", "-lNCSEcw#{s}",
-             "-o", "test#{s}", "dexample1.c"
+    system ENV.cc, "-I#{opt_include}/ECWJP2", "-L#{opt_lib}", "-lNCSEcw",
+           "-o", "test", "dexample1.c"
 
-      %w[ecw jp2].each do |f|
-        out = `./test#{s} #{prefix}/test/RGB_8bit.#{f}`
-        assert_match "Region   99", out
-        assert_match "Region    0", out
-        assert_match "ALL    time", out
-      end
+    %w[ecw jp2].each do |f|
+      out = `./test #{prefix}/test/RGB_8bit.#{f}`
+      assert_match "Region   99", out
+      assert_match "Region    0", out
+      assert_match "ALL    time", out
     end
   end
 end
