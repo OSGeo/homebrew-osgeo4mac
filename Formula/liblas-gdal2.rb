@@ -17,12 +17,13 @@ class LiblasGdal2 < Formula
   keg_only "other version built against older gdal is in main tap"
 
   option "with-test", "Verify during install with `make test`"
+  option "with-laszip", "Build with laszip support"
 
   depends_on "cmake" => :build
   depends_on "libgeotiff"
   depends_on "gdal2"
   depends_on "boost"
-  depends_on "laszip" => :optional
+  depends_on "laszip@2.2" if build.with? "laszip"
 
   # Fix build for Xcode 9 with upstream commit
   # Remove in next version
@@ -31,25 +32,7 @@ class LiblasGdal2 < Formula
     sha256 "5590aef61a58768160051997ae9753c2ae6fc5b7da8549707dfd9a682ce439c8"
   end
 
-  resource "laszip" do
-    # newest older laszip version that still has include/laszip/laszip.hpp
-    url "https://github.com/LASzip/LASzip/archive/v2.2.0.tar.gz"
-    sha256 "b8e8cc295f764b9d402bc587f3aac67c83ed8b39f1cb686b07c168579c61fbb2"
-  end
-
   def install
-    if build.with? "laszip"
-      resource("laszip").stage do
-        args = std_cmake_args
-        args << "-DCMAKE_INSTALL_PREFIX=#{libexec}/laszip"
-        mkdir "build" do
-          system "cmake", "..", *args
-          system "make", "install"
-        end
-        (libexec/"laszip").install "AUTHORS", "COPYING", "NEWS", "README"
-      end
-    end
-
     mkdir "macbuild" do
       # CMake finds boost, but variables like this were set in the last
       # version of this formula. Now using the variables listed here:
@@ -59,8 +42,8 @@ class LiblasGdal2 < Formula
       args = ["-DWITH_GEOTIFF=ON", "-DWITH_GDAL=ON"] + std_cmake_args
       if build.with? "laszip"
         args << "-DWITH_LASZIP=ON"
-        args << "-DLASZIP_INCLUDE_DIR=#{libexec}/laszip/include"
-        args << "-DLASZIP_LIBRARY=#{libexec}/laszip/lib/liblaszip.dylib"
+        args << "-DLASZIP_INCLUDE_DIR=#{Formula['laszip@2.2'].opt_include}"
+        args << "-DLASZIP_LIBRARY=#{Formula['laszip@2.2'].opt_lib}/liblaszip.dylib"
       end
 
       system "cmake", "..", *args
@@ -68,10 +51,12 @@ class LiblasGdal2 < Formula
       system "make", "test" if build.bottle? || build.with?("test")
       system "make", "install"
     end
+
+    # Fix rpath value, to ensure grass7 grabs the correct dylib
+    MachO::Tools.change_install_name("#{lib}/liblas_c.3.dylib", "@rpath/liblas.3.dylib", "#{opt_lib}/liblas.3.dylib")
   end
 
   test do
     system bin/"liblas-config", "--version"
-    system libexec/"laszip/bin/laszippertest" if build.with? "laszip"
   end
 end
