@@ -11,22 +11,12 @@ class LaszipAT22 < Formula
 
   depends_on "cmake" => :build
 
-  resource "cpp_example" do
-    url "https://raw.githubusercontent.com/LASzip/LASzip/master/example/laszipdllexample.cpp"
-    sha256 "5e27b48338095b2570c2e6554aaf95a015b0ab0c5c0a6438b7b21e1202559535"
-  end
-
   def install
     system "cmake", ".", *std_cmake_args
     system "make", "install"
   end
 
   test do
-    resource("cpp_example").stage do
-      system ENV.cxx, "laszipdllexample.cpp", "-L#{lib}",
-                    "-llaszip", "-llaszip_api", "-Wno-format", "-o", "test"
-    assert_match "LASzip DLL", shell_output("./test -h 2>&1", 1)
-
-    end
+    system bin/"laszippertest"
   end
 end
