@@ -1,8 +1,8 @@
 {
   "package": {
     "name": "bottles",
-    "repo": "homebrew-osgeo-bottles",
-    "subject": "nickrobison",
+    "repo": "osgeo-bottles",
+    "subject": "homebrew-osgeo",
     "issue_tracker_url": "https://github.com/OSGeo/homebrew-osgeo4mac/issues",
     "vcs_url": "https://github.com/OSGeo/homebrew-osgeo4mac.git",
     "licenses": [
