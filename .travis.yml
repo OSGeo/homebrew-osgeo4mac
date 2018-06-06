@@ -87,6 +87,5 @@ deploy:
 #  upload-dir: bottles
 #  acl: public_read
   on:
-    # Remove this!
-    branch: bintray
+    branch: master
     repo: OSGeo/homebrew-osgeo4mac
