@@ -1,5 +1,5 @@
 class Pdfium < Formula
-  ver = "3176".freeze # relates to chromium version
+  ver = "3451".freeze # relates to chromium version
 
   desc "Google-contributed PDF library (without V8 JavaScript engine)"
   homepage "https://pdfium.googlesource.com/pdfium/"
