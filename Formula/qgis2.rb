@@ -353,6 +353,11 @@ class Qgis2 < Formula
       pths.insert(0, Formula["gpsbabel-qt4"].opt_bin.to_s)
     end
 
+    # We need to manually add the saga lts path, since it's keg only
+    if build.with? "saga-gis-lts"
+      pths.insert(0, Formula["saga-gis-lts"].opt_bin.to_s)
+    end
+
     envars = {
       :PATH => pths.join(pthsep),
       :PYTHONPATH => pypths.join(pthsep),
