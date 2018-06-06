@@ -1,0 +1,24 @@
+{
+  "package": {
+    "name": "bottles",
+    "repo": "osgeo-bottles",
+    "subject": "homebrew-osgeo",
+    "issue_tracker_url": "https://github.com/OSGeo/homebrew-osgeo4mac/issues",
+    "vcs_url": "https://github.com/OSGeo/homebrew-osgeo4mac.git",
+    "licenses": [
+      "MIT"
+    ],
+    "public_download_numbers": true,
+    "public_stats": true
+  },
+  "version": {
+    "name": "0.1"
+  },
+  "files": [
+    {
+      "includePattern": "bottles/(.*)",
+      "uploadPattern": "$1"
+    }
+  ],
+  "publish": true
+}
