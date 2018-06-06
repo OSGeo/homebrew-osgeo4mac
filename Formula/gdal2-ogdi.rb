@@ -1,8 +1,8 @@
 class Gdal2Ogdi < Formula
   desc "GDAL/OGR 2.x plugin for OGDI driver"
   homepage "http://www.gdal.org/drv_ogdi.html"
-  url "http://download.osgeo.org/gdal/2.2.4/gdal-2.2.4.tar.gz"
-  sha256 "b9d5a723787f3006a82cb276db171c721187b048b866c0e20e6df464d671a1a4"
+  url "http://download.osgeo.org/gdal/2.3.0/gdal-2.3.0.tar.gz"
+  sha256 "2944bbfee009bf1ca092716e4fd547cb4ae2a1e8816186236110c22f11c7e1e9"
 
    bottle do
     root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
