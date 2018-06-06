@@ -54,10 +54,12 @@ BUILT_BOTTLES=
 mkdir -p bottles
 
 pushd bottles
+  # S3 bucket isn't currently working for the Travis pro repo, so we're switching to Bintray, for now.
+  # BOTTLE_ROOT=https://osgeo4mac.s3.amazonaws.com/bottles
+  BOTTLE_ROOT=https://dl.bintray.com/nickrobison/homebrew-osgeo-bottles
   for f in ${CHANGED_FORMULAE};do
     echo "Bottling changed formula ${f}..."
-    brew bottle --verbose --json --root-url=https://osgeo4mac.s3.amazonaws.com/bottles \
-      ${TRAVIS_REPO_SLUG}/${f}
+    brew bottle --verbose --json --root-url=${BOTTLE_ROOT} ${TRAVIS_REPO_SLUG}/${f}
 
     # temporary duplication of 10.2-Xcode-8.x-built bottles to 10.3 bottles
     # Do the bottle duplication per formula, so we can merge the changes
