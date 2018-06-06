@@ -8,10 +8,10 @@ class LiblasGdal2 < Formula
   head "https://github.com/libLAS/libLAS.git"
 
    bottle do
-    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
-    rebuild 1
-    sha256 "fb022fbd4754a8df2f892198ed4b7d0fcd7337d2f8028637262550abbd67c182" => :high_sierra
-    sha256 "fb022fbd4754a8df2f892198ed4b7d0fcd7337d2f8028637262550abbd67c182" => :sierra
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    rebuild 3
+    sha256 "a412dfabdda2b9843bbb63b5d507c5f42d46b8604ad65f45ff3051c0f34e5736" => :high_sierra
+    sha256 "a412dfabdda2b9843bbb63b5d507c5f42d46b8604ad65f45ff3051c0f34e5736" => :sierra
   end
 
   keg_only "other version built against older gdal is in main tap"
