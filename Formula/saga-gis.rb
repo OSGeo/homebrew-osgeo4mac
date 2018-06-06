@@ -1,12 +1,10 @@
-class SagaGisLts < Formula
+class SagaGis < Formula
   desc "System for Automated Geoscientific Analyses - Long Term Support"
   homepage "http://saga-gis.org"
-  url "https://git.code.sf.net/p/saga-gis/code.git",
-      :branch => "release-2-3-lts",
-      :revision => "b6f474f8af4af7f0ff82548cc6f88c53547d91f5"
-  version "2.3.2"
+  url "https://downloads.sourceforge.net/project/saga-gis/SAGA%20-%206/SAGA%20-%206.3.0/saga-6.3.0.tar.gz"
+  sha256 "bb4b99406e3a25cdaa12559904ce3272c449acb542bc0883b2755ce6508dd243"
 
-  head "https://git.code.sf.net/p/saga-gis/code.git", :branch => "release-2-3-lts"
+  head "https://git.code.sf.net/p/saga-gis/code.git"
 
   bottle do
     root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
@@ -14,9 +12,9 @@ class SagaGisLts < Formula
     sha256 "bb468b9ca0a256a4887b511b05cee25b535f85f4fbadd181f894641c1c57c491" => :high_sierra
   end
 
-  keg_only "LTS version is specifically for working with QGIS"
-
   option "with-app", "Build SAGA.app Package"
+
+  keg_only "QGIS fails to load the correct SAGA version, if the latest version is in the path"
 
   depends_on "automake" => :build
   depends_on "autoconf" => :build
@@ -45,10 +43,9 @@ class SagaGisLts < Formula
     #      otherwise, SAGA binaries may lead to multiple GDAL versions being loaded
     # See: https://github.com/libLAS/libLAS/issues/106
 
-    cd "saga-gis"
 
     # fix homebrew-specific header location for qhull
-    inreplace "src/modules/grid/grid_gridding/nn/delaunay.c", "qhull/", "libqhull/" if build.with? "qhull"
+    inreplace "src/tools/grid/grid_gridding/nn/delaunay.c", "qhull/", "libqhull/" if build.with? "qhull"
 
     # libfire and triangle are for non-commercial use only, skip them
     args = %W[
