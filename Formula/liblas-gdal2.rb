@@ -9,9 +9,9 @@ class LiblasGdal2 < Formula
 
    bottle do
     root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
-    rebuild 2
-    sha256 "7ff8a065300b43321a4cd6cc99dcec48fe5c434fde4d10a256e3e209b1b0f551" => :high_sierra
-    sha256 "7ff8a065300b43321a4cd6cc99dcec48fe5c434fde4d10a256e3e209b1b0f551" => :sierra
+    rebuild 1
+    sha256 "fb022fbd4754a8df2f892198ed4b7d0fcd7337d2f8028637262550abbd67c182" => :high_sierra
+    sha256 "fb022fbd4754a8df2f892198ed4b7d0fcd7337d2f8028637262550abbd67c182" => :sierra
   end
 
   keg_only "other version built against older gdal is in main tap"
