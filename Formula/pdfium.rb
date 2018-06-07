@@ -21,6 +21,11 @@ class Pdfium < Formula
     url "https://chromium.googlesource.com/chromium/tools/depot_tools.git"
   end
 
+  resource "chromium_icu" do
+    url "https://chromium.googlesource.com/chromium/deps/icu.git",
+      :revision => "e4194dc7bbb3305d84cbb1b294274ca70d230721"
+  end
+
   def pdfium_build_dir
     "out/Release_x64"
   end
@@ -42,6 +47,9 @@ class Pdfium < Formula
     # install chromium's build tools, includes ninja and gyp
     (buildpath/"depot_tools").install resource("depot_tools")
     ENV.prepend_path "PATH", buildpath/"depot_tools"
+
+    # Add Chromium ICU
+    (buildpath/"pdfium/third_party/icu").install resource("chromium_icu")
 
     # use pdfium's gyp scripts to create ninja build files.
     ENV["GYP_GENERATORS"] = "ninja"
