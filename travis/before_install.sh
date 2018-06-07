@@ -115,7 +115,8 @@ for f in ${CHANGED_FORMULAE};do
   # Special handling of grass7, because it needs to be unlinked
   if [ "$(echo ${deps} | grep -c 'grass7')" != "0" ];then
     echo "Installing and unlinking grass7"
-    brew install grass7 && brew unlink grass7
+    brew install grass7
+    brew unlink grass7
   fi
 
 done
