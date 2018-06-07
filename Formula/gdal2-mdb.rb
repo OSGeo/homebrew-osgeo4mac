@@ -10,6 +10,8 @@ class Gdal2Mdb < Formula
 
   depends_on :java
   depends_on "gdal2"
+  depends_on "libtiff"
+  depends_on "libgeotiff"
 
   # various deps needed for configuring
   depends_on "json-c"
@@ -70,10 +72,10 @@ class Gdal2Mdb < Formula
     without_pkgs = %w[
       armadillo bsb cfitsio cryptopp curl dds dods-root
       ecw epsilon expat fgdb fme freexl
-      geos geotiff gif gnm grass grib gta
+      geos gif gnm grass grib gta
       hdf4 hdf5 idb ingres
       j2lura jasper jp2mrsid jpeg jpeg12 kakadu kea
-      libgrass libkml liblzma libtiff libz
+      libgrass libkml liblzma libz
       mongocxx mrf mrsid_lidar mrsid msg mysql netcdf
       oci odbc ogdi opencl openjpeg
       pam pcidsk pcraster pcre perl pg php png python
