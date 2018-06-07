@@ -3,8 +3,8 @@ class Ossim < Formula
   homepage "https://trac.osgeo.org/ossim/"
 
   stable do
-    url "https://github.com/ossimlabs/ossim/archive/Gasparilla-2.3.1.tar.gz"
-    sha256 "f928544b4dfc6a1c93c55afb244d04e9a33b368fd5e6c3fe552f43b5da4e7c6e"
+    url "https://github.com/ossimlabs/ossim/archive/Hollywood-2.4.0.tar.gz"
+    sha256 "73d59cdfe09f220c9847f9c366b28bd6cf548d4acb0c28ac3800280999bd6d2f"
   end
 
   bottle do
@@ -12,10 +12,6 @@ class Ossim < Formula
     sha256 "bada06e2e468f8398c623b24a581933bb22e5bfeb43a4867c7a71a861f133cd5" => :high_sierra
     sha256 "bada06e2e468f8398c623b24a581933bb22e5bfeb43a4867c7a71a861f133cd5" => :sierra
   end
-
-  # This patch is required in order to build on XCode 8.3
-  # It's been submitted upstream as: https://github.com/ossimlabs/ossim/pull/199
-  patch :DATA
 
   option "with-curl-apps", "Build curl-dependent apps"
   option "without-framework", "Generate library instead of framework"
@@ -84,41 +80,3 @@ class Ossim < Formula
     system bin/"ossim-cli", "--version"
   end
 end
-__END__
-diff --git a/include/ossim/base/ossimRefPtr.h b/include/ossim/base/ossimRefPtr.h
-index fef5824..dbe015a 100644
---- a/include/ossim/base/ossimRefPtr.h
-+++ b/include/ossim/base/ossimRefPtr.h
-@@ -8,6 +8,7 @@
- #define ossimRefPtr_HEADER
- #include <ossim/base/ossimConstants.h>
- #include <stddef.h>
-+#include <cstddef>
- 
- template<class T> class ossimRefPtr
- {
-@@ -100,20 +101,20 @@ template<typename _Tp1, typename _Tp2> inline bool
-   operator==(const ossimRefPtr<_Tp1>& __a, const ossimRefPtr<_Tp2>& __b) noexcept
-   { return __a.get() == __b.get(); }
- 
--template<typename _Tp> inline bool operator==(const ossimRefPtr<_Tp>& __a, nullptr_t) noexcept
-+template<typename _Tp> inline bool operator==(const ossimRefPtr<_Tp>& __a, std::nullptr_t) noexcept
-   { return !__a; }
- 
--template<typename _Tp> inline bool operator==(nullptr_t, const ossimRefPtr<_Tp>& __a) noexcept
-+template<typename _Tp> inline bool operator==(std::nullptr_t, const ossimRefPtr<_Tp>& __a) noexcept
-   { return !__a; }
- 
- template<typename _Tp1, typename _Tp2>  inline bool
-   operator!=(const ossimRefPtr<_Tp1>& __a, const ossimRefPtr<_Tp2>& __b) noexcept
-   { return __a.get() != __b.get(); }
- 
--template<typename _Tp> inline bool operator!=(const ossimRefPtr<_Tp>& __a, nullptr_t) noexcept
-+template<typename _Tp> inline bool operator!=(const ossimRefPtr<_Tp>& __a, std::nullptr_t) noexcept
-   { return (bool)__a; }
- 
--template<typename _Tp> inline bool operator!=(nullptr_t, const ossimRefPtr<_Tp>& __a) noexcept
-+template<typename _Tp> inline bool operator!=(std::nullptr_t, const ossimRefPtr<_Tp>& __a) noexcept
-   { return (bool)__a; }
- 
- 
