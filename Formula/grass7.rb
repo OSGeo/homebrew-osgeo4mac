@@ -22,6 +22,7 @@ class Grass7 < Formula
 
   option "without-gui", "Build without WxPython interface. Command line tools still available."
   option "with-liblas", "Build with LibLAS-with-GDAL2 support"
+  option "with-aqua", "Build with experimental Aqua GUI backend."
 
   depends_on UnlinkedGRASS7
 
@@ -46,7 +47,9 @@ class Grass7 < Formula
   depends_on "mysql" => :optional
   depends_on "cairo"
   depends_on "ghostscript" # for cartographic composer previews
-  depends_on :x11 # needs to find at least X11/include/GL/gl.h
+  depends_on "freetype"
+  depends_on "tcl-tk"
+  depends_on :x11 unless build.with? "aqua" # needs to find at least X11/include/GL/gl.h
   depends_on "openblas" => :optional
   depends_on "liblas-gdal2" if build.with? "liblas"
   depends_on "netcdf" => :optional
@@ -87,9 +90,20 @@ class Grass7 < Formula
       "--with-nls-libs=#{gettext.opt_lib}",
       "--with-nls",
       "--with-freetype",
-      "--without-tcltk", # Disabled due to compatibility issues with OS X Tcl/Tk
+      "--with-freetype-includes=#{Formula["freetype"].opt_include}/freetype2",
+      "--with-freetype-libs=#{Formula["freetype"].opt_lib}",
+      "--with-tcltk",
       "--with-includes=#{gettext.opt_include}"
     ]
+
+    # Enable Aqua GUI, instead of X11
+    if build.with? "aqua"
+      args.concat [
+        "--with-opengl=aqua",
+        "--without-glw",
+        "--without-motif"
+      ]
+    end
 
     unless MacOS::CLT.installed?
       # On Xcode-only systems (without the CLT), we have to help:
