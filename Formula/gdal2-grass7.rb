@@ -5,8 +5,10 @@ class Gdal2Grass7 < Formula
   sha256 "ca4dae77aa0019236a171f15131836984a82f23cc01d19316961dc62a68ec5c3"
 
   bottle do
-    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
-    sha256 "" => :mavericks
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    rebuild 1
+    sha256 "47d1371f0cfeab40e3c600a8d85d876748705cf087187cda3ce096bca71400d0" => :high_sierra
+    sha256 "47d1371f0cfeab40e3c600a8d85d876748705cf087187cda3ce096bca71400d0" => :sierra
   end
 
   depends_on "gdal2"
