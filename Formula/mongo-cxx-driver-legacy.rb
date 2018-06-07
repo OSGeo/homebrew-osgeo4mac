@@ -36,11 +36,11 @@ class MongoCxxDriverLegacy < Formula
       "--c++11=on",
       "--libc++",
       "--osx-version-min=10.9",
-      "--extrapath=#{Formula["boost"].opt_prefix}"
+      "--extrapath=#{Formula["boost"].opt_prefix}",
+      "install"
     ]
 
     scons(*args)
-    scons "install"
   end
 
   test do
