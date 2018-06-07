@@ -57,18 +57,7 @@ class Pdfium < Formula
     system "gclient", "config", "--unmanaged", "--name=pdfium",
            "https://pdfium.googlesource.com/pdfium.git" # @#{pdfium_rev}
 
-    # skip large, unneeded deps
-    # TODO: add corpus via optional Pythoon testing
-    inreplace "pdfium/DEPS" do |s|
-      s.sub! %r{^.*"testing/corpus".*\n.*$}, ""
-      s.sub! %r{^.*"third_party/icu".*\n.*$}, ""
-      s.sub! %r{^.*"third_party/skia".*\n.*$}, ""
-      s.sub! /^.*"v8".*\n.*$/, ""
-    end
-
     system "gclient", "sync", "--no-history" # "--shallow"
-
-    # raise
 
     cd "pdfium" do
       cwdir = Pathname.new(Dir.pwd)
@@ -88,7 +77,7 @@ class Pdfium < Formula
         pdf_is_complete_lib=true
         is_component_build=false
         clang_use_chrome_plugins=false
-        clang=false
+        is_clang=true
         mac_deployment_target="#{MacOS.version}"
       EOS
       system "gn", "gen", pdfium_build_dir
