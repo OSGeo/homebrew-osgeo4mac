@@ -1,2 +1,4 @@
 gdal2-ecwjp2
 gpkgtools
+gdal2-oracle
+gdal2-mrsid
