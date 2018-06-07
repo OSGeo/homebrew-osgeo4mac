@@ -22,9 +22,10 @@ class Qgis2 < Formula
   end
 
   bottle do
-    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
-    sha256 "78a2278e5ce783aadc20516b64807f4b799bff319cd655e04e8ca527072c140d" => :high_sierra
-    sha256 "78a2278e5ce783aadc20516b64807f4b799bff319cd655e04e8ca527072c140d" => :sierra
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    rebuild 1
+    sha256 "1e8cdbce8eb9955c8014738a822f050401942350902d4b7e0923aa4b583b4529" => :high_sierra
+    sha256 "1e8cdbce8eb9955c8014738a822f050401942350902d4b7e0923aa4b583b4529" => :sierra
   end
 
   def pour_bottle?

@@ -9,9 +9,10 @@ class SagaGisLts < Formula
   head "https://git.code.sf.net/p/saga-gis/code.git", :branch => "release-2-3-lts"
 
   bottle do
-    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
-    sha256 "bb468b9ca0a256a4887b511b05cee25b535f85f4fbadd181f894641c1c57c491" => :sierra
-    sha256 "bb468b9ca0a256a4887b511b05cee25b535f85f4fbadd181f894641c1c57c491" => :high_sierra
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    rebuild 1
+    sha256 "a59f97f1f3d47226e126907860cffacdbd45372ee6d683bc3789a793075b4d33" => :high_sierra
+    sha256 "a59f97f1f3d47226e126907860cffacdbd45372ee6d683bc3789a793075b4d33" => :sierra
   end
 
   keg_only "LTS version is specifically for working with QGIS"

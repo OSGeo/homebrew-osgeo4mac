@@ -7,9 +7,10 @@ class SagaGis < Formula
   head "https://git.code.sf.net/p/saga-gis/code.git"
 
   bottle do
-    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
-    sha256 "bb468b9ca0a256a4887b511b05cee25b535f85f4fbadd181f894641c1c57c491" => :sierra
-    sha256 "bb468b9ca0a256a4887b511b05cee25b535f85f4fbadd181f894641c1c57c491" => :high_sierra
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    rebuild 1
+    sha256 "7c27827a6187e362b448e9333f5396e05b4358ec6ae49c6ab7fd1f15acbfc336" => :high_sierra
+    sha256 "7c27827a6187e362b448e9333f5396e05b4358ec6ae49c6ab7fd1f15acbfc336" => :sierra
   end
 
   option "with-app", "Build SAGA.app Package"
