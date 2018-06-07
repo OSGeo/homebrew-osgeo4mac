@@ -25,6 +25,14 @@ class LiblasGdal2 < Formula
   depends_on "boost"
   depends_on "laszip@2.2" if build.with? "laszip"
 
+  needs :cxx11
+
+  # Fix ambiguous method error when building against GDAL 2.3
+  patch do
+    url "https://github.com/nickrobison/libLAS/commit/ec10e274ee765aa54e7c71c8b44d2c7494e63804.patch?full_index=1"
+    sha256 "3f8aefa1073aa32de01175cd217773020d93e5fb44a4592d76644a242bb89a3c"
+  end
+
   # Fix build for Xcode 9 with upstream commit
   # Remove in next version
   patch do
@@ -33,6 +41,8 @@ class LiblasGdal2 < Formula
   end
 
   def install
+
+    ENV.cxx11
     mkdir "macbuild" do
       # CMake finds boost, but variables like this were set in the last
       # version of this formula. Now using the variables listed here:
