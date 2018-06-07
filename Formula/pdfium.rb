@@ -1,5 +1,5 @@
 class Pdfium < Formula
-  ver = "3176".freeze # relates to chromium version
+  ver = "3451".freeze # relates to chromium version
 
   desc "Google-contributed PDF library (without V8 JavaScript engine)"
   homepage "https://pdfium.googlesource.com/pdfium/"
@@ -19,6 +19,11 @@ class Pdfium < Formula
 
   resource "depot_tools" do
     url "https://chromium.googlesource.com/chromium/tools/depot_tools.git"
+  end
+
+  resource "chromium_icu" do
+    url "https://chromium.googlesource.com/chromium/deps/icu.git",
+      :revision => "e4194dc7bbb3305d84cbb1b294274ca70d230721"
   end
 
   def pdfium_build_dir
@@ -43,24 +48,16 @@ class Pdfium < Formula
     (buildpath/"depot_tools").install resource("depot_tools")
     ENV.prepend_path "PATH", buildpath/"depot_tools"
 
+    # Add Chromium ICU
+    (buildpath/"pdfium/third_party/icu").install resource("chromium_icu")
+
     # use pdfium's gyp scripts to create ninja build files.
     ENV["GYP_GENERATORS"] = "ninja"
 
     system "gclient", "config", "--unmanaged", "--name=pdfium",
            "https://pdfium.googlesource.com/pdfium.git" # @#{pdfium_rev}
 
-    # skip large, unneeded deps
-    # TODO: add corpus via optional Pythoon testing
-    inreplace "pdfium/DEPS" do |s|
-      s.sub! %r{^.*"testing/corpus".*\n.*$}, ""
-      s.sub! %r{^.*"third_party/icu".*\n.*$}, ""
-      s.sub! %r{^.*"third_party/skia".*\n.*$}, ""
-      s.sub! /^.*"v8".*\n.*$/, ""
-    end
-
     system "gclient", "sync", "--no-history" # "--shallow"
-
-    # raise
 
     cd "pdfium" do
       cwdir = Pathname.new(Dir.pwd)
@@ -80,7 +77,7 @@ class Pdfium < Formula
         pdf_is_complete_lib=true
         is_component_build=false
         clang_use_chrome_plugins=false
-        clang=false
+        is_clang=true
         mac_deployment_target="#{MacOS.version}"
       EOS
       system "gn", "gen", pdfium_build_dir
