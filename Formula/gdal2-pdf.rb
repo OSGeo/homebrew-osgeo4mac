@@ -26,6 +26,7 @@ class Gdal2Pdf < Formula
     depends_on "jpeg"
     depends_on "libpng"
     depends_on "libtiff"
+    depends_on "libgeotiff"
     depends_on "openjpeg"
   end
   depends_on "pdfium-gdal2" if build.with? "pdfium"
@@ -83,10 +84,10 @@ class Gdal2Pdf < Formula
     without_pkgs = %w[
       armadillo bsb cfitsio cryptopp curl dds dods-root
       ecw epsilon expat fgdb fme freexl
-      geos geotiff gif gnm grass grib gta
+      geos gif gnm grass grib gta
       hdf4 hdf5 idb ingres
       j2lura jasper java jp2mrsid jpeg jpeg12 kakadu kea
-      libgrass libkml liblzma libtiff libz
+      libgrass libkml liblzma libz
       mdb mongocxx mrf mrsid_lidar mrsid msg mysql netcdf
       oci odbc ogdi opencl openjpeg
       pam pcidsk pcraster pcre perl pg php png python
