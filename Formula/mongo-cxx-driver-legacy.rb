@@ -5,10 +5,10 @@ class MongoCxxDriverLegacy < Formula
   sha256 "50304162f706c2c73e04f200cdac767cb2c55d47cf724811cbfc8bb34a0fd6bc"
 
   bottle do
-    cellar :any
-    sha256 "9ce364cb4545f7cb4453ca6adcac2d381dd724cc3df4bcddc87921d2481b586e" => :high_sierra
-    sha256 "5a16f976b70d1f99247e02276debb9098a42d1a92693e8447cbb62cf4e8e2f41" => :sierra
-    sha256 "228a9e3cc0f097b54e9464422528abd89a95c485305a4cc951f9ec0426cdfbbd" => :el_capitan
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    rebuild 1
+    sha256 "41339a7c0004abf77162a9c54d50f24009e7012b9ef72cba177c37a0f95a9d06" => :high_sierra
+    sha256 "41339a7c0004abf77162a9c54d50f24009e7012b9ef72cba177c37a0f95a9d06" => :sierra
   end
 
   keg_only "Newer driver in homebrew core"
