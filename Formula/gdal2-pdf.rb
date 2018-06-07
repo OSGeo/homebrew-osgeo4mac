@@ -1,8 +1,8 @@
 class Gdal2Pdf < Formula
   desc "GDAL/OGR 2.x plugin for PDF driver"
   homepage "http://www.gdal.org/frmt_pdf.html"
-  url "http://download.osgeo.org/gdal/2.2.4/gdal-2.2.4.tar.gz"
-  sha256 "b9d5a723787f3006a82cb276db171c721187b048b866c0e20e6df464d671a1a4"
+  url "http://download.osgeo.org/gdal/2.3.0/gdal-2.3.0.tar.gz"
+  sha256 "2944bbfee009bf1ca092716e4fd547cb4ae2a1e8816186236110c22f11c7e1e9"
 
   bottle do
     root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
@@ -26,6 +26,7 @@ class Gdal2Pdf < Formula
     depends_on "jpeg"
     depends_on "libpng"
     depends_on "libtiff"
+    depends_on "libgeotiff"
     depends_on "openjpeg"
   end
   depends_on "pdfium-gdal2" if build.with? "pdfium"
@@ -83,10 +84,10 @@ class Gdal2Pdf < Formula
     without_pkgs = %w[
       armadillo bsb cfitsio cryptopp curl dds dods-root
       ecw epsilon expat fgdb fme freexl
-      geos geotiff gif gnm grass grib gta
+      geos gif gnm grass grib gta
       hdf4 hdf5 idb ingres
       j2lura jasper java jp2mrsid jpeg jpeg12 kakadu kea
-      libgrass libkml liblzma libtiff libz
+      libgrass libkml liblzma libz
       mdb mongocxx mrf mrsid_lidar mrsid msg mysql netcdf
       oci odbc ogdi opencl openjpeg
       pam pcidsk pcraster pcre perl pg php png python
