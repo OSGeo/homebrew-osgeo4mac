@@ -5,11 +5,10 @@ class Gdal2Sosi < Formula
   sha256 "2944bbfee009bf1ca092716e4fd547cb4ae2a1e8816186236110c22f11c7e1e9"
 
    bottle do
-    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
     cellar :any
-    rebuild 1
-    sha256 "ad87b39cbd4bc5cbd052447724d251b13bc13eb1ed8812b7b241de96322ff539" => :high_sierra
-    sha256 "ad87b39cbd4bc5cbd052447724d251b13bc13eb1ed8812b7b241de96322ff539" => :sierra
+    sha256 "10ff6e0c6457e98d8f2eeaf7a6d620022d7fc0575aabd93348ff0d3906893079" => :high_sierra
+    sha256 "10ff6e0c6457e98d8f2eeaf7a6d620022d7fc0575aabd93348ff0d3906893079" => :sierra
   end
 
   depends_on "fyba"
