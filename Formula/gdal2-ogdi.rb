@@ -44,10 +44,6 @@ class Gdal2Ogdi < Formula
               \\1
               EOS
 
-    inreplace "#{Dir.pwd}/ogr/ogrsf_frmts/ogdi/ogrogdidriver.cpp",
-              /(^CPL_CVSID[^;]+;$)/,
-              "\\1\n\nextern \"C\" void RegisterOGROGDI();\n"
-
     # cxx flags
     args = %W[-Iport -Igcore -Iogr -Iogr/ogrsf_frmts -Iogr/ogrsf_frmts/generic
               -Iogr/ogrsf_frmts/ogdi -I#{ogdi_opt}/include/ogdi]
