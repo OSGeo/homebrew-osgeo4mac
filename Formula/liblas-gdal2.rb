@@ -27,7 +27,11 @@ class LiblasGdal2 < Formula
 
   needs :cxx11
 
-  patch :DATA
+  # Fix ambiguous method error when building against GDAL 2.3
+  patch do
+    url "https://github.com/nickrobison/libLAS/commit/ec10e274ee765aa54e7c71c8b44d2c7494e63804.patch?full_index=1"
+    sha256 "3f8aefa1073aa32de01175cd217773020d93e5fb44a4592d76644a242bb89a3c"
+  end
 
   # Fix build for Xcode 9 with upstream commit
   # Remove in next version
@@ -66,21 +70,3 @@ class LiblasGdal2 < Formula
     system bin/"liblas-config", "--version"
   end
 end
-__END__
-diff --git a/src/gt_citation.cpp b/src/gt_citation.cpp
-index 7884250..e3ef4c8 100644
---- a/src/gt_citation.cpp
-+++ b/src/gt_citation.cpp
-@@ -387,10 +387,10 @@ void SetGeogCSCitation(GTIF * psGTIF, OGRSpatialReference *poSRS, char* angUnitN
-         osCitation += primemName;
-         bRewriteGeogCitation = TRUE;
-
--        double primemValue = poSRS->GetPrimeMeridian(NULL);
-+        double primemValue = poSRS->GetPrimeMeridian(nullptr);
-         if(angUnitName && !EQUAL(angUnitName, "Degree"))
-         {
--            double aUnit = poSRS->GetAngularUnits(NULL);
-+            double aUnit = poSRS->GetAngularUnits(nullptr);
-             primemValue *= aUnit;
-         }
-         GTIFKeySet( psGTIF, GeogPrimeMeridianLongGeoKey, TYPE_DOUBLE, 1,
