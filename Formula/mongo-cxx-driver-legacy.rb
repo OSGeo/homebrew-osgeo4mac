@@ -37,6 +37,7 @@ class MongoCxxDriverLegacy < Formula
       "--libc++",
       "--osx-version-min=10.9",
       "--extrapath=#{Formula["boost"].opt_prefix}",
+      "--sharedclient",
       "install"
     ]
 
