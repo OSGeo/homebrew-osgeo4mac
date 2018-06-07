@@ -112,6 +112,15 @@ for f in ${CHANGED_FORMULAE};do
       ${HOMEBREW_PREFIX}/bin/pip2 install future mock nose2 numpy psycopg2 pyyaml
     fi
   fi
+  # Special handling of grass7, because it needs to be unlinked
+  if [ "$(echo ${deps} | grep -c 'grass7')" != "0" ];then
+    echo "Installing and unlinking grass7"
+#    GDAL gets its numpy installed via pip, but grass also has a dependency, so we need to force it.
+    brew install numpy || brew link --overwrite numpy
+    brew install grass7
+    brew unlink grass7
+  fi
+
 done
 
 # Remove any left over lock or stray cache files
