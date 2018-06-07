@@ -8,9 +8,10 @@ class Ossim < Formula
   end
 
   bottle do
-    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
-    sha256 "bada06e2e468f8398c623b24a581933bb22e5bfeb43a4867c7a71a861f133cd5" => :high_sierra
-    sha256 "bada06e2e468f8398c623b24a581933bb22e5bfeb43a4867c7a71a861f133cd5" => :sierra
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    rebuild 1
+    sha256 "620f012a2e84694de2b7413fe138a14af369f995a9bdbe1d2d358e28f03a5689" => :high_sierra
+    sha256 "620f012a2e84694de2b7413fe138a14af369f995a9bdbe1d2d358e28f03a5689" => :sierra
   end
 
   option "with-curl-apps", "Build curl-dependent apps"
