@@ -25,6 +25,10 @@ class LiblasGdal2 < Formula
   depends_on "boost"
   depends_on "laszip@2.2" if build.with? "laszip"
 
+  needs :cxx11
+
+  patch :DATA
+
   # Fix build for Xcode 9 with upstream commit
   # Remove in next version
   patch do
@@ -33,6 +37,8 @@ class LiblasGdal2 < Formula
   end
 
   def install
+
+    ENV.cxx11
     mkdir "macbuild" do
       # CMake finds boost, but variables like this were set in the last
       # version of this formula. Now using the variables listed here:
@@ -60,3 +66,21 @@ class LiblasGdal2 < Formula
     system bin/"liblas-config", "--version"
   end
 end
+__END__
+diff --git a/src/gt_citation.cpp b/src/gt_citation.cpp
+index 7884250..e3ef4c8 100644
+--- a/src/gt_citation.cpp
++++ b/src/gt_citation.cpp
+@@ -387,10 +387,10 @@ void SetGeogCSCitation(GTIF * psGTIF, OGRSpatialReference *poSRS, char* angUnitN
+         osCitation += primemName;
+         bRewriteGeogCitation = TRUE;
+
+-        double primemValue = poSRS->GetPrimeMeridian(NULL);
++        double primemValue = poSRS->GetPrimeMeridian(nullptr);
+         if(angUnitName && !EQUAL(angUnitName, "Degree"))
+         {
+-            double aUnit = poSRS->GetAngularUnits(NULL);
++            double aUnit = poSRS->GetAngularUnits(nullptr);
+             primemValue *= aUnit;
+         }
+         GTIFKeySet( psGTIF, GeogPrimeMeridianLongGeoKey, TYPE_DOUBLE, 1,
