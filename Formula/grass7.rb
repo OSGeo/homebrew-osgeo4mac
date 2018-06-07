@@ -26,10 +26,6 @@ class Grass7 < Formula
 
   depends_on UnlinkedGRASS7
 
-  # TODO: test on 10.6 first. may work with latest wxWidgets 3.0
-  # depends on :macos => :lion
-  # TODO: builds with clang (has same non-fatal errors as gcc), but is it compiled correctly?
-  # depends on "gcc" => :build
   depends_on "pkg-config" => :build
   depends_on "gettext"
   depends_on "readline"
