@@ -10,7 +10,6 @@ class Gdal2Mongodb < Formula
   depends_on "gdal2"
   depends_on "libtiff"
   depends_on "libgeotiff"
-  depends_on "mongo-c-driver"
   depends_on "mongo-cxx-driver-legacy"
   depends_on "boost"
 
