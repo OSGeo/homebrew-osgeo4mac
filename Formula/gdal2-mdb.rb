@@ -92,12 +92,9 @@ class Gdal2Mdb < Formula
     gdal_plugins.mkpath
 
     ENV.cxx11
-    ENV.deparallelize
 
     # configure GDAL/OGR with minimal drivers
     system "./configure", *configure_args
-
-    # raise
 
     # cxx flags
     args = %W[-DLINUX -DUNIX -Iport -Igcore -Iogr
