@@ -57,6 +57,7 @@ class Gdal2 < Formula
 
   depends_on "postgresql" => :optional
   depends_on "mysql" => :optional
+  depends_on "libmongoclient-legacy" => :optional
 
   depends_on "ogdi" => :optional
 
@@ -187,6 +188,11 @@ class Gdal2 < Formula
     # Database support.
     args << (build.with?("postgresql") ? "--with-pg=#{HOMEBREW_PREFIX}/bin/pg_config" : "--without-pg")
     args << (build.with?("mysql") ? "--with-mysql=#{HOMEBREW_PREFIX}/bin/mysql_config" : "--without-mysql")
+
+    if build.with? "libmongoclient-legacy"
+      args << "--with-mongocxx=#{HOMEBREW_PREFIX}"
+      args << "--with-boost-lib-path=#{HOMEBREW_PREFIX}"
+    end
 
     if build.with? "mdb"
       args << "--with-java=yes"
