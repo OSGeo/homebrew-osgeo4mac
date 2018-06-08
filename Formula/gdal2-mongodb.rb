@@ -4,8 +4,8 @@ class Gdal2Mongodb < Formula
   url "http://download.osgeo.org/gdal/2.3.0/gdal-2.3.0.tar.gz"
   sha256 "2944bbfee009bf1ca092716e4fd547cb4ae2a1e8816186236110c22f11c7e1e9"
 
-   bottle do
-   end
+  bottle do
+  end
 
   depends_on "gdal2"
   depends_on "libtiff"
@@ -43,7 +43,7 @@ class Gdal2Mongodb < Formula
       ecw epsilon expat fgdb fme freexl
       geos gif gnm grass grib gta
       hdf4 hdf5 idb ingres
-      j2lura jasper jp2mrsid jpeg jpeg12 kakadu kea
+      jasper jp2mrsid jpeg jpeg12 kakadu kea
       libgrass libkml liblzma libz
       mdb mrf mrsid_lidar mrsid msg mysql netcdf
       oci odbc ogdi opencl openjpeg
@@ -61,16 +61,9 @@ class Gdal2Mongodb < Formula
     gdal_plugins.mkpath
 
     ENV.cxx11
-    ENV.deparallelize
-
-    # Patch configuration scripts to look for dylib, not .so
-#    inreplace "configure.ac", "libmongoclient.so", "libmongoclient.dylib"
-#    inreplace "configure", "libmongoclient.so", "libmongoclient.dylib"
 
     # configure GDAL/OGR with minimal drivers
     system "./configure", *configure_args
-
-    #raise
 
     # cxx flags
     args = %W[-DLINUX -DUNIX -Iport -Igcore -Iogr
@@ -83,7 +76,7 @@ class Gdal2Mongodb < Formula
     end
 
     # plugin dylib
-    dylib_name = "ogr_mongodb.dylib"
+    dylib_name = "ogr_MongoDB.dylib"
     args.concat %W[
       -std=c++11
       -dynamiclib
@@ -94,59 +87,25 @@ class Gdal2Mongodb < Formula
       -undefined dynamic_lookup
     ]
 
+    # Add the Mongo lib
+    args.concat %W[-L#{Formula["mongo-cxx-driver-legacy"].opt_lib} -lmongoclient]
+
     # build and install shared plugin
     system ENV.cxx, *args
-
-    dylib = lib/gdal_plugins_subdirectory/dylib_name
-#    dylib.ensure_writable do
-      # manually add the libjvm.dylib rpath directory entry to the plugin
-#      MachO::Tools.add_rpath(dylib.to_s, "#{Formula['mongo-c-driver'].opt_lib}", :strict => false)
-#    end
-
-#    libexec.install resource("jackcess-jar")
-#    resource("logging-jars").stage do
-#      libexec.install Dir["lib/commons*.jar"]
-#    end
   end
 
   def caveats; <<~EOS
-      This formula provides a plugin that allows GDAL or OGR to access geospatial
-      data stored in its format. In order to use the shared plugin, you may need
-      to set the following enviroment variable:
+    This formula provides a plugin that allows GDAL or OGR to access geospatial
+    data stored in its format. In order to use the shared plugin, you may need
+    to set the following enviroment variable:
 
-        export GDAL_DRIVER_PATH=#{HOMEBREW_PREFIX}/lib/gdalplugins
-
-      To have a functional MDB driver, install supporting .jar files in:
-        /Library/Java/Extensions/
-      from:
-        #{opt_libexec}/*.jar
-
-      (However, this can affect other JAVA software)
-
-      Optionally, set the following JAVA environment variable, per session:
-
-        export CLASSPATH=#{Dir[libexec/"*.jar"].join(":")}
-
-      See: http://www.gdal.org/ogr/drv_mdb.html
-
-      !!!!!!!!! IMPORTANT !!!!!!!!!
-
-      You may need to adjust your JAVA JRE or JDK install to allow JNI usage:
-
-        see: https://oliverdowling.com.au/2015/10/09/oracles-jdk-8-on-mac-os-x-el-capitan/
+      export GDAL_DRIVER_PATH=#{HOMEBREW_PREFIX}/lib/gdalplugins
     EOS
   end
 
   test do
-    # cmd = Language::Java.java_home_cmd("1.8+")
-    # ENV["JAVA_HOME"] = Utils.popen_read(cmd).chomp
-    ENV["CLASSPATH"] = Dir[libexec/"*.jar"].join(":")
-    # puts "JAVA_HOME=#{ENV["JAVA_HOME"]}"
-    # puts "CLASSPATH=#{ENV["CLASSPATH"]}"
     ENV["GDAL_DRIVER_PATH"] = "#{HOMEBREW_PREFIX}/lib/gdalplugins"
     gdal_opt_bin = Formula["gdal2"].opt_bin
-    system "#{gdal_opt_bin}/ogrinfo", "--format", "MDB"
-    resource("test-mdb").stage testpath
-    system "#{gdal_opt_bin}/ogrinfo", "-ro", testpath/"Atlantic.mdb".to_s
+    system "#{gdal_opt_bin}/ogrinfo", "--format", "MongoDB"
   end
 end
