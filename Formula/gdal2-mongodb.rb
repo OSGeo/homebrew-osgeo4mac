@@ -5,6 +5,9 @@ class Gdal2Mongodb < Formula
   sha256 "2944bbfee009bf1ca092716e4fd547cb4ae2a1e8816186236110c22f11c7e1e9"
 
   bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    sha256 "59e9439095d39db62f2600cde8b6547146a193e6957c9238c06dd1af36accd42" => :high_sierra
+    sha256 "59e9439095d39db62f2600cde8b6547146a193e6957c9238c06dd1af36accd42" => :sierra
   end
 
   depends_on "gdal2"
