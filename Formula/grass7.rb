@@ -36,7 +36,6 @@ class Grass7 < Formula
   depends_on "gdal2"
   depends_on "libtiff"
   depends_on "unixodbc"
-  depends_on "fftw"
   depends_on "python@2"
   depends_on "numpy"
   depends_on "wxpython"
@@ -45,7 +44,8 @@ class Grass7 < Formula
   depends_on "cairo"
   depends_on "ghostscript" # for cartographic composer previews
   depends_on "freetype"
-  depends_on "tcl-tk"
+  depends_on "tcl-tk" => :recommended
+  depends_on "fftw" => :recommended
   depends_on :x11 unless build.with? "aqua" # needs to find at least X11/include/GL/gl.h
   depends_on "openblas" => :optional
   depends_on "liblas-gdal2" if build.with? "liblas"
@@ -89,9 +89,12 @@ class Grass7 < Formula
       "--with-freetype",
       "--with-freetype-includes=#{Formula["freetype"].opt_include}/freetype2",
       "--with-freetype-libs=#{Formula["freetype"].opt_lib}",
-      "--with-tcltk",
       "--with-includes=#{gettext.opt_include}"
     ]
+
+    # Disable some dependencies that don't build correctly on older version of MacOS
+    args << "--without-fftw" if build.without? "fftw"
+    args << "--with-tcltk" if build.with? "tcl-tk"
 
     # Enable Aqua GUI, instead of X11
     if build.with? "aqua"
