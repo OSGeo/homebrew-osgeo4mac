@@ -273,8 +273,6 @@ class Gdal2 < Formula
     include.install Dir["gnm/**/*.h"] if build.with? "gnm"
 
     if build.with? "swig-java"
-      #cmd = Language::Java.java_home_cmd("1.8")
-      #ENV["JAVA_HOME"] = Utils.popen_read(cmd).chomp
       cd "swig/java" do
         inreplace "java.opt", "linux", "darwin"
         inreplace "java.opt", "#JAVA_HOME = /usr/lib/jvm/java-6-openjdk/", "JAVA_HOME=#{ENV["JAVA_HOME"]}"
@@ -310,7 +308,6 @@ class Gdal2 < Formula
 
       PYTHON BINDINGS are now built in a separate formula: gdal2-python
     EOS
-
     s
   end
 
