@@ -15,6 +15,9 @@ class Gdal2 < Formula
     depends_on "doxygen" => :build
   end
 
+  # Needed to build the swig bindings, until https://github.com/OSGeo/gdal/pull/713 is merged.
+  patch :DATA
+
   def plugins_subdirectory
     gdal_ver_list = version.to_s.split(".")
     "gdalplugins/#{gdal_ver_list[0]}.#{gdal_ver_list[1]}"
@@ -37,7 +40,6 @@ class Gdal2 < Formula
   deprecated_option "enable-opencl" => "with-opencl"
   deprecated_option "enable-armadillo" => "with-armadillo"
   deprecated_option "enable-unsupported" => "with-unsupported"
-  deprecated_option "enable-mdb" => "with-mdb"
   deprecated_option "complete" => "with-complete"
   deprecated_option "with-java" => "with-swig-java"
 
@@ -63,6 +65,8 @@ class Gdal2 < Formula
   depends_on "armadillo" => :optional
 
   depends_on "libkml-dev" if build.with? "libkml"
+
+  depends_on :java if build.with? "swig-java"
 
   if build.with? "complete"
     # Raster libraries
@@ -188,13 +192,6 @@ class Gdal2 < Formula
     args << (build.with?("postgresql") ? "--with-pg=#{HOMEBREW_PREFIX}/bin/pg_config" : "--without-pg")
     args << (build.with?("mysql") ? "--with-mysql=#{HOMEBREW_PREFIX}/bin/mysql_config" : "--without-mysql")
 
-    if build.with? "mdb"
-      args << "--with-java=yes"
-      # The rpath is only embedded for Oracle (non-framework) installs
-      args << "--with-jvm-lib-add-rpath=yes"
-      args << "--with-mdb=yes"
-    end
-
     args << "--with-libkml=#{Formula["libkml-dev"].opt_prefix}" if build.with? "libkml"
 
     args << "--with-qhull=#{build.with?("qhull") ? "internal" : "no"}"
@@ -276,8 +273,6 @@ class Gdal2 < Formula
     include.install Dir["gnm/**/*.h"] if build.with? "gnm"
 
     if build.with? "swig-java"
-      cmd = Language::Java.java_home_cmd("1.8")
-      ENV["JAVA_HOME"] = Utils.popen_read(cmd).chomp
       cd "swig/java" do
         inreplace "java.opt", "linux", "darwin"
         inreplace "java.opt", "#JAVA_HOME = /usr/lib/jvm/java-6-openjdk/", "JAVA_HOME=#{ENV["JAVA_HOME"]}"
@@ -285,7 +280,6 @@ class Gdal2 < Formula
         system "make", "install"
 
         # Install the jar that complements the native JNI bindings
-        system "ant"
         lib.install "gdal.jar"
       end
     end
@@ -314,18 +308,6 @@ class Gdal2 < Formula
 
       PYTHON BINDINGS are now built in a separate formula: gdal2-python
     EOS
-
-    if build.with? "mdb"
-      s += <<~EOS
-
-      MDB is no longer supported in the main GDAL formula, please use gdal2-mdb instead.
-
-      To have a functional MDB driver, install supporting .jar files in:
-        `/Library/Java/Extensions/`
-
-      See: `http://www.gdal.org/ogr/drv_mdb.html`
-      EOS
-    end
     s
   end
 
@@ -335,3 +317,24 @@ class Gdal2 < Formula
     system "#{bin}/ogrinfo", "--formats"
   end
 end
+__END__
+diff --git a/gdal/swig/java/GNUmakefile b/gdal/swig/java/GNUmakefile
+index 1313bd9974f..5e4e6844d47 100644
+--- a/swig/java/GNUmakefile
++++ b/swig/java/GNUmakefile
+@@ -56,13 +56,13 @@ generate: makedir ${WRAPPERS}
+ build: generate ${JAVA_OBJECTS} ${JAVA_MODULES}
+ ifeq ($(HAVE_LIBTOOL),yes)
+
+-	if [ -f ".libs/libgdaljni.so" ] ; then \
++	if [ -f ".libs/libgdalalljni.so" ] ; then \
+ 		cp .libs/*.so . ; \
+ 	fi
+
+ 	echo "$(wildcard .libs/*.dylib)"
+
+-	if [ -f ".libs/libgdaljni.dylib" ] ; then \
++	if [ -f ".libs/libgdalalljni.dylib" ] ; then \
+ 		cp .libs/*.dylib . ; \
+ 	fi
+
