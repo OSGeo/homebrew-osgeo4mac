@@ -31,7 +31,7 @@ for f in ${nix_f}; do
 done
 
 # Add taps
-brew tap brewsci/bio/matplotlib || true
+brew tap brewsci/bio || true
 brew tap brewsci/science || true
 #brew tap caskroom/cask || true
 
