@@ -40,7 +40,6 @@ class Gdal2 < Formula
   deprecated_option "enable-opencl" => "with-opencl"
   deprecated_option "enable-armadillo" => "with-armadillo"
   deprecated_option "enable-unsupported" => "with-unsupported"
-  deprecated_option "enable-mdb" => "with-mdb"
   deprecated_option "complete" => "with-complete"
   deprecated_option "with-java" => "with-swig-java"
 
@@ -193,13 +192,6 @@ class Gdal2 < Formula
     args << (build.with?("postgresql") ? "--with-pg=#{HOMEBREW_PREFIX}/bin/pg_config" : "--without-pg")
     args << (build.with?("mysql") ? "--with-mysql=#{HOMEBREW_PREFIX}/bin/mysql_config" : "--without-mysql")
 
-    if build.with? "mdb"
-      args << "--with-java=yes"
-      # The rpath is only embedded for Oracle (non-framework) installs
-      args << "--with-jvm-lib-add-rpath=yes"
-      args << "--with-mdb=yes"
-    end
-
     args << "--with-libkml=#{Formula["libkml-dev"].opt_prefix}" if build.with? "libkml"
 
     args << "--with-qhull=#{build.with?("qhull") ? "internal" : "no"}"
@@ -319,17 +311,6 @@ class Gdal2 < Formula
       PYTHON BINDINGS are now built in a separate formula: gdal2-python
     EOS
 
-    if build.with? "mdb"
-      s += <<~EOS
-
-      MDB is no longer supported in the main GDAL formula, please use gdal2-mdb instead.
-
-      To have a functional MDB driver, install supporting .jar files in:
-        `/Library/Java/Extensions/`
-
-      See: `http://www.gdal.org/ogr/drv_mdb.html`
-      EOS
-    end
     s
   end
 
