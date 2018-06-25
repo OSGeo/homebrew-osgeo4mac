@@ -3,8 +3,8 @@ class Orfeo6 < Formula
   homepage "https://www.orfeo-toolbox.org/otb/"
 
   stable do
-    url "https://www.orfeo-toolbox.org/packages/OTB-6.4.0.tar.gz"
-    sha256 "2db6c2d7d46f77e9ca34f98b158a3ea87f59230439e810058ec4531a0b242fa6"
+    url "https://www.orfeo-toolbox.org/packages/OTB-6.6.0.tar.gz"
+    sha256 "6a9f1a87bfc7b451f87aba4271c03016c3e7858002b6c822b8a514560ec01a45"
 
     # Patch to fix OSSIM adaptor compilation
 #    patch :DATA
