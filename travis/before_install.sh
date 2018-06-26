@@ -40,7 +40,9 @@ brew cask uninstall oclint || true
 
 brew update || brew update
 
-brew install --no-sandbox qt5-webkit
+brew install qt
+
+brew install -v --no-sandbox osgeo/osgeo4mac/qt5-webkit
 
 # Set up ccache (doesn't work with `brew install <formula>`)
 #brew install ccache
