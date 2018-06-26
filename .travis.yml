@@ -30,7 +30,6 @@ addons:
   ssh_known_hosts: github.com
 
 before_install:
-  - export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
   - export GH_USER=$(echo -n "${TRAVIS_REPO_SLUG}" | egrep -o '^[^/]+' | tr -d '\n')
   - export TRAVIS_COMMIT="$(git rev-parse --verify -q HEAD)"
   - export CHANGED_FORMULAE=$(./travis/changed_formulas.sh)
@@ -56,6 +55,7 @@ before_install:
 
 
 install: 
+  - export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
   - export alias python="/usr/local/bin/python3"
   - python --version 
   - python3 --version 
