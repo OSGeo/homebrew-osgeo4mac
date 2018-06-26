@@ -94,8 +94,8 @@ class Qgis3 < Formula
   depends_on "libtasn1"
 
   # core providers
-  depends_on "gdal2" # keg_only
-  depends_on "gdal2-python" # keg_only
+  # depends_on "gdal2" # keg_only
+  # depends_on "gdal2-python" # keg_only
   depends_on "oracle-client-sdk" if build.with? "oracle"
   # TODO: add MSSQL third-party support formula?, :optional
 
