@@ -52,9 +52,15 @@ before_install:
   - export HOMEBREW_PREFIX=$(brew --prefix)
   - ulimit -n 1024
   - ./travis/before_install.sh
+  - python --version 
+  - python3 --version 
+  - python2 --version 
   - brew install --no-sandbox osgeo/osgeo4mac/qt5-webkit
   - brew install osgeo/osgeo4mac/gdal2
   - brew install osgeo/osgeo4mac/gdal2-python
+  - echo 'export PATH="/usr/local/opt/gdal2-python/bin:$PATH"' >> ~/.bash_profile
+  - source ~/.bash_profile
+
 
 install: ./travis/install.sh
 
