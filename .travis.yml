@@ -56,13 +56,15 @@ before_install:
 
 
 install: 
-  # - export alias python="/usr/local/bin/python3"
   - sudo ln -s /usr/local/Cellar/python/3.6.5_1/Frameworks/Python.framework /Library/Frameworks/Python.framework
+  - export alias python="/usr/local/bin/python3"
+  - cat ~/.bash_profile
   - python --version 
   - python3 --version 
   - python2 --version 
   - brew install --no-sandbox osgeo/osgeo4mac/qt5-webkit
   - brew install osgeo/osgeo4mac/gdal2
+  - brew install numpy || brew link --overwrite numpy
   - brew install osgeo/osgeo4mac/gdal2-python
   - ./travis/install.sh
 
