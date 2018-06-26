@@ -1,4 +1,4 @@
-class Qgis3DevUnlinkedFormulae < Requirement
+class Qgis3UnlinkedFormulae < Requirement
   fatal true
   satisfy(:build_env => false) { !qt4_linked && !pyqt4_linked && !txt2tags_linked }
 
@@ -30,7 +30,7 @@ class Qgis3DevUnlinkedFormulae < Requirement
   end
 end
 
-class Qgis3Dev < Formula
+class Qgis3 < Formula
   desc "User friendly open source Geographic Information System"
   homepage "https://www.qgis.org"
 
@@ -54,7 +54,7 @@ class Qgis3Dev < Formula
   option "with-api-docs", "Build the API documentation with Doxygen and Graphviz"
   option "with-3d", "Build with 3D Map View panel"
 
-  depends_on Qgis3DevUnlinkedFormulae
+  depends_on Qgis3UnlinkedFormulae
 
   # core qgis
   depends_on "cmake" => :build
