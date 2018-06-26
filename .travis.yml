@@ -55,7 +55,7 @@ before_install:
 
 
 install: 
-
+  - echo 'export PATH="/usr/local/bin:/usr/local/sbin:$PATH"' >> ~/.bash_profile
   - echo 'export alias python="/usr/local/bin/python3"' >> ~/.bash_profile
   - source ~/.bash_profile
   - python --version 
