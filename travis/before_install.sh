@@ -111,6 +111,8 @@ for f in ${CHANGED_FORMULAE};do
     if [[ "${f}" =~ "qgis" ]];then
       echo "Installing QGIS Python2 dependencies for testing"
       ${HOMEBREW_PREFIX}/bin/pip2 install future mock nose2 numpy psycopg2 pyyaml
+      
+      brew install --no-sandbox qt5-webkit
     fi
   fi
   # Special handling of grass7, because it needs to be unlinked
