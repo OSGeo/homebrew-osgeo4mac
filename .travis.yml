@@ -55,9 +55,8 @@ before_install:
 
 
 install: 
-  - echo 'export PATH="/usr/local/bin:/usr/local/sbin:$PATH"' >> ~/.bash_profile
-  - echo 'export alias python="/usr/local/bin/python3"' >> ~/.bash_profile
-  - source ~/.bash_profile
+  - export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
+  - export alias python="/usr/local/bin/python3"
   - python --version 
   - python3 --version 
   - python2 --version 
@@ -65,8 +64,7 @@ install:
   - brew install osgeo/osgeo4mac/gdal2
   - brew install numpy || brew link --overwrite numpy
   - brew install osgeo/osgeo4mac/gdal2-python
-  - echo 'export PATH="/usr/local/opt/gdal2-python/bin:$PATH"' >> ~/.bash_profile
-  - source ~/.bash_profile
+  - cp ./scripts/pyrcc5.sh /usr/local/bin/pyrcc5
   - ./travis/install.sh
 
 #before_script: ./travis/before_script.sh
