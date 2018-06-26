@@ -42,9 +42,9 @@ brew update || brew update
 
 brew install --no-sandbox qt5-webkit
 
-brew install gdal2
+brew install --no-sandbox gdal2
 
-brew install gdal2-python
+brew install --no-sandbox gdal2-python
 
 # Set up ccache (doesn't work with `brew install <formula>`)
 #brew install ccache
