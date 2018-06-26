@@ -63,6 +63,12 @@ install:
   - python --version 
   - python3 --version 
   - python2 --version 
+  - sudo ln -sf /usr/local/bin/python3 /usr/local/bin/python
+  - source ~/.bash_profile
+  - cat ~/.bash_profile
+  - python --version 
+  - python3 --version 
+  - python2 --version 
   - brew install --no-sandbox osgeo/osgeo4mac/qt5-webkit
   - brew install osgeo/osgeo4mac/gdal2
   - brew install numpy || brew link --overwrite numpy
