@@ -58,6 +58,9 @@ before_install:
 install: 
   - sudo ln -s /usr/local/Cellar/python/3.6.5_1/Frameworks/Python.framework /Library/Frameworks/Python.framework
   - export alias python="/usr/local/bin/python3"
+  - echo 'export PATH="/usr/local/bin:/usr/local/sbin:$PATH"' >> ~/.bash_profile
+  - echo 'export alias python="/usr/local/bin/python3"' >> ~/.bash_profile
+  - source ~/.bash_profile
   - cat ~/.bash_profile
   - python --version 
   - python3 --version 
@@ -70,6 +73,7 @@ install:
 
 before_script: 
   - sudo cp ./scripts/pyrcc5.sh /usr/local/bin/pyrcc5
+  - cat /usr/local/bin/pyrcc5
   #./travis/before_script.sh
 
 script: ./travis/script.sh
