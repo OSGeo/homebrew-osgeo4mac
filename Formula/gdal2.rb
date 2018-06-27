@@ -72,7 +72,7 @@ class Gdal2 < Formula
   if build.with? "complete"
     # Raster libraries
     depends_on "netcdf" # Also brings in HDF5
-    depends_on "hdf4"
+    depends_on "osgeo/osgeo4mac/hdf4"
     depends_on "jasper"
     depends_on "webp"
     depends_on "cfitsio"
@@ -244,9 +244,6 @@ class Gdal2 < Formula
     ENV.append "CFLAGS", "-I#{sqlite.opt_include}"
 
     ENV.append "LDFLAGS", "-L#{Formula["ogdi"].opt_lib}/ogdi" if build.with? "ogdi"
-
-    # GDAL looks for the renamed hdf4 library, which is an artifact of old builds, so we need to repoint it
-    inreplace "configure", "-ldf", "-lhdf" if build.with? "complete"
 
     # Reset ARCHFLAGS to match how we build.
     ENV["ARCHFLAGS"] = "-arch #{MacOS.preferred_arch}"
