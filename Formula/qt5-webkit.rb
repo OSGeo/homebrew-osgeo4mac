@@ -67,7 +67,6 @@ class Qt5Webkit < Formula
     mkdir "build" do
       system qt5.bin/"qmake", "../WebKit.pro", *args
       system "make"
-      ENV.deparallelize
       # just let it install to qt5 formula prefix
       # NOTE: this violates sandboxing, so --no-sandbox during install required
       system "make", "install"
@@ -86,7 +85,7 @@ class Qt5Webkit < Formula
     mv Dir["#{qt5.opt_lib}/cmake/Qt5WebKit*"], "#{lib}/cmake/"
     mv Dir["#{qt5.opt_lib}/pkgconfig/Qt5WebKit*.pc"], "#{lib}/pkgconfig/"
     mv Dir["#{qt5.opt_prefix}/mkspecs/modules/qt_lib_webkit*.pri"], "#{prefix}/mkspecs/modules/"
-    mv qt5.opt_prefix/"plugins/webkit", "#{prefix}/plugins/"
+    #mv qt5.opt_prefix/"plugins/webkit", "#{prefix}/plugins/"
     mv qt5.opt_prefix/"qml/QtWebKit", "#{prefix}/qml/"
     mv qt5.opt_libexec/"QtWebProcess", "#{libexec}/"
 
