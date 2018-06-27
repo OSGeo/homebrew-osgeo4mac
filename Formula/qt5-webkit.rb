@@ -15,7 +15,7 @@ class NoQt5WebKitSandboxRequirement < Requirement
     # versions of macOS that have a bottle to install
     # if there is no bottle, --no-sandbox is required, since it will default to source install
     # TODO: handle case where pouring bottle fails (tricky here)
-    MacOS.version == :sierra
+    MacOS.version >= :sierra
   end
 
   satisfy(:build_env => false) do
@@ -30,9 +30,11 @@ end
 
 class Qt5Webkit < Formula
   desc "QtWebit module for Qt5"
-  homepage "https://download.qt.io/official_releases/qt/5.9"
-  url "https://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtwebkit-opensource-src-5.9.1.tar.xz"
-  sha256 "28a560becd800a4229bfac317c2e5407cd3cc95308bc4c3ca90dba2577b052cf"
+  homepage "https://download.qt.io/official_releases/qt/5.11"
+  url "https://github.com/qt/qtwebkit.git",
+    :branch => "5.212",
+    :commit => "72cfbd7664f21fcc0e62b869a6b01bf73eb5e7da"
+  version "5.11.1"
 
   bottle do
     root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
@@ -44,20 +46,12 @@ class Qt5Webkit < Formula
 
   depends_on NoQt5WebKitAlreadyRequirement
   depends_on NoQt5WebKitSandboxRequirement
-  # depends on "pkg-config" => :build
 
   depends_on "qt"
-  # TODO: main qt5 formula does not use these, should we here?
-  #       the .pro setup seems to opportunistically check for them,
-  #       but depending upon the formulae does not help find them
-  # depends on "fontconfig"
-  # depends on "icu4c"
-  # depends on "webp"
-  # depends on "libxslt"
-  # depends on "sqlite"
 
   depends_on :macos => :mountain_lion
   depends_on :xcode => :build
+  depends_on "cmake" => :build
 
   def install
     # On Mavericks we want to target libc++, this requires a macx-clang flag.
