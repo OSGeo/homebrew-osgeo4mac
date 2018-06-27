@@ -67,6 +67,7 @@ class Qgis3 < Formula
   end
 
   depends_on "python"
+  depends_on "bison"
 
   # depends_on "qt" # keg_only
   # depends_on "qt5-webkit" => :recommended # keg_only
