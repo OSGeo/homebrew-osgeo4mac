@@ -89,6 +89,11 @@ class Qt5Webkit < Formula
     mv qt5.opt_prefix/"qml/QtWebKit", "#{prefix}/qml/"
     mv qt5.opt_libexec/"QtWebProcess", "#{libexec}/"
 
+    # Rename the .so files
+    mv "#{prefix}/qml/QtWebKit/libqmlwebkitplugin.so", "#{prefix}/qml/QtWebKit/libqmlwebkitplugin.dylib"
+    mv "#{prefix}/qml/QtWebKit/experimental/libqmlwebkitexperimentalplugin.so", "#{prefix}/qml/QtWebKit/experimental/libqmlwebkitexperimentalplugin.dylib"
+
+
     # Some config scripts will only find Qt in a "Frameworks" folder
     frameworks.install_symlink Dir["#{lib}/*.framework"]
 
@@ -116,26 +121,27 @@ class Qt5Webkit < Formula
       end
     end
 
-    # fix up linking to QtWebKit*.frameworks in qt5 prefix path
-    machos = [
-      lib/"QtWebKitWidgets.framework/Versions/5/QtWebKitWidgets",
-      libexec/"QtWebProcess",
-      prefix/"qml/QtWebKit/libqmlwebkitplugin.dylib",
-      prefix/"qml/QtWebKit/experimental/libqmlwebkitexperimentalplugin.dylib",
-    ]
-    qt5_prefix = "#{HOMEBREW_CELLAR}/#{qt5.name}/#{qt5.installed_version}"
-    machos.each do |m|
-      dylibs = m.dynamically_linked_libraries
-      m.ensure_writable do
-        dylibs.each do |d|
-          next unless d.to_s =~ %r{^#{qt5_prefix}/lib/QtWebKit(Widgets)?\.framework}
-          MachO::Tools.change_install_name(m.to_s,
-                                           d.to_s,
-                                           d.sub("#{qt5_prefix}/lib", opt_lib),
-                                           :strict => false)
-        end
-      end
-    end
+    # Fix rpath values
+    MachO::Tools.change_install_name("#{lib}/QtWebKitWidgets.framework/Versions/5/QtWebKitWidgets",
+                                    "@rpath/QtWebKit.framework/Versions/5/QtWebKit",
+                                    "#{lib}/QtWebKit.framework/Versions/5/QtWebKit Versions/5/QtWebKit")
+    MachO::Tools.change_install_name("#{opt_prefix}/qml/QtWebKit/libqmlwebkitplugin.dylib",
+                                    "@rpath/QtWebKit.framework/Versions/5/QtWebKit",
+                                    "#{lib}/QtWebKit.framework/Versions/5/QtWebKit")
+    MachO::Tools.change_install_name("#{opt_prefix}/qml/QtWebKit/experimental/libqmlwebkitexperimentalplugin.dylib",
+                                    "@rpath/QtWebKit.framework/Versions/5/QtWebKit",
+                                    "#{lib}/QtWebKit.framework/Versions/5/QtWebKit")
+    MachO::Tools.change_install_name("#{libexec}/QtWebProcess",
+                                     "@rpath/QtWebKitWidgets.framework/Versions/5/QtWebKitWidgets",
+                                     "#{lib}/QtWebKitWidgets.framework/Versions/5/QtWebKitWidgets")
+    MachO::Tools.change_install_name("#{libexec}/QtWebProcess",
+                                    "@rpath/QtWebKit.framework/Versions/5/QtWebKit",
+                                    "#{lib}/QtWebKit.framework/Versions/5/QtWebKit/Versions/5/QtWebKit")
+
+
+
+
+
   end
 
   def caveats; <<~EOS
@@ -224,7 +230,7 @@ class Qt5Webkit < Formula
       int main(int argc, char *argv[])
       {
         QApplication app(argc, argv);
-        Client c("file://#{testpath/"test.html"}", app.instance());
+        Client c("file://#{testpath}/test.html", app.instance());
         qDebug() << "Running application";
         QTimer::singleShot(1000, &c, SLOT(loadUrl()));
         return app.exec();
@@ -242,11 +248,22 @@ class Qt5Webkit < Formula
     cd testpath do
       system Formula["qt5"].bin/"qmake", "hello.pro"
       system "make"
-      assert_predicate "client.o", :exists?
-      assert_predicate "moc_client.o", :exists?
-      assert_predicate "main.o", :exists?
-      assert_predicate "hello", :exists?
-      system "./hello"
+      assert_predicate testpath/"client.o", :exist?
+      assert_predicate testpath/"moc_client.o", :exist?
+      assert_predicate testpath/"main.o", :exist?
+      assert_predicate testpath/"hello", :exist?
+
+      # Test that we can actually serve the page
+      pid = fork do
+        exec testpath/"hello"
+      end
+      sleep 2
+      begin
+        assert_match "<html><body><h1>It works!</h1></body></html>\n", shell_output("curl http://localhost:80")
+      ensure
+        Process.kill("SIGINT", pid)
+        Process.wait(pid)
+      end
     end
   end
 end
