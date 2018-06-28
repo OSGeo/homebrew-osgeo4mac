@@ -37,9 +37,9 @@ class Qt5Webkit < Formula
   version "5.11.1"
 
   bottle do
-    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
-    sha256 "19f0e8d90c876ad81a021af8ad07159e42d3434aa101e9fc17318a65cb7e685b" => :sierra
-    sha256 "19f0e8d90c876ad81a021af8ad07159e42d3434aa101e9fc17318a65cb7e685b" => :high_sierra
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    sha256 "26b681eed0c69cd3fe7b063d1017b78922d3c0b5e5d0051c24cf379186439cf1" => :sierra
+    sha256 "26b681eed0c69cd3fe7b063d1017b78922d3c0b5e5d0051c24cf379186439cf1" => :high_sierra
   end
 
   keg_only "because Qt5 is keg-only"
@@ -93,7 +93,6 @@ class Qt5Webkit < Formula
     mv "#{prefix}/qml/QtWebKit/libqmlwebkitplugin.so", "#{prefix}/qml/QtWebKit/libqmlwebkitplugin.dylib"
     mv "#{prefix}/qml/QtWebKit/experimental/libqmlwebkitexperimentalplugin.so", "#{prefix}/qml/QtWebKit/experimental/libqmlwebkitexperimentalplugin.dylib"
 
-
     # Some config scripts will only find Qt in a "Frameworks" folder
     frameworks.install_symlink Dir["#{lib}/*.framework"]
 
@@ -124,11 +123,11 @@ class Qt5Webkit < Formula
     # Fix rpath values
     MachO::Tools.change_install_name("#{lib}/QtWebKitWidgets.framework/Versions/5/QtWebKitWidgets",
                                     "@rpath/QtWebKit.framework/Versions/5/QtWebKit",
-                                    "#{lib}/QtWebKit.framework/Versions/5/QtWebKit Versions/5/QtWebKit")
-    MachO::Tools.change_install_name("#{opt_prefix}/qml/QtWebKit/libqmlwebkitplugin.dylib",
+                                    "#{lib}/QtWebKit.framework/Versions/5/QtWebKit")
+    MachO::Tools.change_install_name("#{prefix}/qml/QtWebKit/libqmlwebkitplugin.dylib",
                                     "@rpath/QtWebKit.framework/Versions/5/QtWebKit",
                                     "#{lib}/QtWebKit.framework/Versions/5/QtWebKit")
-    MachO::Tools.change_install_name("#{opt_prefix}/qml/QtWebKit/experimental/libqmlwebkitexperimentalplugin.dylib",
+    MachO::Tools.change_install_name("#{prefix}/qml/QtWebKit/experimental/libqmlwebkitexperimentalplugin.dylib",
                                     "@rpath/QtWebKit.framework/Versions/5/QtWebKit",
                                     "#{lib}/QtWebKit.framework/Versions/5/QtWebKit")
     MachO::Tools.change_install_name("#{libexec}/QtWebProcess",
@@ -136,7 +135,7 @@ class Qt5Webkit < Formula
                                      "#{lib}/QtWebKitWidgets.framework/Versions/5/QtWebKitWidgets")
     MachO::Tools.change_install_name("#{libexec}/QtWebProcess",
                                     "@rpath/QtWebKit.framework/Versions/5/QtWebKit",
-                                    "#{lib}/QtWebKit.framework/Versions/5/QtWebKit/Versions/5/QtWebKit")
+                                    "#{lib}/QtWebKit.framework/Versions/5/QtWebKit")
 
 
 
