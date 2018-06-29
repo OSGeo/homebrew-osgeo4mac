@@ -52,7 +52,7 @@ class Qt5Webkit < Formula
   #       but depending upon the formulae does not help find them
   # depends on "fontconfig"
   # depends on "icu4c"
-  # depends on "webp"
+  depends on "webp"
   # depends on "libxslt"
   # depends on "sqlite"
 
