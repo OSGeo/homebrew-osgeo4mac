@@ -63,7 +63,7 @@ install:
   - sudo ln -sf /usr/local/bin/python3 /usr/local/bin/python
   - python --version 
   - brew install numpy || brew link --overwrite numpy
-  - brew install osgeo/osgeo4mac/gdal2-python
+  #- brew install osgeo/osgeo4mac/gdal2-python
   - ./travis/install.sh
 
 before_script: 
