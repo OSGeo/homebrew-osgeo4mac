@@ -52,8 +52,9 @@ class Gdal2Python < Formula
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
     cellar :any
-    sha256 "59d6b683578b45ac078060037cf9a282628363e7937f45981ea5cb9c409b83a6" => :high_sierra
-    sha256 "59d6b683578b45ac078060037cf9a282628363e7937f45981ea5cb9c409b83a6" => :sierra
+    rebuild 1
+    sha256 "4aad8b6432d9f896f90ed2033e33a21d493ab3bae502f47b2d494e62c0f56f4a" => :high_sierra
+    sha256 "4aad8b6432d9f896f90ed2033e33a21d493ab3bae502f47b2d494e62c0f56f4a" => :sierra
   end
   
   head do
