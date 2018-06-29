@@ -23,14 +23,7 @@ for f in ${CHANGED_FORMULAE};do
 #    brew uninstall --force --ignore-dependencies ${f} || true
 #  fi
   echo "Installing changed formula ${f}..."
-  # Default installation flag set
-  FLAGS="--build-bottle"
-  # Special handling of qt5-webkit
-  if [[ ${f} == "qt5-webkit" ]]; then
-	FLAGS=$FLAGS" --no-sandbox"
-  fi
-
-  brew install ${FLAGS} ${TRAVIS_REPO_SLUG}/${f}&
+  brew install --build-bottle ${TRAVIS_REPO_SLUG}/${f}&
   PID=$!
   # add progress to ensure Travis doesn't complain about no output
   while true; do
