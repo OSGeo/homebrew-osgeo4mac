@@ -25,6 +25,11 @@ class Hdf4 < Formula
     sha256 "e4a610c95ddd1f2247038adf46de354fe902e72b5b72757322d19c362c0d415a"
   end
 
+  # redefine library name to "df" from "hdf".  this seems to be an artifact
+  # of using cmake that needs to be corrected for compatibility with
+  # anything depending on hdf4.
+  patch :DATA
+
   def install
     ENV.O0 # Per the release notes, -O2 can cause memory corruption
     ENV["SZIP_INSTALL"] = HOMEBREW_PREFIX
@@ -63,7 +68,7 @@ class Hdf4 < Formula
       # Remove stray nc* artifacts which conflict with NetCDF.
       rm (bin+"ncdump")
       rm (bin+"ncgen")
-#      rm (include+"netcdf.inc")
+      rm (include+"netcdf.inc")
     end
   end
 
@@ -79,5 +84,18 @@ class Hdf4 < Formula
       system "#{opt_prefix}/bin/vshow", "CT01_Rank6ArraysTablesAttributesGroups.hdf"
     end
   end
-
 end
+__END__
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 3996036..36b0c45 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -119,7 +119,7 @@ mark_as_advanced (HDF4_NO_PACKAGES)
+ #-----------------------------------------------------------------------------
+ # Set the core names of all the libraries
+ #-----------------------------------------------------------------------------
+-set (HDF4_SRC_LIB_CORENAME          "hdf")
++set (HDF4_SRC_LIB_CORENAME          "df")
+ set (HDF4_SRC_FCSTUB_LIB_CORENAME   "hdf_fcstub")
+ set (HDF4_SRC_FORTRAN_LIB_CORENAME  "hdf_fortran")
+ set (HDF4_MF_LIB_CORENAME           "mfhdf")

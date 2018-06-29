@@ -245,9 +245,6 @@ class Gdal2 < Formula
 
     ENV.append "LDFLAGS", "-L#{Formula["ogdi"].opt_lib}/ogdi" if build.with? "ogdi"
 
-    # GDAL looks for the renamed hdf4 library, which is an artifact of old builds, so we need to repoint it
-    inreplace "configure", "-ldf", "-lhdf" if build.with? "complete"
-
     # Reset ARCHFLAGS to match how we build.
     ENV["ARCHFLAGS"] = "-arch #{MacOS.preferred_arch}"
 
