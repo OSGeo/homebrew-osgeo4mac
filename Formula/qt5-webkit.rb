@@ -52,6 +52,8 @@ class Qt5Webkit < Formula
   depends_on :macos => :mountain_lion
   depends_on :xcode => :build
   depends_on "cmake" => :build
+  depends_on "libjpeg"
+  depends_on "libpng"
 
   def install
     # On Mavericks we want to target libc++, this requires a macx-clang flag.
