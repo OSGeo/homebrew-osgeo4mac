@@ -30,7 +30,7 @@ for f in ${nix_f}; do
   brew uninstall --force --ignore-dependencies ${f} || true
 done
 
-# Add taps
+brew tap brewsci/bio || true
 brew tap brewsci/science || true
 #brew tap caskroom/cask || true
 
