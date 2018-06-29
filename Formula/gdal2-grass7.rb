@@ -1,8 +1,8 @@
 class Gdal2Grass7 < Formula
   desc "GDAL/OGR 2.x plugin for GRASS 7"
   homepage "http://www.gdal.org"
-  url "http://download.osgeo.org/gdal/2.3.0/gdal-grass-2.3.0.tar.gz"
-  sha256 "ca4dae77aa0019236a171f15131836984a82f23cc01d19316961dc62a68ec5c3"
+  url "http://download.osgeo.org/gdal/2.3.1/gdal-grass-2.3.1.tar.gz"
+  sha256 "c9a1196f98e8499b4703d6a21f96be01c5d8a69a1154a4fe358704500a88c9b8"
 
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
