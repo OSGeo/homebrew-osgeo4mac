@@ -55,7 +55,7 @@ for f in ${CHANGED_FORMULAE};do
   echo "travis_fold:end:deps"
 
   # Install webkit if it's one of the dependencies
-  if [ "$(echo ${deps} | grep -c 'qt5-webkit')" != "0" ];then
+  if [[ "${deps}" =~ "webkit" ]];then
     echo "Install qt5-webkit without the sandbox"
     brew install --no-sandbox qt5-webkit
   fi
