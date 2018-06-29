@@ -1,13 +1,14 @@
 class Gdal2 < Formula
   desc "GDAL: Geospatial Data Abstraction Library"
   homepage "http://www.gdal.org/"
-  url "http://download.osgeo.org/gdal/2.3.0/gdal-2.3.0.tar.gz"
-  sha256 "2944bbfee009bf1ca092716e4fd547cb4ae2a1e8816186236110c22f11c7e1e9"
+  url "http://download.osgeo.org/gdal/2.3.1/gdal-2.3.1.tar.gz"
+  sha256 "034456405d3c43d42643ba68685e4a76da71f040f139d7c57b9a12fbf1378223"
 
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    sha256 "92742fa778cc004cee875bb5ae8d07d50a5ae05fa380f7281aa043393dc2515a" => :high_sierra
-    sha256 "92742fa778cc004cee875bb5ae8d07d50a5ae05fa380f7281aa043393dc2515a" => :sierra
+    rebuild 1
+    sha256 "3977607c652c1331188aa851bccee789586c0a384364e84df43bd1fe69b7beb4" => :high_sierra
+    sha256 "3977607c652c1331188aa851bccee789586c0a384364e84df43bd1fe69b7beb4" => :sierra
   end
 
   head do
@@ -71,7 +72,7 @@ class Gdal2 < Formula
   if build.with? "complete"
     # Raster libraries
     depends_on "netcdf" # Also brings in HDF5
-    depends_on "hdf4"
+    depends_on "osgeo/osgeo4mac/hdf4"
     depends_on "jasper"
     depends_on "webp"
     depends_on "cfitsio"

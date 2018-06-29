@@ -1,13 +1,14 @@
 class Gdal2Pdf < Formula
   desc "GDAL/OGR 2.x plugin for PDF driver"
   homepage "http://www.gdal.org/frmt_pdf.html"
-  url "http://download.osgeo.org/gdal/2.3.0/gdal-2.3.0.tar.gz"
-  sha256 "2944bbfee009bf1ca092716e4fd547cb4ae2a1e8816186236110c22f11c7e1e9"
+  url "http://download.osgeo.org/gdal/2.3.1/gdal-2.3.1.tar.gz"
+  sha256 "034456405d3c43d42643ba68685e4a76da71f040f139d7c57b9a12fbf1378223"
 
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    sha256 "9fe71da8758f0ec5b1c41e1d1835e7df78a33e7909dab3906ab2a13240096087" => :high_sierra
-    sha256 "9fe71da8758f0ec5b1c41e1d1835e7df78a33e7909dab3906ab2a13240096087" => :sierra
+    rebuild 1
+    sha256 "2597ffc9899eb45360908c85ac8ff87ac4f38070f0279f1ba20d70b7c721bb82" => :high_sierra
+    sha256 "2597ffc9899eb45360908c85ac8ff87ac4f38070f0279f1ba20d70b7c721bb82" => :sierra
   end
 
   option "without-poppler", "Build without additional Poppler support"
