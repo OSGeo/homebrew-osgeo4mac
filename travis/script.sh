@@ -26,7 +26,7 @@ for f in ${CHANGED_FORMULAE};do
   # Default installation flag set
   FLAGS="--build-bottle"
   # Special handling of qt5-webkit
-  if [[ ${f} == "qt5-webkit" ]]; then
+  if [[ ${f} =~ "webkit" ]]; then
 	FLAGS=$FLAGS" --no-sandbox"
   fi
 
