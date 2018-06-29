@@ -1,13 +1,14 @@
 class Gdal2Mongodb < Formula
   desc "GDAL/OGR 2.x plugin for MongoDB driver"
   homepage "http://www.gdal.org/drv_mongodb.html"
-  url "http://download.osgeo.org/gdal/2.3.0/gdal-2.3.0.tar.gz"
-  sha256 "2944bbfee009bf1ca092716e4fd547cb4ae2a1e8816186236110c22f11c7e1e9"
+  url "http://download.osgeo.org/gdal/2.3.1/gdal-2.3.1.tar.gz"
+  sha256 "034456405d3c43d42643ba68685e4a76da71f040f139d7c57b9a12fbf1378223"
 
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    sha256 "59e9439095d39db62f2600cde8b6547146a193e6957c9238c06dd1af36accd42" => :high_sierra
-    sha256 "59e9439095d39db62f2600cde8b6547146a193e6957c9238c06dd1af36accd42" => :sierra
+    rebuild 1
+    sha256 "985fdb1a63a9ba5b871213cd015e6b0ba165bc41462bc17d1fe28d704c9bcf43" => :high_sierra
+    sha256 "985fdb1a63a9ba5b871213cd015e6b0ba165bc41462bc17d1fe28d704c9bcf43" => :sierra
   end
 
   depends_on "gdal2"
