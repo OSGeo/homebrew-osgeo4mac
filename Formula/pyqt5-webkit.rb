@@ -1,8 +1,8 @@
 class Pyqt5Webkit < Formula
   desc "Python bindings for v5 of Qt's Webkit"
   homepage "https://www.riverbankcomputing.com/software/pyqt/download5"
-  url "https://downloads.sourceforge.net/project/pyqt/PyQt5/PyQt-5.9/PyQt5_gpl-5.9.tar.gz"
-  sha256 "ab0e7999cf202cc72962c78aefe461d16497b3c1a8282ab966ad90b6cb271096"
+  url "https://sourceforge.net/projects/pyqt/files/PyQt5/PyQt-5.11.1/PyQt5_gpl-5.11.1.tar.gz"
+  sha256 "265fe677d89ecbe34f52fc4f9d2d4f424638fc64c28534be1906da54855e3b48"
 
   bottle do
     root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
