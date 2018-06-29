@@ -69,10 +69,10 @@ class Qgis3 < Formula
   depends_on "python"
 
   depends_on "qt" # keg_only
-  depends_on "osgeo/osgeo4mac/qt5-webkit" => :recommended # keg_only
+  depends_on "qt5-webkit" => :recommended # keg_only
   depends_on "sip"
   depends_on "pyqt"
-  depends_on "osgeo/osgeo4mac/pyqt5-webkit" => :recommended
+  depends_on "pyqt5-webkit" => :recommended
   depends_on "qca"
   depends_on "qtkeychain"
   depends_on "qscintilla2"
@@ -94,14 +94,14 @@ class Qgis3 < Formula
   depends_on "libtasn1"
 
   # core providers
-  depends_on "osgeo/osgeo4mac/gdal2" # keg_only
-  depends_on "osgeo/osgeo4mac/gdal2-python" # keg_only
-  depends_on "osgeo/osgeo4mac/oracle-client-sdk" if build.with? "oracle"
+  depends_on "gdal2" # keg_only
+  depends_on "gdal2-python" # keg_only
+  depends_on "oracle-client-sdk" if build.with? "oracle"
   # TODO: add MSSQL third-party support formula?, :optional
 
   # core plugins (c++ and python)
   if build.with?("grass") || (HOMEBREW_PREFIX/"opt/grass7").exist?
-    depends_on "osgeo/osgeo4mac/grass7"
+    depends_on "grass7"
     depends_on "gettext" # keg_only
   end
 
@@ -122,9 +122,9 @@ class Qgis3 < Formula
 
   # core processing plugin extras
   # see `grass` above
-  depends_on "osgeo/osgeo4mac/orfeo5" => :optional
+  depends_on "orfeo5" => :optional
   depends_on "r" => :optional
-  depends_on "osgeo/osgeo4mac/saga-gis-lts" => :optional
+  depends_on "saga-gis-lts" => :optional
   # TODO: LASTools straight build (2 reporting tools), or via `wine` (10 tools)
   # TODO: Fusion from USFS (via `wine`?)
 
