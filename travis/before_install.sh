@@ -56,7 +56,7 @@ for f in ${CHANGED_FORMULAE};do
 
   # Install webkit if it's one of the dependencies
   if [[ "${deps}" =~ "webkit" ]];then
-    echo "Install qt5-webkit without the sandbox"
+    echo "Install qt5-webkit with the sandbox"
     brew install --no-sandbox qt5-webkit
   fi
 

@@ -19,7 +19,7 @@ class NoQt5WebKitSandboxRequirement < Requirement
   end
 
   satisfy(:build_env => false) do
-    (ARGV.build_all_from_source? || ARGV.build_from_source? || ARGV.build_bottle?) ? ARGV.no_sandbox? : ARGV.no_sandbox? || pour_bottle?
+    (ARGV.build_from_source?) ? ARGV.no_sandbox? : ARGV.no_sandbox? || pour_bottle?
   end
 
   def message; <<~EOS
