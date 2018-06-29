@@ -35,7 +35,7 @@ class Qgis3 < Formula
   homepage "https://www.qgis.org"
 
   url "https://github.com/qgis/QGIS.git", :branch => "release-3_2"
-  version "3.2.0"
+  version "3.2.0" # QGIS Bonn
 
   option "without-ninja", "Disable use of ninja CMake generator"
   option "without-debug", "Disable debug build, which outputs info to system.log or console"
