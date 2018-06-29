@@ -5,9 +5,11 @@ class Pyqt5Webkit < Formula
   sha256 "9932e971e825ece4ea08f84ad95017837fa8f3f29c6b0496985fa1093661e9ef"
 
   bottle do
-    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
-    sha256 "b969d8feec95070c8ef5f1bf4be73c49b7728afbf86398f8d38f171bf31edf4d" => :sierra
-    sha256 "b969d8feec95070c8ef5f1bf4be73c49b7728afbf86398f8d38f171bf31edf4d" => :high_sierra
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    cellar :any
+    rebuild 1
+    sha256 "9936f9b2b59da0f834f6e00d37781112d9f93454a747184e0cba73a8de1ce8ad" => :high_sierra
+    sha256 "9936f9b2b59da0f834f6e00d37781112d9f93454a747184e0cba73a8de1ce8ad" => :sierra
   end
 
   option "with-debug", "Build with debug symbols"
