@@ -54,6 +54,13 @@ for f in ${CHANGED_FORMULAE};do
   echo "${deps}"
   echo "travis_fold:end:deps"
 
+  # Install webkit if it's one of the dependencies
+  if [ "$(echo ${deps} | grep -c 'qt5-webkit')" != "0" ];then
+    echo "Install qt5-webkit without the sandbox"
+    brew install --no-sandbox qt5-webkit
+  fi
+
+
   # Upgrade Python3 to the latest version, before installing Python2. Per the discussion here
   # https://discourse.brew.sh/t/brew-install-python3-fails/1756/3
   if [ "$(echo ${deps} | grep -c '[python|python3]')" != "0" ];then
