@@ -61,7 +61,9 @@ before_script:
   - sudo cp ./scripts/pyrcc5.sh /usr/local/bin/pyrcc5 # fix for /usr/local/bin/pyrcc5
   #./travis/before_script.sh
 
-script: ./travis/script.sh
+script: 
+  - brew install --no-sandbox qt5-webkit # Fix for Error: An unsatisfied requirement failed this build.
+  - ./travis/script.sh
 
 after_script: ./travis/after_script.sh
 
