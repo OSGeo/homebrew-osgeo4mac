@@ -53,9 +53,21 @@ before_install:
   - ulimit -n 1024
   - ./travis/before_install.sh
 
-install: ./travis/install.sh
 
-#before_script: ./travis/before_script.sh
+install: 
+  - echo 'export PATH="/usr/local/bin:/usr/local/sbin:$PATH"' >> ~/.bash_profile
+  - echo 'alias python="/usr/local/bin/python3"' >> ~/.bash_profile
+  - source ~/.bash_profile
+  - cat ~/.bash_profile
+  - python --version 
+  - sudo ln -sf /usr/local/bin/python3 /usr/local/bin/python
+  - python --version 
+  - ./travis/install.sh
+
+before_script: 
+  - sudo cp ./scripts/pyrcc5.sh /usr/local/bin/pyrcc5
+  - cat /usr/local/bin/pyrcc5
+  #./travis/before_script.sh
 
 script: ./travis/script.sh
 

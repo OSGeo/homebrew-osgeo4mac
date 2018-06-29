@@ -1,15 +1,13 @@
 class Pyqt5Webkit < Formula
   desc "Python bindings for v5 of Qt's Webkit"
   homepage "https://www.riverbankcomputing.com/software/pyqt/download5"
-  url "https://downloads.sourceforge.net/project/pyqt/PyQt5/PyQt-5.10.1/PyQt5_gpl-5.10.1.tar.gz"
-  sha256 "9932e971e825ece4ea08f84ad95017837fa8f3f29c6b0496985fa1093661e9ef"
+  url "https://downloads.sourceforge.net/project/pyqt/PyQt5/PyQt-5.9/PyQt5_gpl-5.9.tar.gz"
+  sha256 "ab0e7999cf202cc72962c78aefe461d16497b3c1a8282ab966ad90b6cb271096"
 
   bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    cellar :any
-    rebuild 1
-    sha256 "9936f9b2b59da0f834f6e00d37781112d9f93454a747184e0cba73a8de1ce8ad" => :high_sierra
-    sha256 "9936f9b2b59da0f834f6e00d37781112d9f93454a747184e0cba73a8de1ce8ad" => :sierra
+    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
+    sha256 "b969d8feec95070c8ef5f1bf4be73c49b7728afbf86398f8d38f171bf31edf4d" => :sierra
+    sha256 "b969d8feec95070c8ef5f1bf4be73c49b7728afbf86398f8d38f171bf31edf4d" => :high_sierra
   end
 
   option "with-debug", "Build with debug symbols"
@@ -18,8 +16,8 @@ class Pyqt5Webkit < Formula
   depends_on "osgeo/osgeo4mac/qt5-webkit"
   depends_on "sip"
   depends_on "pyqt"
-  depends_on "python@2" => :recommended
-  depends_on "python" => :recommended
+  depends_on :python => :recommended
+  depends_on :python3 => :recommended
 
   def install
     if build.without?("python3") && build.without?("python")
