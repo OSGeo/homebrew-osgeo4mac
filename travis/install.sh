@@ -19,12 +19,7 @@ set -e
 
 for f in ${CHANGED_FORMULAE};do
   echo "Installing dependencies for changed formula ${f}..."
-  FLAGS="--only-dependencies --build-bottle"
-  if [[ ${f} =~ "webkit" ]]; then
-	FLAGS=${FLAGS}" --no-sandbox"
-  fi
-
-  brew install ${FLAGS} ${TRAVIS_REPO_SLUG}/${f}&
+  brew install --only-dependencies --build-bottle ${TRAVIS_REPO_SLUG}/${f}&
   PID=$!
   # add progress to ensure Travis doesn't complain about no output
   while true; do
