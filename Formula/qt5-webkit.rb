@@ -69,7 +69,6 @@ class Qt5Webkit < Formula
 
     mkdir "build" do
       system qt5.bin/"qmake", "../WebKit.pro", *args
-      raise
       system "make"
       # just let it install to qt5 formula prefix
       # NOTE: this violates sandboxing, so --no-sandbox during install required
