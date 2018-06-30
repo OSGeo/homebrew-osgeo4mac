@@ -19,7 +19,7 @@ class NoQt5WebKitSandboxRequirement < Requirement
   end
 
   satisfy(:build_env => false) do
-    (ARGV.build_from_source?) ? ARGV.no_sandbox? : ARGV.no_sandbox? || pour_bottle?
+    (ARGV.build_all_from_source? || ARGV.build_from_source?) ? ARGV.no_sandbox? : ARGV.no_sandbox? || pour_bottle?
   end
 
   def message; <<~EOS
@@ -54,6 +54,7 @@ class Qt5Webkit < Formula
   depends_on "cmake" => :build
   depends_on "libjpeg"
   depends_on "libpng"
+  depends_on "webp"
 
   def install
     # On Mavericks we want to target libc++, this requires a macx-clang flag.
@@ -68,6 +69,7 @@ class Qt5Webkit < Formula
 
     mkdir "build" do
       system qt5.bin/"qmake", "../WebKit.pro", *args
+      raise
       system "make"
       # just let it install to qt5 formula prefix
       # NOTE: this violates sandboxing, so --no-sandbox during install required
