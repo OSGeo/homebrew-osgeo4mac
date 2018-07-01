@@ -67,6 +67,8 @@ for f in ${CHANGED_FORMULAE};do
   if [ "$(echo ${deps} | grep -c '[python|python3]')" != "0" ];then
     echo "Installing and configuring Homebrew Python3"
     brew outdated python || brew upgrade python
+    ${HOMEBREW_PREFIX}/bin/pip3 install --upgrade wheel
+    ${HOMEBREW_PREFIX}/bin/pip3 install --upgrade setuptools
 
     # Set up Python .pth files
     # get python short version (major.minor)
@@ -86,8 +88,6 @@ for f in ${CHANGED_FORMULAE};do
     fi
     if [[ "${f}" =~ "qgis" ]];then
       echo "Installing QGIS Python3 dependencies for testing"
-      ${HOMEBREW_PREFIX}/bin/pip3 install --upgrade wheel
-      ${HOMEBREW_PREFIX}/bin/pip3 install --upgrade setuptools
       ${HOMEBREW_PREFIX}/bin/pip3 install future mock nose2 numpy psycopg2 pyyaml
     fi
   fi
@@ -99,6 +99,8 @@ for f in ${CHANGED_FORMULAE};do
       brew install python@2
     else
       brew outdated python@2 || brew upgrade python@2
+      ${HOMEBREW_PREFIX}/bin/pip2 install --upgrade wheel
+      ${HOMEBREW_PREFIX}/bin/pip2 install --upgrade setuptools
 
     fi
     # Set up Python .pth files
@@ -119,8 +121,6 @@ for f in ${CHANGED_FORMULAE};do
     fi
     if [[ "${f}" =~ "qgis" ]];then
       echo "Installing QGIS Python2 dependencies for testing"
-      ${HOMEBREW_PREFIX}/bin/pip3 install --upgrade wheel
-      ${HOMEBREW_PREFIX}/bin/pip3 install --upgrade setuptools
       ${HOMEBREW_PREFIX}/bin/pip2 install future mock nose2 numpy psycopg2 pyyaml
     fi
   fi
