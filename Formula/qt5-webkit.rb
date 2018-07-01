@@ -50,6 +50,14 @@ class Qt5Webkit < Formula
   depends_on NoQt5WebKitSandboxRequirement
 
   depends_on "qt"
+  # TODO: main qt5 formula does not use these, should we here?
+  #       the .pro setup seems to opportunistically check for them,
+  #       but depending upon the formulae does not help find them
+  # depends on "fontconfig"
+  # depends on "icu4c"
+  depends on "webp"
+  # depends on "libxslt"
+  # depends on "sqlite"
 
   depends_on :macos => :mountain_lion
   depends_on :xcode => :build
