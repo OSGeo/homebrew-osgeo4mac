@@ -86,6 +86,8 @@ for f in ${CHANGED_FORMULAE};do
     fi
     if [[ "${f}" =~ "qgis" ]];then
       echo "Installing QGIS Python3 dependencies for testing"
+      ${HOMEBREW_PREFIX}/bin/pip3 install --upgrade wheel
+      ${HOMEBREW_PREFIX}/bin/pip3 install --upgrade setuptools
       ${HOMEBREW_PREFIX}/bin/pip3 install future mock nose2 numpy psycopg2 pyyaml
     fi
   fi
@@ -117,6 +119,8 @@ for f in ${CHANGED_FORMULAE};do
     fi
     if [[ "${f}" =~ "qgis" ]];then
       echo "Installing QGIS Python2 dependencies for testing"
+      ${HOMEBREW_PREFIX}/bin/pip3 install --upgrade wheel
+      ${HOMEBREW_PREFIX}/bin/pip3 install --upgrade setuptools
       ${HOMEBREW_PREFIX}/bin/pip2 install future mock nose2 numpy psycopg2 pyyaml
     fi
   fi
