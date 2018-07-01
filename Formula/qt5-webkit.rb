@@ -38,8 +38,10 @@ class Qt5Webkit < Formula
 
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    sha256 "49dbdda9a08a7e3921ad14aa095190e51926e4cef6e11731430a07c6d0395de3" => :sierra
-    sha256 "689dc916f223b50ca697600edb7dcb995dc92fa17740197b1fbb13582a3a21ad" => :high_sierra
+    cellar :any
+    rebuild 1
+    sha256 "e747978ccf022d826d8133ddc15a27f5223ca1a6b2c02d2d61f36c72070a682f" => :high_sierra
+    sha256 "84920602f319187267bd60fdcdad83e94a9c3e89333652595b8a630778547727" => :sierra
   end
 
   keg_only "because Qt5 is keg-only"
