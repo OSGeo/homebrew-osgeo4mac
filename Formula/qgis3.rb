@@ -175,8 +175,9 @@ class Qgis3 < Formula
 
     orig_user_base = ENV["PYTHONUSERBASE"]
     ENV["PYTHONUSERBASE"] = libexec/"python"
-    system HOMEBREW_PREFIX/"bin/pip3 install --user --upgrade wheel"
-    system HOMEBREW_PREFIX/"bin/pip3 install --user --upgrade setuptools"
+    system HOMEBREW_PREFIX/"bin/pip3 install --user --upgrade pip setuptools wheel"
+    system HOMEBREW_PREFIX/"bin/pip3 install --user cython"
+    system HOMEBREW_PREFIX/"bin/pip3 install --user git+https://github.com/jswhit/pyproj.git"
     system HOMEBREW_PREFIX/"bin/pip3", "install", "--user", *py_req
     ENV["PYTHONUSERBASE"] = orig_user_base
 

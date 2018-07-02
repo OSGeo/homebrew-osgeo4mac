@@ -86,8 +86,10 @@ for f in ${CHANGED_FORMULAE};do
     fi
     if [[ "${f}" =~ "qgis" ]];then
       echo "Update wheel and setuptools"
-      ${HOMEBREW_PREFIX}/bin/pip3 install --upgrade wheel
-      ${HOMEBREW_PREFIX}/bin/pip3 install --upgrade setuptools
+      ${HOMEBREW_PREFIX}/bin/pip3 install --upgrade pip setuptools wheel
+      echo "Fix for pyproj"
+      ${HOMEBREW_PREFIX}/bin/pip3 install cython
+      ${HOMEBREW_PREFIX}/bin/pip3 install git+https://github.com/jswhit/pyproj.git
       echo "Installing QGIS Python3 dependencies for testing"
       ${HOMEBREW_PREFIX}/bin/pip3 install future mock nose2 numpy psycopg2 pyyaml
     fi
@@ -120,8 +122,10 @@ for f in ${CHANGED_FORMULAE};do
     fi
     if [[ "${f}" =~ "qgis" ]];then
       echo "Update wheel and setuptools"
-      ${HOMEBREW_PREFIX}/bin/pip2 install --upgrade wheel
-      ${HOMEBREW_PREFIX}/bin/pip2 install --upgrade setuptools
+      ${HOMEBREW_PREFIX}/bin/pip2 install --upgrade pip setuptools wheel
+      echo "Fix for pyproj"
+      ${HOMEBREW_PREFIX}/bin/pip2 install cython
+      ${HOMEBREW_PREFIX}/bin/pip2 install git+https://github.com/jswhit/pyproj.git
       echo "Installing QGIS Python2 dependencies for testing"
       ${HOMEBREW_PREFIX}/bin/pip2 install future mock nose2 numpy psycopg2 pyyaml
     fi
