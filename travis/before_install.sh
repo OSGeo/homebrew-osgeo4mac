@@ -32,6 +32,7 @@ done
 
 # Add taps
 brew tap brewsci/bio || true
+brew tap FreeCAD/freecad || true
 brew tap brewsci/science || true
 #brew tap caskroom/cask || true
 
