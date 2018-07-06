@@ -54,10 +54,12 @@ before_install:
   - ./travis/before_install.sh
 
 install: 
+  # qgis3: fix for python version. Requires python3.
   - sudo ln -sf /usr/local/bin/python3 /usr/local/bin/python
   - ./travis/install.sh
 
-before_script: 
+before_script:
+  # qgis3: fix for pyrcc5.
   - sudo cp ./scripts/pyrcc5.sh /usr/local/bin/pyrcc5
   #./travis/before_script.sh
 
