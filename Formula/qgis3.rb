@@ -110,7 +110,7 @@ class Qgis3 < Formula
   # if build.with? "globe"
   #   # this is pretty borked with OS X >= 10.10+
   #   depends on "open-scene-graph"
-  #   depends on "homebrew/science/osgearth"
+  #   depends on "brewsci/science/osgearth"
   # end
 
   depends_on "gpsbabel" => :optional
