@@ -69,7 +69,7 @@ class Qgis3 < Formula
   depends_on "python"
 
   depends_on "qt" # keg_only
-  depends_on "qt5-webkit" => :recommended # keg_only
+  # depends_on "qt5-webkit" => :recommended # keg_only
   depends_on "FreeCAD/freecad/qtwebkit"
   depends_on "sip"
   depends_on "pyqt"
