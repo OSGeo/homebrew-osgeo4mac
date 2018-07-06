@@ -69,8 +69,10 @@ class Qgis3 < Formula
   depends_on "python"
 
   depends_on "qt" # keg_only
+  # Installing qt5-webkit as dependency of pyqt5-webkit, 
+  # makes the installation of qgis3 complete without stopping after installing qt5-webkit.
   # depends_on "qt5-webkit" => :recommended # keg_only
-  # depends_on "FreeCAD/freecad/qtwebkit"
+  # depends_on "FreeCAD/freecad/qtwebkit"   # Alternative: This formula works correctly
   depends_on "sip"
   depends_on "pyqt"
   depends_on "pyqt5-webkit" => :recommended
