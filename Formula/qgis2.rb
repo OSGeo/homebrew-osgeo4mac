@@ -488,7 +488,7 @@ class Qgis2 < Formula
         #{opt_prefix}/QGIS.app
 
       You may also symlink QGIS.app into /Applications or ~/Applications:
-        brew linkapps [--local]
+        ln -Fs `find $(brew --prefix) -name "QGIS.app"` /Applications/QGIS.app
 
       To directly run the `QGIS.app/Contents/MacOS/QGIS` binary use the wrapper
       script pre-defined with Homebrew prefix environment variables:
