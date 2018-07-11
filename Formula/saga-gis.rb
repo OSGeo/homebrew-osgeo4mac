@@ -8,9 +8,8 @@ class SagaGis < Formula
 
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    rebuild 1
-    sha256 "7c27827a6187e362b448e9333f5396e05b4358ec6ae49c6ab7fd1f15acbfc336" => :high_sierra
-    sha256 "7c27827a6187e362b448e9333f5396e05b4358ec6ae49c6ab7fd1f15acbfc336" => :sierra
+    sha256 "56bf39890fe5940f99ba3943b4b10865a1dfbedee67f0fc0c090268062dd04fb" => :high_sierra
+    sha256 "56bf39890fe5940f99ba3943b4b10865a1dfbedee67f0fc0c090268062dd04fb" => :sierra
   end
 
   option "with-app", "Build SAGA.app Package"
