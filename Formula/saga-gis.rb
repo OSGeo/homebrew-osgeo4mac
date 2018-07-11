@@ -12,13 +12,14 @@ class SagaGis < Formula
     sha256 "56bf39890fe5940f99ba3943b4b10865a1dfbedee67f0fc0c090268062dd04fb" => :sierra
   end
 
-  option "with-app", "Build SAGA.app Package"
-
   keg_only "QGIS fails to load the correct SAGA version, if the latest version is in the path"
+
+  option "with-app", "Build SAGA.app Package"
 
   depends_on "automake" => :build
   depends_on "autoconf" => :build
   depends_on "libtool" => :build
+  depends_on "pkg-config" => :build
   depends_on "gdal2"
   depends_on "proj"
   depends_on "wxmac"
