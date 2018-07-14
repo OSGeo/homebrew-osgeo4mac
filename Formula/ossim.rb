@@ -28,8 +28,8 @@ class Ossim < Formula
   depends_on "geos"
   depends_on "freetype"
   depends_on "zlib"
-  depends_on "open-mpi" => :optional
   depends_on "gdal2" => :recommended
+  depends_on "open-mpi" => :optional
   depends_on "hdf5" => :optional
   depends_on "libpng" => :optional
   depends_on "opencv" => :optional
@@ -71,7 +71,7 @@ class Ossim < Formula
 
     # Additional file support
     args << "-DBUILD_GDAL_PLUGIN=" + (build.with?("gdal2") ? "ON" : "OFF")
-    args << "-DBUILD_HDF5_PLUGIN=" + (build.with?("hdf5") ? "ON" : "OFF")
+    args << "-DBUILD_OSSIM_HDF5_SUPPORT=" + (build.with?("hdf5") ? "ON" : "OFF")
     args << "-DBUILD_KML_PLUGIN=" + (build.with?("libkml") ? "ON" : "OFF")
     args << "-DBUILD_OPENCV_PLUGIN=" + (build.with?("opencv") ? "ON" : "OFF")
     args << "-DBUILD_PNG_PLUGIN=" + (build.with?("libpng") ? "ON" : "OFF")
