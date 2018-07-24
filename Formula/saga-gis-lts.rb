@@ -34,7 +34,7 @@ class SagaGisLts < Formula
   depends_on "brewsci/science/vigra" => :optional
   depends_on "postgresql" => :optional
   depends_on "python@2" => :optional
-  depends_on "brewsci/science/opencv" => :optional
+  depends_on "opencv" => :optional
 
   resource "app_icon" do
     url "https://osgeo4mac.s3.amazonaws.com/src/saga_gui.icns"
@@ -45,6 +45,9 @@ class SagaGisLts < Formula
     # SKIP liblas support until SAGA supports > 1.8.1, which should support GDAL 2;
     #      otherwise, SAGA binaries may lead to multiple GDAL versions being loaded
     # See: https://github.com/libLAS/libLAS/issues/106
+    ENV.cxx11
+    # Disable narrowing warnings when compiling in C++11 mode.
+    ENV.append "CXXFLAGS", "-Wno-c++11-narrowing"
 
     cd "saga-gis"
 
