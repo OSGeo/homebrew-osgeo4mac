@@ -10,9 +10,9 @@ class SagaGisLts < Formula
 
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    rebuild 1
-    sha256 "a59f97f1f3d47226e126907860cffacdbd45372ee6d683bc3789a793075b4d33" => :high_sierra
-    sha256 "a59f97f1f3d47226e126907860cffacdbd45372ee6d683bc3789a793075b4d33" => :sierra
+    rebuild 2
+    sha256 "cd3bf930c7c6b493c9473763ba76b9d4272fbae689a925f96e70c1b691a4489b" => :high_sierra
+    sha256 "cd3bf930c7c6b493c9473763ba76b9d4272fbae689a925f96e70c1b691a4489b" => :sierra
   end
 
   keg_only "LTS version is specifically for working with QGIS"
