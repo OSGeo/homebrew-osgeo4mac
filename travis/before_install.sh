@@ -114,10 +114,6 @@ for f in ${CHANGED_FORMULAE};do
       echo "Installing GDAL 2 Python2 dependencies"
       ${HOMEBREW_PREFIX}/bin/pip2 install numpy
     fi
-    if [[ "${f}" =~ "qgis" ]];then
-      echo "Installing QGIS Python2 dependencies for testing"
-      ${HOMEBREW_PREFIX}/bin/pip2 install future mock nose2 numpy psycopg2 pyyaml
-    fi
   fi
   # Special handling of grass7, because it needs to be unlinked
   if [ "$(echo ${deps} | grep -c 'grass7')" != "0" ];then
