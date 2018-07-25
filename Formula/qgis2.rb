@@ -121,7 +121,7 @@ class Qgis2 < Formula
     version "2.14.0"
   end
 
-    resource "coverage" do
+  resource "coverage" do
     url "https://files.pythonhosted.org/packages/35/fe/e7df7289d717426093c68d156e0fd9117c8f4872b6588e8a8928a0f68424/coverage-4.5.1.tar.gz"
     sha256 "56e448f051a201c5ebbaa86a5efd0ca90d327204d8b059ab25ad0f35fbfd79f1"
   end
@@ -176,7 +176,6 @@ class Qgis2 < Formula
     # Install python dependencies
     venv = virtualenv_create(libexec)
     venv.pip_install resources.reject { |r| r.name == "pyqgis-startup" }
-    venv.pip_install_and_link buildpath
 
     # Set bundling level back to 0 (the default in all versions prior to 1.8.0)
     # so that no time and energy is wasted copying the Qt frameworks into QGIS.
