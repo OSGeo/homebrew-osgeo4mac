@@ -2,6 +2,7 @@ require File.expand_path("../../Requirements/qgis_requirements",
                          Pathname.new(__FILE__).realpath)
 
 class Qgis2 < Formula
+  include Language::Python::Virtualenv
   desc "Open Source Geographic Information System"
   homepage "https://www.qgis.org"
 
@@ -120,7 +121,63 @@ class Qgis2 < Formula
     version "2.14.0"
   end
 
+    resource "coverage" do
+    url "https://files.pythonhosted.org/packages/35/fe/e7df7289d717426093c68d156e0fd9117c8f4872b6588e8a8928a0f68424/coverage-4.5.1.tar.gz"
+    sha256 "56e448f051a201c5ebbaa86a5efd0ca90d327204d8b059ab25ad0f35fbfd79f1"
+  end
+
+  resource "funcsigs" do
+    url "https://files.pythonhosted.org/packages/94/4a/db842e7a0545de1cdb0439bb80e6e42dfe82aaeaadd4072f2263a4fbed23/funcsigs-1.0.2.tar.gz"
+    sha256 "a7bb0f2cf3a3fd1ab2732cb49eba4252c2af4240442415b4abce3b87022a8f50"
+  end
+
+  resource "future" do
+    url "https://files.pythonhosted.org/packages/00/2b/8d082ddfed935f3608cc61140df6dcbf0edea1bc3ab52fb6c29ae3e81e85/future-0.16.0.tar.gz"
+    sha256 "e39ced1ab767b5936646cedba8bcce582398233d6a627067d4c6a454c90cfedb"
+  end
+
+  resource "mock" do
+    url "https://files.pythonhosted.org/packages/0c/53/014354fc93c591ccc4abff12c473ad565a2eb24dcd82490fae33dbf2539f/mock-2.0.0.tar.gz"
+    sha256 "b158b6df76edd239b8208d481dc46b6afd45a846b7812ff0ce58971cf5bc8bba"
+  end
+
+  resource "nose2" do
+    url "https://files.pythonhosted.org/packages/93/46/a389a65237d0520bb4a98fc174fdf6568ad9dcc79b9c1d1f30afc6776031/nose2-0.7.4.tar.gz"
+    sha256 "954a62cfb2d2ac06dad32995cbc822bf00cc11e20d543963515932fd4eff33fa"
+  end
+
+  resource "numpy" do
+    url "https://files.pythonhosted.org/packages/3a/20/c81632328b1a4e1db65f45c0a1350a9c5341fd4bbb8ea66cdd98da56fe2e/numpy-1.15.0.zip"
+    sha256 "f28e73cf18d37a413f7d5de35d024e6b98f14566a10d82100f9dc491a7d449f9"
+  end
+
+  resource "pbr" do
+    url "https://files.pythonhosted.org/packages/c8/c3/935b102539529ea9e6dcf3e8b899583095a018b09f29855ab754a2012513/pbr-4.2.0.tar.gz"
+    sha256 "1b8be50d938c9bb75d0eaf7eda111eec1bf6dc88a62a6412e33bf077457e0f45"
+  end
+
+  resource "psycopg2" do
+    url "https://files.pythonhosted.org/packages/b2/c1/7bf6c464e903ffc4f3f5907c389e5a4199666bf57f6cd6bf46c17912a1f9/psycopg2-2.7.5.tar.gz"
+    sha256 "eccf962d41ca46e6326b97c8fe0a6687b58dfc1a5f6540ed071ff1474cea749e"
+  end
+
+  resource "PyYAML" do
+    url "https://files.pythonhosted.org/packages/9e/a3/1d13970c3f36777c583f136c136f804d70f500168edc1edea6daa7200769/PyYAML-3.13.tar.gz"
+    sha256 "3ef3092145e9b70e3ddd2c7ad59bdd0252a94dfe3949721633e41344de00a6bf"
+  end
+
+  resource "six" do
+    url "https://files.pythonhosted.org/packages/16/d8/bc6316cf98419719bd59c91742194c111b6f2e85abac88e496adefaf7afe/six-1.11.0.tar.gz"
+    sha256 "70e8a77beed4562e7f14fe23a786b54f6296e34344c23bc42f07b15018ff98e9"
+  end
+
   def install
+
+    # Install python dependencies
+    venv = virtualenv_create(libexec)
+    venv.pip_install resources.reject { |r| r.name == "pyqgis-startup" }
+    venv.pip_install_and_link buildpath
+
     # Set bundling level back to 0 (the default in all versions prior to 1.8.0)
     # so that no time and energy is wasted copying the Qt frameworks into QGIS.
 
