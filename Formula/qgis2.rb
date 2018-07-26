@@ -219,7 +219,7 @@ class Qgis2 < Formula
   def install
 
     # Install python dependencies
-    venv = virtualenv_create(libexec)
+    venv = virtualenv_create(libexec/'python')
     venv.pip_install resources.reject { |r| r.name == "pyqgis-startup" }
 
     # Set bundling level back to 0 (the default in all versions prior to 1.8.0)
@@ -287,8 +287,10 @@ class Qgis2 < Formula
       args << "-DSQLITE3_INCLUDE_DIR=#{Formula["sqlite"].opt_include}"
     end
 
-    args << "-DPYTHON_EXECUTABLE='#{`python2 -c "import sys; print(sys.executable)"`.chomp}'"
-    args << "-DPYTHON_CUSTOM_FRAMEWORK='#{`python2 -c "import sys; print(sys.prefix)"`.chomp}'"
+    # args << "-DPYTHON_EXECUTABLE='#{`python2 -c "import sys; print(sys.executable)"`.chomp}'"
+    # args << "-DPYTHON_CUSTOM_FRAMEWORK='#{`python2 -c "import sys; print(sys.prefix)"`.chomp}'"
+    # Disable future, because we've installed it in the virtualenv and will provide it at runtime.
+    args << "-DWITH_INTERNAL_FUTURE=FALSE"
 
     # find git revision for HEAD build
     if build.head? && File.exist?("#{cached_download}/.git/index")
@@ -341,10 +343,13 @@ class Qgis2 < Formula
 
     # if using Homebrew's Python, make sure its components are always found first
     # see: https://github.com/Homebrew/homebrew/pull/28597
-    ENV["PYTHONHOME"] = brewed_python_framework.to_s if brewed_python?
+#    ENV["PYTHONHOME"] = brewed_python_framework.to_s if brewed_python?
+    ENV['PYTHONHOME'] = "#{`python2 -c "import sys; print(sys.executable)"`.chomp}"
 
     # handle custom site-packages for qt-4 keg-only modules and packages
-    ENV["PYTHONPATH"] = python_qt4_site_packages
+    ENV.prepend_path "PYTHONPATH", libexec/'python/lib/python2.7/site-packages'
+    ENV.append_path "PYTHONPATH", python_qt4_site_packages
+    ENV.prepend_path "PATH", libexec/'python/bin/'
 
     # handle some compiler warnings
     ENV["CXX_EXTRA_FLAGS"] = "-Wno-unused-private-field -Wno-deprecated-register"
