@@ -83,10 +83,6 @@ for f in ${CHANGED_FORMULAE};do
       echo "Installing GDAL 2 Python3 dependencies"
       ${HOMEBREW_PREFIX}/bin/pip3 install numpy
     fi
-    if [[ "${f}" =~ "qgis" ]];then
-      echo "Installing QGIS Python3 dependencies for testing"
-      ${HOMEBREW_PREFIX}/bin/pip3 install future mock nose2 numpy psycopg2 pyyaml
-    fi
   fi
 
   if [ "$(echo ${deps} | grep -c 'python@2')" != "0" ];then
