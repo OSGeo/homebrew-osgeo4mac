@@ -287,10 +287,20 @@ class Qgis2 < Formula
       args << "-DSQLITE3_INCLUDE_DIR=#{Formula["sqlite"].opt_include}"
     end
 
-    # args << "-DPYTHON_EXECUTABLE='#{`python2 -c "import sys; print(sys.executable)"`.chomp}'"
-    # args << "-DPYTHON_CUSTOM_FRAMEWORK='#{`python2 -c "import sys; print(sys.prefix)"`.chomp}'"
+    # Python Configuration
+     args << "-DPYTHON_EXECUTABLE='#{`python2 -c "import sys; print(sys.executable)"`.chomp}'"
+     args << "-DPYTHON_CUSTOM_FRAMEWORK='#{`python2 -c "import sys; print(sys.prefix)"`.chomp}'"
     # Disable future, because we've installed it in the virtualenv and will provide it at runtime.
     args << "-DWITH_INTERNAL_FUTURE=FALSE"
+
+    # if using Homebrew's Python, make sure its components are always found first
+    # see: https://github.com/Homebrew/homebrew/pull/28597
+    ENV["PYTHONHOME"] = brewed_python_framework.to_s if brewed_python?
+
+    # handle custom site-packages for qt-4 keg-only modules and packages
+    ENV.prepend_path "PYTHONPATH", libexec/'python/lib/python2.7/site-packages'
+    ENV.append_path "PYTHONPATH", python_qt4_site_packages
+    ENV.prepend_path "PATH", libexec/'python/bin/'
 
     # find git revision for HEAD build
     if build.head? && File.exist?("#{cached_download}/.git/index")
@@ -341,16 +351,6 @@ class Qgis2 < Formula
     # (https://github.com/Homebrew/homebrew-science/issues/23)
     ENV.append "CXXFLAGS", "-F#{Formula["qt-4"].opt_lib}"
 
-    # if using Homebrew's Python, make sure its components are always found first
-    # see: https://github.com/Homebrew/homebrew/pull/28597
-#    ENV["PYTHONHOME"] = brewed_python_framework.to_s if brewed_python?
-    ENV['PYTHONHOME'] = "#{`python2 -c "import sys; print(sys.executable)"`.chomp}"
-
-    # handle custom site-packages for qt-4 keg-only modules and packages
-    ENV.prepend_path "PYTHONPATH", libexec/'python/lib/python2.7/site-packages'
-    ENV.append_path "PYTHONPATH", python_qt4_site_packages
-    ENV.prepend_path "PATH", libexec/'python/bin/'
-
     # handle some compiler warnings
     ENV["CXX_EXTRA_FLAGS"] = "-Wno-unused-private-field -Wno-deprecated-register"
     if ENV.compiler == :clang && (MacOS::Xcode.version >= "7.0" || MacOS::CLT.version >= "7.0")
@@ -392,7 +392,7 @@ class Qgis2 < Formula
     inreplace prefix/"QGIS.app/Contents/Info.plist",
               "org.qgis.qgis2", "org.qgis.qgis2-hb#{build.head? ? "-dev" : ""}"
 
-    py_lib = libexec/"python2.7/site-packages"
+    py_lib = libexec/"python/python2.7/site-packages"
     py_lib.mkpath
     ln_s "../../../QGIS.app/Contents/Resources/python/qgis", py_lib/"qgis"
 
@@ -709,7 +709,7 @@ class Qgis2 < Formula
   end
 
   def python_site_packages
-    HOMEBREW_PREFIX/"lib/python2.7/site-packages"
+    libexec/"python/python2.7/site-packages"
   end
 
   def hb_lib_qt4
