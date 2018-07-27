@@ -216,10 +216,20 @@ class Qgis2 < Formula
     sha256 "3ef3092145e9b70e3ddd2c7ad59bdd0252a94dfe3949721633e41344de00a6bf"
   end
 
+  resource "Jinja2" do
+    url "https://files.pythonhosted.org/packages/56/e6/332789f295cf22308386cf5bbd1f4e00ed11484299c5d7383378cf48ba47/Jinja2-2.10.tar.gz"
+    sha256 "f84be1bb0040caca4cea721fcbbbbd61f9be9464ca236387158b0feea01914a4"
+  end
+
+  resource "MarkupSafe" do
+    url "https://files.pythonhosted.org/packages/4d/de/32d741db316d8fdb7680822dd37001ef7a448255de9699ab4bfcbdf4172b/MarkupSafe-1.0.tar.gz"
+    sha256 "a6be69091dac236ea9c6bc7d012beab42010fa914c459791d627dad4910eb665"
+  end
+
   def install
 
     # Install python dependencies
-    venv = virtualenv_create(libexec/'python')
+    venv = virtualenv_create(libexec/'vendor')
     venv.pip_install resources.reject { |r| r.name == "pyqgis-startup" }
 
     # Set bundling level back to 0 (the default in all versions prior to 1.8.0)
@@ -298,9 +308,9 @@ class Qgis2 < Formula
     ENV["PYTHONHOME"] = brewed_python_framework.to_s if brewed_python?
 
     # handle custom site-packages for qt-4 keg-only modules and packages
-    ENV.prepend_path "PYTHONPATH", libexec/'python/lib/python2.7/site-packages'
+    ENV.prepend_path "PYTHONPATH", python_site_packages
     ENV.append_path "PYTHONPATH", python_qt4_site_packages
-    ENV.prepend_path "PATH", libexec/'python/bin/'
+    ENV.prepend_path "PATH", libexec/'vendor/bin/'
 
     # find git revision for HEAD build
     if build.head? && File.exist?("#{cached_download}/.git/index")
@@ -392,8 +402,7 @@ class Qgis2 < Formula
     inreplace prefix/"QGIS.app/Contents/Info.plist",
               "org.qgis.qgis2", "org.qgis.qgis2-hb#{build.head? ? "-dev" : ""}"
 
-    py_lib = libexec/"python/python2.7/site-packages"
-    py_lib.mkpath
+    py_lib = python_site_packages
     ln_s "../../../QGIS.app/Contents/Resources/python/qgis", py_lib/"qgis"
 
     ln_s "QGIS.app/Contents/MacOS/fcgi-bin", prefix/"fcgi-bin" if build.with? "server"
@@ -709,7 +718,7 @@ class Qgis2 < Formula
   end
 
   def python_site_packages
-    libexec/"python/python2.7/site-packages"
+    libexec/"vendor/python2.7/site-packages"
   end
 
   def hb_lib_qt4
