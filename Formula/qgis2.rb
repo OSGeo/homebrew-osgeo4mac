@@ -226,6 +226,11 @@ class Qgis2 < Formula
     sha256 "a6be69091dac236ea9c6bc7d012beab42010fa914c459791d627dad4910eb665"
   end
 
+  resource "Pygments" do
+    url "https://files.pythonhosted.org/packages/71/2a/2e4e77803a8bd6408a2903340ac498cb0a2181811af7c9ec92cb70b0308a/Pygments-2.2.0.tar.gz"
+    sha256 "dbae1046def0efb574852fab9e90209b23f556367b5a320c0bcb871c77c3e8cc"
+  end
+
   def install
 
     # Install python dependencies
@@ -718,7 +723,7 @@ class Qgis2 < Formula
   end
 
   def python_site_packages
-    libexec/"vendor/python2.7/site-packages"
+    libexec/"vendor/lib/python2.7/site-packages"
   end
 
   def hb_lib_qt4
