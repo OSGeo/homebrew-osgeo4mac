@@ -10,8 +10,8 @@ class Qgis2 < Formula
   head "https://github.com/qgis/QGIS.git", :branch => "release-2_18"
 
   stable do
-    url "https://github.com/qgis/QGIS/archive/final-2_18_21.tar.gz"
-    sha256 "fb0831b54bbf9388911580582bd590b2a82bb07ef36620135db6efe70741024f"
+    url "https://github.com/qgis/QGIS/archive/final-2_18_22.tar.gz"
+    sha256 "54272638c1843975bb32bdc36ab97d386c2d0951d6e3e013c41201d115edbf99"
 
     # patches that represent all backports to release-2_18 branch, since release tag
     # see: https://github.com/qgis/QGIS/commits/release-2_18
