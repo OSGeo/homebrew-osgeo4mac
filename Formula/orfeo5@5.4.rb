@@ -43,7 +43,7 @@ class Orfeo5AT54 < Formula
   depends_on "swig" if build.with? "python@2"
   depends_on "fftw" => :optional # restricts built binaries to GPL license
   depends_on "mapnik" => :optional
-  depends_on "brewsci/science/opencv" => :optional
+  depends_on "opencv" => :optional
   depends_on "openjpeg" => :optional
 
   # ICE Viewer: needs X11 support
