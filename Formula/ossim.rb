@@ -9,14 +9,15 @@ class Ossim < Formula
 
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    rebuild 1
-    sha256 "620f012a2e84694de2b7413fe138a14af369f995a9bdbe1d2d358e28f03a5689" => :high_sierra
-    sha256 "620f012a2e84694de2b7413fe138a14af369f995a9bdbe1d2d358e28f03a5689" => :sierra
+    rebuild 2
+    sha256 "eadf7ff0eecba99bf687f34c2d24f48395da5dfd68eaa050a43ca61327eabfea" => :high_sierra
+    sha256 "eadf7ff0eecba99bf687f34c2d24f48395da5dfd68eaa050a43ca61327eabfea" => :sierra
   end
 
   option "with-curl-apps", "Build curl-dependent apps"
   option "without-framework", "Generate library instead of framework"
   option "with-gui", "Build new ossimGui library and geocell application"
+  option "with-libkml", "Build with Google's libkml driver (requires libkml-dev >= 1.3)"
 
   depends_on "cmake" => :build
   depends_on "open-scene-graph" # just for its OpenThreads lib
@@ -27,7 +28,16 @@ class Ossim < Formula
   depends_on "geos"
   depends_on "freetype"
   depends_on "zlib"
+  depends_on "gdal2" => :recommended
   depends_on "open-mpi" => :optional
+  depends_on "hdf5" => :optional
+  depends_on "libpng" => :optional
+  depends_on "opencv" => :optional
+  depends_on "openjpeg" => :optional
+
+  if build.with? "libkml"
+    depends_on "libkml-dev"
+  end
 
   def install
     ENV.cxx11
@@ -44,17 +54,11 @@ class Ossim < Formula
       -DBUILD_OMS=OFF
       -DBUILD_CNES_PLUGIN=OFF
       -DBUILD_GEOPDF_PLUGIN=OFF
-      -DBUILD_GDAL_PLUGIN=OFF
-      -DBUILD_HDF5_PLUGIN=OFF
       -DBUILD_KAKADU_PLUGIN=OFF
-      -DBUILD_KML_PLUGIN=OFF
       -DBUILD_MRSID_PLUGIN=OFF
       -DMRSID_DIR=
       -DOSSIM_PLUGIN_LINK_TYPE=SHARED
-      -DBUILD_OPENCV_PLUGIN=OFF
-      -DBUILD_OPENJPEG_PLUGIN=OFF
       -DBUILD_PDAL_PLUGIN=OFF
-      -DBUILD_PNG_PLUGIN=OFF
       -DBUILD_POTRACE_PLUGIN=OFF
       -DBUILD_SQLITE_PLUGIN=OFF
       -DBUILD_WEB_PLUGIN=OFF
@@ -64,6 +68,15 @@ class Ossim < Formula
       -DOSSIM_BUILD_ADDITIONAL_DIRECTORIES=
       -DBUILD_OSSIM_TESTS=OFF
     ]
+
+    # Additional file support
+    args << "-DBUILD_GDAL_PLUGIN=" + (build.with?("gdal2") ? "ON" : "OFF")
+    args << "-DBUILD_OSSIM_HDF5_SUPPORT=" + (build.with?("hdf5") ? "ON" : "OFF")
+    args << "-DBUILD_KML_PLUGIN=" + (build.with?("libkml") ? "ON" : "OFF")
+    args << "-DBUILD_OPENCV_PLUGIN=" + (build.with?("opencv") ? "ON" : "OFF")
+    args << "-DBUILD_PNG_PLUGIN=" + (build.with?("libpng") ? "ON" : "OFF")
+    args << "-DBUILD_OPENJPEG_PLUGIN=" + (build.with?("openjpeg") ? "ON" : "OFF")
+
 
     args << "-DBUILD_OSSIM_FRAMEWORKS=" + (build.with?("framework") ? "ON" : "OFF")
     args << "-DBUILD_OSSIM_MPI_SUPPORT=" + (build.with?("mpi") ? "ON" : "OFF")

@@ -1,14 +1,15 @@
 class Qt4 < Formula
   desc "Cross-platform application and UI framework"
   homepage "https://www.qt.io/"
-  url "https://download.qt.io/official_releases/qt/4.8/4.8.7/qt-everywhere-opensource-src-4.8.7.tar.gz"
-  mirror "https://www.mirrorservice.org/sites/download.qt-project.org/official_releases/qt/4.8/4.8.7/qt-everywhere-opensource-src-4.8.7.tar.gz"
+  url "https://download.qt.io/archive/qt/4.8/4.8.7/qt-everywhere-opensource-src-4.8.7.tar.gz"
+  mirror "http://qt.mirror.constant.com/archive/qt/4.8/4.8.7/qt-everywhere-opensource-src-4.8.7.tar.gz"
   sha256 "e2882295097e47fe089f8ac741a95fef47e0a73a3f3cdf21b56990638f626ea0"
 
   bottle do
-    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
-    sha256 "5b831d16f71c52aaf548c804b769aaa49fe5ad148bd50f8145b996f7355c5ddb" => :sierra
-    sha256 "5b831d16f71c52aaf548c804b769aaa49fe5ad148bd50f8145b996f7355c5ddb" => :high_sierra
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    rebuild 1
+    sha256 "b144bc04f10d95c1855ab79d69e0a2905694eb0165907846c8b153fa64ff1f67" => :high_sierra
+    sha256 "b144bc04f10d95c1855ab79d69e0a2905694eb0165907846c8b153fa64ff1f67" => :sierra
   end
 
   # Backport of Qt5 commit to fix the fatal build error with Xcode 7, SDK 10.11.

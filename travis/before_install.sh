@@ -31,9 +31,8 @@ for f in ${nix_f}; do
 done
 
 # Add taps
-brew tap brewsci/bio || true
-#brew tap FreeCAD/freecad || true
 brew tap brewsci/science || true
+brew tap brewsci/bio || true
 #brew tap caskroom/cask || true
 
 # Keeps gcc from being linked
@@ -85,15 +84,6 @@ for f in ${CHANGED_FORMULAE};do
       echo "Installing GDAL 2 Python3 dependencies"
       ${HOMEBREW_PREFIX}/bin/pip3 install numpy
     fi
-    if [[ "${f}" =~ "qgis" ]];then
-      echo "Update wheel and setuptools"
-      ${HOMEBREW_PREFIX}/bin/pip3 install --upgrade pip setuptools wheel
-      echo "Fix for pyproj"
-      ${HOMEBREW_PREFIX}/bin/pip3 install cython
-      ${HOMEBREW_PREFIX}/bin/pip3 install git+https://github.com/jswhit/pyproj.git
-      echo "Installing QGIS Python3 dependencies for testing"
-      ${HOMEBREW_PREFIX}/bin/pip3 install future mock nose2 numpy psycopg2 pyyaml
-    fi
   fi
 
   if [ "$(echo ${deps} | grep -c 'python@2')" != "0" ];then
@@ -120,15 +110,6 @@ for f in ${CHANGED_FORMULAE};do
     if [[ "${f}" =~ "gdal2" ]];then
       echo "Installing GDAL 2 Python2 dependencies"
       ${HOMEBREW_PREFIX}/bin/pip2 install numpy
-    fi
-    if [[ "${f}" =~ "qgis" ]];then
-      echo "Update wheel and setuptools"
-      ${HOMEBREW_PREFIX}/bin/pip2 install --upgrade pip setuptools wheel
-      echo "Fix for pyproj"
-      ${HOMEBREW_PREFIX}/bin/pip2 install cython
-      ${HOMEBREW_PREFIX}/bin/pip2 install git+https://github.com/jswhit/pyproj.git
-      echo "Installing QGIS Python2 dependencies for testing"
-      ${HOMEBREW_PREFIX}/bin/pip2 install future mock nose2 numpy psycopg2 pyyaml
     fi
   fi
   # Special handling of grass7, because it needs to be unlinked

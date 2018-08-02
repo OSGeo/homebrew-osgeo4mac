@@ -1,25 +1,26 @@
 class SagaGis < Formula
   desc "System for Automated Geoscientific Analyses - Long Term Support"
   homepage "http://saga-gis.org"
-  url "https://downloads.sourceforge.net/project/saga-gis/SAGA%20-%206/SAGA%20-%206.3.0/saga-6.3.0.tar.gz"
-  sha256 "bb4b99406e3a25cdaa12559904ce3272c449acb542bc0883b2755ce6508dd243"
+  url "https://downloads.sourceforge.net/project/saga-gis/SAGA%20-%206/SAGA%20-%206.4.0/saga-6.4.0.tar.gz"
+  sha256 "9c3db7089278d50631171526d63398bb56417956623eb62b20143878dadd1490"
 
   head "https://git.code.sf.net/p/saga-gis/code.git"
 
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
     rebuild 1
-    sha256 "7c27827a6187e362b448e9333f5396e05b4358ec6ae49c6ab7fd1f15acbfc336" => :high_sierra
-    sha256 "7c27827a6187e362b448e9333f5396e05b4358ec6ae49c6ab7fd1f15acbfc336" => :sierra
+    sha256 "888764bdbe82263f0f71ce3b52347aa2d787ff517b36cc62085c6ac8d3af5bbd" => :high_sierra
+    sha256 "888764bdbe82263f0f71ce3b52347aa2d787ff517b36cc62085c6ac8d3af5bbd" => :sierra
   end
 
-  option "with-app", "Build SAGA.app Package"
-
   keg_only "QGIS fails to load the correct SAGA version, if the latest version is in the path"
+
+  option "with-app", "Build SAGA.app Package"
 
   depends_on "automake" => :build
   depends_on "autoconf" => :build
   depends_on "libtool" => :build
+  depends_on "pkg-config" => :build
   depends_on "gdal2"
   depends_on "proj"
   depends_on "wxmac"
@@ -32,7 +33,7 @@ class SagaGis < Formula
   depends_on "brewsci/science/vigra" => :optional
   depends_on "postgresql" => :optional
   depends_on "python@2" => :optional
-  depends_on "brewsci/science/opencv" => :optional
+  depends_on "opencv" => :optional
 
   resource "app_icon" do
     url "https://osgeo4mac.s3.amazonaws.com/src/saga_gui.icns"
@@ -40,6 +41,8 @@ class SagaGis < Formula
   end
 
   def install
+
+    ENV.cxx11
     # SKIP liblas support until SAGA supports > 1.8.1, which should support GDAL 2;
     #      otherwise, SAGA binaries may lead to multiple GDAL versions being loaded
     # See: https://github.com/libLAS/libLAS/issues/106

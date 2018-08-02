@@ -10,9 +10,9 @@ class SagaGisLts < Formula
 
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    rebuild 1
-    sha256 "a59f97f1f3d47226e126907860cffacdbd45372ee6d683bc3789a793075b4d33" => :high_sierra
-    sha256 "a59f97f1f3d47226e126907860cffacdbd45372ee6d683bc3789a793075b4d33" => :sierra
+    rebuild 2
+    sha256 "cd3bf930c7c6b493c9473763ba76b9d4272fbae689a925f96e70c1b691a4489b" => :high_sierra
+    sha256 "cd3bf930c7c6b493c9473763ba76b9d4272fbae689a925f96e70c1b691a4489b" => :sierra
   end
 
   keg_only "LTS version is specifically for working with QGIS"
@@ -34,7 +34,7 @@ class SagaGisLts < Formula
   depends_on "brewsci/science/vigra" => :optional
   depends_on "postgresql" => :optional
   depends_on "python@2" => :optional
-  depends_on "brewsci/science/opencv" => :optional
+  depends_on "opencv" => :optional
 
   resource "app_icon" do
     url "https://osgeo4mac.s3.amazonaws.com/src/saga_gui.icns"
@@ -45,6 +45,9 @@ class SagaGisLts < Formula
     # SKIP liblas support until SAGA supports > 1.8.1, which should support GDAL 2;
     #      otherwise, SAGA binaries may lead to multiple GDAL versions being loaded
     # See: https://github.com/libLAS/libLAS/issues/106
+    ENV.cxx11
+    # Disable narrowing warnings when compiling in C++11 mode.
+    ENV.append "CXXFLAGS", "-Wno-c++11-narrowing"
 
     cd "saga-gis"
 
