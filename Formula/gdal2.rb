@@ -47,8 +47,6 @@ class Gdal2 < Formula
   depends_on "libpng"
   depends_on "jpeg"
   depends_on "giflib"
-  depends_on "libtiff"
-  depends_on "libgeotiff"
   depends_on "proj"
   depends_on "geos"
   depends_on "json-c"
@@ -126,8 +124,8 @@ class Gdal2 < Formula
       "--with-jpeg=#{HOMEBREW_PREFIX}",
       "--without-jpeg12", # Needs specially configured JPEG and TIFF libraries.
       "--with-gif=#{HOMEBREW_PREFIX}",
-      "--with-libtiff=#{HOMEBREW_PREFIX}",
-      "--with-geotiff=#{HOMEBREW_PREFIX}",
+      "--with-libtiff=internal",
+      "--with-geotiff=internal",
       "--with-sqlite3=#{Formula["sqlite"].opt_prefix}",
       "--with-freexl=#{HOMEBREW_PREFIX}",
       "--with-spatialite=#{HOMEBREW_PREFIX}",
