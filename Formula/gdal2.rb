@@ -80,6 +80,7 @@ class Gdal2 < Formula
     depends_on "libdap"
     depends_on "libxml2"
     depends_on "openjpeg"
+    depends_on "zstd"
 
     # Vector libraries
     depends_on "unixodbc" # OS X version is not complete enough
@@ -156,6 +157,7 @@ class Gdal2 < Formula
       epsilon
       webp
       openjpeg
+      zstd
     ]
     if build.with? "complete"
       supported_backends.delete "liblzma"
@@ -338,4 +340,3 @@ index 1313bd9974f..5e4e6844d47 100644
 +	if [ -f ".libs/libgdalalljni.dylib" ] ; then \
  		cp .libs/*.dylib . ; \
  	fi
-
