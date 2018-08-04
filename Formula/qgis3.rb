@@ -77,9 +77,9 @@ class Qgis3 < Formula
   depends_on "python"
 #  depends_on :x11
   depends_on "qt"
-  depends_on "qt5-webkit" => :recommended
+  depends_on "osgeo/osgeo4mac/qt5-webkit" => :recommended
   depends_on "pyqt"
-  depends_on "pyqt5-webkit" => :recommended
+  depends_on "osgeo/osgeo4mac/pyqt5-webkit" => :recommended
 #  depends_on "txt2tags" => :build
   if build.with? "api-docs"
     depends_on "graphviz" => :build
@@ -104,8 +104,8 @@ class Qgis3 < Formula
   depends_on "hicolor-icon-theme"
   
   # core providers
-  depends_on "gdal2"
-  depends_on "gdal2-python"
+  depends_on "osgeo/osgeo4mac/gdal2"
+  depends_on "osgeo/osgeo4mac/gdal2-python"
     
   depends_on "oracle-client-sdk" if build.with? "oracle"
   # TODO: add MSSQL third-party support formula?, :optional
