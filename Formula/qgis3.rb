@@ -37,6 +37,9 @@ class Qgis3 < Formula
 
   head "https://github.com/qgis/QGIS.git", :branch => "release-3_2"
 
+  # fix for pyrcc5
+  patch :DATA
+
   stable do
     url "https://github.com/qgis/QGIS/archive/final-3_2_1.tar.gz"
     sha256 "c1603f0afc13de6a0e0c10564c444ceaefebd5670bf41f6ea51c8eae1eac9b6c"
@@ -53,7 +56,7 @@ class Qgis3 < Formula
   option "without-debug", "Disable debug build, which outputs info to system.log or console"
   option "without-server", "Build without QGIS Server (qgis_mapserv.fcgi)"
   option "without-postgresql", "Build without current PostgreSQL client"
-  option "with-globe", "Build with Globe plugin, based upon osgEarth"
+#  option "with-globe", "Build with Globe plugin, based upon osgEarth"
   option "with-grass", "Build with GRASS 7 integration plugin and Processing plugin support (or install grass-7x first)"
   option "with-oracle", "Build extra Oracle geospatial database and raster support"
 #  option "with-orfeo5", "Build extra Orfeo Toolbox for Processing plugin"
@@ -75,12 +78,9 @@ class Qgis3 < Formula
   depends_on "bison" => :build
   depends_on "flex" => :build
   depends_on "python"
-#  depends_on :x11
   depends_on "qt"
-  depends_on "osgeo/osgeo4mac/qt5-webkit" => :recommended
   depends_on "pyqt"
-  depends_on "osgeo/osgeo4mac/pyqt5-webkit" => :recommended
-#  depends_on "txt2tags" => :build
+  depends_on "pyqt5-webkit" => :recommended
   if build.with? "api-docs"
     depends_on "graphviz" => :build
     depends_on "doxygen" => :build
@@ -104,8 +104,7 @@ class Qgis3 < Formula
   depends_on "hicolor-icon-theme"
   
   # core providers
-  depends_on "osgeo/osgeo4mac/gdal2"
-  depends_on "osgeo/osgeo4mac/gdal2-python"
+  depends_on "gdal2-python"
     
   depends_on "oracle-client-sdk" if build.with? "oracle"
   # TODO: add MSSQL third-party support formula?, :optional
@@ -116,20 +115,20 @@ class Qgis3 < Formula
     depends_on "gettext"
   end
 
-   # Not until osgearth is Qt5-ready
-   # if build.with? "globe"
-     # this is pretty borked with OS X >= 10.10+
-#     depends on "open-scene-graph"
-     # depends on "brewsci/science/osgearth"
-   # end
+#  # Not until osgearth is Qt5-ready
+#  #if build.with? "globe"
+#    # this is pretty borked with OS X >= 10.10+
+#    depends_on "open-scene-graph"
+#    # depends_on "brewsci/science/osgearth"
+#  #end
 
   depends_on "gpsbabel" => :optional
 
    # TODO: remove "pyspatialite" when PyPi package supports spatialite 4.x
    #       or DB Manager supports libspatialite >= 4.2.0 (with mod_spatialite)
    # TODO: what to do for Py3 and pyspatialite?
-#  depends on "pyspatialite" # for DB Manager
-   # depends on "qt-mysql" => :optional # for eVis plugin (non-functional in 2.x?)
+#     depends_on "pyspatialite" # for DB Manager
+   # depends_on "qt-mysql" => :optional # for eVis plugin (non-functional in 2.x?)
 
   # core processing plugin extras
   # see `grass` above
@@ -138,14 +137,8 @@ class Qgis3 < Formula
   depends_on "saga-gis-lts" => :optional
   # TODO: LASTools straight build (2 reporting tools), or via `wine` (10 tools)
   # TODO: Fusion from USFS (via `wine`?)
-   
-  # Fix for pyrcc5
-  depends_on "gnu-sed"
-  system '/usr/local/bin/gsed', '-i', 's/pythonw2.7/python3/g', '/usr/local/bin/pyrcc5'
 
-
-  # TODO: add one for Py3
-  #       (only necessary when macOS ships a Python3 or 3rd-party isolation is needed)
+  # TODO: add one for Py3 (only necessary when macOS ships a Python3 or 3rd-party isolation is needed)
   resource "pyqgis-startup" do
     url "https://gist.githubusercontent.com/fjperini/96bb3654b4d8fd97c343345cd12b6cde/raw/785bea0f9f46f17a626ea31d3308393d0814d693/pyqgis_startup.py"
     sha256 "98483e262faa87fa82128527a2318e4b28937156eca0031503cc4ed273ef1fad"
@@ -171,13 +164,14 @@ class Qgis3 < Formula
     url "https://files.pythonhosted.org/packages/ac/71/ff2fbfa64fca17069ce30fac324533aa686c5cb64e6b5f522faed558848f/OWSLib-0.16.0.tar.gz"
     sha256 "ec95a5e93c145a5d84b0074b9ea27570943486552a669151140debf08a100554"
   end
-    
+  
+  # dependence for pyproj
   resource "cython" do
     url "https://files.pythonhosted.org/packages/d2/12/8ef44cede251b93322e8503fd6e1b25a0249fa498bebec191a5a06adbe51/Cython-0.28.4.tar.gz"
     sha256 "76ac2b08d3d956d77b574bb43cbf1d37bd58b9d50c04ba281303e695854ebc46"
   end
 
-  # Fix for Python3.7
+  # fix for Python3.7
   resource "pyproj" do
     url "https://github.com/jswhit/pyproj/archive/master.zip"
     sha256 "6611ca878ec6de71115f7705f7fcb3a900999ef1fa9616376c2de63edd3a7841"
@@ -392,13 +386,13 @@ class Qgis3 < Formula
 #      ENV.append "CXXFLAGS", "-isystem #{Formula["gettext"].include.resolved_path}"
     end
 
-    args << "-DWITH_GLOBE=#{build.with?("globe") ? "TRUE" : "FALSE"}"
-    if build.with? "globe"
-      osg = Formula["open-scene-graph"]
-      opoo "`open-scene-graph` formula's keg not linked." unless osg.linked_keg.exist?
-      # must be HOMEBREW_PREFIX/lib/osgPlugins-#.#.#, since all osg plugins are symlinked there
-      args << "-DOSG_PLUGINS_PATH=#{HOMEBREW_PREFIX}/lib/osgPlugins-#{osg.version}"
-    end
+#    args << "-DWITH_GLOBE=#{build.with?("globe") ? "TRUE" : "FALSE"}"
+#    if build.with? "globe"
+#      osg = Formula["open-scene-graph"]
+#      opoo "`open-scene-graph` formula's keg not linked." unless osg.linked_keg.exist?
+#      # must be HOMEBREW_PREFIX/lib/osgPlugins-#.#.#, since all osg plugins are symlinked there
+#      args << "-DOSG_PLUGINS_PATH=#{HOMEBREW_PREFIX}/lib/osgPlugins-#{osg.version}"
+#    end
 
     args << "-DWITH_ORACLE=#{build.with?("oracle") ? "TRUE" : "FALSE"}"
     if build.with? "oracle"
@@ -417,12 +411,21 @@ class Qgis3 < Formula
     # (https://github.com/Homebrew/homebrew-science/issues/23)
     ENV.append "CXXFLAGS", "-F#{Formula["qt"].opt_lib}"
 
-    # handle some compiler warnings
+#    # handle some compiler warnings
 #    ENV["CXX_EXTRA_FLAGS"] = "-Wno-unused-private-field -Wno-deprecated-register"
 #     if ENV.compiler == :clang && (MacOS::Xcode.version >= "7.0" || MacOS::CLT.version >= "7.0")
 #       ENV.append "CXX_EXTRA_FLAGS", "-Wno-inconsistent-missing-override"
 #     end
-
+    
+    # create pyrcc5
+    File.open("#{libexec}/vendor/bin/pyrcc5", "w") { |file|
+			file << '#!/bin/sh'
+			file << "\n"
+			file << 'exec python3 -m PyQt5.pyrcc_main ${1+"$@"}'
+    }
+    
+    system "chmod", "+x", "#{libexec}/vendor/bin/pyrcc5"
+    
     mkdir "build" do
       system "cmake", "-G", build.with?("ninja") ? "Ninja" : "Unix Makefiles", *args, ".."
       system "cmake", "--build", ".", "--target", "all", "--", "-j", Hardware::CPU.cores
@@ -772,3 +775,17 @@ class Qgis3 < Formula
     quiet_system python_exec, "-c", "import sys;sys.path.insert(1, '#{python_qt_site_packages}'); import #{mod}"
   end
 end
+
+__END__
+
+--- /cmake/PyQtMacros.cmake
++++ /cmake/PyQtMacros.cmake
+@@ -93,7 +93,7 @@
+       SET(_name_opt -name ${outfile})
+     ENDIF()
+     ADD_CUSTOM_COMMAND(OUTPUT ${outfile}
+-      COMMAND ${PYRCC_PROGRAM} ${_name_opt} -o ${outfile} ${infile}
++      COMMAND "/usr/local/Cellar/qgis3/3.2.1/libexec/vendor/bin/pyrcc5" -o ${outfile} ${infile}
+       MAIN_DEPENDENCY ${infile}
+       DEPENDS ${_RC_DEPENDS})
+     SET(${outfiles} ${${outfiles}} ${outfile})
