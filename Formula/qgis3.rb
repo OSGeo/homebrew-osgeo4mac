@@ -336,7 +336,7 @@ class Qgis3 < Formula
       -DPYUIC_PROGRAM=#{libexec}/vendor/bin/pyuic5v
 
       -DWITH_QTWEBKIT=TRUE
-      -DOPTIONAL_QTWEBKIT=#{Formula["qt-webkit"].opt_lib}/cmake/Qt5WebKitWidgets
+      -DOPTIONAL_QTWEBKIT=#{Formula["qt5-webkit"].opt_lib}/cmake/Qt5WebKitWidgets
       
       -DENABLE_TESTS=FALSE
       -DENABLE_MODELTEST=FALSE
@@ -424,7 +424,7 @@ class Qgis3 < Formula
    
     # args << "-DWITH_QTWEBKIT=#{build.with?("qt5-webkit") ? "TRUE" : "FALSE"}"
     # if build.with? "qt5-webkit"
-    #   args << "-DOPTIONAL_QTWEBKIT=" + Formula["qt-webkit"].opt_prefix + "/lib/cmake/Qt5WebKitWidgets"
+    #   args << "-DOPTIONAL_QTWEBKIT=" + Formula["qt5-webkit"].opt_prefix + "/lib/cmake/Qt5WebKitWidgets"
     # end
     
     # prefer opt_prefix for CMake modules that find versioned prefix by default
