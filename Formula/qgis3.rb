@@ -270,6 +270,21 @@ class Qgis3 < Formula
   def install
     ENV.cxx11
 
+    # when gdal2-python.rb loaded, PYTHONPATH gets set to 2.7 site-packages...
+    #   clear it before calling any local python3 functions
+    ENV["PYTHONPATH"] = nil
+    if ARGV.debug?
+      puts "python_exec: #{python_exec}"
+      puts "py_ver: #{py_ver}"
+      puts "brewed_python?: #{brewed_python?}"
+      puts "python_site_packages: #{python_site_packages}"
+      puts "python_prefix: #{python_prefix}"
+      puts "qgis_python_packages: #{qgis_python_packages}"
+      puts "gdal_python_packages: #{gdal_python_packages}"
+      puts "gdal_python_opt_bin: #{gdal_python_opt_bin}"
+      puts "gdal_opt_bin: #{gdal_opt_bin}"
+    end
+
     # install python dependencies
     venv = virtualenv_create(libexec/'vendor', "python3")
     venv.pip_install resources.reject { |r| r.name == "pyqgis-startup" }
@@ -367,8 +382,9 @@ class Qgis3 < Formula
     # handle custom site-packages for qt keg-only modules and packages
     ENV.prepend_path "PYTHONPATH", python_site_packages
     ENV.append_path "PYTHONPATH", python_qt_site_packages
-    # ENV.append_path "PYTHONPATH", libexec/"python/lib/python/site-packages"
+    # ENV.append_path "PYTHONPATH", libexec/"vendor/lib/python#{py_ver}/site-packages"
     ENV.prepend_path "PATH", libexec/'vendor/bin/'
+    # ENV.prepend_path "PATH", libexec/"python/bin"
 
     # find git revision for HEAD build
     if build.head? && File.exist?("#{cached_download}/.git/index")
@@ -528,8 +544,16 @@ class Qgis3 < Formula
 
     # define default isolation env vars
     pthsep = File::PATH_SEPARATOR
-    pypth = python_site_packages.to_s
-    pths = %w[/usr/bin /bin /usr/sbin /sbin /opt/X11/bin /usr/X11/bin]
+    pypth = python_site_packages.to_s      
+    pths = %w[
+      /usr/bin
+      /bin
+      /usr/sbin
+      /sbin
+      /opt/X11/bin
+      /usr/X11/bin
+      #{opt_libexec}/vendor/bin
+    ]
 
     unless opts.include?("with-isolation")
       pths = ORIGINAL_PATHS.dup
@@ -548,9 +572,9 @@ class Qgis3 < Formula
       
     # set install's lib/python#{py_ver}/site-packages first, so app will work if unlinked
     # pypths = %W[
-    #   #{opt_lib}/python#{py_ver}/site-packages
-    #   #{opt_libexec}/python/lib/python/site-packages
-    #   #{pypth}
+    #  #{opt_lib}/python#{py_ver}/site-packages
+    #  #{opt_libexec}/python/lib/python/site-packages
+    #  #{pypth}
     # ]
 
     pths.insert(0, gdal_opt_bin)
@@ -768,18 +792,6 @@ class Qgis3 < Formula
   #   Formula["orfeo5"].opt_prefix.exist?
   # end
 
-  def python_prefix
-    `#{python_exec} -c 'import sys;print(sys.prefix)'`.strip
-  end
-
-  def py_ver
-    `#{python_exec} -c 'import sys;print("{0}.{1}".format(sys.version_info[0],sys.version_info[1]))'`.strip
-  end
-
-  def python_site_packages
-    libexec/"vendor/lib/python#{py_ver}/site-packages"
-  end
-
   def brewed_python?
     Formula["python3"].linked_keg.exist?
   end
@@ -794,12 +806,28 @@ class Qgis3 < Formula
     end
   end
 
+  def python_prefix
+    `#{python_exec} -c 'import sys;print(sys.prefix)'`.strip
+  end
+
+  def py_ver
+    `#{python_exec} -c 'import sys;print("{0}.{1}".format(sys.version_info[0],sys.version_info[1]))'`.strip
+  end
+
+  def python_site_packages
+    libexec/"vendor/lib/python#{py_ver}/site-packages"
+  end
+
   def python_incdir
     Pathname.new(`#{python_exec} -c "from distutils import sysconfig; print(sysconfig.get_python_inc())"`.strip)
   end
 
   def python_libdir
     Pathname.new(`#{python_exec} -c "from distutils import sysconfig; print(sysconfig.get_config_var('LIBPL'))"`.strip)
+  end
+
+  def opt_lib_qt
+    opt_lib/"qt"
   end
 
   def hb_lib_qt
@@ -812,10 +840,6 @@ class Qgis3 < Formula
 
   def lib_qt
     lib/"qt"
-  end
-
-  def opt_lib_qt
-    opt_lib/"qt"
   end
 
   def gdal_python_packages
