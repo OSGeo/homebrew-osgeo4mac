@@ -32,6 +32,7 @@ done
 
 # Add taps
 brew tap brewsci/science || true
+brew tap brewsci/bio || true
 #brew tap caskroom/cask || true
 
 # Keeps gcc from being linked
