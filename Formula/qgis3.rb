@@ -41,6 +41,12 @@ class Qgis3 < Formula
     url "https://github.com/qgis/QGIS/archive/final-3_2_1.tar.gz"
     sha256 "c1603f0afc13de6a0e0c10564c444ceaefebd5670bf41f6ea51c8eae1eac9b6c"
   end
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    sha256 "d906bc9c157d633ce5a9858970da3d9c8a68e3f4be257a80047d6141c8ccb777" => :high_sierra
+    sha256 "d906bc9c157d633ce5a9858970da3d9c8a68e3f4be257a80047d6141c8ccb777" => :sierra
+  end
+
 
   def pour_bottle?
     brewed_python?
