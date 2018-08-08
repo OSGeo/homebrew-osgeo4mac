@@ -41,6 +41,7 @@ class Qgis3 < Formula
     url "https://github.com/qgis/QGIS/archive/final-3_2_1.tar.gz"
     sha256 "c1603f0afc13de6a0e0c10564c444ceaefebd5670bf41f6ea51c8eae1eac9b6c"
   end
+
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
     sha256 "d906bc9c157d633ce5a9858970da3d9c8a68e3f4be257a80047d6141c8ccb777" => :high_sierra
@@ -311,10 +312,12 @@ class Qgis3 < Formula
     # install db plugins to local qt plugins prefix
     if build.with? "qspatialite"
       mkdir lib_qt/"plugins/sqldrivers"
-      inreplace "src/providers/spatialite/qspatialite/CMakeLists.txt",
+      inreplace "src/providers/spatialite/CMakeLists.txt",
                 "${QT_PLUGINS_DIR}/sqldrivers", lib_qt/"plugins/sqldrivers".to_s
     end
+    
     if build.with? "oracle"
+      mkdir lib_qt/"plugins/sqldrivers"
       inreplace "src/providers/oracle/ocispatial/CMakeLists.txt",
                 "${QT_PLUGINS_DIR}/sqldrivers", lib_qt/"plugins/sqldrivers".to_s
     end
@@ -354,7 +357,7 @@ class Qgis3 < Formula
       -DLIBTASN1_LIBRARY=#{Formula["libtasn1"].opt_lib}/libtasn1.dylib
 
       -DPYRCC_PROGRAM=#{libexec}/vendor/bin/pyrcc5
-      -DPYUIC_PROGRAM=#{libexec}/vendor/bin/pyuic5v
+      -DPYUIC_PROGRAM=#{libexec}/vendor/bin/pyuic5
 
       -DWITH_QTWEBKIT=TRUE
       -DOPTIONAL_QTWEBKIT=#{Formula["qt5-webkit"].opt_lib}/cmake/Qt5WebKitWidgets
