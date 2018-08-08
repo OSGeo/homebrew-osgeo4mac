@@ -35,6 +35,8 @@ class Qgis3 < Formula
   desc "Open Source Geographic Information System"
   homepage "https://www.qgis.org"
 
+  revision 1
+
   head "https://github.com/qgis/QGIS.git", :branch => "release-3_2"
 
   stable do
@@ -312,8 +314,10 @@ class Qgis3 < Formula
     # install db plugins to local qt plugins prefix
     if build.with? "qspatialite"
       mkdir lib_qt/"plugins/sqldrivers"
-      inreplace "src/providers/spatialite/CMakeLists.txt",
-                "${QT_PLUGINS_DIR}/sqldrivers", lib_qt/"plugins/sqldrivers".to_s
+      # inreplace "src/providers/spatialite/CMakeLists.txt",
+      #           "${QGIS_PLUGIN_DIR}", lib_qt/"plugins/sqldrivers".to_s
+      inreplace "external/qspatialite/CMakeLists.txt",
+                "${QT_PLUGINS_DIR}/sqldrivers", lib_qt/"plugins/sqldrivers".to_s   
     end
     
     if build.with? "oracle"
@@ -501,6 +505,7 @@ class Qgis3 < Formula
     # TODO: fix upstream in CMake
     dy_libs = [lib_qt/"plugins/designer/libqgis_customwidgets.dylib"]
     dy_libs << lib_qt/"plugins/sqldrivers/libqsqlspatialite.dylib" if build.with? "qspatialite"
+    dy_libs << lib_qt/"plugins/sqldrivers/libqsqlocispatial.dylib" if build.with? "oracle"
     dy_libs.each do |dy_lib|
       MachO::Tools.dylibs(dy_lib.to_s).each do |i_n|
         %w[core gui native].each do |f_n|
