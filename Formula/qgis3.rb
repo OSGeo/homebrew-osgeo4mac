@@ -145,8 +145,6 @@ class Qgis3 < Formula
   # TODO: LASTools straight build (2 reporting tools), or via `wine` (10 tools)
   # TODO: Fusion from USFS (via `wine`?)
 
-  depends_on "ccache" => :optional
-
   # TODO: add one for Py3 (only necessary when macOS ships a Python3 or 3rd-party isolation is needed)
   resource "pyqgis-startup" do
     url "https://gist.githubusercontent.com/fjperini/96bb3654b4d8fd97c343345cd12b6cde/raw/785bea0f9f46f17a626ea31d3308393d0814d693/pyqgis_startup.py"
@@ -380,15 +378,8 @@ class Qgis3 < Formula
       -DWITH_STAGED_PLUGINS=TRUE
       -DWITH_CUSTOM_WIDGETS=TRUE
       -DWITH_ASTYLE=FALSE
+      -DUSE_CCACHE=OFF
     ]
-    
-    if build.with? "ccache"
-      args << "-DUSE_CCACHE=ON"
-      args << "-DCMAKE_CXX_COMPILER=#{Formula["ccache"].opt_libexec}/clang++"
-      args << "-DCMAKE_C_COMPILER=#{Formula["ccache"].opt_libexec}/clang"
-    else
-      args << "-DUSE_CCACHE=OFF"
-    end
 
     # python Configuration
     args << "-DPYTHON_EXECUTABLE='#{`python3 -c "import sys; print(sys.executable)"`.chomp}'"
