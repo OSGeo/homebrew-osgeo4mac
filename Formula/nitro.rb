@@ -1,11 +1,14 @@
 class Nitro < Formula
   desc "Library reading/writing the National Imagery Transmission Format (NITF)."
   homepage "https://github.com/hobu/nitro"
-  url "https://github.com/hobu/nitro/archive/2.7dev-1.tar.gz"
+  url "https://github.com/hobu/nitro/archive/2.7dev-2.tar.gz"
   version "2.7dev-1"
-  sha256 "6c5c403ef5e90f07b3fd6bb425de97eeaefc79a9920a3970541dd9a33b46aca8"
+  sha256 "cb00e5bd5d045f1bc333e1e054272c206c9910d008698b9cd7f2d67153a32ee2"
 
   head "https://github.com/hobu/nitro.git", :branch => "master"
+
+  bottle do
+  end
 
   depends_on "cmake" => :build
 
