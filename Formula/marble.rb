@@ -1,10 +1,15 @@
 class Marble < Formula
   homepage "http://marble.kde.org/"
-  url "https://quickgit.kde.org/?p=marble.git&a=snapshot&h=d6f093ced2ca8900735a0098d7b781321a8fc399&fmt=tgz"
-  sha256 "10c4abbd48daee2ce44446c191b28492310d4d1f9065d9d8eb2c0c5e5e970635"
-  version "1.7.0"
+  url "git://anongit.kde.org/marble",
+    :branch => "Applications/18.08",
+    :revision => "91f63ee2910260ecc9da0fef695cffb35e09ba6f"
+  version "2.2.0"
 
   head "git://anongit.kde.org/marble"
+
+  bottle do
+
+  end
 
   option "with-debug", "Enable debug build type"
   option "without-tools", "Build without extra Marble Tools"
@@ -22,7 +27,7 @@ class Marble < Formula
     # basic std_cmake_args
     args = %W[
       -DCMAKE_INSTALL_PREFIX=#{prefix}
-      -DCMAKE_BUILD_TYPE=#{(build.with?('debug')) ? 'RelWithDebInfo' : 'None' }
+      -DCMAKE_BUILD_TYPE=#{(build.with?('debug')) ? 'Debug' : 'Release' }
       -DCMAKE_FIND_FRAMEWORK=LAST
       -DCMAKE_VERBOSE_MAKEFILE=TRUE
       -Wno-dev
@@ -38,6 +43,7 @@ class Marble < Formula
       -DWITH_QtLocation=OFF
       -DWITH_liblocation=OFF
       -DWITH_libwlocate=OFF
+      -DWITH_KF5=OFF
       -DWITH_DESIGNER_PLUGIN=OFF
       -DBUILD_MARBLE_TOOLS=#{((build.with? "tools") ? "ON" : "OFF")}
       -DBUILD_MARBLE_EXAMPLES=#{((build.with? "examples") ? "ON" : "OFF")}
@@ -45,10 +51,11 @@ class Marble < Formula
 
     mkdir "build" do
       system "cmake", "..", *args
-      # system "bbedit", "CMakeCache.txt"
-      # raise
       system "make"
       system "make", "install"
     end
+  end
+
+  test do
   end
 end
