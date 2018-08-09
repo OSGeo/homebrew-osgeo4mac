@@ -65,7 +65,11 @@ pushd bottles
     # Do the bottle duplication per formula, so we can merge the changes
     for art in ${f}*.sierra.bottle.*; do
       new_name=${art/.sierra./.high_sierra.}
-      cp -a ${art} ${new_name}
+      # Remove double dashes introduced by the latest changes to Homebrew bottling.
+      # This may need to be reverted later, but this at least normalizes the bottle names with what's in the json files.
+      cp -a ${art} ${new_name/--/-}
+      # Move the sierra bottle and json file
+      mv ${art} ${art/--/-}
     done
     for json in ${f}*.high_sierra.bottle*.json; do
       sed -i '' s@sierra@high_sierra@g ${json}
