@@ -73,7 +73,6 @@ class Qgis3 < Formula
   option "with-qspatialite", "Build QSpatialite Qt database driver"
   option "with-api-docs", "Build the API documentation with Doxygen and Graphviz"
   option "with-3d", "Build with 3D Map View panel"
-  option "with-ccache", "Build with CCache"
 
   depends_on UnlinkedQGIS3
 
