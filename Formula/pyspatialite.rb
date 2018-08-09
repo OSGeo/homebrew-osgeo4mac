@@ -20,11 +20,10 @@ class Pyspatialite < Formula
   end
 
   bottle do
-    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
     cellar :any
-    rebuild 1
-    sha256 "39971bed725dfc173fa81a28cc0996bdbe9c44f33d8b144b0de7327042136b46" => :high_sierra
-    sha256 "39971bed725dfc173fa81a28cc0996bdbe9c44f33d8b144b0de7327042136b46" => :sierra
+    sha256 "e2f2181b5477ca75a0f4218280e2ed3c6130cdefbbc659234a2292e64362985d" => :high_sierra
+    sha256 "e2f2181b5477ca75a0f4218280e2ed3c6130cdefbbc659234a2292e64362985d" => :sierra
   end
 
   depends_on "python@2"
