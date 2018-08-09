@@ -378,8 +378,9 @@ class Qgis3 < Formula
       -DWITH_STAGED_PLUGINS=TRUE
       -DWITH_CUSTOM_WIDGETS=TRUE
       -DWITH_ASTYLE=FALSE
+      -DUSE_CCACHE=OFF
     ]
-        
+
     # python Configuration
     args << "-DPYTHON_EXECUTABLE='#{`python3 -c "import sys; print(sys.executable)"`.chomp}'"
     # args << "-DPYTHON_CUSTOM_FRAMEWORK='#{`python3 -c "import sys; print(sys.prefix)"`.chomp}'" # not used by the project
