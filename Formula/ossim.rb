@@ -9,9 +9,8 @@ class Ossim < Formula
 
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    rebuild 3
-    sha256 "99d3505fce4506a141f5a22f174136df7dee39bc5a4e9558183c789afa80e0c4" => :high_sierra
-    sha256 "99d3505fce4506a141f5a22f174136df7dee39bc5a4e9558183c789afa80e0c4" => :sierra
+    sha256 "f491376cdac37e97777007b9b1f945a2e2fea23828c5872458102e5d24a2328a" => :high_sierra
+    sha256 "f491376cdac37e97777007b9b1f945a2e2fea23828c5872458102e5d24a2328a" => :sierra
   end
 
   option "with-curl-apps", "Build curl-dependent apps"
