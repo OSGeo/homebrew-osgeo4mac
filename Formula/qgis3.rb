@@ -73,6 +73,7 @@ class Qgis3 < Formula
   option "with-qspatialite", "Build QSpatialite Qt database driver"
   option "with-api-docs", "Build the API documentation with Doxygen and Graphviz"
   option "with-3d", "Build with 3D Map View panel"
+  option "with-ccache", "Build with CCache"
 
   depends_on UnlinkedQGIS3
 
@@ -144,6 +145,8 @@ class Qgis3 < Formula
   depends_on "saga-gis-lts" => :optional
   # TODO: LASTools straight build (2 reporting tools), or via `wine` (10 tools)
   # TODO: Fusion from USFS (via `wine`?)
+
+  depends_on "ccache" => :optional
 
   # TODO: add one for Py3 (only necessary when macOS ships a Python3 or 3rd-party isolation is needed)
   resource "pyqgis-startup" do
@@ -379,7 +382,15 @@ class Qgis3 < Formula
       -DWITH_CUSTOM_WIDGETS=TRUE
       -DWITH_ASTYLE=FALSE
     ]
-        
+    
+    if build.with? "ccache"
+      args << "-DUSE_CCACHE=ON"
+      args << "-DCMAKE_CXX_COMPILER=#{Formula["ccache"].opt_libexec}/clang++"
+      args << "-DCMAKE_C_COMPILER=#{Formula["ccache"].opt_libexec}/clang"
+    else
+      args << "-DUSE_CCACHE=OFF"
+    end
+
     # python Configuration
     args << "-DPYTHON_EXECUTABLE='#{`python3 -c "import sys; print(sys.executable)"`.chomp}'"
     # args << "-DPYTHON_CUSTOM_FRAMEWORK='#{`python3 -c "import sys; print(sys.prefix)"`.chomp}'" # not used by the project
