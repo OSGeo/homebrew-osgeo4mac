@@ -3,8 +3,8 @@ class Ossim < Formula
   homepage "https://trac.osgeo.org/ossim/"
 
   stable do
-    url "https://github.com/ossimlabs/ossim/archive/Hollywood-2.4.0.tar.gz"
-    sha256 "73d59cdfe09f220c9847f9c366b28bd6cf548d4acb0c28ac3800280999bd6d2f"
+    url "https://github.com/ossimlabs/ossim/archive/Hollywood-2.4.2.tar.gz"
+    sha256 "1dd0cdc1533753b35922d9e49142012293b132f16bc7bc18823a5dfc541c44eb"
   end
 
   bottle do
