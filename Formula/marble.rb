@@ -8,7 +8,9 @@ class Marble < Formula
   head "git://anongit.kde.org/marble"
 
   bottle do
-
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    sha256 "7fb25ec4364a428f113b3f3d099610bae58accd56c77489de1dbc63eb5815cfe" => :high_sierra
+    sha256 "7fb25ec4364a428f113b3f3d099610bae58accd56c77489de1dbc63eb5815cfe" => :sierra
   end
 
   option "with-debug", "Enable debug build type"
