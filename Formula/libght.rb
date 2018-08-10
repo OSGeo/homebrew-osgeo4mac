@@ -9,7 +9,9 @@ class Libght < Formula
   head "https://github.com/pramsey/libght.git", :branch => "master"
 
   bottle do
-
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    sha256 "dd1015999e44dc1478f908a258f17bd2a38e75ac82b81a8e362a34c28ee55a81" => :high_sierra
+    sha256 "dd1015999e44dc1478f908a258f17bd2a38e75ac82b81a8e362a34c28ee55a81" => :sierra
   end
 
   depends_on "cmake" => :build
