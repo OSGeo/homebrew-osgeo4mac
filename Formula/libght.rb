@@ -15,7 +15,6 @@ class Libght < Formula
   depends_on "cmake" => :build
   depends_on "proj"
   depends_on "liblas-gdal2"
-  depends_on "cunit"
 
   def install
     mkdir "build" do
