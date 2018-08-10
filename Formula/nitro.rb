@@ -8,6 +8,10 @@ class Nitro < Formula
   head "https://github.com/hobu/nitro.git", :branch => "master"
 
   bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    cellar :any
+    sha256 "f317ec74d95276905f729cae0bc2703a5c5892858801ba1c5422b5fb4d5f624e" => :high_sierra
+    sha256 "f317ec74d95276905f729cae0bc2703a5c5892858801ba1c5422b5fb4d5f624e" => :sierra
   end
 
   depends_on "cmake" => :build
