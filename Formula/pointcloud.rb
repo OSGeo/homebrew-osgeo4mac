@@ -1,9 +1,8 @@
 class Pointcloud < Formula
   desc "PostgreSQL extension for storing point cloud (LIDAR) data"
   homepage "https://github.com/pgpointcloud/pointcloud"
-  url "https://github.com/pgpointcloud/pointcloud/archive/3929653f51296f5dd5fe5997c8c4c5d46419cb50.tar.gz"
-  version "1.1.0-dev"
-  sha256 "d3190fb662912c1d889343a3cd221bb3995c9bbc69156fa184c5f4712b7b26b5"
+  url "https://github.com/pgpointcloud/pointcloud/archive/v1.1.1.tar.gz"
+  sha256 "1f0da23cf1976d883aad20875b678928e39a28b40d4c96eb90aff5106cdd400d"
 
   head "https://github.com/pgpointcloud/pointcloud.git", :branch => "master"
 
