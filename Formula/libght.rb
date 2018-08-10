@@ -8,21 +8,19 @@ class Libght < Formula
 
   head "https://github.com/pramsey/libght.git", :branch => "master"
 
-  option "with-test", "Run unit tests after build, prior to install"
+  bottle do
 
-  deprecated_option "with-tests" => "with-test"
+  end
 
   depends_on "cmake" => :build
   depends_on "proj"
-  depends_on "liblas"
+  depends_on "liblas-gdal2"
   depends_on "cunit"
 
   def install
-    ENV.libxml2
     mkdir "build" do
       system "cmake", "..", *std_cmake_args
       system "make"
-      puts `test/cu_tester` if build.with? "test"
       system "make", "install"
     end
   end
