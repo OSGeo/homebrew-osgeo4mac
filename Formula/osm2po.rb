@@ -14,7 +14,7 @@ class Osm2po < Formula
     doc.install Dir["osm2po-doc/*"]
     rm "demo.bat"
     libexec.install Dir["*"]
-    bin.write_jar_script libexec/"osm2po-core-5.2.43-signed.jar", "osm2po"
+    bin.write_jar_script libexec/"osm2po-core-#{version.to_s}-signed.jar", "osm2po"
     (libexec/"demo.sh").chmod 0755
   end
 
