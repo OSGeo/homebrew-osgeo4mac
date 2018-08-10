@@ -7,14 +7,14 @@ end
 
 class Osm2po < Formula
   homepage "http://osm2po.de"
-  url "http://osm2po.de/releases/osm2po-5.0.0.zip", :using => CurlRefererDownloadStrategy
-  sha256 "b3cf06899dee97e80a40e4e15b81f7823ec467fd82d5c97c767e670850f9d6ac"
+  url "http://osm2po.de/releases/osm2po-5.2.43.zip"
+  sha256 "dc9caab7089d7b1d2e804ead29d37457a2c0ca308dbb76d076ddd153fac93cb6"
 
   def install
     doc.install Dir["osm2po-doc/*"]
     rm "demo.bat"
     libexec.install Dir["*"]
-    bin.write_jar_script libexec/"osm2po-core-5.0.0-signed.jar", "osm2po"
+    bin.write_jar_script libexec/"osm2po-core-#{version.to_s}-signed.jar", "osm2po"
     (libexec/"demo.sh").chmod 0755
   end
 
