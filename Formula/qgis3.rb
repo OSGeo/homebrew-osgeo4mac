@@ -39,14 +39,11 @@ class Qgis3 < Formula
 
   revision 2
 
-  head "https://github.com/qgis/QGIS.git", :branch => "release-3_2"
+  head "https://github.com/qgis/QGIS.git", :revision => "c7421c77a6063bb680687c107504f65c5d43ae8c"
 
   stable do
-    # using branch:master, because v3.2.1 has a problem with Processing/GRASS
-    # https://github.com/OSGeo/homebrew-osgeo4mac/issues/436
-    url "https://github.com/qgis/QGIS/archive/c7421c77a6063bb680687c107504f65c5d43ae8c.zip"
-    version "3.2.1"
-    sha256 "dcf5e630dcdc79fa88397dce4b71ef7d73669bae4f4406586fed484f482a1c73"
+    url "https://github.com/qgis/QGIS/archive/final-3_2_1.tar.gz"
+    sha256 "c1603f0afc13de6a0e0c10564c444ceaefebd5670bf41f6ea51c8eae1eac9b6c"
   end
 
   bottle do
