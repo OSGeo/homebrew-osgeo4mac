@@ -39,6 +39,8 @@ class Qgis3 < Formula
 
   revision 2
 
+  # using branch:master, because release-3_2 has a problem with Processing/GRASS
+  # https://github.com/OSGeo/homebrew-osgeo4mac/issues/436
   head "https://github.com/qgis/QGIS.git", :revision => "c7421c77a6063bb680687c107504f65c5d43ae8c"
 
   stable do
@@ -409,12 +411,6 @@ class Qgis3 < Formula
     # disable CCache
     args << "-DUSE_CCACHE=OFF"
 
-    # disable OpenCL support
-    # necessary to build from branch: master
-    # fix for CL/cl2.hpp
-    # https://github.com/qgis/QGIS/pull/7451
-    args << "-DUSE_OPENCL=OFF"
-
     # python Configuration
     args << "-DPYTHON_EXECUTABLE='#{`python3 -c "import sys; print(sys.executable)"`.chomp}'"
     # args << "-DPYTHON_CUSTOM_FRAMEWORK='#{`python3 -c "import sys; print(sys.prefix)"`.chomp}'" # not used by the project
@@ -439,6 +435,12 @@ class Qgis3 < Formula
     if build.head? && File.exist?("#{cached_download}/.git/index")
       args << "-DGITCOMMAND=#{Formula["git"].opt_bin}/git"
       args << "-DGIT_MARKER=#{cached_download}/.git/index"
+
+      # disable OpenCL support
+      # necessary to build from branch: master
+      # fix for CL/cl2.hpp
+      # https://github.com/qgis/QGIS/pull/7451
+      args << "-DUSE_OPENCL=OFF"
     end
 
     args << "-DWITH_SERVER=#{build.with?("server") ? "TRUE" : "FALSE"}"
