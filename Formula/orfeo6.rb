@@ -55,6 +55,11 @@ class Orfeo6 < Formula
   depends_on "open-mpi" => :optional
   depends_on "brewsci/science/shark" => :optional
 
+  # Need libagg if building mapnik
+  if build.with? "mapnik"
+    depends_on "libagg"
+  end
+
   # ICE Viewer: needs X11 support
   # apparently, GLUT is not needed by Monteverdi, which uses ICE non-gui module,
   # but is needed for the ICE Viewer
@@ -94,7 +99,6 @@ class Orfeo6 < Formula
       -DQWT_INCLUDE_DIR=#{Formula['qwt-qt4'].lib}/qwt.framework/Headers
       -DOSSIM_LIBRARY=#{Formula['ossim'].opt_prefix}/Frameworks/ossim.framework
       -DOSSIM_INCLUDE_DIR=#{Formula['ossim'].include}
-
     ]
 
     ENV.cxx11
@@ -130,6 +134,10 @@ class Orfeo6 < Formula
     args << "-DOTB_USE_QWT=" + ((build.with?("qt-4") || build.with?("monteverdi")) ? "ON" : "OFF")
     args << "-DOTB_USE_SIFTFAST=ON"
     args << "-DOTB_USE_SHARK=" + (build.with?("brewsci/science/shark") ? "ON" : "OFF")
+
+    if build.with? "mapnik"
+      args << "-DAGG_INCLUDE_DIR=#{Formula['libagg'].include}"
+    end
 
     mkdir "build" do
       system "cmake", "..", *args
