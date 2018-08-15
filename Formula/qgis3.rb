@@ -1,5 +1,6 @@
 class UnlinkedQGIS3 < Requirement
   fatal true
+
   satisfy(:build_env => false) { !qt4_linked && !pyqt4_linked && !txt2tags_linked }
 
   def qt4_linked
@@ -32,12 +33,15 @@ end
 
 class Qgis3 < Formula
   include Language::Python::Virtualenv
+
   desc "Open Source Geographic Information System"
   homepage "https://www.qgis.org"
 
-  revision 1
+  revision 2
 
-  head "https://github.com/qgis/QGIS.git", :branch => "release-3_2"
+  # using branch:master, because release-3_2 has a problem with Processing/GRASS
+  # https://github.com/OSGeo/homebrew-osgeo4mac/issues/436
+  head "https://github.com/qgis/QGIS.git", :branch => "master"
 
   stable do
     url "https://github.com/qgis/QGIS/archive/final-3_2_1.tar.gz"
@@ -51,14 +55,13 @@ class Qgis3 < Formula
     sha256 "65250f593684553997f69977bdfacef3944e07da7f52fbec04a674cbc78cd482" => :sierra
   end
 
-
   def pour_bottle?
     brewed_python?
   end
 
   option "without-ninja", "Disable use of ninja CMake generator"
-  # option "without-qt5-webkit", "Build without webkit based functionality"
-  # option "without-pyqt5-webkit", "Build without webkit python bindings"
+  option "without-qt5-webkit", "Build without webkit based functionality"
+  option "without-pyqt5-webkit", "Build without webkit python bindings"
   option "with-isolation", "Isolate .app's environment to HOMEBREW_PREFIX, to coexist with other QGIS installs"
   option "without-debug", "Disable debug build, which outputs info to system.log or console"
   option "without-server", "Build without QGIS Server (qgis_mapserv.fcgi)"
@@ -92,6 +95,7 @@ class Qgis3 < Formula
     depends_on "graphviz" => :build
     depends_on "doxygen" => :build
   end
+  depends_on :x11
   depends_on "qca"
   depends_on "qtkeychain"
   depends_on "qscintilla2"
@@ -109,7 +113,12 @@ class Qgis3 < Formula
   depends_on "libzip" 
   depends_on "libtasn1"
   depends_on "hicolor-icon-theme"
-  
+  depends_on "libiconv"
+  depends_on "geos"
+  depends_on "libspatialite"
+  depends_on "postgis"
+  depends_on "openssl"
+
   # core providers
   depends_on "gdal2-python"
     
@@ -122,11 +131,11 @@ class Qgis3 < Formula
     depends_on "gettext"
   end
 
-  # Not until osgearth is Qt5-ready
+  # # Not until osgearth is Qt5-ready
   # if build.with? "globe"
-    # this is pretty borked with OS X >= 10.10+
-    # depends_on "open-scene-graph"
-    # depends_on "brewsci/science/osgearth"
+  #   # this is pretty borked with OS X >= 10.10+
+  #   depends_on "open-scene-graph"
+  #   # depends_on "brewsci/science/osgearth"
   # end
 
   depends_on "gpsbabel" => :optional
@@ -134,7 +143,7 @@ class Qgis3 < Formula
   # TODO: remove "pyspatialite" when PyPi package supports spatialite 4.x
   #       or DB Manager supports libspatialite >= 4.2.0 (with mod_spatialite)
   # TODO: what to do for Py3 and pyspatialite?
-  # depends_on "pyspatialite" # for DB Manager
+  depends_on "pyspatialite" # for DB Manager
   # depends_on "qt-mysql" => :optional # for eVis plugin (non-functional in 2.x?)
 
   # core processing plugin extras
@@ -147,8 +156,8 @@ class Qgis3 < Formula
 
   # TODO: add one for Py3 (only necessary when macOS ships a Python3 or 3rd-party isolation is needed)
   resource "pyqgis-startup" do
-    url "https://gist.githubusercontent.com/fjperini/96bb3654b4d8fd97c343345cd12b6cde/raw/785bea0f9f46f17a626ea31d3308393d0814d693/pyqgis_startup.py"
-    sha256 "98483e262faa87fa82128527a2318e4b28937156eca0031503cc4ed273ef1fad"
+    url "https://gist.githubusercontent.com/dakcarto/11385561/raw/e49f75ecec96ed7d6d3950f45ad3f30fe94d4fb2/pyqgis_startup.py"
+    sha256 "385dce925fc2d29f05afd6508bc1f46ec84c0bc607cc0c8dfce78a4bb93b9c4e"
     version "2.14.0"
   end 
     
@@ -270,11 +279,6 @@ class Qgis3 < Formula
     sha256 "dbae1046def0efb574852fab9e90209b23f556367b5a320c0bcb871c77c3e8cc"
   end
 
-  resource "httplib2" do
-    url "https://files.pythonhosted.org/packages/fd/ce/aa4a385e3e9fd351737fd2b07edaa56e7a730448465aceda6b35086a0d9b/httplib2-0.11.3.tar.gz"
-    sha256 "e71daed9a0e6373642db61166fa70beecc9bf04383477f84671348c02a04cbdf"
-  end
-
   needs :cxx11
 
   def install
@@ -294,44 +298,67 @@ class Qgis3 < Formula
       puts "gdal_python_opt_bin: #{gdal_python_opt_bin}"
       puts "gdal_opt_bin: #{gdal_opt_bin}"
     end
-
+      
     # install python dependencies
     venv = virtualenv_create(libexec/'vendor', "python3")
     venv.pip_install resources.reject { |r| r.name == "pyqgis-startup" }
- 
+
     # set bundling level back to 0 (the default in all versions prior to 1.8.0)
     # so that no time and energy is wasted copying the Qt frameworks into QGIS.
 
-    # install custom widgets Designer plugin to local qt plugins prefix
-    mkdir lib_qt/"plugins/designer"
+    # Install custom widgets Designer plugin to local qt plugins prefix
+    mkdir lib/"qt/plugins/designer"
     inreplace "src/customwidgets/CMakeLists.txt",
-              "${QT_PLUGINS_DIR}/designer", lib_qt/"plugins/designer".to_s
+              "${QT_PLUGINS_DIR}/designer", lib/"qt/plugins/designer".to_s
 
-    # fix custom widgets Designer module install path
-    mkdir lib_qt/"python#{py_ver}/site-packages/PyQt5"
+    # Fix custom widgets Designer module install path
+    mkdir lib/"python#{py_ver}/site-packages/PyQt5"
     inreplace "CMakeLists.txt",
-              "${PYQT5_MOD_DIR}", lib_qt/"python#{py_ver}/site-packages/PyQt5".to_s
+              "${PYQT5_MOD_DIR}", lib/"python#{py_ver}/site-packages/PyQt5".to_s
 
-    # install db plugins to local qt plugins prefix
+    # Install db plugins to local qt plugins prefix
     if build.with? "qspatialite"
-      mkdir lib_qt/"plugins/sqldrivers"
-      # inreplace "src/providers/spatialite/CMakeLists.txt",
-      #           "${QGIS_PLUGIN_DIR}", lib_qt/"plugins/sqldrivers".to_s
+      mkdir lib/"qt/plugins/sqldrivers"
       inreplace "external/qspatialite/CMakeLists.txt",
-                "${QT_PLUGINS_DIR}/sqldrivers", lib_qt/"plugins/sqldrivers".to_s   
+                "${QT_PLUGINS_DIR}/sqldrivers", lib/"qt/plugins/sqldrivers".to_s
     end
-    
     if build.with? "oracle"
-      mkdir lib_qt/"plugins/sqldrivers"
+      mkdir lib/"qt/plugins/sqldrivers"
       inreplace "src/providers/oracle/ocispatial/CMakeLists.txt",
-                "${QT_PLUGINS_DIR}/sqldrivers", lib_qt/"plugins/sqldrivers".to_s
+                "${QT_PLUGINS_DIR}/sqldrivers", lib/"qt/plugins/sqldrivers".to_s
     end
+
+    args = std_cmake_args
+    args << "-DCMAKE_BUILD_TYPE=RelWithDebInfo" if build.with? "debug" # override
+
+    cmake_prefixes = %w[
+      qt5
+      qt5-webkit
+      qscintilla2
+      qwt
+      qwtpolar
+      qca
+      gdal2
+      gsl
+      geos
+      proj
+      libspatialite
+      spatialindex
+      expat
+      sqlite
+      libzip
+      flex
+      bison
+      fcgi
+    ].freeze
+
+    # Force CMake to search HB/opt paths first, so headers in HB/include are not found instead;
+    # specifically, ensure any gdal v1 includes are not used
+    args << "-DCMAKE_PREFIX_PATH=#{cmake_prefixes.map { |f| Formula[f.to_s].opt_prefix }.join(";")}"
 
     qwt_fw = Formula["qwt"].opt_lib/"qwt.framework"
     qwtpolar_fw = Formula["qwtpolar"].opt_lib/"qwtpolar.framework"
     qca_fw = Formula["qca"].opt_lib/"qca-qt5.framework"
-    args = std_cmake_args
-    args << "-DCMAKE_BUILD_TYPE=RelWithDebInfo" if build.with? "debug" # override
     args += %W[
       -DBISON_EXECUTABLE=#{Formula["bison"].opt_bin}/bison
       -DEXPAT_INCLUDE_DIR=#{Formula["expat"].opt_include}
@@ -352,6 +379,7 @@ class Qgis3 < Formula
       -DSPATIALINDEX_LIBRARY=#{Formula["spatialindex"].opt_lib}/libspatialindex.dylib
       -DSQLITE3_INCLUDE_DIR=#{Formula["sqlite"].opt_include}
       -DSQLITE3_LIBRARY=#{Formula["sqlite"].opt_lib}/libsqlite3.dylib
+      -DLIBZIP_CONF_INCLUDE_DIR=#{Formula["libzip"].opt_lib}/pkgconfig
       -DLIBZIP_INCLUDE_DIR=#{Formula["libzip"].opt_include}
       -DLIBZIP_LIBRARY=#{Formula["libzip"].opt_lib}/libzip.dylib
       -DSPATIALITE_INCLUDE_DIR=#{Formula["libspatialite"].opt_include}
@@ -364,8 +392,10 @@ class Qgis3 < Formula
       -DPYRCC_PROGRAM=#{libexec}/vendor/bin/pyrcc5
       -DPYUIC_PROGRAM=#{libexec}/vendor/bin/pyuic5
 
+      -DQT_LRELEASE_EXECUTABLE=#{Formula["qt"].opt_bin}/lrelease
       -DWITH_QTWEBKIT=TRUE
-      -DOPTIONAL_QTWEBKIT=#{Formula["qt5-webkit"].opt_lib}/cmake/Qt5WebKitWidgets
+      -DQt5WebKitWidgets_DIR=#{Formula["qt5-webkit"].opt_lib}/cmake/Qt5WebKitWidgets
+      -DQt5WebKit_DIR=#{Formula["qt5-webkit"].opt_lib}/cmake/Qt5WebKit
       
       -DENABLE_TESTS=FALSE
       -DENABLE_MODELTEST=FALSE
@@ -374,41 +404,55 @@ class Qgis3 < Formula
       -DWITH_INTERNAL_QWTPOLAR=FALSE
       -DQGIS_MACAPP_BUNDLE=0
       -DQGIS_MACAPP_INSTALL_DEV=FALSE
-      -DWITH_QSCIAPI=TRUE
+      -DWITH_QSCIAPI=FALSE
       -DWITH_STAGED_PLUGINS=TRUE
       -DWITH_CUSTOM_WIDGETS=TRUE
       -DWITH_ASTYLE=FALSE
-      -DUSE_CCACHE=OFF
+      -DWITH_GRASS=FALSE
     ]
+
+    # disable CCache
+    args << "-DUSE_CCACHE=OFF"
+
+    # By default bindings will be installed only to QGIS directory
+    # Someone might want to install it to python site-packages directory
+    # as otherwise user has to use PYTHONPATH environment variable to add
+    # args << "-DWITH_BINDINGS=ON"
 
     # python Configuration
     args << "-DPYTHON_EXECUTABLE='#{`python3 -c "import sys; print(sys.executable)"`.chomp}'"
     # args << "-DPYTHON_CUSTOM_FRAMEWORK='#{`python3 -c "import sys; print(sys.prefix)"`.chomp}'" # not used by the project
     # Disable future, because we've installed it in the virtualenv and will provide it at runtime.
     # args << "-DWITH_INTERNAL_FUTURE=FALSE" # not used by the project
-    #args << "-DPYTHON_INCLUDE_PATH=#{Formula["python"].opt_include}"
-    #args << "-DPYTHON_LIBRARY=/usr/local/Frameworks/Python.framework/Versions/#{py_ver}/Python"
-    #args << "-DPYTHON_SITE_PACKAGES_DIR=/usr/local/lib/python#{py_ver}/site-packages"
+    # args << "-DPYTHON_INCLUDE_PATH=#{HOMEBREW_PREFIX}/Frameworks/Python.framework/Versions/#{py_ver}/include/python#{py_ver}m"
+    # args << "-DPYTHON_LIBRARY=#{HOMEBREW_PREFIX}/Frameworks/Python.framework/Versions/#{py_ver}/Python"
+    # args << "-DPYTHON_LIBRARY=#{HOMEBREW_PREFIX}/Frameworks/Python.framework/Versions/#{py_ver}/lib/"
+    # args << "-DPYTHON_SITE_PACKAGES_DIR=#{HOMEBREW_PREFIX}/lib/python#{py_ver}/site-packages"
 
     # if using Homebrew's Python, make sure its components are always found first
     # see: https://github.com/Homebrew/homebrew/pull/28597
     ENV["PYTHONHOME"] = python_prefix if brewed_python?
 
-    # handle custom site-packages for qt keg-only modules and packages
-    ENV.prepend_path "PYTHONPATH", python_site_packages
-    ENV.append_path "PYTHONPATH", python_qt_site_packages
-    # ENV.append_path "PYTHONPATH", libexec/"vendor/lib/python#{py_ver}/site-packages"
-    ENV.prepend_path "PATH", libexec/'vendor/bin/'
-    # ENV.prepend_path "PATH", libexec/"python/bin"
+    # handle custom site-packages for keg-only modules and packages
+    ENV.append_path "PYTHONPATH", python_site_packages
+    # ENV.append_path "PYTHONPATH", qgis_python_packages
+    ENV.append_path "PYTHONPATH", lib/"python#{py_ver}/site-packages"
 
     # find git revision for HEAD build
     if build.head? && File.exist?("#{cached_download}/.git/index")
       args << "-DGITCOMMAND=#{Formula["git"].opt_bin}/git"
       args << "-DGIT_MARKER=#{cached_download}/.git/index"
+
+      # disable OpenCL support
+      # necessary to build from branch: master
+      # fix for CL/cl2.hpp
+      # https://github.com/qgis/QGIS/pull/7451
+      args << "-DUSE_OPENCL=OFF"
     end
 
     args << "-DWITH_SERVER=#{build.with?("server") ? "TRUE" : "FALSE"}"
     if build.with? "server"
+      args << "-DWITH_SERVER_PLUGINS=TRUE"
       fcgi_opt = Formula["fcgi"].opt_prefix
       args << "-DFCGI_INCLUDE_DIR=#{fcgi_opt}/include"
       args << "-DFCGI_LIBRARY=#{fcgi_opt}/lib/libfcgi.dylib"
@@ -433,11 +477,18 @@ class Qgis3 < Formula
     end
 
     # args << "-DWITH_GLOBE=#{build.with?("globe") ? "TRUE" : "FALSE"}"
-    # if build.with? "globe"
-    #   osg = Formula["open-scene-graph"]
-    #   opoo "`open-scene-graph` formula's keg not linked." unless osg.linked_keg.exist?
-    #   # must be HOMEBREW_PREFIX/lib/osgPlugins-#.#.#, since all osg plugins are symlinked there
-    #   # args << "-DOSG_PLUGINS_PATH=#{HOMEBREW_PREFIX}/lib/osgPlugins-#{osg.version}"
+    #   if build.with? "globe"
+    #     osg = Formula["open-scene-graph"]
+    #     opoo "`open-scene-graph` formula's keg not linked." unless osg.linked_keg.exist?
+    #     # must be HOMEBREW_PREFIX/lib/osgPlugins-#.#.#, since all osg plugins are symlinked there
+    #     args << "-DOSG_PLUGINS_PATH=#{HOMEBREW_PREFIX}/lib/osgPlugins-#{osg.version}"
+    #     # args << "-DOSGEARTHANNOTATION_LIBRARY="
+    #     # args << "-DOSGEARTHFEATURES_LIBRARY="
+    #     # args << "-DOSGEARTHQT_LIBRARY="
+    #     # args << "-DOSGEARTHSYMBOLOGY_LIBRARY="
+    #     # args << "-DOSGEARTHUTIL_LIBRARY="
+    #     # args << "-DOSGEARTH_INCLUDE_DIR="
+    #     # args << "-DOSGEARTH_LIBRARY="
     # end
 
     args << "-DWITH_ORACLE=#{build.with?("oracle") ? "TRUE" : "FALSE"}"
@@ -455,21 +506,21 @@ class Qgis3 < Formula
    
     # args << "-DWITH_QTWEBKIT=#{build.with?("qt5-webkit") ? "TRUE" : "FALSE"}"
     # if build.with? "qt5-webkit"
-    #   args << "-DOPTIONAL_QTWEBKIT=" + Formula["qt5-webkit"].opt_prefix + "/lib/cmake/Qt5WebKitWidgets"
+    #   args << "-DOPTIONAL_QTWEBKIT=#{Formula["qt5-webkit"].opt_lib}/cmake/Qt5WebKitWidgets"
     # end
     
     # prefer opt_prefix for CMake modules that find versioned prefix by default
     # this keeps non-critical dependency upgrades from breaking QGIS linking
+    args << "-DGDAL_CONFIG=#{Formula["gdal2"].opt_bin}gdal-config"
     args << "-DGDAL_INCLUDE_DIR=#{Formula["gdal2"].opt_include}"
     args << "-DGDAL_LIBRARY=#{Formula["gdal2"].opt_lib}/libgdal.dylib"
+    args << "-DGEOS_CONFIG=#{Formula["geos"].opt_bin}/geos-config"
     args << "-DGEOS_INCLUDE_DIR=#{Formula["geos"].opt_include}"
     args << "-DGEOS_LIBRARY=#{Formula["geos"].opt_lib}/libgeos_c.dylib"
     args << "-DGSL_CONFIG=#{Formula["gsl"].opt_bin}/gsl-config"
     args << "-DGSL_INCLUDE_DIR=#{Formula["gsl"].opt_include}"
     args << "-DGSL_LIBRARIES='-L#{Formula["gsl"].opt_lib} -lgsl -lgslcblas'"
       
-    # args << "-DR_FOLDER=#{Formula["r"].opt_prefix}" if build.with? "r"
-
     # avoid ld: framework not found QtSql
     # (https://github.com/Homebrew/homebrew-science/issues/23)
     ENV.append "CXXFLAGS", "-F#{Formula["qt"].opt_lib}"
@@ -479,21 +530,23 @@ class Qgis3 < Formula
     # if ENV.compiler == :clang && (MacOS::Xcode.version >= "7.0" || MacOS::CLT.version >= "7.0")
     #   ENV.append "CXX_EXTRA_FLAGS", "-Wno-inconsistent-missing-override"
     # end
-    
+
+    ENV.prepend_path "PATH", libexec/"vendor/bin"
+
     # create pyrcc5
     File.open("#{libexec}/vendor/bin/pyrcc5", "w") { |file|
 			file << '#!/bin/sh'
 			file << "\n"
 			file << 'exec python3 -m PyQt5.pyrcc_main ${1+"$@"}'
     }
-    
+
     # create pyuic5
     File.open("#{libexec}/vendor/bin/pyuic5", "w") { |file|
 			file << '#!/bin/sh'
 			file << "\n"
 			file << 'exec python3 -m PyQt5.pyuic5_main ${1+"$@"}'
     }
-    
+
     chmod("+x", "#{libexec}/vendor/bin/pyrcc5")
     chmod("+x", "#{libexec}/vendor/bin/pyuic5")
     
@@ -505,9 +558,9 @@ class Qgis3 < Formula
 
     # fixup some errant lib linking
     # TODO: fix upstream in CMake
-    dy_libs = [lib_qt/"plugins/designer/libqgis_customwidgets.dylib"]
-    dy_libs << lib_qt/"plugins/sqldrivers/libqsqlspatialite.dylib" if build.with? "qspatialite"
-    dy_libs << lib_qt/"plugins/sqldrivers/libqsqlocispatial.dylib" if build.with? "oracle"
+    dy_libs = [lib/"qt/plugins/designer/libqgis_customwidgets.dylib"]
+    dy_libs << lib/"qt/plugins/sqldrivers/libqsqlspatialite.dylib" if build.with? "qspatialite"
+    dy_libs << lib/"qt/plugins/sqldrivers/libqsqlocispatial.dylib" if build.with? "oracle"
     dy_libs.each do |dy_lib|
       MachO::Tools.dylibs(dy_lib.to_s).each do |i_n|
         %w[core gui native].each do |f_n|
@@ -526,7 +579,8 @@ class Qgis3 < Formula
     inreplace prefix/"QGIS.app/Contents/Info.plist",
               "org.qgis.qgis3", "org.qgis.qgis3-hb#{build.head? ? "-dev" : ""}"
 
-    py_lib = python_site_packages
+    py_lib = lib/"python#{py_ver}/site-packages"
+    py_lib.mkpath
     ln_s "../../../QGIS.app/Contents/Resources/python/qgis", py_lib/"qgis"
 
     ln_s "QGIS.app/Contents/MacOS/fcgi-bin", prefix/"fcgi-bin" if build.with? "server"
@@ -560,16 +614,8 @@ class Qgis3 < Formula
 
     # define default isolation env vars
     pthsep = File::PATH_SEPARATOR
-    pypth = python_site_packages.to_s      
-    pths = %w[
-      /usr/bin
-      /bin
-      /usr/sbin
-      /sbin
-      /opt/X11/bin
-      /usr/X11/bin
-      #{opt_libexec}/vendor/bin
-    ]
+    pypth = python_site_packages.to_s
+    pths = %w[/usr/bin /bin /usr/sbin /sbin /opt/X11/bin /usr/X11/bin]
 
     unless opts.include?("with-isolation")
       pths = ORIGINAL_PATHS.dup
@@ -578,21 +624,16 @@ class Qgis3 < Formula
         pypth = pyenv.include?(pypth) ? pyenv : pypth + pthsep + pyenv
       end
     end
+      
+    pths.insert(0, "#{opt_libexec}/vendor/bin")
 
     unless pths.include?(HOMEBREW_PREFIX/"bin")
       pths = pths.insert(0, HOMEBREW_PREFIX/"bin")
     end
 
-    # set qt's then install's libexec/python#{py_ver}/site-packages first, so app will work if unlinked
-    pypths = %W[#{python_qt_site_packages} #{opt_libexec}/python#{py_ver}/site-packages #{pypth}]
-      
     # set install's lib/python#{py_ver}/site-packages first, so app will work if unlinked
-    # pypths = %W[
-    #  #{opt_lib}/python#{py_ver}/site-packages
-    #  #{opt_libexec}/python/lib/python/site-packages
-    #  #{pypth}
-    # ]
-
+    pypths = %W[#{opt_lib}/python#{py_ver}/site-packages #{opt_libexec}/vendor/lib/python#{py_ver}/site-packages #{pypth}]
+      
     pths.insert(0, gdal_opt_bin)
     pths.insert(0, gdal_python_opt_bin)
     pypths.insert(0, gdal_python_packages)
@@ -600,7 +641,7 @@ class Qgis3 < Formula
     # prepend qt based utils to PATH (reverse order)
     pths.insert(0, Formula["qca"].opt_bin.to_s)
     pths.insert(0, Formula["pyqt"].opt_bin.to_s)
-    pths.insert(0, "#{Formula["sip"].opt_libexec}/bin")
+    pths.insert(0, Formula["sip"].opt_bin.to_s)
     pths.insert(0, Formula["qt"].opt_bin.to_s)
 
     if opts.include?("with-gpsbabel")
@@ -618,15 +659,15 @@ class Qgis3 < Formula
       :GDAL_DRIVER_PATH => "#{HOMEBREW_PREFIX}/lib/gdalplugins",
       :GDAL_DATA => "#{Formula["gdal2"].opt_share}/gdal",
     }
-      
+
     # handle multiple Qt plugins directories
     qtplgpths = %W[
       #{opt_lib}/qt/plugins
-      #{hb_lib_qt}/plugins
       #{Formula["qt"].opt_prefix}/plugins
+      #{HOMEBREW_PREFIX}/lib/qt/plugins
     ]
     envars[:QT_PLUGIN_PATH] = qtplgpths.join(pthsep)
-      
+
     proc_algs = "Contents/Resources/python/plugins/processing/algs"
     if opts.include?("with-grass") || brewed_grass7?
       grass7 = Formula["grass7"]
@@ -637,7 +678,7 @@ class Qgis3 < Formula
                   "'/Applications/GRASS-7.{}.app/Contents/MacOS'.format(version)",
                   "'#{grass7.opt_prefix}/grass-base'"
         puts "GRASS 7 GrassUtils.py has been updated"
-      rescue Utils::InreplaceError
+        rescue Utils::InreplaceError
         puts "GRASS 7 GrassUtils.py already updated"
       end
     end
@@ -674,6 +715,8 @@ class Qgis3 < Formula
       ]
       envars[:DYLD_VERSIONED_LIBRARY_PATH] = versioned.join(pthsep)
     end
+
+    # TODO: add for Py3
     if opts.include?("with-isolation") || File.exist?("/Library/Frameworks/GDAL.framework")
       envars[:PYQGIS_STARTUP] = opt_libexec/"pyqgis_startup.py"
     end
@@ -740,8 +783,9 @@ class Qgis3 < Formula
             when launching via the wrapper script, while launching QGIS.app
             bundle they are not.
 
-      For standalone Python development, set the following environment variable:
-        export PYTHONPATH=#{libexec/"python3.7/site-packages"}:#{gdal_python_packages}:#{python_qt_site_packages}:#{python_site_packages}:$PYTHONPATH
+      For standalone Python3 development, set the following environment variable:
+        export PYTHONPATH=#{qgis_python_packages}:#{gdal_python_packages}:#{python_site_packages}:$PYTHONPATH
+
     EOS
 
     if build.with? "isolation"
@@ -753,42 +797,21 @@ class Qgis3 < Formula
       EOS
     end
 
-    # check for required run-time Python module dependencies
-    # TODO: add "pyspatialite" when PyPi package supports spatialite 4.x
-    xm = []
-    %w[psycopg2 matplotlib pyparsing requests future jinja2 pygments].each do |m|
-      xm << m unless module_importable? m
-    end
+    s += <<~EOS
+      QGIS plugins may need extra Python modules to function. Most can be installed with pip in a Terminal:
 
-    unless xm.empty?
-      s += <<~EOS
-        #{Tty.red}
-        The following Python modules are needed by QGIS during run-time:
+          pip3 install modulename
 
-            #{xm.join(", ")}
+      If you want to upgrade modules, add the -U option:
 
-        You can install manually, via installer package or with `pip` (if availble):
+          pip3 install -U modulename
 
-            pip3 install <module>  OR  pip-3.7 install <module>
-        #{Tty.red}
-        #{Tty.reset}
-      EOS
-    end
-
-    # TODO: remove this when libqscintilla.dylib becomes core build dependency?
-    unless module_importable? "PyQt.Qsci"
-      s += <<~EOS
-        QScintilla Python module is needed by QGIS during run-time.
-        Ensure `qscintilla2` formula is linked.
-
-      EOS
-    end
+    EOS
 
     s += <<~EOS
       If you have built GRASS 7 for the Processing plugin set the following in QGIS:
         Processing->Options: Providers->GRASS GIS 7 commands->GRASS 7 folder to:
            #{HOMEBREW_PREFIX}/opt/grass7/grass-base
-
     EOS
     s
   end
@@ -809,21 +832,17 @@ class Qgis3 < Formula
   # end
 
   def brewed_python?
-    Formula["python3"].linked_keg.exist?
+    Formula["python"].linked_keg.exist?
   end
 
   def python_exec
     if brewed_python?
-      Formula["python3"].opt_bin/"python3"
+      libexec/"vendor/bin/python3"
     else
       py_exec = `which python3`.strip
       raise if py_exec == ""
       py_exec
     end
-  end
-
-  def python_prefix
-    `#{python_exec} -c 'import sys;print(sys.prefix)'`.strip
   end
 
   def py_ver
@@ -834,28 +853,12 @@ class Qgis3 < Formula
     libexec/"vendor/lib/python#{py_ver}/site-packages"
   end
 
-  def python_incdir
-    Pathname.new(`#{python_exec} -c "from distutils import sysconfig; print(sysconfig.get_python_inc())"`.strip)
+  def python_prefix
+    `#{python_exec} -c 'import sys;print(sys.prefix)'`.strip
   end
 
-  def python_libdir
-    Pathname.new(`#{python_exec} -c "from distutils import sysconfig; print(sysconfig.get_config_var('LIBPL'))"`.strip)
-  end
-
-  def opt_lib_qt
-    opt_lib/"qt"
-  end
-
-  def hb_lib_qt
-    HOMEBREW_PREFIX/"lib/qt"
-  end
-
-  def python_qt_site_packages
-    hb_lib_qt/"python#{py_ver}/site-packages"
-  end
-
-  def lib_qt
-    lib/"qt"
+  def qgis_python_packages
+    opt_lib/"python#{py_ver}/site-packages".to_s
   end
 
   def gdal_python_packages
@@ -871,7 +874,6 @@ class Qgis3 < Formula
   end
 
   def module_importable?(mod)
-    # `#{python_exec} -c 'import sys;sys.path.insert(1, "#{gdal_python_packages}"); import #{mod}'`.strip
-    quiet_system python_exec, "-c", "import sys;sys.path.insert(1, '#{python_qt_site_packages}'); import #{mod}"
+    `#{python_exec} -c 'import sys; sys.path.insert(1, "#{gdal_python_packages}"); import #{mod}'`.strip
   end
 end
