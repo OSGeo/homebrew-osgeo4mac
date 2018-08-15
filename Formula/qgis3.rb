@@ -37,7 +37,7 @@ class Qgis3 < Formula
 
   revision 1
 
-  head "https://github.com/qgis/QGIS.git", :branch => "release-3_2"
+  head "https://github.com/qgis/QGIS.git", :branch => "master"
 
   stable do
     url "https://github.com/qgis/QGIS/archive/final-3_2_1.tar.gz"
