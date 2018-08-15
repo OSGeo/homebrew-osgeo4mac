@@ -37,7 +37,7 @@ class Qgis3 < Formula
   desc "Open Source Geographic Information System"
   homepage "https://www.qgis.org"
 
-  revision 3
+  revision 2
 
   # using branch:master, because release-3_2 has a problem with Processing/GRASS
   # https://github.com/OSGeo/homebrew-osgeo4mac/issues/436
@@ -298,15 +298,10 @@ class Qgis3 < Formula
       puts "gdal_python_opt_bin: #{gdal_python_opt_bin}"
       puts "gdal_opt_bin: #{gdal_opt_bin}"
     end
-
-    orig_user_base = ENV["PYTHONUSERBASE"]
-    ENV["PYTHONUSERBASE"] = libexec/"python"
       
     # install python dependencies
-    venv = virtualenv_create(libexec/'python', "python3")
+    venv = virtualenv_create(libexec/'vendor', "python3")
     venv.pip_install resources.reject { |r| r.name == "pyqgis-startup" }
-
-    ENV["PYTHONUSERBASE"] = orig_user_base
 
     # set bundling level back to 0 (the default in all versions prior to 1.8.0)
     # so that no time and energy is wasted copying the Qt frameworks into QGIS.
@@ -394,8 +389,8 @@ class Qgis3 < Formula
       -DLIBTASN1_INCLUDE_DIR=#{Formula["libtasn1"].opt_include}
       -DLIBTASN1_LIBRARY=#{Formula["libtasn1"].opt_lib}/libtasn1.dylib
 
-      -DPYRCC_PROGRAM=#{libexec}/python/bin/pyrcc5
-      -DPYUIC_PROGRAM=#{libexec}/python/bin/pyuic5
+      -DPYRCC_PROGRAM=#{libexec}/vendor/bin/pyrcc5
+      -DPYUIC_PROGRAM=#{libexec}/vendor/bin/pyuic5
 
       -DQT_LRELEASE_EXECUTABLE=#{Formula["qt"].opt_bin}/lrelease
       -DWITH_QTWEBKIT=TRUE
@@ -436,12 +431,12 @@ class Qgis3 < Formula
 
     # if using Homebrew's Python, make sure its components are always found first
     # see: https://github.com/Homebrew/homebrew/pull/28597
-    ENV["PYTHONHOME"] = python_prefix
+    ENV["PYTHONHOME"] = python_prefix if brewed_python?
 
     # handle custom site-packages for keg-only modules and packages
     ENV.append_path "PYTHONPATH", python_site_packages
-    ENV.append_path "PYTHONPATH", libexec/"python/lib/python#{py_ver}/site-packages"
-	ENV.prepend_path "PATH", libexec/"python/bin"
+    # ENV.append_path "PYTHONPATH", qgis_python_packages
+    ENV.append_path "PYTHONPATH", lib/"python#{py_ver}/site-packages"
 
     # find git revision for HEAD build
     if build.head? && File.exist?("#{cached_download}/.git/index")
@@ -536,22 +531,24 @@ class Qgis3 < Formula
     #   ENV.append "CXX_EXTRA_FLAGS", "-Wno-inconsistent-missing-override"
     # end
 
+    ENV.prepend_path "PATH", libexec/"vendor/bin"
+
     # create pyrcc5
-    File.open("#{libexec}/python/bin/pyrcc5", "w") { |file|
+    File.open("#{libexec}/vendor/bin/pyrcc5", "w") { |file|
 			file << '#!/bin/sh'
 			file << "\n"
 			file << 'exec python3 -m PyQt5.pyrcc_main ${1+"$@"}'
     }
 
     # create pyuic5
-    File.open("#{libexec}/python/bin/pyuic5", "w") { |file|
+    File.open("#{libexec}/vendor/bin/pyuic5", "w") { |file|
 			file << '#!/bin/sh'
 			file << "\n"
 			file << 'exec python3 -m PyQt5.pyuic5_main ${1+"$@"}'
     }
 
-    chmod("+x", "#{libexec}/python/bin/pyrcc5")
-    chmod("+x", "#{libexec}/python/bin/pyuic5")
+    chmod("+x", "#{libexec}/vendor/bin/pyrcc5")
+    chmod("+x", "#{libexec}/vendor/bin/pyuic5")
     
     mkdir "build" do
       system "cmake", "-G", build.with?("ninja") ? "Ninja" : "Unix Makefiles", *args, ".."
@@ -596,7 +593,7 @@ class Qgis3 < Formula
     # only works with QGIS > 2.0.1
     # doesn't need executable bit set, loaded by Python runner in QGIS
     # TODO: for Py3
-    (libexec/"python").install resource("pyqgis-startup")
+    libexec.install resource("pyqgis-startup")
 
     bin.mkdir
     qgis_bin = bin/name.to_s
@@ -618,15 +615,7 @@ class Qgis3 < Formula
     # define default isolation env vars
     pthsep = File::PATH_SEPARATOR
     pypth = python_site_packages.to_s
-    pths = %w[
-      /usr/bin
-      /bin
-      /usr/sbin
-      /sbin
-      /opt/X11/bin
-      /usr/X11/bin
-      #{opt_libexec}/python/bin
-    ]
+    pths = %w[/usr/bin /bin /usr/sbin /sbin /opt/X11/bin /usr/X11/bin]
 
     unless opts.include?("with-isolation")
       pths = ORIGINAL_PATHS.dup
@@ -635,18 +624,16 @@ class Qgis3 < Formula
         pypth = pyenv.include?(pypth) ? pyenv : pypth + pthsep + pyenv
       end
     end
+      
+    pths.insert(0, "#{opt_libexec}/vendor/bin")
 
     unless pths.include?(HOMEBREW_PREFIX/"bin")
       pths = pths.insert(0, HOMEBREW_PREFIX/"bin")
     end
 
-    # set qt's then install's libexec/python#{py_ver}/site-packages first, so app will work if unlinked
-    pypths = %W[
-      #{opt_lib}/python#{py_ver}/site-packages
-      #{opt_libexec}/python/lib/python#{py_ver}/site-packages
-      #{pypth}
-    ]
-
+    # set install's lib/python#{py_ver}/site-packages first, so app will work if unlinked
+    pypths = %W[#{opt_lib}/python#{py_ver}/site-packages #{opt_libexec}/vendor/lib/python#{py_ver}/site-packages #{pypth}]
+      
     pths.insert(0, gdal_opt_bin)
     pths.insert(0, gdal_python_opt_bin)
     pypths.insert(0, gdal_python_packages)
@@ -731,7 +718,7 @@ class Qgis3 < Formula
 
     # TODO: add for Py3
     if opts.include?("with-isolation") || File.exist?("/Library/Frameworks/GDAL.framework")
-    envars[:PYQGIS_STARTUP] = opt_libexec/"python/pyqgis_startup.py"
+      envars[:PYQGIS_STARTUP] = opt_libexec/"pyqgis_startup.py"
     end
 
     # envars.each { |key, value| puts "#{key.to_s}=#{value}" }
@@ -809,37 +796,17 @@ class Qgis3 < Formula
         be available to Python processes within QGIS.app.
       EOS
     end
-      
-    # check for required run-time Python module dependencies
-    # TODO: add "pyspatialite" when PyPi package supports spatialite 4.x
-    xm = []
-    %w[psycopg2 matplotlib pyparsing requests future jinja2 pygments].each do |m|
-      xm << m unless module_importable? m
-    end
 
-    unless xm.empty?
-      s += <<~EOS
-        #{Tty.red}
-        The following Python modules are needed by QGIS during run-time:
+    s += <<~EOS
+      QGIS plugins may need extra Python modules to function. Most can be installed with pip in a Terminal:
 
-            #{xm.join(", ")}
+          pip3 install modulename
 
-        You can install manually, via installer package or with `pip` (if availble):
+      If you want to upgrade modules, add the -U option:
 
-            pip3 install <module>  OR  pip-3.7 install <module>
-        #{Tty.red}
-        #{Tty.reset}
-      EOS
-    end
+          pip3 install -U modulename
 
-    # TODO: remove this when libqscintilla.dylib becomes core build dependency?
-    unless module_importable? "PyQt.Qsci"
-      s += <<~EOS
-        QScintilla Python module is needed by QGIS during run-time.
-        Ensure `qscintilla2` formula is linked.
-
-      EOS
-    end
+    EOS
 
     s += <<~EOS
       If you have built GRASS 7 for the Processing plugin set the following in QGIS:
@@ -870,7 +837,7 @@ class Qgis3 < Formula
 
   def python_exec
     if brewed_python?
-      Formula["python"].opt_bin/"python3"
+      libexec/"vendor/bin/python3"
     else
       py_exec = `which python3`.strip
       raise if py_exec == ""
@@ -883,7 +850,7 @@ class Qgis3 < Formula
   end
 
   def python_site_packages
-    HOMEBREW_PREFIX/"lib/python#{py_ver}/site-packages"
+    libexec/"vendor/lib/python#{py_ver}/site-packages"
   end
 
   def python_prefix
@@ -907,6 +874,6 @@ class Qgis3 < Formula
   end
 
   def module_importable?(mod)
-    `#{python_exec} -c 'import sys;sys.path.insert(1, "#{gdal_python_packages}"); import #{mod}'`.strip
+    `#{python_exec} -c 'import sys; sys.path.insert(1, "#{gdal_python_packages}"); import #{mod}'`.strip
   end
 end
