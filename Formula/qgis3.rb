@@ -37,15 +37,13 @@ class Qgis3 < Formula
   desc "Open Source Geographic Information System"
   homepage "https://www.qgis.org"
 
-  revision 2
+  # revision 1
 
-  # using branch:master, because release-3_2 has a problem with Processing/GRASS
-  # https://github.com/OSGeo/homebrew-osgeo4mac/issues/436
   head "https://github.com/qgis/QGIS.git", :branch => "master"
 
   stable do
-    url "https://github.com/qgis/QGIS/archive/final-3_2_1.tar.gz"
-    sha256 "c1603f0afc13de6a0e0c10564c444ceaefebd5670bf41f6ea51c8eae1eac9b6c"
+    url "https://github.com/qgis/QGIS/archive/final-3_2_2.tar.gz"
+    sha256 "0cc1f8daf2985a2dd88208d87b842c0667d6ec205abac1f002addbb11c8e6b98"
   end
 
   bottle do
