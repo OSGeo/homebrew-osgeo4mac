@@ -37,7 +37,7 @@ class Qgis3 < Formula
   desc "Open Source Geographic Information System"
   homepage "https://www.qgis.org"
 
-  # revision 1
+  revision 1
 
   head "https://github.com/qgis/QGIS.git", :branch => "master"
 
@@ -48,9 +48,8 @@ class Qgis3 < Formula
 
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    rebuild 1
-    sha256 "9548abe40e350a07bd910b169ea158ebedd862adc1a19421759d9ae31b344017" => :high_sierra
-    sha256 "9548abe40e350a07bd910b169ea158ebedd862adc1a19421759d9ae31b344017" => :sierra
+    sha256 "18821e7c3bd1d15321544c25b1d7447b59bc111a7061d2fae430db41b618ddb4" => :high_sierra
+    sha256 "18821e7c3bd1d15321544c25b1d7447b59bc111a7061d2fae430db41b618ddb4" => :sierra
   end
 
   def pour_bottle?
@@ -66,7 +65,7 @@ class Qgis3 < Formula
   # option "with-globe", "Build with Globe plugin, based upon osgEarth"
   option "with-grass", "Build with GRASS 7 integration plugin and Processing plugin support (or install grass-7x first)"
   option "with-oracle", "Build extra Oracle geospatial database and raster support"
-  # option "with-orfeo5", "Build extra Orfeo Toolbox for Processing plugin"
+  option "with-orfeo", "Build extra Orfeo Toolbox for Processing plugin"
   option "with-r", "Build extra R for Processing plugin"
   option "with-saga-gis-lts", "Build extra Saga GIS for Processing plugin"
   # option "with-qt-mysql", "Build extra Qt MySQL plugin for eVis plugin"
@@ -145,7 +144,7 @@ class Qgis3 < Formula
 
   # core processing plugin extras
   # see `grass` above
-  # depends_on "orfeo5" => :optional
+  depends_on "orfeo6" => :optional
   depends_on "r" => :optional
   depends_on "saga-gis-lts" => :optional
   # TODO: LASTools straight build (2 reporting tools), or via `wine` (10 tools)
@@ -502,8 +501,8 @@ class Qgis3 < Formula
     args << "-DWITH_3D=#{build.with?("3d") ? "TRUE" : "FALSE"}"
    
     # args << "-DWITH_QTWEBKIT=#{build.with?("qt5-webkit") ? "TRUE" : "FALSE"}"
-    # if build.with? "qt5-webkit"
-    #   args << "-DOPTIONAL_QTWEBKIT=#{Formula["qt5-webkit"].opt_lib}/cmake/Qt5WebKitWidgets"
+    # if build.with? "qt5-webkit"
+    #   args << "-DOPTIONAL_QTWEBKIT=#{Formula["qt5-webkit"].opt_lib}/cmake/Qt5WebKitWidgets"
     # end
     
     # prefer opt_prefix for CMake modules that find versioned prefix by default
@@ -680,22 +679,24 @@ class Qgis3 < Formula
       end
     end
 
-    # if opts.include?("with-orfeo5") || brewed_orfeo5?
-    #  orfeo5 = Formula["orfeo5"]
-    #  begin
-    #    inreplace app/"#{proc_algs}/otb/OTBUtils.py" do |s|
-    #      # default geoid path
-    #      # try to replace first, so it fails (if already done) before global replaces
-    #      s.sub! "OTB_GEOID_FILE) or ''", "OTB_GEOID_FILE) or '#{orfeo5.opt_libexec}/default_geoid/egm96.grd'"
-    #      # default bin and lib path
-    #      s.gsub! "/usr/local/bin", orfeo5.opt_bin.to_s
-    #      s.gsub! "/usr/local/lib", orfeo5.opt_lib.to_s
-    #    end
-    #    puts "ORFEO 5 OTBUtils.py has been updated"
-    #    rescue Utils::InreplaceError
-    #    puts "ORFEO 5 OTBUtils.py already updated"
-    #  end
-    # end
+    if opts.include?("with-orfeo") || brewed_orfeo6?
+      orfeo6 = Formula["orfeo6"]
+      # for core integration plugin support
+      envars[:QGIS_PLUGINPATH] = "#{orfeo6.opt_prefix}/qgis_otb_plugin"
+      # begin
+      #   inreplace app/"#{proc_algs}/otb/OTBUtils.py" do |s|
+      #   # default geoid path
+      #   # try to replace first, so it fails (if already done) before global replaces
+      #   s.sub! "OTB_GEOID_FILE) or ''", "OTB_GEOID_FILE) or '#{orfeo6.opt_libexec}/default_geoid/egm96.grd'"
+      #   # default bin and lib path
+      #   s.gsub! "/usr/local/bin", orfeo6.opt_bin.to_s
+      #   s.gsub! "/usr/local/lib", orfeo6.opt_lib.to_s
+      #   end
+      #   puts "ORFEO 6 OTBUtils.py has been updated"
+      #   rescue Utils::InreplaceError
+      #   puts "ORFEO 6 OTBUtils.py already updated"
+      # end
+    end
 
     unless opts.include?("without-globe")
       osg = Formula["open-scene-graph"]
@@ -791,6 +792,7 @@ class Qgis3 < Formula
         types of installations of QGIS on your Mac. However, on versions >= 2.0.1,
         this also means Python modules installed in the *system* Python will NOT
         be available to Python processes within QGIS.app.
+
       EOS
     end
 
@@ -805,11 +807,32 @@ class Qgis3 < Formula
 
     EOS
 
-    s += <<~EOS
-      If you have built GRASS 7 for the Processing plugin set the following in QGIS:
-        Processing->Options: Providers->GRASS GIS 7 commands->GRASS 7 folder to:
-           #{HOMEBREW_PREFIX}/opt/grass7/grass-base
-    EOS
+    if build.with? "orfeo"
+      s += <<~EOS
+        If you have built ORFEO 6 for the Processing plugin set the following in QGIS:
+        Activate plugin
+        Manage and Install Plugins -> Installed -> OTB (click its checkbox)
+
+        Then go to
+        Settings -> Options -> Processing -> OTB
+
+        Activate (click its checkbox)
+        Set OTB folder: #{HOMEBREW_PREFIX}/opt/orfeo6
+        Set OTB application folder: #{HOMEBREW_PREFIX}/opt/orfeo6/lib/otb/applications
+        Set Geoid file: #{HOMEBREW_PREFIX}/opt/orfeo6/libexec/default_geoid/egm96.grd
+
+      EOS
+    end
+
+    if build.with? "grass"
+      s += <<~EOS
+        If you have built GRASS 7 for the Processing plugin set the following in QGIS:
+        Settings -> Options -> Processing -> GRASS
+
+        GRASS 7 folder to: #{HOMEBREW_PREFIX}/opt/grass7/grass-base
+
+      EOS
+    end
     s
   end
 
@@ -824,9 +847,9 @@ class Qgis3 < Formula
     Formula["grass7"].opt_prefix.exist?
   end
 
-  # def brewed_orfeo5?
-  #   Formula["orfeo5"].opt_prefix.exist?
-  # end
+  def brewed_orfeo6?
+    Formula["orfeo6"].opt_prefix.exist?
+  end
 
   def brewed_python?
     Formula["python"].linked_keg.exist?
