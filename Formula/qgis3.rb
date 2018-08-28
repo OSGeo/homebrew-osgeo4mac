@@ -37,7 +37,7 @@ class Qgis3 < Formula
   desc "Open Source Geographic Information System"
   homepage "https://www.qgis.org"
 
-  # revision 1
+  revision 1
 
   head "https://github.com/qgis/QGIS.git", :branch => "master"
 
@@ -186,8 +186,8 @@ class Qgis3 < Formula
 
   # fix for Python3.7
   resource "pyproj" do
-    url "https://github.com/jswhit/pyproj/archive/master.zip"
-    sha256 "6611ca878ec6de71115f7705f7fcb3a900999ef1fa9616376c2de63edd3a7841"
+    url "https://github.com/jswhit/pyproj/archive/40bc5389e7ee8212d9f5a790f582970007e367e1.zip"
+    sha256 "d38ff62738460a6d986c132999fcb83256e35f3b649273304392f961613d731f"
     version "1.9.5.1"
   end
 
