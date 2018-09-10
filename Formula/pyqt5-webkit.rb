@@ -7,9 +7,8 @@ class Pyqt5Webkit < Formula
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
     cellar :any
-    rebuild 1
-    sha256 "9936f9b2b59da0f834f6e00d37781112d9f93454a747184e0cba73a8de1ce8ad" => :high_sierra
-    sha256 "9936f9b2b59da0f834f6e00d37781112d9f93454a747184e0cba73a8de1ce8ad" => :sierra
+    sha256 "64f43df75ac00fa8fee60d170e890eb50b0521225ec55e704d9466b31f92a62d" => :high_sierra
+    sha256 "64f43df75ac00fa8fee60d170e890eb50b0521225ec55e704d9466b31f92a62d" => :sierra
   end
 
   option "with-debug", "Build with debug symbols"
