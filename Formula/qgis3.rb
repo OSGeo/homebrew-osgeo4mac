@@ -37,13 +37,13 @@ class Qgis3 < Formula
   desc "Open Source Geographic Information System"
   homepage "https://www.qgis.org"
 
-  revision 1
+  # revision 1
 
   head "https://github.com/qgis/QGIS.git", :branch => "master"
 
   stable do
-    url "https://github.com/qgis/QGIS/archive/final-3_2_2.tar.gz"
-    sha256 "0cc1f8daf2985a2dd88208d87b842c0667d6ec205abac1f002addbb11c8e6b98"
+    url "https://github.com/qgis/QGIS/archive/final-3_2_3.tar.gz"
+    sha256 "08b838e8e1c9af69de07807b8a245bde3a0edaea3b1511d3df593cdd81f55142"
   end
 
   bottle do
