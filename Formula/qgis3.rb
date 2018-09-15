@@ -48,8 +48,9 @@ class Qgis3 < Formula
 
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    sha256 "80d2b1c751c71efaf615a42ee2d76136bd14adcf9bc165dd58c5e9930daef7a0" => :high_sierra
-    sha256 "80d2b1c751c71efaf615a42ee2d76136bd14adcf9bc165dd58c5e9930daef7a0" => :sierra
+    rebuild 1
+    sha256 "ba535ec46a2a9ac31ceaf01418c2b352371790a5073c8d8bfd882ea3296cbfe3" => :high_sierra
+    sha256 "ba535ec46a2a9ac31ceaf01418c2b352371790a5073c8d8bfd882ea3296cbfe3" => :sierra
   end
 
   def pour_bottle?
