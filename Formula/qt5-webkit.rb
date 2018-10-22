@@ -1,102 +1,73 @@
-class NoQt5WebKitAlreadyRequirement < Requirement
-  fatal true
-  satisfy(:build_env => false) { !(Formula["qt5"].lib/"QtWebKit.framework").exist? }
-
-  def message; <<~EOS
-    Qt5 formula already has QtWebKit installed (e.g. built `--with-webkit`)
-  EOS
-  end
-end
-
-class NoQt5WebKitSandboxRequirement < Requirement
-  fatal true
-
-  def pour_bottle?
-    # versions of macOS that have a bottle to install
-    # if there is no bottle, --no-sandbox is required, since it will default to source install
-    # TODO: handle case where pouring bottle fails (tricky here)
-    MacOS.version >= :sierra
-  end
-
-  satisfy(:build_env => false) do
-    (ARGV.build_all_from_source? || ARGV.build_from_source?) ? ARGV.no_sandbox? : ARGV.no_sandbox? || pour_bottle?
-  end
-
-  def message; <<~EOS
-    Must be built with `brew install --no-sandbox ...`, or install steps will fail.
-  EOS
-  end
-end
-
 class Qt5Webkit < Formula
-  desc "QtWebit module for Qt5"
-  homepage "https://download.qt.io/official_releases/qt/5.11"
-  url "https://github.com/qt/qtwebkit.git",
-    :branch => "5.212",
-    :commit => "72cfbd7664f21fcc0e62b869a6b01bf73eb5e7da"
-  version "5.11.1"
+  desc "Classes for a WebKit2 based implementation and a new QML API"
+  homepage "https://www.qt.io/developers"
 
-  bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    cellar :any
-    rebuild 1
-    sha256 "e747978ccf022d826d8133ddc15a27f5223ca1a6b2c02d2d61f36c72070a682f" => :high_sierra
-    sha256 "84920602f319187267bd60fdcdad83e94a9c3e89333652595b8a630778547727" => :sierra
+  revision 1
+
+  head "https://github.com/qt/qtwebkit.git" # from the developer: "https://github.com/annulen/webkit.git"
+
+  stable do
+    url "https://github.com/qt/qtwebkit/archive/v5.212.0-alpha2.tar.gz"
+    sha256 "6db43b931f64857cfda7bcf89914e2730b82164871a8c24c1881620e6bfdeca1"
+    version "5.11.2"
+  end
+
+  patch :DATA
+
+  # Fix null point dereference (Fedora) https://github.com/annulen/webkit/issues/573
+  patch do
+    url "https://git.archlinux.org/svntogit/packages.git/plain/trunk/qt5-webkit-null-pointer-dereference.patch?h=packages/qt5-webkit"
+    sha256 "510e1f78c2bcd76909703a097dbc1d5c9c6ce4cd94883c26138f09cc10121f43"
+  end
+
+  # Fix build with cmake 3.10
+  patch do
+    url "https://github.com/annulen/webkit/commit/f51554bf104ab0491370f66631fe46143a23d5c2.diff?full_index=1"
+    sha256 "874b56c30cdc43627f94d999083f0617c4bfbcae4594fe1a6fc302bf39ad6c30"
   end
 
   keg_only "because Qt5 is keg-only"
 
-  depends_on NoQt5WebKitAlreadyRequirement
-  depends_on NoQt5WebKitSandboxRequirement
-
-  depends_on "qt"
-
-  depends_on :macos => :mountain_lion
-  depends_on :xcode => :build
   depends_on "cmake" => :build
-  depends_on "libjpeg"
+  depends_on "ninja" => [:build, :recommended]
+  depends_on "fontconfig" => :build
+  depends_on "freetype" => :build
+  depends_on "gperf" => :build
+  depends_on "python@2" => :build
+  depends_on "ruby" => :build
+  depends_on "sqlite" => :build
+  # depends_on :xcode => :build
+  depends_on "conan" # C/C++ package manager
+  depends_on "glslang" # OpenGL ES: opengles2
+  depends_on "gst-plugins-base"
+  depends_on "libjpeg-turbo"
   depends_on "libpng"
+  depends_on "libxslt"
+  depends_on "libxml2"
+  depends_on :macos => :mountain_lion
+  depends_on "openssl"
+  depends_on "qt"
   depends_on "webp"
+  depends_on "zlib"
+  depends_on "gst-plugins-good" => :optional
 
   def install
     # On Mavericks we want to target libc++, this requires a macx-clang flag.
-    if ENV.compiler == :clang && MacOS.version >= :mavericks
-      spec = "macx-clang"
-    else
-      spec = "macx-g++"
-    end
+    spec = (ENV.compiler == :clang && MacOS.version >= :mavericks) ? "macx-clang" : "macx-g++"
     args = %W[-config release -spec #{spec}]
 
-    qt5 = Formula["qt"]
-
     mkdir "build" do
-      system qt5.bin/"qmake", "../WebKit.pro", *args
+      system "#{Formula["qt"].opt_bin}/qmake", "../WebKit.pro", *args
       system "make"
-      # just let it install to qt5 formula prefix
-      # NOTE: this violates sandboxing, so --no-sandbox during install required
       system "make", "install"
     end
 
-    # now move installed bits back to this formula prefix
-    (lib/"cmake").mkpath
-    (lib/"pkgconfig").mkpath
-    # (prefix/"imports").mkpath # TODO: necessary for .pri?
-    (prefix/"mkspecs/modules").mkpath
-    (prefix/"plugins").mkpath
-    (prefix/"qml").mkpath
-    libexec.mkpath
-
-    mv Dir["#{qt5.opt_lib}/QtWebKit*.framework"], "#{lib}/"
-    mv Dir["#{qt5.opt_lib}/cmake/Qt5WebKit*"], "#{lib}/cmake/"
-    mv Dir["#{qt5.opt_lib}/pkgconfig/Qt5WebKit*.pc"], "#{lib}/pkgconfig/"
-    mv Dir["#{qt5.opt_prefix}/mkspecs/modules/qt_lib_webkit*.pri"], "#{prefix}/mkspecs/modules/"
-    #mv qt5.opt_prefix/"plugins/webkit", "#{prefix}/plugins/"
-    mv qt5.opt_prefix/"qml/QtWebKit", "#{prefix}/qml/"
-    mv qt5.opt_libexec/"QtWebProcess", "#{libexec}/"
-
     # Rename the .so files
-    mv "#{prefix}/qml/QtWebKit/libqmlwebkitplugin.so", "#{prefix}/qml/QtWebKit/libqmlwebkitplugin.dylib"
-    mv "#{prefix}/qml/QtWebKit/experimental/libqmlwebkitexperimentalplugin.so", "#{prefix}/qml/QtWebKit/experimental/libqmlwebkitexperimentalplugin.dylib"
+    mv "#{lib}/qml/QtWebKit/libqmlwebkitplugin.so", "#{lib}/qml/QtWebKit/libqmlwebkitplugin.dylib"
+    mv "#{lib}/qml/QtWebKit/experimental/libqmlwebkitexperimentalplugin.so", "#{lib}/qml/QtWebKit/experimental/libqmlwebkitexperimentalplugin.dylib"
+
+    ln_s "#{lib}/qml", "#{prefix}/qml"
+    ln_s "#{lib}/libexec", "#{prefix}/libexec"
 
     # Some config scripts will only find Qt in a "Frameworks" folder
     frameworks.install_symlink Dir["#{lib}/*.framework"]
@@ -108,24 +79,7 @@ class Qt5Webkit < Formula
       include.install_symlink path => path.parent.basename(".framework")
     end
 
-    # update pkgconfig files
-    Dir["#{lib}/pkgconfig/Qt5WebKit*.pc"].each do |pc|
-      inreplace pc do |s|
-        s.sub! /^(prefix=).*$/, "\\1#{prefix}"
-      end
-    end
-
-    # update .pri files
-    # TODO: unsure if QT_MODULE_IMPORT_BASE is relative to module or its imports
-    Dir["#{prefix}/mkspecs/modules/qt_lib_webkit*.pri"].each do |pri|
-      inreplace pri do |s|
-        s.gsub! "$$QT_MODULE_LIB_BASE", opt_lib.to_s
-        next if pri.end_with? "_private.pri"
-        s.gsub! "$$QT_MODULE_BIN_BASE", opt_bin.to_s
-      end
-    end
-
-    # Fix rpath values
+    # # Fix rpath values
     MachO::Tools.change_install_name("#{lib}/QtWebKitWidgets.framework/Versions/5/QtWebKitWidgets",
                                     "@rpath/QtWebKit.framework/Versions/5/QtWebKit",
                                     "#{lib}/QtWebKit.framework/Versions/5/QtWebKit")
@@ -141,17 +95,6 @@ class Qt5Webkit < Formula
     MachO::Tools.change_install_name("#{libexec}/QtWebProcess",
                                     "@rpath/QtWebKit.framework/Versions/5/QtWebKit",
                                     "#{lib}/QtWebKit.framework/Versions/5/QtWebKit")
-
-
-
-
-
-  end
-
-  def caveats; <<~EOS
-    Must be built with `brew install --no-sandbox ...`, or install steps will fail.
-
-  EOS
   end
 
   test do
@@ -271,3 +214,29 @@ class Qt5Webkit < Formula
     end
   end
 end
+
+__END__
+--- a/Source/WTF/wtf/spi/darwin/XPCSPI.h 2017-06-17 13:46:54.000000000 +0300
++++ b/Source/WTF/wtf/spi/darwin/XPCSPI.h 2018-09-08 23:41:06.397523110 +0300
+@@ -89,10 +89,6 @@
+ EXTERN_C const struct _xpc_type_s _xpc_type_string;
+
+ EXTERN_C xpc_object_t xpc_array_create(const xpc_object_t*, size_t count);
+-#if COMPILER_SUPPORTS(BLOCKS)
+-EXTERN_C bool xpc_array_apply(xpc_object_t, xpc_array_applier_t);
+-EXTERN_C bool xpc_dictionary_apply(xpc_object_t xdict, xpc_dictionary_applier_t applier);
+-#endif
+ EXTERN_C size_t xpc_array_get_count(xpc_object_t);
+ EXTERN_C const char* xpc_array_get_string(xpc_object_t, size_t index);
+ EXTERN_C void xpc_array_set_string(xpc_object_t, size_t index, const char* string);
+
+--- a/Tools/qmake/projects/run_cmake.pro 2017-06-17 13:46:54.000000000 +0300
++++ b/Tools/qmake/projects/run_cmake.pro 2018-09-08 23:41:06.397523110 +0300
+@@ -22,6 +22,7 @@
+         PORT=Qt \
+         CMAKE_BUILD_TYPE=$$configuration \
+         CMAKE_TOOLCHAIN_FILE=$$toolchain_file \
++        CMAKE_INSTALL_PREFIX=/usr/local/Cellar/qt5-webkit/5.11.2
+         USE_LIBHYPHEN=OFF
+
+     !isEmpty(_QMAKE_SUPER_CACHE_) {
