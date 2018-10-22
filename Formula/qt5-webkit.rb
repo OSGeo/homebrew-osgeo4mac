@@ -1,30 +1,21 @@
 class Qt5Webkit < Formula
   desc "Classes for a WebKit2 based implementation and a new QML API"
   homepage "https://www.qt.io/developers"
+  url "https://github.com/qt/qtwebkit.git",
+    :branch => "5.212",
+    :commit => "72cfbd7664f21fcc0e62b869a6b01bf73eb5e7da"
+  version "5.11.2"
 
-  revision 1
+  # if it is changed this should be applied in CMAKE_INSTALL_PREFIX (see patch)
+  # in the same way for "version"
+  # revision 1
 
-  head "https://github.com/qt/qtwebkit.git" # from the developer: "https://github.com/annulen/webkit.git"
+  # from the developer: "https://github.com/annulen/webkit.git"
+  head "https://github.com/qt/qtwebkit.git"
 
-  stable do
-    url "https://github.com/qt/qtwebkit/archive/v5.212.0-alpha2.tar.gz"
-    sha256 "6db43b931f64857cfda7bcf89914e2730b82164871a8c24c1881620e6bfdeca1"
-    version "5.11.2"
-  end
-
+  # fix installation permissions
+  # /Tools/qmake/projects/run_cmake.pro
   patch :DATA
-
-  # Fix null point dereference (Fedora) https://github.com/annulen/webkit/issues/573
-  patch do
-    url "https://git.archlinux.org/svntogit/packages.git/plain/trunk/qt5-webkit-null-pointer-dereference.patch?h=packages/qt5-webkit"
-    sha256 "510e1f78c2bcd76909703a097dbc1d5c9c6ce4cd94883c26138f09cc10121f43"
-  end
-
-  # Fix build with cmake 3.10
-  patch do
-    url "https://github.com/annulen/webkit/commit/f51554bf104ab0491370f66631fe46143a23d5c2.diff?full_index=1"
-    sha256 "874b56c30cdc43627f94d999083f0617c4bfbcae4594fe1a6fc302bf39ad6c30"
-  end
 
   keg_only "because Qt5 is keg-only"
 
@@ -36,10 +27,11 @@ class Qt5Webkit < Formula
   depends_on "python@2" => :build
   depends_on "ruby" => :build
   depends_on "sqlite" => :build
-  # depends_on :xcode => :build
+  depends_on :xcode => :build
   depends_on "conan" # C/C++ package manager
   depends_on "glslang" # OpenGL ES: opengles2
   depends_on "gst-plugins-base"
+  # depends_on "libjpeg" # Qt < 5.10
   depends_on "libjpeg-turbo"
   depends_on "libpng"
   depends_on "libxslt"
@@ -52,7 +44,7 @@ class Qt5Webkit < Formula
   depends_on "gst-plugins-good" => :optional
 
   def install
-    # On Mavericks we want to target libc++, this requires a macx-clang flag.
+    # on Mavericks we want to target libc++, this requires a macx-clang flag
     spec = (ENV.compiler == :clang && MacOS.version >= :mavericks) ? "macx-clang" : "macx-g++"
     args = %W[-config release -spec #{spec}]
 
@@ -62,24 +54,51 @@ class Qt5Webkit < Formula
       system "make", "install"
     end
 
-    # Rename the .so files
+    # rename the .so files
     mv "#{lib}/qml/QtWebKit/libqmlwebkitplugin.so", "#{lib}/qml/QtWebKit/libqmlwebkitplugin.dylib"
     mv "#{lib}/qml/QtWebKit/experimental/libqmlwebkitexperimentalplugin.so", "#{lib}/qml/QtWebKit/experimental/libqmlwebkitexperimentalplugin.dylib"
 
     ln_s "#{lib}/qml", "#{prefix}/qml"
     ln_s "#{lib}/libexec", "#{prefix}/libexec"
 
-    # Some config scripts will only find Qt in a "Frameworks" folder
+    # some config scripts will only find Qt in a "Frameworks" folder
     frameworks.install_symlink Dir["#{lib}/*.framework"]
 
-    # The pkg-config files installed suggest that headers can be found in the
+    # the pkg-config files installed suggest that headers can be found in the
     # `include` directory. Make this so by creating symlinks from `include` to
-    # the Frameworks' Headers folders.
+    # the Frameworks' Headers folders
     Pathname.glob("#{lib}/*.framework/Headers") do |path|
       include.install_symlink path => path.parent.basename(".framework")
     end
 
-    # # Fix rpath values
+    # for some reason it is not generating the .pc files, that's why they are created
+    # although these are not necessary
+    mkdir "#{lib}/pkgconfig" do
+      # create Qt5WebKit.pc
+      File.open("#{lib}/pkgconfig/Qt5WebKit.pc", "w") { |file|
+        file << "Name: Qt5WebKit\n"
+        file << "Description: Qt WebKit module\n"
+        file << "Version: #{version}\n"
+        # file << "Libs: -F#{lib} -framework QtWebKit"
+        file << "Libs: -L#{lib} -lQt5WebKit\n"
+        # file << "Cflags: -DQT_WEBKIT_LIB -I#{include}/QtWebKit\n"
+        file << "Cflags: -I#{include}/QtWebKit\n"
+        file << "Requires: Qt5Core Qt5Gui Qt5Network"
+      }
+      # create QtWebKitWidgets.pc
+      File.open("#{lib}/pkgconfig/Qt5WebKitWidgets.pc", "w") { |file|
+        file << "Name: Qt5WebKitWidgets\n"
+        file << "Description: Qt WebKitWidgets module\n"
+        file << "Version: #{version}\n"
+        # file << "Libs: -F#{lib} -framework QtWebKitWidgets"
+        file << "Libs: -L#{lib} -lQt5WebKitWidgets\n"
+        # file << "Cflags: -DQT_WEBKITWIDGETS_LIB -I#{include}/QtWebKitWidgets\n"
+        file << "Cflags: -I#{include}/QtWebKitWidgets\n"
+        file << "Requires:"
+      }
+    end
+
+    # fix rpath values
     MachO::Tools.change_install_name("#{lib}/QtWebKitWidgets.framework/Versions/5/QtWebKitWidgets",
                                     "@rpath/QtWebKit.framework/Versions/5/QtWebKit",
                                     "#{lib}/QtWebKit.framework/Versions/5/QtWebKit")
@@ -200,7 +219,7 @@ class Qt5Webkit < Formula
       assert_predicate testpath/"main.o", :exist?
       assert_predicate testpath/"hello", :exist?
 
-      # Test that we can actually serve the page
+      # test that we can actually serve the page
       pid = fork do
         exec testpath/"hello"
       end
