@@ -25,10 +25,6 @@ for f in ${CHANGED_FORMULAE};do
   echo "Installing changed formula ${f}..."
   # Default installation flag set
   FLAGS="--build-bottle"
-  # Special handling of qt5-webkit
-  if [[ ${f} == "qt5-webkit" ]]; then
-	FLAGS=$FLAGS" --no-sandbox"
-  fi
 
   brew install ${FLAGS} ${TRAVIS_REPO_SLUG}/${f}&
   PID=$!

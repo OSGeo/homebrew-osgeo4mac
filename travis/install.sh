@@ -20,9 +20,6 @@ set -e
 for f in ${CHANGED_FORMULAE};do
   echo "Installing dependencies for changed formula ${f}..."
   FLAGS="--only-dependencies --build-bottle"
-  if [[ ${f} == "qt5-webkit" ]]; then
-	FLAGS=${FLAGS}" --no-sandbox"
-  fi
 
   brew install ${FLAGS} ${TRAVIS_REPO_SLUG}/${f}&
   PID=$!
