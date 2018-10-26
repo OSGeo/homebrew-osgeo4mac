@@ -17,6 +17,14 @@ class Qt5Webkit < Formula
   # /Tools/qmake/projects/run_cmake.pro
   patch :DATA
 
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    cellar :any
+    rebuild 1
+    sha256 "e747978ccf022d826d8133ddc15a27f5223ca1a6b2c02d2d61f36c72070a682f" => :high_sierra
+    sha256 "84920602f319187267bd60fdcdad83e94a9c3e89333652595b8a630778547727" => :sierra
+  end
+
   keg_only "because Qt5 is keg-only"
 
   depends_on "cmake" => :build
