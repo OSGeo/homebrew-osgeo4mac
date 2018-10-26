@@ -1,8 +1,8 @@
 class SagaGis < Formula
   desc "System for Automated Geoscientific Analyses - Long Term Support"
   homepage "http://saga-gis.org"
-  url "https://downloads.sourceforge.net/project/saga-gis/SAGA%20-%206/SAGA%20-%206.4.0/saga-6.4.0.tar.gz"
-  sha256 "9c3db7089278d50631171526d63398bb56417956623eb62b20143878dadd1490"
+  url "https://downloads.sourceforge.net/project/saga-gis/SAGA%20-%207/SAGA%20-%207.0.0/saga-7.0.0.tar.gz"
+  sha256 "b30418eb60c28324536011c0331a4da14f8f3881ddf2ac240e35944229fdc592"
 
   head "https://git.code.sf.net/p/saga-gis/code.git"
 
