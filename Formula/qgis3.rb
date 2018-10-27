@@ -104,7 +104,7 @@ class Qgis3 < Formula
   depends_on "proj"
   depends_on "spatialindex"
   depends_on "numpy"
-  # depends_on "brewsci/bio/matplotlib"
+  depends_on "brewsci/bio/matplotlib"
   # use newer postgresql client than Apple's, also needed by `psycopg2`
   depends_on "postgresql" => :recommended
   depends_on "libzip"
