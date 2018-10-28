@@ -42,8 +42,8 @@ class Qgis3 < Formula
   head "https://github.com/qgis/QGIS.git", :branch => "master"
 
   stable do
-    url "https://github.com/qgis/QGIS/archive/final-3_2_3.tar.gz"
-    sha256 "08b838e8e1c9af69de07807b8a245bde3a0edaea3b1511d3df593cdd81f55142"
+    url "https://github.com/qgis/QGIS/archive/final-3_4_0.tar.gz"
+    sha256 "0ce2fc7f79fa70d5d456945bb23e122a90a4ef3717271f6b6339f63544e2c557"
   end
 
   bottle do
@@ -107,7 +107,7 @@ class Qgis3 < Formula
   depends_on "brewsci/bio/matplotlib"
   # use newer postgresql client than Apple's, also needed by `psycopg2`
   depends_on "postgresql" => :recommended
-  depends_on "libzip" 
+  depends_on "libzip"
   depends_on "libtasn1"
   depends_on "hicolor-icon-theme"
   depends_on "libiconv"
@@ -118,7 +118,7 @@ class Qgis3 < Formula
 
   # core providers
   depends_on "gdal2-python"
-    
+
   depends_on "oracle-client-sdk" if build.with? "oracle"
   # TODO: add MSSQL third-party support formula?, :optional
 
@@ -156,8 +156,8 @@ class Qgis3 < Formula
     url "https://gist.githubusercontent.com/dakcarto/11385561/raw/e49f75ecec96ed7d6d3950f45ad3f30fe94d4fb2/pyqgis_startup.py"
     sha256 "385dce925fc2d29f05afd6508bc1f46ec84c0bc607cc0c8dfce78a4bb93b9c4e"
     version "2.14.0"
-  end 
-    
+  end
+
   resource "certifi" do
     url "https://files.pythonhosted.org/packages/4d/9c/46e950a6f4d6b4be571ddcae21e7bc846fcbb88f1de3eff0f6dd0a6be55d/certifi-2018.4.16.tar.gz"
     sha256 "13e698f54293db9f89122b0581843a782ad0934a4fe0172d2a980ba77fc61bb7"
@@ -177,7 +177,7 @@ class Qgis3 < Formula
     url "https://files.pythonhosted.org/packages/ac/71/ff2fbfa64fca17069ce30fac324533aa686c5cb64e6b5f522faed558848f/OWSLib-0.16.0.tar.gz"
     sha256 "ec95a5e93c145a5d84b0074b9ea27570943486552a669151140debf08a100554"
   end
-  
+
   # dependence for pyproj
   resource "cython" do
     url "https://files.pythonhosted.org/packages/d2/12/8ef44cede251b93322e8503fd6e1b25a0249fa498bebec191a5a06adbe51/Cython-0.28.4.tar.gz"
@@ -241,10 +241,10 @@ class Qgis3 < Formula
     sha256 "954a62cfb2d2ac06dad32995cbc822bf00cc11e20d543963515932fd4eff33fa"
   end
 
-  resource "numpy" do
-    url "https://files.pythonhosted.org/packages/3a/20/c81632328b1a4e1db65f45c0a1350a9c5341fd4bbb8ea66cdd98da56fe2e/numpy-1.15.0.zip"
-    sha256 "f28e73cf18d37a413f7d5de35d024e6b98f14566a10d82100f9dc491a7d449f9"
-  end
+  # resource "numpy" do
+  #   url "https://files.pythonhosted.org/packages/3a/20/c81632328b1a4e1db65f45c0a1350a9c5341fd4bbb8ea66cdd98da56fe2e/numpy-1.15.0.zip"
+  #   sha256 "f28e73cf18d37a413f7d5de35d024e6b98f14566a10d82100f9dc491a7d449f9"
+  # end
 
   resource "pbr" do
     url "https://files.pythonhosted.org/packages/c8/c3/935b102539529ea9e6dcf3e8b899583095a018b09f29855ab754a2012513/pbr-4.2.0.tar.gz"
@@ -295,7 +295,7 @@ class Qgis3 < Formula
       puts "gdal_python_opt_bin: #{gdal_python_opt_bin}"
       puts "gdal_opt_bin: #{gdal_opt_bin}"
     end
-      
+
     # install python dependencies
     venv = virtualenv_create(libexec/'vendor', "python3")
     venv.pip_install resources.reject { |r| r.name == "pyqgis-startup" }
@@ -393,7 +393,7 @@ class Qgis3 < Formula
       -DWITH_QTWEBKIT=TRUE
       -DQt5WebKitWidgets_DIR=#{Formula["qt5-webkit"].opt_lib}/cmake/Qt5WebKitWidgets
       -DQt5WebKit_DIR=#{Formula["qt5-webkit"].opt_lib}/cmake/Qt5WebKit
-      
+
       -DENABLE_TESTS=FALSE
       -DENABLE_MODELTEST=FALSE
       -DSUPPRESS_QT_WARNINGS=TRUE
@@ -498,14 +498,14 @@ class Qgis3 < Formula
     args << "-DWITH_QSPATIALITE=#{build.with?("qspatialite") ? "TRUE" : "FALSE"}"
 
     args << "-DWITH_APIDOC=#{build.with?("api-docs") ? "TRUE" : "FALSE"}"
-    
+
     args << "-DWITH_3D=#{build.with?("3d") ? "TRUE" : "FALSE"}"
-   
+
     # args << "-DWITH_QTWEBKIT=#{build.with?("qt5-webkit") ? "TRUE" : "FALSE"}"
     # if build.with? "qt5-webkit"
     #   args << "-DOPTIONAL_QTWEBKIT=#{Formula["qt5-webkit"].opt_lib}/cmake/Qt5WebKitWidgets"
     # end
-    
+
     # prefer opt_prefix for CMake modules that find versioned prefix by default
     # this keeps non-critical dependency upgrades from breaking QGIS linking
     args << "-DGDAL_CONFIG=#{Formula["gdal2"].opt_bin}gdal-config"
@@ -517,7 +517,7 @@ class Qgis3 < Formula
     args << "-DGSL_CONFIG=#{Formula["gsl"].opt_bin}/gsl-config"
     args << "-DGSL_INCLUDE_DIR=#{Formula["gsl"].opt_include}"
     args << "-DGSL_LIBRARIES='-L#{Formula["gsl"].opt_lib} -lgsl -lgslcblas'"
-      
+
     # avoid ld: framework not found QtSql
     # (https://github.com/Homebrew/homebrew-science/issues/23)
     ENV.append "CXXFLAGS", "-F#{Formula["qt"].opt_lib}"
@@ -546,7 +546,7 @@ class Qgis3 < Formula
 
     chmod("+x", "#{libexec}/vendor/bin/pyrcc5")
     chmod("+x", "#{libexec}/vendor/bin/pyuic5")
-    
+
     mkdir "build" do
       system "cmake", "-G", build.with?("ninja") ? "Ninja" : "Unix Makefiles", *args, ".."
       system "cmake", "--build", ".", "--target", "all", "--", "-j", Hardware::CPU.cores
@@ -621,7 +621,7 @@ class Qgis3 < Formula
         pypth = pyenv.include?(pypth) ? pyenv : pypth + pthsep + pyenv
       end
     end
-      
+
     pths.insert(0, "#{opt_libexec}/vendor/bin")
 
     unless pths.include?(HOMEBREW_PREFIX/"bin")
@@ -630,7 +630,7 @@ class Qgis3 < Formula
 
     # set install's lib/python#{py_ver}/site-packages first, so app will work if unlinked
     pypths = %W[#{opt_lib}/python#{py_ver}/site-packages #{opt_libexec}/vendor/lib/python#{py_ver}/site-packages #{pypth}]
-      
+
     pths.insert(0, gdal_opt_bin)
     pths.insert(0, gdal_python_opt_bin)
     pypths.insert(0, gdal_python_packages)
