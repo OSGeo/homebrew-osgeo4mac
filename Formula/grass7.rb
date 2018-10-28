@@ -6,8 +6,8 @@ class Grass7 < Formula
   homepage "https://grass.osgeo.org/"
 
   stable do
-    url "https://grass.osgeo.org/grass74/source/grass-7.4.1.tar.gz"
-    sha256 "560b8669caaafa9e8dbd4bbf2b4b4bbab7dca1cc46ee828eaf26c744fe0635fc"
+    url "https://grass.osgeo.org/grass74/source/grass-7.4.2.tar.gz"
+    sha256 "18eb19bc0aa4cd7be3f30f79ac83f9d0a29c63657f4c1b05bf4c5d5d57a8f46d"
 
     # Patches to keep files from being installed outside of the prefix.
     # Remove lines from Makefile that try to install to /Library/Documentation.
@@ -203,7 +203,7 @@ index cf16788..8c0007b 100644
 @@ -114,11 +114,6 @@ real-install: | $(INST_DIR) $(UNIX_BIN)
  	-$(INSTALL) config.status $(INST_DIR)/config.status
  	-$(CHMOD) -R a+rX $(INST_DIR) 2>/dev/null
- 
+
 -ifneq ($(findstring darwin,$(ARCH)),)
 -	@# enable OSX Help Viewer
 -	@/bin/ln -sfh "$(INST_DIR)/docs/html" /Library/Documentation/Help/GRASS-$(GRASS_VERSION_MAJOR).$(GRASS_VERSION_MINOR)
@@ -211,4 +211,3 @@ index cf16788..8c0007b 100644
 -
  $(INST_DIR) $(UNIX_BIN):
  	$(MAKE_DIR_CMD) $@
- 
