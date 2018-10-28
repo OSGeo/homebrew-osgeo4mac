@@ -1,8 +1,8 @@
 class Gdal2 < Formula
   desc "GDAL: Geospatial Data Abstraction Library"
   homepage "http://www.gdal.org/"
-  url "http://download.osgeo.org/gdal/2.3.1/gdal-2.3.1.tar.gz"
-  sha256 "034456405d3c43d42643ba68685e4a76da71f040f139d7c57b9a12fbf1378223"
+  url "http://download.osgeo.org/gdal/2.3.2/gdal-2.3.2.tar.gz"
+  sha256 "7808dd7ea7ee19700a133c82060ea614d4a72edbf299dfcb3713f5f79a909d64"
 
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
@@ -15,9 +15,6 @@ class Gdal2 < Formula
     url "https://svn.osgeo.org/gdal/trunk/gdal"
     depends_on "doxygen" => :build
   end
-
-  # Needed to build the swig bindings, until https://github.com/OSGeo/gdal/pull/713 is merged.
-  patch :DATA
 
   def plugins_subdirectory
     gdal_ver_list = version.to_s.split(".")
@@ -318,23 +315,3 @@ class Gdal2 < Formula
     system "#{bin}/ogrinfo", "--formats"
   end
 end
-__END__
-diff --git a/gdal/swig/java/GNUmakefile b/gdal/swig/java/GNUmakefile
-index 1313bd9974f..5e4e6844d47 100644
---- a/swig/java/GNUmakefile
-+++ b/swig/java/GNUmakefile
-@@ -56,13 +56,13 @@ generate: makedir ${WRAPPERS}
- build: generate ${JAVA_OBJECTS} ${JAVA_MODULES}
- ifeq ($(HAVE_LIBTOOL),yes)
-
--	if [ -f ".libs/libgdaljni.so" ] ; then \
-+	if [ -f ".libs/libgdalalljni.so" ] ; then \
- 		cp .libs/*.so . ; \
- 	fi
-
- 	echo "$(wildcard .libs/*.dylib)"
-
--	if [ -f ".libs/libgdaljni.dylib" ] ; then \
-+	if [ -f ".libs/libgdalalljni.dylib" ] ; then \
- 		cp .libs/*.dylib . ; \
- 	fi
