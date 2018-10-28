@@ -1,8 +1,8 @@
 class Gdal2Mysql < Formula
   desc "GDAL/OGR 2 plugin for MySQL driver"
   homepage "http://www.gdal.org/drv_mysql.html"
-  url "http://download.osgeo.org/gdal/2.3.1/gdal-2.3.1.tar.gz"
-  sha256 "034456405d3c43d42643ba68685e4a76da71f040f139d7c57b9a12fbf1378223"
+  url "http://download.osgeo.org/gdal/2.3.2/gdal-2.3.2.tar.gz"
+  sha256 "7808dd7ea7ee19700a133c82060ea614d4a72edbf299dfcb3713f5f79a909d64"
 
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"

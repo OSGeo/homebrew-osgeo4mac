@@ -46,8 +46,8 @@ class Gdal2Python < Formula
 
   desc "Python bindings for GDAL: Geospatial Data Abstraction Library"
   homepage "https://pypi.python.org/pypi/GDAL"
-  url "http://download.osgeo.org/gdal/2.3.1/gdal-2.3.1.tar.gz"
-  sha256 "034456405d3c43d42643ba68685e4a76da71f040f139d7c57b9a12fbf1378223"
+  url "http://download.osgeo.org/gdal/2.3.2/gdal-2.3.2.tar.gz"
+  sha256 "7808dd7ea7ee19700a133c82060ea614d4a72edbf299dfcb3713f5f79a909d64"
 
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
@@ -72,8 +72,8 @@ class Gdal2Python < Formula
   depends_on "numpy"
 
   resource "autotest" do
-    url "http://download.osgeo.org/gdal/2.3.1/gdalautotest-2.3.1.tar.gz"
-    sha256 "f4235844ceb6f017d249f32e570e7da090d53b7fc3bfc124aa6b085bdf87ad83"
+    url "http://download.osgeo.org/gdal/2.3.2/gdalautotest-2.3.2.tar.gz"
+    sha256 "e27e7ba2218e4202be66b4b4c4e012d005a03ff44db28d7c603a19da184e8c13"
   end
 
   def install
