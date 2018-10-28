@@ -16,9 +16,6 @@ class Gdal2 < Formula
     depends_on "doxygen" => :build
   end
 
-  # Needed to build the swig bindings, until https://github.com/OSGeo/gdal/pull/713 is merged.
-  patch :DATA
-
   def plugins_subdirectory
     gdal_ver_list = version.to_s.split(".")
     "gdalplugins/#{gdal_ver_list[0]}.#{gdal_ver_list[1]}"
@@ -318,23 +315,3 @@ class Gdal2 < Formula
     system "#{bin}/ogrinfo", "--formats"
   end
 end
-__END__
-diff --git a/gdal/swig/java/GNUmakefile b/gdal/swig/java/GNUmakefile
-index 1313bd9974f..5e4e6844d47 100644
---- a/swig/java/GNUmakefile
-+++ b/swig/java/GNUmakefile
-@@ -56,13 +56,13 @@ generate: makedir ${WRAPPERS}
- build: generate ${JAVA_OBJECTS} ${JAVA_MODULES}
- ifeq ($(HAVE_LIBTOOL),yes)
-
--	if [ -f ".libs/libgdaljni.so" ] ; then \
-+	if [ -f ".libs/libgdalalljni.so" ] ; then \
- 		cp .libs/*.so . ; \
- 	fi
-
- 	echo "$(wildcard .libs/*.dylib)"
-
--	if [ -f ".libs/libgdaljni.dylib" ] ; then \
-+	if [ -f ".libs/libgdalalljni.dylib" ] ; then \
- 		cp .libs/*.dylib . ; \
- 	fi
