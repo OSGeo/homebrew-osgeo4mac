@@ -4,8 +4,8 @@ rvm: system
 #python:
 #  - "2.7"
 os: osx
-env: OSX=10.12
-osx_image: xcode8.3
+env: OSX=10.13
+osx_image: xcode9.4
 sudo: required
 
 # /usr/local subdirs are Homebrew components
