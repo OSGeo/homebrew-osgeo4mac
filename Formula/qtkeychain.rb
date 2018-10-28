@@ -1,8 +1,8 @@
 class Qtkeychain < Formula
   desc "Platform-independent Qt-based API for storing passwords securely"
   homepage "https://github.com/frankosterfeld/qtkeychain"
-  url "https://github.com/frankosterfeld/qtkeychain/archive/v0.8.0.tar.gz"
-  sha256 "b492f603197538bc04b2714105b1ab2b327a9a98d400d53d9a7cb70edd2db12f"
+  url "https://github.com/frankosterfeld/qtkeychain/archive/v0.9.1.tar.gz"
+  sha256 "9c2762d9d0759a65cdb80106d547db83c6e9fdea66f1973c6e9014f867c6f28e"
 
   head "https://github.com/frankosterfeld/qtkeychain.git", :using => :git
 
