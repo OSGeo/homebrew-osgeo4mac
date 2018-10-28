@@ -1,8 +1,8 @@
 class Hexer < Formula
   desc "LAS and OGR hexagonal density and boundary surface generation"
   homepage "https://github.com/hobu/hexer"
-  url "https://github.com/hobu/hexer/archive/1.3.0.tar.gz"
-  sha256 "826789332b26aa8bc2d766e3732362d11374ed2df45f9194459cfc3d32123d05"
+  url "https://github.com/hobu/hexer/archive/1.4.0.tar.gz"
+  sha256 "886134fcdd75da2c50aa48624de19f5ae09231d5290812ec05f09f50319242cb"
 
   head "https://github.com/hobu/hexer.git", :branch => "master"
 
