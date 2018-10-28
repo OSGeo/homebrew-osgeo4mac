@@ -6,9 +6,9 @@ class CurlRefererDownloadStrategy < CurlDownloadStrategy
 end
 
 class Osm2po < Formula
-  homepage "http://osm2po.de"
-  url "http://osm2po.de/releases/osm2po-5.2.43.zip"
-  sha256 "dc9caab7089d7b1d2e804ead29d37457a2c0ca308dbb76d076ddd153fac93cb6"
+  homepage "https://osm2po.de"
+  url "https://osm2po.de/releases/osm2po-5.2.124.zip"
+  sha256 "153f6f97e6b8ac0fb40cfb2e1b08221bec049352150458121d20ed26a973aef8"
 
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
