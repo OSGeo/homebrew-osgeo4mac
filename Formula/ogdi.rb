@@ -1,9 +1,10 @@
 class Ogdi < Formula
   desc "Open Geographic Datastore Interface - client/server API for GIS"
   homepage "https://ogdi.sourceforge.io/"
-  url "https://github.com/libogdi/ogdi/archive/ogdi_3_2_0.tar.gz"
-  sha256 "4645da4bf0ab3a848ecf2a1d77a35f5bccf89fbf1cccf42c40c66cd0d1f1dcee"
-  revision 1
+  url "https://github.com/libogdi/ogdi/archive/ogdi_3_2_1.tar.gz"
+  sha256 "6086147f66c35f7cc7012bfeff2c74d7681e0419d75009e7b35e1f827a3458ce"
+
+  # revision 1
 
   bottle do
     root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
