@@ -50,6 +50,7 @@ class Gdal2 < Formula
   depends_on "freexl"
   depends_on "geos"
   depends_on "jpeg"
+  depends_on "json-c"
   depends_on "giflib"
   depends_on "libgeotiff"
   depends_on "libpq"
@@ -59,11 +60,11 @@ class Gdal2 < Formula
   depends_on "libtiff"
   depends_on "proj"
   depends_on "numpy"
+  depends_on "libkml-dev" if build.with? "libkml"
   depends_on "postgresql" => :optional
   depends_on "mysql" => :optional
   depends_on "ogdi" => :optional
   depends_on "armadillo" => :optional
-  depends_on "libkml-dev" if build.with? "libkml"
   depends_on "sfcgal" => :optional
 
   if build.with? "swig-java"
@@ -80,7 +81,6 @@ class Gdal2 < Formula
     depends_on "epsilon"
     depends_on "hdf5"
     depends_on "jasper"
-    depends_on "json-c"
     depends_on "libdap"
     depends_on "libxml2"
     depends_on "openjpeg"
@@ -100,7 +100,7 @@ class Gdal2 < Formula
       "--mandir=#{man}",
       "--disable-debug",
       "--with-libtool",
-      "--with-local=#{prefix}", # yes
+      "--with-local=#{prefix}",
       "--with-threads",
       # GDAL native backends
       "--with-bsb",
