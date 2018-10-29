@@ -7,8 +7,12 @@ class Qtkeychain < Formula
   head "https://github.com/frankosterfeld/qtkeychain.git", :using => :git
 
   bottle do
-    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
-    sha256 "6449adce0087b95b8d5c09b96f75e75720f09901a94393360e1e3946d921589c" => :sierra
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    cellar :any
+    rebuild 1
+    sha256 "f4349f3ff6c1fd1740c19e32596da4fc1c96361f371f0182ef9a84a65901e8df" => :mojave
+    sha256 "f4349f3ff6c1fd1740c19e32596da4fc1c96361f371f0182ef9a84a65901e8df" => :high_sierra
+    sha256 "f4349f3ff6c1fd1740c19e32596da4fc1c96361f371f0182ef9a84a65901e8df" => :sierra
   end
 
   option "with-static", "Build static in addition to shared library"
