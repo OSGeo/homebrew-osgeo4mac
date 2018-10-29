@@ -4,7 +4,7 @@ class Gdal2 < Formula
   url "https://github.com/OSGeo/gdal/archive/v2.3.2.tar.gz"
   sha256 "e0f751bff9ba6fb541065acbe7a76007be76a3c6309240faf4e6440f6ff1702a"
 
-  # revision 1
+  revision 1
 
   head do
     url "https://github.com/OSGeo/gdal.git", :branch => "master"
@@ -17,9 +17,6 @@ class Gdal2 < Formula
     sha256 "f67eaadc28e5feb7502ed693d03077f6efd8fb810ec483b1e439b4d0c8aba90e" => :high_sierra
     sha256 "f67eaadc28e5feb7502ed693d03077f6efd8fb810ec483b1e439b4d0c8aba90e" => :sierra
   end
-
-  # Needed to build the swig bindings, until https://github.com/OSGeo/gdal/pull/713 is merged.
-  # patch :DATA
 
   keg_only "older version of gdal is in main tap and installs similar components"
 
@@ -127,7 +124,7 @@ class Gdal2 < Formula
       "--with-webp=#{Formula["webp"].opt_prefix}",
       "--with-netcdf=#{Formula["netcdf"].opt_prefix}",
       "--with-hdf5=#{Formula["hdf5"].opt_prefix}",
-      "--with-jasper=#{Formula["jasper"].opt_prefix}",
+      # "--with-jasper=#{Formula["jasper"].opt_prefix}"
       "--with-openjpeg=#{Formula["openjpeg"].opt_prefix}",
       "--with-cfitsio=#{Formula["cfitsio"].opt_prefix}",
       "--with-proj=#{Formula["proj"].opt_prefix}",
@@ -181,7 +178,6 @@ class Gdal2 < Formula
       epsilon
       zstd
       webp
-      openjpeg
       ogdi
     ]
 
@@ -337,24 +333,3 @@ class Gdal2 < Formula
     system "#{bin}/ogrinfo", "--formats"
   end
 end
-
-# __END__
-# diff --git a/gdal/swig/java/GNUmakefile b/gdal/swig/java/GNUmakefile
-# index 1313bd9974f..5e4e6844d47 100644
-# --- a/swig/java/GNUmakefile
-# +++ b/swig/java/GNUmakefile
-# @@ -56,13 +56,13 @@ generate: makedir ${WRAPPERS}
-#  build: generate ${JAVA_OBJECTS} ${JAVA_MODULES}
-#  ifeq ($(HAVE_LIBTOOL),yes)
-#
-# -	if [ -f ".libs/libgdaljni.so" ] ; then \
-# +	if [ -f ".libs/libgdalalljni.so" ] ; then \
-#  		cp .libs/*.so . ; \
-#  	fi
-#
-#  	echo "$(wildcard .libs/*.dylib)"
-#
-# -	if [ -f ".libs/libgdaljni.dylib" ] ; then \
-# +	if [ -f ".libs/libgdalalljni.dylib" ] ; then \
-#  		cp .libs/*.dylib . ; \
-#  	fi
