@@ -10,8 +10,10 @@ class Nitro < Formula
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
     cellar :any
-    sha256 "f317ec74d95276905f729cae0bc2703a5c5892858801ba1c5422b5fb4d5f624e" => :high_sierra
-    sha256 "f317ec74d95276905f729cae0bc2703a5c5892858801ba1c5422b5fb4d5f624e" => :sierra
+    rebuild 1
+    sha256 "0452649e8d45d85e1611148dc235c8b7a42f4b859ff0e69a4bcdd14109a3c13f" => :mojave
+    sha256 "0452649e8d45d85e1611148dc235c8b7a42f4b859ff0e69a4bcdd14109a3c13f" => :high_sierra
+    sha256 "0452649e8d45d85e1611148dc235c8b7a42f4b859ff0e69a4bcdd14109a3c13f" => :sierra
   end
 
   depends_on "cmake" => :build
