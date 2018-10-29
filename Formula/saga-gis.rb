@@ -1,16 +1,15 @@
 class SagaGis < Formula
   desc "System for Automated Geoscientific Analyses - Long Term Support"
   homepage "http://saga-gis.org"
-  url "https://downloads.sourceforge.net/project/saga-gis/SAGA%20-%206/SAGA%20-%206.4.0/saga-6.4.0.tar.gz"
-  sha256 "9c3db7089278d50631171526d63398bb56417956623eb62b20143878dadd1490"
+  url "https://downloads.sourceforge.net/project/saga-gis/SAGA%20-%207/SAGA%20-%207.0.0/saga-7.0.0.tar.gz"
+  sha256 "b30418eb60c28324536011c0331a4da14f8f3881ddf2ac240e35944229fdc592"
 
   head "https://git.code.sf.net/p/saga-gis/code.git"
 
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    rebuild 1
-    sha256 "888764bdbe82263f0f71ce3b52347aa2d787ff517b36cc62085c6ac8d3af5bbd" => :high_sierra
-    sha256 "888764bdbe82263f0f71ce3b52347aa2d787ff517b36cc62085c6ac8d3af5bbd" => :sierra
+    sha256 "5e2538098f9676a5e8eb1d722eaa825afafcbb682d0e36d915a0ffcaaeecc1fc" => :high_sierra
+    sha256 "5e2538098f9676a5e8eb1d722eaa825afafcbb682d0e36d915a0ffcaaeecc1fc" => :sierra
   end
 
   keg_only "QGIS fails to load the correct SAGA version, if the latest version is in the path"

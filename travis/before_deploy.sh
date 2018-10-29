@@ -75,6 +75,20 @@ pushd bottles
       sed -i '' s@sierra@high_sierra@g ${json}
     done
 
+    # temporary duplication of 10.2-Xcode-8.x-built bottles to 10.4 bottles
+    # Do the bottle duplication per formula, so we can merge the changes
+    for art in ${f}*.sierra.bottle.*; do
+      new_name=${art/.sierra./.mojave.}
+      # Remove double dashes introduced by the latest changes to Homebrew bottling.
+      # This may need to be reverted later, but this at least normalizes the bottle names with what's in the json files.
+      cp -a ${art} ${new_name/--/-}
+      # Move the sierra bottle and json file
+      mv ${art} ${art/--/-}
+    done
+    for json in ${f}*.mojave.bottle*.json; do
+      sed -i '' s@sierra@mojave@g ${json}
+    done
+
     # Do Merge bottles with the formula
     # Don't commit anything, we'll do that after updating all the formulae
     # Catch the eror and store it to a variable

@@ -6,6 +6,13 @@ class Qt5Webkit < Formula
     :commit => "72cfbd7664f21fcc0e62b869a6b01bf73eb5e7da"
   version "5.11.2"
 
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    sha256 "7fe1e518c5680eb661797ae6c571550f010186e03c24c7b318ec64d9db6897ed" => :mojave
+    sha256 "7fe1e518c5680eb661797ae6c571550f010186e03c24c7b318ec64d9db6897ed" => :high_sierra
+    sha256 "7fe1e518c5680eb661797ae6c571550f010186e03c24c7b318ec64d9db6897ed" => :sierra
+  end
+
   # if it is changed this should be applied in CMAKE_INSTALL_PREFIX (see patch)
   # in the same way for "version"
   # revision 1
