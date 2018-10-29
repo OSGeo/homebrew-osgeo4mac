@@ -24,8 +24,6 @@ class Hexer < Formula
   end
 
   test do
-    # Commented. Error: Illegal instruction: 4
-    # system "curse", "--version"
-    system "false"
+    system "curse", "--version"
   end
 end
