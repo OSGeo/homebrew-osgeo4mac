@@ -7,9 +7,9 @@ class Gdal2Ogdi < Formula
    bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
     cellar :any
-    rebuild 1
-    sha256 "5bc5a424c6966d9b5b6c632339237396fbf631db15315dca1a744e3d8d6a1f28" => :high_sierra
-    sha256 "5bc5a424c6966d9b5b6c632339237396fbf631db15315dca1a744e3d8d6a1f28" => :sierra
+    sha256 "10195f09662fd5b21ce0f1baad7968e3e23de116d1acbe95432543ea5798a375" => :mojave
+    sha256 "10195f09662fd5b21ce0f1baad7968e3e23de116d1acbe95432543ea5798a375" => :high_sierra
+    sha256 "10195f09662fd5b21ce0f1baad7968e3e23de116d1acbe95432543ea5798a375" => :sierra
   end
 
   depends_on "ogdi"

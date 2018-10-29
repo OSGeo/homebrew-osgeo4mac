@@ -6,9 +6,9 @@ class Gdal2Pdf < Formula
 
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    rebuild 1
-    sha256 "2597ffc9899eb45360908c85ac8ff87ac4f38070f0279f1ba20d70b7c721bb82" => :high_sierra
-    sha256 "2597ffc9899eb45360908c85ac8ff87ac4f38070f0279f1ba20d70b7c721bb82" => :sierra
+    sha256 "077d86f41b9b61ce4af3d4eaddf387ba36983cab394bba7959240c0fd43cae2a" => :mojave
+    sha256 "077d86f41b9b61ce4af3d4eaddf387ba36983cab394bba7959240c0fd43cae2a" => :high_sierra
+    sha256 "077d86f41b9b61ce4af3d4eaddf387ba36983cab394bba7959240c0fd43cae2a" => :sierra
   end
 
   option "without-poppler", "Build without additional Poppler support"
