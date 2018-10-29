@@ -7,9 +7,11 @@ class Ogdi < Formula
   # revision 1
 
   bottle do
-    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
-    sha256 "0675a1e4fddbb503d60729e70b1b4bab0d9c07857a5833d84c27a61e185c5584" => :sierra
-    sha256 "0675a1e4fddbb503d60729e70b1b4bab0d9c07857a5833d84c27a61e185c5584" => :high_sierra
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    rebuild 1
+    sha256 "7b4a512d136ca1ee971f5641cf5633dda90b6e5f45c0bbe909160d2204a4a299" => :mojave
+    sha256 "7b4a512d136ca1ee971f5641cf5633dda90b6e5f45c0bbe909160d2204a4a299" => :high_sierra
+    sha256 "7b4a512d136ca1ee971f5641cf5633dda90b6e5f45c0bbe909160d2204a4a299" => :sierra
   end
 
   # depends on "autoconf" => :build
