@@ -13,8 +13,10 @@ class Osm2po < Formula
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
     cellar :any_skip_relocation
-    sha256 "8f2b1f8cce3bc062ff56ea7dbda18788cc4fb7de08ff57a111000b2ce0c75ca4" => :high_sierra
-    sha256 "8f2b1f8cce3bc062ff56ea7dbda18788cc4fb7de08ff57a111000b2ce0c75ca4" => :sierra
+    rebuild 1
+    sha256 "b0b664af37de818d0aca76c3aedf7454ea4cb6366425d893708ac0e1f0edd38b" => :mojave
+    sha256 "b0b664af37de818d0aca76c3aedf7454ea4cb6366425d893708ac0e1f0edd38b" => :high_sierra
+    sha256 "b0b664af37de818d0aca76c3aedf7454ea4cb6366425d893708ac0e1f0edd38b" => :sierra
   end
 
   def install
