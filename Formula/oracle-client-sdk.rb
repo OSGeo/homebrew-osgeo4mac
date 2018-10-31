@@ -4,7 +4,7 @@ class OracleClientSdk < Formula
   desc "Oracle database C/C++ client libs, command-line tools and SDK"
   homepage "https://www.oracle.com/technetwork/topics/intel-macsoft-096467.html"
   url "https://osgeo4mac.s3.amazonaws.com/src/dummy.tar.gz"
-  version (MacOS.version < :el_capitan) ? "12.1.0.2.0-2" : "12.2.0.1.0"
+  version (MacOS.version < :el_capitan) ? "12.1.0.2.0-2" : "12.2.0.1.0-2"
   sha256 "e7776e2ff278d6460300bd69a26d7383e6c5e2fbeb17ff12998255e7fc4c9511"
 
   option "with-basic", "Install Oracle's Basic client, instead of Basic Lite"
@@ -16,7 +16,7 @@ class OracleClientSdk < Formula
       sha256 "71aa366c961166fb070eb6ee9e5905358c61d5ede9dffd5fb073301d32cbd20c"
       version "12.1.0.2.0-2"
     else
-      url "file://#{HOMEBREW_CACHE}/instantclient-basic-macos.x64-12.2.0.1.0.zip",
+      url "file://#{HOMEBREW_CACHE}/instantclient-basic-macos.x64-12.2.0.1.0-2.zip",
           :using => CacheDownloadStrategy
       sha256 "04a84542b5bd0a04bc45445e220a67c959a8826ce987000270705f9a1d553157"
     end
@@ -29,9 +29,9 @@ class OracleClientSdk < Formula
       sha256 "c39d498fa6eb08d46014283a3a79bcaf63060cdbd0f58f97322da012350d4c39"
       version "12.1.0.2.0-2"
     else
-      url "file://#{HOMEBREW_CACHE}/instantclient-basiclite-macos.x64-12.2.0.1.0.zip",
+      url "file://#{HOMEBREW_CACHE}/instantclient-basiclite-macos.x64-12.2.0.1.0-2.zip",
           :using => CacheDownloadStrategy
-      sha256 "299e0f97ef64a16454ee9ef094a4771cbbe07d7f93e495995da318010d4e2071"
+      sha256 "2997f753b61f8b445a241e99412c132feb76cf246dcca2e7837fe82b15c1efb8"
     end
   end
 
@@ -42,9 +42,9 @@ class OracleClientSdk < Formula
       sha256 "950153e53e1c163c51ef34eb8eb9b60b7f0da21120a86f7070c0baff44ef4ab9"
       version "12.1.0.2.0-2"
     else
-      url "file://#{HOMEBREW_CACHE}/instantclient-sdk-macos.x64-12.2.0.1.0.zip",
+      url "file://#{HOMEBREW_CACHE}/instantclient-sdk-macos.x64-12.2.0.1.0-2.zip",
           :using => CacheDownloadStrategy
-      sha256 "fe149f4febcdcd6b836a3ee68df958ff324ebd70e99d3bffdfd0652fe15b19dd"
+      sha256 "e0befca9c4e71ebc9f444957ffa70f01aeeec5976ea27c40406471b04c34848b"
     end
   end
 
@@ -55,9 +55,9 @@ class OracleClientSdk < Formula
       sha256 "a663937e2e32c237bb03df1bda835f2a29bc311683087f2d82eac3a8ea569f81"
       version "12.1.0.2.0-2"
     else
-      url "file://#{HOMEBREW_CACHE}/instantclient-sqlplus-macos.x64-12.2.0.1.0.zip",
+      url "file://#{HOMEBREW_CACHE}/instantclient-sqlplus-macos.x64-12.2.0.1.0-2.zip",
           :using => CacheDownloadStrategy
-      sha256 "df4ab35ed15c49f0c341a487afb50f38b65f80cde385d4007af5d922a9e0e5bf"
+      sha256 "d147cbb5b2a954fdcb4b642df4f0bd1153fd56e0f56e7fa301601b4f7e2abe0e"
     end
   end
 
