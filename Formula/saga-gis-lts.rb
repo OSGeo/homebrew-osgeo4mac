@@ -6,7 +6,7 @@ class SagaGisLts < Formula
       :revision => "b6f474f8af4af7f0ff82548cc6f88c53547d91f5"
   version "2.3.2"
 
-  revision 1
+  revision 2
 
   head "https://git.code.sf.net/p/saga-gis/code.git", :branch => "release-2-3-lts"
 
@@ -35,7 +35,6 @@ class SagaGisLts < Formula
   depends_on "proj"
   depends_on "wxmac"
   depends_on "geos"
-  depends_on "gdal2"
   depends_on "laszip"
   depends_on "jasper"
   depends_on "fftw"
@@ -67,18 +66,30 @@ class SagaGisLts < Formula
   end
 
   def install
+    ENV.cxx11
+
     # SKIP liblas support until SAGA supports > 1.8.1, which should support GDAL 2;
     #      otherwise, SAGA binaries may lead to multiple GDAL versions being loaded
     # See: https://github.com/libLAS/libLAS/issues/106
-    ENV.cxx11
 
-    cxxflags= system "wx-config", "--version=3.0", "--cxxflags"
-    libs = system "wx-config", "--version=3.0", "--libs"
+    # https://sourceforge.net/p/saga-gis/wiki/Compiling%20SAGA%20on%20Mac%20OS%20X/
+    # configure FEATURES CXX="CXX" CPPFLAGS="DEFINES GDAL_H $PROJ_H" LDFLAGS="GDAL_SRCH PROJ_SRCH LINK_MISC"
 
-    ENV.append "CPPFLAGS", "-I#{Formula["proj"].opt_include}"
+    # cppflags : wx-config --version=3.0 --cppflags
+    # defines : -D_FILE_OFFSET_BITS=64 -DWXUSINGDLL -D__WXMAC__ -D__WXOSX__ -D__WXOSX_COCOA__
+    cppflags = "-I#{HOMEBREW_PREFIX}/lib/wx/include/osx_cocoa-unicode-3.0 -I#{HOMEBREW_PREFIX}/include/wx-3.0 -D_FILE_OFFSET_BITS=64 -DWXUSINGDLL -D__WXMAC__ -D__WXOSX__ -D__WXOSX_COCOA__"
+
+    # libs : wx-config --version=3.0 --libs
+    ldflags = "-L#{HOMEBREW_PREFIX}/lib -framework IOKit -framework Carbon -framework Cocoa -framework AudioToolbox -framework System -framework OpenGL -lwx_osx_cocoau_xrc-3.0 -lwx_osx_cocoau_webview-3.0 -lwx_osx_cocoau_html-3.0 -lwx_osx_cocoau_qa-3.0 -lwx_osx_cocoau_adv-3.0 -lwx_osx_cocoau_core-3.0 -lwx_baseu_xml-3.0 -lwx_baseu_net-3.0 -lwx_baseu-3.0"
+
+    # xcode : xcrun --show-sdk-path
+    link_misc = "-arch x86_64 -mmacosx-version-min=10.9 -isysroot #{MacOS::Xcode.prefix}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX#{MacOS.version}.sdk -lstdc++"
+
+    ENV.append "CPPFLAGS", "-I#{Formula["proj"].opt_include} -I#{Formula["gdal2"].opt_include} #{cppflags}"
+    ENV.append "LDFLAGS", "-L#{Formula["proj"].opt_lib}/libproj.dylib -L#{Formula["gdal2"].opt_lib}/libgdal.dylib #{link_misc} #{ldflags}"
+
     # Disable narrowing warnings when compiling in C++11 mode.
-    ENV.append "CXXFLAGS", "-Wno-c++11-narrowing -std=c++11 #{cxxflags}"
-    ENV.append "LDFLAGS", "-L#{Formula["proj"].opt_lib}/libproj.dylib #{libs}"
+    ENV.append "CXXFLAGS", "-Wno-c++11-narrowing -std=c++11"
 
     cd "saga-gis"
 
@@ -91,66 +102,61 @@ class SagaGisLts < Formula
       --disable-dependency-tracking
       --disable-openmp
       --disable-libfire
-      --disable-triangle
       --enable-shared
       --enable-debug
+      --enable-gui
     ]
 
     # --disable-gui
+    # --enable-unicode
 
     args << "--disable-odbc" if build.without? "unixodbc"
     args << "--disable-triangle" if build.with? "qhull"
     args << "--with-postgresql=#{Formula["postgresql"].opt_bin}/pg_config" if build.with? "postgresql"
     args << "--with-python" if build.with? "python"
 
+    (prefix/"SAGA.app/Contents/PkgInfo").write "APPLSAGA"
+    (prefix/"SAGA.app/Contents/Resources").install resource("app_icon")
+
+    config = <<~EOS
+      <?xml version="1.0" encoding="UTF-8"?>
+      <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+      <plist version="1.0">
+      <dict>
+        <key>CFBundleDevelopmentRegion</key>
+        <string>English</string>
+        <key>CFBundleExecutable</key>
+        <string>saga_gui</string>
+        <key>CFBundleIconFile</key>
+        <string>saga_gui.icns</string>
+        <key>CFBundleInfoDictionaryVersion</key>
+        <string>6.0</string>
+        <key>CFBundleName</key>
+        <string>SAGA</string>
+        <key>CFBundlePackageType</key>
+        <string>APPL</string>
+        <key>CFBundleSignature</key>
+        <string>SAGA</string>
+        <key>CFBundleVersion</key>
+        <string>1.0</string>
+        <key>CSResourcesFileMapped</key>
+        <true/>
+        <key>NSHighResolutionCapable</key>
+        <string>True</string>
+      </dict>
+      </plist>
+    EOS
+
+    (prefix/"SAGA.app/Contents/Info.plist").write config
+
     system "autoreconf", "-i"
     system "./configure", *args
     system "make", "install"
 
-    if build.with? "app"
-      # Based on original script by Phil Hess
-      # http://web.fastermac.net/~MacPgmr/
-
-      buildpath.install resource("app_icon")
-      mkdir_p "#{buildpath}/SAGA.app/Contents/MacOS"
-      mkdir_p "#{buildpath}/SAGA.app/Contents/Resources"
-
-      (buildpath/"SAGA.app/Contents/PkgInfo").write "APPLSAGA"
-      cp "#{buildpath}/saga_gui.icns", "#{buildpath}/SAGA.app/Contents/Resources/"
-      ln_s "#{bin}/saga_gui", "#{buildpath}/SAGA.app/Contents/MacOS/saga_gui"
-
-      config = <<~EOS
-        <?xml version="1.0" encoding="UTF-8"?>
-        <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-        <plist version="1.0">
-        <dict>
-          <key>CFBundleDevelopmentRegion</key>
-          <string>English</string>
-          <key>CFBundleExecutable</key>
-          <string>saga_gui</string>
-          <key>CFBundleIconFile</key>
-          <string>saga_gui.icns</string>
-          <key>CFBundleInfoDictionaryVersion</key>
-          <string>6.0</string>
-          <key>CFBundleName</key>
-          <string>SAGA</string>
-          <key>CFBundlePackageType</key>
-          <string>APPL</string>
-          <key>CFBundleSignature</key>
-          <string>SAGA</string>
-          <key>CFBundleVersion</key>
-          <string>1.0</string>
-          <key>CSResourcesFileMapped</key>
-          <true/>
-          <key>NSHighResolutionCapable</key>
-          <string>True</string>
-        </dict>
-        </plist>
-      EOS
-
-      (buildpath/"SAGA.app/Contents/Info.plist").write config
-      prefix.install "SAGA.app"
-
+    chdir "#{prefix}/SAGA.app/Contents" do
+      mkdir "MacOS" do
+        ln_s "#{bin}/saga_gui", "saga_gui"
+      end
     end
   end
 
@@ -159,6 +165,9 @@ class SagaGisLts < Formula
       <<~EOS
       SAGA.app was installed in:
         #{prefix}
+
+      You may also symlink QGIS.app into /Applications or ~/Applications:
+        ln -Fs `find $(brew --prefix) -name "SAGA.app"` /Applications/SAGA.app
 
       Note that the SAGA GUI does not work very well yet.
       It has problems with creating a preferences file in the correct location and sometimes won't shut down (use Activity Monitor to force quit if necessary).
