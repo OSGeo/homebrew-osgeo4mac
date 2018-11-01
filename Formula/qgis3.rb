@@ -36,15 +36,16 @@ class Qgis3 < Formula
 
   desc "Open Source Geographic Information System"
   homepage "https://www.qgis.org"
+  # url "https://github.com/qgis/QGIS/archive/final-3_4_0.tar.gz"
+  # sha256 "0ce2fc7f79fa70d5d456945bb23e122a90a4ef3717271f6b6339f63544e2c557"
+  url "https://github.com/qgis/QGIS.git",
+    :branch => "release-3_4",
+    :commit => "31e3a2f083ad344250fc85f43853a909a7d72918"
+  version "3.4.0"
 
-  # revision 1
+  revision 1
 
   head "https://github.com/qgis/QGIS.git", :branch => "master"
-
-  stable do
-    url "https://github.com/qgis/QGIS/archive/final-3_4_0.tar.gz"
-    sha256 "0ce2fc7f79fa70d5d456945bb23e122a90a4ef3717271f6b6339f63544e2c557"
-  end
 
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
@@ -66,7 +67,7 @@ class Qgis3 < Formula
   # option "with-globe", "Build with Globe plugin, based upon osgEarth"
   option "with-grass", "Build with GRASS 7 integration plugin and Processing plugin support (or install grass-7x first)"
   option "with-oracle", "Build extra Oracle geospatial database and raster support"
-  # option "with-orfeo5", "Build extra Orfeo Toolbox for Processing plugin"
+  # option "with-orfeo6", "Build extra Orfeo Toolbox for Processing plugin"
   option "with-r", "Build extra R for Processing plugin"
   option "with-saga-gis-lts", "Build extra Saga GIS for Processing plugin"
   # option "with-qt-mysql", "Build extra Qt MySQL plugin for eVis plugin"
@@ -79,11 +80,11 @@ class Qgis3 < Formula
   # core qgis
   depends_on "cmake" => :build
   depends_on "ninja" => [:build, :recommended]
-  depends_on "fcgi" if build.with? "server"
   depends_on "gsl" => :build
   depends_on "sip" => :build
   depends_on "bison" => :build
   depends_on "flex" => :build
+  depends_on "pkg-config" => :build
   depends_on "python"
   depends_on "qt"
   depends_on "pyqt"
@@ -103,10 +104,10 @@ class Qgis3 < Formula
   depends_on "expat" # keg_only
   depends_on "proj"
   depends_on "spatialindex"
-  depends_on "numpy"
-  depends_on "brewsci/bio/matplotlib"
   # use newer postgresql client than Apple's, also needed by `psycopg2`
   depends_on "postgresql" => :recommended
+  depends_on "libpq"
+  depends_on "curl"
   depends_on "libzip"
   depends_on "libtasn1"
   depends_on "hicolor-icon-theme"
@@ -115,6 +116,18 @@ class Qgis3 < Formula
   depends_on "libspatialite"
   depends_on "postgis"
   depends_on "openssl"
+  depends_on "poppler"
+  depends_on "gnu-sed"
+
+  if build.with? "server"
+    depends_on "fcgi"
+    depends_on "spawn-fcgi"
+    depends_on "lighttpd"
+  end
+
+  # matplotlib
+  depends_on "numpy"
+  depends_on "brewsci/bio/matplotlib"
 
   # core providers
   depends_on "gdal2-python"
@@ -145,7 +158,7 @@ class Qgis3 < Formula
 
   # core processing plugin extras
   # see `grass` above
-  # depends_on "orfeo5" => :optional
+  # depends_on "orfeo6" => :optional
   depends_on "r" => :optional
   depends_on "saga-gis-lts" => :optional
   # TODO: LASTools straight build (2 reporting tools), or via `wine` (10 tools)
@@ -159,8 +172,8 @@ class Qgis3 < Formula
   end
 
   resource "certifi" do
-    url "https://files.pythonhosted.org/packages/4d/9c/46e950a6f4d6b4be571ddcae21e7bc846fcbb88f1de3eff0f6dd0a6be55d/certifi-2018.4.16.tar.gz"
-    sha256 "13e698f54293db9f89122b0581843a782ad0934a4fe0172d2a980ba77fc61bb7"
+    url "https://files.pythonhosted.org/packages/41/b6/4f0cefba47656583217acd6cd797bc2db1fede0d53090fdc28ad2c8e0716/certifi-2018.10.15.tar.gz"
+    sha256 "6d58c986d22b038c8c0df30d639f23a3e6d172a05c3583e766f4c0b785c0986a"
   end
 
   resource "chardet" do
@@ -174,36 +187,36 @@ class Qgis3 < Formula
   end
 
   resource "OWSLib" do
-    url "https://files.pythonhosted.org/packages/ac/71/ff2fbfa64fca17069ce30fac324533aa686c5cb64e6b5f522faed558848f/OWSLib-0.16.0.tar.gz"
-    sha256 "ec95a5e93c145a5d84b0074b9ea27570943486552a669151140debf08a100554"
+    url "https://files.pythonhosted.org/packages/cc/9c/fd05b20753b0c8a94c225e77c21dfa04a32c9fdbf54001b313bbd0092820/OWSLib-0.17.0.tar.gz"
+    sha256 "ac43839c238ae427d6112709c489decb12218f02d5032ca729e5de7557b5a2df"
   end
 
   # dependence for pyproj
   resource "cython" do
-    url "https://files.pythonhosted.org/packages/d2/12/8ef44cede251b93322e8503fd6e1b25a0249fa498bebec191a5a06adbe51/Cython-0.28.4.tar.gz"
-    sha256 "76ac2b08d3d956d77b574bb43cbf1d37bd58b9d50c04ba281303e695854ebc46"
+    url "https://files.pythonhosted.org/packages/f0/66/6309291b19b498b672817bd237caec787d1b18013ee659f17b1ec5844887/Cython-0.29.tar.gz"
+    sha256 "94916d1ede67682638d3cc0feb10648ff14dc51fb7a7f147f4fedce78eaaea97"
   end
 
   # fix for Python3.7
   resource "pyproj" do
-    url "https://github.com/jswhit/pyproj/archive/40bc5389e7ee8212d9f5a790f582970007e367e1.zip"
-    sha256 "d38ff62738460a6d986c132999fcb83256e35f3b649273304392f961613d731f"
+    url "https://github.com/jswhit/pyproj/archive/882074864bb2e567a164624a3710907f34a4d478.zip"
+    sha256 "220b68b879554da91d5b610e43312cb3d833b6ba11a777b50ea53270c05394d9"
     version "1.9.5.1"
   end
 
   resource "python-dateutil" do
-    url "https://files.pythonhosted.org/packages/a0/b0/a4e3241d2dee665fea11baec21389aec6886655cd4db7647ddf96c3fad15/python-dateutil-2.7.3.tar.gz"
-    sha256 "e27001de32f627c22380a688bcc43ce83504a7bc5da472209b4c70f02829f0b8"
+    url "https://files.pythonhosted.org/packages/0e/01/68747933e8d12263d41ce08119620d9a7e5eb72c876a3442257f74490da0/python-dateutil-2.7.5.tar.gz"
+    sha256 "88f9287c0174266bb0d8cedd395cfba9c58e87e5ad86b2ce58859bc11be3cf02"
   end
 
   resource "pytz" do
-    url "https://files.pythonhosted.org/packages/ca/a9/62f96decb1e309d6300ebe7eee9acfd7bccaeedd693794437005b9067b44/pytz-2018.5.tar.gz"
-    sha256 "ffb9ef1de172603304d9d2819af6f5ece76f2e85ec10692a524dd876e72bf277"
+    url "https://files.pythonhosted.org/packages/cd/71/ae99fc3df1b1c5267d37ef2c51b7d79c44ba8a5e37b48e3ca93b4d74d98b/pytz-2018.7.tar.gz"
+    sha256 "31cb35c89bd7d333cd32c5f278fca91b523b0834369e757f4c5641ea252236ca"
   end
 
   resource "requests" do
-    url "https://files.pythonhosted.org/packages/54/1f/782a5734931ddf2e1494e4cd615a51ff98e1879cbe9eecbdfeaf09aa75e9/requests-2.19.1.tar.gz"
-    sha256 "ec22d826a36ed72a7358ff3fe56cbd4ba69dd7a6718ffd450ff0e9df7a47ce6a"
+    url "https://files.pythonhosted.org/packages/97/10/92d25b93e9c266c94b76a5548f020f3f1dd0eb40649cb1993532c0af8f4c/requests-2.20.0.tar.gz"
+    sha256 "99dcfdaaeb17caf6e526f32b6a7b780461512ab3f1d992187801694cba42770c"
   end
 
   resource "six" do
@@ -212,8 +225,8 @@ class Qgis3 < Formula
   end
 
   resource "urllib3" do
-    url "https://files.pythonhosted.org/packages/3c/d2/dc5471622bd200db1cd9319e02e71bc655e9ea27b8e0ce65fc69de0dac15/urllib3-1.23.tar.gz"
-    sha256 "a68ac5e15e76e7e5dd2b8f94007233e01effe3e50e8daddf69acfd81cb686baf"
+    url "https://files.pythonhosted.org/packages/a5/74/05ffd00b4b5c08306939c485869f5dc40cbc27357195b0a98b18e4c48893/urllib3-1.24.tar.gz"
+    sha256 "41c3db2fc01e5b907288010dec72f9d0a74e37d6994e6eb56849f59fea2265ae"
   end
 
   resource "coverage" do
@@ -227,8 +240,8 @@ class Qgis3 < Formula
   end
 
   resource "future" do
-    url "https://files.pythonhosted.org/packages/00/2b/8d082ddfed935f3608cc61140df6dcbf0edea1bc3ab52fb6c29ae3e81e85/future-0.16.0.tar.gz"
-    sha256 "e39ced1ab767b5936646cedba8bcce582398233d6a627067d4c6a454c90cfedb"
+    url "https://files.pythonhosted.org/packages/85/aa/ba2e24dcb889d7e98733f87515d80b3512418b80ba79d82d2ddcd43fadf3/future-0.17.0.tar.gz"
+    sha256 "eb6d4df04f1fb538c99f69c9a28b255d1ee4e825d479b9c62fc38c0cf38065a4"
   end
 
   resource "mock" do
@@ -237,18 +250,13 @@ class Qgis3 < Formula
   end
 
   resource "nose2" do
-    url "https://files.pythonhosted.org/packages/93/46/a389a65237d0520bb4a98fc174fdf6568ad9dcc79b9c1d1f30afc6776031/nose2-0.7.4.tar.gz"
-    sha256 "954a62cfb2d2ac06dad32995cbc822bf00cc11e20d543963515932fd4eff33fa"
+    url "https://files.pythonhosted.org/packages/1b/c5/d5fcd60f5bf8af1e320fde832d7965933581a9b21b0d1b29bbe2208f4403/nose2-0.8.0.tar.gz"
+    sha256 "9052f2b46807b63d9bdf68e0768da1f8386368889b50043fd5d0889c470258f3"
   end
 
-  # resource "numpy" do
-  #   url "https://files.pythonhosted.org/packages/3a/20/c81632328b1a4e1db65f45c0a1350a9c5341fd4bbb8ea66cdd98da56fe2e/numpy-1.15.0.zip"
-  #   sha256 "f28e73cf18d37a413f7d5de35d024e6b98f14566a10d82100f9dc491a7d449f9"
-  # end
-
   resource "pbr" do
-    url "https://files.pythonhosted.org/packages/c8/c3/935b102539529ea9e6dcf3e8b899583095a018b09f29855ab754a2012513/pbr-4.2.0.tar.gz"
-    sha256 "1b8be50d938c9bb75d0eaf7eda111eec1bf6dc88a62a6412e33bf077457e0f45"
+    url "https://files.pythonhosted.org/packages/64/2b/fe0c782f57a6c979a5b8c9d405885ceec5b03105caa5587bdf82affb8bf7/pbr-5.1.0.tar.gz"
+    sha256 "f20ec0abbf132471b68963bb34d9c78e603a5cf9e24473f14358e66551d47475"
   end
 
   resource "psycopg2" do
@@ -276,13 +284,33 @@ class Qgis3 < Formula
     sha256 "dbae1046def0efb574852fab9e90209b23f556367b5a320c0bcb871c77c3e8cc"
   end
 
+  resource "termcolor" do
+    url "https://files.pythonhosted.org/packages/8a/48/a76be51647d0eb9f10e2a4511bf3ffb8cc1e6b14e9e4fab46173aa79f981/termcolor-1.1.0.tar.gz"
+    sha256 "1d6d69ce66211143803fbc56652b41d73b4a400a2891d7bf7a1cdf4c02de613b"
+  end
+
+  resource "oauthlib" do
+    url "https://files.pythonhosted.org/packages/df/5f/3f4aae7b28db87ddef18afed3b71921e531ca288dc604eb981e9ec9f8853/oauthlib-2.1.0.tar.gz"
+    sha256 "ac35665a61c1685c56336bda97d5eefa246f1202618a1d6f34fccb1bdd404162"
+  end
+
+  resource "pyOpenSSL" do
+    url "https://files.pythonhosted.org/packages/9b/7c/ee600b2a9304d260d96044ab5c5e57aa489755b92bbeb4c0803f9504f480/pyOpenSSL-18.0.0.tar.gz"
+    sha256 "6488f1423b00f73b7ad5167885312bb0ce410d3312eb212393795b53c8caa580"
+  end
+
+  resource "numpy" do
+    url "https://files.pythonhosted.org/packages/83/6b/d03277eacf113697675cd659086a4dcf9472108e2f1a83884c0271bdca46/numpy-1.15.3.zip"
+    sha256 "1c0c80e74759fa4942298044274f2c11b08c86230b25b8b819e55e644f5ff2b6"
+  end
+
   needs :cxx11
 
   def install
     ENV.cxx11
 
     # when gdal2-python.rb loaded, PYTHONPATH gets set to 2.7 site-packages...
-    #   clear it before calling any local python3 functions
+    # clear it before calling any local python3 functions
     ENV["PYTHONPATH"] = nil
     if ARGV.debug?
       puts "python_exec: #{python_exec}"
@@ -329,12 +357,14 @@ class Qgis3 < Formula
     args << "-DCMAKE_BUILD_TYPE=RelWithDebInfo" if build.with? "debug" # override
 
     cmake_prefixes = %w[
-      qt5
+      qt
       qt5-webkit
+      pyqt5-webkit
       qscintilla2
       qwt
       qwtpolar
       qca
+      qtkeychain
       gdal2
       gsl
       geos
@@ -365,9 +395,6 @@ class Qgis3 < Formula
       -DPROJ_LIBRARY=#{Formula["proj"].opt_lib}/libproj.dylib
       -DQCA_INCLUDE_DIR=#{qca_fw}/Headers
       -DQCA_LIBRARY=#{qca_fw}/qca-qt5
-      -DQSCINTILLA_INCLUDE_DIR=#{Formula["qscintilla2"].opt_include}
-      -DQSCINTILLA_LIBRARY=#{Formula["qscintilla2"].opt_lib}/libqscintilla2_qt5.dylib
-      -DQSCI_SIP_DIR=#{Formula["qscintilla2"].opt_share}/sip
       -DQWTPOLAR_INCLUDE_DIR=#{qwtpolar_fw}/Headers
       -DQWTPOLAR_LIBRARY=#{qwtpolar_fw}/qwtpolar
       -DQWT_INCLUDE_DIR=#{qwt_fw}/Headers
@@ -386,6 +413,11 @@ class Qgis3 < Formula
       -DLIBTASN1_INCLUDE_DIR=#{Formula["libtasn1"].opt_include}
       -DLIBTASN1_LIBRARY=#{Formula["libtasn1"].opt_lib}/libtasn1.dylib
 
+      -DQSCINTILLA_INCLUDE_DIR=#{Formula["qscintilla2"].opt_include}
+      -DQSCINTILLA_LIBRARY=#{Formula["qscintilla2"].opt_lib}/libqscintilla2_qt5.dylib
+      -DQSCI_SIP_DIR=#{Formula["qscintilla2"].opt_share}/sip
+      -DPYQT5_SIP_DIR=#{Formula["pyqt"].opt_share}/sip/Qt5
+
       -DPYRCC_PROGRAM=#{libexec}/vendor/bin/pyrcc5
       -DPYUIC_PROGRAM=#{libexec}/vendor/bin/pyuic5
 
@@ -396,13 +428,11 @@ class Qgis3 < Formula
 
       -DENABLE_TESTS=FALSE
       -DENABLE_MODELTEST=FALSE
-      -DSUPPRESS_QT_WARNINGS=TRUE
       -DWITH_QWTPOLAR=TRUE
       -DWITH_INTERNAL_QWTPOLAR=FALSE
       -DQGIS_MACAPP_BUNDLE=0
       -DQGIS_MACAPP_INSTALL_DEV=FALSE
       -DWITH_QSCIAPI=FALSE
-      -DWITH_STAGED_PLUGINS=TRUE
       -DWITH_CUSTOM_WIDGETS=TRUE
       -DWITH_ASTYLE=FALSE
       -DWITH_GRASS=FALSE
@@ -418,13 +448,6 @@ class Qgis3 < Formula
 
     # python Configuration
     args << "-DPYTHON_EXECUTABLE='#{`python3 -c "import sys; print(sys.executable)"`.chomp}'"
-    # args << "-DPYTHON_CUSTOM_FRAMEWORK='#{`python3 -c "import sys; print(sys.prefix)"`.chomp}'" # not used by the project
-    # Disable future, because we've installed it in the virtualenv and will provide it at runtime.
-    # args << "-DWITH_INTERNAL_FUTURE=FALSE" # not used by the project
-    # args << "-DPYTHON_INCLUDE_PATH=#{HOMEBREW_PREFIX}/Frameworks/Python.framework/Versions/#{py_ver}/include/python#{py_ver}m"
-    # args << "-DPYTHON_LIBRARY=#{HOMEBREW_PREFIX}/Frameworks/Python.framework/Versions/#{py_ver}/Python"
-    # args << "-DPYTHON_LIBRARY=#{HOMEBREW_PREFIX}/Frameworks/Python.framework/Versions/#{py_ver}/lib/"
-    # args << "-DPYTHON_SITE_PACKAGES_DIR=#{HOMEBREW_PREFIX}/lib/python#{py_ver}/site-packages"
 
     # if using Homebrew's Python, make sure its components are always found first
     # see: https://github.com/Homebrew/homebrew/pull/28597
@@ -444,7 +467,7 @@ class Qgis3 < Formula
       # necessary to build from branch: master
       # fix for CL/cl2.hpp
       # https://github.com/qgis/QGIS/pull/7451
-      args << "-DUSE_OPENCL=OFF"
+      # args << "-DUSE_OPENCL=OFF"
     end
 
     args << "-DWITH_SERVER=#{build.with?("server") ? "TRUE" : "FALSE"}"
@@ -680,16 +703,16 @@ class Qgis3 < Formula
       end
     end
 
-    # if opts.include?("with-orfeo5") || brewed_orfeo5?
-    #  orfeo5 = Formula["orfeo5"]
+    # if opts.include?("with-orfeo6") || brewed_orfeo6?
+    #  orfeo6 = Formula["orfeo6"]
     #  begin
     #    inreplace app/"#{proc_algs}/otb/OTBUtils.py" do |s|
     #      # default geoid path
     #      # try to replace first, so it fails (if already done) before global replaces
-    #      s.sub! "OTB_GEOID_FILE) or ''", "OTB_GEOID_FILE) or '#{orfeo5.opt_libexec}/default_geoid/egm96.grd'"
+    #      s.sub! "OTB_GEOID_FILE) or ''", "OTB_GEOID_FILE) or '#{orfeo6.opt_libexec}/default_geoid/egm96.grd'"
     #      # default bin and lib path
-    #      s.gsub! "/usr/local/bin", orfeo5.opt_bin.to_s
-    #      s.gsub! "/usr/local/lib", orfeo5.opt_lib.to_s
+    #      s.gsub! "/usr/local/bin", orfeo6.opt_bin.to_s
+    #      s.gsub! "/usr/local/lib", orfeo6.opt_lib.to_s
     #    end
     #    puts "ORFEO 5 OTBUtils.py has been updated"
     #    rescue Utils::InreplaceError
@@ -824,8 +847,8 @@ class Qgis3 < Formula
     Formula["grass7"].opt_prefix.exist?
   end
 
-  # def brewed_orfeo5?
-  #   Formula["orfeo5"].opt_prefix.exist?
+  # def brewed_orfeo6?
+  #   Formula["orfeo6"].opt_prefix.exist?
   # end
 
   def brewed_python?
