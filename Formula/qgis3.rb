@@ -36,16 +36,15 @@ class Qgis3 < Formula
 
   desc "Open Source Geographic Information System"
   homepage "https://www.qgis.org"
-  # url "https://github.com/qgis/QGIS/archive/final-3_4_0.tar.gz"
-  # sha256 "0ce2fc7f79fa70d5d456945bb23e122a90a4ef3717271f6b6339f63544e2c557"
-  url "https://github.com/qgis/QGIS.git",
-    :branch => "release-3_4",
-    :commit => "31e3a2f083ad344250fc85f43853a909a7d72918"
-  version "3.4.0"
 
-  revision 1
+  # revision 1
 
   head "https://github.com/qgis/QGIS.git", :branch => "master"
+
+  stable do
+    url "https://github.com/qgis/QGIS/archive/final-3_4_1.tar.gz"
+    sha256 "e275a67d39705f833f689d1491ebd8e5d25c805f422eefa7b568638bc81ddddd"
+  end
 
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
