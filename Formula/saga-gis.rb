@@ -10,8 +10,10 @@ class SagaGis < Formula
 
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    sha256 "5e2538098f9676a5e8eb1d722eaa825afafcbb682d0e36d915a0ffcaaeecc1fc" => :high_sierra
-    sha256 "5e2538098f9676a5e8eb1d722eaa825afafcbb682d0e36d915a0ffcaaeecc1fc" => :sierra
+    rebuild 1
+    sha256 "ae9d4a0f03ac24f1c5e153789e8527ec1acc93b50f447f57cd08575532dc381e" => :mojave
+    sha256 "ae9d4a0f03ac24f1c5e153789e8527ec1acc93b50f447f57cd08575532dc381e" => :high_sierra
+    sha256 "ae9d4a0f03ac24f1c5e153789e8527ec1acc93b50f447f57cd08575532dc381e" => :sierra
   end
 
   keg_only "QGIS fails to load the correct SAGA version, if the latest version is in the path"
