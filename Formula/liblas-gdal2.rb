@@ -9,9 +9,9 @@ class LiblasGdal2 < Formula
 
    bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    rebuild 4
-    sha256 "e920766a74406d0d71ed3314febed85a856979d4d061af8fc0f337f0e8dfaffe" => :high_sierra
-    sha256 "e920766a74406d0d71ed3314febed85a856979d4d061af8fc0f337f0e8dfaffe" => :sierra
+    sha256 "d2f3ac829f4bdd58e56211dc0310d04102c2fa1e594443bfa8ac2ba3574677e4" => :mojave
+    sha256 "d2f3ac829f4bdd58e56211dc0310d04102c2fa1e594443bfa8ac2ba3574677e4" => :high_sierra
+    sha256 "d2f3ac829f4bdd58e56211dc0310d04102c2fa1e594443bfa8ac2ba3574677e4" => :sierra
   end
 
   keg_only "other version built against older gdal is in main tap"
