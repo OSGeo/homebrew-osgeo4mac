@@ -140,7 +140,6 @@ class Gdal2 < Formula
       "--without-perl",
       "--without-php",
       "--without-fme",
-      "--without-hdf4",
       "--without-ecw",
       "--without-kakadu",
       "--without-mrsid",
@@ -169,6 +168,7 @@ class Gdal2 < Formula
     # Optional Homebrew packages supporting additional formats.
     supported_backends = %w[
       liblzma
+      hdf4
       hdf5
       cfitsio
       netcdf
@@ -187,7 +187,6 @@ class Gdal2 < Formula
     # compatible with GDAL. Interested users will have to install such software
     # manually and most likely have to tweak the install routine.
     unsupported_backends = %w[
-      hdf4
       dwgdirect
       podofo
       gta
