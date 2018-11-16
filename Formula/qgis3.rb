@@ -113,7 +113,7 @@ class Qgis3 < Formula
   depends_on "libiconv"
   depends_on "geos"
   depends_on "libspatialite"
-  depends_on "postgis"
+  depends_on "osgeo/homebrew-osgeo4mac/postgis"
   depends_on "openssl"
   depends_on "poppler"
   depends_on "gnu-sed"
