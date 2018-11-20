@@ -13,10 +13,9 @@ class Gdal2 < Formula
 
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    rebuild 2
-    sha256 "a5d679d0eade9203f9c71692a01fa87ae6928eaf4f51c6aa2df0b1da9a547089" => :mojave
-    sha256 "a5d679d0eade9203f9c71692a01fa87ae6928eaf4f51c6aa2df0b1da9a547089" => :high_sierra
-    sha256 "a5d679d0eade9203f9c71692a01fa87ae6928eaf4f51c6aa2df0b1da9a547089" => :sierra
+    sha256 "94d40e4981d418ce3d4bc1e596dfc862638dcc968f1e3eb7a768417ce984e844" => :mojave
+    sha256 "94d40e4981d418ce3d4bc1e596dfc862638dcc968f1e3eb7a768417ce984e844" => :high_sierra
+    sha256 "94d40e4981d418ce3d4bc1e596dfc862638dcc968f1e3eb7a768417ce984e844" => :sierra
   end
 
   keg_only "older version of gdal is in main tap and installs similar components"
