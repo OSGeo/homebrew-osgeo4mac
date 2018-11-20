@@ -5,8 +5,11 @@ class Postgis < Formula
   sha256 "be73abd747e9665f29748e0e7dc6b3f7b1ce98f32e3567f08259420ca10e36d5"
 
   bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles" 
-    rebuild 1
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    cellar :any
+    sha256 "8ccc613743bfaf3436fc1f4f45b0fc7a101df60f882b84a400ac9a850fc230b9" => :mojave
+    sha256 "8ccc613743bfaf3436fc1f4f45b0fc7a101df60f882b84a400ac9a850fc230b9" => :high_sierra
+    sha256 "8ccc613743bfaf3436fc1f4f45b0fc7a101df60f882b84a400ac9a850fc230b9" => :sierra
   end
 
   head do
