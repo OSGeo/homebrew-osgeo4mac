@@ -11,7 +11,8 @@ class PgsqlOgrFdw < Formula
     false
   end
 
-  depends_on "osgeo/homebrew-osgeo4mac/postgis"
+  depends_on "postgis"
+  depends_on "gdal"
 
   def install
     ENV.deparallelize
