@@ -4,7 +4,7 @@ class Gdal2 < Formula
   url "https://github.com/OSGeo/gdal/archive/v2.3.2.tar.gz"
   sha256 "e0f751bff9ba6fb541065acbe7a76007be76a3c6309240faf4e6440f6ff1702a"
 
-  revision 1
+  revision 2
 
   head do
     url "https://github.com/OSGeo/gdal.git", :branch => "master"
@@ -40,6 +40,9 @@ class Gdal2 < Formula
   deprecated_option "with-java" => "with-swig-java"
 
   depends_on "pkg-config"
+  depends_on "libiconv"
+  depends_on "libjson-c"
+  depends_on "expat"
   depends_on "zlib"
   depends_on "qhull"
   depends_on "curl"
