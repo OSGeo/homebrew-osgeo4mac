@@ -41,7 +41,6 @@ class Gdal2 < Formula
 
   depends_on "pkg-config"
   depends_on "libiconv"
-  depends_on "json-c"
   depends_on "expat"
   depends_on "zlib"
   depends_on "qhull"
