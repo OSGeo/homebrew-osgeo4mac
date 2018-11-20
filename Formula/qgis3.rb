@@ -36,15 +36,19 @@ class Qgis3 < Formula
 
   desc "Open Source Geographic Information System"
   homepage "https://www.qgis.org"
+  url "https://github.com/qgis/QGIS.git",
+    :branch => "release-3_4",
+    :commit => "8965dda3b9331ae7412ee42a120e32d5c5060c5d"
+  version "3.4.1"
 
-  # revision 1
+  revision 1
 
   head "https://github.com/qgis/QGIS.git", :branch => "master"
 
-  stable do
-    url "https://github.com/qgis/QGIS/archive/final-3_4_1.tar.gz"
-    sha256 "e275a67d39705f833f689d1491ebd8e5d25c805f422eefa7b568638bc81ddddd"
-  end
+  # stable do
+  #   url "https://github.com/qgis/QGIS/archive/final-3_4_1.tar.gz"
+  #   sha256 "e275a67d39705f833f689d1491ebd8e5d25c805f422eefa7b568638bc81ddddd"
+  # end
 
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
@@ -117,6 +121,7 @@ class Qgis3 < Formula
   depends_on "openssl"
   depends_on "poppler"
   depends_on "gnu-sed"
+  depends_on "exiv2"
 
   if build.with? "server"
     depends_on "fcgi"
@@ -296,6 +301,11 @@ class Qgis3 < Formula
   resource "pyOpenSSL" do
     url "https://files.pythonhosted.org/packages/9b/7c/ee600b2a9304d260d96044ab5c5e57aa489755b92bbeb4c0803f9504f480/pyOpenSSL-18.0.0.tar.gz"
     sha256 "6488f1423b00f73b7ad5167885312bb0ce410d3312eb212393795b53c8caa580"
+  end
+
+  resource "httplib2" do
+    url "https://files.pythonhosted.org/packages/fd/ce/aa4a385e3e9fd351737fd2b07edaa56e7a730448465aceda6b35086a0d9b/httplib2-0.11.3.tar.gz"
+    sha256 "e71daed9a0e6373642db61166fa70beecc9bf04383477f84671348c02a04cbdf"
   end
 
   resource "numpy" do
