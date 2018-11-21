@@ -30,7 +30,7 @@ class Postgis2 < Formula
 
   depends_on "gpp" => :build
   depends_on "pkg-config" => :build
-  # depends_on "gdal2" # for GeoJSON and raster handling
+  depends_on "gdal2" # for GeoJSON and raster handling
   depends_on "geos"
   depends_on "gtk+" if build.with? "gui"
   depends_on "json-c" # for GeoJSON and raster handling
