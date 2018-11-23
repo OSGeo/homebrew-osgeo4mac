@@ -38,16 +38,16 @@ class Qgis3 < Formula
   homepage "https://www.qgis.org"
   url "https://github.com/qgis/QGIS.git",
     :branch => "release-3_4",
-    :commit => "8965dda3b9331ae7412ee42a120e32d5c5060c5d"
-  version "3.4.1"
+    :commit => "9f62f18319dd4517bfa9be5a0709bcdf3ef3f2ca"
+  version "3.4.2"
 
-  revision 1
+  # revision 1
 
   head "https://github.com/qgis/QGIS.git", :branch => "master"
 
   # stable do
-  #   url "https://github.com/qgis/QGIS/archive/final-3_4_1.tar.gz"
-  #   sha256 "e275a67d39705f833f689d1491ebd8e5d25c805f422eefa7b568638bc81ddddd"
+  #   url "https://github.com/qgis/QGIS/archive/final-3_4_2.tar.gz"
+  #   sha256 "e6a1407a391c57205be3cde1e497d2aa48c3557c56683fa40c44ba3f4b6af674"
   # end
 
   bottle do
@@ -118,7 +118,7 @@ class Qgis3 < Formula
   depends_on "libiconv"
   depends_on "geos"
   depends_on "libspatialite"
-  depends_on "postgis"
+  depends_on "postgis2"
   depends_on "openssl"
   depends_on "poppler"
   depends_on "gnu-sed"
