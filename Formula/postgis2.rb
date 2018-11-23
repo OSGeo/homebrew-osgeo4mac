@@ -6,6 +6,14 @@ class Postgis2 < Formula
 
   revision 1
 
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    cellar :any
+    sha256 "87da7c30324e2dae8ae1c1a534857e24e5b649ccbe14cda3eaaa349af791d1ab" => :mojave
+    sha256 "87da7c30324e2dae8ae1c1a534857e24e5b649ccbe14cda3eaaa349af791d1ab" => :high_sierra
+    sha256 "87da7c30324e2dae8ae1c1a534857e24e5b649ccbe14cda3eaaa349af791d1ab" => :sierra
+  end
+
   head do
     url "https://svn.osgeo.org/postgis/trunk/"
 
