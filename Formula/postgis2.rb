@@ -4,7 +4,7 @@ class Postgis2 < Formula
   url "https://download.osgeo.org/postgis/source/postgis-2.5.1.tar.gz"
   sha256 "fb137056f43aae0e9d475dc5b7934eccce466f86f5ceeb69ec8b5cea26817a91"
 
-  # revision 1
+  revision 1
 
   head do
     url "https://svn.osgeo.org/postgis/trunk/"
@@ -12,14 +12,6 @@ class Postgis2 < Formula
     depends_on "autoconf" => :build
     depends_on "automake" => :build
     depends_on "libtool" => :build
-  end
-
-  bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    cellar :any
-    sha256 "8ccc613743bfaf3436fc1f4f45b0fc7a101df60f882b84a400ac9a850fc230b9" => :mojave
-    sha256 "8ccc613743bfaf3436fc1f4f45b0fc7a101df60f882b84a400ac9a850fc230b9" => :high_sierra
-    sha256 "8ccc613743bfaf3436fc1f4f45b0fc7a101df60f882b84a400ac9a850fc230b9" => :sierra
   end
 
   option "with-gui", "Build shp2pgsql-gui in addition to command line tools"
@@ -34,13 +26,13 @@ class Postgis2 < Formula
   depends_on "geos"
   depends_on "gtk+" if build.with? "gui"
   depends_on "json-c" # for GeoJSON and raster handling
+  depends_on "libiconv"
+  depends_on "libxml2"
+  depends_on "libxslt"
   depends_on "pcre" # if build.with? "gdal" # libpcre
   depends_on "postgresql"
   depends_on "proj"
   depends_on "sfcgal" # => :optional # for advanced 2D/3D functions
-  depends_on "libxslt"
-  depends_on "libiconv"
-  depends_on "libxml2"
   depends_on "protobuf-c" => :optional # mapbox
 
   if build.with? "html-docs"
