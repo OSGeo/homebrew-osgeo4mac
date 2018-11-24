@@ -58,7 +58,6 @@ class PgsqlOgrFdw < Formula
   end
 
   test do
-    ogr_fdw_info -s "#{prefix}/data"
     # # test the sql generator for the extension
     # data_sub = "data".upcase # or brew audit thinks there is a D A T A section
     # sql_out = <<~EOS
@@ -81,6 +80,8 @@ class PgsqlOgrFdw < Formula
     #
     # result = shell_output("ogr_fdw_info -s #{prefix}/data -l pt_two")
     # assert_equal sql_out.strip, result.strip
+
+    system "ogr_fdw_info", "-s", "#{prefix}/data"
   end
 end
 
