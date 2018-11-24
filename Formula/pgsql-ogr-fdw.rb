@@ -64,8 +64,8 @@ class PgsqlOgrFdw < Formula
       CREATE SERVER myserver
         FOREIGN #{data_sub} WRAPPER ogr_fdw
         OPTIONS (
-          datasource '#{prefix}/data',
-          format 'ESRI Shapefile');
+              datasource '#{prefix}/data',
+              format 'ESRI Shapefile' );
 
       CREATE FOREIGN TABLE pt_two (
         fid bigint,
@@ -78,7 +78,7 @@ class PgsqlOgrFdw < Formula
       OPTIONS (layer 'pt_two');
     EOS
 
-    result = shell_output("ogr_fdw_info -s #{prefix/"data"} -l pt_two")
+    result = shell_output("ogr_fdw_info -s #{prefix}/data -l pt_two")
     assert_equal sql_out.strip, result.strip
   end
 end
