@@ -65,8 +65,8 @@ class PgsqlOgrFdw < Formula
       CREATE SERVER myserver
         FOREIGN #{data_sub} WRAPPER ogr_fdw
         OPTIONS (
-          datasource '#{prefix}/data',
-          format 'ESRI Shapefile' );
+              datasource '#{prefix}/data',
+              format 'ESRI Shapefile' );
 
       CREATE FOREIGN TABLE pt_two (
         fid bigint,
