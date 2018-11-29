@@ -4,6 +4,13 @@ class PgsqlOgrFdw < Formula
   url "https://github.com/pramsey/pgsql-ogr-fdw/archive/v1.0.7.tar.gz"
   sha256 "c776d9ad108818bae33336ca8d2219837e04d2c25c9086928e4bb6e06947b6e9"
 
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    sha256 "d24ceabc0e9fe709877bf4fb863f9e6170824f89bd1b6e5838aa153860f6ea79" => :mojave
+    sha256 "d24ceabc0e9fe709877bf4fb863f9e6170824f89bd1b6e5838aa153860f6ea79" => :high_sierra
+    sha256 "d24ceabc0e9fe709877bf4fb863f9e6170824f89bd1b6e5838aa153860f6ea79" => :sierra
+  end
+
   # revision 1
 
   head "https://github.com/pramsey/pgsql-ogr-fdw.git", :branch => "master"
