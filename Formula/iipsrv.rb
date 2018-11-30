@@ -5,7 +5,11 @@ class Iipsrv < Formula
   version "1.1-dev"
 
   bottle do
-
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    cellar :any
+    sha256 "ddf28643ef4eb467b3578ad6f5512331c7b412f65842b4d8526c6f860d465cbf" => :mojave
+    sha256 "ddf28643ef4eb467b3578ad6f5512331c7b412f65842b4d8526c6f860d465cbf" => :high_sierra
+    sha256 "ddf28643ef4eb467b3578ad6f5512331c7b412f65842b4d8526c6f860d465cbf" => :sierra
   end
 
   option "with-lighttpd", "Install lighttpd and iipsrv configuration file"
