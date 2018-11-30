@@ -5,9 +5,13 @@ class Grass7 < Formula
   desc "Geographic Resources Analysis Support System"
   homepage "https://grass.osgeo.org/"
 
+  # revision 1
+
+  head "https://svn.osgeo.org/grass/grass/trunk", :using => :svn
+
   stable do
-    url "https://grass.osgeo.org/grass74/source/grass-7.4.2.tar.gz"
-    sha256 "18eb19bc0aa4cd7be3f30f79ac83f9d0a29c63657f4c1b05bf4c5d5d57a8f46d"
+    url "https://grass.osgeo.org/grass74/source/grass-7.4.3.tar.gz"
+    sha256 "004e65693ee97fd4d5dc7ad244e3286a115dccd88964d04be61c07db6574b399"
 
     # Patches to keep files from being installed outside of the prefix.
     # Remove lines from Makefile that try to install to /Library/Documentation.
