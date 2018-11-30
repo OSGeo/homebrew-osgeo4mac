@@ -10,9 +10,9 @@ class Pdfium < Formula
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
     cellar :any_skip_relocation
-    rebuild 1
-    sha256 "a2e33699c028ffc04ac097f63d4f79df1c9c617564df9b279c3d326e87964739" => :high_sierra
-    sha256 "a2e33699c028ffc04ac097f63d4f79df1c9c617564df9b279c3d326e87964739" => :sierra
+    sha256 "8d36c01cd5d05370bbcdfc8e33e74b1784b8373d4d0184a954db207079e2a605" => :mojave
+    sha256 "8d36c01cd5d05370bbcdfc8e33e74b1784b8373d4d0184a954db207079e2a605" => :high_sierra
+    sha256 "8d36c01cd5d05370bbcdfc8e33e74b1784b8373d4d0184a954db207079e2a605" => :sierra
   end
 
   depends_on "python@2" => :build # gyp doesn't run under 2.6 or lower
