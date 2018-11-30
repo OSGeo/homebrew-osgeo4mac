@@ -1,7 +1,7 @@
 class Iipsrv < Formula
-  homepage "https://iipimage.sourceforge.net"
+  homepage "https://github.com/ruven/iipsrv"
   url "https://github.com/ruven/iipsrv.git",
-  :revision => "eb8602ae40ff03aadf6abdc9fb8ef0f54c71c577"
+  :revision => "95a0393ccd165a1c17ec72db4a66d442c10b7c38"
   version "1.1-dev"
 
   bottle do
@@ -32,7 +32,7 @@ class Iipsrv < Formula
 
   resource "iipmooviewer" do
     url "https://github.com/ruven/iipmooviewer.git",
-    :revision => "60f807d53afcd80d5ed3891c65caf2718db307dd"
+    :revision => "93a6979130919f23da4c3abf7645d140ecfef7f5"
     version "2.0-dev"
   end
 
