@@ -5,9 +5,13 @@ class Grass7 < Formula
   desc "Geographic Resources Analysis Support System"
   homepage "https://grass.osgeo.org/"
 
+  # revision 1
+
+  head "https://svn.osgeo.org/grass/grass/trunk"
+
   stable do
-    url "https://grass.osgeo.org/grass74/source/grass-7.4.2.tar.gz"
-    sha256 "18eb19bc0aa4cd7be3f30f79ac83f9d0a29c63657f4c1b05bf4c5d5d57a8f46d"
+    url "https://grass.osgeo.org/grass74/source/grass-7.4.3.tar.gz"
+    sha256 "004e65693ee97fd4d5dc7ad244e3286a115dccd88964d04be61c07db6574b399"
 
     # Patches to keep files from being installed outside of the prefix.
     # Remove lines from Makefile that try to install to /Library/Documentation.
@@ -25,32 +29,35 @@ class Grass7 < Formula
   option "with-liblas", "Build with LibLAS-with-GDAL2 support"
   option "with-aqua", "Build with experimental Aqua GUI backend."
 
-  depends_on UnlinkedGRASS7
-
   depends_on "pkg-config" => :build
-  depends_on "gettext"
-  depends_on "readline"
-  depends_on "flex"
+
   depends_on "bison"
-  depends_on "lbzip2"
-  depends_on "gdal2"
-  depends_on "libtiff"
-  depends_on "unixodbc"
-  depends_on "python@2"
-  depends_on "numpy"
-  depends_on "wxpython"
-  depends_on "postgresql" => :optional
-  depends_on "mysql" => :optional
   depends_on "cairo"
-  depends_on "ghostscript" # for cartographic composer previews
+  depends_on "flex"
   depends_on "freetype"
-  depends_on "tcl-tk" => :recommended
-  depends_on "fftw" => :recommended
-  depends_on :x11 unless build.with? "aqua" # needs to find at least X11/include/GL/gl.h
-  depends_on "openblas" => :optional
+  depends_on "gdal2"
+  depends_on "gettext"
+  depends_on "ghostscript" # for cartographic composer previews
+  depends_on "lbzip2"
   depends_on "liblas-gdal2" if build.with? "liblas"
-  depends_on "netcdf" => :optional
+  depends_on "libtiff"
+  depends_on "numpy"
+  depends_on "python@2"
+  depends_on "readline"
+  depends_on "unixodbc"
+  depends_on UnlinkedGRASS7
+  depends_on "wxpython"
+
+  depends_on :x11 if build.without? "aqua" # needs to find at least X11/include/GL/gl.h
+
+  depends_on "fftw" => :recommended
+  depends_on "tcl-tk" => :recommended
+
   depends_on "ffmpeg" => :optional
+  depends_on "mysql" => :optional
+  depends_on "netcdf" => :optional
+  depends_on "openblas" => :optional
+  depends_on "postgresql" => :optional
 
   def headless?
     # The GRASS GUI is based on WxPython.
