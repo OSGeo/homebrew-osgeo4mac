@@ -1,0 +1,67 @@
+build_steps: &build_steps
+  steps:
+     - checkout
+     - run:
+         name: Update environment variables
+         command: |
+           ulimit -c unlimited
+           ulimit -n 2048
+           export CHANGED_FORMULAE=$(.circleci/changed_formulas.sh)
+           if [ "$CHANGED_FORMULAE" == "" ]; then
+             echo "Skipping CI, not changed formulae found";
+             exit 0;
+           else
+             echo "Changed formulae are ${CHANGED_FORMULAE}";
+           fi
+           export HOMEBREW_REPOSITORY=$(brew --repo)
+           git -C "${HOMEBREW_REPOSITORY}" fetch
+           git -C "${HOMEBREW_REPOSITORY}" reset --hard origin/master
+           mkdir -p "${HOMEBREW_REPOSITORY}/Library/Taps/${CIRCLE_PROJECT_USERNAME}"
+           echo "Linking ${CIRCLE_WORKING_DIRECTORY}" to "${HOMEBREW_REPOSITORY}/Library/Taps/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
+           ln -s "${HOME}/project" "${HOMEBREW_REPOSITORY}/Library/Taps/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
+           echo "export CHANGED_FORMULAE=${CHANGED_FORMULAE}" >> $BASH_ENV
+           echo "export HOMEBREW_REPOSITORY=$HOMEBREW_REPOSITORY" >> $BASH_ENV
+           echo 'export HOMEBREW_DEVELOPER=1' >> $BASH_ENV
+           echo 'export HOMEBREW_NO_AUTO_UPDATE=1' >> $BASH_ENV
+           echo 'export HOMEBREW_PREFIX=/usr/local' >> $BASH_ENV
+
+     - run:
+         name: Before install script
+         command: .circleci/before_install.sh
+
+     - run:
+         name: Install dependencies
+         command: .circleci/install.sh
+     - run:
+          name: Install changed formulae
+          command: .circleci/script.sh
+
+workflow_filter: &filter
+  filters:
+    branches:
+      only:
+        - master
+        - circleci
+
+version: 2
+jobs:
+  sierra-build:
+    <<: *build_steps
+    <<: *filter
+    macos:
+      xcode: "8.3.3"
+  high_sierra-build:
+    <<: *build_steps
+    <<: *filter
+    macos:
+      xcode: "9.4.1"
+
+workflows:
+  version: 2
+  build_bottles:
+    jobs:
+      - high_sierra-build
+      - sierra-build
+
+
+   
