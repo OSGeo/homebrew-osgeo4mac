@@ -6,3 +6,4 @@ jobs:
 
     steps:
       - run: xcodebuild --version
+      - run: brew update
