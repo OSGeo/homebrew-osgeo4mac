@@ -2,8 +2,9 @@ version: 2
 jobs:
   build:
     branches:
-      - master
-      - circleci
+      only:
+        - master
+        - circleci
     macos:
       xcode: "9.0"
 
