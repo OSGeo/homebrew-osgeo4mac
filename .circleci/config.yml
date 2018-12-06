@@ -14,6 +14,16 @@ build_steps: &build_steps
              echo 'Changed formulae are "${CHANGED_FORMULAE}"';
            fi
            echo 'export HOMEBREW_REPOSITORY="$(brew --repo)"'
+           git -C "${HOMEBREW_REPOSITORY}" reset --hard origin/master
+           mkdir -p "${HOMEBREW_REPOSITORY}/Library/Taps/${GH_USER}"
+           ln -s "${CIRCLE_WORKING_DIRECTORY}" "${HOMEBREW_REPOSITORY}/Library/Taps/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
+           echo 'export HOMEBREW_DEVELOPER=1' >> $BASH_ENV
+           echo 'export HOMEBREW_NO_AUTO_UPDATE=1' >> $BASH_ENV
+           echo 'export HOMEBREW_PREFIX=$(brew --prefix)' >> $BASH_ENV
+
+      - run:
+          name: Before install script
+          command: .circleci/before_install.sh
 
 workflow_filter: &filter
   filters:
