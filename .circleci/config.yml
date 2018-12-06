@@ -19,6 +19,7 @@ build_steps: &build_steps
            export HOMEBREW_REPOSITORY=$(brew --repo)
            echo ${HOMBREW_REPOSITORY}
            echo 'setting up repo'
+           git -C "${HOMEBREW_REPOSITORY}" fetch
            git -C "${HOMEBREW_REPOSITORY}" reset --hard origin/master
            mkdir -p "${HOMEBREW_REPOSITORY}/Library/Taps/${GH_USER}"
            ln -s "${CIRCLE_WORKING_DIRECTORY}" "${HOMEBREW_REPOSITORY}/Library/Taps/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
