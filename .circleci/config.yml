@@ -1,4 +1,6 @@
 build_steps: &build_steps
+  environment:
+    CI_MANUAL_FORMULAE=taudem
   steps:
      - checkout
      - run:
@@ -24,7 +26,6 @@ build_steps: &build_steps
            echo 'echo "Hello from Bash!"' >> $BASH_ENV
            echo 'export HOMEBREW_DEVELOPER=1' >> $BASH_ENV
            echo 'export HOMEBREW_NO_AUTO_UPDATE=1' >> $BASH_ENV
-           echo 'export HOMEBREW_PREFIX=$(brew --prefix)' >> $BASH_ENV
 
      - run:
          name: Before install script
