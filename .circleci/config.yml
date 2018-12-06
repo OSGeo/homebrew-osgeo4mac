@@ -8,8 +8,6 @@ build_steps: &build_steps
            ulimit -n 2048
            ulimit -a
            export CHANGED_FORMULAE=$(.circleci/changed_formulas.sh)
-           echo 'sourcing'
-           source $BASH_ENV
            if [ "$CHANGED_FORMULAE" == "" ]; then
              echo "Skipping CI, not changed formulae found";
              exit 0;
