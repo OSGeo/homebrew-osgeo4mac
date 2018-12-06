@@ -3,21 +3,21 @@ build_steps: &build_steps
     only:
       - master
       - circleci
-   steps:
-      - run: checkout
-      - run:
-          name: Update environment variables
-          command: |
-            echo 'export GH_USER=$(echo -n "${TRAVIS_REPO_SLUG}" | egrep -o '^[^/]+' | tr -d '\n')' >> $BASH_ENV
-            echo 'export CI_COMMIT="$(git rev-parse --verify -q HEAD)"' >> $BASH)_ENV'
-            echo 'export CHANGED_FORMULAE=$(./circleci/changed_formulas.sh)'
-            if [ "$CHANGED_FORMULAE" == "" ]; then
-              echo "Skipping CI, not changed formulae found";
-              exit 0;
-            else
-              echo 'Changed formulae are ${CHANGED_FORMULAE}";
-            fi
-            echo 'export HOMEBREW_REPOSITORY="$(brew --repo)"'
+  steps:
+     - run: checkout
+     - run:
+         name: Update environment variables
+         command: |
+           echo 'export GH_USER=$(echo -n "${TRAVIS_REPO_SLUG}" | egrep -o '^[^/]+' | tr -d '\n')' >> $BASH_ENV
+           echo 'export CI_COMMIT="$(git rev-parse --verify -q HEAD)"' >> $BASH)_ENV'
+           echo 'export CHANGED_FORMULAE=$(./circleci/changed_formulas.sh)'
+           if [ "$CHANGED_FORMULAE" == "" ]; then
+             echo "Skipping CI, not changed formulae found";
+             exit 0;
+           else
+             echo 'Changed formulae are ${CHANGED_FORMULAE}";
+           fi
+           echo 'export HOMEBREW_REPOSITORY="$(brew --repo)"'
 
 version: 2
 jobs:
