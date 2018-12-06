@@ -1,8 +1,4 @@
 build_steps: &build_steps
-  branches:
-    only:
-      - master
-      - circleci
   steps:
      - run: checkout
      - run:
@@ -19,14 +15,23 @@ build_steps: &build_steps
            fi
            echo 'export HOMEBREW_REPOSITORY="$(brew --repo)"'
 
+workflow_filter: &filter
+  filters:
+    branches:
+      only:
+        - master
+        - circleci
+
 version: 2
 jobs:
   sierra-build:
     <<: *build_steps
+    <<: *filter
     macos:
       xcode: "8.3.3"
   high_sierra-build:
     <<: *build_steps
+    <<: *filter
     macos:
       xcode: "9.4.1"
 
