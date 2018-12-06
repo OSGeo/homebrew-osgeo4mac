@@ -11,7 +11,9 @@ build_steps: &build_steps
            echo 'export CI_COMMIT="$(git rev-parse --verify -q HEAD)"' >> $BASH_ENV
            echo 'export HOMEBREW_REPOSITORY="$(brew --repo)"' >> $BASH_ENV
            echo 'export CHANGED_FORMULAE=$(.circleci/changed_formulas.sh)' >> $BASH_ENV
+           echo 'sourcing'
            source $BASH_ENV
+           echo ${HOMEBREW_REPOSITORY}
            if [ "$CHANGED_FORMULAE" == "" ]; then
              echo "Skipping CI, not changed formulae found";
              exit 0;
