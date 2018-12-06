@@ -5,13 +5,13 @@ build_steps: &build_steps
          name: Update environment variables
          command: |
            echo 'export GH_USER=$(echo -n "${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}" | egrep -o "^[^/]+" | tr -d "\n")' >> $BASH_ENV
-           echo 'export CI_COMMIT="$(git rev-parse --verify -q HEAD)"' >> $BASH_ENV'
+           echo 'export CI_COMMIT="$(git rev-parse --verify -q HEAD)"' >> $BASH_ENV
            echo 'export CHANGED_FORMULAE=$(./circleci/changed_formulas.sh)' >> $BASH_ENV
            if [ "$CHANGED_FORMULAE" == "" ]; then
              echo "Skipping CI, not changed formulae found";
              exit 0;
            else
-             echo 'Changed formulae are ${CHANGED_FORMULAE}';
+             echo 'Changed formulae are "${CHANGED_FORMULAE}"';
            fi
            echo 'export HOMEBREW_REPOSITORY="$(brew --repo)"'
 
