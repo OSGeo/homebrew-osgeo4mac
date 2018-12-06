@@ -1,4 +1,6 @@
 build_steps: &build_steps
+  environment:
+    BASH_ENV: ~/.bashrc
   steps:
      - checkout
      - run:
