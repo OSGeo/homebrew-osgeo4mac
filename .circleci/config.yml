@@ -29,11 +29,6 @@ jobs:
     <<: *filter
     macos:
       xcode: "8.3.3"
-  high_sierra-build:
-    <<: *build_steps
-    <<: *filter
-    macos:
-      xcode: "9.4.1"
 
 workflows:
   version: 2
