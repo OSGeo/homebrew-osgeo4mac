@@ -5,7 +5,7 @@ build_steps: &build_steps
          name: Update environment variables
          command: |
            ulimit -c unlimited
-           ulimit -n unlimited
+           ulimit -n 2048
            ulimit -a
            echo 'export GH_USER=$(echo -n "${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}" | egrep -o "^[^/]+" | tr -d "\n")' >> $BASH_ENV
            echo 'export CI_COMMIT="$(git rev-parse --verify -q HEAD)"' >> $BASH_ENV
@@ -33,7 +33,7 @@ build_steps: &build_steps
          name: Before install script
          command: |
            ulimit -c unlimited
-           ulimit -n unlimited
+           ulimit -n 2048
            .circleci/before_install.sh
      - run:
          name: Install dependencies
