@@ -35,7 +35,6 @@ workflows:
   build_bottles:
     jobs:
       - sierra-build
-      - high_sierra-build
 
 
    
