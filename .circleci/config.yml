@@ -4,10 +4,7 @@ build_steps: &build_steps
      - run:
          name: Update environment variables
          command: |
-           ulimit -a
-           ulimit -n 1024
-           brew --version
-           brew --repo
+           ulimit -n 2048
            echo 'export GH_USER=$(echo -n "${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}" | egrep -o "^[^/]+" | tr -d "\n")' >> $BASH_ENV
            echo 'export CI_COMMIT="$(git rev-parse --verify -q HEAD)"' >> $BASH_ENV
            echo 'export CHANGED_FORMULAE=$(.circleci/changed_formulas.sh)' >> $BASH_ENV
@@ -17,7 +14,7 @@ build_steps: &build_steps
              echo "Skipping CI, not changed formulae found";
              exit 0;
            else
-             echo 'Changed formulae are ${CHANGED_FORMULAE}';
+             echo 'Changed formulae are "${CHANGED_FORMULAE}"';
            fi
            export HOMEBREW_REPOSITORY=$(brew --repo)
            echo ${HOMBREW_REPOSITORY}
@@ -32,7 +29,7 @@ build_steps: &build_steps
      - run:
          name: Before install script
          command: |
-           ulimit -n 1024
+           ulimit -n 2048
            .circleci/before_install.sh
      - run:
          name: Install dependencies
