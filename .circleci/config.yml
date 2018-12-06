@@ -6,7 +6,7 @@ build_steps: &build_steps
          command: |
            echo 'export GH_USER=$(echo -n "${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}" | egrep -o "^[^/]+" | tr -d "\n")' >> $BASH_ENV
            echo 'export CI_COMMIT="$(git rev-parse --verify -q HEAD)"' >> $BASH_ENV
-           echo 'export CHANGED_FORMULAE=$(./circleci/changed_formulas.sh)' >> $BASH_ENV
+           echo 'export CHANGED_FORMULAE=$(.circleci/changed_formulas.sh)' >> $BASH_ENV
            if [ "$CHANGED_FORMULAE" == "" ]; then
              echo "Skipping CI, not changed formulae found";
              exit 0;
@@ -20,9 +20,16 @@ build_steps: &build_steps
            echo 'export HOMEBREW_DEVELOPER=1' >> $BASH_ENV
            echo 'export HOMEBREW_NO_AUTO_UPDATE=1' >> $BASH_ENV
            echo 'export HOMEBREW_PREFIX=$(brew --prefix)' >> $BASH_ENV
+
      - run:
          name: Before install script
          command: .circleci/before_install.sh
+     - run:
+         name: Install dependencies
+         command: .circleci/install.sh
+      - run:
+          name: Install changed formulae
+          command: .circleci/script.sh
 
 workflow_filter: &filter
   filters:

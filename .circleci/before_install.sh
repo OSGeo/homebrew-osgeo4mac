@@ -35,9 +35,6 @@ done
 brew tap brewsci/science || true
 brew tap brewsci/bio || true
 
-# Keeps gcc from being linked
-brew cask uninstall oclint || true
-
 brew update || brew update
 
 for f in ${CHANGED_FORMULAE};do
