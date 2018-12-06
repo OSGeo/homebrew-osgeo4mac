@@ -7,9 +7,7 @@ build_steps: &build_steps
            ulimit -c unlimited
            ulimit -n 2048
            ulimit -a
-           echo 'export GH_USER=$(echo -n "${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}" | egrep -o "^[^/]+" | tr -d "\n")' >> $BASH_ENV
-           echo 'export CI_COMMIT="$(git rev-parse --verify -q HEAD)"' >> $BASH_ENV
-           echo 'export CHANGED_FORMULAE=$(.circleci/changed_formulas.sh)' >> $BASH_ENV
+           export CHANGED_FORMULAE=$(.circleci/changed_formulas.sh)
            echo 'sourcing'
            source $BASH_ENV
            if [ "$CHANGED_FORMULAE" == "" ]; then
@@ -23,7 +21,7 @@ build_steps: &build_steps
            echo 'setting up repo'
            git -C "${HOMEBREW_REPOSITORY}" fetch
            git -C "${HOMEBREW_REPOSITORY}" reset --hard origin/master
-           mkdir -p "${HOMEBREW_REPOSITORY}/Library/Taps/${GH_USER}"
+           mkdir -p "${HOMEBREW_REPOSITORY}/Library/Taps/${CIRCLE_PROJECT_USERNAME}"
            ln -s "${CIRCLE_WORKING_DIRECTORY}" "${HOMEBREW_REPOSITORY}/Library/Taps/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
            echo 'export HOMEBREW_DEVELOPER=1' >> $BASH_ENV
            echo 'export HOMEBREW_NO_AUTO_UPDATE=1' >> $BASH_ENV
