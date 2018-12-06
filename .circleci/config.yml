@@ -27,7 +27,7 @@ build_steps: &build_steps
      - run:
          name: Install dependencies
          command: .circleci/install.sh
-      - run:
+     - run:
           name: Install changed formulae
           command: .circleci/script.sh
 
