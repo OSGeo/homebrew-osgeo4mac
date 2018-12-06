@@ -1,6 +1,4 @@
 build_steps: &build_steps
-  environment:
-    BASH_ENV: ~/.bashrc
   steps:
      - checkout
      - run:
@@ -23,6 +21,7 @@ build_steps: &build_steps
            git -C "${HOMEBREW_REPOSITORY}" reset --hard origin/master
            mkdir -p "${HOMEBREW_REPOSITORY}/Library/Taps/${CIRCLE_PROJECT_USERNAME}"
            ln -s "${CIRCLE_WORKING_DIRECTORY}" "${HOMEBREW_REPOSITORY}/Library/Taps/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
+           echo 'echo "Hello from Bash!"' >> $BASH_ENV
            echo 'export HOMEBREW_DEVELOPER=1' >> $BASH_ENV
            echo 'export HOMEBREW_NO_AUTO_UPDATE=1' >> $BASH_ENV
            echo 'export HOMEBREW_PREFIX=$(brew --prefix)' >> $BASH_ENV
