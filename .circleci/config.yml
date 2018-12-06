@@ -1,6 +1,6 @@
 build_steps: &build_steps
   steps:
-     - run: checkout
+     - checkout
      - run:
          name: Update environment variables
          command: |
