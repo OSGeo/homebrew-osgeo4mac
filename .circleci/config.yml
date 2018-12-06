@@ -14,7 +14,7 @@ build_steps: &build_steps
              echo "Skipping CI, not changed formulae found";
              exit 0;
            else
-             echo 'Changed formulae are "${CHANGED_FORMULAE}"';
+             echo "Changed formulae are ${CHANGED_FORMULAE}";
            fi
            export HOMEBREW_REPOSITORY=$(brew --repo)
            echo ${HOMBREW_REPOSITORY}
@@ -24,6 +24,7 @@ build_steps: &build_steps
            mkdir -p "${HOMEBREW_REPOSITORY}/Library/Taps/${CIRCLE_PROJECT_USERNAME}"
            ln -s "${CIRCLE_WORKING_DIRECTORY}" "${HOMEBREW_REPOSITORY}/Library/Taps/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
            echo 'echo "Hello from Bash!"' >> $BASH_ENV
+           echo 'export CHANGED_FORMULAE="${CHANGED_FORMULAE}"' >> $BASH_ENV
            echo 'export HOMEBREW_DEVELOPER=1' >> $BASH_ENV
            echo 'export HOMEBREW_NO_AUTO_UPDATE=1' >> $BASH_ENV
 
