@@ -38,7 +38,7 @@ class Qgis3 < Formula
   homepage "https://www.qgis.org"
   url "https://github.com/qgis/QGIS.git",
     :branch => "release-3_4",
-    :commit => "ae76c05c9758e7ce4e9bdecf4243721b3ac6208f"
+    :commit => "7f5afe620f10c585231a84752779f0ecf8b3b9e4"
   version "3.4.2"
 
   revision 1
@@ -97,7 +97,6 @@ class Qgis3 < Formula
     depends_on "graphviz" => :build
     depends_on "doxygen" => :build
   end
-  depends_on :x11
   depends_on "qca"
   depends_on "qtkeychain"
   depends_on "qscintilla2"
