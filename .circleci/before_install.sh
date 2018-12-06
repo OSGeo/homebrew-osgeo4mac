@@ -15,7 +15,9 @@
 #                                                                         #
 ###########################################################################
 
-set -e
+set -o nounset
+set -o errexit
+set -o xtrace
 
 if [ -n "${DEBUG_CI}" ];then
   brew list --versions
