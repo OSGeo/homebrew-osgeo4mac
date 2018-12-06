@@ -18,6 +18,7 @@ else
 
       if [[ $COMMIT_RANGE != *"..."* ]]; then
           COMMIT_RANGE="${COMMIT_RANGE}...${COMMIT_RANGE}"
+      fi
 		FILES=$(git diff --diff-filter=AM --name-only ${COMMIT_RANGE/.../..} )
 	else
 		FILES=
