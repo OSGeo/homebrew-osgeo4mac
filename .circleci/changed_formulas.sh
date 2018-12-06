@@ -6,7 +6,6 @@ set -e
 # If manual formulae are specified, changed files will be ignored
 # This avoids rebuilding bottles when triggered against master
 if [[ -n ${CI_MANUAL_FORMULAE} ]]; then
-  echo ${CI_MANUAL_FORMULAE}
 	echo "${CI_MANUAL_FORMULAE}"
 else
 
