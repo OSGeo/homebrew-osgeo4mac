@@ -9,17 +9,18 @@ build_steps: &build_steps
            brew --repo
            echo 'export GH_USER=$(echo -n "${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}" | egrep -o "^[^/]+" | tr -d "\n")' >> $BASH_ENV
            echo 'export CI_COMMIT="$(git rev-parse --verify -q HEAD)"' >> $BASH_ENV
-           echo 'export HOMEBREW_REPOSITORY="$(brew --repo)"' >> $BASH_ENV
            echo 'export CHANGED_FORMULAE=$(.circleci/changed_formulas.sh)' >> $BASH_ENV
            echo 'sourcing'
            source $BASH_ENV
-           echo ${HOMEBREW_REPOSITORY}
            if [ "$CHANGED_FORMULAE" == "" ]; then
              echo "Skipping CI, not changed formulae found";
              exit 0;
            else
              echo 'Changed formulae are ${CHANGED_FORMULAE}';
            fi
+           export HOMEBREW_REPOSITORY=$(brew --repo)
+           echo ${HOMBREW_REPOSITORY}
+           echo 'setting up repo'
            git -C "${HOMEBREW_REPOSITORY}" reset --hard origin/master
            mkdir -p "${HOMEBREW_REPOSITORY}/Library/Taps/${GH_USER}"
            ln -s "${CIRCLE_WORKING_DIRECTORY}" "${HOMEBREW_REPOSITORY}/Library/Taps/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
