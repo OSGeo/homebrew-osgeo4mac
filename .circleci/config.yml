@@ -1,6 +1,6 @@
 build_steps: &build_steps
   environment:
-    CI_MANUAL_FORMULAE=taudem
+    CI_MANUAL_FORMULAE=hdf4
   steps:
      - checkout
      - run:
@@ -16,22 +16,19 @@ build_steps: &build_steps
              echo "Changed formulae are ${CHANGED_FORMULAE}";
            fi
            export HOMEBREW_REPOSITORY=$(brew --repo)
-           export HELLO="HELLO FROM BASH!"
            git -C "${HOMEBREW_REPOSITORY}" fetch
            git -C "${HOMEBREW_REPOSITORY}" reset --hard origin/master
            mkdir -p "${HOMEBREW_REPOSITORY}/Library/Taps/${CIRCLE_PROJECT_USERNAME}"
+           echo "Linking ${CIRCLE_WORKING_DIRECTORY}" to "${HOMEBREW_REPOSITORY}/Library/Taps/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
            ln -s "${CIRCLE_WORKING_DIRECTORY}" "${HOMEBREW_REPOSITORY}/Library/Taps/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
            echo "export CHANGED_FORMULAE=${CHANGED_FORMULAE}" >> $BASH_ENV
            echo "export HOMEBREW_REPOSITORY=$HOMEBREW_REPOSITORY" >> $BASH_ENV
            echo 'export HOMEBREW_DEVELOPER=1' >> $BASH_ENV
            echo 'export HOMEBREW_NO_AUTO_UPDATE=1' >> $BASH_ENV
-           echo "echo ${HELLO}" >> $BASH_ENV
 
      - run:
          name: Before install script
-         command: |
-           cat $BASH_ENV
-           .circleci/before_install.sh
+         command: .circleci/before_install.sh
 
      - run:
          name: Install dependencies
@@ -53,6 +50,11 @@ jobs:
     <<: *build_steps
     <<: *filter
     macos:
+      xcode: "8.3.3"
+  high_sierra-build:
+    <<: *build_steps
+    <<: *filter
+    macos:
       xcode: "9.4.1"
 
 workflows:
@@ -60,6 +62,7 @@ workflows:
   build_bottles:
     jobs:
       - sierra-build
+      - high_sierra-build
 
 
    
