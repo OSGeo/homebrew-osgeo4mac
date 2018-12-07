@@ -57,11 +57,12 @@ for f in ${CHANGED_FORMULAE};do
     if [ -n "${DEBUG_CI}" ];then
       echo $PY_VER
     fi
-    mkdir -p ${HOME}/Library/Python/${PY_VER}/lib/python/site-packages
+    mkdir -p ${CIRCLE_WORKING_DIRECTORY}/Library/Python/${PY_VER}/lib/python/site-packages
+   
     echo 'import site; site.addsitedir("${HOMEBREW_PREFIX}/lib/python${PY_VER}/site-packages")' \
-      >> ${HOME}/Library/Python/${PY_VER}/lib/python/site-packages/homebrew.pth
+         >> ${CIRCLE_WORKING_DIRECTORY}/Library/Python/${PY_VER}/lib/python/site-packages/homebrew.pth
     echo 'import site; site.addsitedir("${HOMEBREW_PREFIX}/opt/gdal2/lib/python${PY_VER}/site-packages")' \
-      >> ${HOME}/Library/Python/${PY_VER}/lib/python/site-packages/gdal2.pth
+         >> ${CIRCLE_WORKING_DIRECTORY}/Library/Python/${PY_VER}/lib/python/site-packages/gdal2.pth
 
     if [[ "${f}" =~ "gdal2" ]];then
       echo "Installing GDAL 2 Python3 dependencies"
@@ -84,11 +85,11 @@ for f in ${CHANGED_FORMULAE};do
     if [ -n "${DEBUG_CI}" ];then
       echo $PY_VER
     fi
-    mkdir -p ${HOME}/Library/Python/${PY_VER}/lib/python/site-packages
+    mkdir -p ${CIRCLE_WORKING_DIRECTORY}/Library/Python/${PY_VER}/lib/python/site-packages
     echo 'import site; site.addsitedir("${HOMEBREW_PREFIX}/lib/python${PY_VER}/site-packages")' \
-      >> ${HOME}/Library/Python/${PY_VER}/lib/python/site-packages/homebrew.pth
+         >> ${CIRCLE_WORKING_DIRECTORY}/Library/Python/${PY_VER}/lib/python/site-packages/homebrew.pth
     echo 'import site; site.addsitedir("${HOMEBREW_PREFIX}/opt/gdal2/lib/python${PY_VER}/site-packages")' \
-      >> ${HOME}/Library/Python/${PY_VER}/lib/python/site-packages/gdal2.pth
+         >> ${CIRCLE_WORKING_DIRECTORY}/Library/Python/${PY_VER}/lib/python/site-packages/gdal2.pth
 
     if [[ "${f}" =~ "gdal2" ]];then
       echo "Installing GDAL 2 Python2 dependencies"
