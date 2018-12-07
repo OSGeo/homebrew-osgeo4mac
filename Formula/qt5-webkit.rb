@@ -4,7 +4,9 @@ class Qt5Webkit < Formula
   url "https://github.com/qt/qtwebkit.git",
     :branch => "5.212",
     :commit => "72cfbd7664f21fcc0e62b869a6b01bf73eb5e7da"
-  version "5.11.2"
+  version "5.12.0"
+
+  # revision 1
 
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
@@ -262,7 +264,7 @@ __END__
          PORT=Qt \
          CMAKE_BUILD_TYPE=$$configuration \
          CMAKE_TOOLCHAIN_FILE=$$toolchain_file \
-+        CMAKE_INSTALL_PREFIX=/usr/local/Cellar/qt5-webkit/5.11.2
++        CMAKE_INSTALL_PREFIX=HOMEBREW_PREFIX/Cellar/qt5-webkit/5.12.0
          USE_LIBHYPHEN=OFF
 
      !isEmpty(_QMAKE_SUPER_CACHE_) {
