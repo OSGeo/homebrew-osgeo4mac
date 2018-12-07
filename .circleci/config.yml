@@ -25,7 +25,7 @@ build_steps: &build_steps
            echo 'export HOMEBREW_REPOSITORY="$HOMEBREW_REPOSITORY"' >> $BASH_ENV
            echo 'export HOMEBREW_DEVELOPER=1' >> $BASH_ENV
            echo 'export HOMEBREW_NO_AUTO_UPDATE=1' >> $BASH_ENV
-           echo 'echo "$HELLO"' >> $BASH_ENV
+           echo 'echo ${HELLO}' >> $BASH_ENV
 
      - run:
          name: Before install script
