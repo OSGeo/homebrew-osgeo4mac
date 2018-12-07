@@ -24,6 +24,7 @@ if [ -n "${DEBUG_CI}" ];then
 fi
 
 echo ${CHANGED_FORMULAE}
+cat $BASH_ENV
 
 # Forcibly remove all versions of unneeded default formula provided by travis or pre-cached
 nix_f="

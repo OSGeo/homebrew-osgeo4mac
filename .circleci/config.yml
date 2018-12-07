@@ -21,7 +21,7 @@ build_steps: &build_steps
            git -C "${HOMEBREW_REPOSITORY}" reset --hard origin/master
            mkdir -p "${HOMEBREW_REPOSITORY}/Library/Taps/${CIRCLE_PROJECT_USERNAME}"
            ln -s "${CIRCLE_WORKING_DIRECTORY}" "${HOMEBREW_REPOSITORY}/Library/Taps/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
-           echo 'export CHANGED_FORMULAE="$CHANGED_FORMULAE"' >> $BASH_ENV
+           echo 'export CHANGED_FORMULAE="${CHANGED_FORMULAE}"' >> $BASH_ENV
            echo 'export HOMEBREW_REPOSITORY="$HOMEBREW_REPOSITORY"' >> $BASH_ENV
            echo 'export HOMEBREW_DEVELOPER=1' >> $BASH_ENV
            echo 'export HOMEBREW_NO_AUTO_UPDATE=1' >> $BASH_ENV
