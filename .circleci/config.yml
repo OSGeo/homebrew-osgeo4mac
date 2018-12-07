@@ -29,7 +29,10 @@ build_steps: &build_steps
 
      - run:
          name: Before install script
-         command: .circleci/before_install.sh
+         command: |
+           source $BASH_ENV
+           .circleci/before_install.sh
+
      - run:
          name: Install dependencies
          command: .circleci/install.sh
