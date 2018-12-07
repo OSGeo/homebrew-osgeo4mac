@@ -59,7 +59,7 @@ class Qt5Webkit < Formula
 
     mkdir "build" do
       system "#{Formula["qt"].opt_bin}/qmake", "../WebKit.pro", *args
-      system "make"
+      system "make", "-j", Hardware::CPU.cores
       system "make", "install"
     end
 
