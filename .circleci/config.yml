@@ -16,6 +16,7 @@ build_steps: &build_steps
              echo "Changed formulae are ${CHANGED_FORMULAE}";
            fi
            export HOMEBREW_REPOSITORY=$(brew --repo)
+           export HELLO="HELLO FROM BASH!"
            git -C "${HOMEBREW_REPOSITORY}" fetch
            git -C "${HOMEBREW_REPOSITORY}" reset --hard origin/master
            mkdir -p "${HOMEBREW_REPOSITORY}/Library/Taps/${CIRCLE_PROJECT_USERNAME}"
@@ -24,13 +25,11 @@ build_steps: &build_steps
            echo 'export HOMEBREW_REPOSITORY="${HOMEBREW_REPOSITORY}"' >> $BASH_ENV
            echo 'export HOMEBREW_DEVELOPER=1' >> $BASH_ENV
            echo 'export HOMEBREW_NO_AUTO_UPDATE=1' >> $BASH_ENV
+           echo '${HELLO}' >> $BASH_ENV
 
      - run:
          name: Before install script
-         command: |
-           ulimit -c unlimited
-           ulimit -n 2048
-           .circleci/before_install.sh
+         command: .circleci/before_install.sh
      - run:
          name: Install dependencies
          command: .circleci/install.sh
