@@ -23,6 +23,8 @@ if [ -n "${DEBUG_CI}" ];then
   brew list --versions
 fi
 
+echo ${CHANGED_FORMULAE}
+
 # Forcibly remove all versions of unneeded default formula provided by travis or pre-cached
 nix_f="
 gdal

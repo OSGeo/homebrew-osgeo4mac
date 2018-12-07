@@ -8,7 +8,6 @@ build_steps: &build_steps
          command: |
            ulimit -c unlimited
            ulimit -n 2048
-           ulimit -a
            export CHANGED_FORMULAE=$(.circleci/changed_formulas.sh)
            if [ "$CHANGED_FORMULAE" == "" ]; then
              echo "Skipping CI, not changed formulae found";
@@ -17,14 +16,12 @@ build_steps: &build_steps
              echo "Changed formulae are ${CHANGED_FORMULAE}";
            fi
            export HOMEBREW_REPOSITORY=$(brew --repo)
-           echo ${HOMBREW_REPOSITORY}
-           echo 'setting up repo'
            git -C "${HOMEBREW_REPOSITORY}" fetch
            git -C "${HOMEBREW_REPOSITORY}" reset --hard origin/master
            mkdir -p "${HOMEBREW_REPOSITORY}/Library/Taps/${CIRCLE_PROJECT_USERNAME}"
            ln -s "${CIRCLE_WORKING_DIRECTORY}" "${HOMEBREW_REPOSITORY}/Library/Taps/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
-           echo 'echo "Hello from Bash!"' >> $BASH_ENV
            echo 'export CHANGED_FORMULAE="${CHANGED_FORMULAE}"' >> $BASH_ENV
+           echo 'export HOMEBREW_REPOSITORY="${HOMEBREW_REPOSITORY}' >> $BASH_ENV
            echo 'export HOMEBREW_DEVELOPER=1' >> $BASH_ENV
            echo 'export HOMEBREW_NO_AUTO_UPDATE=1' >> $BASH_ENV
 

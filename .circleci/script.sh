@@ -17,6 +17,8 @@
 
 set -e
 
+echo ${CHANGED_FORMULAE}
+
 for f in ${CHANGED_FORMULAE};do
 #  if [[ $(brew list --versions ${f}) ]]; then
 #    echo "Clearing previously installed/cached formula ${f}..."
