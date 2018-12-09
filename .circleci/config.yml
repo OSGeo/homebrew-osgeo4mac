@@ -6,7 +6,6 @@ build_steps: &build_steps
          command: |
            ulimit -c unlimited
            ulimit -n 2048
-           ls
            export CHANGED_FORMULAE=$(.circleci/changed_formulas.sh)
            if [ "$CHANGED_FORMULAE" == "" ]; then
              echo "Skipping CI, not changed formulae found";
@@ -18,6 +17,7 @@ build_steps: &build_steps
            git -C "${HOMEBREW_REPOSITORY}" fetch
            git -C "${HOMEBREW_REPOSITORY}" reset --hard origin/master
            mkdir -p "${HOMEBREW_REPOSITORY}/Library/Taps/${CIRCLE_PROJECT_USERNAME}"
+           ls -R ${CIRCLE_WORKING_DIRECTORY}
            echo "Linking ${CIRCLE_WORKING_DIRECTORY}" to "${HOMEBREW_REPOSITORY}/Library/Taps/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
            ln -s "${CIRCLE_WORKING_DIRECTORY}" "${HOMEBREW_REPOSITORY}/Library/Taps/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
            echo "export CHANGED_FORMULAE=${CHANGED_FORMULAE}" >> $BASH_ENV
