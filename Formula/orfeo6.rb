@@ -2,12 +2,16 @@ class Orfeo6 < Formula
   desc "Library of image processing algorithms"
   homepage "https://www.orfeo-toolbox.org/otb/"
 
+  revision 1
+
+  head "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb.git", :branch => "master"
+
   stable do
     url "https://www.orfeo-toolbox.org/packages/OTB-6.6.0.tar.gz"
     sha256 "6a9f1a87bfc7b451f87aba4271c03016c3e7858002b6c822b8a514560ec01a45"
 
     # Patch to fix OSSIM adaptor compilation
-#    patch :DATA
+    # patch :DATA
   end
 
   bottle do
@@ -18,8 +22,8 @@ class Orfeo6 < Formula
     sha256 "5431274c941da0c67b5772a00e033f502341669fb9a17e3a6143f67b8f2cd3d8" => :sierra
   end
 
-  option "without-monteverdi", "Build without Monteverdi and Mapla applications (Qt4 required)"
-  option "with-iceviewer", "Build with ICE Viewer application (Qt4 and X11 required)"
+  option "without-monteverdi", "Build without Monteverdi and Mapla applications (Qt required)"
+  option "with-iceviewer", "Build with ICE Viewer application (Qt and X11 required)"
   option "with-examples", "Compile and install various examples"
   option "with-java", "Enable Java support"
 
@@ -46,8 +50,8 @@ class Orfeo6 < Formula
   depends_on "minizip" => :recommended
 
   # optional
-  depends_on "python@2" => :optional
-  depends_on "swig" if build.with? "python@2"
+  depends_on "python" => :optional
+  depends_on "swig" if build.with? "python"
   depends_on "fftw" => :optional # restricts built binaries to GPL license
   depends_on "mapnik" => :optional
   depends_on "opencv" => :optional
@@ -65,14 +69,19 @@ class Orfeo6 < Formula
     depends_on "gdal2"
     depends_on "glew"
     depends_on "glfw"
-    depends_on "qt-4"
-    depends_on "qwt-qt4"
+    depends_on "qt"
+    depends_on "qwt"
   else
     depends_on "gdal2" => :recommended
     depends_on "glew" => :optional
     depends_on "glfw" => :optional
-    depends_on "qt-4" => :optional
+    depends_on "qt" => :optional
   end
+
+  depends_on "curl"
+  depends_on "fltk"
+  depends_on "hdf5"
+  depends_on "open-mpi"
 
   resource "geoid" do
     # geoid to use in elevation calculations, if no DEM defined or avialable
@@ -90,12 +99,21 @@ class Orfeo6 < Formula
       -DBUILD_SHARED_LIBS=ON
       -DCMAKE_MACOSX_RPATH=OFF
       -DCMAKE_CXX_STANDARD=11
-      -DQWT_LIBRARY=#{Formula['qwt-qt4'].lib}/qwt.framework
-      -DQWT_INCLUDE_DIR=#{Formula['qwt-qt4'].lib}/qwt.framework/Headers
-      -DOSSIM_LIBRARY=#{Formula['ossim'].opt_prefix}/Frameworks/ossim.framework
-      -DOSSIM_INCLUDE_DIR=#{Formula['ossim'].include}
-
+      -DQWT_LIBRARY=#{Formula["qwt"].lib}/qwt.framework
+      -DQWT_INCLUDE_DIR=#{Formula["qwt"].lib}/qwt.framework/Headers
+      -DOSSIM_LIBRARY=#{Formula["ossim"].opt_prefix}/Frameworks/ossim.framework
+      -DOSSIM_INCLUDE_DIR=#{Formula["ossim"].include}
     ]
+
+    args << "-DOTB_DATA_USE_LARGEINPUT=ON"
+
+    if build.with? "python"
+      args << "-DPYTHON_EXECUTABLE='#{`python3 -c "import sys; print(sys.executable)"`.chomp}'"
+      py_ver=`python3 -c 'import sys;print("{0}.{1}".format(sys.version_info[0],sys.version_info[1]))'`.strip
+      args << "-DOTB_INSTALL_PYTHON_DIR=#{HOMEBREW_PREFIX}/lib/python#{py_ver}/site-packages"
+    end
+
+    args << "-DITK_DIR=#{Formula["cmake"].share}/cmake/Modules"
 
     ENV.cxx11
 
@@ -108,7 +126,7 @@ class Orfeo6 < Formula
     args << "-DBUILD_EXAMPLES=" + (build.with?("examples") ? "ON" : "OFF")
     # args << "-DOTB_USE_PATENTED=" + (build.with?("patented") ? "ON" : "OFF")
     args << "-DOTB_WRAP_JAVA=" + (build.with?("java") ? "ON" : "OFF")
-    args << "-DOTB_WRAP_PYTHON=OFF" if build.without? "python@2"
+    args << "-DOTB_WRAP_PYTHON=OFF" if build.without? "python"
     args << "-DITK_USE_FFTWF=" + (build.with?("fftw") ? "ON" : "OFF")
     args << "-DITK_USE_FFTWD=" + (build.with?("fftw") ? "ON" : "OFF")
     args << "-DITK_USE_SYSTEM_FFTW=" + (build.with?("fftw") ? "ON" : "OFF")
@@ -125,9 +143,9 @@ class Orfeo6 < Formula
     args << "-DOTB_USE_OPENCV=" + (build.with?("opencv") ? "ON" : "OFF")
     args << "-DOTB_USE_OPENGL=" + ((build.with?("examples") || build.with?("iceviewer") || build.with?("monteverdi")) ? "ON" : "OFF")
     args << "-DOTB_USE_MPI=" + (build.with?("mpi") ? "ON" : "OFF")
-    args << "-DOTB_USE_OPENJPEG=" + (build.with?("openjpeg") ? "ON" : "OFF")
-    args << "-DOTB_USE_QT4=" + ((build.with?("qt-4") || build.with?("monteverdi")) ? "ON" : "OFF")
-    args << "-DOTB_USE_QWT=" + ((build.with?("qt-4") || build.with?("monteverdi")) ? "ON" : "OFF")
+    # args << "-DOTB_USE_OPENJPEG=" + (build.with?("openjpeg") ? "ON" : "OFF") # not used by the project
+    args << "-DOTB_USE_QT=" + ((build.with?("qt") || build.with?("monteverdi")) ? "ON" : "OFF")
+    args << "-DOTB_USE_QWT=" + ((build.with?("qt") || build.with?("monteverdi")) ? "ON" : "OFF")
     args << "-DOTB_USE_SIFTFAST=ON"
     args << "-DOTB_USE_SHARK=" + (build.with?("brewsci/science/shark") ? "ON" : "OFF")
 
@@ -144,6 +162,8 @@ class Orfeo6 < Formula
     envars = {
       :GDAL_DATA => "#{Formula["gdal2"].opt_share}/gdal",
       :OTB_APPLICATION_PATH => "#{opt_lib}/otb/applications",
+      :OTB_FOLDER => "#{opt_prefix}",
+      :OTB_GEOID_FILE => "#{opt_libexec}/default_geoid/egm96.grd",
     }
     bin.env_script_all_files(libexec/"bin", envars)
   end
@@ -152,7 +172,6 @@ class Orfeo6 < Formula
       The default geoid to use in elevation calculations is available in:
 
         #{opt_libexec}/default_geoid/egm96.grd
-
   EOS
   end
 
