@@ -40,47 +40,21 @@ class Grass7 < Formula
   depends_on "pkg-config" => :build
   depends_on "bison"
   depends_on "cairo"
-  depends_on "desktop-file-utils"
   depends_on "flex"
-  depends_on "fontconfig"
   depends_on "freetype"
   depends_on "gdal2" # used: gdal2-grass7
-  depends_on "geos"
   depends_on "gettext"
   depends_on "ghostscript" # for cartographic composer previews
   depends_on "lapack" # for GMATH library
   depends_on "lbzip2"
-  depends_on "lesstif"
-  depends_on "liblas"
   depends_on "liblas-gdal2" if build.with? "liblas"
-  depends_on "libomp"
-  depends_on "libpng"
-  depends_on "libpq"
   depends_on "libtiff"
   depends_on "numpy"
-  depends_on "brewsci/bio/matplotlib"
-  depends_on "openssl"
-  depends_on "proj" # proj-epsg/proj-nad
   depends_on "python@2"
   depends_on "readline"
-  depends_on "regex-opt"
-  depends_on "sqlite"
   depends_on "unixodbc"
   depends_on UnlinkedGRASS7
   depends_on "wxpython"
-  depends_on "zlib"
-  depends_on "pdal"
-  depends_on "gdbm"
-  depends_on "ncurses"
-  depends_on "swig"
-  depends_on "libjpeg-turbo"
-  depends_on "cfitsio"
-  depends_on "mesalib-glw"
-  depends_on "imagemagick"
-  depends_on "xz" # lzma
-  depends_on "gd"
-  depends_on "libiconv"
-  depends_on "veclibfort"
   depends_on :x11 if build.without? "aqua" # needs to find at least X11/include/GL/gl.h
   depends_on "fftw" => :recommended
   depends_on "tcl-tk" => :recommended
@@ -89,6 +63,33 @@ class Grass7 < Formula
   depends_on "netcdf" => :optional
   depends_on "openblas" => :optional
   depends_on "postgresql" => :optional
+
+  depends_on "desktop-file-utils" => :optional
+  depends_on "fontconfig" => :optional
+  depends_on "geos" => :optional
+  depends_on "lesstif" => :optional
+  depends_on "liblas" => :optional
+  depends_on "libomp" => :optional
+  depends_on "libpng" => :optional
+  depends_on "libpq" => :optional
+  depends_on "brewsci/bio/matplotlib" => :optional
+  depends_on "openssl" => :optional
+  depends_on "proj" => :optional # proj-epsg/proj-nad
+  depends_on "regex-opt" => :optional
+  depends_on "sqlite" => :optional
+  depends_on "zlib" => :optional
+  depends_on "pdal" => :optional
+  depends_on "gdbm" => :optional
+  depends_on "ncurses" => :optional
+  depends_on "swig" => :optional
+  depends_on "libjpeg-turbo" => :optional
+  depends_on "cfitsio" => :optional
+  depends_on "mesalib-glw" => :optional
+  depends_on "imagemagick" => :optional
+  depends_on "xz" => :optional # lzma
+  depends_on "gd" => :optional
+  depends_on "libiconv" => :optional
+  depends_on "veclibfort" => :optional
   depends_on "r" => :optional
 
   # depends_on "mariadb-connector-c"
