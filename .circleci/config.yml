@@ -54,7 +54,7 @@ jobs:
     <<: *build_steps
     <<: *filter
     macos:
-      xcode: "9.4.1"
+      xcode: "10.1.0"
 
 workflows:
   version: 2
