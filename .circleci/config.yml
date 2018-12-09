@@ -6,6 +6,7 @@ build_steps: &build_steps
          command: |
            ulimit -c unlimited
            ulimit -n 2048
+           ls
            export CHANGED_FORMULAE=$(.circleci/changed_formulas.sh)
            if [ "$CHANGED_FORMULAE" == "" ]; then
              echo "Skipping CI, not changed formulae found";

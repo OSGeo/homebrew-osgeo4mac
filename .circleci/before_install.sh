@@ -23,6 +23,8 @@ if [ -n "${DEBUG_CI}" ];then
   brew list --versions
 fi
 
+ls ${HOMEBREW_REPOSITORY}/Library/Taps
+
 # Forcibly remove all versions of unneeded default formula provided by travis or pre-cached
 nix_f="
 gdal
@@ -41,8 +43,8 @@ brew update || brew update
 
 
 for f in ${CHANGED_FORMULAE};do
-    echo "Homebrew setup for changed formula ${f}..."
-    echo $(brew search ${f})
+  echo "Homebrew setup for changed formula ${f}..."
+  brew search ${f}
   deps=$(brew deps --include-build ${f})
   echo "${f} dependencies:"
   echo "${deps}"
