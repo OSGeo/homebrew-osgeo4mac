@@ -9,17 +9,18 @@ if [[ -n ${CI_MANUAL_FORMULAE} ]]; then
 	echo "${CI_MANUAL_FORMULAE}"
 else
 
-	if [[ ! -z  $CIRCLE_PULL_REQUEST  ]]; then
+	  if [[ ! -z  $CIRCLE_PULL_REQUEST  ]]; then
 		# if on a PR, just analyze the changed files
-		FILES=$(git diff --diff-filter=AM --name-only $(git merge-base HEAD ${CIRCLE_BRANCH} ) )
+		FILES=$(git diff --diff-filter=AM --name-only $(git merge-base origin/master ${CIRCLE_BRANCH} ) )
 	elif [[ ! -z  $COMMIT_RANGE  ]]; then
-      # Get the commit range for the build
-      COMMIT_RANGE=$(echo "${CIRCLE_COMPARE_URL}" | cut -d/ -f7)
+        # Get the commit range for the build
+        # For workflows, we can't use the CIRCLE_COMPARE_URL feature, so we do it by manualy diffing the branch
+#      COMMIT_RANGE=$(echo "${CIRCLE_COMPARE_URL}" | cut -d/ -f7)
 
-      if [[ $COMMIT_RANGE != *"..."* ]]; then
-          COMMIT_RANGE="${COMMIT_RANGE}...${COMMIT_RANGE}"
-      fi
-		FILES=$(git diff --diff-filter=AM --name-only ${COMMIT_RANGE/.../..} )
+#      if [[ $COMMIT_RANGE != *"..."* ]]; then
+#          COMMIT_RANGE="${COMMIT_RANGE}...${COMMIT_RANGE}"
+#      fi
+		FILES=$(git diff --diff-filter=AM --name-only master...${CIRCLE_BRANCH} )
 	else
 		FILES=
 	fi

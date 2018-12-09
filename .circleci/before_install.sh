@@ -23,8 +23,6 @@ if [ -n "${DEBUG_CI}" ];then
   brew list --versions
 fi
 
-ls -R ${HOMEBREW_REPOSITORY}/Library/Taps/OsGeo
-
 # Forcibly remove all versions of unneeded default formula provided by travis or pre-cached
 nix_f="
 gdal
