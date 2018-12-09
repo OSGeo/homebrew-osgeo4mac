@@ -1,6 +1,4 @@
 build_steps: &build_steps
-  environment:
-    CI_MANUAL_FORMULAE=hdf4
   steps:
      - checkout
      - run:
