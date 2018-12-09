@@ -2,10 +2,12 @@ require File.expand_path("../../Requirements/grass_requirements",
                          Pathname.new(__FILE__).realpath)
 
 class Grass7 < Formula
+  include Language::Python::Virtualenv
+
   desc "Geographic Resources Analysis Support System"
   homepage "https://grass.osgeo.org/"
 
-  revision 1
+  revision 2
 
   head "https://svn.osgeo.org/grass/grass/trunk"
 
@@ -15,6 +17,9 @@ class Grass7 < Formula
 
     # Patches to keep files from being installed outside of the prefix.
     # Remove lines from Makefile that try to install to /Library/Documentation.
+    # no_symbolic_links
+    # TypeError
+    # alt-adapt-for-python3
     patch :DATA
   end
 
@@ -30,35 +35,64 @@ class Grass7 < Formula
   option "with-liblas", "Build with LibLAS-with-GDAL2 support"
   option "with-aqua", "Build with experimental Aqua GUI backend."
 
+  depends_on "autoconf" => :build
+  depends_on "automake" => :build
   depends_on "pkg-config" => :build
-
   depends_on "bison"
   depends_on "cairo"
+  depends_on "desktop-file-utils"
   depends_on "flex"
+  depends_on "fontconfig"
   depends_on "freetype"
-  depends_on "gdal2"
+  depends_on "gdal2" # used: gdal2-grass7
+  depends_on "geos"
   depends_on "gettext"
   depends_on "ghostscript" # for cartographic composer previews
+  depends_on "lapack" # for GMATH library
   depends_on "lbzip2"
+  depends_on "lesstif"
+  depends_on "liblas"
   depends_on "liblas-gdal2" if build.with? "liblas"
+  depends_on "libomp"
+  depends_on "libpng"
+  depends_on "libpq"
   depends_on "libtiff"
   depends_on "numpy"
+  depends_on "brewsci/bio/matplotlib"
+  depends_on "openssl"
+  depends_on "proj" # proj-epsg/proj-nad
   depends_on "python@2"
   depends_on "readline"
+  depends_on "regex-opt"
+  depends_on "sqlite"
   depends_on "unixodbc"
   depends_on UnlinkedGRASS7
   depends_on "wxpython"
-
+  depends_on "zlib"
+  depends_on "pdal"
+  depends_on "gdbm"
+  depends_on "ncurses"
+  depends_on "swig"
+  depends_on "libjpeg-turbo"
+  depends_on "cfitsio"
+  depends_on "r"
+  depends_on "mesalib-glw"
+  depends_on "imagemagick"
+  depends_on "xz" # lzma
+  depends_on "gd"
+  depends_on "libiconv"
+  depends_on "veclibfort"
   depends_on :x11 if build.without? "aqua" # needs to find at least X11/include/GL/gl.h
-
   depends_on "fftw" => :recommended
   depends_on "tcl-tk" => :recommended
-
   depends_on "ffmpeg" => :optional
   depends_on "mysql" => :optional
   depends_on "netcdf" => :optional
   depends_on "openblas" => :optional
   depends_on "postgresql" => :optional
+
+  # depends_on "mariadb-connector-c"
+  # depends_on "mariadb"
 
   def headless?
     # The GRASS GUI is based on WxPython.
@@ -70,24 +104,64 @@ class Grass7 < Formula
     ver_split[0] + ver_split[1]
   end
 
+  # pillow and imaging
+  resource "Pillow" do
+    url "https://files.pythonhosted.org/packages/1b/e1/1118d60e9946e4e77872b69c58bc2f28448ec02c99a2ce456cd1a272c5fd/Pillow-5.3.0.tar.gz"
+    sha256 "2ea3517cd5779843de8a759c2349a3cd8d3893e03ab47053b66d5ec6f8bc4f93"
+  end
+
+  resource "argparse" do
+    url "https://files.pythonhosted.org/packages/18/dd/e617cfc3f6210ae183374cd9f6a26b20514bbb5a792af97949c5aacddf0f/argparse-1.4.0.tar.gz"
+    sha256 "62b089a55be1d8949cd2bc7e0df0bddb9e028faefc8c32038cc84862aefdd6e4"
+  end
+
+  resource "python-dateutil" do
+    url "https://files.pythonhosted.org/packages/0e/01/68747933e8d12263d41ce08119620d9a7e5eb72c876a3442257f74490da0/python-dateutil-2.7.5.tar.gz"
+    sha256 "88f9287c0174266bb0d8cedd395cfba9c58e87e5ad86b2ce58859bc11be3cf02"
+  end
+
   def install
+    # ENV.append "MYSQLD_CONFIG=#{bin}/mysql_config
+    # ENV.append "LDFLAGS", "-lintl -liconv -lsgemm -ldgemm -lblas -framework vecLib -framework OpenCL"
+
+    # install python modules
+    venv = virtualenv_create(libexec/'vendor', "python2")
+    venv.pip_install resources
+
     readline = Formula["readline"]
     gettext = Formula["gettext"]
 
     # noinspection RubyLiteralArrayInspection
     args = [
-      "--disable-debug", "--disable-dependency-tracking",
+      "--disable-debug",
+      "--disable-dependency-tracking",
+      "--enable-largefile",
       "--enable-shared",
+      "--with-pthread",
+      "--with-threads",
       "--with-cxx",
-      "--with-python",
+      "--with-python=#{libexec}/vendor/bin/python-config",
       "--with-blas",
       "--with-lapack",
+      "--with-lapack-libs=#{Formula["lapack"].opt_lib}",
+      "--with-lapack-includes=#{Formula["lapack"].opt_include}",
       "--with-sqlite",
+      "--with-sqlite-includes=#{Formula["sqlite"].opt_include}",
+      "--with-sqlite-libs=#{Formula["sqlite"].opt_lib}",
       "--with-odbc",
       "--with-bzlib",
+      "--with-bzlib-includes=#{Formula["zlib"].opt_include}",
+      "--with-bzlib-libs=#{Formula["zlib"].opt_lib}",
       "--with-geos=#{Formula["geos"].opt_bin}/geos-config",
+      "--with-geos-includes=#{Formula["geos"].opt_include}",
+      "--with-geos-libs=#{Formula["geos"].opt_lib}",
+      "--with-proj",
+      "--with-proj-includes=#{Formula["proj"].opt_include}",
+      "--with-proj-libs=#{Formula["proj"].opt_lib}",
       "--with-proj-share=#{Formula["proj"].opt_share}/proj",
       "--with-png",
+      "--with-png-includes=#{Formula["libpng"].opt_include}",
+      "--with-png-libs=#{Formula["libpng"].opt_lib}",
       "--with-readline-includes=#{readline.opt_include}",
       "--with-readline-libs=#{readline.opt_lib}",
       "--with-readline",
@@ -97,7 +171,26 @@ class Grass7 < Formula
       "--with-freetype",
       "--with-freetype-includes=#{Formula["freetype"].opt_include}/freetype2",
       "--with-freetype-libs=#{Formula["freetype"].opt_lib}",
-      "--with-includes=#{gettext.opt_include}"
+      "--with-includes=#{gettext.opt_include}",
+      "--with-tiff",
+      "--with-tiff-includes=#{Formula["libtiff"].opt_include}",
+      "--with-tiff-libs=#{Formula["libtiff"].opt_lib}",
+      "--with-fftw",
+      "--with-fftw-includes=#{Formula["fftw"].opt_include}",
+      "--with-fftw-libs=#{Formula["fftw"].opt_lib}",
+      "--with-motif",
+      "--with-motif-libs=%{_libdir}",
+      "--with-motif-includes=%{_includedir}",
+      "--with-regex",
+      "--with-glw",
+      "--with-htmldocs",
+      "--with-dbm-includes=#{Formula["gdbm"].opt_include}/gdbm",
+      "--with-curses"
+      # "--with-opendwg"
+      # "--with-pdal=#{Formula["pdal"].opt_bin}/pdal-config"
+      # "--with-openmp"
+      # "--with-opencl"
+      # "--with-gdal=#{Formula["gdal2"].opt_bin}/geos-config"
     ]
 
     # Disable some dependencies that don't build correctly on older version of MacOS
@@ -107,9 +200,10 @@ class Grass7 < Formula
     # Enable Aqua GUI, instead of X11
     if build.with? "aqua"
       args.concat [
-        "--with-opengl=aqua",
+        "--with-opengl=aqua", # osx
         "--without-glw",
         "--without-motif"
+        # "--enable-macosx-app"
       ]
     end
 
@@ -117,6 +211,8 @@ class Grass7 < Formula
       # On Xcode-only systems (without the CLT), we have to help:
       args << "--with-macosx-sdk=#{MacOS.sdk_path}"
       args << "--with-opengl-includes=#{MacOS.sdk_path}/System/Library/Frameworks/OpenGL.framework/Headers"
+      # args << "--with-opengl-libs=libdir"
+      # args << "--with-macosx-archs=#{Hardware::CPU.universal_archs}"
     end
 
     if headless?
@@ -134,9 +230,15 @@ class Grass7 < Formula
     args << "--with-cairo-includes=#{cairo.opt_include}/cairo"
     args << "--with-cairo-libs=#{cairo.opt_lib}"
     args << "--with-cairo"
+    args << "--with-cairo-ldflags=-lfontconfig"
 
     # Database support
-    args << "--with-postgres" if build.with? "postgresql"
+    if build.with? "postgresql"
+      postgres = Formula["postgres"]
+      args << "--with-postgres"
+      args << "--with-postgres-includes=#{postgres.opt_include}"
+      args << "--with-postgres-libs=#{postgres.opt_lib}"
+    end
 
     if build.with? "mysql"
       mysql = Formula["mysql"]
@@ -152,7 +254,13 @@ class Grass7 < Formula
       args << "--with-blas-libs=#{openblas.opt_lib}"
     end
 
-    args << "--with-liblas=#{Formula["liblas-gdal2"].opt_bin}/liblas-config" if build.with? "liblas"
+    if build.with? "liblas"
+      args << "--with-liblas=#{Formula["liblas-gdal2"].opt_bin}/liblas-config"
+      # args << "--with-liblas-libs=#{Formula["liblas-gdal2"].opt_lib}"
+      # args << "--with-liblas-includes=#{Formula["liblas-gdal2"].opt_include}"
+      # args << "--with-liblas-config=#{Formula["liblas-gdal2"].opt_bin}/liblas-config"
+    end
+
     args << "--with-netcdf=#{Formula["netcdf"].opt_bin}/nc-config" if build.with? "netcdf"
 
     if build.with? "ffmpeg"
@@ -170,12 +278,13 @@ class Grass7 < Formula
 
     # Patch grass.py to remove bad tab at line 1693 (and insert 12 spaces)
     # Needs to be pushed upstream.
-
     inreplace "lib/init/grass.py", "\t\t\t", "            "
+    # or applying the patch
+    # https://github.com/OSGeo/homebrew-osgeo4mac/pull/549#issuecomment-445507239
 
     system "./configure", "--prefix=#{prefix}", *args
-    system "make", "GDAL_DYNAMIC=" # make and make install must be separate steps.
-    system "make", "GDAL_DYNAMIC=", "install" # GDAL_DYNAMIC set to blank for r.external compatability
+    system "make", "-j", Hardware::CPU.cores, "GDAL_DYNAMIC=" # make and make install must be separate steps.
+    system "make", "-j", Hardware::CPU.cores, "GDAL_DYNAMIC=", "install" # GDAL_DYNAMIC set to blank for r.external compatability
 
     # ensure QGIS's Processing plugin recognizes install
     # 2.14.8+ and other newer QGIS versions may reference just grass.sh
@@ -187,6 +296,32 @@ class Grass7 < Formula
     ln_sf "grass-#{version}", prefix/"grass-base"
     # ensure python2 is used
     bin.env_script_all_files(libexec/"bin", :GRASS_PYTHON => "python2")
+
+    rm "#{bin}/grass#{majmin_ver}"
+    File.open("#{bin}/grass#{majmin_ver}", "w") { |file|
+      file << '#!/bin/bash'
+      file << "\n"
+      file << "export LANG=en_US.UTF-8"
+      file << "\n"
+      file << "export LC_CTYPE=en_US.UTF-8"
+      file << "\n"
+      file << "export LC_ALL=en_US.UTF-8"
+      file << "\n"
+      file << "GRASS_PYTHON=python2 exec #{libexec}/bin/grass#{majmin_ver} $@"
+    }
+
+    # This is established, until the creation of GRASS.app is reviewed
+    # and corrected using: --enable-macosx-app
+    mkdir "#{prefix}/GRASS.app/Contents" do
+      cp "#{buildpath}/macosx/app/Info.plist.in", "Info.plist"
+      cp "#{buildpath}/macosx/app/PkgInfo", "PkgInfo" # APPLGRASS
+      mkdir "Resources" do
+        cp "#{buildpath}/macosx/app/app.icns", "app.icns"
+      end
+      mkdir "MacOS" do
+        ln_s "#{bin}/grass#{majmin_ver}", "grass#{majmin_ver}"
+      end
+    end
   end
 
   def formula_site_packages(f)
@@ -196,9 +331,23 @@ class Grass7 < Formula
   def caveats
     if headless?
       <<~EOS
+        You may also symlink GRASS.app into /Applications:
+
+        ln -Fs `find $(brew --prefix) -name "GRASS.app"` /Applications/GRASS.app
+
         This build of GRASS has been compiled without the WxPython GUI.
 
         The command line tools remain fully functional.
+
+        If that is tha case you can change the shebang a the beginning of
+        the script to enforce Python 2 usage.
+
+        #!/usr/bin/env python
+
+        Should be changed into
+
+        #!/usr/bin/env python2
+
         EOS
     end
   end
@@ -209,8 +358,7 @@ class Grass7 < Formula
 end
 
 __END__
-diff --git a/include/Make/Install.make b/include/Make/Install.make
-index cf16788..8c0007b 100644
+
 --- a/include/Make/Install.make
 +++ b/include/Make/Install.make
 @@ -114,11 +114,6 @@ real-install: | $(INST_DIR) $(UNIX_BIN)
@@ -224,3 +372,43 @@ index cf16788..8c0007b 100644
 -
  $(INST_DIR) $(UNIX_BIN):
  	$(MAKE_DIR_CMD) $@
+
+--- a/macosx/app/build_html_user_index.sh
++++ b/macosx/app/build_html_user_index.sh
+@@ -140,7 +140,6 @@ else
+ #      echo "<tr><td valign=\"top\"><a href=\"$HTMLDIRG/$i\">$BASENAME</a></td> <td>$SHORTDESC</td></tr>" >> $FULLINDEX
+       # make them local to user to simplify page links
+       echo "<tr><td valign=\"top\"><a href=\"global_$i\">$BASENAME</a></td> <td>$SHORTDESC</td></tr>" >> $FULLINDEX
+-      ln -sf "$HTMLDIRG/$i" global_$i
+     done
+   done
+ fi
+@@ -183,8 +182,3 @@ echo "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">
+ </html>" > $i.html
+ done
+
+-# add Help Viewer links in user docs folder
+-
+-mkdir -p $HOME/Library/Documentation/Help/
+-ln -sfh ../../GRASS/$GRASS_MMVER/Modules/docs/html $HOME/Library/Documentation/Help/GRASS-$GRASS_MMVER-addon
+-ln -sfh $GISBASE/docs/html $HOME/Library/Documentation/Help/GRASS-$GRASS_MMVER
+
+--- a/lib/init/grass.py
++++ b/lib/init/grass.py
+@@ -615,7 +615,7 @@
+         if sys_man_path:
+             # to_text_string disabled, see https://trac.osgeo.org/grass/ticket/3508
+             # os.environ['MANPATH'] = to_text_string(sys_man_path)
+-            os.environ['MANPATH'] = sys_man_path
++            os.environ['MANPATH'] = str(sys_man_path)
+             path_prepend(addons_man_path, 'MANPATH')
+             path_prepend(grass_man_path, 'MANPATH')
+         else:
+# @@ -1690,7 +1690,7 @@
+#              filerev.close()
+#              sys.stdout.write("%s\n" % val[0].split(':')[1].rstrip('$"\n').strip())
+#          elif arg == 'version':
+# -			sys.stdout.write("%s\n" % grass_version)
+# +            sys.stdout.write("%s\n" % grass_version)
+#          else:
+#              message(_("Parameter <%s> not supported") % arg)
