@@ -75,7 +75,6 @@ class Grass7 < Formula
   depends_on "swig"
   depends_on "libjpeg-turbo"
   depends_on "cfitsio"
-  depends_on "r"
   depends_on "mesalib-glw"
   depends_on "imagemagick"
   depends_on "xz" # lzma
@@ -90,6 +89,7 @@ class Grass7 < Formula
   depends_on "netcdf" => :optional
   depends_on "openblas" => :optional
   depends_on "postgresql" => :optional
+  depends_on "r" => :optional
 
   # depends_on "mariadb-connector-c"
   # depends_on "mariadb"
