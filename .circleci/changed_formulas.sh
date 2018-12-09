@@ -10,10 +10,6 @@ if [[ -n ${CI_MANUAL_FORMULAE} ]]; then
 else
 
 	  if [[ ! -z  $CIRCLE_PULL_REQUEST  ]]; then
-        echo 'On PR'
-		# if on a PR, just analyze the changed files
-		FILES=$(git diff --diff-filter=AM --name-only $(git merge-base HEAD ${CIRCLE_BRANCH} ) )
-	elif [[ ! -z  $COMMIT_RANGE  ]]; then
         # Get the commit range for the build
         # For workflows, we can't use the CIRCLE_COMPARE_URL feature, so we do it by manualy diffing the branch
 #      COMMIT_RANGE=$(echo "${CIRCLE_COMPARE_URL}" | cut -d/ -f7)
