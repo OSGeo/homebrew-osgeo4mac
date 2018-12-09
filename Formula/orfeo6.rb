@@ -78,9 +78,7 @@ class Orfeo6 < Formula
     depends_on "qt" => :optional
   end
 
-  depends_on "curl"
-  depends_on "fltk"
-  depends_on "hdf5"
+  depends_on "hdf5" => :optional
   depends_on "open-mpi"
 
   resource "geoid" do
