@@ -5,7 +5,7 @@ class Grass7 < Formula
   desc "Geographic Resources Analysis Support System"
   homepage "https://grass.osgeo.org/"
 
-  # revision 1
+  revision 1
 
   head "https://svn.osgeo.org/grass/grass/trunk"
 
@@ -167,6 +167,11 @@ class Grass7 < Formula
       # HOME env var is .brew_home during build, so it is still checked for lib
       ln_sf "#{buildpath}/dist.x86_64-apple-darwin#{`uname -r`.strip}/lib", ".brew_home/lib"
     end
+
+    # Patch grass.py to remove bad tab at line 1693 (and insert 12 spaces)
+    # Needs to be pushed upstream.
+
+    inreplace "lib/init/grass.py", "\t\t\t", "            "
 
     system "./configure", "--prefix=#{prefix}", *args
     system "make", "GDAL_DYNAMIC=" # make and make install must be separate steps.
