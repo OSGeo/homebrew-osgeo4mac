@@ -34,6 +34,7 @@ class Taudem < Formula
   end
 
   def install
+    ENV.cxx11
     args = std_cmake_args
     cd "src" do
       system "cmake", ".", *args
