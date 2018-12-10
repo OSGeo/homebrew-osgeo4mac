@@ -40,13 +40,20 @@ jobs:
     macos:
       xcode: "10.1.0"
     steps:
+      - restore_cache:
+          keys:
+            - homebrew-v1
       - run:
           name: "Update homebrew"
-          command: brew update || brew update
+          command: |
+            brew tap brewsci/science || true
+            brew tap brewsci/bio || true
+            brew update || brew update
       - save_cache:
           key: homebrew-v1
           paths:
             - /usr/local/Homebrew/Library/Taps/homebrew
+            - /usr/local/Homebrew/Library/Taps/brewsci
   sierra-build:
     <<: *build_steps
     <<: *filter
