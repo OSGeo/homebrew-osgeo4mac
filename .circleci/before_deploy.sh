@@ -73,7 +73,7 @@ pushd bottles
 popd
 
 # Set up the keys
-openssl aes-256-cbc -K "${ENCRYPTION_KEY}" -d -in ci_deploy_key.enc -out deploy_key
+openssl aes-256-cbc -iv "${ENCRYPTION_IV}" -K "${ENCRYPTION_KEY}" -d -in ci_deploy_key.enc -out deploy_key
 chmod 600 ./deploy.key
 ssh-add deploy_key
 
