@@ -1,6 +1,9 @@
 build_steps: &build_steps
   steps:
      - checkout
+     - restore_cache:
+         keys:
+           - homebrew-v1
      - run:
          name: Update environment variables
          command: .circleci/set_env.sh
@@ -33,6 +36,17 @@ workflow_filter: &filter
 
 version: 2
 jobs:
+  update-homebrew:
+    macos:
+      xcode: "10.1.0"
+    steps:
+      - run:
+          name: "Update homebrew"
+          command: brew update || brew update
+      - save_cache:
+          key: homebrew-v1
+          paths:
+            - /usr/local/Homebrew/Library/Taps/homebrew
   sierra-build:
     <<: *build_steps
     <<: *filter
@@ -61,8 +75,13 @@ workflows:
   version: 2
   build_bottles:
     jobs:
-      - high_sierra-build
-      - sierra-build
+      - update-homebrew
+      - high_sierra-build:
+          requires:
+            - update-homebrew
+      - sierra-build:
+          requires:
+            - update-homebrew
       - bottle-upload:
           requires:
             - high_sierra-build
