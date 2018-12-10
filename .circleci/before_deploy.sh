@@ -17,7 +17,7 @@
 
 set -e
 
-cd ${CIRCLE_WORKING_DIR}
+ls -lah bottles/
 # Setup Git configuration
 COMMIT_USER=$(git log --format='%an' ${CIRCLE_SHA1}^\!)
 COMMIT_EMAIL=$(git log --format='%ae' ${CIRCLE_SHA1}^\!)
@@ -53,7 +53,6 @@ fi
 BUILT_BOTTLES=
 
 pushd bottles
-  ls -lah
   BOTTLE_ROOT=https://dl.bintray.com/homebrew-osgeo/osgeo-bottles
   for f in ${CHANGED_FORMULAE};do
     echo "Updating changed formula ${f} with new bottles..."
