@@ -3,28 +3,8 @@ build_steps: &build_steps
      - checkout
      - run:
          name: Update environment variables
-         command: |
-           ulimit -c unlimited
-           ulimit -n 2048
-           export CHANGED_FORMULAE=$(.circleci/changed_formulas.sh)
-           if [ "$CHANGED_FORMULAE" == "" ]; then
-             echo "Skipping CI, not changed formulae found";
-             exit 0;
-           else
-             echo "Changed formulae are ${CHANGED_FORMULAE}";
-           fi
-           export HOMEBREW_REPOSITORY=$(brew --repo)
-           git -C "${HOMEBREW_REPOSITORY}" fetch
-           git -C "${HOMEBREW_REPOSITORY}" reset --hard origin/master
-           mkdir -p "${HOMEBREW_REPOSITORY}/Library/Taps/${CIRCLE_PROJECT_USERNAME}"
-           echo "Linking ${CIRCLE_WORKING_DIRECTORY}" to "${HOMEBREW_REPOSITORY}/Library/Taps/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
-           ln -s "${HOME}/project" "${HOMEBREW_REPOSITORY}/Library/Taps/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
-           echo "export CHANGED_FORMULAE=${CHANGED_FORMULAE}" >> $BASH_ENV
-           echo "export HOMEBREW_REPOSITORY=$HOMEBREW_REPOSITORY" >> $BASH_ENV
-           echo 'export HOMEBREW_DEVELOPER=1' >> $BASH_ENV
-           echo 'export HOMEBREW_NO_AUTO_UPDATE=1' >> $BASH_ENV
-           echo 'export HOMEBREW_PREFIX=/usr/local' >> $BASH_ENV
-
+         command: .circleci/set_env.sh
+           
      - run:
          name: Before install script
          command: .circleci/before_install.sh
@@ -71,11 +51,11 @@ jobs:
       - attach_workspace:
           at: ./bottles
       - run:
-          name: test
-          command: |
-            export CHANGED_FORMULAE=$(.circleci/changed_formulas.sh)
-            echo "CHANGED_FORMULAE=${CHANGED_FORMULAE}" >> $BASH_ENV
-            .circleci/before_deploy.sh
+          name: Set env
+          command: .circleci/set_env.sh
+      - run:
+          name: Commit bottles
+          command: .circleci/before_deploy.sh
 
 workflows:
   version: 2

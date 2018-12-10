@@ -42,7 +42,6 @@ brew update || brew update
 
 for f in ${CHANGED_FORMULAE};do
   echo "Homebrew setup for changed formula ${f}..."
-  brew search ${f}
   deps=$(brew deps --include-build ${f})
   echo "${f} dependencies:"
   echo "${deps}"
