@@ -35,6 +35,14 @@ build_steps: &build_steps
      - run:
           name: Install changed formulae
           command: .circleci/script.sh
+     - run:
+         name: Build bottles
+         command: .circleci/after_script.sh
+     - persist_to_workspace:
+         root: bottles
+         paths:
+           - ./*.tar.gz
+           - ./*.json
 
 workflow_filter: &filter
   filters:
@@ -55,6 +63,19 @@ jobs:
     <<: *filter
     macos:
       xcode: "10.1.0"
+  bottle-upload:
+    macos:
+      xcode: "10.1.0"
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ./bottles
+      - run:
+          name: test
+          command: |
+            export CHANGED_FORMULAE=$(.circleci/changed_formulas.sh)
+            echo "CHANGED_FORMULAE=${CHANGED_FORMULAE}" >> $BASH_ENV
+            .circleci/before_deploy.sh
 
 workflows:
   version: 2
@@ -62,6 +83,10 @@ workflows:
     jobs:
       - high_sierra-build
       - sierra-build
+      - bottle-upload:
+          requires:
+            - high_sierra-build
+            - sierra-build
 
 
    
