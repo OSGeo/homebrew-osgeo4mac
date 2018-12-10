@@ -19,7 +19,7 @@ class Osgqt < Formula
   depends_on "jpeg"
   depends_on "freetype"
   depends_on "sdl"
-  depends_on "gdal" => :optional
+  depends_on "gdal2" => :optional
   depends_on "jasper" => :optional
   depends_on "openexr" => :optional
   depends_on "dcmtk" => :optional
