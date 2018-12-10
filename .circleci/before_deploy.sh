@@ -72,6 +72,11 @@ pushd bottles
   done
 popd
 
+# Set up the keys
+openssl aes-256-cbc -K "${ENCRYPTION_KEY}" -d -in ci_deploy_key.enc -out deploy_key
+chmod 600 ./deploy.key
+ssh-add deploy_key
+
 # Now do the commit and push
 
 git add -vA Formula/*.rb
