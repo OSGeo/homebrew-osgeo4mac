@@ -39,4 +39,5 @@ pushd bottles
     for json in ${f}*.mojave.bottle*.json; do
       sed -i '' s@high_sierra@mojave@g ${json}
     done
+  done
 popd
