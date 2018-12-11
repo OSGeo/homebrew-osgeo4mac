@@ -116,7 +116,7 @@ class Qgis3 < Formula
   depends_on "libspatialite"
   depends_on "postgis2"
   depends_on "openssl"
-  depends_on "osgqt"
+  # depends_on "osgqt"
   depends_on "poppler"
   depends_on "gnu-sed"
   depends_on "exiv2"
