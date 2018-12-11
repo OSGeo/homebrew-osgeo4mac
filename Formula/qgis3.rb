@@ -38,17 +38,14 @@ class Qgis3 < Formula
   homepage "https://www.qgis.org"
   url "https://github.com/qgis/QGIS.git",
     :branch => "release-3_4",
-    :commit => "7f5afe620f10c585231a84752779f0ecf8b3b9e4"
+    :commit => "06d5545f3cf8f0a3e53c4f053f197ec87af47bd6"
   version "3.4.2"
 
-  revision 1
+  revision 2
 
   head "https://github.com/qgis/QGIS.git", :branch => "master"
 
-  # stable do
-  #   url "https://github.com/qgis/QGIS/archive/final-3_4_2.tar.gz"
-  #   sha256 "e6a1407a391c57205be3cde1e497d2aa48c3557c56683fa40c44ba3f4b6af674"
-  # end
+  patch :DATA
 
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
@@ -71,7 +68,7 @@ class Qgis3 < Formula
   # option "with-globe", "Build with Globe plugin, based upon osgEarth"
   option "with-grass", "Build with GRASS 7 integration plugin and Processing plugin support (or install grass-7x first)"
   option "with-oracle", "Build extra Oracle geospatial database and raster support"
-  # option "with-orfeo6", "Build extra Orfeo Toolbox for Processing plugin"
+  option "with-orfeo", "Build extra Orfeo Toolbox for Processing plugin"
   option "with-r", "Build extra R for Processing plugin"
   option "with-saga-gis-lts", "Build extra Saga GIS for Processing plugin"
   # option "with-qt-mysql", "Build extra Qt MySQL plugin for eVis plugin"
@@ -119,6 +116,7 @@ class Qgis3 < Formula
   depends_on "libspatialite"
   depends_on "postgis2"
   depends_on "openssl"
+  depends_on "osgqt"
   depends_on "poppler"
   depends_on "gnu-sed"
   depends_on "exiv2"
@@ -149,7 +147,7 @@ class Qgis3 < Formula
   # if build.with? "globe"
   #   # this is pretty borked with OS X >= 10.10+
   #   depends_on "open-scene-graph"
-  #   # depends_on "brewsci/science/osgearth"
+  #   depends_on "brewsci/science/osgearth"
   # end
 
   depends_on "gpsbabel" => :optional
@@ -162,7 +160,7 @@ class Qgis3 < Formula
 
   # core processing plugin extras
   # see `grass` above
-  # depends_on "orfeo6" => :optional
+  depends_on "orfeo6" => :optional
   depends_on "r" => :optional
   depends_on "saga-gis-lts" => :optional
   # TODO: LASTools straight build (2 reporting tools), or via `wine` (10 tools)
@@ -313,10 +311,74 @@ class Qgis3 < Formula
     sha256 "3d734559db35aa3697dadcea492a423118c5c55d176da2f3be9c98d4803fc2a7"
   end
 
+  # R Provider Plugin
+  resource "r-app" do
+    url "https://github.com/north-road/qgis-processing-r.git",
+      :branch => "master",
+      :commit => "ebbfa9e6a243608415468ea3254a1a740bc2006c"
+    version "0.0.3"
+  end
+
+  # Orfeo Provider Plugin
+  resource "otb" do
+    url "https://gitlab.orfeo-toolbox.org/orfeotoolbox/qgis-otb-plugin.git",
+      :branch => "master",
+      :commit => "33f5066ae7319d40ae20cd65b806c60eaefae032"
+    version "0.1"
+  end
+
+  # Patch: OTBAlgorithmProvider
+  resource "OTBAlgorithmProvider" do
+    url "https://gist.githubusercontent.com/fjperini/009a5dda278c1a10e0758865d149820c/raw/ff5a239ac525d8e760d6f02f8ac03364e7a69766/OTBAlgorithmProvider.patch"
+    sha256 "bf59ecdbd2077b0268a05c4eea14d4fe1d0f92d1b4b2d525d2908c91d3d0cdb6"
+  end
+
+  # Patch: OTBUtils
+  resource "OTBUtils" do
+    url "https://gist.githubusercontent.com/fjperini/53f53daf78ab5e203fd81322ea5c3a2f/raw/783b17df86d8e88c41e26a3b4b0f17e5fac3df05/OTBUtils.patch"
+    sha256 "a2d6c97d0fc235ba1230c6012f87f70643367705b6fdf4979113867c5e13bd02"
+  end
+
+  # Patch: RAlgorithmProvider
+  resource "RAlgorithmProvider" do
+    url "https://gist.githubusercontent.com/fjperini/bf9fbd1ac9cc2729994cf331baf7a439/raw/855d95c24d5f4df910f8f454cf6b82389f5de820/RAlgorithmProvider.patch"
+    sha256 "254b0341c05f077dbcf67e29c14d77407a765a04d04524915c9443498a3f4343"
+  end
+
   needs :cxx11
 
   def install
     ENV.cxx11
+
+    # we proceed to install the plugins as a first step,
+    # to ensure that the patches are applied
+    mkdir "#{prefix}/QGIS.app/Contents/Resources/python/plugins/"
+
+    if build.with?("orfeo") || brewed_orfeo6?
+      resource("otb").stage do
+        cp_r "./otb", "#{buildpath}/python/plugins/"
+      end
+      resource("OTBAlgorithmProvider").stage do
+        cp_r "./OTBAlgorithmProvider.patch", "#{buildpath}"
+      end
+      resource("OTBUtils").stage do
+        cp_r "./OTBUtils.patch", "#{buildpath}"
+      end
+      system "patch", "-p1", "-i", "#{buildpath}/OTBAlgorithmProvider.patch"
+      system "patch", "-p1", "-i", "#{buildpath}/OTBUtils.patch"
+      cp_r "#{buildpath}/python/plugins/otb", "#{prefix}/QGIS.app/Contents/Resources/python/plugins/"
+    end
+
+    if build.with?("r") || brewed_r?
+      resource("r-app").stage do
+        cp_r "./r", "#{buildpath}/python/plugins/"
+      end
+      resource("RAlgorithmProvider").stage do
+        cp_r "./RAlgorithmProvider.patch", "#{buildpath}"
+      end
+      system "patch", "-p1", "-i", "#{buildpath}/RAlgorithmProvider.patch"
+      cp_r "#{buildpath}/python/plugins/r", "#{prefix}/QGIS.app/Contents/Resources/python/plugins/"
+    end
 
     # when gdal2-python.rb loaded, PYTHONPATH gets set to 2.7 site-packages...
     # clear it before calling any local python3 functions
@@ -333,9 +395,11 @@ class Qgis3 < Formula
       puts "gdal_opt_bin: #{gdal_opt_bin}"
     end
 
-    # install python dependencies
     venv = virtualenv_create(libexec/'vendor', "python3")
-    venv.pip_install resources.reject { |r| r.name == "pyqgis-startup" }
+    res = resources.map(&:name).to_set - %w[pyqgis-startup r-app otb OTBAlgorithmProvider OTBUtils RAlgorithmProvider]
+    res.each do |r|
+      venv.pip_install resource(r)
+    end
 
     # set bundling level back to 0 (the default in all versions prior to 1.8.0)
     # so that no time and energy is wasted copying the Qt frameworks into QGIS.
@@ -447,6 +511,11 @@ class Qgis3 < Formula
       -DWITH_GRASS=FALSE
     ]
 
+    # args << "-DAPPLE_APPKIT_LIBRARY=#{ENV['HOME']}/Library/Frameworks/AppKit.framework"
+    # args << "-DAPPLE_APPLICATIONSERVICES_LIBRARY=#{ENV['HOME']}/Library/Frameworks/ApplicationServices.framework"
+    # args << "-DAPPLE_COREFOUNDATION_LIBRARY=#{ENV['HOME']}/Library/Frameworks/CoreFoundation.framework"
+    # args << "-DAPPLE_IOKIT_LIBRARY=#{ENV['HOME']}/Library/Frameworks/IOKit.framework"
+
     # disable CCache
     args << "-DUSE_CCACHE=OFF"
 
@@ -508,16 +577,18 @@ class Qgis3 < Formula
     # args << "-DWITH_GLOBE=#{build.with?("globe") ? "TRUE" : "FALSE"}"
     #   if build.with? "globe"
     #     osg = Formula["open-scene-graph"]
+    #     osgqt = Formula["osgqt"]
     #     opoo "`open-scene-graph` formula's keg not linked." unless osg.linked_keg.exist?
     #     # must be HOMEBREW_PREFIX/lib/osgPlugins-#.#.#, since all osg plugins are symlinked there
     #     args << "-DOSG_PLUGINS_PATH=#{HOMEBREW_PREFIX}/lib/osgPlugins-#{osg.version}"
-    #     # args << "-DOSGEARTHANNOTATION_LIBRARY="
-    #     # args << "-DOSGEARTHFEATURES_LIBRARY="
-    #     # args << "-DOSGEARTHQT_LIBRARY="
-    #     # args << "-DOSGEARTHSYMBOLOGY_LIBRARY="
-    #     # args << "-DOSGEARTHUTIL_LIBRARY="
-    #     # args << "-DOSGEARTH_INCLUDE_DIR="
-    #     # args << "-DOSGEARTH_LIBRARY="
+    #     # args << "-DOSGEARTHANNOTATION_LIBRARY=#{osg.opt_lib}"
+    #     # args << "-DOSGEARTHFEATURES_LIBRARY=#{osg.opt_lib}"
+    #     # args << "-DOSGEARTHQT_LIBRARY=#{osg.opt_lib}"
+    #     # args << "-DOSGEARTHSYMBOLOGY_LIBRARY=#{osg.opt_lib}"
+    #     # args << "-DOSGEARTHUTIL_LIBRARY=#{osg.opt_lib}/libosgUtil.dylib"
+    #     args << "-DOSGEARTH_INCLUDE_DIR=#{osg.opt_include}"
+    #     args << "-DOSGEARTH_LIBRARY=#{osg.opt_lib}/libosg.dylib"
+    #     args << "-DOSGQT_LIBRARY=#{osgqt.opt_lib}/libosgQt5.dylib"
     # end
 
     args << "-DWITH_ORACLE=#{build.with?("oracle") ? "TRUE" : "FALSE"}"
@@ -697,13 +768,20 @@ class Qgis3 < Formula
     ]
     envars[:QT_PLUGIN_PATH] = qtplgpths.join(pthsep)
 
-    proc_algs = "Contents/Resources/python/plugins/processing/algs"
+    proc_plugins = "#{app}/Contents/Resources/python/plugins"
+    proc_plugins_algs = "#{proc_plugins}/processing/algs"
+
     if opts.include?("with-grass") || brewed_grass7?
-      grass7 = Formula["grass7"]
       # for core integration plugin support
+      grass7 = Formula["grass7"]
       envars[:GRASS_PREFIX] = "#{grass7.opt_prefix}/grass-base"
+      # envars[:GRASS_SH] = "/bin/sh"
+      # envars[:GRASS_PROJSHARE] = "#{Formula["proj"].opt_share}"
+      # envars[:GRASS_VERSION] = "7.4.3"
+      # envars[:GRASS_LD_LIBRARY_PATH] = "#{Formula["grass7"].opt_prefix}/grass-#{grass_version}/lib"
+      # envars[:GRASS_PERL] = "#{Formula["perl"].opt_bin}/perl"
       begin
-        inreplace app/"#{proc_algs}/grass7/Grass7Utils.py",
+        inreplace "#{proc_plugins_algs}/grass7/Grass7Utils.py",
                   "'/Applications/GRASS-7.{}.app/Contents/MacOS'.format(version)",
                   "'#{grass7.opt_prefix}/grass-base'"
         puts "GRASS 7 GrassUtils.py has been updated"
@@ -712,22 +790,23 @@ class Qgis3 < Formula
       end
     end
 
-    # if opts.include?("with-orfeo6") || brewed_orfeo6?
-    #  orfeo6 = Formula["orfeo6"]
-    #  begin
-    #    inreplace app/"#{proc_algs}/otb/OTBUtils.py" do |s|
-    #      # default geoid path
-    #      # try to replace first, so it fails (if already done) before global replaces
-    #      s.sub! "OTB_GEOID_FILE) or ''", "OTB_GEOID_FILE) or '#{orfeo6.opt_libexec}/default_geoid/egm96.grd'"
-    #      # default bin and lib path
-    #      s.gsub! "/usr/local/bin", orfeo6.opt_bin.to_s
-    #      s.gsub! "/usr/local/lib", orfeo6.opt_lib.to_s
-    #    end
-    #    puts "ORFEO 5 OTBUtils.py has been updated"
-    #    rescue Utils::InreplaceError
-    #    puts "ORFEO 5 OTBUtils.py already updated"
-    #  end
-    # end
+    if opts.include?("with-orfeo") || brewed_orfeo6?
+      orfeo6 = Formula["orfeo6"]
+      # envars[:QGIS_PLUGINPATH] = "#{orfeo6.opt_prefix}"
+      begin
+        inreplace "#{proc_plugins}/otb/OTBUtils.py" do |s|
+        # default geoid path
+        # try to replace first, so it fails (if already done) before global replaces
+        s.sub! "OTB_GEOID_FILE) or ''", "OTB_GEOID_FILE) or '#{orfeo6.opt_libexec}/default_geoid/egm96.grd'"
+        # default bin and lib path
+        s.gsub! "/usr/local/bin", orfeo6.opt_bin.to_s
+        s.gsub! "/usr/local/lib", orfeo6.opt_lib.to_s
+        end
+        puts "ORFEO 6 OTBUtils.py has been updated"
+        rescue Utils::InreplaceError
+        puts "ORFEO 6 OTBUtils.py already updated"
+      end
+    end
 
     unless opts.include?("without-globe")
       osg = Formula["open-scene-graph"]
@@ -823,8 +902,19 @@ class Qgis3 < Formula
         types of installations of QGIS on your Mac. However, on versions >= 2.0.1,
         this also means Python modules installed in the *system* Python will NOT
         be available to Python processes within QGIS.app.
+
       EOS
     end
+
+    if build.with?("orfeo") || ("r-app")
+      s += <<~EOS
+
+        Activate plugin
+        Manage and Install Plugins -> Installed ->  Plugin name (click its checkbox)
+
+      EOS
+    end
+
 
     s += <<~EOS
       QGIS plugins may need extra Python modules to function. Most can be installed with pip in a Terminal:
@@ -856,9 +946,13 @@ class Qgis3 < Formula
     Formula["grass7"].opt_prefix.exist?
   end
 
-  # def brewed_orfeo6?
-  #   Formula["orfeo6"].opt_prefix.exist?
-  # end
+  def brewed_orfeo6?
+    Formula["orfeo6"].opt_prefix.exist?
+  end
+
+  def brewed_r?
+    Formula["r"].opt_prefix.exist?
+  end
 
   def brewed_python?
     Formula["python"].linked_keg.exist?
@@ -906,3 +1000,17 @@ class Qgis3 < Formula
     `#{python_exec} -c 'import sys; sys.path.insert(1, "#{gdal_python_packages}"); import #{mod}'`.strip
   end
 end
+
+__END__
+
+--- a/cmake/FindPyQt5.py
++++ b/cmake/FindPyQt5.py
+@@ -39,7 +39,7 @@
+     import os.path
+     import sys
+     cfg = sipconfig.Configuration()
+-    sip_dir = cfg.default_sip_dir
++    sip_dir = "HOMEBREW_PREFIX/share/sip"
+     if sys.platform.startswith('freebsd'):
+         py_version = str(sys.version_info.major) + str(sys.version_info.minor)
+         sip_dir = sip_dir.replace(py_version, '')
