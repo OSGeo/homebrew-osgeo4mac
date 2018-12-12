@@ -54,13 +54,13 @@ class Qt5Webkit < Formula
     args = cmake_args
     args << "-DPORT=Qt"
     args << "-DENABLE_TOOLS=OFF"
-    args << "-DCMAKE_MACOSX_RPATH=OFF"
-    args << "-DEGPF_SET_RPATH=OFF"
-    args << "-DCMAKE_SKIP_RPATH=ON"
-    args << "-DCMAKE_SKIP_INSTALL_RPATH=ON"
+    # args << "-DCMAKE_MACOSX_RPATH=OFF"
+    # args << "-DEGPF_SET_RPATH=OFF"
+    # args << "-DCMAKE_SKIP_RPATH=ON"
+    # args << "-DCMAKE_SKIP_INSTALL_RPATH=ON"
 
     # Fuck up rpath
-    inreplace "Source/cmake/OptionsQt.cmake", "RPATH\ ON", "RPATH\ OFF"
+    # inreplace "Source/cmake/OptionsQt.cmake", "RPATH\ ON", "RPATH\ OFF"
     mkdir "build" do
       system "cmake", "-G", build.with?("ninja") ? "Ninja" : "Unix Makefiles", *args, ".."
       system "cmake", "--build", ".", "--target", "all", "--", "-j", Hardware::CPU.cores
