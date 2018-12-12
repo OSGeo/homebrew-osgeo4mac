@@ -17,27 +17,23 @@ class Qt5Webkit < Formula
 
   depends_on "cmake" => :build
   depends_on "ninja" => [:build, :recommended]
-  depends_on "fontconfig" => :build
-  depends_on "freetype" => :build
-  depends_on "gperf" => :build
-  depends_on "sqlite" => :build
-
-  depends_on "python@2" => :build
-  depends_on "ruby" => :build
   depends_on :xcode => :build
-
-  depends_on "libxslt"
   depends_on "qt"
-  depends_on "webp"
-  depends_on "zlib"
-
-  # depends_on "gst-plugins-base"
-  # depends_on "libjpeg" # Qt < 5.10
-  depends_on "libjpeg-turbo"
+  depends_on "libjpeg-turbo" # libjpeg: Qt < 5.10
   depends_on "libpng"
-  depends_on "libxslt"
+  depends_on "webp"
   depends_on :macos => :mountain_lion
-  depends_on "gst-plugins-good" => :optional
+
+  # depends_on "fontconfig" => :build
+  # depends_on "freetype" => :build
+  # depends_on "gperf" => :build
+  # depends_on "sqlite" => :build
+  # depends_on "python@2" => :build
+  # depends_on "ruby" => :build
+  # depends_on "zlib"
+  # depends_on "libxslt"
+  # depends_on "gst-plugins-base"
+  # depends_on "gst-plugins-good" => :optional
 
   def cmake_args
     args = %W[
