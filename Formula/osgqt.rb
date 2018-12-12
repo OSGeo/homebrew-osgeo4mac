@@ -6,6 +6,14 @@ class Osgqt < Formula
     :commit => "6d324db8a56feb7d1976e9fb3f1de9bf7d255646"
   version "3.6.3"
 
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    cellar :any
+    sha256 "a1abb537674638c66c7b9fbc5008ff8ee2fccdef8f9860f5b3a9c9f46c780ec5" => :mojave
+    sha256 "a1abb537674638c66c7b9fbc5008ff8ee2fccdef8f9860f5b3a9c9f46c780ec5" => :high_sierra
+    sha256 "a1abb537674638c66c7b9fbc5008ff8ee2fccdef8f9860f5b3a9c9f46c780ec5" => :sierra
+  end
+
   # revision 1
 
   head "https://github.com/openscenegraph/osgQt.git"
