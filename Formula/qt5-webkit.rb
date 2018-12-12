@@ -27,40 +27,23 @@ class Qt5Webkit < Formula
   # depends_on "fontconfig" => :build
   # depends_on "freetype" => :build
   # depends_on "gperf" => :build
-  # depends_on "sqlite" => :build
+  # depends_on "sqlite" => :build
   # depends_on "python@2" => :build
   # depends_on "ruby" => :build
-  # depends_on "zlib"
+  # depends_on "zlib"
   # depends_on "libxslt"
   # depends_on "gst-plugins-base"
   # depends_on "gst-plugins-good" => :optional
 
-  def cmake_args
-    args = %W[
-      -DCMAKE_INSTALL_PREFIX=#{prefix}
-      -DCMAKE_BUILD_TYPE=Release
-      -DCMAKE_FIND_FRAMEWORK=LAST
-      -DCMAKE_VERBOSE_MAKEFILE=ON
-      -Wno-dev
-    ]
-    args
-  end
-
   def install
-    args = cmake_args
-    args << "-DPORT=Qt"
-    args << "-DENABLE_TOOLS=OFF"
-    # args << "-DCMAKE_MACOSX_RPATH=OFF"
-    # args << "-DEGPF_SET_RPATH=OFF"
-    # args << "-DCMAKE_SKIP_RPATH=ON"
-    # args << "-DCMAKE_SKIP_INSTALL_RPATH=ON"
+    # on Mavericks we want to target libc++, this requires a macx-clang flag
+    spec = (ENV.compiler == :clang && MacOS.version >= :mavericks) ? "macx-clang" : "macx-g++"
+    args = %W[-config release -spec #{spec}]
 
-    # Fuck up rpath
-    # inreplace "Source/cmake/OptionsQt.cmake", "RPATH\ ON", "RPATH\ OFF"
     mkdir "build" do
-      system "cmake", "-G", build.with?("ninja") ? "Ninja" : "Unix Makefiles", *args, ".."
-      system "cmake", "--build", ".", "--target", "all", "--", "-j", Hardware::CPU.cores
-      system "cmake", "--build", ".", "--target", "install", "--", "-j", Hardware::CPU.cores
+      system "#{Formula["qt"].opt_bin}/qmake", "../WebKit.pro", *args
+      system "make", "-j", Hardware::CPU.cores
+      system "make", "install"
     end
 
     # rename the .so files
@@ -257,3 +240,14 @@ __END__
  EXTERN_C size_t xpc_array_get_count(xpc_object_t);
  EXTERN_C const char* xpc_array_get_string(xpc_object_t, size_t index);
  EXTERN_C void xpc_array_set_string(xpc_object_t, size_t index, const char* string);
+
+--- a/Tools/qmake/projects/run_cmake.pro 2017-06-17 13:46:54.000000000 +0300
++++ b/Tools/qmake/projects/run_cmake.pro 2018-09-08 23:41:06.397523110 +0300
+@@ -22,6 +22,7 @@
+         PORT=Qt \
+         CMAKE_BUILD_TYPE=$$configuration \
+         CMAKE_TOOLCHAIN_FILE=$$toolchain_file \
++        CMAKE_INSTALL_PREFIX=HOMEBREW_PREFIX/Cellar/qt5-webkit/5.12.0
+         USE_LIBHYPHEN=OFF
+
+     !isEmpty(_QMAKE_SUPER_CACHE_) {
