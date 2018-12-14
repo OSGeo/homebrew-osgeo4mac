@@ -322,7 +322,7 @@ class Qgis3 < Formula
   resource "otb" do
     url "https://gitlab.orfeo-toolbox.org/orfeotoolbox/qgis-otb-plugin.git",
       :branch => "master",
-      :commit => "33f5066ae7319d40ae20cd65b806c60eaefae032"
+      :commit => "b98fda42450851e6d6089c51cc4fea33d26b63ac"
     version "0.1"
   end
 
