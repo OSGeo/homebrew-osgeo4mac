@@ -23,11 +23,13 @@ build_steps: &build_steps
      - run:
          name: Build bottles
          command: .circleci/after_script.sh
-     - persist_to_workspace:
-         root: bottles
-         paths:
-           - ./*.tar.gz
-           - ./*.json
+
+add_to_workspace: &persist
+  - persist_to_workspace:
+      root: bottles
+      paths:
+        - ./*.tar.gz
+        - ./*.json
 
 workflow_filter: &filter
   filters:
@@ -60,9 +62,16 @@ jobs:
   sierra-build:
     <<: *build_steps
     <<: *filter
+    <<: *persist
     macos:
       xcode: "8.3.3"
   high_sierra-build:
+    <<: *build_steps
+    <<: *filter
+    <<: *persist
+    macos:
+      xcode: "9.4.1"
+  xcode_10-build:
     <<: *build_steps
     <<: *filter
     macos:
@@ -70,9 +79,6 @@ jobs:
   bottle-upload:
     macos:
       xcode: "10.1.0"
-    filters:
-      tags:
-        only: deploy
     steps:
       - checkout
       - attach_workspace:
@@ -95,7 +101,13 @@ workflows:
       - sierra-build:
           requires:
             - update-homebrew
+      - xcode_10-build:
+          requires:
+            - update-homebrew
       - bottle-upload:
+          filters:
+            tags:
+              only: deploy
           requires:
             - high_sierra-build
             - sierra-build
