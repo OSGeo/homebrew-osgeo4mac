@@ -3,7 +3,7 @@ build_steps: &build_steps
      - checkout
      - restore_cache:
          keys:
-           - homebrew-v1-{{ .Branch }}-{{ .Revison }}
+           - homebrew-v1-{{ .Branch }}-{{ .Revision }}
            - homebrew-v1-{{ .Branch }}-
            - homebrew-v1-
      - run:
