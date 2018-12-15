@@ -62,15 +62,17 @@ jobs:
   sierra-build:
     <<: *build_steps
     <<: *filter
-    <<: *persist
     macos:
       xcode: "8.3.3"
+      steps:
+        <<: *persist
   high_sierra-build:
     <<: *build_steps
     <<: *filter
-    <<: *persist
     macos:
       xcode: "9.4.1"
+    steps:
+      <<: *persist
   xcode_10-build:
     <<: *build_steps
     <<: *filter
