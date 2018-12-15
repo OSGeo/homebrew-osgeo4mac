@@ -106,13 +106,13 @@ workflows:
       - xcode_10-build:
           requires:
             - update-homebrew
-      - bottle-upload:
-          filters:
-            tags:
-              only: deploy
-          requires:
-            - high_sierra-build
-            - sierra-build
+#      - bottle-upload:
+#          filters:
+#            tags:
+#              only: deploy
+#          requires:
+#            - high_sierra-build
+#            - sierra-build
 
 
    
