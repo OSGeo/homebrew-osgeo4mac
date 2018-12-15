@@ -3,7 +3,9 @@ build_steps: &build_steps
      - checkout
      - restore_cache:
          keys:
-           - homebrew-v1
+           - homebrew-v1-{{ .Branch }}-{{ .Revison }}
+           - homebrew-v1-{{ .Branch }}-
+           - homebrew-v1-
      - run:
          name: Update environment variables
          command: .circleci/set_env.sh
@@ -32,7 +34,6 @@ workflow_filter: &filter
     branches:
       only:
         - master
-        - circleci
 
 version: 2
 jobs:
@@ -42,7 +43,9 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - homebrew-v1
+            - homebrew-v1-{{ .Branch }}-{{ .Revision }}
+            - homebrew-v1-{{ .Branch }}-
+            - homebrew-v1-
       - run:
           name: "Update homebrew"
           command: |
@@ -50,7 +53,7 @@ jobs:
             brew tap brewsci/bio || true
             brew update || brew update
       - save_cache:
-          key: homebrew-v1
+          key: homebrew-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - /usr/local/Homebrew/Library/Taps/homebrew
             - /usr/local/Homebrew/Library/Taps/brewsci
@@ -67,6 +70,9 @@ jobs:
   bottle-upload:
     macos:
       xcode: "10.1.0"
+    filters:
+      tags:
+        only: deploy
     steps:
       - checkout
       - attach_workspace:
