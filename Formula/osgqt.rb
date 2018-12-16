@@ -6,6 +6,10 @@ class Osgqt < Formula
     :commit => "6d324db8a56feb7d1976e9fb3f1de9bf7d255646"
   version "3.6.3"
 
+  revision 1
+
+  head "https://github.com/openscenegraph/osgQt.git"
+
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
     cellar :any
@@ -14,37 +18,14 @@ class Osgqt < Formula
     sha256 "a1abb537674638c66c7b9fbc5008ff8ee2fccdef8f9860f5b3a9c9f46c780ec5" => :sierra
   end
 
-  # revision 1
-
-  head "https://github.com/openscenegraph/osgQt.git"
-
-  option "with-docs", "Build the documentation with Doxygen and Graphviz"
-
-  deprecated_option "docs" => "with-docs"
-
   depends_on "cmake" => :build
   depends_on "pkg-config" => :build
-  depends_on "jpeg"
-  depends_on "freetype"
-  depends_on "sdl"
-  depends_on "gdal2" => :optional
-  depends_on "jasper" => :optional
-  depends_on "openexr" => :optional
-  depends_on "dcmtk" => :optional
-  depends_on "librsvg" => :optional
-  depends_on "collada-dom" => :optional
-  depends_on "gnuplot" => :optional
-  depends_on "ffmpeg" => :optional
   depends_on "qt"
-  depends_on "open-scene-graph"
+  depends_on "openscenegraph-qt5"
 
   # compatible with the new and old versions of OSG
+  # QtWindowingSystem exist from OSG 3.5.3
   patch :DATA
-
-  if build.with? "docs"
-    depends_on "doxygen" => :build
-    depends_on "graphviz" => :build
-  end
 
   def install
     # Fix "fatal error: 'os/availability.h' file not found" on 10.11 and
@@ -55,27 +36,16 @@ class Osgqt < Formula
 
     args = std_cmake_args
 
-    args << "-DBUILD_DOCUMENTATION=" + (build.with?("docs") ? "ON" : "OFF")
+    args << "-DCMAKE_PREFIX_PATH=#{Formula["qt"].opt_lib}/cmake"
     args << "-DCMAKE_CXX_FLAGS=-Wno-error=narrowing" # or: -Wno-c++11-narrowing
-
-    if MacOS.prefer_64_bit?
-      args << "-DCMAKE_OSX_ARCHITECTURES=#{Hardware::CPU.arch_64_bit}"
-      args << "-DOSG_DEFAULT_IMAGE_PLUGIN_FOR_OSX=imageio"
-      args << "-DOSG_WINDOWING_SYSTEM=Cocoa"
-    else
-      args << "-DCMAKE_OSX_ARCHITECTURES=#{Hardware::CPU.arch_32_bit}"
-    end
-
-    if build.with? "collada-dom"
-      args << "-DCOLLADA_INCLUDE_DIR=#{Formula["collada-dom"].opt_include}/collada-dom2.4"
-    end
+    args << "-DCMAKE_OSX_ARCHITECTURES=#{Hardware::CPU.arch_64_bit}"
+    args << "-DOSG_DEFAULT_IMAGE_PLUGIN_FOR_OSX=imageio"
+    args << "-DOSG_WINDOWING_SYSTEM=Cocoa"
 
     mkdir "build" do
       system "cmake", "..", *args
       system "make"
-      system "make", "doc_openscenegraph" if build.with? "docs"
       system "make", "install"
-      doc.install Dir["#{prefix}/doc/OpenSceneGraphReferenceDocs/*"] if build.with? "docs"
     end
   end
 
@@ -104,7 +74,7 @@ __END__
  PROJECT(osgQt)
 
 -FIND_PACKAGE(OpenSceneGraph 3.0.0 REQUIRED osgDB osgGA osgUtil osgText osgViewer osgWidget)
-+FIND_PACKAGE(OpenSceneGraph 3.6.2 REQUIRED osgDB osgGA osgUtil osgText osgViewer osgWidget)
++FIND_PACKAGE(OpenSceneGraph 3.6.3 REQUIRED osgDB osgGA osgUtil osgText osgViewer osgWidget)
  SET(OPENSCENEGRAPH_SOVERSION 145)
 
  SET(OSG_PLUGINS osgPlugins-${OPENSCENEGRAPH_VERSION})
