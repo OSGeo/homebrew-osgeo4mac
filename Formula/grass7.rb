@@ -7,7 +7,7 @@ class Grass7 < Formula
   desc "Geographic Resources Analysis Support System"
   homepage "https://grass.osgeo.org/"
 
-  revision 2
+  revision 3
 
   head "https://svn.osgeo.org/grass/grass/trunk"
 
@@ -18,9 +18,13 @@ class Grass7 < Formula
     # Patches to keep files from being installed outside of the prefix.
     # Remove lines from Makefile that try to install to /Library/Documentation.
     # no_symbolic_links
-    # TypeError
-    # alt-adapt-for-python3
     patch :DATA
+
+    # fix for python3: TypeError and others
+    patch do
+      url "https://gist.githubusercontent.com/fjperini/9480ad46cc4188ac7a72f4918e0d501b/raw/c738ee3b24b30bf439b97f4342a584829df0362b/grass7-python3.patch"
+      sha256 "4c450ef3292ae347ab8d491973870bfd914aad1bf748eb83156f059bda9bc76d"
+    end
   end
 
   bottle do
@@ -35,6 +39,7 @@ class Grass7 < Formula
   option "without-gui", "Build without WxPython interface. Command line tools still available."
   option "with-liblas", "Build with LibLAS-with-GDAL2 support"
   option "with-aqua", "Build with experimental Aqua GUI backend."
+  option "with-app", "Build GRASS.app Package"
 
   depends_on "autoconf" => :build
   depends_on "automake" => :build
@@ -56,6 +61,7 @@ class Grass7 < Formula
   depends_on "unixodbc"
   depends_on UnlinkedGRASS7
   depends_on "wxpython"
+  depends_on "openjpeg" # for Pillow
   depends_on :x11 if build.without? "aqua" # needs to find at least X11/include/GL/gl.h
   depends_on "fftw" => :recommended
   depends_on "tcl-tk" => :recommended
@@ -65,6 +71,7 @@ class Grass7 < Formula
   depends_on "openblas" => :optional
   depends_on "postgresql" => :optional
 
+  # other dependencies
   depends_on "desktop-file-utils" => :optional
   depends_on "fontconfig" => :optional
   depends_on "geos" => :optional
@@ -299,6 +306,7 @@ class Grass7 < Formula
     # ensure python2 is used
     bin.env_script_all_files(libexec/"bin", :GRASS_PYTHON => "python2")
 
+    # fix "ValueError: unknown locale: UTF-8"
     rm "#{bin}/grass#{majmin_ver}"
     File.open("#{bin}/grass#{majmin_ver}", "w") { |file|
       file << '#!/bin/bash'
@@ -312,16 +320,18 @@ class Grass7 < Formula
       file << "GRASS_PYTHON=python2 exec #{libexec}/bin/grass#{majmin_ver} $@"
     }
 
-    # This is established, until the creation of GRASS.app is reviewed
-    # and corrected using: --enable-macosx-app
-    mkdir "#{prefix}/GRASS.app/Contents" do
-      cp "#{buildpath}/macosx/app/Info.plist.in", "Info.plist"
-      cp "#{buildpath}/macosx/app/PkgInfo", "PkgInfo" # APPLGRASS
-      mkdir "Resources" do
-        cp "#{buildpath}/macosx/app/app.icns", "app.icns"
-      end
-      mkdir "MacOS" do
-        ln_s "#{bin}/grass#{majmin_ver}", "grass#{majmin_ver}"
+    if build.with? "app"
+      # This is established, until the creation of GRASS.app is reviewed
+      # and corrected using: --enable-macosx-app
+      mkdir "#{prefix}/GRASS.app/Contents" do
+        cp "#{buildpath}/macosx/app/Info.plist.in", "Info.plist"
+        cp "#{buildpath}/macosx/app/PkgInfo", "PkgInfo" # APPLGRASS
+        mkdir "Resources" do
+          cp "#{buildpath}/macosx/app/app.icns", "app.icns"
+        end
+        mkdir "MacOS" do
+          ln_s "#{bin}/grass#{majmin_ver}", "grass#{majmin_ver}"
+        end
       end
     end
   end
@@ -331,27 +341,38 @@ class Grass7 < Formula
   end
 
   def caveats
-    if headless?
-      <<~EOS
-        You may also symlink GRASS.app into /Applications:
+    s = <<~EOS
+      If that is tha case you can change the shebang a the beginning of
+      the script to enforce Python 2 usage.
 
-        ln -Fs `find $(brew --prefix) -name "GRASS.app"` /Applications/GRASS.app
+      #!/usr/bin/env python
+
+      Should be changed into
+
+      #!/usr/bin/env python2
+
+    EOS
+
+    if headless?
+      s += <<~EOS
 
         This build of GRASS has been compiled without the WxPython GUI.
 
         The command line tools remain fully functional.
 
-        If that is tha case you can change the shebang a the beginning of
-        the script to enforce Python 2 usage.
-
-        #!/usr/bin/env python
-
-        Should be changed into
-
-        #!/usr/bin/env python2
-
-        EOS
+      EOS
     end
+
+    if build.with? "app"
+      s += <<~EOS
+
+        You may also symlink GRASS.app into /Applications:
+
+        ln -Fs `find $(brew --prefix) -name "GRASS.app"` /Applications/GRASS.app
+
+      EOS
+    end
+    s
   end
 
   test do
@@ -394,23 +415,3 @@ __END__
 -mkdir -p $HOME/Library/Documentation/Help/
 -ln -sfh ../../GRASS/$GRASS_MMVER/Modules/docs/html $HOME/Library/Documentation/Help/GRASS-$GRASS_MMVER-addon
 -ln -sfh $GISBASE/docs/html $HOME/Library/Documentation/Help/GRASS-$GRASS_MMVER
-
---- a/lib/init/grass.py
-+++ b/lib/init/grass.py
-@@ -615,7 +615,7 @@
-         if sys_man_path:
-             # to_text_string disabled, see https://trac.osgeo.org/grass/ticket/3508
-             # os.environ['MANPATH'] = to_text_string(sys_man_path)
--            os.environ['MANPATH'] = sys_man_path
-+            os.environ['MANPATH'] = str(sys_man_path)
-             path_prepend(addons_man_path, 'MANPATH')
-             path_prepend(grass_man_path, 'MANPATH')
-         else:
-# @@ -1690,7 +1690,7 @@
-#              filerev.close()
-#              sys.stdout.write("%s\n" % val[0].split(':')[1].rstrip('$"\n').strip())
-#          elif arg == 'version':
-# -			sys.stdout.write("%s\n" % grass_version)
-# +            sys.stdout.write("%s\n" % grass_version)
-#          else:
-#              message(_("Parameter <%s> not supported") % arg)
