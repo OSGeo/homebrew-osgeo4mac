@@ -1,10 +1,10 @@
 class Gdal2 < Formula
   desc "GDAL: Geospatial Data Abstraction Library"
   homepage "https://www.gdal.org/"
-  url "https://github.com/OSGeo/gdal/archive/v2.3.2.tar.gz"
-  sha256 "e0f751bff9ba6fb541065acbe7a76007be76a3c6309240faf4e6440f6ff1702a"
+  url "https://github.com/OSGeo/gdal/archive/v2.4.0.tar.gz"
+  sha256 "625f84721e09151626274922c0ee1b0eec0537e9735c65bc892ba96541a1bd14"
 
-  revision 2
+  # revision 1
 
   head do
     url "https://github.com/OSGeo/gdal.git", :branch => "master"
