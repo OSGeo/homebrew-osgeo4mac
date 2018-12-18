@@ -38,10 +38,10 @@ class Qgis3 < Formula
   homepage "https://www.qgis.org"
   url "https://github.com/qgis/QGIS.git",
     :branch => "release-3_4",
-    :commit => "06d5545f3cf8f0a3e53c4f053f197ec87af47bd6"
+    :commit => "498d51e235111700ae8c87a683011e3dd0be4c57"
   version "3.4.2"
 
-  revision 2
+  revision 3
 
   head "https://github.com/qgis/QGIS.git", :branch => "master"
 
@@ -65,18 +65,19 @@ class Qgis3 < Formula
   option "without-debug", "Disable debug build, which outputs info to system.log or console"
   option "without-server", "Build without QGIS Server (qgis_mapserv.fcgi)"
   option "without-postgresql", "Build without current PostgreSQL client"
-  # option "with-globe", "Build with Globe plugin, based upon osgEarth"
   option "with-grass", "Build with GRASS 7 integration plugin and Processing plugin support (or install grass-7x first)"
   option "with-oracle", "Build extra Oracle geospatial database and raster support"
   option "with-orfeo", "Build extra Orfeo Toolbox for Processing plugin"
   option "with-r", "Build extra R for Processing plugin"
   option "with-saga-gis-lts", "Build extra Saga GIS for Processing plugin"
-  # option "with-qt-mysql", "Build extra Qt MySQL plugin for eVis plugin"
   option "with-qspatialite", "Build QSpatialite Qt database driver"
   option "with-api-docs", "Build the API documentation with Doxygen and Graphviz"
   option "with-3d", "Build with 3D Map View panel"
+  # option "with-globe", "Build with Globe plugin, based upon osgEarth"
+  # option "with-qt-mysql", "Build extra Qt MySQL plugin for eVis plugin"
 
   depends_on UnlinkedQGIS3
+  # depends_on Python
 
   # core qgis
   depends_on "cmake" => :build
@@ -120,6 +121,13 @@ class Qgis3 < Formula
   depends_on "poppler"
   depends_on "gnu-sed"
   depends_on "exiv2"
+  depends_on "liblas"
+  depends_on "netcdf"
+  depends_on "pdal"
+  depends_on "openvpn"
+  depends_on "szip"
+  depends_on "hdf5"
+  depends_on "scipy"
 
   if build.with? "server"
     depends_on "fcgi"
@@ -350,6 +358,27 @@ class Qgis3 < Formula
   def install
     ENV.cxx11
 
+    printf "\n\033[31mIn case you have installed another version of Python (Anaconda, Miniconda or if you used the installer provided by python.org).\e[0m\n\n"
+
+    printf "\e[0mIf the installation failed due to the problem reported in \e[32mhttps://github.com/OSGeo/homebrew-osgeo4mac/issues/520\e[0m\n\n"
+
+    printf "1 - Try after doing:\n\n"
+
+    printf "    $ brew unlink python && brew link --force python\n\n"
+
+    printf "    $PATH (Check that there is no other version)\n\n"
+
+    printf "2 - As a last resort, remove all your Python installations. Clean your PATH, install Python through Homebrew and (1).\n\n"
+
+    printf "\033[31mThe installation will continue, but remember the above.\e[0m\n"
+
+    30.downto(0) do |i|
+        printf "#{'%02d'% i}."
+        sleep 1
+    end
+
+    printf "\n"
+
     # we proceed to install the plugins as a first step,
     # to ensure that the patches are applied
     mkdir "#{prefix}/QGIS.app/Contents/Resources/python/plugins/"
@@ -395,7 +424,8 @@ class Qgis3 < Formula
       puts "gdal_opt_bin: #{gdal_opt_bin}"
     end
 
-    venv = virtualenv_create(libexec/'vendor', "python3")
+    # install python environment
+    venv = virtualenv_create(libexec/'vendor', "#{HOMEBREW_PREFIX}/opt/python/bin/python3")
     res = resources.map(&:name).to_set - %w[pyqgis-startup r-app otb OTBAlgorithmProvider OTBUtils RAlgorithmProvider]
     res.each do |r|
       venv.pip_install resource(r)
@@ -525,7 +555,7 @@ class Qgis3 < Formula
     # args << "-DWITH_BINDINGS=ON"
 
     # python Configuration
-    args << "-DPYTHON_EXECUTABLE='#{`python3 -c "import sys; print(sys.executable)"`.chomp}'"
+    args << "-DPYTHON_EXECUTABLE='#{`#{HOMEBREW_PREFIX}/opt/python/bin/python3 -c "import sys; print(sys.executable)"`.chomp}'"
 
     # if using Homebrew's Python, make sure its components are always found first
     # see: https://github.com/Homebrew/homebrew/pull/28597
@@ -767,6 +797,10 @@ class Qgis3 < Formula
       #{HOMEBREW_PREFIX}/lib/qt/plugins
     ]
     envars[:QT_PLUGIN_PATH] = qtplgpths.join(pthsep)
+    envars[:QT_AUTO_SCREEN_SCALE_FACTOR] = "1"
+    # https://github.com/OSGeo/homebrew-osgeo4mac/issues/447
+    # envars[:QT_AUTO_SCREEN_SCALE_FACTOR] = "0"
+    # envars[:QT_DEVICE_PIXEL_RATIO] = "1"
 
     proc_plugins = "#{app}/Contents/Resources/python/plugins"
     proc_plugins_algs = "#{proc_plugins}/processing/algs"
@@ -1003,14 +1037,28 @@ end
 
 __END__
 
---- a/cmake/FindPyQt5.py
-+++ b/cmake/FindPyQt5.py
-@@ -39,7 +39,7 @@
-     import os.path
-     import sys
-     cfg = sipconfig.Configuration()
--    sip_dir = cfg.default_sip_dir
-+    sip_dir = "HOMEBREW_PREFIX/share/sip"
-     if sys.platform.startswith('freebsd'):
-         py_version = str(sys.version_info.major) + str(sys.version_info.minor)
-         sip_dir = sip_dir.replace(py_version, '')
+--- a/cmake/FindQsci.cmake
++++ b/cmake/FindQsci.cmake
+@@ -21,16 +21,20 @@
+   SET(QSCI_FOUND TRUE)
+ ELSE(EXISTS QSCI_MOD_VERSION_STR)
+
+-  FIND_FILE(_find_qsci_py FindQsci.py PATHS ${CMAKE_MODULE_PATH})
++  # FIND_FILE(_find_qsci_py FindQsci.py PATHS ${CMAKE_MODULE_PATH})
+
+   SET(QSCI_VER 5)
+
+-  EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} ${_find_qsci_py} ${QSCI_VER} OUTPUT_VARIABLE qsci_ver)
++  # EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} ${_find_qsci_py} ${QSCI_VER} OUTPUT_VARIABLE qsci_ver)
+
+   IF(qsci_ver)
+     STRING(REGEX REPLACE "^qsci_version_str:([^\n]+).*$" "\\1" QSCI_MOD_VERSION_STR ${qsci_ver})
+     SET(QSCI_FOUND TRUE)
+   ENDIF(qsci_ver)
++
++  SET(QSCI_FOUND TRUE)
++  SET(QSCI_MOD_VERSION_STR 2.10.4)
++
+
+   IF(QSCI_FOUND)
+     FIND_PATH(QSCI_SIP_DIR
