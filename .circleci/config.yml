@@ -62,8 +62,6 @@ jobs:
     <<: *filter
     macos:
       xcode: "8.3.3"
-      steps:
-        <<: *persist
   high_sierra-build:
     <<: *build_steps
     <<: *filter
