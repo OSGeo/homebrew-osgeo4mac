@@ -2,6 +2,13 @@ class OpenscenegraphQt5 < Formula
   desc "High performance 3D graphics toolkit"
   homepage "http://www.openscenegraph.org/"
   url "https://github.com/openscenegraph/OpenSceneGraph.git",
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    sha256 "affe9cafe01855ece97e453be68be6085b9346433908fa8663602b1d5dfc1e1e" => :mojave
+    sha256 "affe9cafe01855ece97e453be68be6085b9346433908fa8663602b1d5dfc1e1e" => :high_sierra
+    sha256 "affe9cafe01855ece97e453be68be6085b9346433908fa8663602b1d5dfc1e1e" => :sierra
+  end
+
   :branch => "OpenSceneGraph-3.6",
   :commit => "ea1e832d4d19eff5304c4e7d8da9e96ffa66bd12"
   version "3.6.3"
