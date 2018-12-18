@@ -2,59 +2,50 @@ class OpenscenegraphQt5 < Formula
   desc "High performance 3D graphics toolkit"
   homepage "http://www.openscenegraph.org/"
   url "https://github.com/openscenegraph/OpenSceneGraph.git",
-  bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    sha256 "affe9cafe01855ece97e453be68be6085b9346433908fa8663602b1d5dfc1e1e" => :mojave
-    sha256 "affe9cafe01855ece97e453be68be6085b9346433908fa8663602b1d5dfc1e1e" => :high_sierra
-    sha256 "affe9cafe01855ece97e453be68be6085b9346433908fa8663602b1d5dfc1e1e" => :sierra
-  end
-
-  :branch => "OpenSceneGraph-3.6",
-  :commit => "ea1e832d4d19eff5304c4e7d8da9e96ffa66bd12"
+    :branch => "OpenSceneGraph-3.6",
+    :commit => "ea1e832d4d19eff5304c4e7d8da9e96ffa66bd12"
   version "3.6.3"
 
-  # revision 1
+  revision 1
 
   head "https://github.com/openscenegraph/OpenSceneGraph.git", :branch => "master"
-
-  # patch necessary to ensure support for gtkglext-quartz
-  # filed as an issue to the developers https://github.com/openscenegraph/osg/issues/34
-  patch :DATA
 
   depends_on "cmake" => :build
   depends_on "doxygen" => :build
   depends_on "graphviz" => :build
   depends_on "pkg-config" => :build
-  depends_on "freetype"
-  depends_on "gtkglext"
-  depends_on "jpeg"
-  depends_on "sdl"
-  depends_on "qt"
-  depends_on "giflib"
-  depends_on "jasper"
-  depends_on "librsvg"
-  depends_on "curl"
-  depends_on "pth"
+
   depends_on "boost"
-  depends_on "libtiff"
-  depends_on "openexr"
-  depends_on "zlib"
-  depends_on "gdal2"
-  depends_on "ffmpeg"
-  depends_on "poppler"
+  depends_on "curl"
   depends_on "dcmtk"
+  depends_on "ffmpeg"
+  depends_on "freetype"
+  depends_on "gdal2"
+  depends_on "giflib"
   depends_on "gnuplot"
-  depends_on "perl"
-  depends_on "wget"
+  depends_on "gtkglext"
+  depends_on "jasper"
+  depends_on "jpeg"
+  depends_on "librsvg"
+  depends_on "libtiff"
   depends_on "mesa"
-  # depends_on "gst-plugins-base"
+  depends_on "openexr"
+  depends_on "perl"
+  depends_on "poppler"
+  depends_on "pth"
+  depends_on "qt"
+  depends_on "sdl"
+  depends_on "wget"
+  depends_on "zlib"
 
   depends_on "asio" => :optional
-  depends_on "opencollada" => :optional
   depends_on "ilmbase" => :optional
+  depends_on "opencollada" => :optional
   depends_on "v8" => :optional
-  # depends_on "libvncserver" => :optional # x11vnc
-  # depends_on "fltk" => :optional
+
+  # patch necessary to ensure support for gtkglext-quartz
+  # filed as an issue to the developers https://github.com/openscenegraph/osg/issues/34
+  patch :DATA
 
   def install
     # Fix "fatal error: 'os/availability.h' file not found" on 10.11 and
