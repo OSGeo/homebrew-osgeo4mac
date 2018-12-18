@@ -1,0 +1,107 @@
+build_steps: &build_steps
+  steps:
+     - checkout
+     - restore_cache:
+         keys:
+           - homebrew-v1-{{ .Branch }}-{{ .Revision }}
+           - homebrew-v1-{{ .Branch }}-
+           - homebrew-v1-
+     - run:
+         name: Update environment variables
+         command: .circleci/set_env.sh
+           
+     - run:
+         name: Before install script
+         command: .circleci/before_install.sh
+
+     - run:
+         name: Install dependencies
+         command: .circleci/install.sh
+     - run:
+          name: Install changed formulae
+          command: .circleci/script.sh
+     - run:
+         name: Build bottles
+         command: .circleci/after_script.sh
+     - persist_to_workspace:
+         root: bottles
+         paths:
+           - ./*.tar.gz
+           - ./*.json
+
+workflow_filter: &filter
+  filters:
+    branches:
+      only:
+        - master
+
+version: 2
+jobs:
+  update-homebrew:
+    macos:
+      xcode: "10.1.0"
+    steps:
+      - restore_cache:
+          keys:
+            - homebrew-v1-{{ .Branch }}-{{ .Revision }}
+            - homebrew-v1-{{ .Branch }}-
+            - homebrew-v1-
+      - run:
+          name: "Update homebrew"
+          command: |
+            brew tap brewsci/science || true
+            brew tap brewsci/bio || true
+            brew update || brew update
+      - save_cache:
+          key: homebrew-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - /usr/local/Homebrew/Library/Taps/homebrew
+            - /usr/local/Homebrew/Library/Taps/brewsci
+  sierra-build:
+    <<: *build_steps
+    <<: *filter
+    macos:
+      xcode: "8.3.3"
+  high_sierra-build:
+    <<: *build_steps
+    <<: *filter
+    macos:
+      xcode: "10.1.0"
+  bottle-upload:
+    macos:
+      xcode: "10.1.0"
+    filters:
+      tags:
+        only: deploy
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ./bottles
+      - run:
+          name: Set env
+          command: .circleci/set_env.sh
+      - run:
+          name: Commit bottles
+          command: .circleci/before_deploy.sh
+
+workflows:
+  version: 2
+  build_bottles:
+    jobs:
+      - update-homebrew
+      - high_sierra-build:
+          requires:
+            - update-homebrew
+      - sierra-build:
+          requires:
+            - update-homebrew
+#      - bottle-upload:
+#          filters:
+#            tags:
+#              only: deploy
+#          requires:
+#            - high_sierra-build
+#            - sierra-build
+
+
+   

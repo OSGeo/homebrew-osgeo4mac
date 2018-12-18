@@ -15,8 +15,11 @@
 #                                                                         #
 ###########################################################################
 
+set -o errexit
+set -o xtrace
 
-if [ -n "${DEBUG_TRAVIS}" ];then
+echo 'Setting up, before install'
+if [ -n "${DEBUG_CI}" ];then
   brew list --versions
 fi
 
@@ -30,30 +33,14 @@ for f in ${nix_f}; do
   brew uninstall --force --ignore-dependencies ${f} || true
 done
 
-# Add taps
-brew tap brewsci/science || true
-brew tap brewsci/bio || true
-#brew tap caskroom/cask || true
-
-# Keeps gcc from being linked
-brew cask uninstall oclint || true
-
 brew update || brew update
 
-# Set up ccache (doesn't work with `brew install <formula>`)
-#brew install ccache
-#export PATH="/usr/local/opt/ccache/libexec:$PATH"
-#
-#ccache -M 500M
-#ccache -z
 
 for f in ${CHANGED_FORMULAE};do
   echo "Homebrew setup for changed formula ${f}..."
   deps=$(brew deps --include-build ${f})
   echo "${f} dependencies:"
-  echo "travis_fold:start:deps"
   echo "${deps}"
-  echo "travis_fold:end:deps"
 
   # Upgrade Python3 to the latest version, before installing Python2. Per the discussion here
   # https://discourse.brew.sh/t/brew-install-python3-fails/1756/3
@@ -64,14 +51,15 @@ for f in ${CHANGED_FORMULAE};do
     # Set up Python .pth files
     # get python short version (major.minor)
     PY_VER=$(${HOMEBREW_PREFIX}/bin/python3 -c "import sys;print('{0}.{1}'.format(sys.version_info[0],sys.version_info[1]).strip())")
-    if [ -n "${DEBUG_TRAVIS}" ];then
+    if [ -n "${DEBUG_CI}" ];then
       echo $PY_VER
     fi
-    mkdir -p ${HOME}/Library/Python/${PY_VER}/lib/python/site-packages
+    mkdir -p ${CIRCLE_WORKING_DIRECTORY}/Library/Python/${PY_VER}/lib/python/site-packages
+   
     echo 'import site; site.addsitedir("${HOMEBREW_PREFIX}/lib/python${PY_VER}/site-packages")' \
-      >> ${HOME}/Library/Python/${PY_VER}/lib/python/site-packages/homebrew.pth
+         >> ${CIRCLE_WORKING_DIRECTORY}/Library/Python/${PY_VER}/lib/python/site-packages/homebrew.pth
     echo 'import site; site.addsitedir("${HOMEBREW_PREFIX}/opt/gdal2/lib/python${PY_VER}/site-packages")' \
-      >> ${HOME}/Library/Python/${PY_VER}/lib/python/site-packages/gdal2.pth
+         >> ${CIRCLE_WORKING_DIRECTORY}/Library/Python/${PY_VER}/lib/python/site-packages/gdal2.pth
 
     if [[ "${f}" =~ "gdal2" ]];then
       echo "Installing GDAL 2 Python3 dependencies"
@@ -91,14 +79,14 @@ for f in ${CHANGED_FORMULAE};do
     # Set up Python .pth files
     # get python short version (major.minor)
     PY_VER=$(${HOMEBREW_PREFIX}/bin/python2 -c "import sys;print('{0}.{1}'.format(sys.version_info[0],sys.version_info[1]).strip())")
-    if [ -n "${DEBUG_TRAVIS}" ];then
+    if [ -n "${DEBUG_CI}" ];then
       echo $PY_VER
     fi
-    mkdir -p ${HOME}/Library/Python/${PY_VER}/lib/python/site-packages
+    mkdir -p ${CIRCLE_WORKING_DIRECTORY}/Library/Python/${PY_VER}/lib/python/site-packages
     echo 'import site; site.addsitedir("${HOMEBREW_PREFIX}/lib/python${PY_VER}/site-packages")' \
-      >> ${HOME}/Library/Python/${PY_VER}/lib/python/site-packages/homebrew.pth
+         >> ${CIRCLE_WORKING_DIRECTORY}/Library/Python/${PY_VER}/lib/python/site-packages/homebrew.pth
     echo 'import site; site.addsitedir("${HOMEBREW_PREFIX}/opt/gdal2/lib/python${PY_VER}/site-packages")' \
-      >> ${HOME}/Library/Python/${PY_VER}/lib/python/site-packages/gdal2.pth
+         >> ${CIRCLE_WORKING_DIRECTORY}/Library/Python/${PY_VER}/lib/python/site-packages/gdal2.pth
 
     if [[ "${f}" =~ "gdal2" ]];then
       echo "Installing GDAL 2 Python2 dependencies"
@@ -113,5 +101,4 @@ for f in ${CHANGED_FORMULAE};do
     brew install grass7
     brew unlink grass7
   fi
-
 done

@@ -34,6 +34,7 @@ class Taudem < Formula
   end
 
   def install
+    ENV.cxx11
     args = std_cmake_args
     cd "src" do
       system "cmake", ".", *args
@@ -65,3 +66,26 @@ index 475133f..d249134 100644
 
  # GDAL is required
  find_package(GDAL REQUIRED)
+diff --git a/src/dinf.cpp b/src/dinf.cpp
+index d1a7427..0820e91 100644
+--- a/src/dinf.cpp
++++ b/src/dinf.cpp
+@@ -568,7 +568,7 @@ long setPosDirDinf(tdpartition *elevDEM, tdpartition *flowDir, tdpartition *slop
+ 					elevDEM->getdxdyc(j,tempdxc,tempdyc);
+ 		        
+ 					
+-					float DXX[3] = {0,tempdxc,tempdyc};//tardemlib.cpp ln 1291
++					float DXX[3] = {0,static_cast<float>(tempdxc),static_cast<float>(tempdyc)};//tardemlib.cpp ln 1291
+ 					float DD = sqrt(tempdxc*tempdxc+tempdyc*tempdyc);//tardemlib.cpp ln 1293
+ 					SET2(j,i,DXX,DD, elevDEM,flowDir,slope);//i=y in function form old code j is x switched on purpose
+ 					//  Use SET2 from serial code here modified to get what it has as felevg.d from elevDEM partition
+@@ -799,7 +799,7 @@ long resolveflats( tdpartition *elevDEM, tdpartition *flowDir, queue<node> *que,
+ 				//  direction based on the artificial elevations
+ 
+ 	elevDEM->getdxdyc(j,tempdxc,tempdyc);
+-	float DXX[3] = {0,tempdxc,tempdyc};//tardemlib.cpp ln 1291
++	float DXX[3] = {0,static_cast<float>(tempdxc),static_cast<float>(tempdyc)};//tardemlib.cpp ln 1291
+ 	float DD = sqrt(tempdxc*tempdxc+tempdyc*tempdyc);//tardemlib.cpp ln 1293
+ 
+ 			SET2(j,i,DXX,DD,elevDEM,elev2,flowDir,dn);	//use new elevations to calculate flowDir.	
+
