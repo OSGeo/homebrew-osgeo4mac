@@ -2,19 +2,13 @@ class OsgearthQt5 < Formula
   desc "Geospatial SDK and terrain engine for OpenSceneGraph"
   homepage "http://osgearth.org"
   url "https://github.com/gwaldron/osgearth.git",
-  :branch => "2.10",
-  :commit => "32efedbbd1478b156fb27ae6197943a43db9d42b"
+    :branch => "2.10",
+    :commit => "32efedbbd1478b156fb27ae6197943a43db9d42b"
   version "2.10"
 
   # revision 1
 
   head "https://github.com/gwaldron/osgearth.git", :branch => "master"
-
-  # fix error: unknown type name 'GLDEBUGPROC'
-  # restore osgEarthQt: osgEarthQt5
-  # https://github.com/gwaldron/osgearth/commit/c7f9d22b60bd1bb969b853b34b7f3955141e8b07
-  # qgis3: libosgEarthQt5.dylib needed by PlugIns/qgis/libglobeplugin.dylib
-  patch :DATA
 
   option "without-minizip", "Build without Google KMZ file access support"
   option "with-docs-examples", "Build and install html documentation and examples"
@@ -24,34 +18,37 @@ class OsgearthQt5 < Formula
   # option "with-duktape", "Build with Duktape an Embeddable Javascript engine"
 
   depends_on "cmake" => :build
-  depends_on "minizip" => :recommended
-  depends_on "gdal2"
-  depends_on "openscenegraph-qt5"
-  depends_on "osgqt"
-  depends_on "expat"
-  depends_on "curl"
-  depends_on "qt"
-  depends_on "protobuf"
-  depends_on "libzip"
-  depends_on "leveldb"
-  depends_on "poco"
   depends_on "boost"
+  depends_on "curl"
+  depends_on "expat"
+  depends_on "gdal2"
   depends_on "geos"
   depends_on "glslang"
-  depends_on "triton"
-  depends_on "sqlite"
-  depends_on :x11
+  depends_on "leveldb"
+  depends_on "libzip"
   depends_on :macos => :mavericks
-
+  depends_on "openscenegraph-qt5"
+  depends_on "osgqt"
+  depends_on "poco"
+  depends_on "protobuf"
+  depends_on "qt"
+  depends_on "sqlite"
+  depends_on "triton"
+  depends_on :x11
+  depends_on "minizip" => :recommended
   depends_on "rocksdb" => :optional
   depends_on "v8" => :optional
-  # depends_on "tinyxml" => :optional
-  # depends_on "duktape" => :optional
 
   resource "sphinx" do
     url "https://files.pythonhosted.org/packages/4c/ea/7388faba7cf02999e1bc42f6a8eb1ea0120aec3dd93474cee21cea2d693f/Sphinx-1.8.2.tar.gz"
     sha256 "120732cbddb1b2364471c3d9f8bfd4b0c5b550862f99a65736c77f970b142aea"
   end
+
+  # fix error: unknown type name 'GLDEBUGPROC'
+  # restore osgEarthQt: osgEarthQt5
+  # https://github.com/gwaldron/osgearth/commit/c7f9d22b60bd1bb969b853b34b7f3955141e8b07
+  # qgis3: libosgEarthQt5.dylib needed by PlugIns/qgis/libglobeplugin.dylib
+  patch :DATA
 
   def install
     ENV.cxx11
