@@ -5,10 +5,12 @@ class Taudem < Formula
   sha256 "12a3cc1f43bd4ba9fd518ed82e524e386c1eb28891dfd3ed4329e8ad0a390245"
 
   bottle do
-    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
     cellar :any
-    sha256 "fe1fa48a7db5876570f330eceb41f3ebc53d7e02250b7d78cf20ad14ccef2b67" => :high_sierra
-    sha256 "fe1fa48a7db5876570f330eceb41f3ebc53d7e02250b7d78cf20ad14ccef2b67" => :sierra
+    rebuild 1
+    sha256 "39b5e713f42d0334feeb574ace86e112c489ca0502790b365c14359dff3cb8f8" => :mojave
+    sha256 "39b5e713f42d0334feeb574ace86e112c489ca0502790b365c14359dff3cb8f8" => :high_sierra
+    sha256 "39b5e713f42d0334feeb574ace86e112c489ca0502790b365c14359dff3cb8f8" => :sierra
   end
 
   devel do
