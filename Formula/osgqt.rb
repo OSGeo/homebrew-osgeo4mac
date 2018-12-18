@@ -20,8 +20,8 @@ class Osgqt < Formula
 
   depends_on "cmake" => :build
   depends_on "pkg-config" => :build
-  depends_on "qt"
   depends_on "openscenegraph-qt5"
+  depends_on "qt"
 
   # compatible with the new and old versions of OSG
   # QtWindowingSystem exist from OSG 3.5.3
