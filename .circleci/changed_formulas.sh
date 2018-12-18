@@ -19,8 +19,11 @@ else
 
 #      if [[ $COMMIT_RANGE != *"..."* ]]; then
 #          COMMIT_RANGE="${COMMIT_RANGE}...${COMMIT_RANGE}"
-#      fi
-		FILES=$(git diff --diff-filter=AM --name-only master...${CIRCLE_BRANCH} )
+        #      fi
+        # Since CircleCI doesn't currently support getting a range of commits when running as a workflow, we're stuck just looking at the changes from the most recent commit.
+        # This means we always needs to rebase or squash and merge, which is mostly what we do anyways.
+		    #FILES=$(git diff --diff-filter=AM --name-only master...${CIRCLE_BRANCH} )
+        FILES=$(git diff --diff-filter=AM --name-only master^1 )
 	else
 		FILES=
 	fi
