@@ -38,7 +38,7 @@ class Qgis3 < Formula
   homepage "https://www.qgis.org"
   url "https://github.com/qgis/QGIS.git",
     :branch => "release-3_4",
-    :commit => "498d51e235111700ae8c87a683011e3dd0be4c57"
+    :commit => "01f6ceda123dfd138e3a8c818f1bf6bf66d412c1"
   version "3.4.2"
 
   revision 3
@@ -121,12 +121,12 @@ class Qgis3 < Formula
   depends_on "poppler"
   depends_on "gnu-sed"
   depends_on "exiv2"
-  depends_on "liblas"
-  depends_on "netcdf"
-  depends_on "pdal"
-  depends_on "openvpn"
-  depends_on "szip"
-  depends_on "hdf5"
+  depends_on "liblas" => :optional
+  depends_on "netcdf" => :optional
+  depends_on "pdal" => :optional
+  depends_on "openvpn" => :optional
+  depends_on "szip" => :optional
+  depends_on "hdf5" => :optional
   depends_on "scipy"
 
   if build.with? "server"
@@ -362,13 +362,9 @@ class Qgis3 < Formula
 
     printf "\e[0mIf the installation failed due to the problem reported in \e[32mhttps://github.com/OSGeo/homebrew-osgeo4mac/issues/520\e[0m\n\n"
 
-    printf "1 - Try after doing:\n\n"
+    printf "Try after doing:\n\n"
 
     printf "    $ brew unlink python && brew link --force python\n\n"
-
-    printf "    $PATH (Check that there is no other version)\n\n"
-
-    printf "2 - As a last resort, remove all your Python installations. Clean your PATH, install Python through Homebrew and (1).\n\n"
 
     printf "\033[31mThe installation will continue, but remember the above.\e[0m\n"
 
