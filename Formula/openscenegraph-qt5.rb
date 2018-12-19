@@ -10,6 +10,13 @@ class OpenscenegraphQt5 < Formula
 
   head "https://github.com/openscenegraph/OpenSceneGraph.git", :branch => "master"
 
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    sha256 "88c4a57f8a895bd0ee03ba83d5b7a1e291ab8ca899ee1625d0f0a7f4f09049b1" => :mojave
+    sha256 "88c4a57f8a895bd0ee03ba83d5b7a1e291ab8ca899ee1625d0f0a7f4f09049b1" => :high_sierra
+    sha256 "88c4a57f8a895bd0ee03ba83d5b7a1e291ab8ca899ee1625d0f0a7f4f09049b1" => :sierra
+  end
+
   depends_on "cmake" => :build
   depends_on "doxygen" => :build
   depends_on "graphviz" => :build
