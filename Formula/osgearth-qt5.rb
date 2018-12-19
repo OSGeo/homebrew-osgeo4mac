@@ -6,6 +6,14 @@ class OsgearthQt5 < Formula
     :commit => "32efedbbd1478b156fb27ae6197943a43db9d42b"
   version "2.10"
 
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    cellar :any
+    sha256 "89dbeb522b4ccf2280dd589e04cd4724bf87d598709132bf61739b0d19e4be1b" => :mojave
+    sha256 "89dbeb522b4ccf2280dd589e04cd4724bf87d598709132bf61739b0d19e4be1b" => :high_sierra
+    sha256 "89dbeb522b4ccf2280dd589e04cd4724bf87d598709132bf61739b0d19e4be1b" => :sierra
+  end
+
   # revision 1
 
   head "https://github.com/gwaldron/osgearth.git", :branch => "master"
