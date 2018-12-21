@@ -38,10 +38,10 @@ class Qgis3 < Formula
   homepage "https://www.qgis.org"
   url "https://github.com/qgis/QGIS.git",
     :branch => "release-3_4",
-    :commit => "01f6ceda123dfd138e3a8c818f1bf6bf66d412c1"
-  version "3.4.2"
+    :commit => "2f64a3c4e74022c5555ee19862f034ffacc2b5fe"
+  version "3.4.3"
 
-  revision 3
+  # revision 1
 
   head "https://github.com/qgis/QGIS.git", :branch => "master"
 
