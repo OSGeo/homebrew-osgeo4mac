@@ -7,8 +7,8 @@ end
 
 class Osm2po < Formula
   homepage "https://osm2po.de"
-  url "https://osm2po.de/releases/osm2po-5.2.124.zip"
-  sha256 "153f6f97e6b8ac0fb40cfb2e1b08221bec049352150458121d20ed26a973aef8"
+  url "https://osm2po.de/releases/osm2po-5.2.126.zip"
+  sha256 "43987da8b65f8a8598d3f8aa56afe0e2d9b54b65db703c4c791e1e79a3ccabc9"
 
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
