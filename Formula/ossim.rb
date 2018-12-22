@@ -3,8 +3,8 @@ class Ossim < Formula
   homepage "https://trac.osgeo.org/ossim/"
 
   stable do
-    url "https://github.com/ossimlabs/ossim/archive/Juno-2.6.0.tar.gz"
-    sha256 "d82cabf150591c747d64be2c5963428d9d832fc850ec60d8feb5fe5695136789"
+    url "https://github.com/ossimlabs/ossim/archive/Juno-2.6.1.tar.gz"
+    sha256 "28ad2f5b4571556ce7a0d18eec5750bd33447bc5a7168cb406761282af3864d3"
   end
 
   bottle do
