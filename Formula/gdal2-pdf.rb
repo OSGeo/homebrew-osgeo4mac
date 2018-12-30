@@ -64,7 +64,6 @@ class Gdal2Pdf < Formula
       "--disable-debug",
       "--with-local=#{prefix}",
       "--with-threads",
-      "--with-libtool",
 
       # various deps needed for configuring
       "--with-libjson-c=#{Formula["json-c"].opt_prefix}",
