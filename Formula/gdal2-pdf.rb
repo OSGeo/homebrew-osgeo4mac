@@ -156,13 +156,6 @@ class Gdal2Pdf < Formula
     end
 
     cd "frmts/pdf" do
-      gdal_opt = Formula["gdal2"].opt_prefix
-      # force std libc++ and linkage to libgdal.dylib
-      inreplace "GNUmakefile" do |s|
-        s.gsub! "libstdc", "libc"
-        s.sub! "$(CONFIG_LIBS)", "-L#{gdal_opt}/lib -lgdal"
-      end
-
       system "make", "plugin"
       mv "gdal_PDF.dylib", "#{gdal_plugins}/"
     end
