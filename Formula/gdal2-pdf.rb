@@ -150,8 +150,6 @@ class Gdal2Pdf < Formula
     # configure GDAL/OGR with minimal drivers
     system "./configure", *configure_args
 
-    raise
-
     # PDF driver needs memory driver object files
     cd "ogr/ogrsf_frmts/mem" do
       system "make"
