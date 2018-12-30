@@ -12,7 +12,7 @@ class Gdal2Pdf < Formula
   end
 
   option "without-poppler", "Build without additional Poppler support"
-  option "with-pdfium", "Build without PDFium support (stdlib for C++ issues)"
+  option "with-pdfium", "Build with PDFium support"
   option "with-podofo", "Build with additional PoDoFo support"
 
   if build.with? "poppler"
@@ -71,6 +71,7 @@ class Gdal2Pdf < Formula
       # force correction of dylib setup, even though we are not building framework here
       "--with-macosx-framework",
       "--enable-pdf-plugin",
+      "--without-libtool"
     ]
 
     # PDF-supporting backends for writing
@@ -149,7 +150,7 @@ class Gdal2Pdf < Formula
     # configure GDAL/OGR with minimal drivers
     system "./configure", *configure_args
 
-    # raise
+    raise
 
     # PDF driver needs memory driver object files
     cd "ogr/ogrsf_frmts/mem" do
