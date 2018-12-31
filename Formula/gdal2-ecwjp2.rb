@@ -1,8 +1,8 @@
 class Gdal2Ecwjp2 < Formula
   desc "GDAL/OGR 2.x plugin for ECW driver"
   homepage "http://www.gdal.org/frmt_ecw.html"
-  url "http://download.osgeo.org/gdal/2.3.2/gdal-2.3.2.tar.gz"
-  sha256 "7808dd7ea7ee19700a133c82060ea614d4a72edbf299dfcb3713f5f79a909d64"
+  url "http://download.osgeo.org/gdal/2.4.0/gdal-2.4.0.tar.gz"
+  sha256 "a568cf3dc7bb203ae12a48e1eb2a42302cded499ef6eccaf9e8f09187d8ce75a"
 
   # bottle do
   #   never

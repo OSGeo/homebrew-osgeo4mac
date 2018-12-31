@@ -1,8 +1,8 @@
 class Gdal2Pdf < Formula
   desc "GDAL/OGR 2.x plugin for PDF driver"
   homepage "http://www.gdal.org/frmt_pdf.html"
-  url "http://download.osgeo.org/gdal/2.3.2/gdal-2.3.2.tar.gz"
-  sha256 "7808dd7ea7ee19700a133c82060ea614d4a72edbf299dfcb3713f5f79a909d64"
+  url "http://download.osgeo.org/gdal/2.4.0/gdal-2.4.0.tar.gz"
+  sha256 "a568cf3dc7bb203ae12a48e1eb2a42302cded499ef6eccaf9e8f09187d8ce75a"
 
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
@@ -12,7 +12,7 @@ class Gdal2Pdf < Formula
   end
 
   option "without-poppler", "Build without additional Poppler support"
-  option "with-pdfium", "Build without PDFium support (stdlib for C++ issues)"
+  option "with-pdfium", "Build with PDFium support"
   option "with-podofo", "Build with additional PoDoFo support"
 
   if build.with? "poppler"
@@ -64,7 +64,6 @@ class Gdal2Pdf < Formula
       "--disable-debug",
       "--with-local=#{prefix}",
       "--with-threads",
-      "--with-libtool",
 
       # various deps needed for configuring
       "--with-libjson-c=#{Formula["json-c"].opt_prefix}",
@@ -72,6 +71,7 @@ class Gdal2Pdf < Formula
       # force correction of dylib setup, even though we are not building framework here
       "--with-macosx-framework",
       "--enable-pdf-plugin",
+      "--without-libtool"
     ]
 
     # PDF-supporting backends for writing
@@ -150,21 +150,12 @@ class Gdal2Pdf < Formula
     # configure GDAL/OGR with minimal drivers
     system "./configure", *configure_args
 
-    # raise
-
     # PDF driver needs memory driver object files
     cd "ogr/ogrsf_frmts/mem" do
       system "make"
     end
 
     cd "frmts/pdf" do
-      gdal_opt = Formula["gdal2"].opt_prefix
-      # force std libc++ and linkage to libgdal.dylib
-      inreplace "GNUmakefile" do |s|
-        s.gsub! "libstdc", "libc"
-        s.sub! "$(CONFIG_LIBS)", "-L#{gdal_opt}/lib -lgdal"
-      end
-
       system "make", "plugin"
       mv "gdal_PDF.dylib", "#{gdal_plugins}/"
     end
