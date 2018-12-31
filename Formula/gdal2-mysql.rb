@@ -6,9 +6,10 @@ class Gdal2Mysql < Formula
 
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    sha256 "c2dedd928547de1b1c960bdde28e5444bd1fd396bbe6a2b9efdcf5e3b22a0d6d" => :mojave
-    sha256 "c2dedd928547de1b1c960bdde28e5444bd1fd396bbe6a2b9efdcf5e3b22a0d6d" => :high_sierra
-    sha256 "c2dedd928547de1b1c960bdde28e5444bd1fd396bbe6a2b9efdcf5e3b22a0d6d" => :sierra
+    rebuild 1
+    sha256 "f5be3cb041222b6ff94f71c6209ae92b3b79c151d9232ba46be7c12220bf655a" => :mojave
+    sha256 "f5be3cb041222b6ff94f71c6209ae92b3b79c151d9232ba46be7c12220bf655a" => :high_sierra
+    sha256 "f5be3cb041222b6ff94f71c6209ae92b3b79c151d9232ba46be7c12220bf655a" => :sierra
   end
 
   depends_on "mysql" => :build # adds openssl

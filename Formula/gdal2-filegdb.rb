@@ -7,9 +7,10 @@ class Gdal2Filegdb < Formula
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
     cellar :any
-    sha256 "33956a202cb5dae9f0e089c8849f178835ccb92682b2988ccbc3faeef8c4d63b" => :mojave
-    sha256 "33956a202cb5dae9f0e089c8849f178835ccb92682b2988ccbc3faeef8c4d63b" => :high_sierra
-    sha256 "33956a202cb5dae9f0e089c8849f178835ccb92682b2988ccbc3faeef8c4d63b" => :sierra
+    rebuild 1
+    sha256 "f3fb74caf5254b64912284d4a7f55fa72df5a4d297ebf01a4416c6902174a6f8" => :mojave
+    sha256 "f3fb74caf5254b64912284d4a7f55fa72df5a4d297ebf01a4416c6902174a6f8" => :high_sierra
+    sha256 "f3fb74caf5254b64912284d4a7f55fa72df5a4d297ebf01a4416c6902174a6f8" => :sierra
   end
 
   depends_on "filegdb-api"

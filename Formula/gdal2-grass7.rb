@@ -6,10 +6,10 @@ class Gdal2Grass7 < Formula
 
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    rebuild 1
-    sha256 "a386bae7bf615c712d4d236fd518f021cebe8da80e1d00a9ed5dd0121dbbaaa1" => :mojave
-    sha256 "a386bae7bf615c712d4d236fd518f021cebe8da80e1d00a9ed5dd0121dbbaaa1" => :high_sierra
-    sha256 "a386bae7bf615c712d4d236fd518f021cebe8da80e1d00a9ed5dd0121dbbaaa1" => :sierra
+    cellar :any
+    sha256 "ad0a84d5f5b27da8cfc8c46b1b0f4d064657146a817206c4619f628745ccd007" => :mojave
+    sha256 "ad0a84d5f5b27da8cfc8c46b1b0f4d064657146a817206c4619f628745ccd007" => :high_sierra
+    sha256 "ad0a84d5f5b27da8cfc8c46b1b0f4d064657146a817206c4619f628745ccd007" => :sierra
   end
 
   depends_on "gdal2"
