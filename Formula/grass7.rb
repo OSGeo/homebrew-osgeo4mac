@@ -75,7 +75,6 @@ class Grass7 < Formula
   depends_on "fontconfig" => :optional
   depends_on "geos" => :optional
   depends_on "lesstif" => :optional
-  depends_on "liblas" => :optional
   depends_on "libomp" => :optional
   depends_on "libpng" => :optional
   depends_on "libpq" => :optional

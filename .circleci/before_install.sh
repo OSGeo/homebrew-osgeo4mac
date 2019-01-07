@@ -35,6 +35,9 @@ done
 
 brew update || brew update
 
+# Install XQuartz
+brew cask install xquartz
+
 
 for f in ${CHANGED_FORMULAE};do
   echo "Homebrew setup for changed formula ${f}..."
