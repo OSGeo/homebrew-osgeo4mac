@@ -2,13 +2,13 @@ class Orfeo6 < Formula
   desc "Library of image processing algorithms"
   homepage "https://www.orfeo-toolbox.org/otb/"
 
-  revision 1
+  # revision 1
 
   head "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb.git", :branch => "master"
 
   stable do
-    url "https://www.orfeo-toolbox.org/packages/OTB-6.6.0.tar.gz"
-    sha256 "6a9f1a87bfc7b451f87aba4271c03016c3e7858002b6c822b8a514560ec01a45"
+    url "https://github.com/orfeotoolbox/OTB/archive/6.6.1.tar.gz"
+    sha256 "f8fea75f620fae1bb0ce902fb8133457b6ead40ad14d4dec55beaa59ae641b4c"
 
     # Patch to fix OSSIM adaptor compilation
     # patch :DATA
@@ -40,7 +40,7 @@ class Orfeo6 < Formula
   depends_on "ossim"
   depends_on "sqlite"
   depends_on "tinyxml"
-  depends_on "open-scene-graph" # (for libOpenThreads, now internal to osg)
+  depends_on "openscenegraph-qt5" # (for libOpenThreads, now internal to osg)
   depends_on "zlib"
 
   # recommended
@@ -104,6 +104,9 @@ class Orfeo6 < Formula
     ]
 
     args << "-DOTB_DATA_USE_LARGEINPUT=ON"
+
+    args << "-DOPENTHREADS_LIBRARY=#{Formula["openscenegraph-qt5"].opt_lib}/libOpenThreads.dylib"
+    args << "-DOPENTHREADS_INCLUDE_DIR=#{Formula["openscenegraph-qt5"].opt_include}"
 
     if build.with? "python"
       args << "-DPYTHON_EXECUTABLE='#{`python3 -c "import sys; print(sys.executable)"`.chomp}'"
