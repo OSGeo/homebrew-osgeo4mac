@@ -109,7 +109,7 @@ class Orfeo6 < Formula
     args << "-DOPENTHREADS_INCLUDE_DIR=#{Formula["openscenegraph-qt5"].opt_include}"
 
     if build.with? "python"
-      args << "-DPYTHON_EXECUTABLE='#{`python3 -c "import sys; print(sys.executable)"`.chomp}'"
+      args << "-DPYTHON_EXECUTABLE=" + `python3 -c "import sys; print(sys.executable)"`.chomp
       py_ver=`python3 -c 'import sys;print("{0}.{1}".format(sys.version_info[0],sys.version_info[1]))'`.strip
       args << "-DOTB_INSTALL_PYTHON_DIR=#{HOMEBREW_PREFIX}/lib/python#{py_ver}/site-packages"
     end
