@@ -7,13 +7,13 @@ class Grass7 < Formula
   desc "Geographic Resources Analysis Support System"
   homepage "https://grass.osgeo.org/"
 
-  revision 3
+  # revision 1
 
   head "https://svn.osgeo.org/grass/grass/trunk"
 
   stable do
-    url "https://grass.osgeo.org/grass74/source/grass-7.4.3.tar.gz"
-    sha256 "004e65693ee97fd4d5dc7ad244e3286a115dccd88964d04be61c07db6574b399"
+    url "https://grass.osgeo.org/grass74/source/grass-7.4.4.tar.gz"
+    sha256 "96a39e273103f7375a670eba94fa3e5dad2819c5c5664c9aee8f145882a94e8c"
 
     # Patches to keep files from being installed outside of the prefix.
     # Remove lines from Makefile that try to install to /Library/Documentation.
@@ -231,7 +231,7 @@ class Grass7 < Formula
       args << "--with-wxwidgets=#{Formula["wxmac"].opt_bin}/wx-config"
     end
 
-    args << "--enable-64bit" if MacOS.prefer_64_bit?
+    # args << "--enable-64bit" if MacOS.prefer_64_bit? # NoMethodError: undefined method `prefer_64_bit?' for OS::Mac:Module
     args << "--with-macos-archs=#{MacOS.preferred_arch}"
 
     cairo = Formula["cairo"]
@@ -286,7 +286,7 @@ class Grass7 < Formula
 
     # Patch grass.py to remove bad tab at line 1693 (and insert 12 spaces)
     # Needs to be pushed upstream.
-    inreplace "lib/init/grass.py", "\t\t\t", "            "
+    # inreplace "lib/init/grass.py", "\t\t\t", "            "
     # or applying the patch
     # https://github.com/OSGeo/homebrew-osgeo4mac/pull/549#issuecomment-445507239
 
