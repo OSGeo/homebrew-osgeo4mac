@@ -30,10 +30,9 @@ class Grass7 < Formula
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
     cellar :any
-    rebuild 1
-    sha256 "192639b2b5c313cf61c2a8944b3cd009abd23bcb93124a0a6adbc5d35430e26d" => :mojave
-    sha256 "192639b2b5c313cf61c2a8944b3cd009abd23bcb93124a0a6adbc5d35430e26d" => :high_sierra
-    sha256 "192639b2b5c313cf61c2a8944b3cd009abd23bcb93124a0a6adbc5d35430e26d" => :sierra
+    sha256 "95954620adc0aafef7dbbceb89414a69b70172b409486f2dffbccb51be6d2cdc" => :mojave
+    sha256 "95954620adc0aafef7dbbceb89414a69b70172b409486f2dffbccb51be6d2cdc" => :high_sierra
+    sha256 "95954620adc0aafef7dbbceb89414a69b70172b409486f2dffbccb51be6d2cdc" => :sierra
   end
 
   option "without-gui", "Build without WxPython interface. Command line tools still available."
