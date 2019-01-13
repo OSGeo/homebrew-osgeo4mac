@@ -38,10 +38,10 @@ class Qgis3 < Formula
   homepage "https://www.qgis.org"
   url "https://github.com/qgis/QGIS.git",
     :branch => "release-3_4",
-    :commit => "b557cc265ab28ffd7bc54005bc2c848c124eb0bd"
+    :commit => "5364afe45cf00277a9de804ab33273b0661491bb"
   version "3.4.3"
 
-  # revision 1
+  revision 2
 
   head "https://github.com/qgis/QGIS.git", :branch => "master"
 
@@ -69,7 +69,7 @@ class Qgis3 < Formula
   option "with-oracle", "Build extra Oracle geospatial database and raster support"
   option "with-orfeo", "Build extra Orfeo Toolbox for Processing plugin"
   option "with-r", "Build extra R for Processing plugin"
-  option "with-saga-gis-lts", "Build extra Saga GIS for Processing plugin"
+  option "with-saga", "Build extra Saga GIS (LTS) for Processing plugin"
   option "with-qspatialite", "Build QSpatialite Qt database driver"
   option "with-api-docs", "Build the API documentation with Doxygen and Graphviz"
   option "with-3d", "Build with 3D Map View panel"
@@ -146,7 +146,7 @@ class Qgis3 < Formula
   # TODO: add MSSQL third-party support formula?, :optional
 
   # core plugins (c++ and python)
-  if build.with?("grass") || (HOMEBREW_PREFIX/"opt/grass7").exist?
+  if build.with?("grass") || brewed_grass7?
     depends_on "grass7"
     depends_on "gettext"
   end
@@ -169,7 +169,12 @@ class Qgis3 < Formula
   # core processing plugin extras
   # see `grass` above
   depends_on "orfeo6" => :optional
-  depends_on "r" => :optional
+
+  if build.with?("r")
+    unless Formula["r"].opt_prefix.exist?
+      depends_on "r"
+    end
+  end
   depends_on "saga-gis-lts" => :optional
   # TODO: LASTools straight build (2 reporting tools), or via `wine` (10 tools)
   # TODO: Fusion from USFS (via `wine`?)
@@ -209,9 +214,10 @@ class Qgis3 < Formula
 
   # fix for Python3.7
   resource "pyproj" do
-    url "https://github.com/jswhit/pyproj/archive/882074864bb2e567a164624a3710907f34a4d478.zip"
-    sha256 "220b68b879554da91d5b610e43312cb3d833b6ba11a777b50ea53270c05394d9"
-    version "1.9.5.1"
+    url "https://github.com/jswhit/pyproj.git",
+      :branch => "master",
+      :commit => "263e283bce209ec7a6e4517828a31839545f2e8a"
+    version "1.9.6"
   end
 
   resource "python-dateutil" do
@@ -331,20 +337,20 @@ class Qgis3 < Formula
   resource "otb" do
     url "https://gitlab.orfeo-toolbox.org/orfeotoolbox/qgis-otb-plugin.git",
       :branch => "master",
-      :commit => "b98fda42450851e6d6089c51cc4fea33d26b63ac"
+      :commit => "a1762b732f18a2dff9e92c44cf2f892f227b0f91"
     version "0.1"
   end
 
   # Patch: OTBAlgorithmProvider
   resource "OTBAlgorithmProvider" do
-    url "https://gist.githubusercontent.com/fjperini/009a5dda278c1a10e0758865d149820c/raw/ff5a239ac525d8e760d6f02f8ac03364e7a69766/OTBAlgorithmProvider.patch"
-    sha256 "bf59ecdbd2077b0268a05c4eea14d4fe1d0f92d1b4b2d525d2908c91d3d0cdb6"
+    url "https://gist.githubusercontent.com/fjperini/009a5dda278c1a10e0758865d149820c/raw/6aa94c089d69cb6e936a4c9ddbf52404af397395/OTBAlgorithmProvider.patch"
+    sha256 "e46c68bb9123ade3d61b9e567133d38816d9c584b406c387e9fff7408a0c58c5"
   end
 
   # Patch: OTBUtils
   resource "OTBUtils" do
-    url "https://gist.githubusercontent.com/fjperini/53f53daf78ab5e203fd81322ea5c3a2f/raw/783b17df86d8e88c41e26a3b4b0f17e5fac3df05/OTBUtils.patch"
-    sha256 "a2d6c97d0fc235ba1230c6012f87f70643367705b6fdf4979113867c5e13bd02"
+    url "https://gist.githubusercontent.com/fjperini/53f53daf78ab5e203fd81322ea5c3a2f/raw/67545e7568130728fa633b8dc8997d7783e51217/OTBUtils.patch"
+    sha256 "bc09786785672a7913d2fcfa91e316eefb8b28fbadedcead1a1c8c45ba2be659"
   end
 
   # Patch: RAlgorithmProvider
@@ -366,11 +372,19 @@ class Qgis3 < Formula
 
     printf "    $ brew unlink python && brew link --force python\n\n"
 
+    printf "    $ $PATH (Check that there is no other version)\n\n"
+
     printf "\033[31mThe installation will continue, but remember the above.\e[0m\n"
 
     30.downto(0) do |i|
         printf "#{'%02d'% i}."
         sleep 1
+    end
+
+    printf "\n\n"
+
+    if build.with?("r") || brewed_r?
+      printf "If you need R with more support (\e[32mserfore/r-srf\e[0m): \e[32mhttps://github.com/adamhsparks/setup_macOS_for_R\e[0m\n\n"
     end
 
     printf "\n"
@@ -936,7 +950,7 @@ class Qgis3 < Formula
       EOS
     end
 
-    if build.with?("orfeo") || ("r-app")
+    if build.with?("orfeo") || ("r")
       s += <<~EOS
 
         Activate plugin
@@ -1058,3 +1072,15 @@ __END__
 
    IF(QSCI_FOUND)
      FIND_PATH(QSCI_SIP_DIR
+
+--- a/cmake/FindPyQt5.py
++++ b/cmake/FindPyQt5.py
+@@ -39,7 +39,7 @@
+     import os.path
+     import sys
+     cfg = sipconfig.Configuration()
+-    sip_dir = cfg.default_sip_dir
++    sip_dir = "HOMEBREW_PREFIX/share/sip"
+     if sys.platform.startswith('freebsd'):
+         py_version = str(sys.version_info.major) + str(sys.version_info.minor)
+         sip_dir = sip_dir.replace(py_version, '')
