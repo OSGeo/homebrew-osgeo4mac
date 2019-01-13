@@ -2,7 +2,7 @@ class Orfeo6 < Formula
   desc "Library of image processing algorithms"
   homepage "https://www.orfeo-toolbox.org/otb/"
 
-  # revision 1
+  revision 1
 
   head "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb.git", :branch => "master"
 
@@ -10,8 +10,8 @@ class Orfeo6 < Formula
     url "https://github.com/orfeotoolbox/OTB/archive/6.6.1.tar.gz"
     sha256 "f8fea75f620fae1bb0ce902fb8133457b6ead40ad14d4dec55beaa59ae641b4c"
 
-    # Patch to fix OSSIM adaptor compilation
-    # patch :DATA
+    # otbenv.profile
+    patch :DATA
   end
 
   bottle do
@@ -27,6 +27,7 @@ class Orfeo6 < Formula
   option "with-iceviewer", "Build with ICE Viewer application (Qt and X11 required)"
   option "with-examples", "Compile and install various examples"
   option "with-java", "Enable Java support"
+  option "with-shark", "Build with Machine leaning library"
 
   depends_on "cmake" => :build
 
@@ -43,9 +44,19 @@ class Orfeo6 < Formula
   depends_on "tinyxml"
   depends_on "openscenegraph-qt5" # (for libOpenThreads, now internal to osg)
   depends_on "zlib"
+  depends_on "expat"
+  depends_on "gsl"
+  depends_on "curl"
+  depends_on "pkg-config"
+  depends_on "icu4c"
+  depends_on "freetype"
+  depends_on "numpy"
+  depends_on "perl"
+  depends_on "libtool" # libltdl
 
   # recommended
   depends_on "muparser" => :recommended
+  # depends_on "muparserx" => :recommended
   depends_on "libkml" => :recommended
   depends_on "libsvm" => :recommended
   depends_on "minizip" => :recommended
@@ -57,8 +68,9 @@ class Orfeo6 < Formula
   depends_on "mapnik" => :optional
   depends_on "opencv" => :optional
   depends_on "openjpeg" => :optional
+  depends_on "hdf5" => :optional
   depends_on "open-mpi" => :optional
-  depends_on "brewsci/science/shark" => :optional
+  depends_on "brewsci/science/shark" if build.with? "shark"
 
   # ICE Viewer: needs X11 support
   # apparently, GLUT is not needed by Monteverdi, which uses ICE non-gui module,
@@ -79,8 +91,10 @@ class Orfeo6 < Formula
     depends_on "qt" => :optional
   end
 
-  depends_on "hdf5" => :optional
-  depends_on "open-mpi"
+  # Need libagg if building mapnik
+  if build.with? "mapnik"
+    depends_on "libagg"
+  end
 
   resource "geoid" do
     # geoid to use in elevation calculations, if no DEM defined or avialable
@@ -89,7 +103,21 @@ class Orfeo6 < Formula
     version "5.0.0"
   end
 
+  # resource "GKSVM" do
+  #   url "https://github.com/jmichel-otb/GKSVM.git",
+  #     :branch => "master",
+  #     :commit => "553dc8e40ab1538c46de6596ec323627dac5fea5"
+  #   version "0.0.1"
+  # end
+
   def install
+    ENV.cxx11
+
+    # Module for monteverdi build
+    # if build.with? "monteverdi"
+    #   (buildpath/"Modules/Remote").install resource("GKSVM")
+    # end
+
     (libexec/"default_geoid").install resource("geoid")
 
     args = std_cmake_args + %W[
@@ -102,6 +130,7 @@ class Orfeo6 < Formula
       -DQWT_INCLUDE_DIR=#{Formula["qwt"].lib}/qwt.framework/Headers
       -DOSSIM_LIBRARY=#{Formula["ossim"].opt_prefix}/Frameworks/ossim.framework
       -DOSSIM_INCLUDE_DIR=#{Formula["ossim"].include}
+      -DOTB_USE_GSL=ON
     ]
 
     args << "-DOTB_DATA_USE_LARGEINPUT=ON"
@@ -110,19 +139,34 @@ class Orfeo6 < Formula
     args << "-DOPENTHREADS_INCLUDE_DIR=#{Formula["openscenegraph-qt5"].opt_include}"
 
     if build.with? "python"
-      args << "-DPYTHON_EXECUTABLE=" + `#{HOMEBREW_PREFIX}/opt/python/bin/python3 -c "import sys; print(sys.executable)"`.chomp
-      py_ver=`#{HOMEBREW_PREFIX}/opt/python/bin/python3 -c 'import sys;print("{0}.{1}".format(sys.version_info[0],sys.version_info[1]))'`.chomp
-      args << "-DOTB_INSTALL_PYTHON_DIR=#{HOMEBREW_PREFIX}/lib/python#{py_ver}/site-packages"
+      args << "-DOTB_WRAP_PYTHON3=ON"
+      args << "-DPYTHON3_EXECUTABLE=#{HOMEBREW_PREFIX}/opt/python/bin/python3"
+      py_ver= `#{HOMEBREW_PREFIX}/opt/python/bin/python3 -c 'import sys;print("{0}.{1}".format(sys.version_info[0],sys.version_info[1]))'`.strip
+      args << "-DPYTHON3_LIBRARY=#{HOMEBREW_PREFIX}/Frameworks/Python.framework/Versions/#{py_ver}/lib/libpython#{py_ver}m.dylib"
+      args << "-DPYTHON3_LIBRARY_RELEASE=#{HOMEBREW_PREFIX}/Frameworks/Python.framework/Versions/#{py_ver}/lib/libpython#{py_ver}m.dylib"
+      # args << "-DPYTHON3_LIBRARY_DEBUG="
+      args << "-DPYTHON3_INCLUDE_DIR=#{HOMEBREW_PREFIX}/Frameworks/Python.framework/Versions/#{py_ver}/include/python#{py_ver}m"
+      # args << "-DNUMPY_PYTHON3_INCLUDE_DIR="
+      args << "-DOTB_INSTALL_PYTHON3_DIR=#{lib}/python3"
     end
 
     args << "-DITK_DIR=#{Formula["cmake"].share}/cmake/Modules"
-
-    ENV.cxx11
+    if build.with? "mapnik"
+      args << "-DMAPNIK_INCLUDE_DIRS=#{Formula['mapnik'].include}/mapnik"
+      args << "-DMAPNIK_LIBRARIES=#{Formula['mapnik'].lib}"
+      args << "-DAGG_INCLUDE_DIR=#{Formula['libagg'].include}"
+    end
 
     if build.with? "iceviewer"
       fg = Formula["freeglut"]
       args << "-DGLUT_INCLUDE_DIR=#{fg.opt_include}"
       args << "-DGLUT_glut_LIBRARY=#{fg.opt_lib}/libglut.dylib"
+    end
+
+    if build.with? "opencv"
+      args << "-DOTB_USE_OPENCV=ON"
+      args << "-Dopencv_INCLUDE_DIR=#{Formula['opencv'].include}/opencv4"
+      args << "-DOPENCV_core_LIBRARY=#{Formula['opencv'].lib}"
     end
 
     args << "-DBUILD_EXAMPLES=" + (build.with?("examples") ? "ON" : "OFF")
@@ -142,20 +186,22 @@ class Orfeo6 < Formula
     args << "-DOTB_USE_MAPNIK=" + (build.with?("mapnik") ? "ON" : "OFF")
     args << "-DOTB_USE_MUPARSER=" + (build.with?("muparser") ? "ON" : "OFF")
     # args << "-DOTB_USE_MUPARSERX=" + (build.with?("") ? "ON" : "OFF")
-    args << "-DOTB_USE_OPENCV=" + (build.with?("opencv") ? "ON" : "OFF")
     args << "-DOTB_USE_OPENGL=" + ((build.with?("examples") || build.with?("iceviewer") || build.with?("monteverdi")) ? "ON" : "OFF")
     args << "-DOTB_USE_MPI=" + (build.with?("mpi") ? "ON" : "OFF")
     # args << "-DOTB_USE_OPENJPEG=" + (build.with?("openjpeg") ? "ON" : "OFF") # not used by the project
     args << "-DOTB_USE_QT=" + ((build.with?("qt") || build.with?("monteverdi")) ? "ON" : "OFF")
     args << "-DOTB_USE_QWT=" + ((build.with?("qt") || build.with?("monteverdi")) ? "ON" : "OFF")
     args << "-DOTB_USE_SIFTFAST=ON"
-    args << "-DOTB_USE_SHARK=" + (build.with?("brewsci/science/shark") ? "ON" : "OFF")
+    args << "-DOTB_USE_SHARK=" + (build.with?("shark") ? "ON" : "OFF")
 
     mkdir "build" do
       system "cmake", "..", *args
       system "make"
       system "make", "install"
     end
+
+    # A script to initialize the environment for OTB executables
+    cp_r "#{buildpath}/Packaging/Files/otbenv.profile", "#{prefix}"
 
     # clean up any unneeded otbgui script wrappers
     rm_f Dir["#{bin}/otbgui*"] unless (bin/"otbgui").exist?
@@ -193,17 +239,28 @@ class Orfeo6 < Formula
 end
 
 __END__
-diff --git a/Modules/Adapters/OSSIMAdapters/src/otbRPCSolverAdapter.cxx b/Modules/Adapters/OSSIMAdapters/src/otbRPCSolverAdapter.cxx
-index d20e208..92796dd 100644
---- a/Modules/Adapters/OSSIMAdapters/src/otbRPCSolverAdapter.cxx
-+++ b/Modules/Adapters/OSSIMAdapters/src/otbRPCSolverAdapter.cxx
-@@ -109,7 +109,8 @@ RPCSolverAdapter::Solve(const GCPsContainerType& gcpContainer,
-   rmsError = rpcSolver->getRmsError();
 
-   // Retrieve the output RPC projection
--  ossimRefPtr<ossimRpcProjection> rpcProjection = dynamic_cast<ossimRpcProjection*>(rpcSolver->createRpcProjection()->getProjection());
-+  ossimRefPtr<ossimImageGeometry> outputProj = dynamic_cast<ossimImageGeometry*>(rpcSolver->createRpcProjection());
-+  ossimRefPtr<ossimRpcProjection> rpcProjection = dynamic_cast<ossimRpcProjection*>(outputProj->getProjection());
+--- a/Packaging/Files/otbenv.profile
++++ b/Packaging/Files/otbenv.profile
+@@ -37,18 +37,18 @@
+ PATH=OUT_DIR/bin:$PATH
 
-   // Export the sensor model in an ossimKeywordlist
-   ossimKeywordlist geom_kwl;
+ # export PYTHONPATH to import otbApplication.py
+-PYTHONPATH=OUT_DIR/lib/python:$PYTHONPATH
++PYTHONPATH=OUT_DIR/lib/python3:$PYTHONPATH
+
+ # set numeric locale to C
+ LC_NUMERIC=C
+
+ # set GDAL_DATA variable used by otb application
+-GDAL_DATA=OUT_DIR/share/gdal
++GDAL_DATA=HOMEBREW_PREFIX/opt/gdal2/share/gdal
+
+ export GDAL_DRIVER_PATH=disable
+
+ # set GEOTIFF_CSV variable used by otb application
+-GEOTIFF_CSV=OUT_DIR/share/epsg_csv
++GEOTIFF_CSV=HOMEBREW_PREFIX/opt/libgeotiff/share/epsg_csv
+
+ # export variables
+ export LC_NUMERIC
