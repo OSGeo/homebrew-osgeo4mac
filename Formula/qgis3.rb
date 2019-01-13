@@ -146,7 +146,7 @@ class Qgis3 < Formula
   # TODO: add MSSQL third-party support formula?, :optional
 
   # core plugins (c++ and python)
-  if build.with?("grass") || brewed_grass7?
+  if build.with?("grass") || (HOMEBREW_PREFIX/"opt/grass7").exist?
     depends_on "grass7"
     depends_on "gettext"
   end
