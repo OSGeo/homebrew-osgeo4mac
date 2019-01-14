@@ -349,8 +349,8 @@ class Qgis3 < Formula
 
   # Patch: OTBUtils
   resource "OTBUtils" do
-    url "https://gist.githubusercontent.com/fjperini/53f53daf78ab5e203fd81322ea5c3a2f/raw/67545e7568130728fa633b8dc8997d7783e51217/OTBUtils.patch"
-    sha256 "bc09786785672a7913d2fcfa91e316eefb8b28fbadedcead1a1c8c45ba2be659"
+    url "https://gist.githubusercontent.com/fjperini/53f53daf78ab5e203fd81322ea5c3a2f/raw/6daa39316c3c5d4da34a5f6717e8fb93418fff85/OTBUtils.patch"
+    sha256 "a52899872c696b6fbdd3e4a09327feb74880a199a0bda8356785806bc6de8057"
   end
 
   # Patch: RAlgorithmProvider
