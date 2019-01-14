@@ -349,14 +349,14 @@ class Qgis3 < Formula
 
   # Patch: OtbAlgorithmProvider
   resource "OtbAlgorithmProvider" do
-    url "https://gist.githubusercontent.com/fjperini/009a5dda278c1a10e0758865d149820c/raw/a3695752df3e0b59cb61fb0967d6dd4cdd5e2bfb/OtbAlgorithmProvider.patch"
-    sha256 "e46c68bb9123ade3d61b9e567133d38816d9c584b406c387e9fff7408a0c58c5"
+    url "https://gist.githubusercontent.com/fjperini/009a5dda278c1a10e0758865d149820c/raw/fe1cf1292ecd497fb77b830b59296315295a6615/OtbAlgorithmProvider.patch"
+    sha256 "3b2d8573b8a7a820a73531bc9b0128048faaf9229af619fbd6fa95d02cb63ec2"
   end
 
   # Patch: OtbUtils
   resource "OtbUtils" do
-    url "https://gist.githubusercontent.com/fjperini/53f53daf78ab5e203fd81322ea5c3a2f/raw/848d3aae74f584017696442e8d7cecaaf0fb9766/OtbUtils.patch"
-    sha256 "a52899872c696b6fbdd3e4a09327feb74880a199a0bda8356785806bc6de8057"
+    url "https://gist.githubusercontent.com/fjperini/53f53daf78ab5e203fd81322ea5c3a2f/raw/4838df9a17aa10a77df0285164f517d9fca4e7c6/OtbUtils.patch"
+    sha256 "659e9310c74b3b7615ec7f812061a93e59d838110e7d4ed7697d6657f15a332e"
   end
 
   # Patch: RAlgorithmProvider
