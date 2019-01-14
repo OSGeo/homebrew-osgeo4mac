@@ -27,7 +27,7 @@ class Orfeo6 < Formula
   option "with-iceviewer", "Build with ICE Viewer application (Qt and X11 required)"
   option "with-examples", "Compile and install various examples"
   option "with-java", "Enable Java support"
-  option "with-shark", "Build with Machine leaning library"
+  option "with-shark", "Build with Machine learning library"
 
   depends_on "cmake" => :build
 
