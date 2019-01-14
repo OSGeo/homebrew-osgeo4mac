@@ -38,13 +38,14 @@ class Qgis3 < Formula
   homepage "https://www.qgis.org"
   url "https://github.com/qgis/QGIS.git",
     :branch => "release-3_4",
-    :commit => "5364afe45cf00277a9de804ab33273b0661491bb"
+    :commit => "5c24b4e42e7d0097c87a28eb9fb3f5e2cb85b254"
   version "3.4.3"
 
   revision 2
 
   head "https://github.com/qgis/QGIS.git", :branch => "master"
 
+  # fix FindQsci and FindPyQt5
   patch :DATA
 
   bottle do
@@ -75,6 +76,8 @@ class Qgis3 < Formula
   option "with-3d", "Build with 3D Map View panel"
   # option "with-globe", "Build with Globe plugin, based upon osgEarth"
   # option "with-qt-mysql", "Build extra Qt MySQL plugin for eVis plugin"
+
+  deprecated_option "with-saga-gis-lts" => "with-saga"
 
   depends_on UnlinkedQGIS3
   # depends_on Python
@@ -170,11 +173,14 @@ class Qgis3 < Formula
   # see `grass` above
   depends_on "orfeo6" => :optional
 
+  # If you need R with more support (serfore/r-srf):
+  # https://github.com/adamhsparks/setup_macOS_for_R
   if build.with?("r")
     unless Formula["r"].opt_prefix.exist?
       depends_on "r"
     end
   end
+
   depends_on "saga-gis-lts" => :optional
   # TODO: LASTools straight build (2 reporting tools), or via `wine` (10 tools)
   # TODO: Fusion from USFS (via `wine`?)
@@ -341,15 +347,15 @@ class Qgis3 < Formula
     version "0.1"
   end
 
-  # Patch: OTBAlgorithmProvider
-  resource "OTBAlgorithmProvider" do
-    url "https://gist.githubusercontent.com/fjperini/009a5dda278c1a10e0758865d149820c/raw/6aa94c089d69cb6e936a4c9ddbf52404af397395/OTBAlgorithmProvider.patch"
+  # Patch: OtbAlgorithmProvider
+  resource "OtbAlgorithmProvider" do
+    url "https://gist.githubusercontent.com/fjperini/009a5dda278c1a10e0758865d149820c/raw/a3695752df3e0b59cb61fb0967d6dd4cdd5e2bfb/OtbAlgorithmProvider.patch"
     sha256 "e46c68bb9123ade3d61b9e567133d38816d9c584b406c387e9fff7408a0c58c5"
   end
 
-  # Patch: OTBUtils
-  resource "OTBUtils" do
-    url "https://gist.githubusercontent.com/fjperini/53f53daf78ab5e203fd81322ea5c3a2f/raw/6daa39316c3c5d4da34a5f6717e8fb93418fff85/OTBUtils.patch"
+  # Patch: OtbUtils
+  resource "OtbUtils" do
+    url "https://gist.githubusercontent.com/fjperini/53f53daf78ab5e203fd81322ea5c3a2f/raw/848d3aae74f584017696442e8d7cecaaf0fb9766/OtbUtils.patch"
     sha256 "a52899872c696b6fbdd3e4a09327feb74880a199a0bda8356785806bc6de8057"
   end
 
@@ -383,12 +389,6 @@ class Qgis3 < Formula
 
     printf "\n\n"
 
-    if build.with?("r") || brewed_r?
-      printf "If you need R with more support (\e[32mserfore/r-srf\e[0m): \e[32mhttps://github.com/adamhsparks/setup_macOS_for_R\e[0m\n\n"
-    end
-
-    printf "\n"
-
     # we proceed to install the plugins as a first step,
     # to ensure that the patches are applied
     mkdir "#{prefix}/QGIS.app/Contents/Resources/python/plugins/"
@@ -397,14 +397,14 @@ class Qgis3 < Formula
       resource("otb").stage do
         cp_r "./otb", "#{buildpath}/python/plugins/"
       end
-      resource("OTBAlgorithmProvider").stage do
-        cp_r "./OTBAlgorithmProvider.patch", "#{buildpath}"
+      resource("OtbAlgorithmProvider").stage do
+        cp_r "./OtbAlgorithmProvider.patch", "#{buildpath}"
       end
-      resource("OTBUtils").stage do
-        cp_r "./OTBUtils.patch", "#{buildpath}"
+      resource("OtbUtils").stage do
+        cp_r "./OtbUtils.patch", "#{buildpath}"
       end
-      system "patch", "-p1", "-i", "#{buildpath}/OTBAlgorithmProvider.patch"
-      system "patch", "-p1", "-i", "#{buildpath}/OTBUtils.patch"
+      system "patch", "-p1", "-i", "#{buildpath}/OtbAlgorithmProvider.patch"
+      system "patch", "-p1", "-i", "#{buildpath}/OtbUtils.patch"
       cp_r "#{buildpath}/python/plugins/otb", "#{prefix}/QGIS.app/Contents/Resources/python/plugins/"
     end
 
@@ -436,7 +436,7 @@ class Qgis3 < Formula
 
     # install python environment
     venv = virtualenv_create(libexec/'vendor', "#{HOMEBREW_PREFIX}/opt/python/bin/python3")
-    res = resources.map(&:name).to_set - %w[pyqgis-startup r-app otb OTBAlgorithmProvider OTBUtils RAlgorithmProvider]
+    res = resources.map(&:name).to_set - %w[pyqgis-startup r-app otb OtbAlgorithmProvider OtbUtils RAlgorithmProvider]
     res.each do |r|
       venv.pip_install resource(r)
     end
@@ -789,7 +789,7 @@ class Qgis3 < Formula
     end
 
     # we need to manually add the saga lts path, since it's keg only
-    if build.with? "saga-gis-lts"
+    if build.with? "saga"
       pths.insert(0, Formula["saga-gis-lts"].opt_bin.to_s)
     end
 
