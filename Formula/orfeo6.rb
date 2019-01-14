@@ -147,7 +147,7 @@ class Orfeo6 < Formula
       # args << "-DPYTHON3_LIBRARY_DEBUG="
       args << "-DPYTHON3_INCLUDE_DIR=#{HOMEBREW_PREFIX}/Frameworks/Python.framework/Versions/#{py_ver}/include/python#{py_ver}m"
       # args << "-DNUMPY_PYTHON3_INCLUDE_DIR="
-      args << "-DOTB_INSTALL_PYTHON3_DIR=#{lib}/python3"
+      args << "-DOTB_INSTALL_PYTHON3_DIR=#{lib}/python#{py_ver}/site-packages/otb"
     end
 
     args << "-DITK_DIR=#{Formula["cmake"].share}/cmake/Modules"
@@ -247,7 +247,7 @@ __END__
 
  # export PYTHONPATH to import otbApplication.py
 -PYTHONPATH=OUT_DIR/lib/python:$PYTHONPATH
-+PYTHONPATH=OUT_DIR/lib/python3:$PYTHONPATH
++PYTHONPATH=OUT_DIR/lib/python3.7/site-packages:$PYTHONPATH
 
  # set numeric locale to C
  LC_NUMERIC=C
