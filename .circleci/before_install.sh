@@ -46,9 +46,9 @@ for f in ${CHANGED_FORMULAE};do
 
   # Upgrade Python3 to the latest version, before installing Python2. Per the discussion here
   # https://discourse.brew.sh/t/brew-install-python3-fails/1756/3
-  if [ "$(echo ${deps} | grep -c '[python|python3]')" != "0" ];then
+  if [ "$(echo ${deps} | grep -c 'python')" != "0" ];then
     echo "Installing and configuring Homebrew Python3"
-    brew install python
+    brew outdated python || brew upgrade python
 
     # Set up Python .pth files
     # get python short version (major.minor)
@@ -71,7 +71,7 @@ for f in ${CHANGED_FORMULAE};do
 
   if [ "$(echo ${deps} | grep -c 'python@2')" != "0" ];then
     echo "Installing and configuring Homebrew Python2"
-    brew install python@2
+    brew outdated python@2 || brew upgrade python@2
 
     # Set up Python .pth files
     # get python short version (major.minor)
