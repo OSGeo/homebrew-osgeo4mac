@@ -44,8 +44,6 @@ for f in ${CHANGED_FORMULAE};do
   echo "${f} dependencies:"
   echo "${deps}"
 
-#
-
   if [ "$(echo ${deps} | grep -c '[python@2|python2]')" != "0" ];then
     echo "Installing and configuring Homebrew Python 2"
     brew outdated python@2 || brew upgrade python@2
