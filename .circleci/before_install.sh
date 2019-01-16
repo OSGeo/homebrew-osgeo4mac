@@ -47,12 +47,12 @@ for f in ${CHANGED_FORMULAE};do
   # Upgrade Python3 to the latest version, before installing Python2. Per the discussion here
   # https://discourse.brew.sh/t/brew-install-python3-fails/1756/3
   if [ "$(echo ${deps} | grep -c 'python')" != "0" ];then
-    echo "Installing and configuring Homebrew Python3"
+    echo "Installing and configuring Homebrew Python 3"
     brew outdated python || brew upgrade python
 
     # Set up Python .pth files
     # get python short version (major.minor)
-    PY_VER=$(${HOMEBREW_PREFIX}/bin/python3 -c "import sys;print('{0}.{1}'.format(sys.version_info[0],sys.version_info[1]).strip())")
+    PY_VER=$($#{HOMEBREW_PREFIX}/bin/python3 -c 'import sys;print("{0}.{1}".format(sys.version_info[0],sys.version_info[1]))')
     if [ -n "${DEBUG_CI}" ];then
       echo $PY_VER
     fi
@@ -64,29 +64,30 @@ for f in ${CHANGED_FORMULAE};do
          >> ${CIRCLE_WORKING_DIRECTORY}/Library/Python/${PY_VER}/lib/python/site-packages/gdal2.pth
 
     if [[ "${f}" =~ "gdal2" ]];then
-      echo "Installing GDAL 2 Python3 dependencies"
+      echo "Installing GDAL 2 Python 3 dependencies"
       ${HOMEBREW_PREFIX}/bin/pip3 install numpy
     fi
   fi
 
   if [ "$(echo ${deps} | grep -c 'python@2')" != "0" ];then
-    echo "Installing and configuring Homebrew Python2"
+    echo "Installing and configuring Homebrew Python 2"
     brew outdated python@2 || brew upgrade python@2
 
     # Set up Python .pth files
     # get python short version (major.minor)
-    PY_VER=$(${HOMEBREW_PREFIX}/bin/python2 -c "import sys;print('{0}.{1}'.format(sys.version_info[0],sys.version_info[1]).strip())")
+    PY_VER=$($#{HOMEBREW_PREFIX}/bin/python2 -c 'import sys;print("{0}.{1}".format(sys.version_info[0],sys.version_info[1]))')
     if [ -n "${DEBUG_CI}" ];then
       echo $PY_VER
     fi
     mkdir -p ${CIRCLE_WORKING_DIRECTORY}/Library/Python/${PY_VER}/lib/python/site-packages
+
     echo 'import site; site.addsitedir("${HOMEBREW_PREFIX}/lib/python${PY_VER}/site-packages")' \
          >> ${CIRCLE_WORKING_DIRECTORY}/Library/Python/${PY_VER}/lib/python/site-packages/homebrew.pth
     echo 'import site; site.addsitedir("${HOMEBREW_PREFIX}/opt/gdal2/lib/python${PY_VER}/site-packages")' \
          >> ${CIRCLE_WORKING_DIRECTORY}/Library/Python/${PY_VER}/lib/python/site-packages/gdal2.pth
 
     if [[ "${f}" =~ "gdal2" ]];then
-      echo "Installing GDAL 2 Python2 dependencies"
+      echo "Installing GDAL 2 Python 2 dependencies"
       ${HOMEBREW_PREFIX}/bin/pip2 install numpy
     fi
   fi
