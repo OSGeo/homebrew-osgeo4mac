@@ -49,9 +49,9 @@ class OsgearthQt5 < Formula
   # depends_on "duktape" => :optional
   # depends_on "triton-sdk" => :optional # Triton Ocean SDK
 
-  resource "sphinx" do
-    url "https://files.pythonhosted.org/packages/4c/ea/7388faba7cf02999e1bc42f6a8eb1ea0120aec3dd93474cee21cea2d693f/Sphinx-1.8.2.tar.gz"
-    sha256 "120732cbddb1b2364471c3d9f8bfd4b0c5b550862f99a65736c77f970b142aea"
+  resource "Sphinx" do
+    url "https://files.pythonhosted.org/packages/4d/ed/4595274b5c9ce53a768cc0804ef65fd6282c956b93919a969e98d53894e4/Sphinx-1.8.3.tar.gz"
+    sha256 "c4cb17ba44acffae3d3209646b6baec1e215cad3065e852c68cc569d4df1b9f8"
   end
 
   # fix error: unknown type name 'GLDEBUGPROC'
@@ -66,10 +66,10 @@ class OsgearthQt5 < Formula
     if (build.with? "docs-examples") && (!which("sphinx-build"))
       # temporarily vendor a local sphinx install
       sphinx_dir = prefix/"sphinx"
-      sphinx_site = sphinx_dir/"lib/python3.7/site-packages"
+      sphinx_site = sphinx_dir/"lib/python#{py_ver}/site-packages"
       sphinx_site.mkpath
       ENV.prepend_create_path "PYTHONPATH", sphinx_site
-      resource("sphinx").stage { quiet_system "python3.7", "setup.py", "install", "--prefix=#{sphinx_dir}" }
+      resource("Sphinx").stage { quiet_system "python#{py_ver}", "setup.py", "install", "--prefix=#{sphinx_dir}" }
       ENV.prepend_path "PATH", sphinx_dir/"bin"
     end
 
@@ -173,6 +173,12 @@ class OsgearthQt5 < Formula
 
   test do
     system "#{bin}/osgearth_version"
+  end
+
+  private
+
+  def py_ver
+    `#{Formula["python"].opt_bin}/python3 -c 'import sys;print("{0}.{1}".format(sys.version_info[0],sys.version_info[1]))'`.strip
   end
 end
 
