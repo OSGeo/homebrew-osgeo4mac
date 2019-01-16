@@ -34,6 +34,10 @@ addons:
   ssh_known_hosts: github.com
 
 before_install:
+  - ruby -ropen-uri -e 'eval open("https://git.io/vQhWq").read'
+  - gem install bundler
+  - gem update --system
+
   - export GH_USER=$(echo -n "${TRAVIS_REPO_SLUG}" | egrep -o '^[^/]+' | tr -d '\n')
   - export TRAVIS_COMMIT="$(git rev-parse --verify -q HEAD)"
   - export CHANGED_FORMULAE=$(./travis/changed_formulas.sh)
