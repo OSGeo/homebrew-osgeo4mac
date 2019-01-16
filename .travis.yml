@@ -1,5 +1,6 @@
 language: ruby
-rvm: system
+rvm:
+  - 2.3.7
 #language: python
 #python:
 #  - "2.7"
@@ -34,6 +35,9 @@ addons:
   ssh_known_hosts: github.com
 
 before_install:
+  - gem update --system
+  - gem install bundler
+
   - export GH_USER=$(echo -n "${TRAVIS_REPO_SLUG}" | egrep -o '^[^/]+' | tr -d '\n')
   - export TRAVIS_COMMIT="$(git rev-parse --verify -q HEAD)"
   - export CHANGED_FORMULAE=$(./travis/changed_formulas.sh)
