@@ -81,9 +81,9 @@ for f in ${CHANGED_FORMULAE};do
     fi
     mkdir -p ${CIRCLE_WORKING_DIRECTORY}/Library/Python/${PY_VER}/lib/python/site-packages
 
-    echo 'import site; site.addsitedir("/usr/local/bin//lib/python${PY_VER}/site-packages")' \
+    echo 'import site; site.addsitedir("/usr/local/bin/lib/python${PY_VER}/site-packages")' \
          >> ${CIRCLE_WORKING_DIRECTORY}/Library/Python/${PY_VER}/lib/python/site-packages/homebrew.pth
-    echo 'import site; site.addsitedir("/usr/local/bin//opt/gdal2/lib/python${PY_VER}/site-packages")' \
+    echo 'import site; site.addsitedir("/usr/local/bin/opt/gdal2/lib/python${PY_VER}/site-packages")' \
          >> ${CIRCLE_WORKING_DIRECTORY}/Library/Python/${PY_VER}/lib/python/site-packages/gdal2.pth
 
     if [[ "${f}" =~ "gdal2" ]];then
