@@ -3,7 +3,7 @@ class OsgearthQt5 < Formula
   homepage "http://osgearth.org"
   url "https://github.com/gwaldron/osgearth.git",
     :branch => "2.10",
-    :commit => "32efedbbd1478b156fb27ae6197943a43db9d42b"
+    :commit => "62ddefab67334e41d1e9f402fd17e03508e84169"
   version "2.10"
 
   bottle do
@@ -14,7 +14,7 @@ class OsgearthQt5 < Formula
     sha256 "89dbeb522b4ccf2280dd589e04cd4724bf87d598709132bf61739b0d19e4be1b" => :sierra
   end
 
-  # revision 1
+  revision 1
 
   head "https://github.com/gwaldron/osgearth.git", :branch => "master"
 
@@ -39,17 +39,19 @@ class OsgearthQt5 < Formula
   depends_on "osgqt"
   depends_on "poco"
   depends_on "protobuf"
+  depends_on "python" # for sphinx
   depends_on "qt"
   depends_on "sqlite"
-  depends_on "triton"
   depends_on :x11
   depends_on "minizip" => :recommended
   depends_on "rocksdb" => :optional
   depends_on "v8" => :optional
+  # depends_on "duktape" => :optional
+  # depends_on "triton-sdk" => :optional # Triton Ocean SDK
 
-  resource "sphinx" do
-    url "https://files.pythonhosted.org/packages/4c/ea/7388faba7cf02999e1bc42f6a8eb1ea0120aec3dd93474cee21cea2d693f/Sphinx-1.8.2.tar.gz"
-    sha256 "120732cbddb1b2364471c3d9f8bfd4b0c5b550862f99a65736c77f970b142aea"
+  resource "Sphinx" do
+    url "https://files.pythonhosted.org/packages/4d/ed/4595274b5c9ce53a768cc0804ef65fd6282c956b93919a969e98d53894e4/Sphinx-1.8.3.tar.gz"
+    sha256 "c4cb17ba44acffae3d3209646b6baec1e215cad3065e852c68cc569d4df1b9f8"
   end
 
   # fix error: unknown type name 'GLDEBUGPROC'
@@ -64,10 +66,10 @@ class OsgearthQt5 < Formula
     if (build.with? "docs-examples") && (!which("sphinx-build"))
       # temporarily vendor a local sphinx install
       sphinx_dir = prefix/"sphinx"
-      sphinx_site = sphinx_dir/"lib/python2.7/site-packages"
+      sphinx_site = sphinx_dir/"lib/python#{py_ver}/site-packages"
       sphinx_site.mkpath
       ENV.prepend_create_path "PYTHONPATH", sphinx_site
-      resource("sphinx").stage { quiet_system "python2.7", "setup.py", "install", "--prefix=#{sphinx_dir}" }
+      resource("Sphinx").stage { quiet_system "python#{py_ver}", "setup.py", "install", "--prefix=#{sphinx_dir}" }
       ENV.prepend_path "PATH", sphinx_dir/"bin"
     end
 
@@ -110,14 +112,22 @@ class OsgearthQt5 < Formula
     args << "-DSQLITE3_LIBRARY=#{Formula["sqlite"].opt_lib}/libsqlite3.dylib"
     args << "-DSQLITE3_INCLUDE_DIR=#{Formula["sqlite"].opt_include}"
 
-    # args << "-DTRITON_LIBRARY=#{Formula["triton"].opt_lib}"
-    # args << "-DTRITON_INCLUDE_DIR=#{Formula["triton"].opt_include}"
-
     if build.with? "rocksdb"
       args << "-DWITH_STATIC_ROCKSDB=ON"
       args << "-DROCKSDB_LIBRARY=#{Formula["rocksdb"].opt_lib}/librocksdb.dylib"
       args << "-DROCKSDB_INCLUDE_DIR=#{Formula["rocksdb"].opt_include}"
     end
+
+    # v8 and minizip options should have empty values if not defined '--with'
+    if build.without? "v8"
+      args << "-DV8_INCLUDE_DIR=''" << "-DV8_BASE_LIBRARY=''" << "-DV8_SNAPSHOT_LIBRARY=''"
+      args << "-DV8_ICUI18N_LIBRARY=''" << "-DV8_ICUUC_LIBRARY=''"
+    end
+
+    # if build.with? "triton"
+    #   args << "-DTRITON_LIBRARY=#{Formula["triton-sdk"].opt_lib}"
+    #   args << "-DTRITON_INCLUDE_DIR=#{Formula["triton-sdk"].opt_include}"
+    # end
 
     # if build.with? "duktape"
     #   args << "-DWITH_EXTERNAL_DUKTAPE=ON"
@@ -132,12 +142,6 @@ class OsgearthQt5 < Formula
     #   args << "-DTINYXML_LIBRARY=#{Formula["tinyxml"].opt_lib}/libtinyxml.dylib"
     #   args << "-DTINYXML_INCLUDE_DIR=#{Formula["tinyxml"].opt_include}"
     # end
-
-    # v8 and minizip options should have empty values if not defined '--with'
-    if build.without? "v8"
-      args << "-DV8_INCLUDE_DIR=''" << "-DV8_BASE_LIBRARY=''" << "-DV8_SNAPSHOT_LIBRARY=''"
-      args << "-DV8_ICUI18N_LIBRARY=''" << "-DV8_ICUUC_LIBRARY=''"
-    end
 
     mkdir "build" do
       system "cmake", "..", *args
@@ -169,6 +173,12 @@ class OsgearthQt5 < Formula
 
   test do
     system "#{bin}/osgearth_version"
+  end
+
+  private
+
+  def py_ver
+    `#{Formula["python"].opt_bin}/python3 -c 'import sys;print("{0}.{1}".format(sys.version_info[0],sys.version_info[1]))'`.strip
   end
 end
 
