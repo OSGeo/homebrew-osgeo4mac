@@ -48,7 +48,7 @@ for f in ${CHANGED_FORMULAE};do
   # https://discourse.brew.sh/t/brew-install-python3-fails/1756/3
   if [ "$(echo ${deps} | grep -c '[python|python3]')" != "0" ];then
     echo "Installing and configuring Homebrew Python3"
-    brew upgrade python > /dev/null
+    brew install python
 
     # Set up Python .pth files
     # get python short version (major.minor)
@@ -71,7 +71,7 @@ for f in ${CHANGED_FORMULAE};do
 
   if [ "$(echo ${deps} | grep -c 'python@2')" != "0" ];then
     echo "Installing and configuring Homebrew Python2"
-    brew upgrade python@2 > /dev/null
+    brew install python@2
 
     # Set up Python .pth files
     # get python short version (major.minor)
