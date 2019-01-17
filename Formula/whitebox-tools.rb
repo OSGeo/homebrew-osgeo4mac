@@ -19,6 +19,6 @@ class WhiteboxTools < Formula
   end
 
   test do
-    system "#{bin}/whitebox_tools" --version
+    system "#{bin}/whitebox_tools", "--toolbox=Slope"
   end
 end
