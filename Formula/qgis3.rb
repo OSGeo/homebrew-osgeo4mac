@@ -38,13 +38,14 @@ class Qgis3 < Formula
   homepage "https://www.qgis.org"
   url "https://github.com/qgis/QGIS.git",
     :branch => "release-3_4",
-    :commit => "b557cc265ab28ffd7bc54005bc2c848c124eb0bd"
+    :commit => "5c24b4e42e7d0097c87a28eb9fb3f5e2cb85b254"
   version "3.4.3"
 
-  # revision 1
+  revision 2
 
   head "https://github.com/qgis/QGIS.git", :branch => "master"
 
+  # fix FindQsci and FindPyQt5
   patch :DATA
 
   bottle do
@@ -69,12 +70,14 @@ class Qgis3 < Formula
   option "with-oracle", "Build extra Oracle geospatial database and raster support"
   option "with-orfeo", "Build extra Orfeo Toolbox for Processing plugin"
   option "with-r", "Build extra R for Processing plugin"
-  option "with-saga-gis-lts", "Build extra Saga GIS for Processing plugin"
+  option "with-saga", "Build extra Saga GIS (LTS) for Processing plugin"
   option "with-qspatialite", "Build QSpatialite Qt database driver"
   option "with-api-docs", "Build the API documentation with Doxygen and Graphviz"
   option "with-3d", "Build with 3D Map View panel"
   # option "with-globe", "Build with Globe plugin, based upon osgEarth"
   # option "with-qt-mysql", "Build extra Qt MySQL plugin for eVis plugin"
+
+  deprecated_option "with-saga-gis-lts" => "with-saga"
 
   depends_on UnlinkedQGIS3
   # depends_on Python
@@ -169,7 +172,15 @@ class Qgis3 < Formula
   # core processing plugin extras
   # see `grass` above
   depends_on "orfeo6" => :optional
-  depends_on "r" => :optional
+
+  # If you need R with more support (serfore/r-srf):
+  # https://github.com/adamhsparks/setup_macOS_for_R
+  if build.with?("r")
+    unless Formula["r"].opt_prefix.exist?
+      depends_on "r"
+    end
+  end
+
   depends_on "saga-gis-lts" => :optional
   # TODO: LASTools straight build (2 reporting tools), or via `wine` (10 tools)
   # TODO: Fusion from USFS (via `wine`?)
@@ -209,9 +220,10 @@ class Qgis3 < Formula
 
   # fix for Python3.7
   resource "pyproj" do
-    url "https://github.com/jswhit/pyproj/archive/882074864bb2e567a164624a3710907f34a4d478.zip"
-    sha256 "220b68b879554da91d5b610e43312cb3d833b6ba11a777b50ea53270c05394d9"
-    version "1.9.5.1"
+    url "https://github.com/jswhit/pyproj.git",
+      :branch => "master",
+      :commit => "263e283bce209ec7a6e4517828a31839545f2e8a"
+    version "1.9.6"
   end
 
   resource "python-dateutil" do
@@ -331,20 +343,20 @@ class Qgis3 < Formula
   resource "otb" do
     url "https://gitlab.orfeo-toolbox.org/orfeotoolbox/qgis-otb-plugin.git",
       :branch => "master",
-      :commit => "b98fda42450851e6d6089c51cc4fea33d26b63ac"
+      :commit => "a1762b732f18a2dff9e92c44cf2f892f227b0f91"
     version "0.1"
   end
 
-  # Patch: OTBAlgorithmProvider
-  resource "OTBAlgorithmProvider" do
-    url "https://gist.githubusercontent.com/fjperini/009a5dda278c1a10e0758865d149820c/raw/ff5a239ac525d8e760d6f02f8ac03364e7a69766/OTBAlgorithmProvider.patch"
-    sha256 "bf59ecdbd2077b0268a05c4eea14d4fe1d0f92d1b4b2d525d2908c91d3d0cdb6"
+  # Patch: OtbAlgorithmProvider
+  resource "OtbAlgorithmProvider" do
+    url "https://gist.githubusercontent.com/fjperini/009a5dda278c1a10e0758865d149820c/raw/fe1cf1292ecd497fb77b830b59296315295a6615/OtbAlgorithmProvider.patch"
+    sha256 "3b2d8573b8a7a820a73531bc9b0128048faaf9229af619fbd6fa95d02cb63ec2"
   end
 
-  # Patch: OTBUtils
-  resource "OTBUtils" do
-    url "https://gist.githubusercontent.com/fjperini/53f53daf78ab5e203fd81322ea5c3a2f/raw/783b17df86d8e88c41e26a3b4b0f17e5fac3df05/OTBUtils.patch"
-    sha256 "a2d6c97d0fc235ba1230c6012f87f70643367705b6fdf4979113867c5e13bd02"
+  # Patch: OtbUtils
+  resource "OtbUtils" do
+    url "https://gist.githubusercontent.com/fjperini/53f53daf78ab5e203fd81322ea5c3a2f/raw/4838df9a17aa10a77df0285164f517d9fca4e7c6/OtbUtils.patch"
+    sha256 "659e9310c74b3b7615ec7f812061a93e59d838110e7d4ed7697d6657f15a332e"
   end
 
   # Patch: RAlgorithmProvider
@@ -366,6 +378,8 @@ class Qgis3 < Formula
 
     printf "    $ brew unlink python && brew link --force python\n\n"
 
+    printf "    $ $PATH (Check that there is no other version)\n\n"
+
     printf "\033[31mThe installation will continue, but remember the above.\e[0m\n"
 
     30.downto(0) do |i|
@@ -373,7 +387,7 @@ class Qgis3 < Formula
         sleep 1
     end
 
-    printf "\n"
+    printf "\n\n"
 
     # we proceed to install the plugins as a first step,
     # to ensure that the patches are applied
@@ -383,14 +397,14 @@ class Qgis3 < Formula
       resource("otb").stage do
         cp_r "./otb", "#{buildpath}/python/plugins/"
       end
-      resource("OTBAlgorithmProvider").stage do
-        cp_r "./OTBAlgorithmProvider.patch", "#{buildpath}"
+      resource("OtbAlgorithmProvider").stage do
+        cp_r "./OtbAlgorithmProvider.patch", "#{buildpath}"
       end
-      resource("OTBUtils").stage do
-        cp_r "./OTBUtils.patch", "#{buildpath}"
+      resource("OtbUtils").stage do
+        cp_r "./OtbUtils.patch", "#{buildpath}"
       end
-      system "patch", "-p1", "-i", "#{buildpath}/OTBAlgorithmProvider.patch"
-      system "patch", "-p1", "-i", "#{buildpath}/OTBUtils.patch"
+      system "patch", "-p1", "-i", "#{buildpath}/OtbAlgorithmProvider.patch"
+      system "patch", "-p1", "-i", "#{buildpath}/OtbUtils.patch"
       cp_r "#{buildpath}/python/plugins/otb", "#{prefix}/QGIS.app/Contents/Resources/python/plugins/"
     end
 
@@ -422,7 +436,7 @@ class Qgis3 < Formula
 
     # install python environment
     venv = virtualenv_create(libexec/'vendor', "#{HOMEBREW_PREFIX}/opt/python/bin/python3")
-    res = resources.map(&:name).to_set - %w[pyqgis-startup r-app otb OTBAlgorithmProvider OTBUtils RAlgorithmProvider]
+    res = resources.map(&:name).to_set - %w[pyqgis-startup r-app otb OtbAlgorithmProvider OtbUtils RAlgorithmProvider]
     res.each do |r|
       venv.pip_install resource(r)
     end
@@ -775,7 +789,7 @@ class Qgis3 < Formula
     end
 
     # we need to manually add the saga lts path, since it's keg only
-    if build.with? "saga-gis-lts"
+    if build.with? "saga"
       pths.insert(0, Formula["saga-gis-lts"].opt_bin.to_s)
     end
 
@@ -936,7 +950,7 @@ class Qgis3 < Formula
       EOS
     end
 
-    if build.with?("orfeo") || ("r-app")
+    if build.with?("orfeo") || ("r")
       s += <<~EOS
 
         Activate plugin
@@ -1058,3 +1072,15 @@ __END__
 
    IF(QSCI_FOUND)
      FIND_PATH(QSCI_SIP_DIR
+
+--- a/cmake/FindPyQt5.py
++++ b/cmake/FindPyQt5.py
+@@ -39,7 +39,7 @@
+     import os.path
+     import sys
+     cfg = sipconfig.Configuration()
+-    sip_dir = cfg.default_sip_dir
++    sip_dir = "HOMEBREW_PREFIX/share/sip"
+     if sys.platform.startswith('freebsd'):
+         py_version = str(sys.version_info.major) + str(sys.version_info.minor)
+         sip_dir = sip_dir.replace(py_version, '')
