@@ -1,5 +1,5 @@
 class WhiteboxTools < Formula
-  desc "Geographic information system (GIS) and remote sensing package intended for advanced geospatial analysis and data visualization"
+  desc "An advanced geospatial data analysis platform"
   homepage "https://www.uoguelph.ca/~hydrogeo/WhiteboxTools"
   url "https://github.com/jblindsay/whitebox-tools/releases/download/v0.13/WhiteboxTools_darwin_amd64.zip"
   sha256 "fe79c3b797ba7ae23a525e11441b0d6406c339858b23271c143734c62af7ec27"
