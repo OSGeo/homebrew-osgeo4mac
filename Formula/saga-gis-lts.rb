@@ -43,7 +43,7 @@ class SagaGisLts < Formula
   depends_on "swig"
   depends_on "xz" # lzma
   depends_on "giflib"
-  depends_on "opencv@2" # required or: 'opencv/cv.h' / 'opencv2/core/version.hpp' file not found
+  depends_on "opencv@2" # required or: 'opencv/cv.h' and 'opencv2/core/version.hpp' file not found
   depends_on "unixodbc" => :recommended
   depends_on "libharu" => :recommended
   depends_on "qhull" => :recommended # instead of looking for triangle
@@ -53,7 +53,6 @@ class SagaGisLts < Formula
   depends_on "brewsci/science/vigra" => :optional
   depends_on "postgresql" => :optional
   depends_on "python@2" => :optional
-  # depends_on "opencv" => :optional
   depends_on "liblas" => :optional
   depends_on "poppler" => :optional
   depends_on "osgeo/osgeo4mac/hdf4" => :optional
