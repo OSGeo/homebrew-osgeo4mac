@@ -6,7 +6,7 @@ class SagaGisLts < Formula
       :revision => "b6f474f8af4af7f0ff82548cc6f88c53547d91f5"
   version "2.3.2"
 
-  revision 2
+  revision 3
 
   head "https://git.code.sf.net/p/saga-gis/code.git", :branch => "release-2-3-lts"
 
@@ -43,6 +43,7 @@ class SagaGisLts < Formula
   depends_on "swig"
   depends_on "xz" # lzma
   depends_on "giflib"
+  depends_on "opencv@2" # required or: 'opencv/cv.h' and 'opencv2/core/version.hpp' file not found
   depends_on "unixodbc" => :recommended
   depends_on "libharu" => :recommended
   depends_on "qhull" => :recommended # instead of looking for triangle
@@ -52,8 +53,6 @@ class SagaGisLts < Formula
   depends_on "brewsci/science/vigra" => :optional
   depends_on "postgresql" => :optional
   depends_on "python@2" => :optional
-  depends_on "opencv@2" => :optional
-  # depends_on "opencv" => :optional
   depends_on "liblas" => :optional
   depends_on "poppler" => :optional
   depends_on "osgeo/osgeo4mac/hdf4" => :optional
@@ -116,47 +115,49 @@ class SagaGisLts < Formula
     args << "--with-postgresql=#{Formula["postgresql"].opt_bin}/pg_config" if build.with? "postgresql"
     args << "--with-python" if build.with? "python"
 
-    (prefix/"SAGA.app/Contents/PkgInfo").write "APPLSAGA"
-    (prefix/"SAGA.app/Contents/Resources").install resource("app_icon")
-
-    config = <<~EOS
-      <?xml version="1.0" encoding="UTF-8"?>
-      <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-      <plist version="1.0">
-      <dict>
-        <key>CFBundleDevelopmentRegion</key>
-        <string>English</string>
-        <key>CFBundleExecutable</key>
-        <string>saga_gui</string>
-        <key>CFBundleIconFile</key>
-        <string>saga_gui.icns</string>
-        <key>CFBundleInfoDictionaryVersion</key>
-        <string>6.0</string>
-        <key>CFBundleName</key>
-        <string>SAGA</string>
-        <key>CFBundlePackageType</key>
-        <string>APPL</string>
-        <key>CFBundleSignature</key>
-        <string>SAGA</string>
-        <key>CFBundleVersion</key>
-        <string>1.0</string>
-        <key>CSResourcesFileMapped</key>
-        <true/>
-        <key>NSHighResolutionCapable</key>
-        <string>True</string>
-      </dict>
-      </plist>
-    EOS
-
-    (prefix/"SAGA.app/Contents/Info.plist").write config
-
     system "autoreconf", "-i"
     system "./configure", *args
     system "make", "install"
 
-    chdir "#{prefix}/SAGA.app/Contents" do
-      mkdir "MacOS" do
-        ln_s "#{bin}/saga_gui", "saga_gui"
+    if build.with? "app"
+      (prefix/"SAGA.app/Contents/PkgInfo").write "APPLSAGA"
+      (prefix/"SAGA.app/Contents/Resources").install resource("app_icon")
+
+      config = <<~EOS
+        <?xml version="1.0" encoding="UTF-8"?>
+        <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+        <plist version="1.0">
+        <dict>
+          <key>CFBundleDevelopmentRegion</key>
+          <string>English</string>
+          <key>CFBundleExecutable</key>
+          <string>saga_gui</string>
+          <key>CFBundleIconFile</key>
+          <string>saga_gui.icns</string>
+          <key>CFBundleInfoDictionaryVersion</key>
+          <string>6.0</string>
+          <key>CFBundleName</key>
+          <string>SAGA</string>
+          <key>CFBundlePackageType</key>
+          <string>APPL</string>
+          <key>CFBundleSignature</key>
+          <string>SAGA</string>
+          <key>CFBundleVersion</key>
+          <string>1.0</string>
+          <key>CSResourcesFileMapped</key>
+          <true/>
+          <key>NSHighResolutionCapable</key>
+          <string>True</string>
+        </dict>
+        </plist>
+      EOS
+
+      (prefix/"SAGA.app/Contents/Info.plist").write config
+
+      chdir "#{prefix}/SAGA.app/Contents" do
+        mkdir "MacOS" do
+          ln_s "#{bin}/saga_gui", "saga_gui"
+        end
       end
     end
   end
