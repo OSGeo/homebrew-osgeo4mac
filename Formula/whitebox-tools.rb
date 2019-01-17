@@ -19,6 +19,6 @@ class WhiteboxTools < Formula
   end
 
   test do
-    system "false"
+    system "#{bin}/whitebox_tools" --version
   end
 end
