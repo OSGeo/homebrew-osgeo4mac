@@ -35,14 +35,14 @@ build_steps: &build_steps
      - persist_to_workspace:
           root: bottles
           paths:
-            - ./*.json
-            - ./*.tar.gz
-     # - store_test_results:
-     #      path: /bottles
+            # - ./*.json
+            # - ./*.tar.gz
+            - ./
+     - store_test_results:
+          path: /bottles
   # collect-bottles:
   #   docker:
   #    - image: linuxbrew/brew
-
 workflow_filter: &filter
   filters:
     branches:
@@ -104,10 +104,10 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: /tmp/workspace
-      - store_artifacts:
-          path: /tmp/workspace/bottles
-          destination: bottles
+          at: ./bottles
+      # - store_artifacts:
+      #     path: bottles
+      #     destination: bottles
       - run:
           name: Set env
           command: .circleci/set_env.sh
