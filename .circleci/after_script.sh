@@ -24,7 +24,7 @@ pushd bottles
   BOTTLE_ROOT=https://dl.bintray.com/homebrew-osgeo/osgeo-bottles
   for f in ${CHANGED_FORMULAE};do
     echo "Bottling changed formula ${f}..."
-    brew bottle --verbose --json --root-url=${BOTTLE_ROOT} ${TRAVIS_REPO_SLUG}/${f}
+    brew bottle --verbose --json --root-url=${BOTTLE_ROOT} osgeo/osgeo4mac/${f}
 
     for art in ${f}*.sierra.bottle.*; do
         # Remove double dashes introduced by the latest changes to Homebrew bottling.
