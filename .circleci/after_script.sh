@@ -17,13 +17,12 @@
 
 # Build the actual bottles
 # In Travis, this used to be part of the deploy phase, but now it needs to run as part of the original build process, but only on master.
+mkdir -p bottles
 
 if [ "$CHANGED_FORMULAE" == "" ]; then
   echo "Skipping CI, no changed formulae found";
   exit 0;
 else
-  mkdir -p bottles
-
   pushd bottles
     BOTTLE_ROOT=https://dl.bintray.com/homebrew-osgeo/osgeo-bottles
     for f in ${CHANGED_FORMULAE};do
