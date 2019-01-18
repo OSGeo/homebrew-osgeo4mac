@@ -17,25 +17,20 @@
 
 set -e
 
-if [ "$CHANGED_FORMULAE" == "" ]; then
-  echo "Skipping CI, no changed formulae found";
-  exit 0;
-else
-  for f in ${CHANGED_FORMULAE};do
-    echo "Installing dependencies for changed formula ${f}..."
-    FLAGS="--only-dependencies --build-bottle"
+for f in ${CHANGED_FORMULAE};do
+  echo "Installing dependencies for changed formula ${f}..."
+  FLAGS="--only-dependencies --build-bottle"
 
-    brew install ${FLAGS} ${TRAVIS_REPO_SLUG}/${f}&
-    PID=$!
-    # add progress to ensure Travis doesn't complain about no output
-    while true; do
-      sleep 30
-      if jobs -rp | grep ${PID} >/dev/null; then
-        echo "."
-      else
-        echo
-        break
-      fi
-    done
+  brew install ${FLAGS} ${TRAVIS_REPO_SLUG}/${f}&
+  PID=$!
+  # add progress to ensure Travis doesn't complain about no output
+  while true; do
+    sleep 30
+    if jobs -rp | grep ${PID} >/dev/null; then
+      echo "."
+    else
+      echo
+      break
+    fi
   done
-fi
+done

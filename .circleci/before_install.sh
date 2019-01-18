@@ -18,89 +18,84 @@
 set -o errexit
 set -o xtrace
 
-if [ "$CHANGED_FORMULAE" == "" ]; then
-  echo "Skipping CI, no changed formulae found";
-  exit 0;
-else
-  echo 'Setting up, before install'
-  if [ -n "${DEBUG_CI}" ];then
-    brew list --versions
+echo 'Setting up, before install'
+if [ -n "${DEBUG_CI}" ];then
+  brew list --versions
+fi
+
+# Forcibly remove all versions of unneeded default formula provided by travis or pre-cached
+nix_f="
+gdal
+postgis
+"
+
+for f in ${nix_f}; do
+  brew uninstall --force --ignore-dependencies ${f} || true
+done
+
+brew update > /dev/null
+
+# Install XQuartz
+brew cask install xquartz
+
+for f in ${CHANGED_FORMULAE};do
+  echo "Homebrew setup for changed formula ${f}..."
+  deps=$(brew deps --include-build ${f})
+  echo "${f} dependencies:"
+  echo "${deps}"
+
+  if [ "$(echo ${deps} | grep -c '[python@2|python2]')" != "0" ];then
+    echo "Installing and configuring Homebrew Python 2"
+    brew outdated python@2 || brew upgrade python@2
+
+    # Set up Python .pth files
+    # get python short version (major.minor)
+    PY_VER=$(/usr/local/bin/python2 -c 'import sys;print("{0}.{1}".format(sys.version_info[0],sys.version_info[1]))')
+    if [ -n "${DEBUG_CI}" ];then
+      echo $PY_VER
+    fi
+    mkdir -p ${CIRCLE_WORKING_DIRECTORY}/Library/Python/${PY_VER}/lib/python/site-packages
+
+    echo 'import site; site.addsitedir("/usr/local/bin/lib/python${PY_VER}/site-packages")' \
+         >> ${CIRCLE_WORKING_DIRECTORY}/Library/Python/${PY_VER}/lib/python/site-packages/homebrew.pth
+    echo 'import site; site.addsitedir("/usr/local/bin/opt/gdal2/lib/python${PY_VER}/site-packages")' \
+         >> ${CIRCLE_WORKING_DIRECTORY}/Library/Python/${PY_VER}/lib/python/site-packages/gdal2.pth
+
+    if [[ "${f}" =~ "gdal2" ]];then
+      echo "Installing GDAL 2 Python 2 dependencies"
+      /usr/local/bin/bin/pip2 install numpy
+    fi
   fi
 
-  # Forcibly remove all versions of unneeded default formula provided by travis or pre-cached
-  nix_f="
-  gdal
-  postgis
-  "
+  if [ "$(echo ${deps} | grep -c '[python|python3]')" != "0" ];then
+    echo "Installing and configuring Homebrew Python 3"
+    brew outdated python || brew upgrade python
 
-  for f in ${nix_f}; do
-    brew uninstall --force --ignore-dependencies ${f} || true
-  done
-
-  brew update > /dev/null
-
-  # Install XQuartz
-  brew cask install xquartz
-
-  for f in ${CHANGED_FORMULAE};do
-    echo "Homebrew setup for changed formula ${f}..."
-    deps=$(brew deps --include-build ${f})
-    echo "${f} dependencies:"
-    echo "${deps}"
-
-    if [ "$(echo ${deps} | grep -c '[python@2|python2]')" != "0" ];then
-      echo "Installing and configuring Homebrew Python 2"
-      brew outdated python@2 || brew upgrade python@2
-
-      # Set up Python .pth files
-      # get python short version (major.minor)
-      PY_VER=$(/usr/local/bin/python2 -c 'import sys;print("{0}.{1}".format(sys.version_info[0],sys.version_info[1]))')
-      if [ -n "${DEBUG_CI}" ];then
-        echo $PY_VER
-      fi
-      mkdir -p ${CIRCLE_WORKING_DIRECTORY}/Library/Python/${PY_VER}/lib/python/site-packages
-
-      echo 'import site; site.addsitedir("/usr/local/bin/lib/python${PY_VER}/site-packages")' \
-           >> ${CIRCLE_WORKING_DIRECTORY}/Library/Python/${PY_VER}/lib/python/site-packages/homebrew.pth
-      echo 'import site; site.addsitedir("/usr/local/bin/opt/gdal2/lib/python${PY_VER}/site-packages")' \
-           >> ${CIRCLE_WORKING_DIRECTORY}/Library/Python/${PY_VER}/lib/python/site-packages/gdal2.pth
-
-      if [[ "${f}" =~ "gdal2" ]];then
-        echo "Installing GDAL 2 Python 2 dependencies"
-        /usr/local/bin/bin/pip2 install numpy
-      fi
+    # Set up Python .pth files
+    # get python short version (major.minor)
+    PY_VER=$(/usr/local/bin/python3 -c 'import sys;print("{0}.{1}".format(sys.version_info[0],sys.version_info[1]))')
+    if [ -n "${DEBUG_CI}" ];then
+      echo $PY_VER
     fi
+    mkdir -p ${CIRCLE_WORKING_DIRECTORY}/Library/Python/${PY_VER}/lib/python/site-packages
 
-    if [ "$(echo ${deps} | grep -c '[python|python3]')" != "0" ];then
-      echo "Installing and configuring Homebrew Python 3"
-      brew outdated python || brew upgrade python
+    echo 'import site; site.addsitedir("/usr/local/bin/lib/python${PY_VER}/site-packages")' \
+         >> ${CIRCLE_WORKING_DIRECTORY}/Library/Python/${PY_VER}/lib/python/site-packages/homebrew.pth
+    echo 'import site; site.addsitedir("/usr/local/bin/opt/gdal2/lib/python${PY_VER}/site-packages")' \
+         >> ${CIRCLE_WORKING_DIRECTORY}/Library/Python/${PY_VER}/lib/python/site-packages/gdal2.pth
 
-      # Set up Python .pth files
-      # get python short version (major.minor)
-      PY_VER=$(/usr/local/bin/python3 -c 'import sys;print("{0}.{1}".format(sys.version_info[0],sys.version_info[1]))')
-      if [ -n "${DEBUG_CI}" ];then
-        echo $PY_VER
-      fi
-      mkdir -p ${CIRCLE_WORKING_DIRECTORY}/Library/Python/${PY_VER}/lib/python/site-packages
-
-      echo 'import site; site.addsitedir("/usr/local/bin/lib/python${PY_VER}/site-packages")' \
-           >> ${CIRCLE_WORKING_DIRECTORY}/Library/Python/${PY_VER}/lib/python/site-packages/homebrew.pth
-      echo 'import site; site.addsitedir("/usr/local/bin/opt/gdal2/lib/python${PY_VER}/site-packages")' \
-           >> ${CIRCLE_WORKING_DIRECTORY}/Library/Python/${PY_VER}/lib/python/site-packages/gdal2.pth
-
-      if [[ "${f}" =~ "gdal2" ]];then
-        echo "Installing GDAL 2 Python 3 dependencies"
-        /usr/local/bin/bin/pip3 install numpy
-      fi
+    if [[ "${f}" =~ "gdal2" ]];then
+      echo "Installing GDAL 2 Python 3 dependencies"
+      /usr/local/bin/bin/pip3 install numpy
     fi
+  fi
 
-    # Special handling of grass7, because it needs to be unlinked
-    if [ "$(echo ${deps} | grep -c 'grass7')" != "0" ];then
-      echo "Installing and unlinking grass7"
-      # GDAL gets its numpy installed via pip, but grass also has a dependency, so we need to force it.
-      brew install numpy || brew link --overwrite numpy
-      brew install grass7
-      brew unlink grass7
-    fi
-  done
-fi
+  # Special handling of grass7, because it needs to be unlinked
+  if [ "$(echo ${deps} | grep -c 'grass7')" != "0" ];then
+    echo "Installing and unlinking grass7"
+    # GDAL gets its numpy installed via pip, but grass also has a dependency, so we need to force it.
+    brew install numpy || brew link --overwrite numpy
+    brew install grass7
+    brew unlink grass7
+  fi
+done
