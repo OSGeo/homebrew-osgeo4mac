@@ -19,14 +19,6 @@ class Whitebox < Formula
 
   def install
 
-    printf "\n\033[31mRequires Java 8.\e[0m\n\n"
-
-    printf "\e[0mHow To Install Java 8:\n\n"
-
-    printf "\e[32mhttps://gist.github.com/ntamvl/5f4dbaa8f68e6897b99682a395a44c2e\e[0m\n"
-
-    printf "\e[32mhttps://gist.github.com/alChaCC/ddb11542c9e6b6683bad80d9ca858bc5\e[0m\n\n"
-
     cp_r "#{buildpath}", "#{prefix}"
 
     mkdir "#{bin}"
@@ -87,16 +79,33 @@ class Whitebox < Formula
   end
 
   def caveats
-    if build.with? "app"
-      <<~EOS
-      WBT.app was installed in:
-        #{prefix}
+    s = <<~EOS
+    \n\033[31mRequires Java 8.\e[0m
 
-      You may also symlink WBT.app into /Applications or ~/Applications:
-        ln -Fs `find $(brew --prefix) -name "WBT.app"` /Applications/WBT.app
+    \e[0mHow To Install Java 8:
+
+      \e[32mbrew tap caskroom/cask\e[0m
+      \e[32mbrew install java8\e[0m
+
+    Install Multiple Java Versions:
+
+      https://gist.github.com/ntamvl/5f4dbaa8f68e6897b99682a395a44c2e
+      https://gist.github.com/alChaCC/ddb11542c9e6b6683bad80d9ca858bc5
+
+    EOS
+
+    if build.with? "app"
+      s += <<~EOS
+
+      \e[32mWBT.app\e[0m was installed in: \e[32m#{prefix}\e[0m
+
+      You may also symlink to /Applications or ~/Applications:
+
+        \e[32mln -Fs `find $(brew --prefix) -name "WBT.app"` /Applications/WBT.app\e[0m
 
       EOS
     end
+    s
   end
 
   test do
