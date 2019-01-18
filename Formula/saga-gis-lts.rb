@@ -12,10 +12,9 @@ class SagaGisLts < Formula
 
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    rebuild 1
-    sha256 "cd1d465f1f864f682111c8877fd0cfa2264b13f8d30fe3814317fd4edcd0bb2c" => :mojave
-    sha256 "cd1d465f1f864f682111c8877fd0cfa2264b13f8d30fe3814317fd4edcd0bb2c" => :high_sierra
-    sha256 "cd1d465f1f864f682111c8877fd0cfa2264b13f8d30fe3814317fd4edcd0bb2c" => :sierra
+    sha256 "a2a85c09b25b72dbc43f5c6bb35192c0de567fddd88e4b36779c9743dc45d5af" => :mojave
+    sha256 "a2a85c09b25b72dbc43f5c6bb35192c0de567fddd88e4b36779c9743dc45d5af" => :high_sierra
+    sha256 "a2a85c09b25b72dbc43f5c6bb35192c0de567fddd88e4b36779c9743dc45d5af" => :sierra
   end
 
   # - saga_api, CSG_Table::Del_Records(): bug fix, check record count correctly
