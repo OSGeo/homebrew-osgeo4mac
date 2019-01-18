@@ -29,21 +29,16 @@ build_steps: &build_steps
      - run:
           name: Build bottles
           no_output_timeout: 30m
-          # command: .circleci/after_script.sh
-          command: |
-            mkdir /tmp/bottles
-            cp .circleci/after_script.sh /tmp/bottles
-            cd /tmp/bottles
-            ./after_script.sh
+          command: .circleci/after_script.sh
 
      # brew test-bot --skip-setup --bintray-org=homebrew-osgeo --root-url=https://dl.bintray.com/homebrew-osgeo/osgeo-bottles --git-name=GeoNinja --git-email=qgisninja@gmail.com
      - persist_to_workspace:
-          root: /tmp
+          root: bottles
           paths:
-            - bottles/*.json
-            - bottles/*.tar.gz
-     - store_test_results:
-          path: /tmp/bottles
+            - ./*.json
+            - ./*.tar.gz
+     # - store_test_results:
+     #      path: /bottles
   # collect-bottles:
   #   docker:
   #    - image: linuxbrew/brew
