@@ -76,6 +76,7 @@ jobs:
       tags:
         only: deploy
     steps:
+      - checkout
       - attach_workspace:
           at: /tmp/workspace
       - store_artifacts:
