@@ -20,16 +20,34 @@ build_steps: &build_steps
      - run:
           name: Install changed formulae
           command: .circleci/script.sh
-     - run:
-         name: Build bottles
-         command: .circleci/after_script.sh
-     - persist_to_workspace:
+      # - run: |
+      #     git remote set-url origin $CIRCLE_REPOSITORY_URL
+      #     git fetch origin
+      #     git config --global user.name GeoNinja
+      #     git config --global user.email qgisninja@gmail.com
+      #     repo=$(brew --repo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME)
+      #     mkdir -p $repo
+      #     cp -a ./ $repo/
+      - run:
+          name: Build bottles
+          no_output_timeout: 30m
+          command: |
+            mkdir /tmp/bottles
+            cd /tmp/bottles
+            .circleci/after_script.sh
+
+      # brew test-bot --skip-setup --bintray-org=homebrew-osgeo --root-url=https://dl.bintray.com/homebrew-osgeo/osgeo-bottles/ --git-name=GeoNinja --git-email=qgisninja@gmail.com
+
+      - persist_to_workspace:
           root: /tmp
           paths:
             - bottles/*.json
             - bottles/*.tar.gz
-     - store_test_results:
+      - store_test_results:
           path: /tmp/bottles
+  collect-bottles:
+    docker:
+      - image: linuxbrew/brew
 
 workflow_filter: &filter
   filters:
@@ -39,15 +57,26 @@ workflow_filter: &filter
 
 version: 2
 jobs:
-  update-homebrew:
+  build-macos:
     macos:
       xcode: "10.1.0"
+    # environment:
+    #   CIRCLE_REPOSITORY_URL: https://github.com/OSGeo/homebrew-osgeo4mac
+    #   HOMEBREW_DEVELOPER: 1
+    #   HOMEBREW_NO_AUTO_UPDATE: 1
     steps:
       - restore_cache:
           keys:
             - homebrew-v1-{{ .Branch }}-{{ .Revision }}
             - homebrew-v1-{{ .Branch }}-
             - homebrew-v1-
+      # - run: |
+      #     brew --version
+      #     brew remove $(brew list)
+      #     rm -rf /usr/local/Homebrew/Library/Taps/
+      #     brew update-reset
+      #     brew --env
+      #     brew config
       - run:
           name: "Update homebrew"
           command: |
@@ -93,13 +122,16 @@ workflows:
   version: 2
   build_bottles:
     jobs:
-      - update-homebrew
+      - build-macos
       - high_sierra-build:
           requires:
-            - update-homebrew
+            - build-macos
       - sierra-build:
           requires:
-            - update-homebrew
+            - build-macos
+      - collect-bottles:
+          requires:
+            - build-macos
 #      - bottle-upload:
 #          filters:
 #            tags:
