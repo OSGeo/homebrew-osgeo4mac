@@ -17,7 +17,6 @@
 
 set -e
 
-
 ulimit -c unlimited
            ulimit -n 2048
            export CHANGED_FORMULAE=$(.circleci/changed_formulas.sh)

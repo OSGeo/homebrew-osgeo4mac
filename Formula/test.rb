@@ -1,4 +1,4 @@
-class Taudem < Formula
+class Test < Formula
   desc "Terrain Analysis Using Digital Elevation Models for hydrology"
   homepage "http://hydrology.usu.edu/taudem/taudem5/"
   url "https://github.com/dtarb/TauDEM/archive/v5.3.7.tar.gz"
