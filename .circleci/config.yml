@@ -1,23 +1,29 @@
 build_steps: &build_steps
   steps:
      - checkout
+
      - restore_cache:
          keys:
            - homebrew-v1-{{ .Branch }}-{{ .Revision }}
            - homebrew-v1-{{ .Branch }}-
            - homebrew-v1-
+
      - run:
          name: Update environment variables
          command: .circleci/set_env.sh
+
      - run:
          name: Before install script
          command: .circleci/before_install.sh
+
      - run:
          name: Install dependencies
          command: .circleci/install.sh
+
      - run:
           name: Install changed formulae
           command: .circleci/script.sh
+
      # - run: |
      #     git remote set-url origin $CIRCLE_REPOSITORY_URL
      #     git fetch origin
@@ -26,23 +32,27 @@ build_steps: &build_steps
      #     repo=$(brew --repo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME)
      #     mkdir -p $repo
      #     cp -a ./ $repo/
+
      - run:
           name: Build bottles
           no_output_timeout: 30m
           command: .circleci/after_script.sh
-
      # brew test-bot --skip-setup --bintray-org=homebrew-osgeo --root-url=https://dl.bintray.com/homebrew-osgeo/osgeo-bottles --git-name=GeoNinja --git-email=qgisninja@gmail.com
+
      - persist_to_workspace:
           root: bottles
           paths:
             # - ./*.json
             # - ./*.tar.gz
             - ./
+
      - store_test_results:
-          path: /bottles
+          path: bottles
+
   # collect-bottles:
   #   docker:
   #    - image: linuxbrew/brew
+
 workflow_filter: &filter
   filters:
     branches:
@@ -58,6 +68,7 @@ jobs:
     #   CIRCLE_REPOSITORY_URL: https://github.com/OSGeo/homebrew-osgeo4mac
     #   HOMEBREW_DEVELOPER: 1
     #   HOMEBREW_NO_AUTO_UPDATE: 1
+
     steps:
       - restore_cache:
           keys:
@@ -71,12 +82,14 @@ jobs:
       #     brew update-reset
       #     brew --env
       #     brew config
+
       - run:
           name: "Update homebrew"
           command: |
             brew tap brewsci/science || true
             brew tap brewsci/bio || true
             brew update || brew update
+
       - save_cache:
           key: homebrew-v1-{{ .Branch }}-{{ .Revision }}
           paths:
@@ -101,16 +114,20 @@ jobs:
     filters:
       tags:
         only: deploy
+
     steps:
       - checkout
       - attach_workspace:
           at: ./bottles
+
       # - store_artifacts:
       #     path: bottles
       #     destination: bottles
+
       - run:
           name: Set env
           command: .circleci/set_env.sh
+
       - run:
           name: Commit bottles
           command: .circleci/before_deploy.sh
@@ -120,15 +137,19 @@ workflows:
   build_bottles:
     jobs:
       - update-homebrew
+
       - high_sierra-build:
           requires:
             - update-homebrew
+
       - sierra-build:
           requires:
             - update-homebrew
+
       # - collect-bottles:
       #     requires:
       #       - update-homebrew
+
       # - bottle-upload:
       #     filters:
       #       tags:
@@ -136,6 +157,7 @@ workflows:
       #     requires:
       #       - high_sierra-build
       #       - sierra-build
+
 # notify:
 #   webhooks:
 # - url:
