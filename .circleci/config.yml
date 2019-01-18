@@ -28,7 +28,7 @@ build_steps: &build_steps
       #     repo=$(brew --repo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME)
       #     mkdir -p $repo
       #     cp -a ./ $repo/
-      - run:
+     - run:
           name: Build bottles
           no_output_timeout: 30m
           command: |
@@ -38,16 +38,16 @@ build_steps: &build_steps
 
       # brew test-bot --skip-setup --bintray-org=homebrew-osgeo --root-url=https://dl.bintray.com/homebrew-osgeo/osgeo-bottles/ --git-name=GeoNinja --git-email=qgisninja@gmail.com
 
-      - persist_to_workspace:
+     - persist_to_workspace:
           root: /tmp
           paths:
             - bottles/*.json
             - bottles/*.tar.gz
-      - store_test_results:
+     - store_test_results:
           path: /tmp/bottles
   collect-bottles:
     docker:
-      - image: linuxbrew/brew
+     - image: linuxbrew/brew
 
 workflow_filter: &filter
   filters:
