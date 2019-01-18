@@ -9,35 +9,47 @@ build_steps: &build_steps
      - run:
          name: Update environment variables
          command: .circleci/set_env.sh
-
      - run:
          name: Before install script
          command: .circleci/before_install.sh
-
      - run:
          name: Install dependencies
          command: .circleci/install.sh
      - run:
           name: Install changed formulae
           command: .circleci/script.sh
-      # - run: |
-      #     git remote set-url origin $CIRCLE_REPOSITORY_URL
-      #     git fetch origin
-      #     git config --global user.name GeoNinja
-      #     git config --global user.email qgisninja@gmail.com
-      #     repo=$(brew --repo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME)
-      #     mkdir -p $repo
-      #     cp -a ./ $repo/
+     # - run: |
+     #     git remote set-url origin $CIRCLE_REPOSITORY_URL
+     #     git fetch origin
+     #     git config --global user.name GeoNinja
+     #     git config --global user.email qgisninja@gmail.com
+     #     repo=$(brew --repo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME)
+     #     mkdir -p $repo
+     #     cp -a ./ $repo/
      - run:
           name: Build bottles
           no_output_timeout: 30m
+          # command: .circleci/after_script.sh
           command: |
             mkdir /tmp/bottles
             cd /tmp/bottles
-            ../../.circleci/after_script.sh
-
+            mkdir -p bottles
+            for f in ${CHANGED_FORMULAE};do
+              echo "Bottling changed formula ${f}..."
+              brew bottle --verbose --json --root-url=https://dl.bintray.com/homebrew-osgeo/osgeo-bottles homebrew-osgeo/osgeo-bottles/${f}
+              for art in ${f}*.sierra.bottle.*; do
+                  mv ${art} ${art/--/-}
+              done
+              for art in ${f}*.high_sierra.bottle.*; do
+                new_name=${art/.high_sierra./.mojave.}
+                cp -a ${art} ${new_name/--/-}
+                mv ${art} ${art/--/-}
+              done
+              for json in ${f}*.mojave.bottle*.json; do
+                sed -i '' s@high_sierra@mojave@g ${json}
+              done
+            done
      # brew test-bot --skip-setup --bintray-org=homebrew-osgeo --root-url=https://dl.bintray.com/homebrew-osgeo/osgeo-bottles/ --git-name=GeoNinja --git-email=qgisninja@gmail.com
-
      - persist_to_workspace:
           root: /tmp
           paths:
@@ -57,7 +69,7 @@ workflow_filter: &filter
 
 version: 2
 jobs:
-  build-macos:
+  update-homebrew:
     macos:
       xcode: "10.1.0"
     # environment:
@@ -88,16 +100,19 @@ jobs:
           paths:
             - /usr/local/Homebrew/Library/Taps/homebrew
             - /usr/local/Homebrew/Library/Taps/brewsci
+
   sierra-build:
     <<: *build_steps
     <<: *filter
     macos:
       xcode: "8.3.3"
+
   high_sierra-build:
     <<: *build_steps
     <<: *filter
     macos:
       xcode: "10.1.0"
+
   bottle-upload:
     macos:
       xcode: "10.1.0"
@@ -122,23 +137,23 @@ workflows:
   version: 2
   build_bottles:
     jobs:
-      - build-macos
+      - update-homebrew
       - high_sierra-build:
           requires:
-            - build-macos
+            - update-homebrew
       - sierra-build:
           requires:
-            - build-macos
+            - update-homebrew
       # - collect-bottles:
       #     requires:
-      #       - build-macos
-#      - bottle-upload:
-#          filters:
-#            tags:
-#              only: deploy
-#          requires:
-#            - high_sierra-build
-#            - sierra-build
-notify:
+      #       - update-homebrew
+      # - bottle-upload:
+      #     filters:
+      #       tags:
+      #         only: deploy
+      #     requires:
+      #       - high_sierra-build
+      #       - sierra-build
+# notify:
 #   webhooks:
 # - url:
