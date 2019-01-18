@@ -34,9 +34,9 @@ build_steps: &build_steps
           command: |
             mkdir /tmp/bottles
             cd /tmp/bottles
-            ../../circleci/after_script.sh
+            ../../.circleci/after_script.sh
 
-      # brew test-bot --skip-setup --bintray-org=homebrew-osgeo --root-url=https://dl.bintray.com/homebrew-osgeo/osgeo-bottles/ --git-name=GeoNinja --git-email=qgisninja@gmail.com
+     # brew test-bot --skip-setup --bintray-org=homebrew-osgeo --root-url=https://dl.bintray.com/homebrew-osgeo/osgeo-bottles/ --git-name=GeoNinja --git-email=qgisninja@gmail.com
 
      - persist_to_workspace:
           root: /tmp
@@ -129,9 +129,9 @@ workflows:
       - sierra-build:
           requires:
             - build-macos
-      - collect-bottles:
-          requires:
-            - build-macos
+      # - collect-bottles:
+      #     requires:
+      #       - build-macos
 #      - bottle-upload:
 #          filters:
 #            tags:
