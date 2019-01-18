@@ -1,7 +1,7 @@
 require File.expand_path("../../Requirements/qgis_requirements",
                          Pathname.new(__FILE__).realpath)
 
-class Qgis2 < Formula
+class QgisLtrAT218 < Formula
   include Language::Python::Virtualenv
   desc "Open Source Geographic Information System"
   homepage "https://www.qgis.org"
