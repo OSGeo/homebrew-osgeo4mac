@@ -9,7 +9,7 @@ build_steps: &build_steps
      - run:
          name: Update environment variables
          command: .circleci/set_env.sh
-           
+
      - run:
          name: Before install script
          command: .circleci/before_install.sh
@@ -23,11 +23,13 @@ build_steps: &build_steps
      - run:
          name: Build bottles
          command: .circleci/after_script.sh
-     - persist_to_workspace:
-         root: bottles
-         paths:
-           - ./*.tar.gz
-           - ./*.json
+      - persist_to_workspace:
+          root: /tmp
+          paths:
+            - bottles/*.json
+            - bottles/*.tar.gz
+      - store_test_results:
+          path: /tmp/bottles
 
 workflow_filter: &filter
   filters:
@@ -74,9 +76,11 @@ jobs:
       tags:
         only: deploy
     steps:
-      - checkout
       - attach_workspace:
-          at: ./bottles
+          at: /tmp/workspace
+      - store_artifacts:
+          path: /tmp/workspace/bottles
+          destination: bottles
       - run:
           name: Set env
           command: .circleci/set_env.sh
@@ -102,6 +106,3 @@ workflows:
 #          requires:
 #            - high_sierra-build
 #            - sierra-build
-
-
-   
