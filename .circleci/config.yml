@@ -23,12 +23,12 @@ build_steps: &build_steps
      - run:
          name: Build bottles
          command: .circleci/after_script.sh
-      - persist_to_workspace:
+     - persist_to_workspace:
           root: /tmp
           paths:
             - bottles/*.json
             - bottles/*.tar.gz
-      - store_test_results:
+     - store_test_results:
           path: /tmp/bottles
 
 workflow_filter: &filter
