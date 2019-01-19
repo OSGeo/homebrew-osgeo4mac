@@ -17,7 +17,6 @@
 
 set -e
 
-
 ulimit -c unlimited
            ulimit -n 2048
            export CHANGED_FORMULAE=$(.circleci/changed_formulas.sh)
@@ -38,3 +37,4 @@ ulimit -c unlimited
            echo 'export HOMEBREW_DEVELOPER=1' >> $BASH_ENV
            echo 'export HOMEBREW_NO_AUTO_UPDATE=1' >> $BASH_ENV
            echo 'export HOMEBREW_PREFIX=/usr/local' >> $BASH_ENV
+           echo 'export CIRCLE_REPOSITORY_URL=https://github.com/OSGeo/homebrew-osgeo4mac' >> $BASH_ENV

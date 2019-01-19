@@ -1,15 +1,17 @@
 build_steps: &build_steps
   steps:
      - checkout
+
      - restore_cache:
          keys:
            - homebrew-v1-{{ .Branch }}-{{ .Revision }}
            - homebrew-v1-{{ .Branch }}-
            - homebrew-v1-
+
      - run:
          name: Update environment variables
          command: .circleci/set_env.sh
-           
+
      - run:
          name: Before install script
          command: .circleci/before_install.sh
@@ -17,17 +19,44 @@ build_steps: &build_steps
      - run:
          name: Install dependencies
          command: .circleci/install.sh
+
      - run:
           name: Install changed formulae
           command: .circleci/script.sh
+
+     # - run: |
+     #     git remote set-url origin $CIRCLE_REPOSITORY_URL
+     #     git fetch origin
+     #     git config --global user.name GeoNinja
+     #     git config --global user.email qgisninja@gmail.com
+     #     repo=$(brew --repo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME)
+     #     mkdir -p $repo
+     #     cp -a ./ $repo/
+
      - run:
-         name: Build bottles
-         command: .circleci/after_script.sh
+          name: Build bottles
+          # no_output_timeout: 30m
+          command: .circleci/after_script.sh
+
+     # mkdir /tmp/bottles
+     # cd /tmp/bottles
+     # brew test-bot --skip-setup --bintray-org=homebrew-osgeo --root-url=https://dl.bintray.com/homebrew-osgeo/osgeo-bottles --git-name=GeoNinja --git-email=qgisninja@gmail.com
+
      - persist_to_workspace:
-         root: bottles
-         paths:
-           - ./*.tar.gz
-           - ./*.json
+          root: bottles # /tmp
+          paths:
+            # if the formula does not change or if a file is updated/uploaded:
+            # The specified paths did not match any files in /Users/distiller/project/bottles
+            # - ./*.json
+            # - ./*.tar.gz
+            - ./ # bottles
+
+     # - store_test_results:
+     #      path: bottles
+
+  # collect-bottles:
+  #   docker:
+  #    - image: linuxbrew/brew
 
 workflow_filter: &filter
   filters:
@@ -40,46 +69,71 @@ jobs:
   update-homebrew:
     macos:
       xcode: "10.1.0"
+    # environment:
+    #   CIRCLE_REPOSITORY_URL: https://github.com/OSGeo/homebrew-osgeo4mac
+    #   HOMEBREW_DEVELOPER: 1
+    #   HOMEBREW_NO_AUTO_UPDATE: 1
+
     steps:
       - restore_cache:
           keys:
             - homebrew-v1-{{ .Branch }}-{{ .Revision }}
             - homebrew-v1-{{ .Branch }}-
             - homebrew-v1-
+
+      # - run: |
+      #     brew --version
+      #     brew remove $(brew list)
+      #     rm -rf /usr/local/Homebrew/Library/Taps/
+      #     brew update-reset
+      #     brew --env
+      #     brew config
+
       - run:
           name: "Update homebrew"
           command: |
             brew tap brewsci/science || true
             brew tap brewsci/bio || true
             brew update || brew update
+
       - save_cache:
           key: homebrew-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - /usr/local/Homebrew/Library/Taps/homebrew
             - /usr/local/Homebrew/Library/Taps/brewsci
+
   sierra-build:
     <<: *build_steps
     <<: *filter
     macos:
       xcode: "8.3.3"
+
   high_sierra-build:
     <<: *build_steps
     <<: *filter
     macos:
       xcode: "10.1.0"
+
   bottle-upload:
     macos:
       xcode: "10.1.0"
     filters:
       tags:
         only: deploy
+
     steps:
       - checkout
       - attach_workspace:
-          at: ./bottles
+          at: ./bottles # /tmp/workspace
+
+      # - store_artifacts:
+      #     path: /tmp/workspace/bottles
+      #     destination: bottles
+
       - run:
           name: Set env
           command: .circleci/set_env.sh
+
       - run:
           name: Commit bottles
           command: .circleci/before_deploy.sh
@@ -89,19 +143,27 @@ workflows:
   build_bottles:
     jobs:
       - update-homebrew
+
       - high_sierra-build:
           requires:
             - update-homebrew
+
       - sierra-build:
           requires:
             - update-homebrew
-#      - bottle-upload:
-#          filters:
-#            tags:
-#              only: deploy
-#          requires:
-#            - high_sierra-build
-#            - sierra-build
 
+      # - collect-bottles:
+      #     requires:
+      #       - update-homebrew
 
-   
+      # - bottle-upload:
+      #     filters:
+      #       tags:
+      #         only: deploy
+      #     requires:
+      #       - high_sierra-build
+      #       - sierra-build
+
+# notify:
+#   webhooks:
+# - url:
