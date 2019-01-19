@@ -35,8 +35,11 @@ done
 
 brew update > /dev/null
 
-# Install XQuartz
-brew cask install xquartz
+formula=$(echo "grass" | grep -wv '[grass|osgearth]')
+if (${formula}==grass7 || ${formula}==grass7-lts || ${formula}==grass6 || ${formula}==grass-64 || ${formula}==osgearth-qt5);then
+  # Install XQuartz
+  brew cask install xquartz
+fi
 
 for f in ${CHANGED_FORMULAE};do
   echo "Homebrew setup for changed formula ${f}..."
