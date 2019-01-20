@@ -1,5 +1,13 @@
 class Lastools < Formula
   desc "Efficient tools for LiDAR processing. Contains LASlib, a C++ programming API for reading / writing LIDAR data stored in standard LAS format"
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    cellar :any_skip_relocation
+    sha256 "323cb55abbc4494c3d9c08ce12610caf0d8dbd4a74f9d9dfb02d64a3955ef476" => :mojave
+    sha256 "323cb55abbc4494c3d9c08ce12610caf0d8dbd4a74f9d9dfb02d64a3955ef476" => :high_sierra
+    sha256 "323cb55abbc4494c3d9c08ce12610caf0d8dbd4a74f9d9dfb02d64a3955ef476" => :sierra
+  end
+
   homepage "https://rapidlasso.com/lastools" # http://lastools.org
   # url "http://lastools.org/download/LAStools.zip" # wine
   # sha256 "2d7a7b6a232c953dd73505e25c33f2cb6b7765342eb2522e9b0dc8bed62d0890"
