@@ -8,6 +8,14 @@ class WhiteboxTools < Formula
   #   :commit => "f0cf6af792de8f60dd8afb10e3f0a26df1c702c4"
   version "0.13.0"
 
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    cellar :any_skip_relocation
+    sha256 "73eaf7a1af09c2029d1a8c368d277376d3465c345f901a6525f7a9d7a92f790b" => :mojave
+    sha256 "73eaf7a1af09c2029d1a8c368d277376d3465c345f901a6525f7a9d7a92f790b" => :high_sierra
+    sha256 "73eaf7a1af09c2029d1a8c368d277376d3465c345f901a6525f7a9d7a92f790b" => :sierra
+  end
+
   # revision 1
 
   # head "https://github.com/jblindsay/whitebox-tools.git", :branch => "master"
