@@ -63,7 +63,7 @@ for f in ${CHANGED_FORMULAE};do
 
     if [[ "${f}" =~ "gdal2" ]];then
       echo "Installing GDAL 2 Python 2 dependencies"
-      /usr/local/bin/bin/pip2 install numpy
+      /usr/local/bin/pip2 install numpy
     fi
   fi
 
@@ -86,7 +86,7 @@ for f in ${CHANGED_FORMULAE};do
 
     if [[ "${f}" =~ "gdal2" ]];then
       echo "Installing GDAL 2 Python 3 dependencies"
-      /usr/local/bin/bin/pip3 install numpy
+      /usr/local/bin/pip3 install numpy
     fi
   fi
 
