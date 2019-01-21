@@ -56,14 +56,14 @@ for f in ${CHANGED_FORMULAE};do
     fi
     mkdir -p ${CIRCLE_WORKING_DIRECTORY}/Library/Python/${PY_VER}/lib/python/site-packages
 
-    echo 'import site; site.addsitedir("/usr/local/bin/lib/python${PY_VER}/site-packages")' \
+    echo 'import site; site.addsitedir("/usr/local/lib/python${PY_VER}/site-packages")' \
          >> ${CIRCLE_WORKING_DIRECTORY}/Library/Python/${PY_VER}/lib/python/site-packages/homebrew.pth
-    echo 'import site; site.addsitedir("/usr/local/bin/opt/gdal2/lib/python${PY_VER}/site-packages")' \
+    echo 'import site; site.addsitedir("/usr/local/opt/gdal2/lib/python${PY_VER}/site-packages")' \
          >> ${CIRCLE_WORKING_DIRECTORY}/Library/Python/${PY_VER}/lib/python/site-packages/gdal2.pth
 
     if [[ "${f}" =~ "gdal2" ]];then
       echo "Installing GDAL 2 Python 2 dependencies"
-      /usr/local/bin/bin/pip2 install numpy
+      /usr/local/bin/pip2 install numpy
     fi
   fi
 
@@ -79,14 +79,14 @@ for f in ${CHANGED_FORMULAE};do
     fi
     mkdir -p ${CIRCLE_WORKING_DIRECTORY}/Library/Python/${PY_VER}/lib/python/site-packages
 
-    echo 'import site; site.addsitedir("/usr/local/bin/lib/python${PY_VER}/site-packages")' \
+    echo 'import site; site.addsitedir("/usr/local/lib/python${PY_VER}/site-packages")' \
          >> ${CIRCLE_WORKING_DIRECTORY}/Library/Python/${PY_VER}/lib/python/site-packages/homebrew.pth
-    echo 'import site; site.addsitedir("/usr/local/bin/opt/gdal2/lib/python${PY_VER}/site-packages")' \
+    echo 'import site; site.addsitedir("/usr/local/opt/gdal2/lib/python${PY_VER}/site-packages")' \
          >> ${CIRCLE_WORKING_DIRECTORY}/Library/Python/${PY_VER}/lib/python/site-packages/gdal2.pth
 
     if [[ "${f}" =~ "gdal2" ]];then
       echo "Installing GDAL 2 Python 3 dependencies"
-      /usr/local/bin/bin/pip3 install numpy
+      /usr/local/bin/pip3 install numpy
     fi
   fi
 

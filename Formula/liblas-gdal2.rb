@@ -3,7 +3,8 @@ class LiblasGdal2 < Formula
   homepage "https://liblas.org/"
   url "http://download.osgeo.org/liblas/libLAS-1.8.1.tar.bz2"
   sha256 "9adb4a98c63b461ed2bc82e214ae522cbd809cff578f28511122efe6c7ea4e76"
-  revision 1
+
+  revision 2
 
   head "https://github.com/libLAS/libLAS.git"
 
@@ -25,6 +26,10 @@ class LiblasGdal2 < Formula
   depends_on "gdal2"
   depends_on "boost"
   depends_on "laszip@2.2" if build.with? "laszip"
+  depends_on "zlib"
+  depends_on "jpeg"
+  depends_on "libtiff"
+  depends_on "proj"
 
   needs :cxx11
 
@@ -51,6 +56,7 @@ class LiblasGdal2 < Formula
       ENV["Boost_INCLUDE_DIR"] = "#{HOMEBREW_PREFIX}/include"
       ENV["Boost_LIBRARY_DIRS"] = "#{HOMEBREW_PREFIX}/lib"
       args = ["-DWITH_GEOTIFF=ON", "-DWITH_GDAL=ON"] + std_cmake_args
+
       if build.with? "laszip"
         args << "-DWITH_LASZIP=ON"
         args << "-DLASZIP_INCLUDE_DIR=#{Formula['laszip@2.2'].opt_include}"
