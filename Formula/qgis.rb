@@ -38,7 +38,7 @@ class Qgis < Formula
   homepage "https://www.qgis.org"
   url "https://github.com/qgis/QGIS.git",
     :branch => "release-3_4",
-    :commit => "20a1d7ff2da59a6fa503e78d5686cfead3368709"
+    :commit => "69b199a9b551d34568051ce900417e0a8d207b40"
   version "3.4.4"
 
   # revision 1
@@ -330,19 +330,19 @@ class Qgis < Formula
     sha256 "3d734559db35aa3697dadcea492a423118c5c55d176da2f3be9c98d4803fc2a7"
   end
 
-  # R Provider Plugin
+  # R Plugin
   resource "r-app" do
     url "https://github.com/north-road/qgis-processing-r.git",
       :branch => "master",
-      :commit => "ebbfa9e6a243608415468ea3254a1a740bc2006c"
-    version "0.0.3"
+      :commit => "0fdc3b0ebe39acf1f79103091f155c5a26364850"
+    version "1.0.1"
   end
 
-  # Orfeo Provider Plugin
+  # OTB Plugin
   resource "otb" do
     url "https://gitlab.orfeo-toolbox.org/orfeotoolbox/qgis-otb-plugin.git",
       :branch => "master",
-      :commit => "a1762b732f18a2dff9e92c44cf2f892f227b0f91"
+      :commit => "2449af85b0fed64e2c8373676c813365fbcd7e82"
     version "0.1"
   end
 
@@ -409,7 +409,7 @@ class Qgis < Formula
 
     if build.with?("r") || brewed_r?
       resource("r-app").stage do
-        cp_r "./r", "#{buildpath}/python/plugins/"
+        cp_r "./processing_r", "#{buildpath}/python/plugins/"
       end
       resource("RAlgorithmProvider").stage do
         cp_r "./RAlgorithmProvider.patch", "#{buildpath}"
