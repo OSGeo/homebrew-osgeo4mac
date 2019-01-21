@@ -12,19 +12,13 @@ class Grass7 < Formula
   head "https://svn.osgeo.org/grass/grass/trunk"
 
   stable do
-    url "https://grass.osgeo.org/grass74/source/grass-7.4.4.tar.gz"
-    sha256 "96a39e273103f7375a670eba94fa3e5dad2819c5c5664c9aee8f145882a94e8c"
+    url "https://grass.osgeo.org/grass76/source/grass-7.6.0.tar.gz"
+    sha256 "07628f83ad59ba6d9d097cdc91c490efaf5b1d57bc7ee1fc2709183162741b6a"
 
     # Patches to keep files from being installed outside of the prefix.
     # Remove lines from Makefile that try to install to /Library/Documentation.
     # no_symbolic_links
     patch :DATA
-
-    # fix for python3: TypeError and others
-    patch do
-      url "https://gist.githubusercontent.com/fjperini/9480ad46cc4188ac7a72f4918e0d501b/raw/c738ee3b24b30bf439b97f4342a584829df0362b/grass7-python3.patch"
-      sha256 "4c450ef3292ae347ab8d491973870bfd914aad1bf748eb83156f059bda9bc76d"
-    end
   end
 
   bottle do
