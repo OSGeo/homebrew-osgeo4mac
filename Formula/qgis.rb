@@ -409,13 +409,8 @@ class Qgis < Formula
 
     if build.with?("r") || brewed_r?
       resource("r-app").stage do
-        cp_r "./processing_r", "#{buildpath}/python/plugins/"
+        cp_r "./processing_r", "#{prefix}/QGIS.app/Contents/Resources/python/plugins/"
       end
-      resource("RAlgorithmProvider").stage do
-        cp_r "./RAlgorithmProvider.patch", "#{buildpath}"
-      end
-      system "patch", "-p1", "-i", "#{buildpath}/RAlgorithmProvider.patch"
-      cp_r "#{buildpath}/python/plugins/r", "#{prefix}/QGIS.app/Contents/Resources/python/plugins/"
     end
 
     # when gdal2-python.rb loaded, PYTHONPATH gets set to 2.7 site-packages...
@@ -848,6 +843,17 @@ class Qgis < Formula
         puts "ORFEO 6 OTBUtils.py has been updated"
         rescue Utils::InreplaceError
         puts "ORFEO 6 OTBUtils.py already updated"
+      end
+    end
+
+    if opts.include?("with-r") || brewed_r?
+      begin
+        inreplace "#{proc_plugins}/processing_r/processing/provider.py" do |s|
+        s.gsub! "'Activate'), False))", "'Activate'), True))"
+        end
+        puts "R RAlgorithmProvider.py has been updated"
+        rescue Utils::InreplaceError
+        puts "R RAlgorithmProvider.py already updated"
       end
     end
 
