@@ -38,10 +38,10 @@ class Qgis < Formula
   homepage "https://www.qgis.org"
   url "https://github.com/qgis/QGIS.git",
     :branch => "release-3_4",
-    :commit => "69b199a9b551d34568051ce900417e0a8d207b40"
+    :commit => "508817d6344cb9fb7215209db7994b97ad8c5162"
   version "3.4.4"
 
-  # revision 1
+  revision 1
 
   head "https://github.com/qgis/QGIS.git", :branch => "master"
 
@@ -66,6 +66,7 @@ class Qgis < Formula
   option "without-debug", "Disable debug build, which outputs info to system.log or console"
   option "without-server", "Build without QGIS Server (qgis_mapserv.fcgi)"
   option "without-postgresql", "Build without current PostgreSQL client"
+  option "with-postgresql10", "Build with PostgreSQL 10 client"
   option "with-grass", "Build with GRASS 7 integration plugin and Processing plugin support (or install grass-7x first)"
   option "with-oracle", "Build extra Oracle geospatial database and raster support"
   option "with-orfeo", "Build extra Orfeo Toolbox for Processing plugin"
@@ -107,8 +108,6 @@ class Qgis < Formula
   depends_on "expat" # keg_only
   depends_on "proj"
   depends_on "spatialindex"
-  # use newer postgresql client than Apple's, also needed by `psycopg2`
-  depends_on "postgresql" => :recommended
   depends_on "libpq"
   depends_on "curl"
   depends_on "libzip"
@@ -130,6 +129,13 @@ class Qgis < Formula
   depends_on "szip" => :optional
   depends_on "hdf5" => :optional
   depends_on "scipy"
+
+  # use newer postgresql client than Apple's, also needed by `psycopg2`
+  if build.with? "postgresql10"
+    depends_on "postgresql@10" => :recommended
+  else
+    depends_on "postgresql" => :recommended
+  end
 
   if build.with? "server"
     depends_on "fcgi"
