@@ -449,6 +449,7 @@ class Qgis < Formula
     venv = virtualenv_create(libexec/'vendor', "#{HOMEBREW_PREFIX}/opt/python/bin/python3")
     res = resources.map(&:name).to_set - %w[pyqgis-startup r-app otb OtbAlgorithmProvider OtbUtils RAlgorithmProvider]
     res.each do |r|
+      system libexec/"bin/pip", "install", "-U", "'pip<19.0'", "setuptools", "wheel", "|", "cat"
       venv.pip_install resource(r)
     end
 
