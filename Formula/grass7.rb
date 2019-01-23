@@ -1,5 +1,5 @@
-require File.expand_path("../../Requirements/grass_requirements",
-                         Pathname.new(__FILE__).realpath)
+# require File.expand_path("../../Requirements/grass_requirements",
+#                          Pathname.new(__FILE__).realpath)
 
 class Grass7 < Formula
   include Language::Python::Virtualenv
@@ -81,7 +81,7 @@ class Grass7 < Formula
 
   depends_on :x11 if build.without? "aqua" # needs to find at least X11/include/GL/gl.h
 
-  depends_on UnlinkedGRASS7
+  # depends_on UnlinkedGRASS7
 
   # optional dependencies
   depends_on "netcdf" => :optional
