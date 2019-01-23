@@ -447,11 +447,12 @@ class Qgis < Formula
 
     # install python environment
     venv = virtualenv_create(libexec/'vendor', "#{HOMEBREW_PREFIX}/opt/python/bin/python3")
-    res = resources.map(&:name).to_set - %w[pyqgis-startup r-app otb OtbAlgorithmProvider OtbUtils RAlgorithmProvider]
+    res = resources.map(&:name).to_set - %w[python-dateutil pyqgis-startup r-app otb OtbAlgorithmProvider OtbUtils RAlgorithmProvider]
+    venv.pip_install "--no-use-pep517" resource("python-dateutil")
     res.each do |r|
       venv.pip_install resource(r)
     end
-
+ 
     # set bundling level back to 0 (the default in all versions prior to 1.8.0)
     # so that no time and energy is wasted copying the Qt frameworks into QGIS.
 
