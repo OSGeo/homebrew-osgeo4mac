@@ -48,6 +48,12 @@ for f in ${CHANGED_FORMULAE};do
     echo "Installing and configuring Homebrew Python 2"
     brew outdated python@2 || brew upgrade python@2
 
+    # fix pip._vendor.pep517.wrappers.BackendUnavailable
+    if ['qgis', 'qgis-ltr', 'qgis-ltr@2.18', 'grass7'].include?(${f})
+      echo "Update pip"
+      /usr/local/bin/pip2 install -U 'pip<19.0' setuptools wheel | cat
+    fi
+
     # Set up Python .pth files
     # get python short version (major.minor)
     PY_VER=$(/usr/local/bin/python2 -c 'import sys;print("{0}.{1}".format(sys.version_info[0],sys.version_info[1]))')
@@ -70,6 +76,12 @@ for f in ${CHANGED_FORMULAE};do
   if [ "$(echo ${deps} | grep -c '[python|python3]')" != "0" ];then
     echo "Installing and configuring Homebrew Python 3"
     brew outdated python || brew upgrade python
+
+    # fix pip._vendor.pep517.wrappers.BackendUnavailable
+    if ['qgis', 'qgis-ltr', 'qgis-ltr@2.18', 'grass7'].include?(${f})
+      echo "Update pip"
+      /usr/local/bin/pip3 install -U 'pip<19.0' setuptools wheel | cat
+    fi
 
     # Set up Python .pth files
     # get python short version (major.minor)
