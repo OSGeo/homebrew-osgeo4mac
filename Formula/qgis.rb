@@ -438,7 +438,7 @@ class Qgis < Formula
     # install python environment
     venv = virtualenv_create(libexec/'vendor', "#{HOMEBREW_PREFIX}/opt/python/bin/python3")
     res = resources.map(&:name).to_set - %w[python-dateutil pyqgis-startup r-app otb OtbAlgorithmProvider OtbUtils RAlgorithmProvider]
-    system libexec/"vendor/bin/pip", "install", "-v", "--no-deps", "--no-binary", ":all:", "--ignore-installed", "--no-use-pep517", "setuptools", "pip", "wheel", "pep517", "python-dateutil"
+    system libexec/"vendor/bin/pip", "install", "-v", "--no-deps", "--no-binary", ":all:", "--ignore-installed", "setuptools", "pip", "wheel", "pep517", "python-dateutil"
     system libexec/"vendor/bin/pip", "uninstall", "-y", "python-dateutil"
     venv.pip_install_and_link "python-dateutil"
     res.each do |r|
