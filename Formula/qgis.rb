@@ -197,21 +197,6 @@ class Qgis < Formula
     version "2.14.0"
   end
 
-  resource "setuptools" do
-    url "https://files.pythonhosted.org/packages/37/1b/b25507861991beeade31473868463dad0e58b1978c209de27384ae541b0b/setuptools-40.6.3.zip"
-    sha256 "3b474dad69c49f0d2d86696b68105f3a6f195f7ab655af12ef9a9c326d2b08f8"
-  end
-
-  resource "pip" do
-    url "https://files.pythonhosted.org/packages/c8/89/ad7f27938e59db1f0f55ce214087460f65048626e2226531ba6cb6da15f0/pip-19.0.1.tar.gz"
-    sha256 "e81ddd35e361b630e94abeda4a1eddd36d47a90e71eb00f38f46b57f787cd1a5"
-  end
-
-  resource "wheel" do
-    url "https://files.pythonhosted.org/packages/d8/55/221a530d66bf78e72996453d1e2dedef526063546e131d70bed548d80588/wheel-0.32.3.tar.gz"
-    sha256 "029703bf514e16c8271c3821806a1c171220cc5bdd325cbf4e7da1e056a01db6"
-  end
-
   resource "certifi" do
     url "https://files.pythonhosted.org/packages/41/b6/4f0cefba47656583217acd6cd797bc2db1fede0d53090fdc28ad2c8e0716/certifi-2018.10.15.tar.gz"
     sha256 "6d58c986d22b038c8c0df30d639f23a3e6d172a05c3583e766f4c0b785c0986a"
@@ -240,6 +225,11 @@ class Qgis < Formula
   resource "pyproj" do
     url "https://files.pythonhosted.org/packages/26/8c/1da0580f334718e04f8bbf74f0515a7fb8185ff96b2560ce080c11aa145b/pyproj-1.9.6.tar.gz"
     sha256 "e0c02b1554b20c710d16d673817b2a89ff94738b0b537aead8ecb2edc4c4487b"
+  end
+
+  resource "pep517" do
+    url "https://files.pythonhosted.org/packages/79/27/1e6a8ba83dab2b243e1020e340552c129b0076fbb5518e0c2a9c44c7d056/pep517-0.5.0.tar.gz"
+    sha256 "cb5ca55450b64e80744cd5c32f7d5b8928004042dfea50fdc3f96ad7f27cba96"
   end
 
   resource "python-dateutil" do
@@ -448,7 +438,7 @@ class Qgis < Formula
     # install python environment
     venv = virtualenv_create(libexec/'vendor', "#{HOMEBREW_PREFIX}/opt/python/bin/python3")
     res = resources.map(&:name).to_set - %w[python-dateutil pyqgis-startup r-app otb OtbAlgorithmProvider OtbUtils RAlgorithmProvider]
-    system libexec/"vendor/bin/pip", "install", "-v", "--no-deps", "--no-binary", ":all:", "--ignore-installed", "--no-use-pep517", "python-dateutil"
+    system libexec/"vendor/bin/pip", "install", "-v", "--no-deps", "--no-binary", ":all:", "--ignore-installed", "--no-use-pep517", "setuptools", "pip", "wheel", "pep517", "python-dateutil"
     system libexec/"vendor/bin/pip", "uninstall", "-y", "python-dateutil"
     venv.pip_install_and_link "python-dateutil"
     res.each do |r|
