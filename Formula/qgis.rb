@@ -197,21 +197,6 @@ class Qgis < Formula
     version "2.14.0"
   end
 
-  resource "setuptools" do
-    url "https://files.pythonhosted.org/packages/37/1b/b25507861991beeade31473868463dad0e58b1978c209de27384ae541b0b/setuptools-40.6.3.zip"
-    sha256 "3b474dad69c49f0d2d86696b68105f3a6f195f7ab655af12ef9a9c326d2b08f8"
-  end
-
-  resource "pip" do
-    url "https://files.pythonhosted.org/packages/45/ae/8a0ad77defb7cc903f09e551d88b443304a9bd6e6f124e75c0fbbf6de8f7/pip-18.1.tar.gz"
-    sha256 "c0a292bd977ef590379a3f05d7b7f65135487b67470f6281289a94e015650ea1"
-  end
-
-  resource "wheel" do
-    url "https://files.pythonhosted.org/packages/d8/55/221a530d66bf78e72996453d1e2dedef526063546e131d70bed548d80588/wheel-0.32.3.tar.gz"
-    sha256 "029703bf514e16c8271c3821806a1c171220cc5bdd325cbf4e7da1e056a01db6"
-  end
-
   resource "certifi" do
     url "https://files.pythonhosted.org/packages/41/b6/4f0cefba47656583217acd6cd797bc2db1fede0d53090fdc28ad2c8e0716/certifi-2018.10.15.tar.gz"
     sha256 "6d58c986d22b038c8c0df30d639f23a3e6d172a05c3583e766f4c0b785c0986a"
@@ -448,7 +433,7 @@ class Qgis < Formula
     # install python environment
     venv = virtualenv_create(libexec/'vendor', "#{HOMEBREW_PREFIX}/opt/python/bin/python3")
     res = resources.map(&:name).to_set - %w[pyqgis-startup r-app otb OtbAlgorithmProvider OtbUtils RAlgorithmProvider]
-    system "#{libexec}/vendor/bin/pip", "install", "-U", "'pip<19.0'", "setuptools", "wheel", "|", "cat"
+    system "#{libexec}/vendor/bin/pip", "install", "-U", "'pip<19'", "setuptools"
     res.each do |r|
       venv.pip_install resource(r)
     end
