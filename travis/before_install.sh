@@ -62,7 +62,7 @@ for f in ${CHANGED_FORMULAE};do
     brew outdated python || brew upgrade python
 
     # fix pip._vendor.pep517.wrappers.BackendUnavailable
-    if ['qgis', 'qgis-ltr', 'qgis-ltr@2.18', 'grass7'].include?("${f}")
+    if [ "${f}" == 'qgis' || "${f}" == 'qgis-ltr' || ${f} == 'qgis-ltr@2.18' || "${f}" == 'grass7'];then
       echo "Update pip"
       /usr/local/bin/python3 -m pip install -U 'pip<19.0' setuptools wheel | cat
     fi
@@ -95,7 +95,7 @@ for f in ${CHANGED_FORMULAE};do
     fi
 
     # fix pip._vendor.pep517.wrappers.BackendUnavailable
-    if ['qgis', 'qgis-ltr', 'qgis-ltr@2.18', 'grass7'].include?("${f}")
+    if [ "${f}" == 'qgis' || "${f}" == 'qgis-ltr' || ${f} == 'qgis-ltr@2.18' || "${f}" == 'grass7'];then
       echo "Update pip"
       /usr/local/bin/python2 -m pip install -U 'pip<19.0' setuptools wheel | cat
     fi
