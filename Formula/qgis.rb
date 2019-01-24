@@ -38,7 +38,7 @@ class Qgis < Formula
   homepage "https://www.qgis.org"
   url "https://github.com/qgis/QGIS.git",
     :branch => "release-3_4",
-    :commit => "69b199a9b551d34568051ce900417e0a8d207b40"
+    :commit => "8ce8ee0be0f5e05f0665bc5149ebe7f3edec6e88a"
   version "3.4.4"
 
   # revision 1
@@ -66,6 +66,7 @@ class Qgis < Formula
   option "without-debug", "Disable debug build, which outputs info to system.log or console"
   option "without-server", "Build without QGIS Server (qgis_mapserv.fcgi)"
   option "without-postgresql", "Build without current PostgreSQL client"
+  option "with-postgresql10", "Build with PostgreSQL 10 client"
   option "with-grass", "Build with GRASS 7 integration plugin and Processing plugin support (or install grass-7x first)"
   option "with-oracle", "Build extra Oracle geospatial database and raster support"
   option "with-orfeo", "Build extra Orfeo Toolbox for Processing plugin"
@@ -107,8 +108,6 @@ class Qgis < Formula
   depends_on "expat" # keg_only
   depends_on "proj"
   depends_on "spatialindex"
-  # use newer postgresql client than Apple's, also needed by `psycopg2`
-  depends_on "postgresql" => :recommended
   depends_on "libpq"
   depends_on "curl"
   depends_on "libzip"
@@ -130,6 +129,13 @@ class Qgis < Formula
   depends_on "szip" => :optional
   depends_on "hdf5" => :optional
   depends_on "scipy"
+
+  # use newer postgresql client than Apple's, also needed by `psycopg2`
+  if build.with? "postgresql10"
+    depends_on "postgresql@10" => :recommended
+  else
+    depends_on "postgresql" => :recommended
+  end
 
   if build.with? "server"
     depends_on "fcgi"
@@ -225,10 +231,12 @@ class Qgis < Formula
     version "1.9.6"
   end
 
-  resource "python-dateutil" do
-    url "https://files.pythonhosted.org/packages/0e/01/68747933e8d12263d41ce08119620d9a7e5eb72c876a3442257f74490da0/python-dateutil-2.7.5.tar.gz"
-    sha256 "88f9287c0174266bb0d8cedd395cfba9c58e87e5ad86b2ce58859bc11be3cf02"
-  end
+  # erro: pip._vendor.pep517.wrappers.BackendUnavailable
+  # disable module temporarily until receive an update.
+  # resource "python-dateutil" do
+  #   url "https://files.pythonhosted.org/packages/0e/01/68747933e8d12263d41ce08119620d9a7e5eb72c876a3442257f74490da0/python-dateutil-2.7.5.tar.gz"
+  #   sha256 "88f9287c0174266bb0d8cedd395cfba9c58e87e5ad86b2ce58859bc11be3cf02"
+  # end
 
   resource "pytz" do
     url "https://files.pythonhosted.org/packages/cd/71/ae99fc3df1b1c5267d37ef2c51b7d79c44ba8a5e37b48e3ca93b4d74d98b/pytz-2018.7.tar.gz"
