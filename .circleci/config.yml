@@ -1,5 +1,44 @@
 version: 2
 jobs:
+  test-bot-macos:
+    macos:
+      xcode: "10.1.0"
+    environment:
+      CIRCLE_REPOSITORY_URL: https://github.com/osgeo/homebrew-osgeo4mac
+      HOMEBREW_DEVELOPER: 1
+      HOMEBREW_NO_AUTO_UPDATE: 1
+    steps:
+      # - run:
+      #     brew cask install xquartz
+      - run: |
+          brew --version
+          brew update
+          cd $(brew --repo)
+          if [ -e .git/shallow ]; then echo git fetch --unshallow; fi
+          git fetch origin --tags
+          git reset --hard origin/master
+          brew --env
+          brew config
+      - checkout
+      - run: |
+          git remote set-url origin $CIRCLE_REPOSITORY_URL
+          if [ -e .git/shallow ]; then echo git fetch --unshallow; fi
+          git fetch origin
+          git reset --hard origin/master
+          repo=$(brew --repo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME)
+          echo $repo
+          mkdir -p $repo
+          cp -a ./ $repo/
+      - run:
+          no_output_timeout: 60m
+          command: |
+            mkdir /tmp/bottles
+            cd /tmp/bottles
+          # brew test-bot --skip-setup --local
+            RELEASE_TAG=$(echo "$CIRCLE_BRANCH" | sed -nE 's/(^[@a-z0-9\.\-]+-[0-9\._]+)#(macos-)?bottle$/\1/p')
+            FORMULA=$(echo "$RELEASE_TAG" | sed -nE 's/(^[@a-z0-9\.\-]*)-[0-9\._]*$/\1/p')
+            brew audit $FORMULA
+
   bottle-macos:
     macos:
       xcode: "10.1.0"
@@ -119,6 +158,10 @@ workflows:
   version: 2
   test-bot:
     jobs:
+      - test-bot-macos:
+          filters:
+            branches:
+              ignore: /master|.*#pr|.*#bottle|.*#macos-bottle/
       - create-macos-pr:
           requires:
             - bottle-macos
