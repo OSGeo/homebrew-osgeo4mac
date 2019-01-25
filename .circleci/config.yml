@@ -117,18 +117,18 @@ jobs:
   bottle-upload:
     macos:
       xcode: "10.1.0"
-    # filters:
-    #   tags:
-    #     only: deploy
+    filters:
+      tags:
+        only: deploy
 
     steps:
       - checkout
       - attach_workspace:
-          at: /workspace
+          at: ./
 
       - store_artifacts:
-          path: /workspace/bottles
-          destination: bottles
+          path: bottles
+          # destination: bottles
 
       - run:
           name: Set env
@@ -157,9 +157,9 @@ workflows:
       #       - update-homebrew
 
       - bottle-upload:
-          # filters:
-          #   tags:
-          #     only: deploy
+          filters:
+            tags:
+              only: deploy
           requires:
             - high_sierra-build
             - sierra-build
