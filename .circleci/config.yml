@@ -29,15 +29,12 @@ jobs:
           echo $repo
           mkdir -p $repo
           cp -a ./ $repo/
-      - run:
-          no_output_timeout: 60m
-          command: |
-            mkdir /tmp/bottles
-            cd /tmp/bottles
-            RELEASE_TAG=$(echo "$CIRCLE_BRANCH" | sed -nE 's/(^[@a-z0-9\.\-]+-[0-9\._]+)#(macos-)?bottle$/\1/p')
-            FORMULA=$(echo "$RELEASE_TAG" | sed -nE 's/(^[@a-z0-9\.\-]*)-[0-9\._]*$/\1/p')
-            brew audit $FORMULA
-          # brew test-bot --skip-setup --local
+      # - run:
+      #     no_output_timeout: 60m
+      #     command: |
+      #       mkdir /tmp/bottles
+      #       cd /tmp/bottles
+      #       brew test-bot --skip-setup --local
 
   bottle-macos:
     macos:
