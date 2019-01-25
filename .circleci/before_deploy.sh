@@ -73,7 +73,7 @@ popd
 
 # Set up the keys
 # openssl aes-256-cbc -iv "${ENCRYPTION_IV}" -K "${ENCRYPTION_KEY}" -d -in ci_deploy_key.enc -out deploy_key
-openssl aes-256-cbc -d -K $REPO_ENC_KEY -iv $REPO_ENC_IV -in ci_deploy_key.enc -out deploy_key
+openssl aes-256-cbc -d -k $decryption_key -in ci_deploy_key.enc -out deploy_key
 ls .
 chmod 600 ./deploy_key
 eval `ssh-agent -s`
@@ -94,7 +94,7 @@ echo "Upload bottles for ${f}"
 
 # Now do the commit and push
 git checkout -b builds
-it checkout builds
+git checkout builds
 git add bottles
 git add -vA ./bottles/*.tar.gz
 git add -vA ./bottles/*.json
