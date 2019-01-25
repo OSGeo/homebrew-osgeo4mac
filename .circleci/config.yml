@@ -1,41 +1,5 @@
 version: 2
 jobs:
-  test-bot-macos:
-    macos:
-      xcode: "10.1.0"
-    environment:
-      CIRCLE_REPOSITORY_URL: https://github.com/osgeo/homebrew-osgeo4mac
-      HOMEBREW_DEVELOPER: 1
-      HOMEBREW_NO_AUTO_UPDATE: 1
-    steps:
-      # - run:
-      #     brew cask install xquartz
-      - run: |
-          brew --version
-          brew update
-          cd $(brew --repo)
-          if [ -e .git/shallow ]; then echo git fetch --unshallow; fi
-          git fetch origin --tags
-          git reset --hard origin/master
-          brew --env
-          brew config
-      - checkout
-      - run: |
-          git remote set-url origin $CIRCLE_REPOSITORY_URL
-          if [ -e .git/shallow ]; then echo git fetch --unshallow; fi
-          git fetch origin
-          git reset --hard origin/master
-          repo=$(brew --repo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME)
-          echo $repo
-          mkdir -p $repo
-          cp -a ./ $repo/
-      - run:
-          no_output_timeout: 60m
-          command: |
-            mkdir /tmp/bottles
-            cd /tmp/bottles
-          # brew test-bot --skip-setup --local
-
   bottle-macos:
     macos:
       xcode: "10.1.0"
@@ -106,14 +70,37 @@ jobs:
           git push --set-upstream --force origin "$RELEASE_TAG#pr"
           hub pull-request -m "$(git log -1 --pretty=%B)"
 
+
+  create-pr:
+    docker:
+      - image: linuxbrew/brew
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - checkout
+      - run: |
+          git config --global user.name "Geo Ninja"
+          git config --global user.email "qgisninja@gmail.com"
+      - run: |
+          brew install hub
+          TAP_PATH=$(brew --repo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME)
+          mkdir -p $TAP_PATH
+          cp -a ./ $TAP_PATH/
+          brew tap --repair
+          # create pull request
+          cd $TAP_PATH
+          git reset --hard origin/$CIRCLE_BRANCH
+          brew bottle --merge --write /tmp/workspace/bottles/*.json
+          RELEASE_TAG=$(echo "$CIRCLE_BRANCH" | sed -nE 's/(^[@a-z0-9\.\-]+-[0-9\._]+)#(macos-)?bottle$/\1/p')
+          git checkout -b "$RELEASE_TAG#pr"
+          git remote set-url origin https://$CIRCLE_PROJECT_USERNAME:$GITHUB_TOKEN@github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
+          git push --set-upstream --force origin "$RELEASE_TAG#pr"
+          hub pull-request -m "$(git log -1 --pretty=%B)"
+
 workflows:
   version: 2
   build:
     jobs:
-      - test-bot-macos:
-          filters:
-            branches:
-              ignore: /master|.*#pr|.*#bottle|.*#macos-bottle/
       - create-macos-pr:
           requires:
             - bottle-macos
