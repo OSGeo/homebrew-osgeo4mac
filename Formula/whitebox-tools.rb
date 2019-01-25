@@ -4,9 +4,6 @@ class WhiteboxTools < Formula
   url "https://github.com/jblindsay/whitebox-tools/releases/download/v0.13/WhiteboxTools_darwin_amd64.zip"
   version "0.13.0"
   sha256 "fe79c3b797ba7ae23a525e11441b0d6406c339858b23271c143734c62af7ec27"
-  # url "https://github.com/jblindsay/whitebox-tools.git",
-  #   :branch => "master",
-  #   :commit => "f0cf6af792de8f60dd8afb10e3f0a26df1c702c4"
 
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
