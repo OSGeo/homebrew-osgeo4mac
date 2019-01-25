@@ -37,18 +37,21 @@ build_steps: &build_steps
           name: Build bottles
           command: .circleci/after_script.sh
           # command: |
-          # mkdir /tmp/bottles
-          # cd /tmp/bottles
+          # mkdir bottles
+          # cd bottles
           # brew test-bot --skip-setup --bintray-org=homebrew-osgeo --root-url=https://dl.bintray.com/homebrew-osgeo/osgeo-bottles --git-name=GeoNinja --git-email=qgisninja@gmail.com
 
      - persist_to_workspace:
-          root: /tmp
+          root: bottles
           paths:
-            - bottles/*.json
-            - bottles/*.tar.gz
+            # if the formula does not change or if a file is updated/uploaded:
+            # The specified paths did not match any files in /Users/distiller/project/bottles
+            # - ./*.json
+            # - ./*.tar.gz
+            - ./ # bottles
 
      - store_test_results:
-          path: /tmp/bottles
+          path: bottles
 
   # collect-bottles:
   #   docker:
@@ -120,10 +123,10 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: /tmp/workspace
+          at: /workspace
 
       - store_artifacts:
-          path: /tmp/workspace/bottles
+          path: /workspace/bottles
           destination: bottles
 
       - run:
