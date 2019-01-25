@@ -42,16 +42,16 @@ build_steps: &build_steps
           # brew test-bot --skip-setup --bintray-org=homebrew-osgeo --root-url=https://dl.bintray.com/homebrew-osgeo/osgeo-bottles --git-name=GeoNinja --git-email=qgisninja@gmail.com
 
      - persist_to_workspace:
-          root: bottles
+          root: ./
           paths:
             # if the formula does not change or if a file is updated/uploaded:
             # The specified paths did not match any files in /Users/distiller/project/bottles
             # - ./*.json
             # - ./*.tar.gz
-            - ./ # bottles
+            - ./bottles # bottles
 
      - store_test_results:
-          path: bottles
+          path: ./bottles
 
   # collect-bottles:
   #   docker:
@@ -127,7 +127,7 @@ jobs:
           at: ./
 
       - store_artifacts:
-          path: bottles
+          path: ./bottles
           # destination: bottles
 
       - run:

@@ -86,11 +86,13 @@ git commit -m "Updated bottles for: ${BUILT_BOTTLES}
 Committed for ${COMMIT_USER}<${COMMIT_EMAIL}>
 [ci skip]"
 
+git push ${SSH_REPO} $CIRCLE_BRANCH
 git push git@github.com:osgeo/homebrew-osgeo4mac.git master
 
 echo "Upload bottles for ${f}"
 
 # Now do the commit and push
+git checkout -b bottles
 git add -vA ./bottles/*.tar.gz
 git add -vA ./bottles/*.json
 git commit -m "Updated bottle for: ${BUILT_BOTTLES}
@@ -98,4 +100,5 @@ git commit -m "Updated bottle for: ${BUILT_BOTTLES}
 Committed for ${COMMIT_USER}<${COMMIT_EMAIL}>
 [ci skip]"
 
-git push git@github.com:osgeo/homebrew-osgeo4mac.git bottles
+git push ${SSH_REPO} bottles
+# git push git@github.com:osgeo/homebrew-osgeo4mac.git bottles
