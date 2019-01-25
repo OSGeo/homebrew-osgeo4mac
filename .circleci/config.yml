@@ -102,11 +102,11 @@ jobs:
             - /usr/local/Homebrew/Library/Taps/homebrew
             - /usr/local/Homebrew/Library/Taps/brewsci
 
-  sierra-build:
-    <<: *build_steps
-    <<: *filter
-    macos:
-      xcode: "8.3.3"
+  # sierra-build:
+  #   <<: *build_steps
+  #   <<: *filter
+  #   macos:
+  #     xcode: "8.3.3"
 
   high_sierra-build:
     <<: *build_steps
@@ -148,9 +148,9 @@ workflows:
           requires:
             - update-homebrew
 
-      - sierra-build:
-          requires:
-            - update-homebrew
+      # - sierra-build:
+      #     requires:
+      #       - update-homebrew
 
       # - collect-bottles:
       #     requires:
@@ -162,7 +162,7 @@ workflows:
               only: deploy
           requires:
             - high_sierra-build
-            - sierra-build
+            # - sierra-build
 
 # notify:
 #   webhooks:

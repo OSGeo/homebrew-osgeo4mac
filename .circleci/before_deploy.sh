@@ -73,7 +73,7 @@ popd
 
 # Set up the keys
 # openssl aes-256-cbc -iv "${ENCRYPTION_IV}" -K "${ENCRYPTION_KEY}" -d -in ci_deploy_key.enc -out deploy_key
-openssl aes-256-cbc -d -in ci_deploy_key.enc -k "${KEY}" -out deploy_key
+openssl aes-256-cbc -md md5 -d -in ci_deploy_key.enc -k "${KEY}" -out deploy_key
 ls .
 chmod 600 ./deploy_key
 eval `ssh-agent -s`
