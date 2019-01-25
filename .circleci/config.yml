@@ -155,13 +155,13 @@ workflows:
       #     requires:
       #       - update-homebrew
 
-      # - bottle-upload:
-      #     filters:
-      #       tags:
-      #         only: deploy
-      #     requires:
-      #       - high_sierra-build
-      #       - sierra-build
+      - bottle-upload:
+          filters:
+            tags:
+              only: deploy
+          requires:
+            - high_sierra-build
+            - sierra-build
 
 # notify:
 #   webhooks:
