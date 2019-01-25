@@ -9,21 +9,13 @@ jobs:
             - homebrew-v1-{{ .Branch }}-{{ .Revision }}
             - homebrew-v1-{{ .Branch }}-
             - homebrew-v1-
-
-      # - run: |
-      #     brew --version
-      #     brew remove $(brew list)
-      #     rm -rf /usr/local/Homebrew/Library/Taps/
-      #     brew update-reset
-      #     brew --env
-      #     brew config
-
       - run:
           name: "Update homebrew"
           command: |
             brew tap brewsci/science || true
             brew tap brewsci/bio || true
             brew update || brew update
+
       - save_cache:
           key: homebrew-v1-{{ .Branch }}-{{ .Revision }}
           paths:
@@ -33,36 +25,36 @@ jobs:
   bottle-macos:
     macos:
       xcode: "10.1.0"
-    environment:
-      CIRCLE_REPOSITORY_URL: https://github.com/osgeo/homebrew-osgeo4mac
-      HOMEBREW_DEVELOPER: 1
-      HOMEBREW_NO_AUTO_UPDATE: 1
+    # environment:
+    #   CIRCLE_REPOSITORY_URL: https://github.com/randy3k/homebrew-r
+    #   HOMEBREW_DEVELOPER: 1
+    #   HOMEBREW_NO_AUTO_UPDATE: 1
     steps:
-      # - run:
-      #     brew cask install xquartz
-      - run: |
-          brew --version
-          brew update
-          cd $(brew --repo)
-          if [ -e .git/shallow ]; then echo git fetch --unshallow; fi
-          git fetch origin --tags
-          git reset --hard origin/master
-          brew --env
-          brew config
-      - checkout
-      - run: |
-          git remote set-url origin $CIRCLE_REPOSITORY_URL
-          if [ -e .git/shallow ]; then echo git fetch --unshallow; fi
-          git fetch origin
-          git reset --hard origin/master
-          repo=$(brew --repo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME)
-          echo $repo
-          mkdir -p $repo
-          cp -a ./ $repo/
+       - checkout
+       - restore_cache:
+           keys:
+             - homebrew-v1-{{ .Branch }}-{{ .Revision }}
+             - homebrew-v1-{{ .Branch }}-
+             - homebrew-v1-
+       - run:
+           name: Update environment variables
+           command: .circleci/set_env.sh
+       # - run:
+       #     name: Before install script
+       #     command: .circleci/before_install.sh
+       # - run:
+       #     name: Install dependencies
+       #     command: .circleci/install.sh
+       # - run:
+       #      name: Install changed formulae
+       #      command: .circleci/script.sh
+       # - run:
+       #      name: Build bottles
+       #      # no_output_timeout: 30m
+       #      command: .circleci/after_script.sh
       - run:
           no_output_timeout: 60m
           command: |
-            brew --version
             brew update
             TAP_PATH=$(brew --repo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME)
             mkdir -p $TAP_PATH
@@ -78,7 +70,7 @@ jobs:
       - run: |
             # modify merge message platform tag
             cd /tmp/bottles
-            sed -i '' 's/"sierra"/"high_sierra"/g' *.sierra.*.json
+            sed -i '' 's/"sierra"/"sierra_or_later"/g' *.sierra.*.json
       - run: |
             # upload bottles to github releases
             brew tap tcnksm/ghr
@@ -116,10 +108,9 @@ jobs:
           git push --set-upstream --force origin "$RELEASE_TAG#pr"
           hub pull-request -m "$(git log -1 --pretty=%B)"
 
-
   create-pr:
     docker:
-      - image: linuxbrew/brew
+      - image: linuxbrew/linuxbrew
     steps:
       - attach_workspace:
           at: /tmp/workspace
@@ -145,21 +136,27 @@ jobs:
 
 workflows:
   version: 2
-  build_bottles:
+  build:
     jobs:
-      - update-homebrew
+      - update-homebrew:
+          # filters:
+          #   branches:
+          #     ignore: /master|.*#pr|.*#bottle|.*#macos-bottle/
+
       - create-macos-pr:
           requires:
             - bottle-macos
           filters:
             branches:
               only: /.*#macos-bottle/
+
       - create-pr:
           requires:
             - bottle-macos
           filters:
             branches:
               only: /.*#bottle/
+
       - bottle-macos:
           filters:
             branches:
