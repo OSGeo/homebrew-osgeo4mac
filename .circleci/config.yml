@@ -117,7 +117,7 @@ jobs:
 
 workflows:
   version: 2
-  build:
+  test-bot:
     jobs:
       - create-macos-pr:
           requires:
