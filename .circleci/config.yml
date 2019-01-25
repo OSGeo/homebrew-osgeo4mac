@@ -25,20 +25,7 @@ jobs:
           paths:
             - /usr/local/Homebrew/Library/Taps/homebrew
             - /usr/local/Homebrew/Library/Taps/brewsci
-  bottle-macos:
-    macos:
-      xcode: "10.1.0"
-    environment:
-      CIRCLE_REPOSITORY_URL: https://github.com/randy3k/homebrew-r
-      HOMEBREW_DEVELOPER: 1
-      HOMEBREW_NO_AUTO_UPDATE: 1
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - homebrew-v1-{{ .Branch }}-{{ .Revision }}
-            - homebrew-v1-{{ .Branch }}-
-            - homebrew-v1-
+
       # - run:
       #     name: Update environment variables
       #     command: .circleci/set_env.sh
@@ -143,21 +130,18 @@ workflows:
   build:
     jobs:
       - update-homebrew
-
       - create-macos-pr:
           requires:
-            - bottle-macos
+            - update-homebrew
           filters:
             branches:
               only: /.*#macos-bottle/
-
       - create-pr:
           requires:
-            - bottle-macos
+            - update-homebrew
           filters:
             branches:
               only: /.*#bottle/
-
       - bottle-macos:
           filters:
             branches:
