@@ -71,9 +71,12 @@ pushd bottles
   done
 popd
 
+REPO_ENC_KEY=A28046C01D9F3A7E8CECDE5C624F43AECDE3EAC06C0F3A33131B5FDAAED86199
+REPO_ENC_IV=8051AB9791140F426CB70F6644FB3731
+
 # Set up the keys
 # openssl aes-256-cbc -iv "${ENCRYPTION_IV}" -K "${ENCRYPTION_KEY}" -d -in ci_deploy_key.enc -out deploy_key
-openssl aes-256-cbc -md md5 -d -in ci_deploy_key.enc -k "${KEY}" -out deploy_key
+openssl aes-256-cbc -d -K $REPO_ENC_KEY -iv $REPO_ENC_IV -in ci_deploy_key.enc -out deploy_key
 ls .
 chmod 600 ./deploy_key
 eval `ssh-agent -s`
