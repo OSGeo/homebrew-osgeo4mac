@@ -17,9 +17,10 @@
 
 # Build the actual bottles
 # In Travis, this used to be part of the deploy phase, but now it needs to run as part of the original build process, but only on master.
-mkdir -p bottles
 
-pushd bottles
+mkdir -p /tmp/bottles
+
+pushd /tmp/bottles
   BOTTLE_ROOT=https://dl.bintray.com/homebrew-osgeo/osgeo-bottles
   for f in ${CHANGED_FORMULAE};do
     echo "Bottling changed formula ${f}..."
