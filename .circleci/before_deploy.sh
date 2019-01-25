@@ -48,11 +48,12 @@ if ! git checkout "$CIRCLE_BRANCH"; then
     return 1
 fi
 
+
 # Build the bottles
 BUILT_BOTTLES=
 
 pushd bottles
-  BOTTLE_ROOT=https://github.com/osgeo/homebrew-osgeo4mac/blob/builds
+  BOTTLE_ROOT=https://dl.bintray.com/homebrew-osgeo/osgeo-bottles
   for f in ${CHANGED_FORMULAE};do
     echo "Updating changed formula ${f} with new bottles..."
 
@@ -71,12 +72,8 @@ pushd bottles
   done
 popd
 
-REPO_ENC_KEY=A28046C01D9F3A7E8CECDE5C624F43AECDE3EAC06C0F3A33131B5FDAAED86199
-REPO_ENC_IV=8051AB9791140F426CB70F6644FB3731
-
 # Set up the keys
-# openssl aes-256-cbc -iv "${ENCRYPTION_IV}" -K "${ENCRYPTION_KEY}" -d -in ci_deploy_key.enc -out deploy_key
-openssl aes-256-cbc -d -K $REPO_ENC_KEY -iv $REPO_ENC_IV -in ci_deploy_key.enc -out deploy_key
+openssl aes-256-cbc -iv "${ENCRYPTION_IV}" -K "${ENCRYPTION_KEY}" -d -in ci_deploy_key.enc -out deploy_key
 ls .
 chmod 600 ./deploy_key
 eval `ssh-agent -s`
@@ -90,21 +87,5 @@ git commit -m "Updated bottles for: ${BUILT_BOTTLES}
 Committed for ${COMMIT_USER}<${COMMIT_EMAIL}>
 [ci skip]"
 
+# Now that we're all set up, we can push.
 git push ${SSH_REPO} $CIRCLE_BRANCH
-# git push git@github.com:osgeo/homebrew-osgeo4mac.git master
-
-echo "Upload bottles for ${f}"
-
-# Now do the commit and push
-git checkout -b builds
-git checkout builds
-git add bottles
-git add -vA ./bottles/*.tar.gz
-git add -vA ./bottles/*.json
-git commit -m "Updated bottle for: ${BUILT_BOTTLES}
-
-Committed for ${COMMIT_USER}<${COMMIT_EMAIL}>
-[ci skip]"
-
-git push ${SSH_REPO} builds
-# git push git@github.com:osgeo/homebrew-osgeo4mac.git bottles

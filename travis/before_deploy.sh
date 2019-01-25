@@ -56,7 +56,7 @@ mkdir -p bottles
 pushd bottles
   # S3 bucket isn't currently working for the Travis pro repo, so we're switching to Bintray, for now.
   # BOTTLE_ROOT=https://osgeo4mac.s3.amazonaws.com/bottles
-  BOTTLE_ROOT=https://dl.bintray.com/homebrew-osgeo/osgeo-bottles
+  BOTTLE_ROOT=https://github.com/osgeo/homebrew-osgeo4mac/blob/builds
   for f in ${CHANGED_FORMULAE};do
     echo "Bottling changed formula ${f}..."
     brew bottle --verbose --json --root-url=${BOTTLE_ROOT} ${TRAVIS_REPO_SLUG}/${f}
@@ -112,5 +112,18 @@ git commit -m "Updated bottles for: ${BUILT_BOTTLES}
 Committed for ${COMMIT_USER}<${COMMIT_EMAIL}>
 [ci skip]"
 
-# Now that we're all set up, we can push.
 git push ${SSH_REPO} $TRAVIS_BRANCH
+
+echo "Upload bottles for ${f}"
+
+git checkout -b builds
+git checkout builds
+git add bottles
+git add -vA ./bottles/*.tar.gz
+git add -vA ./bottles/*.json
+git commit -m "Updated bottle for: ${BUILT_BOTTLES}
+
+Committed for ${COMMIT_USER}<${COMMIT_EMAIL}>
+[ci skip]"
+
+git push ${SSH_REPO} builds
