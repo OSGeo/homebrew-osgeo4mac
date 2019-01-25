@@ -3,6 +3,10 @@ jobs:
   update-homebrew:
     macos:
       xcode: "10.1.0"
+    # environment:
+    #   CIRCLE_REPOSITORY_URL: https://github.com/randy3k/homebrew-r
+    #   HOMEBREW_DEVELOPER: 1
+    #   HOMEBREW_NO_AUTO_UPDATE: 1
     steps:
       - restore_cache:
           keys:
@@ -133,14 +137,12 @@ jobs:
           git push --set-upstream --force origin "$RELEASE_TAG#pr"
           hub pull-request -m "$(git log -1 --pretty=%B)"
 
+
 workflows:
   version: 2
   build:
     jobs:
-      - update-homebrew:
-          # filters:
-          #   branches:
-          #     ignore: /master|.*#pr|.*#bottle|.*#macos-bottle/
+      - update-homebrew
 
       - create-macos-pr:
           requires:
