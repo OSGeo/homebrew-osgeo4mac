@@ -10,7 +10,25 @@ jobs:
     steps:
       # - run:
       #     brew cask install xquartz
+      - run: |
+          brew --version
+          brew update
+          cd $(brew --repo)
+          if [ -e .git/shallow ]; then echo git fetch --unshallow; fi
+          git fetch origin --tags
+          git reset --hard origin/master
+          brew --env
+          brew config
       - checkout
+      - run: |
+          git remote set-url origin $CIRCLE_REPOSITORY_URL
+          if [ -e .git/shallow ]; then echo git fetch --unshallow; fi
+          git fetch origin
+          git reset --hard origin/master
+          repo=$(brew --repo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME)
+          echo $repo
+          mkdir -p $repo
+          cp -a ./ $repo/
       - run:
           no_output_timeout: 60m
           command: |
