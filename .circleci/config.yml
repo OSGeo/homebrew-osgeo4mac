@@ -21,37 +21,36 @@ jobs:
           paths:
             - /usr/local/Homebrew/Library/Taps/homebrew
             - /usr/local/Homebrew/Library/Taps/brewsci
-
   bottle-macos:
     macos:
       xcode: "10.1.0"
-    # environment:
-    #   CIRCLE_REPOSITORY_URL: https://github.com/randy3k/homebrew-r
-    #   HOMEBREW_DEVELOPER: 1
-    #   HOMEBREW_NO_AUTO_UPDATE: 1
+    environment:
+      CIRCLE_REPOSITORY_URL: https://github.com/randy3k/homebrew-r
+      HOMEBREW_DEVELOPER: 1
+      HOMEBREW_NO_AUTO_UPDATE: 1
     steps:
-       - checkout
-       - restore_cache:
-           keys:
-             - homebrew-v1-{{ .Branch }}-{{ .Revision }}
-             - homebrew-v1-{{ .Branch }}-
-             - homebrew-v1-
-       - run:
-           name: Update environment variables
-           command: .circleci/set_env.sh
-       # - run:
-       #     name: Before install script
-       #     command: .circleci/before_install.sh
-       # - run:
-       #     name: Install dependencies
-       #     command: .circleci/install.sh
-       # - run:
-       #      name: Install changed formulae
-       #      command: .circleci/script.sh
-       # - run:
-       #      name: Build bottles
-       #      # no_output_timeout: 30m
-       #      command: .circleci/after_script.sh
+      - checkout
+      - restore_cache:
+          keys:
+            - homebrew-v1-{{ .Branch }}-{{ .Revision }}
+            - homebrew-v1-{{ .Branch }}-
+            - homebrew-v1-
+      # - run:
+      #     name: Update environment variables
+      #     command: .circleci/set_env.sh
+      # - run:
+      #     name: Before install script
+      #     command: .circleci/before_install.sh
+      # - run:
+      #     name: Install dependencies
+      #     command: .circleci/install.sh
+      # - run:
+      #      name: Install changed formulae
+      #      command: .circleci/script.sh
+      # - run:
+      #      name: Build bottles
+      #      # no_output_timeout: 30m
+      #      command: .circleci/after_script.sh
       - run:
           no_output_timeout: 60m
           command: |
