@@ -5,6 +5,8 @@ class WhiteboxTools < Formula
   version "0.13.0"
   sha256 "fe79c3b797ba7ae23a525e11441b0d6406c339858b23271c143734c62af7ec27"
 
+  revision 1
+
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
     cellar :any_skip_relocation
@@ -12,10 +14,6 @@ class WhiteboxTools < Formula
     sha256 "73eaf7a1af09c2029d1a8c368d277376d3465c345f901a6525f7a9d7a92f790b" => :high_sierra
     sha256 "73eaf7a1af09c2029d1a8c368d277376d3465c345f901a6525f7a9d7a92f790b" => :sierra
   end
-
-  revision 1
-
-  # head "https://github.com/jblindsay/whitebox-tools.git", :branch => "master"
 
   def install
     cp_r buildpath.to_s, prefix.to_s
