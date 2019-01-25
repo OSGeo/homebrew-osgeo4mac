@@ -51,7 +51,7 @@ fi
 # Build the bottles
 BUILT_BOTTLES=
 
-pushd /tmp/bottles
+pushd bottles
   BOTTLE_ROOT=https://github.com/OSGeo/homebrew-osgeo4mac/blob/master/bottles
   for f in ${CHANGED_FORMULAE};do
     echo "Updating changed formula ${f} with new bottles..."
@@ -77,6 +77,8 @@ ls .
 chmod 600 ../deploy_key
 eval `ssh-agent -s`
 ssh-add ../deploy_key
+
+# Now do the commit and push
 
 git add -vA Formula/*.rb
 git commit -m "Updated bottles for: ${BUILT_BOTTLES}
