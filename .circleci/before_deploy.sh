@@ -72,11 +72,11 @@ pushd bottles
 popd
 
 # Set up the keys
-openssl aes-256-cbc -iv "${ENCRYPTION_IV}" -K "${ENCRYPTION_KEY}" -d -in ../ci_deploy_key.enc -out ../deploy_key
+openssl aes-256-cbc -iv "${ENCRYPTION_IV}" -K "${ENCRYPTION_KEY}" -d -in ci_deploy_key.enc -out deploy_key
 ls .
-chmod 600 ../deploy_key
+chmod 600 ./deploy_key
 eval `ssh-agent -s`
-ssh-add ../deploy_key
+ssh-add deploy_key
 
 # Now do the commit and push
 
@@ -87,7 +87,7 @@ Committed for ${COMMIT_USER}<${COMMIT_EMAIL}>
 [ci skip]"
 
 git push ${SSH_REPO} $CIRCLE_BRANCH
-git push git@github.com:osgeo/homebrew-osgeo4mac.git master
+# git push git@github.com:osgeo/homebrew-osgeo4mac.git master
 
 echo "Upload bottles for ${f}"
 
