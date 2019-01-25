@@ -57,6 +57,7 @@ build_steps: &build_steps
   #   docker:
   #    - image: linuxbrew/brew
 
+
 workflow_filter: &filter
   filters:
     branches:
@@ -116,9 +117,9 @@ jobs:
   bottle-upload:
     macos:
       xcode: "10.1.0"
-    filters:
-      tags:
-        only: deploy
+    # filters:
+    #   tags:
+    #     only: deploy
 
     steps:
       - checkout
@@ -156,9 +157,9 @@ workflows:
       #       - update-homebrew
 
       - bottle-upload:
-          filters:
-            tags:
-              only: deploy
+          # filters:
+          #   tags:
+          #     only: deploy
           requires:
             - high_sierra-build
             - sierra-build
