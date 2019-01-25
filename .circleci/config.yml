@@ -12,8 +12,6 @@ jobs:
       #     brew cask install xquartz
       - run: |
           brew --version
-          brew tap brewsci/science || true
-          brew tap brewsci/bio || true
           brew update
           cd $(brew --repo)
           if [ -e .git/shallow ]; then echo git fetch --unshallow; fi
@@ -36,7 +34,7 @@ jobs:
           command: |
             mkdir /tmp/bottles
             cd /tmp/bottles
-            brew test-bot --skip-setup --local
+          # brew test-bot --skip-setup --local
 
   bottle-macos:
     macos:
@@ -52,6 +50,9 @@ jobs:
       - run:
           no_output_timeout: 60m
           command: |
+            brew --version
+            brew tap brewsci/science || true
+            brew tap brewsci/bio || true
             brew update
             TAP_PATH=$(brew --repo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME)
             mkdir -p $TAP_PATH
