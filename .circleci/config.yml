@@ -3,10 +3,10 @@ jobs:
   update-homebrew:
     macos:
       xcode: "10.1.0"
-    # environment:
-    #   CIRCLE_REPOSITORY_URL: https://github.com/randy3k/homebrew-r
-    #   HOMEBREW_DEVELOPER: 1
-    #   HOMEBREW_NO_AUTO_UPDATE: 1
+    environment:
+      CIRCLE_REPOSITORY_URL: https://github.com/osgeo/homebrew-osgeo4mac
+      HOMEBREW_DEVELOPER: 1
+      HOMEBREW_NO_AUTO_UPDATE: 1
     steps:
       - restore_cache:
           keys:
@@ -18,14 +18,14 @@ jobs:
           command: |
             brew tap brewsci/science || true
             brew tap brewsci/bio || true
-            brew update || brew update
-
+            brew update || brew upgrade
+      # - run:
+      #     brew cask install xquartz
       - save_cache:
           key: homebrew-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - /usr/local/Homebrew/Library/Taps/homebrew
             - /usr/local/Homebrew/Library/Taps/brewsci
-
       # - run:
       #     name: Update environment variables
       #     command: .circleci/set_env.sh
@@ -75,6 +75,10 @@ jobs:
   create-macos-pr:
     macos:
       xcode: "10.1.0"
+    environment:
+      CIRCLE_REPOSITORY_URL: https://github.com/osgeo/homebrew-osgeo4mac
+      HOMEBREW_DEVELOPER: 1
+      HOMEBREW_NO_AUTO_UPDATE: 1
     steps:
       - attach_workspace:
           at: /tmp/workspace
@@ -100,7 +104,7 @@ jobs:
 
   create-pr:
     docker:
-      - image: linuxbrew/linuxbrew
+      - image: linuxbrew/brew
     steps:
       - attach_workspace:
           at: /tmp/workspace
