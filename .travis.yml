@@ -78,7 +78,7 @@ before_deploy:
   - ssh-add deploy_key
   - ./travis/before_deploy.sh
   # upload bottles to github releases
-  - ./travis/upload_release.sh
+  - sh ./travis/upload_release.sh
 
 deploy:
   skip_cleanup: true
