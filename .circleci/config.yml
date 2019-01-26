@@ -8,34 +8,35 @@ jobs:
       HOMEBREW_DEVELOPER: 1
       HOMEBREW_NO_AUTO_UPDATE: 1
     steps:
-     - checkout
+      - checkout
 
-     - restore_cache:
-         keys:
-           - homebrew-v1-{{ .Branch }}-{{ .Revision }}
-           - homebrew-v1-{{ .Branch }}-
-           - homebrew-v1-
+      - restore_cache:
+          keys:
+            - homebrew-v1-{{ .Branch }}-{{ .Revision }}
+            - homebrew-v1-{{ .Branch }}-
+            - homebrew-v1-
 
-     - run:
-         name: Update environment variables
-         command: .circleci/set_env.sh
+      - run:
+          name: Update environment variables
+          command: .circleci/set_env.sh
 
-     - run:
-         name: Before install script
-         command: .circleci/before_install.sh
+      - run:
+          name: Before install script
+          command: .circleci/before_install.sh
 
-     - run:
-         name: Install dependencies
-         command: .circleci/install.sh
+      - run:
+          name: Install dependencies
+          command: .circleci/install.sh
 
-     - run:
-          name: Install changed formulae
-          command: .circleci/script.sh
+      - run:
+           name: Install changed formulae
+           command: .circleci/script.sh
 
-     - run:
-          name: Build bottles
-          # no_output_timeout: 30m
-          command: .circleci/after_script.sh
+      - run:
+           name: Build bottles
+           # no_output_timeout: 30m
+           command: .circleci/after_script.sh
+
       - run: |
             # upload bottles to github releases
             brew tap tcnksm/ghr
