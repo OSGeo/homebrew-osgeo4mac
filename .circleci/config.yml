@@ -37,6 +37,13 @@ jobs:
            # no_output_timeout: 30m
            command: .circleci/after_script.sh
 
+      - run:
+          name: Create release
+          command: |
+            git fetch --tags
+            curl -O https://raw.githubusercontent.com/reactiveops/release.sh/v0.0.2/release
+            /bin/bash release
+
       - persist_to_workspace:
           root: /tmp
           paths:
