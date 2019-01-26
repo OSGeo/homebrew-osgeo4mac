@@ -68,6 +68,14 @@ jobs:
       #       RELEASE_TAG=$(echo "$CIRCLE_BRANCH" | sed -nE 's/(^[@a-z0-9\.\-]+-[0-9\._]+)#(macos-)?bottle$/\1/p')
       #       ghr --username $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME --token $GITHUB_TOKEN --replace "$RELEASE_TAG" /tmp/bottles
       - run:
+          no_output_timeout: 60m
+          command: |
+            brew update
+            TAP_PATH=$(brew --repo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME)
+            mkdir -p $TAP_PATH
+            cp -a ./ $TAP_PATH/
+            brew tap --repair
+      - run:
            name: Build bottles
            # no_output_timeout: 30m
            command: .circleci/after_script.sh
