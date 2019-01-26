@@ -75,10 +75,8 @@ jobs:
             mkdir -p $TAP_PATH
             cp -a ./ $TAP_PATH/
             brew tap --repair
-      - run:
-           name: Build bottles
-           # no_output_timeout: 30m
-           command: .circleci/after_script.sh
+            cd $TAP_PATH
+            .circleci/after_script.sh
       - run: |
             # upload bottles to github releases
             brew tap tcnksm/ghr
