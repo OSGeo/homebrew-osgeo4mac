@@ -29,9 +29,9 @@ pushd /tmp/bottles
   BOTTLE_ROOT=https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/releases/download/$RELEASE_TAG
   for f in ${CHANGED_FORMULAE};do
     echo "Bottling changed formula ${f}..."
-    # brew bottle --verbose --json --root-url=${BOTTLE_ROOT} osgeo/osgeo4mac/${f}
-    brew install --build-from-source --build-bottle $FORMULA
-    brew bottle --verbose --json --root-url=${BOTTLE_ROOT} $FORMULA
+    brew bottle --verbose --json --root-url=${BOTTLE_ROOT} osgeo/osgeo4mac/${f}
+    # brew install --build-from-source --build-bottle $FORMULA
+    # brew bottle --verbose --json --root-url=${BOTTLE_ROOT} $FORMULA
 
     for art in ${f}*.sierra.bottle.*; do
         # Remove double dashes introduced by the latest changes to Homebrew bottling.
@@ -53,5 +53,10 @@ pushd /tmp/bottles
     for json in ${f}*.mojave.bottle*.json; do
       sed -i '' s@high_sierra@mojave@g ${json}
     done
+    # upload bottles to github releases
+    brew tap tcnksm/ghr
+    brew install ghr
+    RELEASE_TAG=$(echo "$CIRCLE_BRANCH" | sed -nE 's/(^[@a-z0-9\.\-]+-[0-9\._]+)#(macos-)?bottle$/\1/p')
+    ghr --username $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME --token $GITHUB_TOKEN --replace "$RELEASE_TAG" /tmp/bottles
   done
 popd
