@@ -16,13 +16,13 @@ class WhiteboxTools < Formula
     sha256 "73eaf7a1af09c2029d1a8c368d277376d3465c345f901a6525f7a9d7a92f790b" => :sierra
   end
 
-  # revision 1
+  revision 1
 
   # head "https://github.com/jblindsay/whitebox-tools.git", :branch => "master"
 
   def install
-    cp_r "#{buildpath}", "#{prefix}"
-    mkdir "#{bin}"
+    cp_r buildpath.to_s, prefix.to_s
+    mkdir bin.to_s
     ln_s "#{prefix}/WBT/whitebox_tools", "#{bin}/whitebox_tools"
   end
 
