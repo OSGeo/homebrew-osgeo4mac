@@ -57,7 +57,9 @@ pushd bottles
   # S3 bucket isn't currently working for the Travis pro repo, so we're switching to Bintray, for now.
   # BOTTLE_ROOT=https://osgeo4mac.s3.amazonaws.com/bottles
   # BOTTLE_ROOT=https://dl.bintray.com/homebrew-osgeo/osgeo-bottles
+  RELEASE_TAG=$(echo "${TRAVIS_BRANCH}" | sed -nE 's/(^[@a-z0-9\.\-]+-[0-9\._]+)#(macos-)?bottle$/\1/p')
   BOTTLE_ROOT_URL=https://github.com/${TRAVIS_REPO_SLUG}/releases/download/${RELEASE_TAG}
+  echo "Release Tag: ${RELEASE_TAG}"
   for f in ${CHANGED_FORMULAE};do
     echo "Bottling changed formula ${f}..."
     brew bottle --verbose --json --root-url=${BOTTLE_ROOT} ${TRAVIS_REPO_SLUG}/${f}

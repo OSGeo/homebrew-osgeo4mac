@@ -3,6 +3,8 @@ set -e
 brew install hub
 ls ./
 
+RELEASE_TAG=$(echo "${TRAVIS_BRANCH}" | sed -nE 's/(^[@a-z0-9\.\-]+-[0-9\._]+)#(macos-)?bottle$/\1/p')
+echo "Release Tag: ${RELEASE_TAG}"
 # tag_name="v${1}"
 asset_dir="./bottles"
 assets=()
