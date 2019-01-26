@@ -11,10 +11,10 @@ class WhiteboxTools < Formula
   bottle do
     root_url ""
     cellar :any_skip_relocation
-    rebuild 1
-    sha256 "23095da04f4ceab445d1bb77b0b09cc48520d3e64684c931d2ce7ed9b18beb3b" => :mojave
-    sha256 "23095da04f4ceab445d1bb77b0b09cc48520d3e64684c931d2ce7ed9b18beb3b" => :high_sierra
-    sha256 "23095da04f4ceab445d1bb77b0b09cc48520d3e64684c931d2ce7ed9b18beb3b" => :sierra
+    rebuild 2
+    sha256 "d99a35d775e5eb160381de08a7453a5d80fbdb71a4e947da4ceae864fc84b238" => :mojave
+    sha256 "d99a35d775e5eb160381de08a7453a5d80fbdb71a4e947da4ceae864fc84b238" => :high_sierra
+    sha256 "d99a35d775e5eb160381de08a7453a5d80fbdb71a4e947da4ceae864fc84b238" => :sierra
   end
 
   revision 1
