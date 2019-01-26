@@ -1,9 +1,6 @@
 language: ruby
 rvm:
   - 2.3.7
-#language: python
-#python:
-#  - "2.7"
 os: osx
 env: OSX=10.12
 osx_image: xcode8.3
@@ -12,24 +9,6 @@ sudo: required
 branches:
   except:
     - circleci
-
-# /usr/local subdirs are Homebrew components
-#cache:
-#  directories:
-#    - $HOME/Library/Caches/pip
-#    - /usr/local/Cellar
-#    - /usr/local/Frameworks
-#    - /usr/local/Homebrew
-#    - /usr/local/bin
-#    - /usr/local/etc
-#    - /usr/local/include
-#    - /usr/local/lib
-#    - /usr/local/opt
-#    - /usr/local/share
-#    - /usr/local/var
-#  timeout: 900
-#before_cache:
-#  - ./travis/before_cache.sh
 
 addons:
   ssh_known_hosts: github.com
@@ -58,6 +37,7 @@ before_install:
   - export HOMEBREW_DEVELOPER=1
   - export HOMEBREW_NO_AUTO_UPDATE=1
   - export HOMEBREW_PREFIX=$(brew --prefix)
+  - RELEASE_TAG=$(echo "${TRAVIS_BRANCH}" | sed -nE 's/(^[@a-z0-9\.\-]+-[0-9\._]+)#(macos-)?bottle$/\1/p')
   - ulimit -n 1024
   - ./travis/before_install.sh
 
@@ -76,24 +56,18 @@ before_deploy:
   - eval `ssh-agent -s`
   - ssh-add deploy_key
   - ./travis/before_deploy.sh
+  # upload bottles to github releases
+  - brew tap tcnksm/ghr
+  - brew install ghr
+  - ghr "${RELEASE_TAG}" /bottles
 
-deploy:
-  skip_cleanup: true
-  provider: bintray
-  file: travis/bintray-upload.json
-  user: nickrobison
-  key:
-    secure: "nEmP/uU8N+TbbX3zWED62CsjPxoDjXcOF3RtAENW/4qVBdI9r7dFmyE4WAW732Ttd1PbANPz7Lz494j2TS2hbn2R4yQ9CuIllsnjey/ve6TAq1FfYSruBuMGLK/7EJ/cSfZWsOBex7b68UeVlvyAra3ck6y9j1ouzF9RKEtCx3P/w3heLN5Fl0pNUCzwknrdBFGfTQRy8NSQnYo/8mpIQbCrXEQThJ4PZY/7s5tqDOv3tAesPTdoGmoNWWBoQe8ZnrwSutskcm6Nsf5nz64i44vai9Xx+9U3QpHDvzuAXOzwxFBGk1dfsnLRp/P71QrDYuqnMEExmfdZAWYK0o0JLuwsecOfSvG2C14fAp1rA2GNWMK9SViYxeYnJgwenGgd7FBci6N052mvyv3+52xGc7aHUlp74PvqYEv8LoILdOlG9jGj1jS41seQyW7Qyg6VYfQ+f1Vp4kUupH3EE53QgJzM6rVyFI9qmkThJTN0ZhUzIhwrTqUfceMkWyeYKd7/hk6AUxhYNZehtR7xH8pf1vibLifUr978M4vyutSwJ4xnaJKTvuUdA0d2GQHAuEDwfqPlYcIUDbKOVmbKj+SifKdSlcwGTYunzmKkJskA9DzYIbUjKe00jluAvjGZuoCIbIKdqlH1ntTUoW5OCpE09TmIZdh/SURRKo7QsfLNQ0I="
-  # S3 bucket upload, which is not working right now
-#  provider: s3
-#  access_key_id:
-#    secure: JxG4/zxgbYvKqX4kJTZdQxvAL+EHqmmi4OEjAOY+KUFAP4t9l5aLEYh6brjHF07kDyFyjMt8G7Hf+SZeznA/JGe8NaliXfCnxLH7ftApCP3l/Tl73z3wXnGL1L7EljiO0EbwlsJUM23B+01BMalzBfyLYOEc61LfSuJsEFFa/ck=
-#  secret_access_key:
-#    secure: ZdsR1FsY6ER6w6KvF9rjxY4s7GjLXRkT9Rmv4GWyL9+pcHI/4/2KMfab6gj1sQdbc2ocfBgGXR8hQZHi+NZPyTnHbIXf5n2YenLo9NyOHwNs1qiJgxXgtYvhtI/NXCcD9JgX5i5BRR3jkPqJBRe70CmoTwv29kR5Tp158tr3gIg=
-#  bucket: osgeo4mac
-#  local-dir: bottles
-#  upload-dir: bottles
-#  acl: public_read
-  on:
-    branch: master
-    repo: OSGeo/homebrew-osgeo4mac
+# deploy:
+#   skip_cleanup: true
+#   provider: bintray
+#   file: travis/bintray-upload.json
+#   user: nickrobison
+#   key:
+#     secure: "nEmP/uU8N+TbbX3zWED62CsjPxoDjXcOF3RtAENW/4qVBdI9r7dFmyE4WAW732Ttd1PbANPz7Lz494j2TS2hbn2R4yQ9CuIllsnjey/ve6TAq1FfYSruBuMGLK/7EJ/cSfZWsOBex7b68UeVlvyAra3ck6y9j1ouzF9RKEtCx3P/w3heLN5Fl0pNUCzwknrdBFGfTQRy8NSQnYo/8mpIQbCrXEQThJ4PZY/7s5tqDOv3tAesPTdoGmoNWWBoQe8ZnrwSutskcm6Nsf5nz64i44vai9Xx+9U3QpHDvzuAXOzwxFBGk1dfsnLRp/P71QrDYuqnMEExmfdZAWYK0o0JLuwsecOfSvG2C14fAp1rA2GNWMK9SViYxeYnJgwenGgd7FBci6N052mvyv3+52xGc7aHUlp74PvqYEv8LoILdOlG9jGj1jS41seQyW7Qyg6VYfQ+f1Vp4kUupH3EE53QgJzM6rVyFI9qmkThJTN0ZhUzIhwrTqUfceMkWyeYKd7/hk6AUxhYNZehtR7xH8pf1vibLifUr978M4vyutSwJ4xnaJKTvuUdA0d2GQHAuEDwfqPlYcIUDbKOVmbKj+SifKdSlcwGTYunzmKkJskA9DzYIbUjKe00jluAvjGZuoCIbIKdqlH1ntTUoW5OCpE09TmIZdh/SURRKo7QsfLNQ0I="
+#   on:
+#     branch: master
+#     repo: OSGeo/homebrew-osgeo4mac

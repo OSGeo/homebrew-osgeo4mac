@@ -53,5 +53,10 @@ pushd /tmp/bottles
     for json in ${f}*.mojave.bottle*.json; do
       sed -i '' s@high_sierra@mojave@g ${json}
     done
+    # upload bottles to github releases
+    brew tap tcnksm/ghr
+    brew install ghr
+    RELEASE_TAG=$(echo "$CIRCLE_BRANCH" | sed -nE 's/(^[@a-z0-9\.\-]+-[0-9\._]+)#(macos-)?bottle$/\1/p')
+    ghr --username $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME --token $GITHUB_TOKEN --replace "$RELEASE_TAG" /tmp/bottles
   done
 popd
