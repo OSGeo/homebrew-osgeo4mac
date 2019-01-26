@@ -17,13 +17,21 @@
 
 # Build the actual bottles
 # In Travis, this used to be part of the deploy phase, but now it needs to run as part of the original build process, but only on master.
-mkdir -p bottles
+mkdir -p /tmp/bottles
 
-pushd bottles
-  BOTTLE_ROOT=https://dl.bintray.com/homebrew-osgeo/osgeo-bottles
+pushd /tmp/bottles
+  TAP_PATH=$(brew --repo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME)
+  mkdir -p $TAP_PATH
+  cp -a ./ $TAP_PATH/
+  brew tap --repair
+  RELEASE_TAG=$(echo "$CIRCLE_BRANCH" | sed -nE 's/(^[@a-z0-9\.\-]+-[0-9\._]+)#(macos-)?bottle$/\1/p')
+  FORMULA=$(echo "$RELEASE_TAG" | sed -nE 's/(^[@a-z0-9\.\-]*)-[0-9\._]*$/\1/p')
+  BOTTLE_ROOT=https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/releases/download/$RELEASE_TAG
   for f in ${CHANGED_FORMULAE};do
     echo "Bottling changed formula ${f}..."
-    brew bottle --verbose --json --root-url=${BOTTLE_ROOT} osgeo/osgeo4mac/${f}
+    # brew bottle --verbose --json --root-url=${BOTTLE_ROOT} osgeo/osgeo4mac/${f}
+    brew install --build-from-source --build-bottle $FORMULA
+    brew bottle --verbose --json --root-url=${BOTTLE_ROOT} $FORMULA
 
     for art in ${f}*.sierra.bottle.*; do
         # Remove double dashes introduced by the latest changes to Homebrew bottling.

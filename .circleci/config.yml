@@ -42,25 +42,35 @@ jobs:
       #      name: Build bottles
       #      # no_output_timeout: 30m
       #      command: .circleci/after_script.sh
+      # - run:
+      #     no_output_timeout: 60m
+      #     command: |
+      #       brew update
+      #       TAP_PATH=$(brew --repo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME)
+      #       mkdir -p $TAP_PATH
+      #       cp -a ./ $TAP_PATH/
+      #       brew tap --repair
+      #       RELEASE_TAG=$(echo "$CIRCLE_BRANCH" | sed -nE 's/(^[@a-z0-9\.\-]+-[0-9\._]+)#(macos-)?bottle$/\1/p')
+      #       FORMULA=$(echo "$RELEASE_TAG" | sed -nE 's/(^[@a-z0-9\.\-]*)-[0-9\._]*$/\1/p')
+      #       brew install --build-from-source --build-bottle $FORMULA
+      #       mkdir -p /tmp/bottles
+      #       cd /tmp/bottles
+      #       BOTTLE_ROOT_URL=https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/releases/download/$RELEASE_TAG
+      #       brew bottle --json --root-url=$BOTTLE_ROOT_URL $FORMULA
+      # - run: |
+      #       # modify merge message platform tag
+      #       cd /tmp/bottles
+      #       sed -i '' 's/"sierra"/"sierra_or_later"/g' *.sierra.*.json
+      # - run: |
+      #       # upload bottles to github releases
+      #       brew tap tcnksm/ghr
+      #       brew install ghr
+      #       RELEASE_TAG=$(echo "$CIRCLE_BRANCH" | sed -nE 's/(^[@a-z0-9\.\-]+-[0-9\._]+)#(macos-)?bottle$/\1/p')
+      #       ghr --username $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME --token $GITHUB_TOKEN --replace "$RELEASE_TAG" /tmp/bottles
       - run:
-          no_output_timeout: 60m
-          command: |
-            brew update
-            TAP_PATH=$(brew --repo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME)
-            mkdir -p $TAP_PATH
-            cp -a ./ $TAP_PATH/
-            brew tap --repair
-            RELEASE_TAG=$(echo "$CIRCLE_BRANCH" | sed -nE 's/(^[@a-z0-9\.\-]+-[0-9\._]+)#(macos-)?bottle$/\1/p')
-            FORMULA=$(echo "$RELEASE_TAG" | sed -nE 's/(^[@a-z0-9\.\-]*)-[0-9\._]*$/\1/p')
-            brew install --build-from-source --build-bottle $FORMULA
-            mkdir -p /tmp/bottles
-            cd /tmp/bottles
-            BOTTLE_ROOT_URL=https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/releases/download/$RELEASE_TAG
-            brew bottle --json --root-url=$BOTTLE_ROOT_URL $FORMULA
-      - run: |
-            # modify merge message platform tag
-            cd /tmp/bottles
-            sed -i '' 's/"sierra"/"sierra_or_later"/g' *.sierra.*.json
+           name: Build bottles
+           # no_output_timeout: 30m
+           command: .circleci/after_script.sh
       - run: |
             # upload bottles to github releases
             brew tap tcnksm/ghr
