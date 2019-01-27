@@ -60,9 +60,11 @@ pushd bottles
   for f in ${CHANGED_FORMULAE};do
     echo "Bottling changed formula ${f}..."
 
+    # use ggprep instead of gprep
+    brew install grep
     # find ${HOMEBREW_REPOSITORY}/Cellar/${f} -name "${f}.rb" >> version.txt
-    # RELEASE_TAG=$(grep -Po "(\d+\.)+(\d+\.)+\d" version.txt | head -n 1)
-    RELEASE_TAG=$(grep -Po "(\d+\.)+(\d+\.)+\d" ${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}/Formula/${f}.rb | head -n 1)
+    # RELEASE_TAG=$(ggrep -Po "(\d+\.)+(\d+\.)+\d" version.txt | head -n 1)
+    # RELEASE_TAG=$(ggrep -Po "(\d+\.)+(\d+\.)+\d" ${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}/Formula/${f}.rb | head -n 1)
     echo "Release Tag: ${RELEASE_TAG}"
 
     BOTTLE_ROOT_URL=https://github.com/${TRAVIS_REPO_SLUG}/releases/download/${RELEASE_TAG}
@@ -120,9 +122,9 @@ pushd bottles
 
     # tag_name="v${1}"
 
-    asset_dir="./"
+    asset_dir="."
     assets=()
-    for f in "$asset_dir"/*; do [ -f "${f}" ] && assets+=(-a "${f}"); done
+    for b in "$asset_dir"/*; do [ -f "${b}" ] && assets+=(-a "${b}"); done
 
     # upload files
     hub release create "${assets[@]}" -m "Release ${RELEASE_TAG}" "${RELEASE_TAG}"

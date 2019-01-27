@@ -19,11 +19,6 @@ set -e
 
 for f in ${CHANGED_FORMULAE};do
   echo "Installing dependencies for changed formula ${f}..."
-
-  # check RELEASE_TAG necessary to publish the bottles.
-  RELEASE_TAG=$(grep -Po "(\d+\.)+(\d+\.)+\d" ${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}/Formula/${f}.rb | head -n 1)
-  echo "Release Tag: ${RELEASE_TAG}"
-
   FLAGS="--only-dependencies --build-bottle"
 
   brew install ${FLAGS} ${TRAVIS_REPO_SLUG}/${f}&

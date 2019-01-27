@@ -16,3 +16,6 @@
 ###########################################################################
 
 # ccache -s
+
+# check RELEASE_TAG necessary to publish the bottles.
+echo "Release Tag: ${RELEASE_TAG}"
