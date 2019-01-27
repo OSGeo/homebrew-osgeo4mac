@@ -18,6 +18,9 @@
 set -e
 
 cd ${TRAVIS_BUILD_DIR}
+
+ls ./
+
 # Setup Git configuration
 COMMIT_USER=$(git log --format='%an' ${TRAVIS_COMMIT}^\!)
 COMMIT_EMAIL=$(git log --format='%ae' ${TRAVIS_COMMIT}^\!)
@@ -115,8 +118,14 @@ pushd bottles
 
     echo "Upload bottles to GitHub releases"
 
+    # we could use the script upload_release.sh
+    # in: travis.yml > before_deploy
+    # - chmod +x ./travis/upload_release.sh
+    # - ./travis/upload_release.sh
+
     # command-line tool to use with GitHub
     brew install hub
+
     ls ./
 
     # delete old release tag

@@ -3,6 +3,8 @@ set -e
 cd ${TRAVIS_BUILD_DIR}
 echo "Check build dir: ${TRAVIS_BUILD_DIR}"
 
+ls ./
+
 cd bottles
 
 for f in ${CHANGED_FORMULAE}; do

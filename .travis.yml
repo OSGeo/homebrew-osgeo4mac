@@ -76,9 +76,6 @@ before_deploy:
   - eval `ssh-agent -s`
   - ssh-add deploy_key
   - ./travis/before_deploy.sh
-  # upload bottles to github releases
-  # - chmod +x ./travis/upload_release.sh
-  # - ./travis/upload_release.sh
 
 deploy:
   skip_cleanup: true
