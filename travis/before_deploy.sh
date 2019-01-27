@@ -64,7 +64,7 @@ pushd bottles
     brew install grep
     # find ${HOMEBREW_REPOSITORY}/Cellar/${f} -name "${f}.rb" >> version.txt
     # RELEASE_TAG=$(ggrep -Po "(\d+\.)+(\d+\.)+\d" version.txt | head -n 1)
-    # RELEASE_TAG=$(ggrep -Po "(\d+\.)+(\d+\.)+\d" ${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}/Formula/${f}.rb | head -n 1)
+    RELEASE_TAG=$(ggrep -Po "(\d+\.)+(\d+\.)+\d" ${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}/Formula/${f}.rb | head -n 1)
     echo "Release Tag: ${RELEASE_TAG}"
 
     BOTTLE_ROOT_URL=https://github.com/${TRAVIS_REPO_SLUG}/releases/download/${RELEASE_TAG}
@@ -114,10 +114,12 @@ pushd bottles
 
     echo "Upload bottles to GitHub releases"
 
+    # command-line tool to use with GitHub
     brew install hub
     ls ./
 
     # delete old release tag
+    echo "Release Tag ${RELEASE_TAG} will be eliminated if existing"
     hub release delete "${RELEASE_TAG}"
 
     # tag_name="v${1}"

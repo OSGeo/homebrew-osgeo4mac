@@ -48,14 +48,6 @@ brew update || brew update
 #ccache -z
 
 for f in ${CHANGED_FORMULAE};do
-
-  # check RELEASE_TAG necessary to publish the bottles.
-  brew install grep
-  # find ${HOMEBREW_REPOSITORY}/Cellar/${f} -name "${f}.rb" >> version.txt
-  # export RELEASE_TAG=$(ggrep -Po "(\d+\.)+(\d+\.)+\d" version.txt | head -n 1)
-  export RELEASE_TAG=$(ggrep -Po "(\d+\.)+(\d+\.)+\d" "${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}/Formula/${f}.rb" | head -n 1)
-  echo "Release Tag: ${RELEASE_TAG}"
-
   echo "Homebrew setup for changed formula ${f}..."
   deps=$(brew deps --include-build ${f})
   echo "${f} dependencies:"
