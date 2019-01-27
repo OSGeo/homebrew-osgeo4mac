@@ -62,12 +62,13 @@ pushd bottles
 
     # use ggprep instead of gprep
     brew install grep
-    # find ${HOMEBREW_REPOSITORY}/Cellar/${f} -name "${f}.rb" >> version.txt
+    # find ${HOMEBREW_PREFIX}/Cellar/${f} -name "${f}.rb" >> version.txt
     # RELEASE_TAG=$(ggrep -Po "(\d+\.)+(\d+\.)+\d" version.txt | head -n 1)
     RELEASE_TAG=$(ggrep -Po "(\d+\.)+(\d+\.)+\d" ${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}/Formula/${f}.rb | head -n 1)
     echo "Release Tag: ${RELEASE_TAG}"
 
     BOTTLE_ROOT_URL=https://github.com/${TRAVIS_REPO_SLUG}/releases/download/${RELEASE_TAG}
+    echo "The bottles will be uploaded to: ${BOTTLE_ROOT_URL}"
 
     brew bottle --verbose --json --root-url=${BOTTLE_ROOT} ${TRAVIS_REPO_SLUG}/${f}
 
