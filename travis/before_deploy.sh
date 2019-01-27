@@ -18,6 +18,9 @@
 set -e
 
 cd ${TRAVIS_BUILD_DIR}
+
+ls ./
+
 # Setup Git configuration
 COMMIT_USER=$(git log --format='%an' ${TRAVIS_COMMIT}^\!)
 COMMIT_EMAIL=$(git log --format='%ae' ${TRAVIS_COMMIT}^\!)
@@ -57,9 +60,19 @@ pushd bottles
   # S3 bucket isn't currently working for the Travis pro repo, so we're switching to Bintray, for now.
   # BOTTLE_ROOT=https://osgeo4mac.s3.amazonaws.com/bottles
   # BOTTLE_ROOT=https://dl.bintray.com/homebrew-osgeo/osgeo-bottles
-  BOTTLE_ROOT_URL=https://github.com/${TRAVIS_REPO_SLUG}/releases/download/${RELEASE_TAG}
   for f in ${CHANGED_FORMULAE};do
     echo "Bottling changed formula ${f}..."
+
+    # use ggprep instead of gprep
+    brew install grep
+    # find ${HOMEBREW_PREFIX}/Cellar/${f} -name "${f}.rb" >> version.txt
+    # RELEASE_TAG=$(ggrep -Po "(\d+\.)+(\d+\.)+\d" version.txt | head -n 1)
+    RELEASE_TAG=$(ggrep -Po "(\d+\.)+(\d+\.)+\d" ${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}/Formula/${f}.rb | head -n 1)
+    echo "Release Tag: ${RELEASE_TAG}"
+
+    BOTTLE_ROOT_URL=https://github.com/${TRAVIS_REPO_SLUG}/releases/download/${RELEASE_TAG}
+    echo "The bottles will be uploaded to: ${BOTTLE_ROOT_URL}"
+
     brew bottle --verbose --json --root-url=${BOTTLE_ROOT} ${TRAVIS_REPO_SLUG}/${f}
 
     # temporary duplication of 10.2-Xcode-8.x-built bottles to 10.3 bottles
@@ -102,6 +115,32 @@ pushd bottles
       rm ${f}*.json
       rm ${f}*.tar.gz
     fi
+
+    echo "Upload bottles to GitHub releases"
+
+    # we could use the script upload_release.sh
+    # in: travis.yml > before_deploy
+    # - chmod +x ./travis/upload_release.sh
+    # - ./travis/upload_release.sh
+
+    # command-line tool to use with GitHub
+    brew install hub
+
+    ls ./
+
+    # delete old release tag
+    echo "Release Tag ${RELEASE_TAG} will be eliminated if existing"
+    hub release delete "${RELEASE_TAG}"
+
+    # tag_name="v${1}"
+
+    asset_dir="."
+    assets=()
+    for b in "$asset_dir"/*; do [ -f "${b}" ] && assets+=(-a "${b}"); done
+
+    # upload files
+    hub release create "${assets[@]}" -m "Release ${RELEASE_TAG}" "${RELEASE_TAG}"
+
   done
 popd
 
