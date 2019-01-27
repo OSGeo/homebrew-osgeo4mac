@@ -3,7 +3,10 @@ set -e
 brew install hub
 ls ./
 
-RELEASE_TAG=$(grep -Po "(\d+\.)+(\d+\.)+\d" ${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}/Formula/${f}.rb | head -n 1)
+# find ${HOMEBREW_REPOSITORY}/Cellar/${f} -name "${f}.rb" >> version.txt
+# RELEASE_TAG=$(grep -Po "(\d+\.)+(\d+\.)+\d" version.txt | head -n 1)
+# RELEASE_TAG=$(grep -Po "(\d+\.)+(\d+\.)+\d" ${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}/Formula/${f}.rb | head -n 1)
+
 hub release delete "${RELEASE_TAG}"
 
 # tag_name="v${1}"

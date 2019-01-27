@@ -60,8 +60,11 @@ pushd bottles
   for f in ${CHANGED_FORMULAE};do
     echo "Bottling changed formula ${f}..."
 
+    # find ${HOMEBREW_REPOSITORY}/Cellar/${f} -name "${f}.rb" >> version.txt
+    # RELEASE_TAG=$(grep -Po "(\d+\.)+(\d+\.)+\d" version.txt | head -n 1)
     RELEASE_TAG=$(grep -Po "(\d+\.)+(\d+\.)+\d" ${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}/Formula/${f}.rb | head -n 1)
     echo "Release Tag: ${RELEASE_TAG}"
+
     BOTTLE_ROOT_URL=https://github.com/${TRAVIS_REPO_SLUG}/releases/download/${RELEASE_TAG}
 
     brew bottle --verbose --json --root-url=${BOTTLE_ROOT} ${TRAVIS_REPO_SLUG}/${f}
@@ -106,6 +109,24 @@ pushd bottles
       rm ${f}*.json
       rm ${f}*.tar.gz
     fi
+
+    echo "Upload bottles to GitHub releases"
+
+    brew install hub
+    ls ./
+
+    # delete old release tag
+    hub release delete "${RELEASE_TAG}"
+
+    # tag_name="v${1}"
+
+    asset_dir="./"
+    assets=()
+    for f in "$asset_dir"/*; do [ -f "${f}" ] && assets+=(-a "${f}"); done
+
+    # upload files
+    hub release create "${assets[@]}" -m "Release ${RELEASE_TAG}" "${RELEASE_TAG}"
+
   done
 popd
 
