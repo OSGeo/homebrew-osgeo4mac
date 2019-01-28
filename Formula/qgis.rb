@@ -38,10 +38,10 @@ class Qgis < Formula
   homepage "https://www.qgis.org"
   url "https://github.com/qgis/QGIS.git",
     :branch => "release-3_4",
-    :commit => "8ce8ee0be0f5e05f0665bc5149ebe7f3edec6e88a"
+    :commit => "9eb298fe55f963915dd4e584d1e05bdcbd442755"
   version "3.4.4"
 
-  # revision 1
+  revision 1
 
   head "https://github.com/qgis/QGIS.git", :branch => "master"
 
@@ -371,8 +371,6 @@ class Qgis < Formula
     url "https://gist.githubusercontent.com/fjperini/bf9fbd1ac9cc2729994cf331baf7a439/raw/855d95c24d5f4df910f8f454cf6b82389f5de820/RAlgorithmProvider.patch"
     sha256 "254b0341c05f077dbcf67e29c14d77407a765a04d04524915c9443498a3f4343"
   end
-
-  needs :cxx11
 
   def install
     ENV.cxx11
