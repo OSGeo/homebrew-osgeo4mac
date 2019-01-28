@@ -43,7 +43,7 @@ class Qt5Webkit < Formula
   depends_on "libpng"
   depends_on "libxslt"
   depends_on "libxml2"
-  depends_on :macos => :mountain_lion
+  # depends_on :macos => :mountain_lion # error: unknown version
   depends_on "openssl"
   depends_on "qt"
   depends_on "webp"
