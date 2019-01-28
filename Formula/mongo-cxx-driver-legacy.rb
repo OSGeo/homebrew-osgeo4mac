@@ -42,7 +42,7 @@ class MongoCxxDriverLegacy < Formula
       "install"
     ]
 
-    scons(*args)
+    system "scons", *args
   end
 
   test do
@@ -66,6 +66,7 @@ class MongoCxxDriverLegacy < Formula
 
       end
 end
+
 __END__
 diff --git a/src/mongo/client/command_writer.h b/src/mongo/client/command_writer.h
 index 09cd752..6d60721 100644
