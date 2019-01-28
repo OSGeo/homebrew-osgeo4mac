@@ -92,7 +92,7 @@ jobs:
       - run:
           name: "Update homebrew"
           command: |
-            brew tap brewsci/science || true
+          # brew tap brewsci/science || true
             brew tap brewsci/bio || true
             brew update || brew update
 
