@@ -46,7 +46,7 @@ class QgisLtr < Formula
     sha256 "e55df08519f050b6383be8f7ea3ec139e2aa470b6001f05aad1f66200f974be4" => :sierra
   end
 
-  # revision 1
+  revision 1
 
   head "https://github.com/qgis/QGIS.git", :branch => "release-3_4"
 
@@ -361,8 +361,6 @@ class QgisLtr < Formula
     url "https://gist.githubusercontent.com/fjperini/bf9fbd1ac9cc2729994cf331baf7a439/raw/855d95c24d5f4df910f8f454cf6b82389f5de820/RAlgorithmProvider.patch"
     sha256 "254b0341c05f077dbcf67e29c14d77407a765a04d04524915c9443498a3f4343"
   end
-
-  needs :cxx11
 
   def install
     ENV.cxx11
