@@ -29,7 +29,7 @@ class Qt5WebkitQtAT57 < Formula
   depends_on "libxslt"
   depends_on "sqlite"
 
-  depends_on :macos => :mountain_lion
+  # depends_on :macos => :mountain_lion # # error: unknown version
   depends_on :xcode => :build
 
   def install
