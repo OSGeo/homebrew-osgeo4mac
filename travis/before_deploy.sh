@@ -112,8 +112,8 @@ git commit -m "Updated bottles for: ${BUILT_BOTTLES}
 Committed for ${COMMIT_USER}<${COMMIT_EMAIL}>
 [ci skip]"
 
+git add *
+git commit -m "fix error: failed to push some refs"
+
 # Now that we're all set up, we can push.
 git push ${SSH_REPO} $TRAVIS_BRANCH
-
-# fix error: failed to push some refs
-git push origin master --force
