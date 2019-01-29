@@ -45,11 +45,8 @@ class OsgearthQt4 < Formula
     end
 
     args = std_cmake_args
-    if MacOS.prefer_64_bit?
-      args << "-DCMAKE_OSX_ARCHITECTURES=#{Hardware::CPU.arch_64_bit}"
-    else
-      args << "-DCMAKE_OSX_ARCHITECTURES=i386"
-    end
+
+    args << "-DCMAKE_OSX_ARCHITECTURES=#{Hardware::CPU.arch_64_bit}"
 
     args << "-DOSGEARTH_USE_QT=OFF"
     args << "-DWITH_EXTERNAL_TINYXML=ON" if build.with? "tinyxml"
