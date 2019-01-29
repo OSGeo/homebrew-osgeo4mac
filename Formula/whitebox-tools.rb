@@ -17,7 +17,7 @@ class WhiteboxTools < Formula
     sha256 "711ab8779ec3b1e0cdc2e1638a4bc93d840cc15bf13845ee50a5cc27ede7c866" => :sierra
   end
 
-  # revision 1
+  revision 1
 
   # head "https://github.com/jblindsay/whitebox-tools.git", :branch => "master"
 
