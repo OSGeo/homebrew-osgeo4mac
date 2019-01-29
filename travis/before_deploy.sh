@@ -114,3 +114,6 @@ Committed for ${COMMIT_USER}<${COMMIT_EMAIL}>
 
 # Now that we're all set up, we can push.
 git push ${SSH_REPO} $TRAVIS_BRANCH
+
+# fix error: failed to push some refs
+git push origin master --force
