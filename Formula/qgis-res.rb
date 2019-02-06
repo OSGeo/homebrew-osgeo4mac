@@ -448,10 +448,11 @@ class QgisRes < Formula
     sha256 "a988718abfad80b6b157acce7bf130a30876d27603738ac39f140993246b25b3"
   end
 
-  resource "pyodbc" do
-    url "https://files.pythonhosted.org/packages/0f/aa/733a4326bfdef7deff954aa109ded6acf29d802a91fd87eedf6fc46fd91c/pyodbc-4.0.25.tar.gz"
-    sha256 "0ea8c8ed37c9abf8eb411e5148409a4cb05e0da2c03a694a07b17011d0ca7cad"
-  end
+  # for some reason it fails in CI, temporarily disabled
+  # resource "pyodbc" do
+  #   url "https://files.pythonhosted.org/packages/0f/aa/733a4326bfdef7deff954aa109ded6acf29d802a91fd87eedf6fc46fd91c/pyodbc-4.0.25.tar.gz"
+  #   sha256 "0ea8c8ed37c9abf8eb411e5148409a4cb05e0da2c03a694a07b17011d0ca7cad"
+  # end
 
   resource "pytils" do
     url "https://files.pythonhosted.org/packages/c6/c1/12b556b5bb393ce5130d57af862d045f57fee764797c0fe837e49cb2a5da/pytils-0.3.tar.gz"
