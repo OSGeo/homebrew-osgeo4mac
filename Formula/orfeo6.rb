@@ -2,7 +2,7 @@ class Orfeo6 < Formula
   desc "Library of image processing algorithms"
   homepage "https://www.orfeo-toolbox.org/otb/"
 
-  revision 1
+  revision 2
 
   head "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb.git", :branch => "master"
 
@@ -23,25 +23,32 @@ class Orfeo6 < Formula
   end
 
   option "without-monteverdi", "Build without Monteverdi and Mapla applications (Qt required)"
+  option "without-python", "Build without Python support"
+  option "with-monteverdi", "Build with Monteverdi and Mapla applications (Qt required)"
+  option "with-python", "Build with Python support"
+  option "with-patented", "Build with Patented Examples"
+  option "with-fftw", "Build with FFTW support"
+  option "with-hdf5", "Build with HDF5, general purpose library and file format for storing scientific data support"
   option "with-iceviewer", "Build with ICE Viewer application (Qt and X11 required)"
   option "with-examples", "Compile and install various examples"
   option "with-java", "Enable Java support"
-  option "with-shark", "Build with Machine learning library"
+  option "with-mpi", "Build with Open MPI, a High Performance Message Passing Library"
+  option "with-opencv", "Build with OpenCV support"
+  # option "with-shark", "Build with Machine learning library"
+  # option "with-mapnik", "Build with Mapnik, toolkit for developing mapping applications"
+  # option "with-openjpeg", "Build with OpenJPEG, an open source JPEG 2000 codec"
 
   depends_on "cmake" => :build
 
   # required
   depends_on "boost"
   depends_on "vtk"
-  depends_on "brewsci/science/insighttoolkit"
   depends_on "libgeotiff"
   depends_on "libpng"
   depends_on "pcre"
   depends_on "openssl"
-  depends_on "ossim"
   depends_on "sqlite"
   depends_on "tinyxml"
-  depends_on "openscenegraph-qt5" # (for libOpenThreads, now internal to osg)
   depends_on "zlib"
   depends_on "expat"
   depends_on "gsl"
@@ -49,9 +56,17 @@ class Orfeo6 < Formula
   depends_on "pkg-config"
   depends_on "icu4c"
   depends_on "freetype"
-  depends_on "numpy"
   depends_on "perl"
   depends_on "libtool" # libltdl
+  depends_on "jpeg"
+  depends_on "libtiff"
+  depends_on "proj"
+  depends_on "geos"
+  depends_on "netcdf"
+  depends_on "openjpeg"
+  depends_on "osgeo/osgeo4mac/ossim"
+  depends_on "osgeo/osgeo4mac/insighttoolkit"
+  depends_on "osgeo/osgeo4mac/openscenegraph-qt5" # (for libOpenThreads, now internal to osg)
 
   # recommended
   depends_on "muparser" => :recommended
@@ -61,15 +76,18 @@ class Orfeo6 < Formula
   depends_on "minizip" => :recommended
 
   # optional
-  depends_on "python" => :optional
-  depends_on "swig" if build.with? "python"
   depends_on "fftw" => :optional # restricts built binaries to GPL license
-  depends_on "mapnik" => :optional
-  depends_on "opencv" => :optional
-  depends_on "openjpeg" => :optional
   depends_on "hdf5" => :optional
-  depends_on "open-mpi" => :optional
-  depends_on "brewsci/science/shark" if build.with? "shark"
+  # depends_on "hdf4" => :optional
+  # depends_on "mapnik" => :optional
+  # depends_on "osgeo/osgeo4mac/shark" if build.with? "shark"
+  depends_on "open-mpi" if build.with? "mpi"
+  depends_on "opencv@2" if build.with? "opencv"
+  if build.with? "python"
+    depends_on "python" => :optional
+    depends_on "swig"
+    depends_on "numpy"
+  end
 
   # ICE Viewer: needs X11 support
   # apparently, GLUT is not needed by Monteverdi, which uses ICE non-gui module,
@@ -78,13 +96,13 @@ class Orfeo6 < Formula
 
   # Monteverdi: required deps and required/optionals shared with OTB
   if build.with? "monteverdi"
-    depends_on "gdal2"
+    depends_on "osgeo/osgeo4mac/gdal2"
     depends_on "glew"
     depends_on "glfw"
     depends_on "qt"
     depends_on "qwt"
   else
-    depends_on "gdal2" => :recommended
+    depends_on "osgeo/osgeo4mac/gdal2" => :recommended
     depends_on "glew" => :optional
     depends_on "glfw" => :optional
     depends_on "qt" => :optional
@@ -132,21 +150,52 @@ class Orfeo6 < Formula
       -DOTB_USE_GSL=ON
     ]
 
+    # Simple Parallel Tiff Writer
+    # args << "OTB_USE_SPTW=OFF"
+
+    # Option to activate deprecated classes
+    # Turn on the use and test of deprecated classes
+    # args << "-DOTB_USE_DEPRECATED=OFF"
+
+    # Add openmp compiler and linker flags
+    # args << "-DOTB_USE_OPENMP=OFF"
+
+    # Enable SIMD optimizations (hardware dependent)
+    # args << "-DOTB_USE_SSE_FLAGS=ON"
+
+    # Enable module 6S
+    # args << "-DOTB_USE_6S=ON"
+
+    # Enable module Curl
+    # args << "-DOTB_USE_CURL=ON"
+
+    # Build with static libraries
+    # args << "-DBUILD_STATIC_LIBS=OFF"
+
+    # Build with specific list of remote modules
+    # args << "-DWITH_REMOTE_MODULES=OFF"
+
+
     args << "-DOTB_DATA_USE_LARGEINPUT=ON"
 
     args << "-DOPENTHREADS_LIBRARY=#{Formula["openscenegraph-qt5"].opt_lib}/libOpenThreads.dylib"
     args << "-DOPENTHREADS_INCLUDE_DIR=#{Formula["openscenegraph-qt5"].opt_include}"
 
+    args << "-DOTB_WRAP_JAVA=" + (build.with?("java") ? "ON" : "OFF")
+    args << "-DOTB_WRAP_PYTHON=OFF" if build.without? "python"
+
     if build.with? "python"
-      args << "-DOTB_WRAP_PYTHON3=ON"
-      args << "-DPYTHON3_EXECUTABLE=#{HOMEBREW_PREFIX}/opt/python/bin/python3"
+      args << "-DOTB_WRAP_PYTHON=ON"
+      args << "-DPYTHON_EXECUTABLE=#{HOMEBREW_PREFIX}/opt/python/bin/python3"
       py_ver= `#{HOMEBREW_PREFIX}/opt/python/bin/python3 -c 'import sys;print("{0}.{1}".format(sys.version_info[0],sys.version_info[1]))'`.strip
-      args << "-DPYTHON3_LIBRARY=#{HOMEBREW_PREFIX}/Frameworks/Python.framework/Versions/#{py_ver}/lib/libpython#{py_ver}m.dylib"
-      args << "-DPYTHON3_LIBRARY_RELEASE=#{HOMEBREW_PREFIX}/Frameworks/Python.framework/Versions/#{py_ver}/lib/libpython#{py_ver}m.dylib"
+      args << "-DPYTHON_LIBRARY=#{HOMEBREW_PREFIX}/Frameworks/Python.framework/Versions/#{py_ver}/lib/libpython#{py_ver}m.dylib"
+      args << "-DPYTHON_LIBRARY_RELEASE=#{HOMEBREW_PREFIX}/Frameworks/Python.framework/Versions/#{py_ver}/lib/libpython#{py_ver}m.dylib"
       # args << "-DPYTHON3_LIBRARY_DEBUG="
-      args << "-DPYTHON3_INCLUDE_DIR=#{HOMEBREW_PREFIX}/Frameworks/Python.framework/Versions/#{py_ver}/include/python#{py_ver}m"
+      args << "-DPYTHON_INCLUDE_DIR=#{HOMEBREW_PREFIX}/Frameworks/Python.framework/Versions/#{py_ver}/include/python#{py_ver}m"
       # args << "-DNUMPY_PYTHON3_INCLUDE_DIR="
-      args << "-DOTB_INSTALL_PYTHON3_DIR=#{lib}/python#{py_ver}/site-packages/otb"
+      args << "-DOTB_INSTALL_PYTHON_DIR=#{lib}/python#{py_ver}/site-packages/otb"
+
+      args << "-DNUMPY_INCLUDE_DIR=#{Formula["numpy"].opt_lib}/python#{py_ver}/site-packages/numpy/core/include" # numpy/arrayobject.h
     end
 
     args << "-DITK_DIR=#{Formula["cmake"].share}/cmake/Modules"
@@ -164,18 +213,15 @@ class Orfeo6 < Formula
 
     if build.with? "opencv"
       args << "-DOTB_USE_OPENCV=ON"
-      args << "-Dopencv_INCLUDE_DIR=#{Formula['opencv'].include}/opencv4"
-      args << "-DOPENCV_core_LIBRARY=#{Formula['opencv'].lib}"
+      args << "-Dopencv_INCLUDE_DIR=#{Formula['opencv@2'].include}"
+      args << "-DOPENCV_core_LIBRARY=#{Formula['opencv@2'].lib}/libopencv_core.dylib"
     end
 
     args << "-DBUILD_EXAMPLES=" + (build.with?("examples") ? "ON" : "OFF")
-    # args << "-DOTB_USE_PATENTED=" + (build.with?("patented") ? "ON" : "OFF")
-    args << "-DOTB_WRAP_JAVA=" + (build.with?("java") ? "ON" : "OFF")
-    args << "-DOTB_WRAP_PYTHON=OFF" if build.without? "python"
+
     args << "-DITK_USE_FFTWF=" + (build.with?("fftw") ? "ON" : "OFF")
     args << "-DITK_USE_FFTWD=" + (build.with?("fftw") ? "ON" : "OFF")
     args << "-DITK_USE_SYSTEM_FFTW=" + (build.with?("fftw") ? "ON" : "OFF")
-
     args << "-DOTB_USE_CURL=ON"
     args << "-DOTB_USE_GLEW=" + ((build.with?("glew") || build.with?("monteverdi")) ? "ON" : "OFF")
     args << "-DOTB_USE_GLFW=" + ((build.with?("glfw") || build.with?("monteverdi")) ? "ON" : "OFF")
@@ -183,15 +229,17 @@ class Orfeo6 < Formula
     args << "-DOTB_USE_LIBKML=" + (build.with?("libkml") ? "ON" : "OFF")
     args << "-DOTB_USE_LIBSVM=" + (build.with?("libsvm") ? "ON" : "OFF")
     args << "-DOTB_USE_MAPNIK=" + (build.with?("mapnik") ? "ON" : "OFF")
-    args << "-DOTB_USE_MUPARSER=" + (build.with?("muparser") ? "ON" : "OFF")
-    # args << "-DOTB_USE_MUPARSERX=" + (build.with?("") ? "ON" : "OFF")
     args << "-DOTB_USE_OPENGL=" + ((build.with?("examples") || build.with?("iceviewer") || build.with?("monteverdi")) ? "ON" : "OFF")
     args << "-DOTB_USE_MPI=" + (build.with?("mpi") ? "ON" : "OFF")
-    # args << "-DOTB_USE_OPENJPEG=" + (build.with?("openjpeg") ? "ON" : "OFF") # not used by the project
     args << "-DOTB_USE_QT=" + ((build.with?("qt") || build.with?("monteverdi")) ? "ON" : "OFF")
     args << "-DOTB_USE_QWT=" + ((build.with?("qt") || build.with?("monteverdi")) ? "ON" : "OFF")
     args << "-DOTB_USE_SIFTFAST=ON"
-    args << "-DOTB_USE_SHARK=" + (build.with?("shark") ? "ON" : "OFF")
+    args << "-DOTB_USE_MUPARSER=" + (build.with?("muparser") ? "ON" : "OFF")
+    # args << "-DOTB_USE_MUPARSERX=" + (build.with?("muparserx") ? "ON" : "OFF")
+    # args << "-DOTB_USE_SHARK=" + (build.with?("shark") ? "ON" : "OFF")
+
+    # args << "-DOTB_USE_PATENTED=" + (build.with?("patented") ? "ON" : "OFF") # not used by the project
+    # args << "-DOTB_USE_OPENJPEG=" + (build.with?("openjpeg") ? "ON" : "OFF") # not used by the project
 
     mkdir "build" do
       system "cmake", "..", *args
