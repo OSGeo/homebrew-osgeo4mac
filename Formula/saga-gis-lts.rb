@@ -31,7 +31,7 @@ class SagaGisLts < Formula
   depends_on "autoconf" => :build
   depends_on "libtool" => :build
   depends_on "pkg-config" => :build
-  depends_on "gdal2"
+  depends_on "osgeo/osgeo4mac/gdal2"
   depends_on "proj"
   depends_on "wxmac"
   depends_on "geos"
@@ -49,7 +49,7 @@ class SagaGisLts < Formula
   # Vigra support builds, but dylib in saga shows 'failed' when loaded
   # Also, using --with-python will trigger vigra to be built with it, which
   # triggers a source (re)build of boost --with-python
-  depends_on "brewsci/science/vigra" => :optional
+  depends_on "osgeo/osgeo4mac/vigra" => :optional
   depends_on "postgresql" => :optional
   depends_on "python@2" => :optional
   depends_on "liblas" => :optional
