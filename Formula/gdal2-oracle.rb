@@ -38,6 +38,7 @@ class Gdal2Oracle < Formula
     # plugin dylib
     dylib_name = "ogr_OCI.dylib"
     args.concat %W[
+      -std=c++11
       -dynamiclib
       -install_name #{opt_lib}/#{gdal_plugins_subdirectory}/#{dylib_name}
       -current_version #{version}
