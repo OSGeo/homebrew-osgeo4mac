@@ -42,7 +42,7 @@ class Qgis < Formula
   homepage "https://www.qgis.org"
   url "https://github.com/qgis/QGIS.git",
     :branch => "release-3_4",
-    :commit => "da4a0c09095256c11eff38ef08bc3ca935f40c43"
+    :commit => "7a5c913f05cc21aa219efc6289cd2e39795ddfd3"
   version "3.4.4"
 
   revision 2
