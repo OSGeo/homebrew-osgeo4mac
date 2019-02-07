@@ -1,7 +1,7 @@
 ################################################################################
 # Maintainer: FJ Perini @fjperini
 # Collaborator: Nick Robison @nickrobison
-# Collaborator: Luis Puerto @lpuerto
+# Collaborator: Luis Puerto @luispuerto
 ################################################################################
 
 class UnlinkedQGIS < Requirement
