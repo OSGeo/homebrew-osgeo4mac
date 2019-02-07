@@ -1,20 +1,10 @@
 class Lastools < Formula
   desc "Efficient tools for LiDAR processing. Contains LASlib, a C++ programming API for reading / writing LIDAR data stored in standard LAS format"
-  bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    cellar :any_skip_relocation
-    sha256 "323cb55abbc4494c3d9c08ce12610caf0d8dbd4a74f9d9dfb02d64a3955ef476" => :mojave
-    sha256 "323cb55abbc4494c3d9c08ce12610caf0d8dbd4a74f9d9dfb02d64a3955ef476" => :high_sierra
-    sha256 "323cb55abbc4494c3d9c08ce12610caf0d8dbd4a74f9d9dfb02d64a3955ef476" => :sierra
-  end
-
-  homepage "https://rapidlasso.com/lastools" # http://lastools.org
-  # url "http://lastools.org/download/LAStools.zip" # wine
-  # sha256 "2d7a7b6a232c953dd73505e25c33f2cb6b7765342eb2522e9b0dc8bed62d0890"
+  homepage "https://rapidlasso.com/lastools"
   url "https://github.com/LAStools/LAStools.git",
     :branch => "master",
-    :commit => "e2a8973ac27432c6e5d09bb3aadf2e1a5c797c9c"
-  version "19.01.14"
+    :commit => "18471441333cc84aa9f7a8c0ae6537286714f909"
+  version "19.01.27"
 
   # revision 1
 
@@ -60,18 +50,18 @@ class Lastools < Formula
   def caveats
     if build.with? "wine"
       <<~EOS
-        \n1 - \e[32mDownload and unzip LASTools. Remember where you unzipped it.\e[0m\n
+        \n1 - Download \e[32mhttp://lastools.org/download/LAStools.zip\e[0m and unzip LASTools.\n
+            Remember where you unzipped it.\n
 
-        2 - \e[32mYou’re almost done. Start QGIS. Select Processing/Options.\e[0m\n
-            \e[32mIn the Providers section scroll to “LASTools”. Fill out the blanks:\e[0m\n
+        2 - Start QGIS. Select \e[32mProcessing/Options.\e[0m\n
+            In the Providers section scroll to “LASTools”. Fill out the blanks:\n
 
-            \033[31mLASTools folder:\e[0m LASTools directory\n
+            \033[31mLASTools folder:\e[0m \e[32mLASTools directory\e[0m (unzipped)\n
+            \033[31mWine Folder:\e[0m \e[32m#{Formula["wine"].opt_bin}\e[0m\n
 
-            \033[31mWine Folder:\e[0m #{HOMEBREW_PREFIX}/bin\n
-
-          https://rapidlasso.com/2014/10/04/using-lastools-on-mac-os-x-with-wine/\n
-          https://rapidlasso.com/2013/09/29/how-to-install-lastools-toolbox-in-qgis/\n
-          http://gis.ubc.ca/2018/02/installing-lastools-for-lidar-data-in-qgis-for-mac/\n
+        https://rapidlasso.com/2014/10/04/using-lastools-on-mac-os-x-with-wine/\n
+        https://rapidlasso.com/2013/09/29/how-to-install-lastools-toolbox-in-qgis/\n
+        http://gis.ubc.ca/2018/02/installing-lastools-for-lidar-data-in-qgis-for-mac/\n
       EOS
     else
       <<~EOS
