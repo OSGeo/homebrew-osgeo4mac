@@ -1299,7 +1299,7 @@ __END__
 +           <item>
 +            <widget class="QLabel" name="label_osgeo">
 +             <property name="text">
-+              <string>OSGeo4Mac Team / Maintainer: @fjperini - Collaborators: @nickrobison and @lpuerto</string>
++              <string>OSGeo4Mac Team / Maintainer: @fjperini - Collaborators: @nickrobison and @luispuerto</string>
 +             </property>
 +             <property name="alignment">
 +              <set>Qt::AlignCenter</set>
