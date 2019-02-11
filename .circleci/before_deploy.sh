@@ -73,11 +73,19 @@ pushd bottles
 popd
 
 # Set up the keys
-openssl aes-256-cbc -iv "${ENCRYPTION_IV}" -K "${ENCRYPTION_KEY}" -d -in ci_deploy_key.enc -out deploy_key
-ls .
-chmod 600 ./deploy_key
-eval `ssh-agent -s`
-ssh-add deploy_key
+# Decrypt the circle_deploy_key.enc key into /tmp/circle_deploy_key
+openssl aes-256-cbc -d -K $REPO_ENC_KEY -iv $REPO_ENC_IV -in circle_deploy_key.enc -out /tmp/circle_deploy_key
+# Make sure only the current user can read the private key
+chmod 600 /tmp/circle_deploy_key
+# Create a script to return the passphrase environment variable to ssh-add
+echo 'echo ${SSH_PASSPHRASE}' > /tmp/askpass && chmod +x /tmp/askpass
+# Start the authentication agent
+eval "$(ssh-agent -s)"
+# Add the key to the authentication agent
+brew install util-linux # for setsid
+DISPLAY=":0.0" SSH_ASKPASS="/tmp/askpass" setsid ssh-add /tmp/circle_deploy_key </dev/null
+# checkout, restore_cache, run: yarn install, save_cache, etc.
+# Run semantic-release after all the above is set.
 
 # Now do the commit and push
 
