@@ -70,13 +70,18 @@ script: ./travis/script.sh
 after_script: ./travis/after_script.sh
 
 before_deploy:
-  key:
-    secure: "lR5trOZ0DO9wsP6TU1khfckWXshn75CUJ2OtS1qBQ+ir1rUftdJ1VYipG8M2+yHA5ve7M8kjpmVL7gFlFN5c0oru4PIQtfSIU2ShNFiqWT+IIySAVLBDUEH25dZi9UzkeRSxlaRWuFsVbvGRhhj1fDhDimbxrQJhxZ3C5MaxCVcELN8DA8ZIsZF9s84PyzI4koyUC4Z+D9Rv7hPqFF5KncWFq5lSRFrsHEFqp7CbWpU7+3YMhvkR4XHgs6nMrSV5OhOw/LQqJUkz+Cvh9mzKyWhVm/JUqOBWsJDQPfeYcnRsB4g6Xunk73ZyAKNZe4GMJlPH5R+xqIVQXXXF5p1sjTlkJOtlT/H3eLpPNlBkkUK4qlaHp8pbg2HC/Ysr1knnIbk5eg6fGpQOD2fPe/gU63irjkf5vA4GaXWFhG70JTKABDVSeHRfsJqy9Gy1VVovzvZbIlGkewLZNJB8/lRXqHtK3JTmlu0j83i8iA0KarLrnnBNGqHzTxdk0ReW09h71m9pS9bQVnIOd1BeROVgvOPAfuKZJYT4SG7xInq/3fF1j7vyhAylKPysMr7fnTRXGCHpqJgqFsY6TK37J9qCbpnmzZ2yYvdc0RQlEsoMovb4KJHx0HcuCQIy3FVzHDC/vTAQ+LcF6pWDkQQCkvPQUvXP+7j/es8FgXB04HMFsYA="
   # Get the deploy key by using Travis's stored variables to decrypt deploy_key.enc
-  - openssl aes-256-cbc -K $encrypted_key -iv $encrypted_iv -in deploy_key.enc -out deploy_key -d
-  - chmod 600 ./deploy_key
-  - eval `ssh-agent -s`
-  - ssh-add deploy_key
+  # Decrypt the git_deploy_key.enc key into /tmp/git_deploy_key
+  - openssl aes-256-cbc -K $encrypted_key -iv $encrypted_iv -in travis_deploy_key.enc -out travis_deploy_key -d
+  # Make sure only the current user can read the private key
+  - chmod 600 /tmp/travis_deploy_key
+  # Create a script to return the passphrase environment variable to ssh-add
+  - echo 'echo ${SSH_PASSPHRASE}' > /tmp/askpass && chmod +x /tmp/askpass
+  # Start the authentication agent
+  - eval "$(ssh-agent -s)"
+  # Add the key to the authentication agent
+  - DISPLAY=":0.0" SSH_ASKPASS="/tmp/askpass" setsid ssh-add /tmp/travis_deploy_key </dev/null
+  # add changes
   - ./travis/before_deploy.sh
 
 deploy:
