@@ -1,12 +1,12 @@
 class WhiteboxTools < Formula
   desc "An advanced geospatial data analysis platform"
   homepage "https://www.uoguelph.ca/~hydrogeo/WhiteboxTools"
-  url "https://github.com/jblindsay/whitebox-tools/releases/download/v0.14/WhiteboxTools_darwin_amd64.zip"
+  url "https://github.com/jblindsay/whitebox-tools/releases/download/v0.14.1/WhiteboxTools_darwin_amd64.zip"
   # url "https://github.com/jblindsay/whitebox-tools.git",
   #   :branch => "master",
   #   :commit => "f0cf6af792de8f60dd8afb10e3f0a26df1c702c4"
   version "0.14.0"
-  sha256 "da5f2f2b7fbfec3abb136b182e2254087b087604d33d8e1f384f0326d7e75e4e"
+  sha256 "1a96a037a83f3c1b83eff03c586ae6783bd6abcf04d8b0f9f0724cbe348352a8"
 
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
