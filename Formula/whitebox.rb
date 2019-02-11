@@ -1,24 +1,11 @@
 class Whitebox < Formula
   desc "Geographic information system (GIS) and remote sensing package intended for advanced geospatial analysis and data visualization"
-  homepage "https://www.uoguelph.ca/~hydrogeo/Whitebox"
+  homepage "https://www.uoguelph.ca/~hydrogeo/Whitebox" # https://github.com/jblindsay/whitebox-geospatial-analysis-tools
   url "https://www.uoguelph.ca/~hydrogeo/Whitebox/WhiteboxGAT-mac.zip"
   sha256 "32b2a75dab883e97d271621c60e7ad254558587b8bda0f1013bb9562077eea34"
-  # url "https://github.com/jblindsay/whitebox-geospatial-analysis-tools.git",
-  #   :branch => "master",
-  #   :commit => "57d26067d2cf2e30ecc150c04e7b5342525ac9d9"
   version "3.4.0"
 
-  bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    cellar :any_skip_relocation
-    sha256 "5475d273ca95c20c3ab22e7f9f810fd129f21e3509eb532847fe0412474aabdb" => :mojave
-    sha256 "5475d273ca95c20c3ab22e7f9f810fd129f21e3509eb532847fe0412474aabdb" => :high_sierra
-    sha256 "5475d273ca95c20c3ab22e7f9f810fd129f21e3509eb532847fe0412474aabdb" => :sierra
-  end
-
-  # revision 1
-
-  # head "https://github.com/jblindsay/whitebox-geospatial-analysis-tools.git", :branch => "master"
+  revision 1
 
   option "with-app", "Build WBT.app Package"
 
