@@ -1,5 +1,13 @@
 class Whitebox < Formula
   desc "Geographic information system (GIS) and remote sensing package intended for advanced geospatial analysis and data visualization"
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    cellar :any_skip_relocation
+    sha256 "582ee2fb521668fe29c56946db9cfc5bb51e6a81a58685c0025567bf7faf8b9b" => :mojave
+    sha256 "582ee2fb521668fe29c56946db9cfc5bb51e6a81a58685c0025567bf7faf8b9b" => :high_sierra
+    sha256 "582ee2fb521668fe29c56946db9cfc5bb51e6a81a58685c0025567bf7faf8b9b" => :sierra
+  end
+
   homepage "https://www.uoguelph.ca/~hydrogeo/Whitebox" # https://github.com/jblindsay/whitebox-geospatial-analysis-tools
   url "https://www.uoguelph.ca/~hydrogeo/Whitebox/WhiteboxGAT-mac.zip"
   sha256 "32b2a75dab883e97d271621c60e7ad254558587b8bda0f1013bb9562077eea34"
