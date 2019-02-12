@@ -26,7 +26,6 @@ class Orfeo6 < Formula
   option "without-python", "Build without Python support"
   option "with-monteverdi", "Build with Monteverdi and Mapla applications (Qt required)"
   option "with-python", "Build with Python support"
-  option "with-patented", "Build with Patented Examples"
   option "with-fftw", "Build with FFTW support"
   option "with-iceviewer", "Build with ICE Viewer application (Qt and X11 required)"
   option "with-examples", "Compile and install various examples"
@@ -36,6 +35,7 @@ class Orfeo6 < Formula
   # option "with-shark", "Build with Machine learning library"
   # option "with-mapnik", "Build with Mapnik, toolkit for developing mapping applications"
   # option "with-openjpeg", "Build with OpenJPEG, an open source JPEG 2000 codec"
+  # option "with-patented", "Build with Patented Examples"
 
   depends_on "cmake" => :build
 
@@ -95,18 +95,11 @@ class Orfeo6 < Formula
   depends_on "freeglut" if build.with? "iceviewer"
 
   # Monteverdi: required deps and required/optionals shared with OTB
-  if build.with? "monteverdi"
-    depends_on "osgeo/osgeo4mac/gdal2"
-    depends_on "glew"
-    depends_on "glfw"
-    depends_on "qt"
-    depends_on "qwt"
-  else
-    depends_on "osgeo/osgeo4mac/gdal2" => :recommended
-    depends_on "glew" => :optional
-    depends_on "glfw" => :optional
-    depends_on "qt" => :optional
-  end
+  depends_on "qwt" => :recommended
+  depends_on "osgeo/osgeo4mac/gdal2" => :recommended
+  depends_on "glew" => :recommended
+  depends_on "glfw" => :recommended
+  depends_on "qt" => :recommended
 
   # Need libagg if building mapnik
   if build.with? "mapnik"
@@ -175,7 +168,6 @@ class Orfeo6 < Formula
     # Build with specific list of remote modules
     # args << "-DWITH_REMOTE_MODULES=OFF"
 
-
     args << "-DOTB_DATA_USE_LARGEINPUT=ON"
 
     args << "-DOPENTHREADS_LIBRARY=#{Formula["openscenegraph-qt5"].opt_lib}/libOpenThreads.dylib"
@@ -197,6 +189,7 @@ class Orfeo6 < Formula
     end
 
     args << "-DITK_DIR=#{Formula["cmake"].share}/cmake/Modules"
+
     if build.with? "mapnik"
       args << "-DMAPNIK_INCLUDE_DIRS=#{Formula['mapnik'].include}/mapnik"
       args << "-DMAPNIK_LIBRARIES=#{Formula['mapnik'].lib}"
