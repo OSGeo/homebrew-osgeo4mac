@@ -8,6 +8,14 @@ class Qpsql < Formula
 
   head "https://code.qt.io/qt/qt5.git", :branch => "5.12", :shallow => false
 
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    cellar :any
+    sha256 "329de22a52ff950401516164f73dfc31ccbe77d73360985a9ead1d6063c5d027" => :mojave
+    sha256 "329de22a52ff950401516164f73dfc31ccbe77d73360985a9ead1d6063c5d027" => :high_sierra
+    sha256 "329de22a52ff950401516164f73dfc31ccbe77d73360985a9ead1d6063c5d027" => :sierra
+  end
+
   depends_on "pkg-config" => :build
   depends_on "libiconv"
   depends_on "gettext"
