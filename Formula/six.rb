@@ -10,6 +10,14 @@ class Six < Formula
 
   head "https://github.com/benjaminp/six.git", :branch => "master"
 
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    cellar :any_skip_relocation
+    sha256 "ecb39cc150f8a54cbc2bafa3dca562826baa39bf6bb3787d19fdb68101e4cd07" => :mojave
+    sha256 "ecb39cc150f8a54cbc2bafa3dca562826baa39bf6bb3787d19fdb68101e4cd07" => :high_sierra
+    sha256 "ecb39cc150f8a54cbc2bafa3dca562826baa39bf6bb3787d19fdb68101e4cd07" => :sierra
+  end
+
   depends_on "python@2"
   depends_on "python"
   depends_on "tcl-tk"
