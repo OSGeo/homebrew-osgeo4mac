@@ -18,6 +18,11 @@
 set -e
 
 for f in ${CHANGED_FORMULAE};do
+
+  # Install gdal2
+  # fix Another active Homebrew process is already using gdal2.formula
+  brew install gdal2
+
   echo "Installing dependencies for changed formula ${f}..."
   FLAGS="--only-dependencies --build-bottle"
 

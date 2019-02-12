@@ -47,10 +47,6 @@ brew update || brew update
 #ccache -M 500M
 #ccache -z
 
-# Install gdal2
-# fix Another active Homebrew process is already using gdal2.formula
-brew install gdal2
-
 for f in ${CHANGED_FORMULAE};do
   echo "Homebrew setup for changed formula ${f}..."
   deps=$(brew deps --include-build ${f})
