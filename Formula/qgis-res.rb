@@ -30,6 +30,8 @@ class QgisRes < Formula
   depends_on "openblas"
   depends_on "lapack"
   depends_on "cython"
+  depends_on "ghostscript"
+  depends_on "wxpython"
 
   # rpy2
   depends_on "gettext"
@@ -40,9 +42,7 @@ class QgisRes < Formula
   depends_on "libiconv"
   depends_on "icu4c"
 
-  depends_on "ghostscript"
-  depends_on "wxpython"
-
+  # for matplotlib
   depends_on "cairo"
   depends_on "py3cairo"
   depends_on "gtk+3"
@@ -50,6 +50,8 @@ class QgisRes < Formula
   depends_on "pygtk"
   depends_on "pygobject"
   depends_on "pyqt"
+  depends_on "ffmpeg"
+  depends_on "imagemagick"
 
   depends_on "numpy"
   depends_on "scipy"
@@ -61,13 +63,8 @@ class QgisRes < Formula
   depends_on "unixodbc" # for pyodbc
   # depends_on "gdk-pixbuf" # for cairocffi
 
-  if build.with? "others"
-    depends_on "ffmpeg" # for matplotlib
-    depends_on "imagemagick" # for matplotlib
-    depends_on "pyside" # for pyqtgraph
-    depends_on "xclip" # for optional pandas
-    depends_on "freetds" # for pymssql
-  end
+  depends_on "pyside" # for pyqtgraph
+  depends_on "freetds" # for pymssql
 
   if build.with?("r")
     depends_on "r"
@@ -117,17 +114,16 @@ class QgisRes < Formula
     sha256 "f84be1bb0040caca4cea721fcbbbbd61f9be9464ca236387158b0feea01914a4"
   end
 
+  # dependence for pyproj and numpy
+  resource "cython" do
+    url "https://files.pythonhosted.org/packages/e0/31/4a166556f92c469d8291d4b03a187f325c773c330fffc1e798bf83d947f2/Cython-0.29.5.tar.gz"
+    sha256 "9d5290d749099a8e446422adfb0aa2142c711284800fb1eb70f595101e32cbf1"
+  end
+
   resource "pyproj" do
     url "https://files.pythonhosted.org/packages/26/8c/1da0580f334718e04f8bbf74f0515a7fb8185ff96b2560ce080c11aa145b/pyproj-1.9.6.tar.gz"
     sha256 "e0c02b1554b20c710d16d673817b2a89ff94738b0b537aead8ecb2edc4c4487b"
   end
-
-  # resource "pyproj" do
-  #   url "https://github.com/jswhit/pyproj.git",
-  #     :branch => "master",
-  #     :commit => "263e283bce209ec7a6e4517828a31839545f2e8a"
-  #   version "1.9.6"
-  # end
 
   # DB Manager plugin and Processing plugin
   resource "psycopg2" do
@@ -177,12 +173,6 @@ class QgisRes < Formula
     sha256 "f1bffef9cbc82628f6e7d7b40d7e255aefaa1adb6a1b1d26c69a8b79e6208a98"
   end
 
-  # dependence for pyproj and numpy
-  resource "cython" do
-    url "https://files.pythonhosted.org/packages/e0/31/4a166556f92c469d8291d4b03a187f325c773c330fffc1e798bf83d947f2/Cython-0.29.5.tar.gz"
-    sha256 "9d5290d749099a8e446422adfb0aa2142c711284800fb1eb70f595101e32cbf1"
-  end
-
   resource "pytest" do
     url "https://files.pythonhosted.org/packages/41/f8/507d1f6121293a0392f5d0850c138d9c7dac6d22f575734078da2d0f447c/pytest-4.2.0.tar.gz"
     sha256 "65aeaa77ae87c7fc95de56285282546cfa9c886dc8e5dc78313db1c25e21bc07"
@@ -200,29 +190,15 @@ class QgisRes < Formula
   end
 
   # for some reason it fails in CI, temporarily disabled
-  # resource "pyodbc" do
-  #   url "https://files.pythonhosted.org/packages/0f/aa/733a4326bfdef7deff954aa109ded6acf29d802a91fd87eedf6fc46fd91c/pyodbc-4.0.25.tar.gz"
-  #   sha256 "0ea8c8ed37c9abf8eb411e5148409a4cb05e0da2c03a694a07b17011d0ca7cad"
-  # end
-
   resource "pyodbc" do
-    url "https://github.com/mkleehammer/pyodbc.git",
-      :branch => "master",
-      :commit => "84e9d5d5a77427a0b8ab0b5973a391951c2a4528"
-    version "4.0.25"
+    url "https://files.pythonhosted.org/packages/0f/aa/733a4326bfdef7deff954aa109ded6acf29d802a91fd87eedf6fc46fd91c/pyodbc-4.0.25.tar.gz"
+    sha256 "0ea8c8ed37c9abf8eb411e5148409a4cb05e0da2c03a694a07b17011d0ca7cad"
   end
 
   # for some reason it fails in CI, temporarily disabled
-  # resource "h5py" do
-  #   url "https://files.pythonhosted.org/packages/43/27/a6e7dcb8ae20a4dbf3725321058923fec262b6f7835179d78ccc8d98deec/h5py-2.9.0.tar.gz"
-  #   sha256 "9d41ca62daf36d6b6515ab8765e4c8c4388ee18e2a665701fef2b41563821002"
-  # end
-
   resource "h5py" do
-    url "https://github.com/h5py/h5py.git",
-      :branch => "2.9.x",
-      :commit => "d4c11c7447c17fdc1763d34ffa77aa214d95cd84"
-    version "2.9.0"
+    url "https://files.pythonhosted.org/packages/43/27/a6e7dcb8ae20a4dbf3725321058923fec262b6f7835179d78ccc8d98deec/h5py-2.9.0.tar.gz"
+    sha256 "9d41ca62daf36d6b6515ab8765e4c8c4388ee18e2a665701fef2b41563821002"
   end
 
   resource "scipy" do
@@ -288,37 +264,28 @@ class QgisRes < Formula
     sha256 "e90f17980e6ab0f3c2f3730e56d1fe9bcba1891eeea58966e89d352492cc74f4"
   end
 
-  # resource "xcffib" do
-  #   url "https://files.pythonhosted.org/packages/e0/36/e35d6fc422486aa9aae679b7427d3a9d453d7646d43d534cdbfb48402797/xcffib-0.6.0.tar.gz"
-  #   sha256 "36142cb72535933e8e1ed39ff2c45559fa7038823bd6be6961ef8ee5bb0f6912"
-  # end
+  # for some reason it fails in CI, temporarily disabled
+  resource "xcffib" do
+    url "https://files.pythonhosted.org/packages/e0/36/e35d6fc422486aa9aae679b7427d3a9d453d7646d43d534cdbfb48402797/xcffib-0.6.0.tar.gz"
+    sha256 "36142cb72535933e8e1ed39ff2c45559fa7038823bd6be6961ef8ee5bb0f6912"
+  end
 
-  # resource "cairocffi" do
-  #   url "https://files.pythonhosted.org/packages/33/33/a6aac7bace71019712fbc34f4ceb9d90c23f8fbadf2ac48f771aef9c1431/cairocffi-1.0.0.tar.gz"
-  #   sha256 "e048b15001cc235e6bc4855870e986ad9f09aa2b7b0ddcc4716c3d5458f8367f"
-  # end
+  # for some reason it fails in CI, temporarily disabled
+  resource "cairocffi" do
+    url "https://files.pythonhosted.org/packages/33/33/a6aac7bace71019712fbc34f4ceb9d90c23f8fbadf2ac48f771aef9c1431/cairocffi-1.0.0.tar.gz"
+    sha256 "e048b15001cc235e6bc4855870e986ad9f09aa2b7b0ddcc4716c3d5458f8367f"
+  end
 
   resource "tornado" do
     url "https://files.pythonhosted.org/packages/e6/78/6e7b5af12c12bdf38ca9bfe863fcaf53dc10430a312d0324e76c1e5ca426/tornado-5.1.1.tar.gz"
     sha256 "4e5158d97583502a7e2739951553cbd88a72076f152b4b11b64b9a10c4c49409"
   end
 
-  # resource "matplotlib" do
-  #   url "https://files.pythonhosted.org/packages/89/0c/653aec68e9cfb775c4fbae8f71011206e5e7fe4d60fcf01ea1a9d3bc957f/matplotlib-3.0.2.tar.gz"
-  #   sha256 "c94b792af431f6adb6859eb218137acd9a35f4f7442cea57e4a59c54751c36af"
-  # end
-
-  # resource "matplotlib" do
-  #   url "https://files.pythonhosted.org/packages/eb/a0/31b6ba00bc4dcbc06f0b80d1ad6119a9cc3081ecb04a00117f6c1ca3a084/matplotlib-2.2.3.tar.gz"
-  #   sha256 "7355bf757ecacd5f0ac9dd9523c8e1a1103faadf8d33c22664178e17533f8ce5"
-  # end
-
-  # resource "matplotlib" do
-  #   url "https://github.com/mkleehammer/pyodbc.git",
-  #     :branch => "v3.0.x",
-  #     :commit => "eb5303cd170671429ee442bb93918c4494f88163"
-  #   version "3.0.2"
-  # end
+  # for some reason it fails in CI, temporarily disabled
+  resource "matplotlib" do
+    url "https://files.pythonhosted.org/packages/89/0c/653aec68e9cfb775c4fbae8f71011206e5e7fe4d60fcf01ea1a9d3bc957f/matplotlib-3.0.2.tar.gz"
+    sha256 "c94b792af431f6adb6859eb218137acd9a35f4f7442cea57e4a59c54751c36af"
+  end
 
   resource "python-dateutil" do
     url "https://files.pythonhosted.org/packages/ad/99/5b2e99737edeb28c71bcbec5b5dda19d0d9ef3ca3e92e3e925e7c0bb364c/python-dateutil-2.8.0.tar.gz"
@@ -363,29 +330,15 @@ class QgisRes < Formula
   end
 
   # for some reason it fails in CI, temporarily disabled
-  # resource "Shapely" do
-  #   url "https://files.pythonhosted.org/packages/a2/fb/7a7af9ef7a35d16fa23b127abee272cfc483ca89029b73e92e93cdf36e6b/Shapely-1.6.4.post2.tar.gz"
-  #   sha256 "c4b87bb61fc3de59fc1f85e71a79b0c709dc68364d9584473697aad4aa13240f"
-  # end
-
   resource "Shapely" do
-    url "https://github.com/Toblerity/Shapely.git",
-      :branch => "master",
-      :commit => "a6174b998d73646c5ef45acced401cd63d257b5d"
-    version "1.6.4"
+    url "https://files.pythonhosted.org/packages/a2/fb/7a7af9ef7a35d16fa23b127abee272cfc483ca89029b73e92e93cdf36e6b/Shapely-1.6.4.post2.tar.gz"
+    sha256 "c4b87bb61fc3de59fc1f85e71a79b0c709dc68364d9584473697aad4aa13240f"
   end
 
   # for some reason it fails in CI, temporarily disabled
-  # resource "Rtree" do
-  #   url "https://files.pythonhosted.org/packages/b0/6c/6cc8d738f14d5efa0c38ec29403bbd9c75e64b3fe84b53290178dda0dbd9/Rtree-0.8.3.tar.gz"
-  #   sha256 "6cb9cf3000963ea6a3db777a597baee2bc55c4fc891e4f1967f262cc96148649"
-  # end
-
   resource "Rtree" do
-    url "https://github.com/Toblerity/rtree.git",
-      :branch => "master",
-      :commit => "5d33357c8e88f1a8344415dc15a7d2440211b281"
-    version "0.8.3"
+    url "https://files.pythonhosted.org/packages/b0/6c/6cc8d738f14d5efa0c38ec29403bbd9c75e64b3fe84b53290178dda0dbd9/Rtree-0.8.3.tar.gz"
+    sha256 "6cb9cf3000963ea6a3db777a597baee2bc55c4fc891e4f1967f262cc96148649"
   end
 
   resource "geopy" do
@@ -407,13 +360,6 @@ class QgisRes < Formula
     url "https://files.pythonhosted.org/packages/02/27/30c96578b6d6caae50c6240e9c2166bb50707027b8ac1fc1db8f67bc8228/geopandas-0.4.0.tar.gz"
     sha256 "9f5d24d23f33e6d3267a633025e4d9e050b3a1e86d41a96d3ccc5ad95afec3db"
   end
-
-  # resource "geopandas" do
-  #   url "https://github.com/geopandas/geopandas",
-  #     :branch => "master",
-  #     :commit => "39e724b475c57b11d4de0afac6d4bf2814ef209b"
-  #   version "0.4.0"
-  # end
 
   # others recommended
 
@@ -730,11 +676,13 @@ class QgisRes < Formula
 
   # others
 
-  # resource "wxPython" do
-  #   url "https://files.pythonhosted.org/packages/17/74/7c3ced03c3c76b9f98e4a0edae1801755a7599ebf481c04d9f77dfff17e3/wxPython-4.0.4.tar.gz"
-  #   sha256 "0d9ef4260cb2f3e23ed9dcf6baa905ba585ac7d631613cddc299c4c83463ae29"
-  # end
+  # for some reason it fails in CI, temporarily disabled
+  resource "wxPython" do
+    url "https://files.pythonhosted.org/packages/17/74/7c3ced03c3c76b9f98e4a0edae1801755a7599ebf481c04d9f77dfff17e3/wxPython-4.0.4.tar.gz"
+    sha256 "0d9ef4260cb2f3e23ed9dcf6baa905ba585ac7d631613cddc299c4c83463ae29"
+  end
 
+  # for some reason it fails in CI, temporarily disabled
   resource "pymssql" do
     url "https://files.pythonhosted.org/packages/2e/81/99562b93d75f3fc5956fa65decfb35b38a4ee97cf93c1d0d3cb799fffb99/pymssql-2.1.4.tar.gz"
     sha256 "3201eb1b1263ad55b555d727ed8bed0b12b7b9de3ce5e529206e36d4be1a7afb"
@@ -772,13 +720,6 @@ class QgisRes < Formula
     sha256 "78b12b1f32416e5f5ba383f6558018c062de5c14703a05a977f1584b6f5b213c"
   end
 
-  # resource "pyRscript" do
-  #   url "https://github.com/chairco/pyRscript.git",
-  #     :branch => "master",
-  #     :commit => "e952f450a873de52baa4fe80ed901f0cf990c0b7"
-  #   version "0.0.2"
-  # end
-
   resource "seaborn" do
     url "https://files.pythonhosted.org/packages/7a/bf/04cfcfc9616cedd4b5dd24dfc40395965ea9f50c1db0d3f3e52b050f74a5/seaborn-0.9.0.tar.gz"
     sha256 "76c83f794ca320fb6b23a7c6192d5e185a5fcf4758966a0c0a54baee46d41e2f"
@@ -807,7 +748,7 @@ class QgisRes < Formula
   def install
     # install python environment
     venv = virtualenv_create(libexec/'vendor', "#{Formula["python"].opt_bin}/python3")
-    res = resources.map(&:name).to_set - %w[Shapely Rtree pymssql rpy2 pyRscript] # python-dateutil
+    res = resources.map(&:name).to_set - %w[pyodbc h5py xcffib cairocffi matplotlib Shapely Rtree wxPython pymssql rpy2 pyRscript] # python-dateutil
 
     # fix pip._vendor.pep517.wrappers.BackendUnavailable
     system libexec/"vendor/bin/pip3", "install", "--upgrade", "-v", "setuptools", "pip<19.0.0", "wheel"
@@ -816,9 +757,16 @@ class QgisRes < Formula
       venv.pip_install resource(r)
     end
 
+    venv.pip_install_and_link "pyodbc"
+    venv.pip_install_and_link "h5py"
+    venv.pip_install_and_link "xcffib"
+    venv.pip_install_and_link "cairocffi"
+    venv.pip_install_and_link "matplotlib"
     venv.pip_install_and_link "Shapely"
     venv.pip_install_and_link "Rtree"
+    venv.pip_install_and_link "wxPython"
     venv.pip_install_and_link "pymssql"
+
     # venv.pip_install_and_link "python-dateutil"
 
     if build.with?("r") || ("r-sethrfore")
