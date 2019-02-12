@@ -61,9 +61,7 @@ before_install:
   - ulimit -n 1024
   - ./travis/before_install.sh
 
-install:
-  - rm ${HOMEBREW_PREFIX}/var/homebrew/locks/*
-  - ./travis/install.sh
+install: ./travis/install.sh
 
 #before_script: ./travis/before_script.sh
 
