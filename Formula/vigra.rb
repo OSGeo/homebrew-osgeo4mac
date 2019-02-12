@@ -5,7 +5,7 @@ class Vigra < Formula
   url "https://github.com/ukoethe/vigra/releases/download/Version-1-11-1/vigra-1.11.1-src.tar.gz"
   sha256 "a5564e1083f6af6a885431c1ee718bad77d11f117198b277557f8558fa461aaf"
 
-  # revision 1
+  revision 1
 
   head "https://github.com/ukoethe/vigra.git"
 
@@ -83,5 +83,9 @@ class Vigra < Formula
       EOS
     end
     s
+  end
+
+  test do
+    system bin/"vigra-config", "--version"
   end
 end
