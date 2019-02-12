@@ -3,13 +3,10 @@ class Insighttoolkit < Formula
   homepage "https://www.itk.org"
   url "https://downloads.sourceforge.net/project/itk/itk/4.13/InsightToolkit-4.13.1.tar.gz"
   sha256 "fdcfd218bd6f99d1826c5fb18bb2d60ebc906e9589d70576c60360d7c6715147"
-  head "git://itk.org/ITK.git"
 
-  bottle do
-    sha256 "d5ab1f5c66bdb0afbd9cde3e5be580bc78e114d604b9b4db4f5089e26208b48e" => :high_sierra
-    sha256 "3ed156592517d0fde2ccc21f180e2a6e8487a216a0a260e84f13e945156e80ce" => :sierra
-    sha256 "450da49dcec1fa3a329bb444e51b1b65ab61f4ce82a438ee74fc3a7d0ef246f5" => :el_capitan
-  end
+  revision 1
+
+  head "git://itk.org/ITK.git"
 
   option :cxx11
   option "with-examples", "Compile and install various examples"
