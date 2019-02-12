@@ -6,7 +6,7 @@
 
 class QgisRes < Formula
   include Language::Python::Virtualenv
-  desc "Resoruces for QGIS"
+  desc "Resources for QGIS"
   homepage "https://www.qgis.org"
   url "https://gist.githubusercontent.com/dakcarto/11385561/raw/e49f75ecec96ed7d6d3950f45ad3f30fe94d4fb2/pyqgis_startup.py"
   sha256 "385dce925fc2d29f05afd6508bc1f46ec84c0bc607cc0c8dfce78a4bb93b9c4e"
@@ -25,13 +25,12 @@ class QgisRes < Formula
   depends_on "freetype"
   depends_on "libpng"
   depends_on "openssl"
+  depends_on "libssh"
   depends_on "qhull"
   depends_on "tcl-tk"
   depends_on "openblas"
   depends_on "lapack"
-  depends_on "cython"
   depends_on "ghostscript"
-  depends_on "wxpython"
 
   # rpy2
   depends_on "gettext"
@@ -42,20 +41,26 @@ class QgisRes < Formula
   depends_on "libiconv"
   depends_on "icu4c"
 
+  depends_on "cython" # pip cython
+  depends_on "wxpython"
+
   # for matplotlib
   depends_on "cairo"
-  depends_on "py3cairo"
+  depends_on "py3cairo" # pip pycairo
+  depends_on "libsvg-cairo"
+  depends_on "librsvg"
+  depends_on "svg2pdf"
   depends_on "gtk+3"
-  depends_on "pygobject3"
-  depends_on "pygtk"
+  depends_on "pygobject3" # pip PyGObject
   depends_on "pygobject"
+  depends_on "pygtk" # pip pygtk
   depends_on "pyqt"
   depends_on "ffmpeg"
   depends_on "imagemagick"
 
-  depends_on "numpy"
-  depends_on "scipy"
-  depends_on "brewsci/bio/matplotlib"
+  depends_on "numpy" # pip numpy
+  depends_on "scipy" # pip scipy
+  depends_on "brewsci/bio/matplotlib" # pip matplotlib
 
   depends_on "osgeo/osgeo4mac/gdal2" # for Fiona
   depends_on "openjpeg" # for Pillow
@@ -730,6 +735,21 @@ class QgisRes < Formula
     sha256 "abd42a4c9c2069febb4c38fe74bfc4b4a9d3a89fea3bc2e4ba7baff7a20f783f"
   end
 
+  resource "PyGObject" do
+    url "https://files.pythonhosted.org/packages/8c/1f/76533985b054473ef6ab1ba4d9c00d62da502f8b43d3171ae588ec81ae93/PyGObject-3.30.4.tar.gz"
+    sha256 "2d4423cbf169d50a3165f2dde21478a00215c7fb3f68d9d236af588c670980bb"
+  end
+
+  resource "CairoSVG" do
+    url "https://files.pythonhosted.org/packages/f3/23/67e77d4ffd643287a0dfb7dc76acef05548bd1964cd355f588b93c026deb/CairoSVG-2.3.0.tar.gz"
+    sha256 "66f333ef5dc79fdfbd3bbe98adc791b1f854e0461067d202fa7b15de66d517ec"
+  end
+
+  resource "PyGTK" do
+    url "https://files.pythonhosted.org/packages/85/52/3d9bb924bd2c9bdb8afd9b7994cd09160fad5948bb2eca18fd7ffa12cfdc/pygtk-2.24.0.win32-py2.6.exe"
+    sha256 "16336e79f9a7913e5b2d1cf50120896495aac8892be2d352f660b905205c48db"
+  end
+
   resource "palettable" do
     url "https://files.pythonhosted.org/packages/f5/ef/cf4480c0ebaf51c1a23f4e6c943769210c8385543af0fe0999a1d2099d5b/palettable-3.1.1.tar.gz"
     sha256 "0685b223a236bb7e2a900ef7a855ccf9a4027361c8acf400f3b350ea51870f80"
@@ -740,6 +760,7 @@ class QgisRes < Formula
     sha256 "5b011ff4d81f83eed4380b0c72876be9b5572c4ed97e2b784dce477183c934f5"
   end
 
+  # for some reason it fails in CI, temporarily disabled
   resource "geos" do
     url "https://files.pythonhosted.org/packages/46/52/ef047a04ce59fc95cae1338b3cac5f50cf74849d3dd51c8a3a50fad50229/geos-0.2.1.tar.gz"
     sha256 "97c69520ba6081cf3135f8c37b07b1641d3a02eb3f0b75af54fc956eb9dd0bb3"
@@ -748,7 +769,7 @@ class QgisRes < Formula
   def install
     # install python environment
     venv = virtualenv_create(libexec/'vendor', "#{Formula["python"].opt_bin}/python3")
-    res = resources.map(&:name).to_set - %w[pyodbc h5py xcffib cairocffi matplotlib Shapely Rtree wxPython pymssql rpy2 pyRscript] # python-dateutil
+    res = resources.map(&:name).to_set - %w[pyodbc h5py xcffib cairocffi matplotlib Shapely Rtree wxPython pymssql geos rpy2 pyRscript] # python-dateutil
 
     # fix pip._vendor.pep517.wrappers.BackendUnavailable
     system libexec/"vendor/bin/pip3", "install", "--upgrade", "-v", "setuptools", "pip<19.0.0", "wheel"
@@ -766,6 +787,7 @@ class QgisRes < Formula
     venv.pip_install_and_link "Rtree"
     venv.pip_install_and_link "wxPython"
     venv.pip_install_and_link "pymssql"
+    venv.pip_install_and_link "geos"
 
     # venv.pip_install_and_link "python-dateutil"
 
