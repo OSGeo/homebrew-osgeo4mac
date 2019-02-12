@@ -270,16 +270,16 @@ class QgisRes < Formula
   end
 
   # for some reason it fails in CI, temporarily disabled
-  resource "xcffib" do
-    url "https://files.pythonhosted.org/packages/e0/36/e35d6fc422486aa9aae679b7427d3a9d453d7646d43d534cdbfb48402797/xcffib-0.6.0.tar.gz"
-    sha256 "36142cb72535933e8e1ed39ff2c45559fa7038823bd6be6961ef8ee5bb0f6912"
-  end
+  # resource "xcffib" do
+  #   url "https://files.pythonhosted.org/packages/e0/36/e35d6fc422486aa9aae679b7427d3a9d453d7646d43d534cdbfb48402797/xcffib-0.6.0.tar.gz"
+  #   sha256 "36142cb72535933e8e1ed39ff2c45559fa7038823bd6be6961ef8ee5bb0f6912"
+  # end
 
   # for some reason it fails in CI, temporarily disabled
-  resource "cairocffi" do
-    url "https://files.pythonhosted.org/packages/33/33/a6aac7bace71019712fbc34f4ceb9d90c23f8fbadf2ac48f771aef9c1431/cairocffi-1.0.0.tar.gz"
-    sha256 "e048b15001cc235e6bc4855870e986ad9f09aa2b7b0ddcc4716c3d5458f8367f"
-  end
+  # resource "cairocffi" do
+  #   url "https://files.pythonhosted.org/packages/33/33/a6aac7bace71019712fbc34f4ceb9d90c23f8fbadf2ac48f771aef9c1431/cairocffi-1.0.0.tar.gz"
+  #   sha256 "e048b15001cc235e6bc4855870e986ad9f09aa2b7b0ddcc4716c3d5458f8367f"
+  # end
 
   resource "tornado" do
     url "https://files.pythonhosted.org/packages/e6/78/6e7b5af12c12bdf38ca9bfe863fcaf53dc10430a312d0324e76c1e5ca426/tornado-5.1.1.tar.gz"
@@ -287,10 +287,10 @@ class QgisRes < Formula
   end
 
   # for some reason it fails in CI, temporarily disabled
-  resource "matplotlib" do
-    url "https://files.pythonhosted.org/packages/89/0c/653aec68e9cfb775c4fbae8f71011206e5e7fe4d60fcf01ea1a9d3bc957f/matplotlib-3.0.2.tar.gz"
-    sha256 "c94b792af431f6adb6859eb218137acd9a35f4f7442cea57e4a59c54751c36af"
-  end
+  # resource "matplotlib" do
+  #   url "https://files.pythonhosted.org/packages/89/0c/653aec68e9cfb775c4fbae8f71011206e5e7fe4d60fcf01ea1a9d3bc957f/matplotlib-3.0.2.tar.gz"
+  #   sha256 "c94b792af431f6adb6859eb218137acd9a35f4f7442cea57e4a59c54751c36af"
+  # end
 
   resource "python-dateutil" do
     url "https://files.pythonhosted.org/packages/ad/99/5b2e99737edeb28c71bcbec5b5dda19d0d9ef3ca3e92e3e925e7c0bb364c/python-dateutil-2.8.0.tar.gz"
@@ -682,10 +682,10 @@ class QgisRes < Formula
   # others
 
   # for some reason it fails in CI, temporarily disabled
-  resource "wxPython" do
-    url "https://files.pythonhosted.org/packages/17/74/7c3ced03c3c76b9f98e4a0edae1801755a7599ebf481c04d9f77dfff17e3/wxPython-4.0.4.tar.gz"
-    sha256 "0d9ef4260cb2f3e23ed9dcf6baa905ba585ac7d631613cddc299c4c83463ae29"
-  end
+  # resource "wxPython" do
+  #   url "https://files.pythonhosted.org/packages/17/74/7c3ced03c3c76b9f98e4a0edae1801755a7599ebf481c04d9f77dfff17e3/wxPython-4.0.4.tar.gz"
+  #   sha256 "0d9ef4260cb2f3e23ed9dcf6baa905ba585ac7d631613cddc299c4c83463ae29"
+  # end
 
   # for some reason it fails in CI, temporarily disabled
   resource "pymssql" do
@@ -770,7 +770,8 @@ class QgisRes < Formula
   def install
     # install python environment
     venv = virtualenv_create(libexec/'vendor', "#{Formula["python"].opt_bin}/python3")
-    res = resources.map(&:name).to_set - %w[pyodbc h5py xcffib cairocffi matplotlib Shapely Rtree wxPython pymssql PyGTK geos rpy2 pyRscript] # python-dateutil
+    # res = resources.map(&:name).to_set - %w[pyodbc h5py xcffib cairocffi matplotlib Shapely Rtree wxPython pymssql PyGTK geos rpy2 pyRscript] # python-dateutil
+    res = resources.map(&:name).to_set - %w[pyodbc h5py Shapely Rtree pymssql PyGTK geos rpy2 pyRscript] # python-dateutil
 
     # fix pip._vendor.pep517.wrappers.BackendUnavailable
     system libexec/"vendor/bin/pip3", "install", "--upgrade", "-v", "setuptools", "pip<19.0.0", "wheel"
@@ -781,14 +782,14 @@ class QgisRes < Formula
 
     venv.pip_install_and_link "pyodbc"
     venv.pip_install_and_link "h5py"
-    venv.pip_install_and_link "xcffib"
-    venv.pip_install_and_link "cairocffi"
-    venv.pip_install_and_link "matplotlib"
+    # venv.pip_install_and_link "xcffib" # not
+    # venv.pip_install_and_link "cairocffi" # not
+    # venv.pip_install_and_link "matplotlib"
     venv.pip_install_and_link "Shapely"
-    venv.pip_install_and_link "Rtree"
-    venv.pip_install_and_link "wxPython"
-    venv.pip_install_and_link "pymssql"
-    venv.pip_install_and_link "PyGTK"
+    venv.pip_install_and_link "Rtree" # not
+    # venv.pip_install_and_link "wxPython" # not
+    venv.pip_install_and_link "pymssql" # not
+    venv.pip_install_and_link "PyGTK" # not
     venv.pip_install_and_link "geos"
 
     # venv.pip_install_and_link "python-dateutil"
