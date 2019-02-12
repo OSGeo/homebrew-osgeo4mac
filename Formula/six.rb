@@ -6,7 +6,7 @@ class Six < Formula
   url "https://github.com/benjaminp/six/archive/1.12.0.tar.gz"
   sha256 "0ce7aef70d066b8dda6425c670d00c25579c3daad8108b3e3d41bef26003c852"
 
-  # revision 1
+  revision 1
 
   head "https://github.com/benjaminp/six.git", :branch => "master"
 
