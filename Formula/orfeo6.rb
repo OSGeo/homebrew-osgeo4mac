@@ -68,6 +68,7 @@ class Orfeo6 < Formula
   depends_on "osgeo/osgeo4mac/ossim"
   depends_on "osgeo/osgeo4mac/insighttoolkit"
   depends_on "osgeo/osgeo4mac/openscenegraph-qt5" # (for libOpenThreads, now internal to osg)
+  depends_on "osgeo/osgeo4mac/opencollada" # some dependency need of this package
 
   # recommended
   depends_on "muparser" => :recommended
