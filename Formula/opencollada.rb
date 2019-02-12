@@ -9,7 +9,8 @@ class Opencollada < Formula
   head "https://github.com/KhronosGroup/OpenCOLLADA.git", :branch => "master"
 
   bottle do
-    cellar :any_skip_relocation
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    cellar :any
     sha256 "34252dd8c9f605f9f1ffdef4c5675820e14ccc586236f4eb095d7182dba13a55" => :mojave
     sha256 "34252dd8c9f605f9f1ffdef4c5675820e14ccc586236f4eb095d7182dba13a55" => :high_sierra
     sha256 "34252dd8c9f605f9f1ffdef4c5675820e14ccc586236f4eb095d7182dba13a55" => :sierra
