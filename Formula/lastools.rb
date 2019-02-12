@@ -10,6 +10,14 @@ class Lastools < Formula
 
   head "https://github.com/LAStools/LAStools.git", :branch => "master"
 
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    cellar :any_skip_relocation
+    sha256 "01ac14177e9032f62c88980de08d1715d2a004372a9f5d9e1695e4816298eb1b" => :mojave
+    sha256 "01ac14177e9032f62c88980de08d1715d2a004372a9f5d9e1695e4816298eb1b" => :high_sierra
+    sha256 "01ac14177e9032f62c88980de08d1715d2a004372a9f5d9e1695e4816298eb1b" => :sierra
+  end
+
   option "with-wine", "Use Wine to have more support"
 
   depends_on "cmake" => :build
