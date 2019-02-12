@@ -6,7 +6,7 @@ class Lastools < Formula
     :commit => "18471441333cc84aa9f7a8c0ae6537286714f909"
   version "19.01.27"
 
-  # revision 1
+  revision 1
 
   head "https://github.com/LAStools/LAStools.git", :branch => "master"
 
@@ -43,7 +43,6 @@ class Lastools < Formula
        file << "Version: #{version}\n"
        file << "Libs: -L\${libdir} -llas\n"
        file << "Cflags: -I${includedir}\n"
-       # file << "Requires:"
      }
   end
 
@@ -59,9 +58,6 @@ class Lastools < Formula
             \033[31mLASTools folder:\e[0m \e[32mLASTools directory\e[0m (unzipped)\n
             \033[31mWine Folder:\e[0m \e[32m#{Formula["wine"].opt_bin}\e[0m\n
 
-        https://rapidlasso.com/2014/10/04/using-lastools-on-mac-os-x-with-wine/\n
-        https://rapidlasso.com/2013/09/29/how-to-install-lastools-toolbox-in-qgis/\n
-        http://gis.ubc.ca/2018/02/installing-lastools-for-lidar-data-in-qgis-for-mac/\n
       EOS
     else
       <<~EOS
