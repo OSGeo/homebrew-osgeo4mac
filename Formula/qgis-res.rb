@@ -807,17 +807,18 @@ class QgisRes < Formula
   def install
     # install python environment
     venv = virtualenv_create(libexec/'vendor', "#{Formula["python"].opt_bin}/python3")
-    res = resources.map(&:name).to_set - %w[Shapely Rtree pyRscript rpy2] # python-dateutil
+    res = resources.map(&:name).to_set - %w[Shapely Rtree rpy2 pyRscript] # python-dateutil
 
     # fix pip._vendor.pep517.wrappers.BackendUnavailable
     system libexec/"vendor/bin/pip3", "install", "--upgrade", "-v", "setuptools", "pip<19.0.0", "wheel"
-    venv.pip_install_and_link "Shapely"
-    venv.pip_install_and_link "Rtree"
-    # venv.pip_install_and_link "python-dateutil"
 
     res.each do |r|
       venv.pip_install resource(r)
     end
+
+    venv.pip_install_and_link "Shapely"
+    venv.pip_install_and_link "Rtree"
+    # venv.pip_install_and_link "python-dateutil"
 
     if build.with?("r") || ("r-sethrfore")
       venv.pip_install resource("rpy2")
@@ -845,12 +846,7 @@ class QgisRes < Formula
 
     EOS
 
-    if build.with?("r") || ("r-sethrfore")
-      s += <<~EOS
-        You can see the complete list of modules installed in: \e[32mhttps://download.osgeo.org/osgeo4w/x86_64/versions.html\e[0m
-
-      EOS
-    else
+    unless opts.include?("r") || ("r-sethrfore")
       s += <<~EOS
         You can use the \e[32m--with-r\e[0m or \e[32m--with-r-sethrfore\e[0m to install others useful modules.
 
