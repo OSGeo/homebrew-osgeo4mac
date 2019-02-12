@@ -14,9 +14,8 @@ class QgisRes < Formula
 
   # revision 1
 
-  option "with-r", "Build with modules referred to R"
-  option "with-r-sethrfore", "Build with modules referred to R"
-  option "with-others", "Build with others available modules"
+  option "with-r", "Build with modules referred to R (if use homebrew-core)"
+  option "with-r-sethrfore", "Build with modules referred to R (if use sethrfore/r-srf)"
 
   depends_on "pkg-config" => :build
   depends_on "gcc" => :build # for gfortran
@@ -110,40 +109,6 @@ class QgisRes < Formula
   resource "wheel" do
     url "https://files.pythonhosted.org/packages/d8/55/221a530d66bf78e72996453d1e2dedef526063546e131d70bed548d80588/wheel-0.32.3.tar.gz"
     sha256 "029703bf514e16c8271c3821806a1c171220cc5bdd325cbf4e7da1e056a01db6"
-  end
-
-  if build.with?("r") || ("r-sethrfore")
-    resource "pip-tools" do
-      url "https://files.pythonhosted.org/packages/c2/09/b89b14a8b25b254c96ebe7888d21c91d691727369ddd076a2bb4ec7b0b23/pip-tools-3.3.2.tar.gz"
-      sha256 "100496b15463155f4da3df04c2ca0068677e1ee74d346ebade2d85eef4de8cda"
-    end
-
-    resource "Sphinx" do
-      url "https://files.pythonhosted.org/packages/dd/f8/df628d41f42793d446285767164c6a8da71d82892f2c98c43e0523836d39/Sphinx-1.8.4.tar.gz"
-      sha256 "c1c00fc4f6e8b101a0d037065043460dffc2d507257f2f11acaed71fd2b0c83c"
-    end
-
-    resource "sphinxcontrib-websupport" do
-      url "https://files.pythonhosted.org/packages/07/7a/e74b06dce85555ffee33e1d6b7381314169ebf7e31b62c18fcb2815626b7/sphinxcontrib-websupport-1.1.0.tar.gz"
-      sha256 "9de47f375baf1ea07cdb3436ff39d7a9c76042c10a769c52353ec46e4e8fc3b9"
-    end
-
-    resource "rpy2" do
-      url "https://files.pythonhosted.org/packages/02/d1/074ffbbe7b4bf74c60b75d74c8e67a1e4515b0d85f85cd6540e39610754a/rpy2-2.9.5.tar.gz"
-      sha256 "b91f8efca7d0929f2b2b3634946be892cba6c21f92acdf737399e7eedf4532db"
-    end
-
-    resource "pyRscript" do
-      url "https://files.pythonhosted.org/packages/a4/3b/a3e62553aa109b0fbdaed9d8c2b89ac3b1b1ad49c56ce722106946476c4c/pyRscript-0.0.2.tar.gz"
-      sha256 "78b12b1f32416e5f5ba383f6558018c062de5c14703a05a977f1584b6f5b213c"
-    end
-
-    # resource "pyRscript" do
-    #   url "https://github.com/chairco/pyRscript.git",
-    #     :branch => "master",
-    #     :commit => "e952f450a873de52baa4fe80ed901f0cf990c0b7"
-    #   version "0.0.2"
-    # end
   end
 
   # MetaSearch plugin
@@ -586,251 +551,247 @@ class QgisRes < Formula
   #   sha256 "b725a580e6faa0bc17edc3e6caa1da9e6efc401fab19e8482631ee179132b4df"
   # end
 
-  if build.with?("others")
-    resource "nltk" do
-      url "https://files.pythonhosted.org/packages/6f/ed/9c755d357d33bc1931e157f537721efb5b88d2c583fe593cc09603076cc3/nltk-3.4.zip"
-      sha256 "286f6797204ffdb52525a1d21ec0a221ec68b8e3fa4f2d25f412ac8e63c70e8d"
-    end
+  # others
 
-    resource "scikit-learn" do
-      url "https://files.pythonhosted.org/packages/49/0e/8312ac2d7f38537361b943c8cde4b16dadcc9389760bb855323b67bac091/scikit-learn-0.20.2.tar.gz"
-      sha256 "bc5bc7c7ee2572a1edcb51698a6caf11fae554194aaab9a38105d9ec419f29e6"
-    end
+  resource "nltk" do
+    url "https://files.pythonhosted.org/packages/6f/ed/9c755d357d33bc1931e157f537721efb5b88d2c583fe593cc09603076cc3/nltk-3.4.zip"
+    sha256 "286f6797204ffdb52525a1d21ec0a221ec68b8e3fa4f2d25f412ac8e63c70e8d"
+  end
 
-    resource "statsmodels" do
-      url "https://files.pythonhosted.org/packages/67/68/eb3ec6ab61f97216c257edddb853cc174cd76ea44b365cf4adaedcd44482/statsmodels-0.9.0.tar.gz"
-      sha256 "6461f93a842c649922c2c9a9bc9d9c4834110b89de8c4af196a791ab8f42ba3b"
-    end
+  resource "scikit-learn" do
+    url "https://files.pythonhosted.org/packages/49/0e/8312ac2d7f38537361b943c8cde4b16dadcc9389760bb855323b67bac091/scikit-learn-0.20.2.tar.gz"
+    sha256 "bc5bc7c7ee2572a1edcb51698a6caf11fae554194aaab9a38105d9ec419f29e6"
+  end
 
-    resource "PyOpenGL" do
-      url "https://files.pythonhosted.org/packages/ce/33/ef0e3b40a3f4cbfcfb93511652673fb19d07bafac0611f01f6237d1978ed/PyOpenGL-3.1.0.zip"
-      sha256 "efa4e39a49b906ccbe66758812ca81ced13a6f26931ab2ba2dba2750c016c0d0"
-    end
+  resource "statsmodels" do
+    url "https://files.pythonhosted.org/packages/67/68/eb3ec6ab61f97216c257edddb853cc174cd76ea44b365cf4adaedcd44482/statsmodels-0.9.0.tar.gz"
+    sha256 "6461f93a842c649922c2c9a9bc9d9c4834110b89de8c4af196a791ab8f42ba3b"
+  end
 
-    resource "pyqtgraph" do
-      url "https://files.pythonhosted.org/packages/cd/ad/307e0280df5c19986c4206d138ec3a8954afc722cea991f4adb4a16337d9/pyqtgraph-0.10.0.tar.gz"
-      sha256 "4c08ab34881fae5ecf9ddfe6c1220b9e41e6d3eb1579a7d8ef501abb8e509251"
-    end
+  resource "PyOpenGL" do
+    url "https://files.pythonhosted.org/packages/ce/33/ef0e3b40a3f4cbfcfb93511652673fb19d07bafac0611f01f6237d1978ed/PyOpenGL-3.1.0.zip"
+    sha256 "efa4e39a49b906ccbe66758812ca81ced13a6f26931ab2ba2dba2750c016c0d0"
+  end
 
-    resource "gmt-python" do
-      url "https://files.pythonhosted.org/packages/30/de/c5a0a37c9e656212872a40ac38e8f675e222789d8403e2c410503cd2b140/gmt-python-0.1a3.tar.gz"
-      sha256 "91f719838f6d376bc472eb22d82e3ecccf7fca689600d47ce80c48e24784f59a"
-    end
+  resource "pyqtgraph" do
+    url "https://files.pythonhosted.org/packages/cd/ad/307e0280df5c19986c4206d138ec3a8954afc722cea991f4adb4a16337d9/pyqtgraph-0.10.0.tar.gz"
+    sha256 "4c08ab34881fae5ecf9ddfe6c1220b9e41e6d3eb1579a7d8ef501abb8e509251"
+  end
 
-    resource "Pyro4" do
-      url "https://files.pythonhosted.org/packages/a9/e6/07950f8efd3e6c781c46873c4f346fa6e56ca99330803511c956edd1096b/Pyro4-4.75.tar.gz"
-      sha256 "3897c0254046d4cb412a4d1a8f2f9c2c1c1ae643a24db07d0abdb51acdb8d7b5"
-    end
+  resource "gmt-python" do
+    url "https://files.pythonhosted.org/packages/30/de/c5a0a37c9e656212872a40ac38e8f675e222789d8403e2c410503cd2b140/gmt-python-0.1a3.tar.gz"
+    sha256 "91f719838f6d376bc472eb22d82e3ecccf7fca689600d47ce80c48e24784f59a"
+  end
 
-    resource "GitPython" do
-      url "https://files.pythonhosted.org/packages/4d/e8/98e06d3bc954e3c5b34e2a579ddf26255e762d21eb24fede458eff654c51/GitPython-2.1.11.tar.gz"
-      sha256 "8237dc5bfd6f1366abeee5624111b9d6879393d84745a507de0fda86043b65a8"
-    end
+  resource "Pyro4" do
+    url "https://files.pythonhosted.org/packages/a9/e6/07950f8efd3e6c781c46873c4f346fa6e56ca99330803511c956edd1096b/Pyro4-4.75.tar.gz"
+    sha256 "3897c0254046d4cb412a4d1a8f2f9c2c1c1ae643a24db07d0abdb51acdb8d7b5"
+  end
 
-    resource "asn1crypto" do
-      url "https://files.pythonhosted.org/packages/fc/f1/8db7daa71f414ddabfa056c4ef792e1461ff655c2ae2928a2b675bfed6b4/asn1crypto-0.24.0.tar.gz"
-      sha256 "9d5c20441baf0cb60a4ac34cc447c6c189024b6b4c6cd7877034f4965c464e49"
-    end
+  resource "GitPython" do
+    url "https://files.pythonhosted.org/packages/4d/e8/98e06d3bc954e3c5b34e2a579ddf26255e762d21eb24fede458eff654c51/GitPython-2.1.11.tar.gz"
+    sha256 "8237dc5bfd6f1366abeee5624111b9d6879393d84745a507de0fda86043b65a8"
+  end
 
-    resource "cryptography" do
-      url "https://files.pythonhosted.org/packages/69/ed/5e97b7f54237a9e4e6291b6e52173372b7fa45ca730d36ea90b790c0059a/cryptography-2.5.tar.gz"
-      sha256 "4946b67235b9d2ea7d31307be9d5ad5959d6c4a8f98f900157b47abddf698401"
-    end
+  resource "asn1crypto" do
+    url "https://files.pythonhosted.org/packages/fc/f1/8db7daa71f414ddabfa056c4ef792e1461ff655c2ae2928a2b675bfed6b4/asn1crypto-0.24.0.tar.gz"
+    sha256 "9d5c20441baf0cb60a4ac34cc447c6c189024b6b4c6cd7877034f4965c464e49"
+  end
 
-    resource "gitdb2" do
-      url "https://files.pythonhosted.org/packages/c4/5c/579abccd59187eaf6b3c8a4a6ecd86fce1dfd818155bfe4c52ac28dca6b7/gitdb2-2.0.5.tar.gz"
-      sha256 "83361131a1836661a155172932a13c08bda2db3674e4caa32368aa6eb02f38c2"
-    end
+  resource "cryptography" do
+    url "https://files.pythonhosted.org/packages/69/ed/5e97b7f54237a9e4e6291b6e52173372b7fa45ca730d36ea90b790c0059a/cryptography-2.5.tar.gz"
+    sha256 "4946b67235b9d2ea7d31307be9d5ad5959d6c4a8f98f900157b47abddf698401"
+  end
 
-    resource "gitdb" do
-      url "https://files.pythonhosted.org/packages/e3/95/7e5d7261feb46c0539ac5e451be340ddd64d78c5118f2d893b052c76fe8c/gitdb-0.6.4.tar.gz"
-      sha256 "a3ebbc27be035a2e874ed904df516e35f4a29a778a764385de09de9e0f139658"
-    end
+  resource "gitdb2" do
+    url "https://files.pythonhosted.org/packages/c4/5c/579abccd59187eaf6b3c8a4a6ecd86fce1dfd818155bfe4c52ac28dca6b7/gitdb2-2.0.5.tar.gz"
+    sha256 "83361131a1836661a155172932a13c08bda2db3674e4caa32368aa6eb02f38c2"
+  end
 
-    resource "pubsub" do
-      url "https://files.pythonhosted.org/packages/1b/6a/587dd0d9ab5e1a9ff0d71be6e251640644e3b692cbf65a8772b787300b58/pubsub-0.1.2.tar.gz"
-      sha256 "9b91d0e492f7a1f07de8bea9bc381897d42e33cd1e348192699eb8bb436c8a55"
-    end
+  resource "gitdb" do
+    url "https://files.pythonhosted.org/packages/e3/95/7e5d7261feb46c0539ac5e451be340ddd64d78c5118f2d893b052c76fe8c/gitdb-0.6.4.tar.gz"
+    sha256 "a3ebbc27be035a2e874ed904df516e35f4a29a778a764385de09de9e0f139658"
+  end
 
-    resource "pycparser" do
-      url "https://files.pythonhosted.org/packages/68/9e/49196946aee219aead1290e00d1e7fdeab8567783e83e1b9ab5585e6206a/pycparser-2.19.tar.gz"
-      sha256 "a988718abfad80b6b157acce7bf130a30876d27603738ac39f140993246b25b3"
-    end
+  resource "pubsub" do
+    url "https://files.pythonhosted.org/packages/1b/6a/587dd0d9ab5e1a9ff0d71be6e251640644e3b692cbf65a8772b787300b58/pubsub-0.1.2.tar.gz"
+    sha256 "9b91d0e492f7a1f07de8bea9bc381897d42e33cd1e348192699eb8bb436c8a55"
+  end
 
-    resource "pytils" do
-      url "https://files.pythonhosted.org/packages/c6/c1/12b556b5bb393ce5130d57af862d045f57fee764797c0fe837e49cb2a5da/pytils-0.3.tar.gz"
-      sha256 "1e85118d095d48928fef1a73e3e1dccdbc07bc931131705976b7dd05b66627fc"
-    end
+  resource "pycparser" do
+    url "https://files.pythonhosted.org/packages/68/9e/49196946aee219aead1290e00d1e7fdeab8567783e83e1b9ab5585e6206a/pycparser-2.19.tar.gz"
+    sha256 "a988718abfad80b6b157acce7bf130a30876d27603738ac39f140993246b25b3"
+  end
 
-    resource "smmap" do
-      url "https://files.pythonhosted.org/packages/bc/aa/b744b3761fff1b10579df996a2d2e87f124ae07b8336e37edc89cc502f86/smmap-0.9.0.tar.gz"
-      sha256 "0e2b62b497bd5f0afebc002eda4d90df9d209c30ef257e8673c90a6b5c119d62"
-    end
+  resource "pytils" do
+    url "https://files.pythonhosted.org/packages/c6/c1/12b556b5bb393ce5130d57af862d045f57fee764797c0fe837e49cb2a5da/pytils-0.3.tar.gz"
+    sha256 "1e85118d095d48928fef1a73e3e1dccdbc07bc931131705976b7dd05b66627fc"
+  end
 
-    resource "smmap2" do
-      url "https://files.pythonhosted.org/packages/3b/ba/e49102b3e8ffff644edded25394b2d22ebe3e645f3f6a8139129c4842ffe/smmap2-2.0.5.tar.gz"
-      sha256 "29a9ffa0497e7f2be94ca0ed1ca1aa3cd4cf25a1f6b4f5f87f74b46ed91d609a"
-    end
+  resource "smmap" do
+    url "https://files.pythonhosted.org/packages/bc/aa/b744b3761fff1b10579df996a2d2e87f124ae07b8336e37edc89cc502f86/smmap-0.9.0.tar.gz"
+    sha256 "0e2b62b497bd5f0afebc002eda4d90df9d209c30ef257e8673c90a6b5c119d62"
+  end
 
-    resource "gnm" do
-      url "https://files.pythonhosted.org/packages/4e/c6/dba4aacba9dd9ab4c5a723b155813b242ef87ec2444ad36604926fa33e9b/gnm-1.0.4.tar.gz"
-      sha256 "2aeb5ab50401a930e11c3ef0dbd452fa6af3ed7e82ad03f4ab8f2b9eedf4a5b6"
-    end
+  resource "smmap2" do
+    url "https://files.pythonhosted.org/packages/3b/ba/e49102b3e8ffff644edded25394b2d22ebe3e645f3f6a8139129c4842ffe/smmap2-2.0.5.tar.gz"
+    sha256 "29a9ffa0497e7f2be94ca0ed1ca1aa3cd4cf25a1f6b4f5f87f74b46ed91d609a"
+  end
 
-    # optional for pandas
+  resource "gnm" do
+    url "https://files.pythonhosted.org/packages/4e/c6/dba4aacba9dd9ab4c5a723b155813b242ef87ec2444ad36604926fa33e9b/gnm-1.0.4.tar.gz"
+    sha256 "2aeb5ab50401a930e11c3ef0dbd452fa6af3ed7e82ad03f4ab8f2b9eedf4a5b6"
+  end
 
-    resource "beautifulsoup4" do
-      url "https://files.pythonhosted.org/packages/80/f2/f6aca7f1b209bb9a7ef069d68813b091c8c3620642b568dac4eb0e507748/beautifulsoup4-4.7.1.tar.gz"
-      sha256 "945065979fb8529dd2f37dbb58f00b661bdbcbebf954f93b32fdf5263ef35348"
-    end
+  # optional for pandas
 
-    resource "blosc" do
-      url "https://files.pythonhosted.org/packages/f4/8f/024a70d6af0b0dd736954a16b2a4be544a2b61ef6c0f660e5221accd4f8c/blosc-1.7.0.tar.gz"
-      sha256 "7ffa7d243a980f5d9e63d7a1f8934803d986398f0aec058345095e47f0cabc72"
-    end
+  resource "beautifulsoup4" do
+    url "https://files.pythonhosted.org/packages/80/f2/f6aca7f1b209bb9a7ef069d68813b091c8c3620642b568dac4eb0e507748/beautifulsoup4-4.7.1.tar.gz"
+    sha256 "945065979fb8529dd2f37dbb58f00b661bdbcbebf954f93b32fdf5263ef35348"
+  end
 
-    resource "bottleneck" do
-      url "https://files.pythonhosted.org/packages/05/ae/cedf5323f398ab4e4ff92d6c431a3e1c6a186f9b41ab3e8258dff786a290/Bottleneck-1.2.1.tar.gz"
-      sha256 "6efcde5f830aed64feafca0359b51db0e184c72af8ba6675b4a99f263922eb36"
-    end
+  resource "blosc" do
+    url "https://files.pythonhosted.org/packages/f4/8f/024a70d6af0b0dd736954a16b2a4be544a2b61ef6c0f660e5221accd4f8c/blosc-1.7.0.tar.gz"
+    sha256 "7ffa7d243a980f5d9e63d7a1f8934803d986398f0aec058345095e47f0cabc72"
+  end
 
-    resource "html5lib" do
-      url "https://files.pythonhosted.org/packages/85/3e/cf449cf1b5004e87510b9368e7a5f1acd8831c2d6691edd3c62a0823f98f/html5lib-1.0.1.tar.gz"
-      sha256 "66cb0dcfdbbc4f9c3ba1a63fdb511ffdbd4f513b2b6d81b80cd26ce6b3fb3736"
-    end
+  resource "bottleneck" do
+    url "https://files.pythonhosted.org/packages/05/ae/cedf5323f398ab4e4ff92d6c431a3e1c6a186f9b41ab3e8258dff786a290/Bottleneck-1.2.1.tar.gz"
+    sha256 "6efcde5f830aed64feafca0359b51db0e184c72af8ba6675b4a99f263922eb36"
+  end
 
-    resource "numexpr" do
-      url "https://files.pythonhosted.org/packages/82/a0/42e0f42d79e0db81e78424828dee1aea08a06da66c2bc06068742e9b860f/numexpr-2.6.9.tar.gz"
-      sha256 "fc218b777cdbb14fa8cff8f28175ee631bacabbdd41ca34e061325b6c44a6fa6"
-    end
+  resource "numexpr" do
+    url "https://files.pythonhosted.org/packages/82/a0/42e0f42d79e0db81e78424828dee1aea08a06da66c2bc06068742e9b860f/numexpr-2.6.9.tar.gz"
+    sha256 "fc218b777cdbb14fa8cff8f28175ee631bacabbdd41ca34e061325b6c44a6fa6"
+  end
 
-    resource "openpyxl" do
-      url "https://files.pythonhosted.org/packages/41/a8/257a30b5b7ce0e548bc03f5be3d4b262140c1f7a506038da63cd1f4d34ad/openpyxl-2.6.0.tar.gz"
-      sha256 "70da6b45a5925285b6a3d93570b45f4402eb2d335740163a58eef533b139565c"
-    end
+  resource "openpyxl" do
+    url "https://files.pythonhosted.org/packages/41/a8/257a30b5b7ce0e548bc03f5be3d4b262140c1f7a506038da63cd1f4d34ad/openpyxl-2.6.0.tar.gz"
+    sha256 "70da6b45a5925285b6a3d93570b45f4402eb2d335740163a58eef533b139565c"
+  end
 
-    resource "pandas-datareader" do
-      url "https://files.pythonhosted.org/packages/ac/7d/15392ca70fc9fc988423568e78a56370a632237583cfdcb7605f3740fb88/pandas-datareader-0.7.0.tar.gz"
-      sha256 "7dee3fe6fa483c8c2ee4f1af91a65b542c5446d75a6fc25c832cad1ffca8ef0b"
-    end
+  resource "pandas-datareader" do
+    url "https://files.pythonhosted.org/packages/ac/7d/15392ca70fc9fc988423568e78a56370a632237583cfdcb7605f3740fb88/pandas-datareader-0.7.0.tar.gz"
+    sha256 "7dee3fe6fa483c8c2ee4f1af91a65b542c5446d75a6fc25c832cad1ffca8ef0b"
+  end
 
-    resource "qtpy" do
-      url "https://files.pythonhosted.org/packages/60/eb/97613c6faf3df25be90107a5affe934bb0b240a4048d639d1f116dbae630/QtPy-1.6.0.tar.gz"
-      sha256 "fd5c09655e58bf3a013d2940e71f069732ed67f056d4dcb2b0609a3ecd9b320f"
-    end
+  resource "qtpy" do
+    url "https://files.pythonhosted.org/packages/60/eb/97613c6faf3df25be90107a5affe934bb0b240a4048d639d1f116dbae630/QtPy-1.6.0.tar.gz"
+    sha256 "fd5c09655e58bf3a013d2940e71f069732ed67f056d4dcb2b0609a3ecd9b320f"
+  end
 
-    resource "sqlalchemy" do
-      url "https://files.pythonhosted.org/packages/c6/52/73d1c92944cd294a5b165097038418abb6a235f5956d43d06f97254f73bf/SQLAlchemy-1.2.17.tar.gz"
-      sha256 "52a42dbf02d0562d6e90e7af59f177f1cc027e72833cc29c3a821eefa009c71d"
-    end
+  resource "sqlalchemy" do
+    url "https://files.pythonhosted.org/packages/c6/52/73d1c92944cd294a5b165097038418abb6a235f5956d43d06f97254f73bf/SQLAlchemy-1.2.17.tar.gz"
+    sha256 "52a42dbf02d0562d6e90e7af59f177f1cc027e72833cc29c3a821eefa009c71d"
+  end
 
-    resource "xlsxwriter" do
-      url "https://files.pythonhosted.org/packages/fe/d3/bfd7da98e4465fc82b2cc890085d3aab8a5702429a68e77be9086c249919/XlsxWriter-1.1.3.tar.gz"
-      sha256 "e9aa1fc246d1683ca54bca81223e60123a2781dd3b67cc05daa328b0c1f3fbe7"
-    end
+  resource "xlsxwriter" do
+    url "https://files.pythonhosted.org/packages/fe/d3/bfd7da98e4465fc82b2cc890085d3aab8a5702429a68e77be9086c249919/XlsxWriter-1.1.3.tar.gz"
+    sha256 "e9aa1fc246d1683ca54bca81223e60123a2781dd3b67cc05daa328b0c1f3fbe7"
+  end
 
-    resource "olefile" do
-      url "https://files.pythonhosted.org/packages/34/81/e1ac43c6b45b4c5f8d9352396a14144bba52c8fec72a80f425f6a4d653ad/olefile-0.46.zip"
-      sha256 "133b031eaf8fd2c9399b78b8bc5b8fcbe4c31e85295749bb17a87cba8f3c3964"
-    end
+  resource "olefile" do
+    url "https://files.pythonhosted.org/packages/34/81/e1ac43c6b45b4c5f8d9352396a14144bba52c8fec72a80f425f6a4d653ad/olefile-0.46.zip"
+    sha256 "133b031eaf8fd2c9399b78b8bc5b8fcbe4c31e85295749bb17a87cba8f3c3964"
+  end
 
-    # grass
+  # grass
 
-    resource "argparse" do
-      url "https://files.pythonhosted.org/packages/18/dd/e617cfc3f6210ae183374cd9f6a26b20514bbb5a792af97949c5aacddf0f/argparse-1.4.0.tar.gz"
-      sha256 "62b089a55be1d8949cd2bc7e0df0bddb9e028faefc8c32038cc84862aefdd6e4"
-    end
+  resource "argparse" do
+    url "https://files.pythonhosted.org/packages/18/dd/e617cfc3f6210ae183374cd9f6a26b20514bbb5a792af97949c5aacddf0f/argparse-1.4.0.tar.gz"
+    sha256 "62b089a55be1d8949cd2bc7e0df0bddb9e028faefc8c32038cc84862aefdd6e4"
+  end
 
-    resource "subprocess32" do
-      url "https://files.pythonhosted.org/packages/be/2b/beeba583e9877e64db10b52a96915afc0feabf7144dcbf2a0d0ea68bf73d/subprocess32-3.5.3.tar.gz"
-      sha256 "6bc82992316eef3ccff319b5033809801c0c3372709c5f6985299c88ac7225c3"
-    end
+  resource "subprocess32" do
+    url "https://files.pythonhosted.org/packages/be/2b/beeba583e9877e64db10b52a96915afc0feabf7144dcbf2a0d0ea68bf73d/subprocess32-3.5.3.tar.gz"
+    sha256 "6bc82992316eef3ccff319b5033809801c0c3372709c5f6985299c88ac7225c3"
+  end
 
-    resource "backports.functools_lru_cache" do
-      url "https://files.pythonhosted.org/packages/57/d4/156eb5fbb08d2e85ab0a632e2bebdad355798dece07d4752f66a8d02d1ea/backports.functools_lru_cache-1.5.tar.gz"
-      sha256 "9d98697f088eb1b0fa451391f91afb5e3ebde16bbdb272819fd091151fda4f1a"
-    end
+  resource "backports.functools_lru_cache" do
+    url "https://files.pythonhosted.org/packages/57/d4/156eb5fbb08d2e85ab0a632e2bebdad355798dece07d4752f66a8d02d1ea/backports.functools_lru_cache-1.5.tar.gz"
+    sha256 "9d98697f088eb1b0fa451391f91afb5e3ebde16bbdb272819fd091151fda4f1a"
+  end
 
-    # others
+  # others
 
-    # resource "wxPython" do
-    #   url "https://files.pythonhosted.org/packages/17/74/7c3ced03c3c76b9f98e4a0edae1801755a7599ebf481c04d9f77dfff17e3/wxPython-4.0.4.tar.gz"
-    #   sha256 "0d9ef4260cb2f3e23ed9dcf6baa905ba585ac7d631613cddc299c4c83463ae29"
-    # end
+  # resource "wxPython" do
+  #   url "https://files.pythonhosted.org/packages/17/74/7c3ced03c3c76b9f98e4a0edae1801755a7599ebf481c04d9f77dfff17e3/wxPython-4.0.4.tar.gz"
+  #   sha256 "0d9ef4260cb2f3e23ed9dcf6baa905ba585ac7d631613cddc299c4c83463ae29"
+  # end
 
-    resource "pymssql" do
-      url "https://files.pythonhosted.org/packages/2e/81/99562b93d75f3fc5956fa65decfb35b38a4ee97cf93c1d0d3cb799fffb99/pymssql-2.1.4.tar.gz"
-      sha256 "3201eb1b1263ad55b555d727ed8bed0b12b7b9de3ce5e529206e36d4be1a7afb"
-    end
+  resource "pymssql" do
+    url "https://files.pythonhosted.org/packages/2e/81/99562b93d75f3fc5956fa65decfb35b38a4ee97cf93c1d0d3cb799fffb99/pymssql-2.1.4.tar.gz"
+    sha256 "3201eb1b1263ad55b555d727ed8bed0b12b7b9de3ce5e529206e36d4be1a7afb"
+  end
 
-    resource "PyMySQL" do
-      url "https://files.pythonhosted.org/packages/da/15/23ba6592920e21cb40eb0fe0ea002d2b6177beb1ca8a4c1add5a8f32754d/PyMySQL-0.9.3.tar.gz"
-      sha256 "d8c059dcd81dedb85a9f034d5e22dcb4442c0b201908bede99e306d65ea7c8e7"
-    end
+  resource "PyMySQL" do
+    url "https://files.pythonhosted.org/packages/da/15/23ba6592920e21cb40eb0fe0ea002d2b6177beb1ca8a4c1add5a8f32754d/PyMySQL-0.9.3.tar.gz"
+    sha256 "d8c059dcd81dedb85a9f034d5e22dcb4442c0b201908bede99e306d65ea7c8e7"
+  end
 
-    resource "py-postgresql" do
-      url "https://files.pythonhosted.org/packages/45/fb/b652627746d727e867258019bfd81586fe17789b653f26f6bcb369366a55/py-postgresql-1.2.1.tar.gz"
-      sha256 "271bef0cb340f58662cbe958d05746fb421d18f35815e6965f839c824678bb3d"
-    end
+  resource "py-postgresql" do
+    url "https://files.pythonhosted.org/packages/45/fb/b652627746d727e867258019bfd81586fe17789b653f26f6bcb369366a55/py-postgresql-1.2.1.tar.gz"
+    sha256 "271bef0cb340f58662cbe958d05746fb421d18f35815e6965f839c824678bb3d"
+  end
 
-    resource "py2oracle" do
-      url "https://files.pythonhosted.org/packages/88/e3/4908cf35b22386c0ba9e3a9b36143eade5cd23563cfb29c39787771e0107/py2oracle-0.4.tar.gz"
-      sha256 "39bd37315b1b6e477eca8a0b442fa5bae2281425012339730bfaf140ec581f52"
-    end
+  resource "py2oracle" do
+    url "https://files.pythonhosted.org/packages/88/e3/4908cf35b22386c0ba9e3a9b36143eade5cd23563cfb29c39787771e0107/py2oracle-0.4.tar.gz"
+    sha256 "39bd37315b1b6e477eca8a0b442fa5bae2281425012339730bfaf140ec581f52"
+  end
 
-    resource "pandas_oracle" do
-      url "https://files.pythonhosted.org/packages/42/5f/439c7f43b3e890cc0f9e242856d176dca6f31585b74bbe0c63e049489a32/pandas_oracle-2.1.3.tar.gz"
-      sha256 "f4fdfa2b9e22ae551474abcfa868efd82a135691ace2bfd7a9e96d9302e5d063"
-    end
+  resource "pandas_oracle" do
+    url "https://files.pythonhosted.org/packages/42/5f/439c7f43b3e890cc0f9e242856d176dca6f31585b74bbe0c63e049489a32/pandas_oracle-2.1.3.tar.gz"
+    sha256 "f4fdfa2b9e22ae551474abcfa868efd82a135691ace2bfd7a9e96d9302e5d063"
+  end
 
-    resource "pep8" do
-      url "https://files.pythonhosted.org/packages/01/a0/64ba19519db49e4094d82599412a9660dee8c26a7addbbb1bf17927ceefe/pep8-1.7.1.tar.gz"
-      sha256 "fe249b52e20498e59e0b5c5256aa52ee99fc295b26ec9eaa85776ffdb9fe6374"
-    end
+  # r
 
-    resource "pexpect" do
-      url "https://files.pythonhosted.org/packages/89/43/07d07654ee3e25235d8cea4164cdee0ec39d1fda8e9203156ebe403ffda4/pexpect-4.6.0.tar.gz"
-      sha256 "2a8e88259839571d1251d278476f3eec5db26deb73a70be5ed5dc5435e418aba"
-    end
+  resource "rpy2" do
+    url "https://files.pythonhosted.org/packages/02/d1/074ffbbe7b4bf74c60b75d74c8e67a1e4515b0d85f85cd6540e39610754a/rpy2-2.9.5.tar.gz"
+    sha256 "b91f8efca7d0929f2b2b3634946be892cba6c21f92acdf737399e7eedf4532db"
+  end
 
-    resource "expect" do
-      url "https://files.pythonhosted.org/packages/86/9a/4944ecc222f24d18e8d2819800472ffc2668e52986afd5c7bc41ecaf897b/expects-0.9.0.tar.gz"
-      sha256 "419902ccafe81b7e9559eeb6b7a07ef9d5c5604eddb93000f0642b3b2d594f4c"
-    end
+  resource "pyRscript" do
+    url "https://files.pythonhosted.org/packages/a4/3b/a3e62553aa109b0fbdaed9d8c2b89ac3b1b1ad49c56ce722106946476c4c/pyRscript-0.0.2.tar.gz"
+    sha256 "78b12b1f32416e5f5ba383f6558018c062de5c14703a05a977f1584b6f5b213c"
+  end
 
-    resource "capturer" do
-      url "https://files.pythonhosted.org/packages/ce/a4/fabb849584366383a59d2ac985a7ece30609f1ae4a40ecfd02baad900a2d/capturer-2.4.tar.gz"
-      sha256 "090142a58f3f85def3a7dd55d9024d0d1a86d1a88aaf9317c0f146244994a615"
-    end
+  # resource "pyRscript" do
+  #   url "https://github.com/chairco/pyRscript.git",
+  #     :branch => "master",
+  #     :commit => "e952f450a873de52baa4fe80ed901f0cf990c0b7"
+  #   version "0.0.2"
+  # end
 
-    # work with Python 2.4 or later, will not work under any version of Python 3
-    # resource "supervisor" do
-    #   url "https://files.pythonhosted.org/packages/ba/65/92575a8757ed576beaee59251f64a3287bde82bdc03964b89df9e1d29e1b/supervisor-3.3.5.tar.gz"
-    #   sha256 "1b4d6d2e551dcb49e928cfffea857b8cca6b64a4a8fb755dcf86addf62866af0"
-    # end
+  resource "seaborn" do
+    url "https://files.pythonhosted.org/packages/7a/bf/04cfcfc9616cedd4b5dd24dfc40395965ea9f50c1db0d3f3e52b050f74a5/seaborn-0.9.0.tar.gz"
+    sha256 "76c83f794ca320fb6b23a7c6192d5e185a5fcf4758966a0c0a54baee46d41e2f"
+  end
 
-    # Python 2.7 only
-    # resource "functools32" do
-    #   url "https://files.pythonhosted.org/packages/5e/1a/0aa2c8195a204a9f51284018562dea77e25511f02fe924fac202fc012172/functools32-3.2.3-2.zip"
-    #   sha256 "89d824aa6c358c421a234d7f9ee0bd75933a67c29588ce50aaa3acdf4d403fa0"
-    # end
+  resource "pycairo" do
+    url "https://files.pythonhosted.org/packages/a6/54/23d6cf3e8d8f1eb30e0e58f171b6f62b2ea75c024935492373639a1a08e4/pycairo-1.18.0.tar.gz"
+    sha256 "abd42a4c9c2069febb4c38fe74bfc4b4a9d3a89fea3bc2e4ba7baff7a20f783f"
+  end
 
-    # resource "enum34" do
-    #   url "https://files.pythonhosted.org/packages/e8/26/a6101edcf724453845c850281b96b89a10dac6bd98edebc82634fccce6a5/enum34-1.1.6.zip"
-    #   sha256 "2d81cbbe0e73112bdfe6ef8576f2238f2ba27dd0d55752a776c41d38b7da2850"
-    # end
+  resource "palettable" do
+    url "https://files.pythonhosted.org/packages/f5/ef/cf4480c0ebaf51c1a23f4e6c943769210c8385543af0fe0999a1d2099d5b/palettable-3.1.1.tar.gz"
+    sha256 "0685b223a236bb7e2a900ef7a855ccf9a4027361c8acf400f3b350ea51870f80"
+  end
+
+  resource "pgi" do
+    url "https://files.pythonhosted.org/packages/ed/92/60411ba83f86fa128932466e7ffc86d806d075da64c04d6d45c99a08f4dc/pgi-0.0.11.2.tar.gz"
+    sha256 "5b011ff4d81f83eed4380b0c72876be9b5572c4ed97e2b784dce477183c934f5"
+  end
+
+  resource "geos" do
+    url "https://files.pythonhosted.org/packages/46/52/ef047a04ce59fc95cae1338b3cac5f50cf74849d3dd51c8a3a50fad50229/geos-0.2.1.tar.gz"
+    sha256 "97c69520ba6081cf3135f8c37b07b1641d3a02eb3f0b75af54fc956eb9dd0bb3"
   end
 
   def install
     # install python environment
     venv = virtualenv_create(libexec/'vendor', "#{Formula["python"].opt_bin}/python3")
-    res = resources.map(&:name).to_set - %w[pyRscript] # python-dateutil
-
-    if build.with?("r") || ("r-sethrfore")
-      # fix ModuleNotFoundError: No module named 'pip.req'
-      system libexec/"vendor/bin/pip3", "install", "--upgrade", "-v", "setuptools", "pip==9.0.3", "wheel"
-      venv.pip_install_and_link "pyRscript"
-    end
+    res = resources.map(&:name).to_set - %w[pyRscript rpy2] # python-dateutil
 
     # fix pip._vendor.pep517.wrappers.BackendUnavailable
     system libexec/"vendor/bin/pip3", "install", "--upgrade", "-v", "setuptools", "pip<19.0.0", "wheel"
@@ -838,6 +799,14 @@ class QgisRes < Formula
 
     res.each do |r|
       venv.pip_install resource(r)
+    end
+
+    if build.with?("r") || ("r-sethrfore")
+      venv.pip_install resource("rpy2")
+
+      # fix ModuleNotFoundError: No module named 'pip.req'
+      system libexec/"vendor/bin/pip3", "install", "--upgrade", "-v", "setuptools", "pip==9.0.3", "wheel"
+      venv.pip_install resource("pyRscript")
     end
 
     # upgrade pip
@@ -858,15 +827,14 @@ class QgisRes < Formula
 
     EOS
 
-    if build.with?("r") || ("r-sethrfore") || ("others")
+    if build.with?("r") || ("r-sethrfore")
       s += <<~EOS
         You can see the complete list of modules installed in: \e[32mhttps://download.osgeo.org/osgeo4w/x86_64/versions.html\e[0m
 
       EOS
     else
       s += <<~EOS
-        You can use the \e[32m--with-r\e[0m, \e[32m--with-r-sethrfore\e[0m and \e[32m--with-others\e[0m flags to install others useful modules
-        and required by a lot of plugins.
+        You can use the \e[32m--with-r\e[0m or \e[32m--with-r-sethrfore\e[0m to install others useful modules.
 
       EOS
     end
