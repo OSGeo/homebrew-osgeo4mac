@@ -807,7 +807,7 @@ class QgisRes < Formula
   def install
     # install python environment
     venv = virtualenv_create(libexec/'vendor', "#{Formula["python"].opt_bin}/python3")
-    res = resources.map(&:name).to_set - %w[Shapely Rtree rpy2 pyRscript] # python-dateutil
+    res = resources.map(&:name).to_set - %w[Shapely Rtree pymssql rpy2 pyRscript] # python-dateutil
 
     # fix pip._vendor.pep517.wrappers.BackendUnavailable
     system libexec/"vendor/bin/pip3", "install", "--upgrade", "-v", "setuptools", "pip<19.0.0", "wheel"
@@ -818,6 +818,7 @@ class QgisRes < Formula
 
     venv.pip_install_and_link "Shapely"
     venv.pip_install_and_link "Rtree"
+    venv.pip_install_and_link "pymssql"
     # venv.pip_install_and_link "python-dateutil"
 
     if build.with?("r") || ("r-sethrfore")
