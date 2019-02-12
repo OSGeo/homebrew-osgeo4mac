@@ -745,6 +745,7 @@ class QgisRes < Formula
     sha256 "66f333ef5dc79fdfbd3bbe98adc791b1f854e0461067d202fa7b15de66d517ec"
   end
 
+  # for some reason it fails in CI, temporarily disabled
   resource "PyGTK" do
     url "https://files.pythonhosted.org/packages/85/52/3d9bb924bd2c9bdb8afd9b7994cd09160fad5948bb2eca18fd7ffa12cfdc/pygtk-2.24.0.win32-py2.6.exe"
     sha256 "16336e79f9a7913e5b2d1cf50120896495aac8892be2d352f660b905205c48db"
@@ -769,7 +770,7 @@ class QgisRes < Formula
   def install
     # install python environment
     venv = virtualenv_create(libexec/'vendor', "#{Formula["python"].opt_bin}/python3")
-    res = resources.map(&:name).to_set - %w[pyodbc h5py xcffib cairocffi matplotlib Shapely Rtree wxPython pymssql geos rpy2 pyRscript] # python-dateutil
+    res = resources.map(&:name).to_set - %w[pyodbc h5py xcffib cairocffi matplotlib Shapely Rtree wxPython pymssql PyGTK geos rpy2 pyRscript] # python-dateutil
 
     # fix pip._vendor.pep517.wrappers.BackendUnavailable
     system libexec/"vendor/bin/pip3", "install", "--upgrade", "-v", "setuptools", "pip<19.0.0", "wheel"
@@ -787,6 +788,7 @@ class QgisRes < Formula
     venv.pip_install_and_link "Rtree"
     venv.pip_install_and_link "wxPython"
     venv.pip_install_and_link "pymssql"
+    venv.pip_install_and_link "PyGTK"
     venv.pip_install_and_link "geos"
 
     # venv.pip_install_and_link "python-dateutil"
