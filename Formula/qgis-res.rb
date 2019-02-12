@@ -70,13 +70,13 @@ class QgisRes < Formula
     depends_on "freetds" # for pymssql
   end
 
-  if build.with? "r"
+  if build.with?("r")
     depends_on "r"
   end
 
   # R with more support
   # https://github.com/adamhsparks/setup_macOS_for_R
-  if build.with? "r-sethrfore"
+  if build.with?("r-sethrfore")
     depends_on "sethrfore/r-srf/r"
   end
 
@@ -112,7 +112,7 @@ class QgisRes < Formula
     sha256 "029703bf514e16c8271c3821806a1c171220cc5bdd325cbf4e7da1e056a01db6"
   end
 
-  if build.include?("r") || ("r-sethrfore")
+  if build.with?("r") || ("r-sethrfore")
     resource "pip-tools" do
       url "https://files.pythonhosted.org/packages/c2/09/b89b14a8b25b254c96ebe7888d21c91d691727369ddd076a2bb4ec7b0b23/pip-tools-3.3.2.tar.gz"
       sha256 "100496b15463155f4da3df04c2ca0068677e1ee74d346ebade2d85eef4de8cda"
@@ -586,7 +586,7 @@ class QgisRes < Formula
   #   sha256 "b725a580e6faa0bc17edc3e6caa1da9e6efc401fab19e8482631ee179132b4df"
   # end
 
-  if build.with? "others"
+  if build.with?("others")
     resource "nltk" do
       url "https://files.pythonhosted.org/packages/6f/ed/9c755d357d33bc1931e157f537721efb5b88d2c583fe593cc09603076cc3/nltk-3.4.zip"
       sha256 "286f6797204ffdb52525a1d21ec0a221ec68b8e3fa4f2d25f412ac8e63c70e8d"
