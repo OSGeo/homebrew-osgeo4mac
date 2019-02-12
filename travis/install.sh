@@ -18,7 +18,7 @@
 set -e
 # Install gdal2
 # fix Another active Homebrew process is already using gdal2.formula
-brew install gdal2
+brew install gdal2-python
 
 for f in ${CHANGED_FORMULAE};do
   echo "Installing dependencies for changed formula ${f}..."
