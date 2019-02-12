@@ -2,7 +2,7 @@ class Orfeo6 < Formula
   desc "Library of image processing algorithms"
   homepage "https://www.orfeo-toolbox.org/otb/"
 
-  revision 2
+  revision 3
 
   head "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb.git", :branch => "master"
 
@@ -26,7 +26,6 @@ class Orfeo6 < Formula
   option "without-python", "Build without Python support"
   option "with-monteverdi", "Build with Monteverdi and Mapla applications (Qt required)"
   option "with-python", "Build with Python support"
-  option "with-patented", "Build with Patented Examples"
   option "with-fftw", "Build with FFTW support"
   option "with-hdf5", "Build with HDF5, general purpose library and file format for storing scientific data support"
   option "with-iceviewer", "Build with ICE Viewer application (Qt and X11 required)"
@@ -37,6 +36,7 @@ class Orfeo6 < Formula
   # option "with-shark", "Build with Machine learning library"
   # option "with-mapnik", "Build with Mapnik, toolkit for developing mapping applications"
   # option "with-openjpeg", "Build with OpenJPEG, an open source JPEG 2000 codec"
+  # option "with-patented", "Build with Patented Examples"
 
   depends_on "cmake" => :build
 
@@ -63,6 +63,7 @@ class Orfeo6 < Formula
   depends_on "proj"
   depends_on "geos"
   depends_on "netcdf"
+  depends_on "hdf5"
   depends_on "openjpeg"
   depends_on "osgeo/osgeo4mac/ossim"
   depends_on "osgeo/osgeo4mac/insighttoolkit"
@@ -76,15 +77,16 @@ class Orfeo6 < Formula
   depends_on "minizip" => :recommended
 
   # optional
+
   depends_on "fftw" => :optional # restricts built binaries to GPL license
-  depends_on "hdf5" => :optional
   # depends_on "hdf4" => :optional
   # depends_on "mapnik" => :optional
   # depends_on "osgeo/osgeo4mac/shark" if build.with? "shark"
   depends_on "open-mpi" if build.with? "mpi"
   depends_on "opencv@2" if build.with? "opencv"
+
   if build.with? "python"
-    depends_on "python" => :optional
+    depends_on "python"
     depends_on "swig"
     depends_on "numpy"
   end
