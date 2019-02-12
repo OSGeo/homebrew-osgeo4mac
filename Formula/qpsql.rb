@@ -4,7 +4,7 @@ class Qpsql < Formula
   url "https://download.qt.io/official_releases/qt/5.12/5.12.0/single/qt-everywhere-src-5.12.0.tar.xz"
   sha256 "356f42d9087718f22f03d13d0c2cdfb308f91dc3cf0c6318bed33f2094cd9d6c"
 
-  # revision 1
+  revision 1
 
   head "https://code.qt.io/qt/qt5.git", :branch => "5.12", :shallow => false
 
@@ -30,7 +30,7 @@ class Qpsql < Formula
       system "make"
 
       # copy libqsqlpsql.dylib
-      # libqsqlite.dylib from sqlite
+      # libqsqlite.dylib from qt
       cp_r "#{buildpath}/qtbase/src/plugins/sqldrivers/plugins/sqldrivers/libqsqlpsql.dylib", "#{lib}/qt/plugins/sqldrivers/"
     end
   end
