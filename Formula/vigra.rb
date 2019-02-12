@@ -9,6 +9,14 @@ class Vigra < Formula
 
   head "https://github.com/ukoethe/vigra.git"
 
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    cellar :any
+    sha256 "6370fe2b781f16562a1c42e2085d0ae3a70a3620c23f82c80f21ad0dd906386e" => :mojave
+    sha256 "6370fe2b781f16562a1c42e2085d0ae3a70a3620c23f82c80f21ad0dd906386e" => :high_sierra
+    sha256 "6370fe2b781f16562a1c42e2085d0ae3a70a3620c23f82c80f21ad0dd906386e" => :sierra
+  end
+
   option "without-test", "skip tests"
 
   deprecated_option "without-check" => "without-test"
