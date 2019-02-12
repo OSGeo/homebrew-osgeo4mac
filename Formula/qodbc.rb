@@ -8,6 +8,14 @@ class Qodbc < Formula
 
   head "https://code.qt.io/qt/qt5.git", :branch => "5.12", :shallow => false
 
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    cellar :any
+    sha256 "01a65f9cc2af4aaf38e342e2dd41908acec086c93ccf7bf6cf8d22adaf26cc56" => :mojave
+    sha256 "01a65f9cc2af4aaf38e342e2dd41908acec086c93ccf7bf6cf8d22adaf26cc56" => :high_sierra
+    sha256 "01a65f9cc2af4aaf38e342e2dd41908acec086c93ccf7bf6cf8d22adaf26cc56" => :sierra
+  end
+
   depends_on "pkg-config" => :build
   depends_on "libiconv"
   depends_on "gettext"
