@@ -367,9 +367,17 @@ class QgisRes < Formula
     sha256 "c4b87bb61fc3de59fc1f85e71a79b0c709dc68364d9584473697aad4aa13240f"
   end
 
+  # for some reason it fails in CI, temporarily disabled
+  # resource "Rtree" do
+  #   url "https://files.pythonhosted.org/packages/b0/6c/6cc8d738f14d5efa0c38ec29403bbd9c75e64b3fe84b53290178dda0dbd9/Rtree-0.8.3.tar.gz"
+  #   sha256 "6cb9cf3000963ea6a3db777a597baee2bc55c4fc891e4f1967f262cc96148649"
+  # end
+
   resource "Rtree" do
-    url "https://files.pythonhosted.org/packages/b0/6c/6cc8d738f14d5efa0c38ec29403bbd9c75e64b3fe84b53290178dda0dbd9/Rtree-0.8.3.tar.gz"
-    sha256 "6cb9cf3000963ea6a3db777a597baee2bc55c4fc891e4f1967f262cc96148649"
+    url "https://github.com/Toblerity/rtree.git",
+      :branch => "master",
+      :commit => "5d33357c8e88f1a8344415dc15a7d2440211b281"
+    version "0.8.3"
   end
 
   resource "geopy" do
