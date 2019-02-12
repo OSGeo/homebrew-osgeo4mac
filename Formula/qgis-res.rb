@@ -362,9 +362,17 @@ class QgisRes < Formula
     sha256 "aec9ab2e3513c9503ec123b1a8573bee55fc6a66e2ac07088c3376bf6738a424"
   end
 
+  # for some reason it fails in CI, temporarily disabled
+  # resource "Shapely" do
+  #   url "https://files.pythonhosted.org/packages/a2/fb/7a7af9ef7a35d16fa23b127abee272cfc483ca89029b73e92e93cdf36e6b/Shapely-1.6.4.post2.tar.gz"
+  #   sha256 "c4b87bb61fc3de59fc1f85e71a79b0c709dc68364d9584473697aad4aa13240f"
+  # end
+
   resource "Shapely" do
-    url "https://files.pythonhosted.org/packages/a2/fb/7a7af9ef7a35d16fa23b127abee272cfc483ca89029b73e92e93cdf36e6b/Shapely-1.6.4.post2.tar.gz"
-    sha256 "c4b87bb61fc3de59fc1f85e71a79b0c709dc68364d9584473697aad4aa13240f"
+    url "https://github.com/Toblerity/Shapely.git",
+      :branch => "master",
+      :commit => "a6174b998d73646c5ef45acced401cd63d257b5d"
+    version "1.6.4"
   end
 
   # for some reason it fails in CI, temporarily disabled
