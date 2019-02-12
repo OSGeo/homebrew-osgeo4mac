@@ -2,7 +2,7 @@ class Orfeo6 < Formula
   desc "Library of image processing algorithms"
   homepage "https://www.orfeo-toolbox.org/otb/"
 
-  revision 2
+  revision 3
 
   head "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb.git", :branch => "master"
 
@@ -28,7 +28,6 @@ class Orfeo6 < Formula
   option "with-python", "Build with Python support"
   option "with-patented", "Build with Patented Examples"
   option "with-fftw", "Build with FFTW support"
-  option "with-hdf5", "Build with HDF5, general purpose library and file format for storing scientific data support"
   option "with-iceviewer", "Build with ICE Viewer application (Qt and X11 required)"
   option "with-examples", "Compile and install various examples"
   option "with-java", "Enable Java support"
@@ -63,6 +62,7 @@ class Orfeo6 < Formula
   depends_on "proj"
   depends_on "geos"
   depends_on "netcdf"
+  depends_on "hdf5"
   depends_on "openjpeg"
   depends_on "osgeo/osgeo4mac/ossim"
   depends_on "osgeo/osgeo4mac/insighttoolkit"
@@ -77,14 +77,14 @@ class Orfeo6 < Formula
 
   # optional
   depends_on "fftw" => :optional # restricts built binaries to GPL license
-  depends_on "hdf5" => :optional
-  # depends_on "hdf4" => :optional
   # depends_on "mapnik" => :optional
+
   # depends_on "osgeo/osgeo4mac/shark" if build.with? "shark"
   depends_on "open-mpi" if build.with? "mpi"
   depends_on "opencv@2" if build.with? "opencv"
+
   if build.with? "python"
-    depends_on "python" => :optional
+    depends_on "python"
     depends_on "swig"
     depends_on "numpy"
   end
@@ -190,11 +190,9 @@ class Orfeo6 < Formula
       py_ver= `#{HOMEBREW_PREFIX}/opt/python/bin/python3 -c 'import sys;print("{0}.{1}".format(sys.version_info[0],sys.version_info[1]))'`.strip
       args << "-DPYTHON_LIBRARY=#{HOMEBREW_PREFIX}/Frameworks/Python.framework/Versions/#{py_ver}/lib/libpython#{py_ver}m.dylib"
       args << "-DPYTHON_LIBRARY_RELEASE=#{HOMEBREW_PREFIX}/Frameworks/Python.framework/Versions/#{py_ver}/lib/libpython#{py_ver}m.dylib"
-      # args << "-DPYTHON3_LIBRARY_DEBUG="
       args << "-DPYTHON_INCLUDE_DIR=#{HOMEBREW_PREFIX}/Frameworks/Python.framework/Versions/#{py_ver}/include/python#{py_ver}m"
-      # args << "-DNUMPY_PYTHON3_INCLUDE_DIR="
-      args << "-DOTB_INSTALL_PYTHON_DIR=#{lib}/python#{py_ver}/site-packages/otb"
 
+      args << "-DOTB_INSTALL_PYTHON_DIR=#{lib}/python#{py_ver}/site-packages/otb"
       args << "-DNUMPY_INCLUDE_DIR=#{Formula["numpy"].opt_lib}/python#{py_ver}/site-packages/numpy/core/include" # numpy/arrayobject.h
     end
 
