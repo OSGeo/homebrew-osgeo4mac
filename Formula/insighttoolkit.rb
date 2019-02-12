@@ -8,6 +8,13 @@ class Insighttoolkit < Formula
 
   head "git://itk.org/ITK.git"
 
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    sha256 "a584d23e24d37809937abc612d2e865bf7e16340f63ee060b02f819abe92ff44" => :mojave
+    sha256 "a584d23e24d37809937abc612d2e865bf7e16340f63ee060b02f819abe92ff44" => :high_sierra
+    sha256 "a584d23e24d37809937abc612d2e865bf7e16340f63ee060b02f819abe92ff44" => :sierra
+  end
+
   option :cxx11
   option "with-examples", "Compile and install various examples"
   option "with-itkv3-compatibility", "Include ITKv3 compatibility"
