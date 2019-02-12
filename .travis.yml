@@ -65,7 +65,9 @@ install: ./travis/install.sh
 
 #before_script: ./travis/before_script.sh
 
-script: ./travis/script.sh
+script:
+  - rm ${HOMEBREW_PREFIX}/var/homebrew/locks/*
+  - ./travis/script.sh
 
 after_script: ./travis/after_script.sh
 
