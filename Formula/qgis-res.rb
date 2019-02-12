@@ -112,7 +112,7 @@ class QgisRes < Formula
     sha256 "029703bf514e16c8271c3821806a1c171220cc5bdd325cbf4e7da1e056a01db6"
   end
 
-  if build.with?("r") || ("r-sethrfore")
+  if build.include?("r") || ("r-sethrfore")
     resource "pip-tools" do
       url "https://files.pythonhosted.org/packages/c2/09/b89b14a8b25b254c96ebe7888d21c91d691727369ddd076a2bb4ec7b0b23/pip-tools-3.3.2.tar.gz"
       sha256 "100496b15463155f4da3df04c2ca0068677e1ee74d346ebade2d85eef4de8cda"
