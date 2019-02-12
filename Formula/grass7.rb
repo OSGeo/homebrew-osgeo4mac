@@ -1,13 +1,10 @@
-# require File.expand_path("../../Requirements/grass_requirements",
-#                          Pathname.new(__FILE__).realpath)
-
 class Grass7 < Formula
   include Language::Python::Virtualenv
 
   desc "Geographic Resources Analysis Support System"
   homepage "https://grass.osgeo.org/"
 
-  revision 1
+  revision 2
 
   # svn: E230001: Server SSL certificate verification failed: issuer is not trusted
   # head "https://svn.osgeo.org/grass/grass/trunk", :using => :svn
@@ -33,12 +30,13 @@ class Grass7 < Formula
     sha256 "8b91c59b6b5b3cf16c6fa64b085a54de80e2273a92dc0bb16cff69bcb858eea4" => :sierra
   end
 
-  option "without-gui", "Build without WxPython interface. Command line tools still available."
-  option "with-aqua", "Build with experimental Aqua GUI backend."
+  option "without-gui", "Build without WxPython interface. Command line tools still available"
+  option "with-others", "Build with other optional dependencies"
+  option "with-r", "Build with R support"
+  option "with-avce00", "Build with AVCE00 support: Make Arc/Info (binary) Vector Coverages appear as E00"
+  option "with-aqua", "Build with experimental Aqua GUI backend"
   option "with-app", "Build GRASS.app Package"
   option "with-liblas", "Build with LibLAS-with-GDAL2 support"
-  option "with-netcdf", "Build with NetCDF support"
-  option "with-zstd", "Build with zstd support"
   option "with-postgresql", "Build with PostgreSQL support"
   option "with-mysql", "Build with MySQL support"
   option "with-pthread", "Build with PThread support"
@@ -67,37 +65,24 @@ class Grass7 < Formula
   depends_on "regex-opt"
   depends_on "proj"
   depends_on "geos"
-  depends_on "gdal2"
+  depends_on "osgeo/osgeo4mac/gdal2"
   depends_on "readline"
   depends_on "lapack"
   depends_on "openblas"
   depends_on "bzip2"
   depends_on "zlib"
   depends_on "unixodbc"
+  depends_on "netcdf"
   depends_on "wxmac"
   depends_on "wxpython"
+  depends_on "zstd"
+  depends_on "lbzip2"
+  depends_on "xz"
+  depends_on "byacc" # yacc
   depends_on "subversion" # for g.extension
-  depends_on "avce00" # avcimport
   depends_on "openjpeg" # for Pillow
 
   depends_on :x11 if build.without? "aqua" # needs to find at least X11/include/GL/gl.h
-
-  # depends_on UnlinkedGRASS7
-
-  # optional dependencies
-  depends_on "netcdf" => :optional
-  depends_on "liblas-gdal2" if build.with? "liblas"
-  depends_on "zstd" => :optional
-  depends_on "mysql" => :optional
-  depends_on "postgresql" => :optional
-  depends_on "libpq" => :optional
-  depends_on "lbzip2" => :optional
-  depends_on "libredwg" if build.with? "opendwg"
-  depends_on "ffmpeg" => :optional
-  depends_on "r" => :optional
-  # depends_on "pdal" => :optional
-  # depends_on "libomp" if build.with? "openmp"
-
 
   # matplotlib
   depends_on "py3cairo"
@@ -108,38 +93,59 @@ class Grass7 < Formula
   depends_on "scipy"
   depends_on "brewsci/bio/matplotlib"
 
+  # optional dependencies
+
+  depends_on "osgeo/osgeo4mac/liblas-gdal2" if build.with? "liblas"
+
+  depends_on "mysql" if build.with? "mysql"
+  if build.with? "postgresql"
+    depends_on "postgresql"
+    depends_on "libpq"
+  end
+
+  depends_on "avce00" => :optional # avcimport
+
+  # R with more support: serfore/r-srf
+  # https://github.com/adamhsparks/setup_macOS_for_R
+  if build.with?("r")
+    unless Formula["r"].opt_prefix.exist?
+      depends_on "r"
+    end
+  end
+
+  # depends_on "pdal" => :optional
+  # depends_on "libomp" if build.with? "openmp"
+
   # other dependencies
-
-  depends_on "ffmpeg2theora" => :optional
-  depends_on "ffmpegthumbnailer" => :optional
-  depends_on "libav" => :optional
-  depends_on "jasper" => :optional
-  depends_on "wget" => :optional
-  depends_on "dateutils" => :optional
-  depends_on "gsl" => :optional
-  depends_on "ncurses" => :optional
-  depends_on "gdbm" => :optional
-  depends_on "mesa" => :optional
-  depends_on "mesalib-glw" => :optional
-  depends_on "openmotif" => :optional
-
-  depends_on "gpsbabel" => :optional
-  depends_on "gdal2-python" => :optional
-  depends_on "byacc" => :optional # yacc
-  depends_on "desktop-file-utils" => :optional
-  depends_on "fontconfig" => :optional
-  depends_on "netpbm" => :optional # mpeg_encode or ppmtompeg
-  depends_on "lesstif" => :optional
-  depends_on "openssl" => :optional
-  depends_on "swig" => :optional
-  depends_on "libjpeg-turbo" => :optional
-  depends_on "cfitsio" => :optional
-  depends_on "imagemagick" => :optional
-  depends_on "xz" => :optional # lzma
-  depends_on "gd" => :optional
-
-  # depends_on "mariadb-connector-c" => :optional
-  # depends_on "mariadb" => :optional
+  if build.with? "others"
+    depends_on "osgeo/osgeo4mac/gdal2-python"
+    depends_on "gpsbabel"
+    depends_on "netpbm" # mpeg_encode or ppmtompeg
+    depends_on "openssl"
+    depends_on "swig"
+    depends_on "ffmpeg"
+    depends_on "ffmpeg2theora"
+    depends_on "ffmpegthumbnailer"
+    depends_on "libav"
+    depends_on "jasper"
+    depends_on "wget"
+    depends_on "dateutils"
+    depends_on "gsl"
+    depends_on "ncurses"
+    depends_on "gdbm"
+    depends_on "mesa"
+    depends_on "mesalib-glw"
+    depends_on "openmotif"
+    depends_on "desktop-file-utils"
+    depends_on "fontconfig"
+    depends_on "lesstif"
+    depends_on "libjpeg-turbo"
+    depends_on "cfitsio"
+    depends_on "imagemagick"
+    depends_on "gd"
+    # depends_on "mariadb-connector-c"
+    # depends_on "mariadb"
+  end
 
   def headless?
     # The GRASS GUI is based on WxPython.
@@ -152,8 +158,8 @@ class Grass7 < Formula
   end
 
   resource "setuptools" do
-    url "https://files.pythonhosted.org/packages/37/1b/b25507861991beeade31473868463dad0e58b1978c209de27384ae541b0b/setuptools-40.6.3.zip"
-    sha256 "3b474dad69c49f0d2d86696b68105f3a6f195f7ab655af12ef9a9c326d2b08f8"
+    url "https://files.pythonhosted.org/packages/c2/f7/c7b501b783e5a74cf1768bc174ee4fb0a8a6ee5af6afa92274ff964703e0/setuptools-40.8.0.zip"
+    sha256 "6e4eec90337e849ade7103723b9a99631c1f0d19990d6e8412dc42f5ae8b304d"
   end
 
   resource "pip" do
@@ -167,12 +173,12 @@ class Grass7 < Formula
   end
 
   resource "Pillow" do
-    url "https://files.pythonhosted.org/packages/1b/e1/1118d60e9946e4e77872b69c58bc2f28448ec02c99a2ce456cd1a272c5fd/Pillow-5.3.0.tar.gz"
-    sha256 "2ea3517cd5779843de8a759c2349a3cd8d3893e03ab47053b66d5ec6f8bc4f93"
+    url "https://files.pythonhosted.org/packages/3c/7e/443be24431324bd34d22dd9d11cc845d995bcd3b500676bcf23142756975/Pillow-5.4.1.tar.gz"
+    sha256 "5233664eadfa342c639b9b9977190d64ad7aca4edc51a966394d7e08e7f38a9f"
   end
 
   resource "ply" do
-    url "http://www.dabeaz.com/ply/ply-3.11.tar.gz"
+    url "https://files.pythonhosted.org/packages/e5/69/882ee5c9d017149285cab114ebeab373308ef0f874fcdac9beb90e0ac4da/ply-3.11.tar.gz"
     sha256 "00c7c1aaa88358b9c765b6d3000c6eec0ba42abca5351b095321aef446081da3"
   end
 
@@ -181,11 +187,10 @@ class Grass7 < Formula
     sha256 "62b089a55be1d8949cd2bc7e0df0bddb9e028faefc8c32038cc84862aefdd6e4"
   end
 
-  # error: pip._vendor.pep517.wrappers.BackendUnavailable
-  # resource "python-dateutil" do
-  #   url "https://files.pythonhosted.org/packages/0e/01/68747933e8d12263d41ce08119620d9a7e5eb72c876a3442257f74490da0/python-dateutil-2.7.5.tar.gz"
-  #   sha256 "88f9287c0174266bb0d8cedd395cfba9c58e87e5ad86b2ce58859bc11be3cf02"
-  # end
+  resource "python-dateutil" do
+    url "https://files.pythonhosted.org/packages/ad/99/5b2e99737edeb28c71bcbec5b5dda19d0d9ef3ca3e92e3e925e7c0bb364c/python-dateutil-2.8.0.tar.gz"
+    sha256 "c89805f6f4d64db21ed966fda138f8a5ed7a4fdbc1a8ee329ce1b74e3c74da9e"
+  end
 
   resource "six" do
     url "https://files.pythonhosted.org/packages/dd/bf/4138e7bfb757de47d1f4b6994648ec67a51efe58fa907c1e11e350cddfca/six-1.12.0.tar.gz"
@@ -198,8 +203,8 @@ class Grass7 < Formula
   end
 
   resource "psycopg2" do
-    url "https://files.pythonhosted.org/packages/c0/07/93573b97ed61b6fb907c8439bf58f09957564cf7c39612cef36c547e68c6/psycopg2-2.7.6.1.tar.gz"
-    sha256 "27959abe64ca1fc6d8cd11a71a1f421d8287831a3262bd4cacd43bbf43cc3c82"
+    url "https://files.pythonhosted.org/packages/63/54/c039eb0f46f9a9406b59a638415c2012ad7be9b4b97bfddb1f48c280df3a/psycopg2-2.7.7.tar.gz"
+    sha256 "f4526d078aedd5187d0508aa5f9a01eae6a48a470ed678406da94b4cd6524b7e"
   end
 
   resource "termcolor" do
@@ -250,8 +255,8 @@ class Grass7 < Formula
   end
 
   resource "numpy" do
-    url "https://files.pythonhosted.org/packages/04/b6/d7faa70a3e3eac39f943cc6a6a64ce378259677de516bd899dd9eb8f9b32/numpy-1.16.0.zip"
-    sha256 "cb189bd98b2e7ac02df389b6212846ab20661f4bafe16b5a70a6f1728c1cc7cb"
+    url "https://files.pythonhosted.org/packages/2b/26/07472b0de91851b6656cbc86e2f0d5d3a3128e7580f23295ef58b6862d6c/numpy-1.16.1.zip"
+    sha256 "31d3fe5b673e99d33d70cfee2ea8fe8dccd60f265c3ed990873a88647e3dd288"
   end
 
   # "error: no member named 'signbit' in the global namespace"
@@ -271,7 +276,15 @@ class Grass7 < Formula
 
     # install python modules
     venv = virtualenv_create(libexec/'vendor', "#{Formula["python@2"].opt_bin}/python2")
-    # venv.pip_install resources
+    res = resources.map(&:name).to_set # - %w[python-dateutil]
+
+    # fix pip._vendor.pep517.wrappers.BackendUnavailable
+    system libexec/"vendor/bin/pip2", "install", "--upgrade", "-v", "setuptools", "pip<19.0.0", "wheel"
+    # venv.pip_install_and_link "python-dateutil"
+
+    res.each do |r|
+      venv.pip_install resource(r)
+    end
 
     # noinspection RubyLiteralArrayInspection
     args = [
@@ -279,9 +292,14 @@ class Grass7 < Formula
       "--enable-shared",
       "--enable-largefile",
       "--with-nls",
-      "--with-python=#{libexec}/vendor/bin/python-config",
       "--with-includes=#{HOMEBREW_PREFIX}/include",
       "--with-libs=#{HOMEBREW_PREFIX}/LIB",
+      "--with-python=#{libexec}/vendor/bin/python-config",
+      "--with-tcltk",
+      "--with-netcdf=#{Formula["netcdf"].opt_bin}/nc-config",
+      "--with-zstd",
+      "--with-zstd-includes=#{Formula["zstd"].opt_include}",
+      "--with-zstd-libs=#{Formula["zstd"].opt_lib}",
       "--with-readline",
       "--with-readline-includes=#{Formula["readline"].opt_include}",
       "--with-readline-libs=#{Formula["readline"].opt_lib}",
@@ -331,19 +349,8 @@ class Grass7 < Formula
 
     # Disable some dependencies that don't build correctly on older version of MacOS
     args << "--without-fftw" if build.without? "fftw"
-    args << "--with-tcltk" if build.with? "tcl-tk"
 
     args << "--with-liblas=#{Formula["liblas-gdal2"].opt_bin}/liblas-config" if build.with? "liblas"
-
-    if build.with? "netcdf"
-      args << "--with-netcdf=#{Formula["netcdf"].opt_bin}/nc-config"
-    end
-
-    if build.with? "zstd"
-      args << "--with-zstd"
-      args << "--with-zstd-includes=#{Formula["zstd"].opt_include}"
-      args << "--with-zstd-libs=#{Formula["zstd"].opt_lib}"
-    end
 
     if build.with? "postgresql"
       args << "--with-postgres"
@@ -444,6 +451,29 @@ class Grass7 < Formula
       file << "export LC_CTYPE=en_US.UTF-8"
       file << "\n"
       file << "export LC_ALL=en_US.UTF-8"
+      file << "\n"
+      file << "export GRASS_PREFIX=#{prefix}/grass-base"
+      file << "\n"
+      file << "export GRASS_SH=/bin/sh"
+      file << "\n"
+      file << "export GRASS_PROJSHARE=#{Formula["proj"].opt_share}"
+      file << "\n"
+      file << "export GRASS_VERSION=#{version}"
+      file << "\n"
+      file << "export GRASS_LD_LIBRARY_PATH=#{prefix}/grass-#{version}/lib"
+      file << "\n"
+      file << "export GRASS_PERL=#{Formula["perl"].opt_bin}/perl"
+      file << "\n"
+      file << "export PROJ_LIB=#{Formula["proj"].opt_lib}"
+      file << "\n"
+      file << "export GEOTIFF_CSV=#{Formula["libgeotiff"].opt_share}/epsg_csv"
+      file << "\n"
+      file << "export GDAL_DATA=#{Formula["gdal2"].opt_share}/gdal"
+      # file << "\n"
+      # file << "export PYTHONHOME=#{Formula["python"].opt_frameworks}/Python.framework/Versions/#{py_ver}:$PYTHONHOME"
+      # file << "export R_HOME=#{Formula["r"].opt_bin}/R:$R_HOME"
+      # file << "export R_HOME=/Applications/RStudio.app/Contents/MacOS/RStudio:$R_HOME"
+      # file << "export R_USER=USER_PROFILE/Documents"
       file << "\n"
       file << "GRASS_PYTHON=python2 exec #{libexec}/bin/grass#{majmin_ver} $@"
     }
