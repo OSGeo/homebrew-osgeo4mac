@@ -70,7 +70,7 @@ class QgisRes < Formula
   depends_on "scipy"
   depends_on "brewsci/bio/matplotlib"
 
-  depends_on "osgeo/osgeo4mac/gdal2" # for Fiona
+  depends_on "gdal2" # for Fiona
   depends_on "spatialindex" # for Rtree
   depends_on "openjpeg" # for Pillow
   depends_on "hdf5" # for h5py
@@ -768,18 +768,7 @@ class QgisRes < Formula
 
     # venv.pip_install_and_link "matplotlib"
 
-    if build.with? "r"
-      venv.pip_install resource("rpy2")
-
-      venv.pip_install resource("Sphinx")
-      venv.pip_install resource("sphinxcontrib-websupport")
-      # fix ModuleNotFoundError: No module named 'pip.req'
-      system libexec/"vendor/bin/pip3", "install", "--upgrade", "-v", "setuptools", "pip==9.0.3", "wheel"
-      venv.pip_install resource("pyRscript")
-    end
-
-    # fix temporary for sethrfore
-    if build.with? "r-sethrfore"
+    if build.with?("r") || brewed_r?
       venv.pip_install resource("rpy2")
 
       venv.pip_install resource("Sphinx")
@@ -811,5 +800,11 @@ class QgisRes < Formula
 
   test do
     #  TODO
+  end
+
+  private
+
+  def brewed_r?
+    Formula["r"].opt_prefix.exist?
   end
 end
