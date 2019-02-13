@@ -771,7 +771,7 @@ class QgisRes < Formula
     # install python environment
     venv = virtualenv_create(libexec/'vendor', "#{Formula["python"].opt_bin}/python3")
     # res = resources.map(&:name).to_set - %w[pyodbc h5py xcffib cairocffi matplotlib Shapely Rtree wxPython pymssql PyGTK geos rpy2 pyRscript] # python-dateutil
-    res = resources.map(&:name).to_set - %w[pyodbc h5py Shapely Rtree pymssql PyGTK geos rpy2 pyRscript] # python-dateutil
+    res = resources.map(&:name).to_set - %w[pyodbc h5py Shapely Rtree PyGTK geos rpy2 pyRscript] # python-dateutil
 
     # fix pip._vendor.pep517.wrappers.BackendUnavailable
     system libexec/"vendor/bin/pip3", "install", "--upgrade", "-v", "setuptools", "pip<19.0.0", "wheel"
@@ -788,7 +788,7 @@ class QgisRes < Formula
     venv.pip_install_and_link "Shapely"
     venv.pip_install_and_link "Rtree" # not
     # venv.pip_install_and_link "wxPython" # not
-    venv.pip_install_and_link "pymssql" # not
+    # venv.pip_install_and_link "pymssql" # not
     venv.pip_install_and_link "PyGTK" # not
     venv.pip_install_and_link "geos"
 
