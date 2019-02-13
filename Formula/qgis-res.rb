@@ -32,7 +32,7 @@ class QgisRes < Formula
   depends_on "lapack"
   depends_on "ghostscript"
 
-  # rpy2
+  # for rpy2
   depends_on "gettext"
   depends_on "readline"
   depends_on "pcre"
@@ -760,7 +760,7 @@ class QgisRes < Formula
 
     # venv.pip_install_and_link "matplotlib"
 
-    if build.with?("r" || "r-sethrfore")
+    if build.with?("r") || ("r-sethrfore")
       venv.pip_install resource("rpy2")
 
       venv.pip_install resource("Sphinx")
