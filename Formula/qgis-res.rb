@@ -776,6 +776,8 @@ class QgisRes < Formula
     # fix pip._vendor.pep517.wrappers.BackendUnavailable
     system libexec/"vendor/bin/pip3", "install", "--upgrade", "-v", "setuptools", "pip<19.0.0", "wheel"
 
+   venv.pip_install_and_link "cython" # not
+
     venv.pip_install_and_link "pymssql" # not
     venv.pip_install_and_link "PyGTK" # not
     venv.pip_install_and_link "wxPython" # not
