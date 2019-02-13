@@ -15,12 +15,6 @@
 #                                                                         #
 ###########################################################################
 
-chown -R $(whoami) /usr/local/var/homebrew
-sudo /usr/bin/pkill ruby
-sudo rm -rf /usr/local/var/homebrew/locks
-
-brew update
-brew install pyside
 
 if [ -n "${DEBUG_TRAVIS}" ];then
   brew list --versions
@@ -44,8 +38,7 @@ brew tap brewsci/bio || true
 # Keeps gcc from being linked
 brew cask uninstall oclint || true
 
-# Error: Another active Homebrew update process is already in progress.
-# brew update || brew update
+brew update || brew update
 
 # Set up ccache (doesn't work with `brew install <formula>`)
 #brew install ccache

@@ -90,16 +90,16 @@ class Qgis < Formula
   depends_on "ninja" => [:build, :recommended]
   depends_on "gsl" => :build
   depends_on "sip" => :build
-  depends_on "osgeo/osgeo4mac/six" => :build
+  depends_on "six" => :build
   depends_on "bison" => :build
   depends_on "flex" => :build
   depends_on "pkg-config" => :build
   depends_on "python"
   depends_on "qt"
   depends_on "pyqt"
-  depends_on "osgeo/osgeo4mac/pyqt5-webkit" => :recommended
+  depends_on "pyqt5-webkit" => :recommended
   depends_on "qca"
-  depends_on "osgeo/osgeo4mac/qtkeychain"
+  depends_on "qtkeychain"
   depends_on "qscintilla2"
   depends_on "qwt"
   depends_on "qwtpolar"
@@ -116,7 +116,7 @@ class Qgis < Formula
   depends_on "libiconv"
   depends_on "geos"
   depends_on "libspatialite"
-  depends_on "osgeo/osgeo4mac/postgis2"
+  depends_on "postgis2"
   depends_on "openssl"
   depends_on "poppler"
   depends_on "gnu-sed"
@@ -138,7 +138,7 @@ class Qgis < Formula
   depends_on "hdf5"
 
   # core providers
-  depends_on "osgeo/osgeo4mac/gdal2-python"
+  depends_on "gdal2-python"
 
   if build.with? "api-docs"
     depends_on "graphviz" => :build
@@ -153,7 +153,7 @@ class Qgis < Formula
   # pygments - MetaSearch
   # yaml - Processing
   # many useful modules are incorporated
-  depends_on "osgeo/osgeo4mac/qgis-res" => :recommended
+  depends_on "qgis-res" => :recommended
 
   if build.with? "server"
     depends_on "fcgi"
@@ -163,7 +163,7 @@ class Qgis < Formula
 
   # core plugins (c++ and python)
   if build.with?("grass") || (HOMEBREW_PREFIX/"opt/grass7").exist?
-    depends_on "osgeo/osgeo4mac/grass7"
+    depends_on "grass7"
     depends_on "gettext"
   end
 
@@ -171,9 +171,9 @@ class Qgis < Formula
   # only for QGIS 2 and it does not support a larger version than OSGearh v2.7.
   # working on the implementation
   # if build.with? "globe"
-  #   depends_on "osgeo/osgeo4mac/openscenegraph-qt5"
-  #   depends_on "osgeo/osgeo4mac/osgqt"
-  #   depends_on "osgeo/osgeo4mac/osgearth-qt5"
+  #   depends_on "openscenegraph-qt5"
+  #   depends_on "osgqt"
+  #   depends_on "osgearth-qt5"
   # end
 
   depends_on "gpsbabel" => :optional
@@ -181,7 +181,7 @@ class Qgis < Formula
   # TODO: remove "pyspatialite" when PyPi package supports spatialite 4.x
   #       or DB Manager supports libspatialite >= 4.2.0 (with mod_spatialite)
   # TODO: what to do for Py3 and pyspatialite?
-  depends_on "osgeo/osgeo4mac/pyspatialite" # for DB Manager
+  depends_on "pyspatialite" # for DB Manager
 
   # use newer postgresql client than Apple's, also needed by `psycopg2`
   if build.with? "postgresql10"
@@ -190,7 +190,7 @@ class Qgis < Formula
     depends_on "postgresql" => :recommended
   end
 
-  depends_on "osgeo/osgeo4mac/oracle-client-sdk" if build.with? "oracle"
+  depends_on "oracle-client-sdk" if build.with? "oracle"
 
   # TODO: add MSSQL third-party support formula?, :optional
   if build.with? "mssql"
@@ -198,15 +198,15 @@ class Qgis < Formula
     depends_on "microsoft/mssql-release/mssql-tools"
   end
 
-  depends_on "osgeo/osgeo4mac/qpsql"
-  depends_on "osgeo/osgeo4mac/qodbc"
-  depends_on "osgeo/osgeo4mac/qmysql" # for eVis plugin
+  depends_on "qpsql"
+  depends_on "qodbc"
+  depends_on "qmysql" # for eVis plugin
   # qtds obsolete from Qt 4.7
   # qoci from oracle-client-sdk?
 
   # core processing plugin extras
   # see `grass` above
-  depends_on "osgeo/osgeo4mac/orfeo6" if build.with? "orfeo"
+  depends_on "orfeo6" if build.with? "orfeo"
 
   if build.with? "r"
     depends_on "r"
@@ -219,13 +219,13 @@ class Qgis < Formula
     depends_on "sethrfore/r-srf/r"
   end
 
-  depends_on "osgeo/osgeo4mac/saga-gis-lts" if build.with? "saga"
+  depends_on "saga-gis-lts" if build.with? "saga"
 
-  depends_on "osgeo/osgeo4mac/whitebox-tools" if build.with? "whitebox"
+  depends_on "whitebox-tools" if build.with? "whitebox"
 
-  depends_on "osgeo/osgeo4mac/lastools" => :optional
+  depends_on "lastools" => :optional
 
-  depends_on "osgeo/osgeo4mac/taudem" => :optional
+  depends_on "taudem" => :optional
 
   # TODO: LASTools straight build (2 reporting tools), or via `wine` (10 tools)
   # TODO: Fusion from USFS (via `wine`?)
