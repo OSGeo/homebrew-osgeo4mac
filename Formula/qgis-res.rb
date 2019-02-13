@@ -20,69 +20,71 @@ class QgisRes < Formula
   depends_on "pkg-config" => :build
   depends_on "gcc" => :build # for gfortran
   depends_on "python" => :build
-  depends_on "swig" => :build
-  depends_on "libagg"
-  depends_on "freetype"
-  depends_on "libpng"
-  depends_on "openssl"
-  depends_on "libssh"
-  depends_on "qhull"
-  depends_on "tcl-tk"
-  depends_on "openblas"
-  depends_on "lapack"
-  depends_on "ghostscript"
+  # depends_on "swig" => :build
+  # depends_on "libagg"
+  # depends_on "freetype"
+  # depends_on "libpng"
+  # depends_on "openssl"
+  # depends_on "libssh"
+  # depends_on "qhull"
+  # depends_on "tcl-tk"
+  # depends_on "openblas"
+  # depends_on "lapack"
+  # depends_on "ghostscript"
+  #
+  # # rpy2
+  # depends_on "gettext"
+  # depends_on "readline"
+  # depends_on "pcre"
+  # depends_on "xz"
+  # depends_on "bzip2"
+  # depends_on "libiconv"
+  # depends_on "icu4c"
+  #
+  # depends_on "cython" # pip cython
+  # depends_on "wxpython"
+  #
+  # # for matplotlib
+  # depends_on "cairo"
+  # depends_on "py3cairo" # pip pycairo
+  # depends_on "libsvg-cairo"
+  # depends_on "librsvg"
+  # depends_on "svg2pdf"
+  # depends_on "gtk+3"
+  # depends_on "pygobject3" # pip PyGObject
+  # depends_on "pygobject"
+  # depends_on "pygtk" # pip pygtk
+  # depends_on "pyqt"
+  # depends_on "ffmpeg"
+  # depends_on "imagemagick"
+  #
+  # depends_on "numpy" # pip numpy
+  # depends_on "scipy" # pip scipy
+  # depends_on "brewsci/bio/matplotlib" # pip matplotlib
+  #
+  # depends_on "osgeo/osgeo4mac/gdal2" # for Fiona
+  # depends_on "openjpeg" # for Pillow
+  # depends_on "hdf5" # for h5py
+  # depends_on "unixodbc" # for pyodbc
+  # # depends_on "gdk-pixbuf" # for cairocffi
+  #
+  # depends_on "pyside" # for pyqtgraph
+  # depends_on "freetds" # for pymssql
+  #
+  # if build.with?("r")
+  #   depends_on "r"
+  # end
+  #
+  # # R with more support
+  # # https://github.com/adamhsparks/setup_macOS_for_R
+  # if build.with?("r-sethrfore")
+  #   depends_on "sethrfore/r-srf/r"
+  # end
+  #
+  # # needed by psycopg2
+  # depends_on "postgresql" => :recommended
 
-  # rpy2
-  depends_on "gettext"
-  depends_on "readline"
-  depends_on "pcre"
-  depends_on "xz"
-  depends_on "bzip2"
-  depends_on "libiconv"
-  depends_on "icu4c"
-
-  depends_on "cython" # pip cython
-  depends_on "wxpython"
-
-  # for matplotlib
-  depends_on "cairo"
-  depends_on "py3cairo" # pip pycairo
-  depends_on "libsvg-cairo"
-  depends_on "librsvg"
-  depends_on "svg2pdf"
-  depends_on "gtk+3"
-  depends_on "pygobject3" # pip PyGObject
-  depends_on "pygobject"
-  depends_on "pygtk" # pip pygtk
-  depends_on "pyqt"
-  depends_on "ffmpeg"
-  depends_on "imagemagick"
-
-  depends_on "numpy" # pip numpy
-  depends_on "scipy" # pip scipy
-  depends_on "brewsci/bio/matplotlib" # pip matplotlib
-
-  depends_on "osgeo/osgeo4mac/gdal2" # for Fiona
-  depends_on "openjpeg" # for Pillow
-  depends_on "hdf5" # for h5py
-  depends_on "unixodbc" # for pyodbc
-  # depends_on "gdk-pixbuf" # for cairocffi
-
-  depends_on "pyside" # for pyqtgraph
-  depends_on "freetds" # for pymssql
-
-  if build.with?("r")
-    depends_on "r"
-  end
-
-  # R with more support
-  # https://github.com/adamhsparks/setup_macOS_for_R
-  if build.with?("r-sethrfore")
-    depends_on "sethrfore/r-srf/r"
-  end
-
-  # needed by psycopg2
-  depends_on "postgresql" => :recommended
+  depends_on "r"
 
   # pyqgis_startup.py
   # TODO: add one for Py3 (only necessary when macOS ships a Python3 or 3rd-party isolation is needed)
@@ -720,6 +722,16 @@ class QgisRes < Formula
     sha256 "b91f8efca7d0929f2b2b3634946be892cba6c21f92acdf737399e7eedf4532db"
   end
 
+  resource "Sphinx" do
+    url "https://files.pythonhosted.org/packages/dd/f8/df628d41f42793d446285767164c6a8da71d82892f2c98c43e0523836d39/Sphinx-1.8.4.tar.gz"
+    sha256 "c1c00fc4f6e8b101a0d037065043460dffc2d507257f2f11acaed71fd2b0c83c"
+  end
+
+  resource "sphinxcontrib-websupport" do
+    url "https://files.pythonhosted.org/packages/07/7a/e74b06dce85555ffee33e1d6b7381314169ebf7e31b62c18fcb2815626b7/sphinxcontrib-websupport-1.1.0.tar.gz"
+    sha256 "9de47f375baf1ea07cdb3436ff39d7a9c76042c10a769c52353ec46e4e8fc3b9"
+  end
+
   resource "pyRscript" do
     url "https://files.pythonhosted.org/packages/a4/3b/a3e62553aa109b0fbdaed9d8c2b89ac3b1b1ad49c56ce722106946476c4c/pyRscript-0.0.2.tar.gz"
     sha256 "78b12b1f32416e5f5ba383f6558018c062de5c14703a05a977f1584b6f5b213c"
@@ -746,10 +758,10 @@ class QgisRes < Formula
   end
 
   # for some reason it fails in CI, temporarily disabled
-  resource "PyGTK" do
-    url "https://files.pythonhosted.org/packages/85/52/3d9bb924bd2c9bdb8afd9b7994cd09160fad5948bb2eca18fd7ffa12cfdc/pygtk-2.24.0.win32-py2.6.exe"
-    sha256 "16336e79f9a7913e5b2d1cf50120896495aac8892be2d352f660b905205c48db"
-  end
+  # resource "PyGTK" do
+  #   url "https://files.pythonhosted.org/packages/85/52/3d9bb924bd2c9bdb8afd9b7994cd09160fad5948bb2eca18fd7ffa12cfdc/pygtk-2.24.0.win32-py2.6.exe"
+  #   sha256 "16336e79f9a7913e5b2d1cf50120896495aac8892be2d352f660b905205c48db"
+  # end
 
   resource "palettable" do
     url "https://files.pythonhosted.org/packages/f5/ef/cf4480c0ebaf51c1a23f4e6c943769210c8385543af0fe0999a1d2099d5b/palettable-3.1.1.tar.gz"
@@ -770,53 +782,40 @@ class QgisRes < Formula
   def install
     # install python environment
     venv = virtualenv_create(libexec/'vendor', "#{Formula["python"].opt_bin}/python3")
-    res = resources.map(&:name).to_set - %w[pyodbc h5py xcffib cairocffi matplotlib Shapely Rtree wxPython pymssql PyGTK geos rpy2 pyRscript] # python-dateutil
-    # res = resources.map(&:name).to_set - %w[pyodbc h5py Shapely Rtree geos rpy2 pyRscript] # python-dateutil
+    # res = resources.map(&:name).to_set - %w[pyodbc h5py xcffib cairocffi matplotlib Shapely Rtree wxPython pymssql PyGTK geos rpy2 pyRscript]
+    res = resources.map(&:name).to_set - %w[pyodbc h5py Shapely Rtree pymssql geos rpy2 Sphinx sphinxcontrib-websupport pyRscript]
 
     # fix pip._vendor.pep517.wrappers.BackendUnavailable
     system libexec/"vendor/bin/pip3", "install", "--upgrade", "-v", "setuptools", "pip<19.0.0", "wheel"
 
-   venv.pip_install_and_link "cython" # not
-
-    venv.pip_install_and_link "pymssql" # not
-    venv.pip_install_and_link "PyGTK" # not
-    venv.pip_install_and_link "wxPython" # not
-    venv.pip_install_and_link "matplotlib"
-
-    venv.pip_install_and_link "geos"
-    venv.pip_install_and_link "pyodbc"
-    venv.pip_install_and_link "h5py"
-    venv.pip_install_and_link "xcffib" # not
-    # venv.pip_install_and_link "cairocffi" # not
-    venv.pip_install_and_link "Shapely"
-    venv.pip_install_and_link "Rtree" # not
-
-
-    res.each do |r|
-      venv.pip_install resource(r)
-    end
-
-    # venv.pip_install_and_link "pyodbc"
-    # venv.pip_install_and_link "h5py"
-    # # venv.pip_install_and_link "xcffib" # not
-    # # venv.pip_install_and_link "cairocffi" # not
-    # # venv.pip_install_and_link "matplotlib"
-    # venv.pip_install_and_link "Shapely"
-    # venv.pip_install_and_link "Rtree" # not
-    # # venv.pip_install_and_link "wxPython" # not
-    # # venv.pip_install_and_link "pymssql" # not
-    # # venv.pip_install_and_link "PyGTK" # not
-    # venv.pip_install_and_link "geos"
-
-    # venv.pip_install_and_link "python-dateutil"
-
-    if build.with?("r") || ("r-sethrfore")
+    # if build.with?("r") || ("r-sethrfore")
       venv.pip_install resource("rpy2")
 
+      venv.pip_install resource("Sphinx")
+      venv.pip_install resource("sphinxcontrib-websupport")
       # fix ModuleNotFoundError: No module named 'pip.req'
       system libexec/"vendor/bin/pip3", "install", "--upgrade", "-v", "setuptools", "pip==9.0.3", "wheel"
       venv.pip_install resource("pyRscript")
-    end
+    # end
+
+   # venv.pip_install_and_link "cython" # not
+   #
+   #  res.each do |r|
+   #    venv.pip_install resource(r)
+   #  end
+   #
+   #  venv.pip_install_and_link "pyodbc"
+   #  venv.pip_install_and_link "h5py"
+   #  venv.pip_install_and_link "Shapely"
+   #  venv.pip_install_and_link "Rtree"
+   #  venv.pip_install_and_link "pymssql"
+   #  venv.pip_install_and_link "geos"
+
+    # venv.pip_install_and_link "xcffib"
+    # venv.pip_install_and_link "cairocffi"
+    # venv.pip_install_and_link "matplotlib"
+    # venv.pip_install_and_link "PyGTK"
+    # venv.pip_install_and_link "wxPython"
 
     # upgrade pip
     system libexec/"vendor/bin/pip3", "install", "--upgrade", "-v", "setuptools", "pip", "wheel"
