@@ -52,6 +52,7 @@ before_install:
   - sudo chown -R "$USER":admin /usr/local/var/homebrew
   - brew cleanup
   - sudo rm -rf /usr/local/var/homebrew/locks
+  - touch /usr/local/Homebrew/Library/Homebrew/utils/lock.sh
   - git -C "${HOMEBREW_REPOSITORY}" reset --hard origin/master
   - mkdir -p "${HOMEBREW_REPOSITORY}/Library/Taps/${GH_USER}"
   - ln -s "$TRAVIS_BUILD_DIR" "${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}"

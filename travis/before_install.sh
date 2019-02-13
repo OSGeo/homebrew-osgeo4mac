@@ -38,7 +38,13 @@ brew tap brewsci/bio || true
 # Keeps gcc from being linked
 brew cask uninstall oclint || true
 
-brew update || brew update
+sudo chown -R "$USER":admin "${HOMEBREW_REPOSITORY}"
+sudo chown -R "$USER":admin /usr/local/var/homebrew
+brew cleanup
+sudo rm -rf /usr/local/var/homebrew/locks
+touch /usr/local/Homebrew/Library/Homebrew/utils/lock.sh
+
+brew update
 
 # Set up ccache (doesn't work with `brew install <formula>`)
 #brew install ccache
