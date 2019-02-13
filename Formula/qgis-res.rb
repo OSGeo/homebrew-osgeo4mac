@@ -20,71 +20,69 @@ class QgisRes < Formula
   depends_on "pkg-config" => :build
   depends_on "gcc" => :build # for gfortran
   depends_on "python" => :build
-  # depends_on "swig" => :build
-  # depends_on "libagg"
-  # depends_on "freetype"
-  # depends_on "libpng"
-  # depends_on "openssl"
-  # depends_on "libssh"
-  # depends_on "qhull"
-  # depends_on "tcl-tk"
-  # depends_on "openblas"
-  # depends_on "lapack"
-  # depends_on "ghostscript"
-  #
-  # # rpy2
-  # depends_on "gettext"
-  # depends_on "readline"
-  # depends_on "pcre"
-  # depends_on "xz"
-  # depends_on "bzip2"
-  # depends_on "libiconv"
-  # depends_on "icu4c"
-  #
-  # depends_on "cython" # pip cython
-  # depends_on "wxpython"
-  #
-  # # for matplotlib
-  # depends_on "cairo"
-  # depends_on "py3cairo" # pip pycairo
-  # depends_on "libsvg-cairo"
-  # depends_on "librsvg"
-  # depends_on "svg2pdf"
-  # depends_on "gtk+3"
-  # depends_on "pygobject3" # pip PyGObject
-  # depends_on "pygobject"
-  # depends_on "pygtk" # pip pygtk
-  # depends_on "pyqt"
-  # depends_on "ffmpeg"
-  # depends_on "imagemagick"
-  #
-  # depends_on "numpy" # pip numpy
-  # depends_on "scipy" # pip scipy
-  # depends_on "brewsci/bio/matplotlib" # pip matplotlib
-  #
-  # depends_on "osgeo/osgeo4mac/gdal2" # for Fiona
-  # depends_on "openjpeg" # for Pillow
-  # depends_on "hdf5" # for h5py
-  # depends_on "unixodbc" # for pyodbc
-  # # depends_on "gdk-pixbuf" # for cairocffi
-  #
-  # depends_on "pyside" # for pyqtgraph
-  # depends_on "freetds" # for pymssql
-  #
-  # if build.with?("r")
-  #   depends_on "r"
-  # end
-  #
-  # # R with more support
-  # # https://github.com/adamhsparks/setup_macOS_for_R
-  # if build.with?("r-sethrfore")
-  #   depends_on "sethrfore/r-srf/r"
-  # end
-  #
-  # # needed by psycopg2
-  # depends_on "postgresql" => :recommended
+  depends_on "swig" => :build
+  depends_on "libagg"
+  depends_on "freetype"
+  depends_on "libpng"
+  depends_on "openssl"
+  depends_on "libssh"
+  depends_on "qhull"
+  depends_on "tcl-tk"
+  depends_on "openblas"
+  depends_on "lapack"
+  depends_on "ghostscript"
 
-  depends_on "r"
+  # rpy2
+  depends_on "gettext"
+  depends_on "readline"
+  depends_on "pcre"
+  depends_on "xz"
+  depends_on "bzip2"
+  depends_on "libiconv"
+  depends_on "icu4c"
+
+  depends_on "cython" # pip cython
+  depends_on "wxpython"
+
+  # for matplotlib
+  depends_on "cairo"
+  depends_on "py3cairo" # pip pycairo
+  depends_on "libsvg-cairo"
+  depends_on "librsvg"
+  depends_on "svg2pdf"
+  depends_on "gtk+3"
+  depends_on "pygobject3" # pip PyGObject
+  depends_on "pygobject"
+  depends_on "pygtk" # pip pygtk
+  depends_on "pyqt"
+  depends_on "ffmpeg"
+  depends_on "imagemagick"
+
+  depends_on "numpy" # pip numpy
+  depends_on "scipy" # pip scipy
+  depends_on "brewsci/bio/matplotlib" # pip matplotlib
+
+  depends_on "osgeo/osgeo4mac/gdal2" # for Fiona
+  depends_on "openjpeg" # for Pillow
+  depends_on "hdf5" # for h5py
+  depends_on "unixodbc" # for pyodbc
+  # depends_on "gdk-pixbuf" # for cairocffi
+
+  depends_on "pyside" # for pyqtgraph
+  depends_on "freetds" # for pymssql
+
+  if build.with?("r")
+    depends_on "r"
+  end
+
+  # or R with more support
+  # https://github.com/adamhsparks/setup_macOS_for_R
+  if build.with?("r-sethrfore")
+    depends_on "sethrfore/r-srf/r"
+  end
+
+  # needed by psycopg2
+  depends_on "postgresql" => :recommended
 
   # pyqgis_startup.py
   # TODO: add one for Py3 (only necessary when macOS ships a Python3 or 3rd-party isolation is needed)
@@ -690,10 +688,10 @@ class QgisRes < Formula
   # end
 
   # for some reason it fails in CI, temporarily disabled
-  # resource "pymssql" do
-  #   url "https://files.pythonhosted.org/packages/2e/81/99562b93d75f3fc5956fa65decfb35b38a4ee97cf93c1d0d3cb799fffb99/pymssql-2.1.4.tar.gz"
-  #   sha256 "3201eb1b1263ad55b555d727ed8bed0b12b7b9de3ce5e529206e36d4be1a7afb"
-  # end
+  resource "pymssql" do
+    url "https://files.pythonhosted.org/packages/2e/81/99562b93d75f3fc5956fa65decfb35b38a4ee97cf93c1d0d3cb799fffb99/pymssql-2.1.4.tar.gz"
+    sha256 "3201eb1b1263ad55b555d727ed8bed0b12b7b9de3ce5e529206e36d4be1a7afb"
+  end
 
   resource "PyMySQL" do
     url "https://files.pythonhosted.org/packages/da/15/23ba6592920e21cb40eb0fe0ea002d2b6177beb1ca8a4c1add5a8f32754d/PyMySQL-0.9.3.tar.gz"
@@ -785,10 +783,7 @@ class QgisRes < Formula
     # res = resources.map(&:name).to_set - %w[pyodbc h5py xcffib cairocffi matplotlib Shapely Rtree wxPython pymssql PyGTK geos rpy2 pyRscript]
     res = resources.map(&:name).to_set - %w[pyodbc h5py Shapely Rtree pymssql geos rpy2 Sphinx sphinxcontrib-websupport pyRscript]
 
-    # fix pip._vendor.pep517.wrappers.BackendUnavailable
-    system libexec/"vendor/bin/pip3", "install", "--upgrade", "-v", "setuptools", "pip<19.0.0", "wheel"
-
-    # if build.with?("r") || ("r-sethrfore")
+    if build.with?("r") || ("r-sethrfore")
       venv.pip_install resource("rpy2")
 
       venv.pip_install resource("Sphinx")
@@ -796,20 +791,21 @@ class QgisRes < Formula
       # fix ModuleNotFoundError: No module named 'pip.req'
       system libexec/"vendor/bin/pip3", "install", "--upgrade", "-v", "setuptools", "pip==9.0.3", "wheel"
       venv.pip_install resource("pyRscript")
-    # end
+    end
 
-   # venv.pip_install_and_link "cython" # not
-   #
-   #  res.each do |r|
-   #    venv.pip_install resource(r)
-   #  end
-   #
-   #  venv.pip_install_and_link "pyodbc"
-   #  venv.pip_install_and_link "h5py"
-   #  venv.pip_install_and_link "Shapely"
-   #  venv.pip_install_and_link "Rtree"
-   #  venv.pip_install_and_link "pymssql"
-   #  venv.pip_install_and_link "geos"
+    # fix pip._vendor.pep517.wrappers.BackendUnavailable
+    system libexec/"vendor/bin/pip3", "install", "--upgrade", "-v", "setuptools", "pip<19.0.0", "wheel"
+
+    res.each do |r|
+      venv.pip_install resource(r)
+    end
+
+    venv.pip_install_and_link "pyodbc"
+    venv.pip_install_and_link "h5py"
+    venv.pip_install_and_link "Shapely"
+    venv.pip_install_and_link "Rtree"
+    venv.pip_install_and_link "pymssql"
+    venv.pip_install_and_link "geos"
 
     # venv.pip_install_and_link "xcffib"
     # venv.pip_install_and_link "cairocffi"
