@@ -688,10 +688,10 @@ class QgisRes < Formula
   # end
 
   # for some reason it fails in CI, temporarily disabled
-  resource "pymssql" do
-    url "https://files.pythonhosted.org/packages/2e/81/99562b93d75f3fc5956fa65decfb35b38a4ee97cf93c1d0d3cb799fffb99/pymssql-2.1.4.tar.gz"
-    sha256 "3201eb1b1263ad55b555d727ed8bed0b12b7b9de3ce5e529206e36d4be1a7afb"
-  end
+  # resource "pymssql" do
+  #   url "https://files.pythonhosted.org/packages/2e/81/99562b93d75f3fc5956fa65decfb35b38a4ee97cf93c1d0d3cb799fffb99/pymssql-2.1.4.tar.gz"
+  #   sha256 "3201eb1b1263ad55b555d727ed8bed0b12b7b9de3ce5e529206e36d4be1a7afb"
+  # end
 
   resource "PyMySQL" do
     url "https://files.pythonhosted.org/packages/da/15/23ba6592920e21cb40eb0fe0ea002d2b6177beb1ca8a4c1add5a8f32754d/PyMySQL-0.9.3.tar.gz"
@@ -770,27 +770,39 @@ class QgisRes < Formula
   def install
     # install python environment
     venv = virtualenv_create(libexec/'vendor', "#{Formula["python"].opt_bin}/python3")
-    # res = resources.map(&:name).to_set - %w[pyodbc h5py xcffib cairocffi matplotlib Shapely Rtree wxPython pymssql PyGTK geos rpy2 pyRscript] # python-dateutil
-    res = resources.map(&:name).to_set - %w[pyodbc h5py Shapely Rtree PyGTK geos rpy2 pyRscript] # python-dateutil
+    res = resources.map(&:name).to_set - %w[pyodbc h5py xcffib cairocffi matplotlib Shapely Rtree wxPython pymssql PyGTK geos rpy2 pyRscript] # python-dateutil
+    # res = resources.map(&:name).to_set - %w[pyodbc h5py Shapely Rtree geos rpy2 pyRscript] # python-dateutil
 
     # fix pip._vendor.pep517.wrappers.BackendUnavailable
     system libexec/"vendor/bin/pip3", "install", "--upgrade", "-v", "setuptools", "pip<19.0.0", "wheel"
+
+    venv.pip_install_and_link "geos"
+    venv.pip_install_and_link "pyodbc"
+    venv.pip_install_and_link "h5py"
+    venv.pip_install_and_link "xcffib" # not
+    venv.pip_install_and_link "cairocffi" # not
+    venv.pip_install_and_link "Shapely"
+    venv.pip_install_and_link "Rtree" # not
+    venv.pip_install_and_link "pymssql" # not
+    venv.pip_install_and_link "PyGTK" # not
+    venv.pip_install_and_link "wxPython" # not
+    venv.pip_install_and_link "matplotlib"
 
     res.each do |r|
       venv.pip_install resource(r)
     end
 
-    venv.pip_install_and_link "pyodbc"
-    venv.pip_install_and_link "h5py"
-    # venv.pip_install_and_link "xcffib" # not
-    # venv.pip_install_and_link "cairocffi" # not
-    # venv.pip_install_and_link "matplotlib"
-    venv.pip_install_and_link "Shapely"
-    venv.pip_install_and_link "Rtree" # not
-    # venv.pip_install_and_link "wxPython" # not
-    # venv.pip_install_and_link "pymssql" # not
-    venv.pip_install_and_link "PyGTK" # not
-    venv.pip_install_and_link "geos"
+    # venv.pip_install_and_link "pyodbc"
+    # venv.pip_install_and_link "h5py"
+    # # venv.pip_install_and_link "xcffib" # not
+    # # venv.pip_install_and_link "cairocffi" # not
+    # # venv.pip_install_and_link "matplotlib"
+    # venv.pip_install_and_link "Shapely"
+    # venv.pip_install_and_link "Rtree" # not
+    # # venv.pip_install_and_link "wxPython" # not
+    # # venv.pip_install_and_link "pymssql" # not
+    # # venv.pip_install_and_link "PyGTK" # not
+    # venv.pip_install_and_link "geos"
 
     # venv.pip_install_and_link "python-dateutil"
 
