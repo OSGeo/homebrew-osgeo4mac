@@ -19,6 +19,13 @@ sudo chown $USER:admin /usr/local/Homebrew/Library/Homebrew/utils/lock.sh
 sudo chown -R $USER:admin /usr/local/Homebrew
 sudo chown -R $USER:admin /usr/local/var/homebrew
 
+brew cleanup
+rm -rf /usr/local/var/homebrew/locks
+brew untap homebrew/core
+brew tap homebrew/core
+
+brew update
+brew upgrade
 brew install pyside
 
 if [ -n "${DEBUG_TRAVIS}" ];then
