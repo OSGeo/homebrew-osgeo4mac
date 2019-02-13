@@ -17,9 +17,10 @@ class Orfeo6 < Formula
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
     cellar :any
-    sha256 "93fda2fd0f342d0a8f0ad807cdfeeb80f9dee5bd7012fecc48a264cc21efa85c" => :mojave
-    sha256 "93fda2fd0f342d0a8f0ad807cdfeeb80f9dee5bd7012fecc48a264cc21efa85c" => :high_sierra
-    sha256 "93fda2fd0f342d0a8f0ad807cdfeeb80f9dee5bd7012fecc48a264cc21efa85c" => :sierra
+    rebuild 1
+    sha256 "f942a56c1b43b0f4ec33c6f24ada705cc560fb8e47a030f3a950ca849bf8a299" => :mojave
+    sha256 "f942a56c1b43b0f4ec33c6f24ada705cc560fb8e47a030f3a950ca849bf8a299" => :high_sierra
+    sha256 "f942a56c1b43b0f4ec33c6f24ada705cc560fb8e47a030f3a950ca849bf8a299" => :sierra
   end
 
   option "without-monteverdi", "Build without Monteverdi and Mapla applications (Qt required)"
