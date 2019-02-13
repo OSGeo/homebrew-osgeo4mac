@@ -14,8 +14,8 @@ class QgisRes < Formula
 
   # revision 1
 
-  option "with-r", "Build with modules referred to R (if use homebrew-core)"
-  option "with-r-sethrfore", "Build with modules referred to R (if use sethrfore/r-srf)"
+  option "with-r", "Build with modules referred to R"
+  option "with-r-sethrfore", "Build with modules referred to R (only if you already have this version installed)"
 
   depends_on "pkg-config" => :build
   depends_on "gcc" => :build # for gfortran
@@ -41,32 +41,32 @@ class QgisRes < Formula
   depends_on "libiconv"
   depends_on "icu4c"
 
-  depends_on "cython" # pip cython
+  depends_on "cython"
   depends_on "wxpython"
 
   # for matplotlib
   depends_on "cairo"
-  depends_on "py3cairo" # pip pycairo
+  depends_on "py3cairo"
   depends_on "libsvg-cairo"
   depends_on "librsvg"
   depends_on "svg2pdf"
   depends_on "gtk+3"
-  depends_on "pygobject3" # pip PyGObject
+  depends_on "pygobject3"
   depends_on "pygobject"
-  depends_on "pygtk" # pip pygtk
+  depends_on "pygtk"
   depends_on "pyqt"
   depends_on "ffmpeg"
   depends_on "imagemagick"
 
-  depends_on "numpy" # pip numpy
-  depends_on "scipy" # pip scipy
-  depends_on "brewsci/bio/matplotlib" # pip matplotlib
+  depends_on "numpy"
+  depends_on "scipy"
+  depends_on "brewsci/bio/matplotlib"
 
   depends_on "osgeo/osgeo4mac/gdal2" # for Fiona
+  depends_on "spatialindex" # for Rtree
   depends_on "openjpeg" # for Pillow
   depends_on "hdf5" # for h5py
   depends_on "unixodbc" # for pyodbc
-  # depends_on "gdk-pixbuf" # for cairocffi
 
   depends_on "pyside" # for pyqtgraph
   depends_on "freetds" # for pymssql
@@ -75,8 +75,9 @@ class QgisRes < Formula
     depends_on "r"
   end
 
-  # or R with more support
+  # R with more support
   # https://github.com/adamhsparks/setup_macOS_for_R
+  # fix: rpy2 requires finding R
   if build.with?("r-sethrfore")
     depends_on "sethrfore/r-srf/r"
   end
@@ -268,18 +269,6 @@ class QgisRes < Formula
     url "https://files.pythonhosted.org/packages/e7/a7/4cd50e57cc6f436f1cc3a7e8fa700ff9b8b4d471620629074913e3735fb2/cffi-1.11.5.tar.gz"
     sha256 "e90f17980e6ab0f3c2f3730e56d1fe9bcba1891eeea58966e89d352492cc74f4"
   end
-
-  # for some reason it fails in CI, temporarily disabled
-  # resource "xcffib" do
-  #   url "https://files.pythonhosted.org/packages/e0/36/e35d6fc422486aa9aae679b7427d3a9d453d7646d43d534cdbfb48402797/xcffib-0.6.0.tar.gz"
-  #   sha256 "36142cb72535933e8e1ed39ff2c45559fa7038823bd6be6961ef8ee5bb0f6912"
-  # end
-
-  # for some reason it fails in CI, temporarily disabled
-  # resource "cairocffi" do
-  #   url "https://files.pythonhosted.org/packages/33/33/a6aac7bace71019712fbc34f4ceb9d90c23f8fbadf2ac48f771aef9c1431/cairocffi-1.0.0.tar.gz"
-  #   sha256 "e048b15001cc235e6bc4855870e986ad9f09aa2b7b0ddcc4716c3d5458f8367f"
-  # end
 
   resource "tornado" do
     url "https://files.pythonhosted.org/packages/e6/78/6e7b5af12c12bdf38ca9bfe863fcaf53dc10430a312d0324e76c1e5ca426/tornado-5.1.1.tar.gz"
@@ -682,12 +671,6 @@ class QgisRes < Formula
   # others
 
   # for some reason it fails in CI, temporarily disabled
-  # resource "wxPython" do
-  #   url "https://files.pythonhosted.org/packages/17/74/7c3ced03c3c76b9f98e4a0edae1801755a7599ebf481c04d9f77dfff17e3/wxPython-4.0.4.tar.gz"
-  #   sha256 "0d9ef4260cb2f3e23ed9dcf6baa905ba585ac7d631613cddc299c4c83463ae29"
-  # end
-
-  # for some reason it fails in CI, temporarily disabled
   resource "pymssql" do
     url "https://files.pythonhosted.org/packages/2e/81/99562b93d75f3fc5956fa65decfb35b38a4ee97cf93c1d0d3cb799fffb99/pymssql-2.1.4.tar.gz"
     sha256 "3201eb1b1263ad55b555d727ed8bed0b12b7b9de3ce5e529206e36d4be1a7afb"
@@ -713,6 +696,27 @@ class QgisRes < Formula
     sha256 "f4fdfa2b9e22ae551474abcfa868efd82a135691ace2bfd7a9e96d9302e5d063"
   end
 
+  resource "seaborn" do
+    url "https://files.pythonhosted.org/packages/7a/bf/04cfcfc9616cedd4b5dd24dfc40395965ea9f50c1db0d3f3e52b050f74a5/seaborn-0.9.0.tar.gz"
+    sha256 "76c83f794ca320fb6b23a7c6192d5e185a5fcf4758966a0c0a54baee46d41e2f"
+  end
+
+  resource "palettable" do
+    url "https://files.pythonhosted.org/packages/f5/ef/cf4480c0ebaf51c1a23f4e6c943769210c8385543af0fe0999a1d2099d5b/palettable-3.1.1.tar.gz"
+    sha256 "0685b223a236bb7e2a900ef7a855ccf9a4027361c8acf400f3b350ea51870f80"
+  end
+
+  resource "pgi" do
+    url "https://files.pythonhosted.org/packages/ed/92/60411ba83f86fa128932466e7ffc86d806d075da64c04d6d45c99a08f4dc/pgi-0.0.11.2.tar.gz"
+    sha256 "5b011ff4d81f83eed4380b0c72876be9b5572c4ed97e2b784dce477183c934f5"
+  end
+
+  # for some reason it fails in CI, temporarily disabled
+  resource "geos" do
+    url "https://files.pythonhosted.org/packages/46/52/ef047a04ce59fc95cae1338b3cac5f50cf74849d3dd51c8a3a50fad50229/geos-0.2.1.tar.gz"
+    sha256 "97c69520ba6081cf3135f8c37b07b1641d3a02eb3f0b75af54fc956eb9dd0bb3"
+  end
+
   # r
 
   resource "rpy2" do
@@ -735,63 +739,10 @@ class QgisRes < Formula
     sha256 "78b12b1f32416e5f5ba383f6558018c062de5c14703a05a977f1584b6f5b213c"
   end
 
-  resource "seaborn" do
-    url "https://files.pythonhosted.org/packages/7a/bf/04cfcfc9616cedd4b5dd24dfc40395965ea9f50c1db0d3f3e52b050f74a5/seaborn-0.9.0.tar.gz"
-    sha256 "76c83f794ca320fb6b23a7c6192d5e185a5fcf4758966a0c0a54baee46d41e2f"
-  end
-
-  resource "pycairo" do
-    url "https://files.pythonhosted.org/packages/a6/54/23d6cf3e8d8f1eb30e0e58f171b6f62b2ea75c024935492373639a1a08e4/pycairo-1.18.0.tar.gz"
-    sha256 "abd42a4c9c2069febb4c38fe74bfc4b4a9d3a89fea3bc2e4ba7baff7a20f783f"
-  end
-
-  resource "PyGObject" do
-    url "https://files.pythonhosted.org/packages/8c/1f/76533985b054473ef6ab1ba4d9c00d62da502f8b43d3171ae588ec81ae93/PyGObject-3.30.4.tar.gz"
-    sha256 "2d4423cbf169d50a3165f2dde21478a00215c7fb3f68d9d236af588c670980bb"
-  end
-
-  resource "CairoSVG" do
-    url "https://files.pythonhosted.org/packages/f3/23/67e77d4ffd643287a0dfb7dc76acef05548bd1964cd355f588b93c026deb/CairoSVG-2.3.0.tar.gz"
-    sha256 "66f333ef5dc79fdfbd3bbe98adc791b1f854e0461067d202fa7b15de66d517ec"
-  end
-
-  # for some reason it fails in CI, temporarily disabled
-  # resource "PyGTK" do
-  #   url "https://files.pythonhosted.org/packages/85/52/3d9bb924bd2c9bdb8afd9b7994cd09160fad5948bb2eca18fd7ffa12cfdc/pygtk-2.24.0.win32-py2.6.exe"
-  #   sha256 "16336e79f9a7913e5b2d1cf50120896495aac8892be2d352f660b905205c48db"
-  # end
-
-  resource "palettable" do
-    url "https://files.pythonhosted.org/packages/f5/ef/cf4480c0ebaf51c1a23f4e6c943769210c8385543af0fe0999a1d2099d5b/palettable-3.1.1.tar.gz"
-    sha256 "0685b223a236bb7e2a900ef7a855ccf9a4027361c8acf400f3b350ea51870f80"
-  end
-
-  resource "pgi" do
-    url "https://files.pythonhosted.org/packages/ed/92/60411ba83f86fa128932466e7ffc86d806d075da64c04d6d45c99a08f4dc/pgi-0.0.11.2.tar.gz"
-    sha256 "5b011ff4d81f83eed4380b0c72876be9b5572c4ed97e2b784dce477183c934f5"
-  end
-
-  # for some reason it fails in CI, temporarily disabled
-  resource "geos" do
-    url "https://files.pythonhosted.org/packages/46/52/ef047a04ce59fc95cae1338b3cac5f50cf74849d3dd51c8a3a50fad50229/geos-0.2.1.tar.gz"
-    sha256 "97c69520ba6081cf3135f8c37b07b1641d3a02eb3f0b75af54fc956eb9dd0bb3"
-  end
-
   def install
     # install python environment
     venv = virtualenv_create(libexec/'vendor', "#{Formula["python"].opt_bin}/python3")
-    # res = resources.map(&:name).to_set - %w[pyodbc h5py xcffib cairocffi matplotlib Shapely Rtree wxPython pymssql PyGTK geos rpy2 pyRscript]
-    res = resources.map(&:name).to_set - %w[pyodbc h5py Shapely Rtree pymssql geos rpy2 Sphinx sphinxcontrib-websupport pyRscript]
-
-    if build.with?("r" || "r-sethrfore")
-      venv.pip_install resource("rpy2")
-
-      venv.pip_install resource("Sphinx")
-      venv.pip_install resource("sphinxcontrib-websupport")
-      # fix ModuleNotFoundError: No module named 'pip.req'
-      system libexec/"vendor/bin/pip3", "install", "--upgrade", "-v", "setuptools", "pip==9.0.3", "wheel"
-      venv.pip_install resource("pyRscript")
-    end
+    res = resources.map(&:name).to_set - %w[pyodbc h5py Shapely Rtree pymssql geos rpy2 Sphinx sphinxcontrib-websupport pyRscript] # matplotlib
 
     # fix pip._vendor.pep517.wrappers.BackendUnavailable
     system libexec/"vendor/bin/pip3", "install", "--upgrade", "-v", "setuptools", "pip<19.0.0", "wheel"
@@ -807,11 +758,17 @@ class QgisRes < Formula
     venv.pip_install_and_link "pymssql"
     venv.pip_install_and_link "geos"
 
-    # venv.pip_install_and_link "xcffib"
-    # venv.pip_install_and_link "cairocffi"
     # venv.pip_install_and_link "matplotlib"
-    # venv.pip_install_and_link "PyGTK"
-    # venv.pip_install_and_link "wxPython"
+
+    if build.with?("r" || "r-sethrfore")
+      venv.pip_install resource("rpy2")
+
+      venv.pip_install resource("Sphinx")
+      venv.pip_install resource("sphinxcontrib-websupport")
+      # fix ModuleNotFoundError: No module named 'pip.req'
+      system libexec/"vendor/bin/pip3", "install", "--upgrade", "-v", "setuptools", "pip==9.0.3", "wheel"
+      venv.pip_install resource("pyRscript")
+    end
 
     # upgrade pip
     system libexec/"vendor/bin/pip3", "install", "--upgrade", "-v", "setuptools", "pip", "wheel"
@@ -830,13 +787,6 @@ class QgisRes < Formula
       just remember that you will need to build QGIS again.
 
     EOS
-
-    unless opts.include?("r" || "r-sethrfore")
-      s += <<~EOS
-        You can use the \e[32m--with-r\e[0m or \e[32m--with-r-sethrfore\e[0m to install others useful modules.
-
-      EOS
-    end
     s
   end
 
