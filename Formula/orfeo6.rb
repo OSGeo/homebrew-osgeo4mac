@@ -2,7 +2,7 @@ class Orfeo6 < Formula
   desc "Library of image processing algorithms"
   homepage "https://www.orfeo-toolbox.org/otb/"
 
-  revision 2
+  revision 3
 
   head "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb.git", :branch => "master"
 
@@ -64,9 +64,9 @@ class Orfeo6 < Formula
   depends_on "geos"
   depends_on "netcdf"
   depends_on "openjpeg"
-  depends_on "osgeo/osgeo4mac/ossim"
-  depends_on "osgeo/osgeo4mac/insighttoolkit"
-  depends_on "osgeo/osgeo4mac/openscenegraph-qt5" # (for libOpenThreads, now internal to osg)
+  depends_on "ossim"
+  depends_on "insighttoolkit"
+  depends_on "openscenegraph-qt5" # (for libOpenThreads, now internal to osg)
 
   # recommended
   depends_on "muparser" => :recommended
@@ -80,7 +80,7 @@ class Orfeo6 < Formula
   depends_on "hdf5" => :optional
   # depends_on "hdf4" => :optional
   # depends_on "mapnik" => :optional
-  # depends_on "osgeo/osgeo4mac/shark" if build.with? "shark"
+  # depends_on "shark" if build.with? "shark"
   depends_on "open-mpi" if build.with? "mpi"
   depends_on "opencv@2" if build.with? "opencv"
   if build.with? "python"
@@ -96,13 +96,13 @@ class Orfeo6 < Formula
 
   # Monteverdi: required deps and required/optionals shared with OTB
   if build.with? "monteverdi"
-    depends_on "osgeo/osgeo4mac/gdal2"
+    depends_on "gdal2"
     depends_on "glew"
     depends_on "glfw"
     depends_on "qt"
     depends_on "qwt"
   else
-    depends_on "osgeo/osgeo4mac/gdal2" => :recommended
+    depends_on "gdal2" => :recommended
     depends_on "glew" => :optional
     depends_on "glfw" => :optional
     depends_on "qt" => :optional
