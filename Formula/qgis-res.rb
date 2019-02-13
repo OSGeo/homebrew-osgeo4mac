@@ -783,7 +783,7 @@ class QgisRes < Formula
     # res = resources.map(&:name).to_set - %w[pyodbc h5py xcffib cairocffi matplotlib Shapely Rtree wxPython pymssql PyGTK geos rpy2 pyRscript]
     res = resources.map(&:name).to_set - %w[pyodbc h5py Shapely Rtree pymssql geos rpy2 Sphinx sphinxcontrib-websupport pyRscript]
 
-    if build.with?("r") || ("r-sethrfore")
+    if build.with?("r" || "r-sethrfore")
       venv.pip_install resource("rpy2")
 
       venv.pip_install resource("Sphinx")
@@ -831,7 +831,7 @@ class QgisRes < Formula
 
     EOS
 
-    unless opts.include?("r") || ("r-sethrfore")
+    unless opts.include?("r" || "r-sethrfore")
       s += <<~EOS
         You can use the \e[32m--with-r\e[0m or \e[32m--with-r-sethrfore\e[0m to install others useful modules.
 
