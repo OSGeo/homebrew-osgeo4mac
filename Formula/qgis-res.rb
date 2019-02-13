@@ -10,7 +10,7 @@ class QgisRes < Formula
   homepage "https://www.qgis.org"
   url "https://gist.githubusercontent.com/dakcarto/11385561/raw/e49f75ecec96ed7d6d3950f45ad3f30fe94d4fb2/pyqgis_startup.py"
   sha256 "385dce925fc2d29f05afd6508bc1f46ec84c0bc607cc0c8dfce78a4bb93b9c4e"
-  version "1.0.1"
+  version "3.4.4"
 
   # revision 1
 
@@ -71,14 +71,14 @@ class QgisRes < Formula
   depends_on "pyside" # for pyqtgraph
   depends_on "freetds" # for pymssql
 
-  if build.with?("r")
+  if build.with? "r"
     depends_on "r"
   end
 
   # R with more support
   # https://github.com/adamhsparks/setup_macOS_for_R
   # fix: rpy2 requires finding R
-  if build.with?("r-sethrfore")
+  if build.with? "r-sethrfore"
     depends_on "sethrfore/r-srf/r"
   end
 
@@ -760,7 +760,18 @@ class QgisRes < Formula
 
     # venv.pip_install_and_link "matplotlib"
 
-    if build.with?("r") || ("r-sethrfore")
+    if build.with? "r"
+      venv.pip_install resource("rpy2")
+
+      venv.pip_install resource("Sphinx")
+      venv.pip_install resource("sphinxcontrib-websupport")
+      # fix ModuleNotFoundError: No module named 'pip.req'
+      system libexec/"vendor/bin/pip3", "install", "--upgrade", "-v", "setuptools", "pip==9.0.3", "wheel"
+      venv.pip_install resource("pyRscript")
+    end
+
+    # fix temporary for sethrfore
+    if build.with? "r-sethrfore"
       venv.pip_install resource("rpy2")
 
       venv.pip_install resource("Sphinx")
