@@ -776,17 +776,19 @@ class QgisRes < Formula
     # fix pip._vendor.pep517.wrappers.BackendUnavailable
     system libexec/"vendor/bin/pip3", "install", "--upgrade", "-v", "setuptools", "pip<19.0.0", "wheel"
 
-    venv.pip_install_and_link "geos"
-    venv.pip_install_and_link "pyodbc"
-    venv.pip_install_and_link "h5py"
-    venv.pip_install_and_link "xcffib" # not
-    venv.pip_install_and_link "cairocffi" # not
-    venv.pip_install_and_link "Shapely"
-    venv.pip_install_and_link "Rtree" # not
     venv.pip_install_and_link "pymssql" # not
     venv.pip_install_and_link "PyGTK" # not
     venv.pip_install_and_link "wxPython" # not
     venv.pip_install_and_link "matplotlib"
+
+    venv.pip_install_and_link "geos"
+    venv.pip_install_and_link "pyodbc"
+    venv.pip_install_and_link "h5py"
+    venv.pip_install_and_link "xcffib" # not
+    # venv.pip_install_and_link "cairocffi" # not
+    venv.pip_install_and_link "Shapely"
+    venv.pip_install_and_link "Rtree" # not
+
 
     res.each do |r|
       venv.pip_install resource(r)
