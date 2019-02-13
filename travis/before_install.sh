@@ -43,7 +43,9 @@ brew cask uninstall oclint || true
 sudo chown -R "$USER":admin /usr/local
 brew cleanup
 rm -rf /usr/local/var/homebrew/locks
-
+brew update
+brew upgrade
+brew install pyside
 # Set up ccache (doesn't work with `brew install <formula>`)
 #brew install ccache
 #export PATH="/usr/local/opt/ccache/libexec:$PATH"
