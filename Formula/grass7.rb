@@ -411,14 +411,19 @@ class Grass7 < Formula
       # On Xcode-only systems (without the CLT), we have to help:
       args << "--with-macosx-sdk=#{MacOS.sdk_path}"
       args << "--with-macosx-archs=#{MacOS.preferred_arch}" # Hardware::CPU.universal_archs
-      # args << "--with-opengl"
       args << "--with-opengl-includes=#{MacOS.sdk_path}/System/Library/Frameworks/OpenGL.framework/Headers"
       # args << "--with-opengl-libs=" # GL
       # args << "--with-opengl-framework="
     # end
 
     # Enable Aqua GUI, instead of X11
-    args << "--with-opengl=#{build.with?("aqua") ? "aqua" : ""}"
+    if build.with? "aqua"
+      args.concat [
+        "--with-opengl=aqua",
+        "--without-glw",
+        "--without-motif"
+      ]
+    end
 
     if headless?
       args << "--without-wxwidgets"
