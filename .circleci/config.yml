@@ -103,6 +103,10 @@ jobs:
             - /usr/local/Homebrew/Library/Taps/homebrew
             - /usr/local/Homebrew/Library/Taps/brewsci
 
+     # fix Error: Formulae found in multiple taps: 
+      - run: |
+          rm -r /usr/local/Homebrew/Library/Taps/brewsci/homebrew-science
+
   sierra-build:
     <<: *build_steps
     <<: *filter
