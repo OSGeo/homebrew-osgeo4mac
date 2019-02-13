@@ -12,6 +12,14 @@ class QgisRes < Formula
   sha256 "385dce925fc2d29f05afd6508bc1f46ec84c0bc607cc0c8dfce78a4bb93b9c4e"
   version "3.4.4"
 
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    cellar :any
+    sha256 "26754f3d5ec868db3370aa4e40c1f9a263fc1cff847af6c3b9ec6c528d47bcc0" => :mojave
+    sha256 "26754f3d5ec868db3370aa4e40c1f9a263fc1cff847af6c3b9ec6c528d47bcc0" => :high_sierra
+    sha256 "26754f3d5ec868db3370aa4e40c1f9a263fc1cff847af6c3b9ec6c528d47bcc0" => :sierra
+  end
+
   # revision 1
 
   option "with-r", "Build with modules referred to R"
