@@ -41,9 +41,8 @@ brew cask uninstall oclint || true
 # Error: Another active Homebrew update process is already in progress.
 # brew update || brew update
 sudo chown -R "$USER":admin /usr/local
-brew update
-brew upgrade
 brew cleanup
+rm -rf /usr/local/var/homebrew/locks
 
 # Set up ccache (doesn't work with `brew install <formula>`)
 #brew install ccache
