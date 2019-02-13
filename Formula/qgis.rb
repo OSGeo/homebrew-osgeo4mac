@@ -40,9 +40,8 @@ end
 class Qgis < Formula
   desc "Open Source Geographic Information System"
   homepage "https://www.qgis.org"
-  url "https://github.com/qgis/QGIS.git",
-    :branch => "release-3_4",
-    :commit => "0d178aa887f5c1814edf3dcc883e9b63e95f45ea"
+  url "https://github.com/qgis/QGIS/archive/0d178aa887f5c1814edf3dcc883e9b63e95f45ea.zip"
+  sha256 "faf8beb298639bd5356d47dcaa0bee98d69850b39118d4fcc27dff131f0c6f1f"
   version "3.4.4"
 
   revision 3
@@ -121,9 +120,6 @@ class Qgis < Formula
   depends_on "poppler"
   depends_on "gnu-sed"
   depends_on "exiv2"
-  depends_on "numpy"
-  depends_on "brewsci/bio/matplotlib"
-  depends_on "scipy"
   depends_on "git"
   depends_on "unixodbc"
   depends_on "libiodbc"
@@ -131,11 +127,17 @@ class Qgis < Formula
   depends_on "psqlodbc"
   depends_on "libpq"
   depends_on "liblas"
+  depends_on "libxml2"
+  depends_on "libffi"
   depends_on "netcdf"
   depends_on "pdal"
   depends_on "openvpn"
   depends_on "szip"
   depends_on "hdf5"
+
+  depends_on "numpy"
+  depends_on "scipy"
+  depends_on "brewsci/bio/matplotlib"
 
   # core providers
   depends_on "gdal2-python"
