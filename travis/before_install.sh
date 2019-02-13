@@ -40,6 +40,7 @@ brew cask uninstall oclint || true
 
 # Error: Another active Homebrew update process is already in progress.
 # brew update || brew update
+brew update && brew upgrade && brew cleanup
 
 # Set up ccache (doesn't work with `brew install <formula>`)
 #brew install ccache
