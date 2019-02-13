@@ -40,14 +40,16 @@ class QgisRes < Formula
   depends_on "lapack"
   depends_on "ghostscript"
 
-  # for rpy2
-  depends_on "gettext"
-  depends_on "readline"
-  depends_on "pcre"
-  depends_on "xz"
-  depends_on "bzip2"
-  depends_on "libiconv"
-  depends_on "icu4c"
+  if build.with?("r") || build.with?("sethrfore")
+    # for rpy2
+    depends_on "gettext"
+    depends_on "readline"
+    depends_on "pcre"
+    depends_on "xz"
+    depends_on "bzip2"
+    depends_on "libiconv"
+    depends_on "icu4c"
+  end
 
   depends_on "cython"
   depends_on "wxpython"
