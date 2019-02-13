@@ -15,6 +15,11 @@
 #                                                                         #
 ###########################################################################
 
+sudo chown $USER:admin /usr/local/Homebrew/Library/Homebrew/utils/lock.sh
+sudo chown -R $USER:admin /usr/local/Homebrew
+sudo chown -R $USER:admin /usr/local/var/homebrew
+
+brew install pyside
 
 if [ -n "${DEBUG_TRAVIS}" ];then
   brew list --versions
@@ -40,12 +45,7 @@ brew cask uninstall oclint || true
 
 # Error: Another active Homebrew update process is already in progress.
 # brew update || brew update
-sudo chown -R "$USER":admin /usr/local
-brew cleanup
-rm -rf /usr/local/var/homebrew/locks
-brew update
-brew upgrade
-brew install pyside
+
 # Set up ccache (doesn't work with `brew install <formula>`)
 #brew install ccache
 #export PATH="/usr/local/opt/ccache/libexec:$PATH"
