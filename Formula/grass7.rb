@@ -4,7 +4,7 @@ class Grass7 < Formula
   desc "Geographic Resources Analysis Support System"
   homepage "https://grass.osgeo.org/"
 
-  revision 2
+  revision 3
 
   # svn: E230001: Server SSL certificate verification failed: issuer is not trusted
   # head "https://svn.osgeo.org/grass/grass/trunk", :using => :svn
@@ -32,6 +32,7 @@ class Grass7 < Formula
   option "without-gui", "Build without WxPython interface. Command line tools still available"
   option "with-others", "Build with other optional dependencies"
   option "with-r", "Build with R support"
+  option "with-r-sethrfore", "Build with R support (only if you are going to install with this version of R)"
   option "with-avce00", "Build with AVCE00 support: Make Arc/Info (binary) Vector Coverages appear as E00"
   option "with-aqua", "Build with experimental Aqua GUI backend"
   option "with-app", "Build GRASS.app Package"
@@ -64,7 +65,7 @@ class Grass7 < Formula
   depends_on "regex-opt"
   depends_on "proj"
   depends_on "geos"
-  depends_on "osgeo/osgeo4mac/gdal2"
+  depends_on "gdal2"
   depends_on "readline"
   depends_on "lapack"
   depends_on "openblas"
@@ -94,7 +95,7 @@ class Grass7 < Formula
 
   # optional dependencies
 
-  depends_on "osgeo/osgeo4mac/liblas-gdal2" if build.with? "liblas"
+  depends_on "liblas-gdal2" if build.with? "liblas"
 
   depends_on "mysql" if build.with? "mysql"
   if build.with? "postgresql"
@@ -104,12 +105,15 @@ class Grass7 < Formula
 
   depends_on "avce00" => :optional # avcimport
 
-  # R with more support: serfore/r-srf
+  if build.with? "r"
+    depends_on "r"
+  end
+
+  # R with more support
   # https://github.com/adamhsparks/setup_macOS_for_R
-  if build.with?("r")
-    unless Formula["r"].opt_prefix.exist?
-      depends_on "r"
-    end
+  # fix: will not build if the R version does not match
+  if build.with? "r-sethrfore"
+    depends_on "sethrfore/r-srf/r"
   end
 
   # depends_on "pdal" => :optional
@@ -117,7 +121,7 @@ class Grass7 < Formula
 
   # other dependencies
   if build.with? "others"
-    depends_on "osgeo/osgeo4mac/gdal2-python"
+    depends_on "gdal2-python"
     depends_on "gpsbabel"
     depends_on "netpbm" # mpeg_encode or ppmtompeg
     depends_on "openssl"
@@ -407,14 +411,19 @@ class Grass7 < Formula
       # On Xcode-only systems (without the CLT), we have to help:
       args << "--with-macosx-sdk=#{MacOS.sdk_path}"
       args << "--with-macosx-archs=#{MacOS.preferred_arch}" # Hardware::CPU.universal_archs
-      # args << "--with-opengl"
       args << "--with-opengl-includes=#{MacOS.sdk_path}/System/Library/Frameworks/OpenGL.framework/Headers"
       # args << "--with-opengl-libs=" # GL
       # args << "--with-opengl-framework="
     # end
 
     # Enable Aqua GUI, instead of X11
-    args << "--with-opengl#{build.with?("aqua") ? "aqua" : ""}"
+    if build.with? "aqua"
+      args.concat [
+        "--with-opengl=aqua",
+        "--without-glw",
+        "--without-motif"
+      ]
+    end
 
     if headless?
       args << "--without-wxwidgets"
