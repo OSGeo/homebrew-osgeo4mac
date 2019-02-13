@@ -42,10 +42,10 @@ class Qgis < Formula
   homepage "https://www.qgis.org"
   url "https://github.com/qgis/QGIS.git",
     :branch => "release-3_4",
-    :commit => "7a5c913f05cc21aa219efc6289cd2e39795ddfd3"
+    :commit => "0d178aa887f5c1814edf3dcc883e9b63e95f45ea"
   version "3.4.4"
 
-  revision 2
+  revision 3
 
   head "https://github.com/qgis/QGIS.git", :branch => "master"
 
@@ -56,29 +56,30 @@ class Qgis < Formula
     brewed_python?
   end
 
-  option "without-ninja", "Disable use of ninja CMake generator"
-  option "without-pyqt5-webkit", "Build without webkit python bindings"
   option "without-debug", "Disable debug build, which outputs info to system.log or console"
-  option "without-server", "Build without QGIS Server (qgis_mapserv.fcgi)"
-  option "with-server", "Build with QGIS Server (qgis_mapserv.fcgi)"
-  option "with-api-docs", "Build the API documentation with Doxygen and Graphviz"
-  option "with-isolation", "Isolate .app's environment to HOMEBREW_PREFIX, to coexist with other QGIS installs"
+  option "without-ninja", "Disable use of ninja CMake generator"
   option "without-postgresql", "Build without current PostgreSQL client"
-  option "with-postgresql10", "Build with PostgreSQL 10"
+  option "without-pyqt5-webkit", "Build without webkit python bindings"
+  option "without-qgis-res", "Build without QGIS Resources support"
+  option "without-server", "Build without QGIS Server (qgis_mapserv.fcgi)"
+  option "with-3d", "Build with 3D Map View panel"
+  option "with-api-docs", "Build the API documentation with Doxygen and Graphviz"
+  option "with-gpsbabel", "Build with GPSBabel. Read, write and manipulate GPS waypoints in a variety of formats"
   option "with-grass", "Build with GRASS 7 integration plugin and Processing plugin support (or install grass-7x first)"
+  option "with-isolation", "Isolate .app's environment to HOMEBREW_PREFIX, to coexist with other QGIS installs"
+  option "with-lastools", "Build with LAStools, efficient tools for LiDAR processing. Contains LASlib, a C++ programming API for reading / writing LIDAR data stored in standard LAS format."
+  option "with-mssql", "Build with Microsoft ODBC Driver for SQL Server"
   option "with-oracle", "Build extra Oracle geospatial database and raster support"
   option "with-orfeo", "Build extra Orfeo Toolbox for Processing plugin"
-  option "with-r", "Build extra R for Processing plugin"
-  option "with-saga", "Build extra Saga GIS (LTS) for Processing plugin"
-  option "with-gpsbabel", "Build with GPSBabel. Read, write and manipulate GPS waypoints in a variety of formats"
+  option "with-postgresql10", "Build with PostgreSQL 10 client"
   option "with-qspatialite", "Build QSpatialite Qt database driver"
-  option "with-3d", "Build with 3D Map View panel"
-  option "with-lastools", "Build with LAStools: Efficient tools for LiDAR processing"
-  option "with-taudem", "Build with TauDEM: Terrain Analysis Using Digital Elevation Models for hydrology"
-  option "with-whitebox", "Build with Whitebox Tools: An advanced geospatial data analysis platform"
-  option "with-mssql", "Build with Microsoft ODBC Driver for SQL Server"
+  option "with-r", "Build extra R for Processing plugin"
+  option "with-r-sethrfore", "Build extra R for Processing plugin (only if you are going to install with this version of R)"
+  option "with-saga", "Build extra Saga GIS (LTS) for Processing plugin"
+  option "with-server", "Build with QGIS Server (qgis_mapserv.fcgi)"
+  option "with-taudem", "Build with TauDEM, Terrain Analysis Using Digital Elevation Models for hydrology"
+  option "with-whitebox", "Build with Whitebox Tools, an advanced geospatial data analysis platform"
   # option "with-globe", "Build with Globe plugin, based upon osgEarth"
-  # option "with-qt-mysql", "Build extra Qt MySQL plugin for eVis plugin"
 
   deprecated_option "with-saga-gis-lts" => "with-saga"
 
@@ -89,20 +90,16 @@ class Qgis < Formula
   depends_on "ninja" => [:build, :recommended]
   depends_on "gsl" => :build
   depends_on "sip" => :build
-  depends_on "osgeo/osgeo4mac/six" => :build
+  depends_on "six" => :build
   depends_on "bison" => :build
   depends_on "flex" => :build
   depends_on "pkg-config" => :build
   depends_on "python"
   depends_on "qt"
   depends_on "pyqt"
-  depends_on "osgeo/osgeo4mac/pyqt5-webkit" => :recommended
-  if build.with? "api-docs"
-    depends_on "graphviz" => :build
-    depends_on "doxygen" => :build
-  end
+  depends_on "pyqt5-webkit" => :recommended
   depends_on "qca"
-  depends_on "osgeo/osgeo4mac/qtkeychain"
+  depends_on "qtkeychain"
   depends_on "qscintilla2"
   depends_on "qwt"
   depends_on "qwtpolar"
@@ -111,7 +108,6 @@ class Qgis < Formula
   depends_on "expat"
   depends_on "proj"
   depends_on "spatialindex"
-  depends_on "libpq"
   depends_on "curl"
   depends_on "libzip"
   depends_on "libtasn1"
@@ -120,7 +116,7 @@ class Qgis < Formula
   depends_on "libiconv"
   depends_on "geos"
   depends_on "libspatialite"
-  depends_on "osgeo/osgeo4mac/postgis2"
+  depends_on "postgis2"
   depends_on "openssl"
   depends_on "poppler"
   depends_on "gnu-sed"
@@ -129,18 +125,24 @@ class Qgis < Formula
   depends_on "brewsci/bio/matplotlib"
   depends_on "scipy"
   depends_on "git"
-  depends_on "liblas" => :optional
-  depends_on "netcdf" => :optional
-  depends_on "pdal" => :optional
-  depends_on "openvpn" => :optional
-  depends_on "szip" => :optional
-  depends_on "hdf5" => :optional
+  depends_on "unixodbc"
+  depends_on "libiodbc"
+  depends_on "freetds"
+  depends_on "psqlodbc"
+  depends_on "libpq"
+  depends_on "liblas"
+  depends_on "netcdf"
+  depends_on "pdal"
+  depends_on "openvpn"
+  depends_on "szip"
+  depends_on "hdf5"
 
-  # use newer postgresql client than Apple's, also needed by `psycopg2`
-  if build.with? "postgresql10"
-    depends_on "postgresql@10" => :recommended
-  else
-    depends_on "postgresql" => :recommended
+  # core providers
+  depends_on "gdal2-python"
+
+  if build.with? "api-docs"
+    depends_on "graphviz" => :build
+    depends_on "doxygen" => :build
   end
 
   # requires python modules
@@ -151,7 +153,7 @@ class Qgis < Formula
   # pygments - MetaSearch
   # yaml - Processing
   # many useful modules are incorporated
-  depends_on "osgeo/osgeo4mac/qgis-res" => :recommended
+  depends_on "qgis-res" => :recommended
 
   if build.with? "server"
     depends_on "fcgi"
@@ -159,20 +161,9 @@ class Qgis < Formula
     depends_on "lighttpd"
   end
 
-  if build.with? "mssql"
-    depends_on "microsoft/mssql-release/msodbcsql17"
-    depends_on "microsoft/mssql-release/mssql-tools"
-  end
-
-  # core providers
-  depends_on "osgeo/osgeo4mac/gdal2-python"
-
-  # TODO: add MSSQL third-party support formula?, :optional
-  depends_on "osgeo/osgeo4mac/oracle-client-sdk" if build.with? "oracle"
-
   # core plugins (c++ and python)
   if build.with?("grass") || (HOMEBREW_PREFIX/"opt/grass7").exist?
-    depends_on "osgeo/osgeo4mac/grass7"
+    depends_on "grass7"
     depends_on "gettext"
   end
 
@@ -180,9 +171,9 @@ class Qgis < Formula
   # only for QGIS 2 and it does not support a larger version than OSGearh v2.7.
   # working on the implementation
   # if build.with? "globe"
-  #   depends_on "osgeo/osgeo4mac/openscenegraph-qt5"
-  #   depends_on "osgeo/osgeo4mac/osgqt"
-  #   depends_on "osgeo/osgeo4mac/osgearth-qt5"
+  #   depends_on "openscenegraph-qt5"
+  #   depends_on "osgqt"
+  #   depends_on "osgearth-qt5"
   # end
 
   depends_on "gpsbabel" => :optional
@@ -190,29 +181,51 @@ class Qgis < Formula
   # TODO: remove "pyspatialite" when PyPi package supports spatialite 4.x
   #       or DB Manager supports libspatialite >= 4.2.0 (with mod_spatialite)
   # TODO: what to do for Py3 and pyspatialite?
-  depends_on "osgeo/osgeo4mac/pyspatialite" # for DB Manager
+  depends_on "pyspatialite" # for DB Manager
 
-  # depends_on "qt-mysql" => :optional # for eVis plugin (non-functional in 2.x?)
+  # use newer postgresql client than Apple's, also needed by `psycopg2`
+  if build.with? "postgresql10"
+    depends_on "postgresql@10" => :recommended
+  else
+    depends_on "postgresql" => :recommended
+  end
+
+  depends_on "oracle-client-sdk" if build.with? "oracle"
+
+  # TODO: add MSSQL third-party support formula?, :optional
+  if build.with? "mssql"
+    depends_on "microsoft/mssql-release/msodbcsql17"
+    depends_on "microsoft/mssql-release/mssql-tools"
+  end
+
+  depends_on "qpsql"
+  depends_on "qodbc"
+  depends_on "qmysql" # for eVis plugin
+  # qtds obsolete from Qt 4.7
+  # qoci from oracle-client-sdk?
 
   # core processing plugin extras
   # see `grass` above
-  depends_on "osgeo/osgeo4mac/orfeo6" if build.with? "orfeo"
+  depends_on "orfeo6" if build.with? "orfeo"
 
-  # R with more support: serfore/r-srf
-  # https://github.com/adamhsparks/setup_macOS_for_R
-  if build.with?("r")
-    unless Formula["r"].opt_prefix.exist?
-      depends_on "r"
-    end
+  if build.with? "r"
+    depends_on "r"
   end
 
-  depends_on "osgeo/osgeo4mac/saga-gis-lts" if build.with? "saga"
+  # R with more support
+  # https://github.com/adamhsparks/setup_macOS_for_R
+  # fix: will not build if the R version does not match
+  if build.with? "r-sethrfore"
+    depends_on "sethrfore/r-srf/r"
+  end
 
-  depends_on "osgeo/osgeo4mac/whitebox-tools" if build.with? "whitebox"
+  depends_on "saga-gis-lts" if build.with? "saga"
 
-  depends_on "osgeo/osgeo4mac/lastools" => :optional
+  depends_on "whitebox-tools" if build.with? "whitebox"
 
-  depends_on "osgeo/osgeo4mac/taudem" => :optional
+  depends_on "lastools" => :optional
+
+  depends_on "taudem" => :optional
 
   # TODO: LASTools straight build (2 reporting tools), or via `wine` (10 tools)
   # TODO: Fusion from USFS (via `wine`?)
@@ -221,8 +234,8 @@ class Qgis < Formula
   resource "r" do
     url "https://github.com/north-road/qgis-processing-r.git",
       :branch => "master",
-      :commit => "0fdc3b0ebe39acf1f79103091f155c5a26364850"
-    version "1.0.1"
+      :commit => "eb270b01c24c63313eb3debb23dc197df5036e75"
+    version "1.0.2"
   end
 
   # OTB Plugin
@@ -296,36 +309,32 @@ class Qgis < Formula
   def install
     ENV.cxx11
 
-    printf "\n\033[31mIn case you have installed another version of Python (Anaconda, Miniconda or if you used the installer provided by python.org).\e[0m\n"
-
-    printf "\033[31mQGIS will use the first Python that is in its PATH, so the installation may fail.\e[0m\n\n"
-
-    printf "If the installation failed due to the problem reported in \e[32mhttps://github.com/OSGeo/homebrew-osgeo4mac/issues/520\e[0m\n\n"
-
-    printf "Try after doing:\n\n"
-
-    printf "    \e[32m$ brew unlink python && brew link --force python\e[0m\n\n"
-
-    printf "    \e[32m$ $PATH (Check that there is no other version)\e[0m\n\n"
-
-    printf "If the installation failed due to the problem reported in \e[32mhttps://github.com/OSGeo/homebrew-osgeo4mac/issues/510\e[0m\n\n"
-
-    printf "Try after doing:\n\n"
-
-    printf "    \e[32m$ brew reinstall ninja gsl sip six bison flex pkg-config python qt pyqt qscintilla2\e[0m\n\n"
-
-    printf "    \e[32m$ brew link --overwrite pyqt\e[0m\n\n"
-
-    printf "Other Notes:\n\n"
-
-    printf "    An installation that failed previously may have created this link\n"
-
-    printf "    \033[31m#{HOMEBREW_PREFIX}/lib/python#{py_ver}/site-packages/PyQt5/uic/widget-plugins/qgis_customwidgets.py\e[0m, you will need to delete it.\n\n"
-
-    printf "    Also make sure that the folder \033[31m#{HOMEBREW_PREFIX}/Cellar/qgis\e[0m does not exist if the installation fails.\n\n"
-
-    printf "    It is also recommended remove the Homebrew Cache \e[32m$ rm -rf $(brew --cache)\e[0m (\e[32m~/Library/Caches/Homebrew\e[0m) and the temporary build files in \e[32m/tmp\e[0m.\n\n\n"
-
+    # suggestions before installing
+    printf  "\n\033[31mSome suggestions that you should keep in mind!!!\e[0m\n\n"
+    printf  "- In case you have installed another version of Python\e[0m (Anaconda, Miniconda or if you used the installer provided by python.org),\n"
+    printf  "  QGIS will use the first Python that is in its PATH, so the installation may fail.\n\n"
+    printf  "- If the installation failed due to the problem reported in \e[32mhttps://github.com/OSGeo/homebrew-osgeo4mac/issues/520\e[0m\n\n"
+    printf  "  Try after doing:\n\n"
+    printf  "    \e[32m$ brew unlink python && brew link --force python\e[0m  \e[1;33m(*)\e[0m\n\n"
+    printf  "    \e[32m$ $PATH (Check that there is no other version)\e[0m\n\n"
+    printf  "- If the installation failed due to the problem reported in \e[32mhttps://github.com/OSGeo/homebrew-osgeo4mac/issues/510\e[0m\n\n"
+    printf  "  Try after doing:\n\n"
+    printf  "    \e[32m$ brew reinstall ninja gsl sip six bison flex pkg-config python qt pyqt qscintilla2\e[0m\n\n"
+    printf  "    \e[32m$ brew link --overwrite pyqt\e[0m  \e[1;33m(**)\e[0m\n\n"
+    printf  "- Other Notes:\n\n"
+    printf  "    - An installation that failed previously may have created this link\n\n"
+    printf  "      \033[31m#{HOMEBREW_PREFIX}/lib/python3.7/site-packages/PyQt5/uic/widget-plugins/qgis_customwidgets.py\e[0m, you will need to delete it.\n\n"
+    printf  "    - Also make sure that the folder \033[31m#{HOMEBREW_PREFIX}/Cellar/qgis\e[0m does not exist if the installation fails.\n\n"
+    printf  "    - It is also recommended remove the Homebrew Cache \e[32m$ rm -rf $(brew --cache)\e[0m (\e[32m~/Library/Caches/Homebrew\e[0m) and the temporary build files in \e[32m/tmp\e[0m.\n\n"
+    printf  "    - If you are going to install with several options you may have the following error:\n\n"
+    printf  "      \033[31mError: Too many open files @ rb_sysopen - #{HOMEBREW_PREFIX}/var/homebrew/locks/..\e[0m\n\n"
+    printf  "      Check before with: \e[32m$ ulimit -n\e[0m\n"
+    printf  "      You can change it temporarily to avoid this problem: \e[32m$ ulimit -n 1024\e[0m\n"
+    printf  "      Will be re-established in the next session\n\n"
+    printf  "    - If the installation failed with the error\n\n"
+    printf  "      \033[31mfatal error: 'libintl.h' file not found\e[0m\n\n"
+    printf  "      Try after doing: \e[32m$ brew unlink gettext && brew link --force gettext\e[0m  \e[1;33m(***)\e[0m\n\n"
+    printf  "\n\033[31mWe recommend that you run on the console\e[0m \e[1;33m(*)\e[0m\033[31m,\e[1;33m(**)\e[0m \033[31mand\e[0m \e[1;33m(***)\e[0m \033[31mbefore installation, to make sure everything works correctly.\e[0m\n\n"
     printf "\033[31mThe installation will continue, but remember the above.\e[0m\n"
 
     30.downto(0) do |i|
@@ -396,6 +405,15 @@ class Qgis < Formula
       system "patch", "-p1", "-i", "#{buildpath}/LAStoolsProvider.diff"
       cp_r "#{buildpath}/python/plugins/lastools", "#{prefix}/QGIS.app/Contents/Resources/python/plugins/"
     end
+
+    # if you have a 3rd party Python installed, and/or Python 3,
+    # you need to remove it from your path for the installation.
+    # once installed, QGIS will run even if the primary Python is,
+    # for example, Anaconda Python 3.
+    # reset path
+    ENV["PATH"] = nil
+    pths = "#{HOMEBREW_PREFIX}/bin:#{HOMEBREW_PREFIX}/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/usr/X11/bin:#{Formula["gettext"].opt_bin}"
+    ENV.append_path "PATH", "#{pths}"
 
     # when gdal2-python.rb loaded, PYTHONPATH gets set to 2.7 site-packages...
     # clear it before calling any local python3 functions
@@ -497,23 +515,21 @@ class Qgis < Formula
       -DQTKEYCHAIN_LIBRARY=#{Formula["qtkeychain"].opt_lib}/libqt5keychain.dylib
       -DLIBTASN1_INCLUDE_DIR=#{Formula["libtasn1"].opt_include}
       -DLIBTASN1_LIBRARY=#{Formula["libtasn1"].opt_lib}/libtasn1.dylib
-
       -DPYRCC_PROGRAM=#{libexec}/vendor/bin/pyrcc5
       -DPYUIC_PROGRAM=#{libexec}/vendor/bin/pyuic5
-
+      -DWITH_QWTPOLAR=TRUE
+      -DWITH_INTERNAL_QWTPOLAR=FALSE
+      -DWITH_QSCIAPI=FALSE
+      -DWITH_CUSTOM_WIDGETS=TRUE
+      -DWITH_ASTYLE=FALSE
       -DWITH_QTWEBKIT=TRUE
       -DQT_LRELEASE_EXECUTABLE=#{Formula["qt"].opt_bin}/lrelease
       -DQT5_3DEXTRA_INCLUDE_DIR=#{Formula["qt"].opt_lib}/cmake/Qt53DExtras
       -DQt5WebKitWidgets_DIR=#{Formula["qt5-webkit"].opt_lib}/cmake/Qt5WebKitWidgets
       -DQt5WebKit_DIR=#{Formula["qt5-webkit"].opt_lib}/cmake/Qt5WebKit
-
-      -DWITH_QWTPOLAR=TRUE
-      -DWITH_INTERNAL_QWTPOLAR=FALSE
       -DQGIS_MACAPP_BUNDLE=0
       -DQGIS_MACAPP_INSTALL_DEV=FALSE
-      -DWITH_QSCIAPI=FALSE
-      -DWITH_CUSTOM_WIDGETS=TRUE
-      -DWITH_ASTYLE=FALSE
+      -DQGIS_APP_NAME=QGIS-HB
     ]
 
     # Build unit tests
@@ -571,19 +587,25 @@ class Qgis < Formula
     # Use Clang tidy
     args << "-DWITH_CLANG_TIDY=FALSE"
 
-    # By default bindings will be installed only to QGIS directory
-    # Someone might want to install it to python site-packages directory
+    # try to configure and build python bindings by default
+    # determines whether python bindings should be built
+    args << "-DWITH_BINDINGS=TRUE"
+    # by default bindings will be installed only to QGIS directory
+    # someone might want to install it to python site-packages directory
     # as otherwise user has to use PYTHONPATH environment variable to add
-    # args << "-DWITH_BINDINGS=TRUE"
-    # Install bindings to global python directory? (might need root)
-    # args << "-DBINDINGS_GLOBAL_INSTALL=FALSE"
+    # QGIS bindings to package search path
+    # install bindings to global python directory? (might need root)
+    args << "-DBINDINGS_GLOBAL_INSTALL=FALSE"
     # Stage-install core Python plugins to run from build directory? (utilities and console are always staged)
-    # args << "-DWITH_STAGED_PLUGINS=TRUE"
+    args << "-DWITH_STAGED_PLUGINS=TRUE"
     # Determines whether Python modules in staged or installed locations are byte-compiled"
-    # args << "-DWITH_PY_COMPILE=FALSE"
+    args << "-DWITH_PY_COMPILE=FALSE"
 
     # python Configuration
-    args << "-DPYTHON_EXECUTABLE='#{`#{Formula["python"].opt_bin}/python3 -c "import sys; print(sys.executable)"`.chomp}'"
+    args << "-DPYTHON_EXECUTABLE=#{`#{Formula["python"].opt_bin}/python3 -c "import sys; print(sys.executable)"`.chomp}"
+    # args << "-DPYTHON_INCLUDE_PATH=#{HOMEBREW_PREFIX}/Frameworks/Python.framework/Versions/#{py_ver}/include/python#{py_ver}m"
+    # args << "-DPYTHON_LIBRARY=#{HOMEBREW_PREFIX}/Frameworks/Python.framework/Versions/#{py_ver}/Python"
+    # args << "-DPYTHON_SITE_PACKAGES_DIR=#{HOMEBREW_PREFIX}/lib/python#{py_ver}/site-packages"
 
     # if using Homebrew's Python, make sure its components are always found first
     # see: https://github.com/Homebrew/homebrew/pull/28597
@@ -615,7 +637,7 @@ class Qgis < Formula
       args << "-DFCGI_LIBRARY=#{fcgi_opt}/lib/libfcgi.dylib"
     end
 
-    args << "-DWITH_POSTGRESQL=#{build.with?("postgresql") || ("postgresql10") ? "TRUE" : "FALSE"}"
+    args << "-DWITH_POSTGRESQL=#{build.with?("postgresql") || brewed_postgresql10? ? "TRUE" : "FALSE"}"
     if build.with?("postgresql10")
       args << "-DPOSTGRES_CONFIG=#{Formula["postgresql@10"].opt_bin}/pg_config"
       args << "-DPOSTGRES_INCLUDE_DIR=#{Formula["postgresql@10"].opt_include}"
@@ -631,7 +653,7 @@ class Qgis < Formula
       args << "-DWITH_GRASS=FALSE" # grass6
       # this is to build the GRASS Plugin, not for Processing plugin support
       grass = Formula["grass7"]
-      args << "-DGRASS_PREFIX7='#{grass.opt_prefix}/grass-base'"
+      args << "-DGRASS_PREFIX7=#{grass.opt_prefix}/grass-base"
       # keep superenv from stripping (use Cellar prefix)
       ENV.append "CXXFLAGS", "-isystem #{grass.prefix.resolved_path}/grass-base/include"
       # So that `libintl.h` can be found (use Cellar prefix; should not be needed anymore with QGIS 2.99+)
@@ -769,6 +791,7 @@ class Qgis < Formula
     (prefix/"QGIS.app/Contents/Resources/python").install_symlink Dir["#{Formula["matplotlib"].opt_lib}/python#{py_ver}/site-packages/*"]
     # (prefix/"QGIS.app/Contents/Resources/python").install_symlink Dir["#{Formula["numpy"].opt_lib}/python#{py_ver}/site-packages/*"]
     # (prefix/"QGIS.app/Contents/Resources/python").install_symlink Dir["#{Formula["scipy"].opt_lib}/python#{py_ver}/site-packages/*"]
+    # (prefix/"QGIS.app/Contents/Resources/python").install_symlink Dir["#{Formula["gdal2-python"].opt_lib}/python#{py_ver}/site-packages/*"]
 
     # fixup some errant lib linking
     # TODO: fix upstream in CMake
@@ -829,7 +852,7 @@ class Qgis < Formula
     # define default isolation env vars
     pthsep = File::PATH_SEPARATOR
     pypth = "#{python_site_packages}"
-    pths = %w[/usr/local/bin /usr/local/sbin /usr/bin /bin /usr/sbin /sbin /opt/X11/bin /usr/X11/bin]
+    pths = %W[#{HOMEBREW_PREFIX}/bin #{HOMEBREW_PREFIX}/sbin /usr/bin /bin /usr/sbin /sbin /opt/X11/bin /usr/X11/bin]
 
     unless opts.include?("with-isolation")
       pths = ORIGINAL_PATHS.dup
@@ -900,8 +923,13 @@ class Qgis < Formula
       envars[:GRASS_SH] = "/bin/sh"
       envars[:GRASS_PROJSHARE] = "#{Formula["proj"].opt_share}"
       envars[:GRASS_VERSION] = "#{grass_version}"
-      envars[:GRASS_LD_LIBRARY_PATH] = "#{grass}/grass-#{grass_version}/lib"
+      envars[:GRASS_LD_LIBRARY_PATH] = "#{grass.opt_prefix}/grass-#{grass_version}/lib"
       envars[:GRASS_PERL] = "#{Formula["perl"].opt_bin}/perl"
+      envars[:PROJ_LIB] = "#{Formula["proj"].opt_lib}"
+      envars[:GEOTIFF_CSV] = "#{Formula["libgeotiff"].opt_share}/epsg_csv"
+      # envars[:R_HOME] = "#{Formula["r"].opt_bin}/R"
+      # envars[:R_HOME] = "/Applications/RStudio.app/Contents/MacOS/RStudio"
+      # envars[:R_USER] = "USER_PROFILE/Documents"
       begin
         inreplace "#{proc_plugins_algs}/grass7/Grass7Utils.py",
                   "'/Applications/GRASS-7.{}.app/Contents/MacOS'.format(version)",
@@ -1065,7 +1093,6 @@ class Qgis < Formula
         \e[32mqgis_location=$(find $(brew --prefix)/Cellar/qgis/ -name "3.*" -print -quit)/QGIS.app\e[0m
         \e[32mosascript -e 'tell application "Finder"' -e 'make new alias to file (posix file "'$qgis_location'") at (posix file "/Applications")' -e 'end tell'\e[0m
 
-
         https://github.com/OSGeo/homebrew-osgeo4mac/issues/607#issuecomment-455905926
 
       NOTE: Your current PATH and PYTHONPATH environment variables are honored
@@ -1080,10 +1107,38 @@ class Qgis < Formula
 
     if build.with? "isolation"
       s += <<~EOS
-        \033[31mQGIS built with isolation enabled. This allows it to coexist with other
-        types of installations of QGIS on your Mac. However, on versions >= 2.0.1,
-        this also means Python modules installed in the *system* Python will NOT
-        be available to Python processes within QGIS.app.\e[0m
+        \033[31mQGIS built with isolation enabled. This allows it to coexist with other types of installations
+        of QGIS on your Mac. However, on versions >= 2.0.1, this also means Python modules installed in the
+        *system* Python will NOT be available to Python processes within QGIS.app.\e[0m
+
+      EOS
+    end
+
+    if build.with? "lastools"
+      s += <<~EOS
+
+        You installed LAStools!
+
+        If you will use Wine to have more features:
+
+        \n1 - Download \e[32mhttp://lastools.org/download/LAStools.zip\e[0m and unzip LASTools.
+            Remember where you unzipped it.
+
+        2 - Start QGIS. Select \e[32mProcessing/Options.\e[0m
+            In the Providers section scroll to “LASTools”
+
+            \033[31mLASTools folder:\e[0m \e[32mLASTools directory\e[0m (unzipped)
+            \033[31mWine Folder:\e[0m \e[32m#{Formula["wine"].opt_bin}\e[0m\n
+      EOS
+    end
+
+    if build.with? "grass"
+      s += <<~EOS
+        If you have built GRASS 7 for the Processing plugin set the following in QGIS
+
+          \e[32mProcessing -> Options: Providers -> GRASS GIS 7 commands -> GRASS 7 folder\e[0m
+
+          to \e[32m#{HOMEBREW_PREFIX}/opt/grass7/grass-base\e[0m
 
       EOS
     end
@@ -1107,28 +1162,7 @@ class Qgis < Formula
         \e[32mManage and Install Plugins -> Installed ->  Plugin name\e[0m (click its checkbox)
 
     EOS
-
-    if build.with? "lastools"
-      s += <<~EOS
-
-        You installed LASTools. If you will use wine to have more features,
-        you will need to manually enter the path where
-        you unzipped LASTools and Wine path (\e[32m#{Formula["wine"].opt_prefix}\e[0m).
-
-      EOS
-    end
-
-    if build.with? "grass"
-      s += <<~EOS
-        If you have built GRASS 7 for the Processing plugin set the following in QGIS
-
-          \e[32mProcessing -> Options: Providers -> GRASS GIS 7 commands -> GRASS 7 folder\e[0m
-
-          to \e[32m#{HOMEBREW_PREFIX}/opt/grass7/grass-base\e[0m
-
-      EOS
-      s
-    end
+    s
   end
 
   test do
@@ -1190,9 +1224,9 @@ class Qgis < Formula
   #   Formula["postgresql"].opt_prefix.exist?
   # end
 
-  # def brewed_postgresql10?
-  #   Formula["postgresql@10"].opt_prefix.exist?
-  # end
+  def brewed_postgresql10?
+    Formula["postgresql@10"].opt_prefix.exist?
+  end
 
   def brewed_oracle?
     Formula["oracle-client-sdk"].opt_prefix.exist?
@@ -1242,10 +1276,6 @@ class Qgis < Formula
 
   def gdal_opt_bin
     "#{Formula["gdal2"].opt_bin}"
-  end
-
-  def module_importable?(mod)
-    `#{python_exec} -c 'import sys; sys.path.insert(1, "#{gdal_python_packages}"); import #{mod}'`.strip
   end
 end
 
