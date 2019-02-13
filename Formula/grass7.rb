@@ -414,7 +414,7 @@ class Grass7 < Formula
     # end
 
     # Enable Aqua GUI, instead of X11
-    args << "--with-opengl#{build.with?("aqua") ? "aqua" : ""}"
+    args << "--with-opengl=#{build.with?("aqua") ? "aqua" : ""}"
 
     if headless?
       args << "--without-wxwidgets"
