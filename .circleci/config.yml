@@ -93,9 +93,9 @@ jobs:
           name: "Update homebrew"
           command: |
             brew tap brewsci/bio || true
+            brew tap brewsci/science || true
+            brew untap brewsci/science || true
             brew update || brew update
-
-      # brew tap brewsci/science || true
 
       - save_cache:
           key: homebrew-v1-{{ .Branch }}-{{ .Revision }}
