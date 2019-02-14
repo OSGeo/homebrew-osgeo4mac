@@ -12,72 +12,69 @@ class QgisRes < Formula
   sha256 "385dce925fc2d29f05afd6508bc1f46ec84c0bc607cc0c8dfce78a4bb93b9c4e"
   version "3.4.4"
 
-  bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    cellar :any
-    sha256 "26754f3d5ec868db3370aa4e40c1f9a263fc1cff847af6c3b9ec6c528d47bcc0" => :mojave
-    sha256 "26754f3d5ec868db3370aa4e40c1f9a263fc1cff847af6c3b9ec6c528d47bcc0" => :high_sierra
-    sha256 "26754f3d5ec868db3370aa4e40c1f9a263fc1cff847af6c3b9ec6c528d47bcc0" => :sierra
-  end
-
   # revision 1
 
+  option "with-complete", "Build with others modules"
   option "with-r", "Build with modules referred to R"
   option "with-r-sethrfore", "Build with modules referred to R (only if you already have this version installed)"
 
   depends_on "pkg-config" => :build
-  depends_on "gcc" => :build # for gfortran
+  depends_on "gcc" => :build # for gfortran # numpy
   depends_on "python" => :build
   depends_on "swig" => :build
-  depends_on "libagg"
-  depends_on "freetype"
-  depends_on "libpng"
-  depends_on "openssl"
-  depends_on "libssh"
-  depends_on "qhull"
-  depends_on "tcl-tk"
-  depends_on "openblas"
   depends_on "lapack"
-  depends_on "ghostscript"
+  depends_on "openblas"
+  depends_on "cython"
+  depends_on "postgresql" # psycopg2
+  depends_on "libyaml" # yaml
+  depends_on "tcl-tk" # six
 
   # for rpy2
-  depends_on "gettext"
-  depends_on "readline"
-  depends_on "pcre"
-  depends_on "xz"
-  depends_on "bzip2"
-  depends_on "libiconv"
-  depends_on "icu4c"
+  if build.with? "r#{build.with?("r-sethrfore") ? "-sethrfore" : ""}"
+    depends_on "gettext"
+    depends_on "readline"
+    depends_on "pcre"
+    depends_on "xz"
+    depends_on "bzip2"
+    depends_on "libiconv"
+    depends_on "icu4c"
+  end
 
-  depends_on "cython"
-  depends_on "wxpython"
+  if build.with? "complete"
+    depends_on "swig"
+    depends_on "libagg"
+    depends_on "freetype"
+    depends_on "libpng"
+    depends_on "openssl"
+    depends_on "libssh"
+    depends_on "qhull"
+    depends_on "ghostscript"
+    depends_on "cairo"
+    depends_on "py3cairo"
+    depends_on "libsvg-cairo"
+    depends_on "librsvg"
+    depends_on "svg2pdf"
+    depends_on "gtk+3"
+    depends_on "pygobject3"
+    depends_on "pygobject"
+    depends_on "pygtk"
+    depends_on "pyqt"
+    depends_on "wxpython"
+    depends_on "ffmpeg"
+    depends_on "imagemagick"
 
-  # for matplotlib
-  depends_on "cairo"
-  depends_on "py3cairo"
-  depends_on "libsvg-cairo"
-  depends_on "librsvg"
-  depends_on "svg2pdf"
-  depends_on "gtk+3"
-  depends_on "pygobject3"
-  depends_on "pygobject"
-  depends_on "pygtk"
-  depends_on "pyqt"
-  depends_on "ffmpeg"
-  depends_on "imagemagick"
+    depends_on "numpy"
+    depends_on "scipy"
+    depends_on "brewsci/bio/matplotlib"
 
-  depends_on "numpy"
-  depends_on "scipy"
-  depends_on "brewsci/bio/matplotlib"
-
-  depends_on "gdal2" # for Fiona
-  depends_on "spatialindex" # for Rtree
-  depends_on "openjpeg" # for Pillow
-  depends_on "hdf5" # for h5py
-  depends_on "unixodbc" # for pyodbc
-
-  depends_on "pyside" # for pyqtgraph
-  depends_on "freetds" # for pymssql
+    depends_on "gdal2" # for Fiona
+    depends_on "spatialindex" # for Rtree
+    depends_on "openjpeg" # for Pillow
+    depends_on "hdf5" # for h5py
+    depends_on "unixodbc" # for pyodbc
+    depends_on "pyside" # for pyqtgraph
+    depends_on "freetds" # for pymssql
+  end
 
   if build.with? "r"
     depends_on "r"
@@ -89,9 +86,6 @@ class QgisRes < Formula
   if build.with? "r-sethrfore"
     depends_on "sethrfore/r-srf/r"
   end
-
-  # needed by psycopg2
-  depends_on "postgresql" => :recommended
 
   # pyqgis_startup.py
   # TODO: add one for Py3 (only necessary when macOS ships a Python3 or 3rd-party isolation is needed)
@@ -118,8 +112,8 @@ class QgisRes < Formula
   # end
 
   resource "wheel" do
-    url "https://files.pythonhosted.org/packages/d8/55/221a530d66bf78e72996453d1e2dedef526063546e131d70bed548d80588/wheel-0.32.3.tar.gz"
-    sha256 "029703bf514e16c8271c3821806a1c171220cc5bdd325cbf4e7da1e056a01db6"
+    url "https://files.pythonhosted.org/packages/d9/7d/86df15e317027f6e87aa68ea854abf8437e796b4c0fadd3ae5ee67b77cb2/wheel-0.33.0.tar.gz"
+    sha256 "12363e6df5678ecf9daf8429f06f97e7106e701405898f24318ce7f0b79c611a"
   end
 
   # MetaSearch plugin
@@ -750,25 +744,104 @@ class QgisRes < Formula
   def install
     # install python environment
     venv = virtualenv_create(libexec/'vendor', "#{Formula["python"].opt_bin}/python3")
-    res = resources.map(&:name).to_set - %w[pyodbc h5py Shapely Rtree pymssql geos rpy2 Sphinx sphinxcontrib-websupport pyRscript] # matplotlib
+    res = resources.map(&:name).to_set - %w[future pyparsing MarkupSafe nose cython pytest python-dateutil pyproj pytz requests Jinja2 numpy OWSLib psycopg2 Pygments PyYAML six numpy scipy pyodbc h5py Shapely Rtree pymssql geos rpy2 Sphinx sphinxcontrib-websupport pyRscript]
 
     # fix pip._vendor.pep517.wrappers.BackendUnavailable
     system libexec/"vendor/bin/pip3", "install", "--upgrade", "-v", "setuptools", "pip<19.0.0", "wheel"
 
-    res.each do |r|
-      venv.pip_install resource(r)
+    venv.pip_install resource("future")
+    venv.pip_install resource("pyparsing")
+    venv.pip_install resource("MarkupSafe")
+    venv.pip_install resource("nose")
+    venv.pip_install resource("cython")
+    venv.pip_install resource("pytest")
+    venv.pip_install resource("python-dateutil")
+    venv.pip_install resource("pyproj")
+    venv.pip_install resource("pytz")
+    venv.pip_install resource("requests")
+    venv.pip_install resource("Jinja2")
+    venv.pip_install resource("six")
+
+    resource("numpy").stage do
+      openblas = Formula["openblas"].opt_prefix
+      ENV["ATLAS"] = "None" # avoid linking against Accelerate.framework
+      ENV["BLAS"] = ENV["LAPACK"] = "#{openblas}/lib/libopenblas.dylib"
+
+      config = <<~EOS
+        [openblas]
+        libraries = openblas
+        library_dirs = #{openblas}/lib
+        include_dirs = #{openblas}/include
+      EOS
+
+      Pathname("site.cfg").write config
+
+      system "#{libexec}/vendor/bin/python3", "setup.py",
+        "build", "--fcompiler=gnu95", "--parallel=#{ENV.make_jobs}",
+        "install", "--prefix=#{libexec}/vendor",
+        "--single-version-externally-managed", "--record=installed.txt"
     end
 
-    venv.pip_install_and_link "pyodbc"
-    venv.pip_install_and_link "h5py"
-    venv.pip_install_and_link "Shapely"
-    venv.pip_install_and_link "Rtree"
-    venv.pip_install_and_link "pymssql"
-    venv.pip_install_and_link "geos"
+    resource("scipy").stage do
+      openblas = Formula["openblas"].opt_prefix
+      ENV["ATLAS"] = "None" # avoid linking against Accelerate.framework
+      ENV["BLAS"] = ENV["LAPACK"] = "#{openblas}/lib/libopenblas.dylib"
 
-    # venv.pip_install_and_link "matplotlib"
+      config = <<~EOS
+        [DEFAULT]
+        library_dirs = #{HOMEBREW_PREFIX}/lib
+        include_dirs = #{HOMEBREW_PREFIX}/include
+        [openblas]
+        libraries = openblas
+        library_dirs = #{openblas}/lib
+        include_dirs = #{openblas}/include
+      EOS
 
-    if build.with?("r") || brewed_r?
+      Pathname("site.cfg").write config
+
+      system "#{libexec}/vendor/bin/python3", "setup.py",
+        "build", "--fcompiler=gnu95",
+        "install", "--prefix=#{libexec}/vendor"
+      # cleanup leftover .pyc files from previous installs which can cause problems
+      # see https://github.com/Homebrew/homebrew-python/issues/185#issuecomment-67534979
+      rm_f Dir["#{libexec}/vendor/lib/python*.*/site-packages/scipy/**/*.pyc"]
+    end
+
+    # resource("matplotlib").stage do
+    #   if DevelopmentTools.clang_build_version >= 900
+    #     ENV.delete "SDKROOT"
+    #     ENV.delete "HOMEBREW_SDKROOT"
+    #   end
+    #
+    #   inreplace "setupext.py",
+    #             "'darwin': ['/usr/local/'",
+    #             "'darwin': ['#{HOMEBREW_PREFIX}'"
+    #
+    #   system "#{libexec}/vendor/bin/python3", "setup.py",
+    #     "install", "--prefix=#{libexec}/vendor"
+    # end
+
+    # system "#{libexec}/vendor/bin/python3", "-m", "pip", "install", "--install-option=--prefix=#{libexec}/vendor", "matplotlib"
+
+    venv.pip_install resource("OWSLib")
+    venv.pip_install resource("psycopg2")
+    venv.pip_install resource("Pygments")
+    venv.pip_install resource("PyYAML")
+
+    if build.with? "complete"
+      res.each do |r|
+        venv.pip_install resource(r)
+      end
+
+      venv.pip_install_and_link "pyodbc"
+      venv.pip_install_and_link "h5py"
+      venv.pip_install_and_link "Shapely"
+      venv.pip_install_and_link "Rtree"
+      venv.pip_install_and_link "pymssql"
+      venv.pip_install_and_link "geos"
+    end
+
+    if build.with? "r#{build.with?("r-sethrfore") ? "-sethrfore" : ""}"
       venv.pip_install resource("rpy2")
 
       venv.pip_install resource("Sphinx")
@@ -785,26 +858,32 @@ class QgisRes < Formula
   end
 
   def caveats
-    s = <<~EOS
+      s = <<~EOS
 
-      This formula was created to have more Python modules and save time using the generated bottle.
+        This formula was created to have more Python modules and save time using the generated bottle.
 
-      It is not necessary to build each time a new version or revision of the QGIS formula is generated.
+        It is not necessary to build each time a new version or revision of the QGIS formula is generated.
 
-      It will only be updated if necessary, although you can choose to update modules if you wish,
-      just remember that you will need to build QGIS again.
+        It will only be updated if necessary, although you can choose to update modules if you wish,
 
-    EOS
+        just remember that you will need to build QGIS again.
+
+        You can use the \e[32m--with-r\e[0m or \e[32m--with-r-sethrfore\e[0m flag to install modules associated with R.
+
+      EOS
+
+    if build.without? "complete"
+      s += <<~EOS
+        You can use the \e[32m--with-complete\e[0m flag to install more modules.
+
+        \033[31mThis is highly recommended if you will install QGIS with optional support.\e[0m
+
+      EOS
+    end
     s
   end
 
   test do
     #  TODO
-  end
-
-  private
-
-  def brewed_r?
-    Formula["r"].opt_prefix.exist?
   end
 end
