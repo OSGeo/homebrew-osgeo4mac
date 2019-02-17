@@ -4,61 +4,79 @@ class Qt5Webkit < Formula
   url "https://github.com/qt/qtwebkit.git",
     :branch => "5.212",
     :commit => "72cfbd7664f21fcc0e62b869a6b01bf73eb5e7da"
-  version "5.12.0"
+  version "5.12.1"
 
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    sha256 "f7641ec22cf263623f0ccb527d9d14bd2a3fbbb7b4aa57197ab1f6bc86fac230" => :mojave
-    sha256 "f7641ec22cf263623f0ccb527d9d14bd2a3fbbb7b4aa57197ab1f6bc86fac230" => :high_sierra
-    sha256 "f7641ec22cf263623f0ccb527d9d14bd2a3fbbb7b4aa57197ab1f6bc86fac230" => :sierra
+    cellar :any
+    sha256 "dc31f6418403e8c7ea7282be54c0be71aadf53f21dd02b68f028ea3d6d27111a" => :mojave
+    sha256 "dc31f6418403e8c7ea7282be54c0be71aadf53f21dd02b68f028ea3d6d27111a" => :high_sierra
+    sha256 "dc31f6418403e8c7ea7282be54c0be71aadf53f21dd02b68f028ea3d6d27111a" => :sierra
   end
 
-  # if it is changed this should be applied in CMAKE_INSTALL_PREFIX (see patch)
-  # in the same way for "version"
   # revision 1
 
   # from the developer: "https://github.com/annulen/webkit.git"
   head "https://github.com/qt/qtwebkit.git"
 
-  # fix installation permissions
-  # /Tools/qmake/projects/run_cmake.pro
+  # insert the XPC_NOESCAPE macro in the right places in xpc_array_apply and xpc_dictionary_apply
+  # to match the definitions now used in the 10.14 SDK
   patch :DATA
-
-  keg_only "because Qt5 is keg-only"
 
   depends_on "cmake" => :build
   depends_on "ninja" => [:build, :recommended]
   depends_on "fontconfig" => :build
   depends_on "freetype" => :build
   depends_on "gperf" => :build
-  depends_on "python@2" => :build
-  depends_on "ruby" => :build
   depends_on "sqlite" => :build
+  depends_on "bison" => :build
+  depends_on "pkg-config" => :build
+
+  depends_on "python" => :build
+  depends_on "ruby" => :build
+  depends_on "perl" => :build
   depends_on :xcode => :build
-  depends_on "conan" # C/C++ package manager
-  depends_on "glslang" # OpenGL ES: opengles2
-  depends_on "gst-plugins-base"
+
+  depends_on "gcc" => :build # features.h
+
+  depends_on "libxslt"
+  depends_on "qt"
+  depends_on "webp"
+  depends_on "zlib"
+
+  # depends_on "gst-plugins-base"
   # depends_on "libjpeg" # Qt < 5.10
   depends_on "libjpeg-turbo"
   depends_on "libpng"
   depends_on "libxslt"
-  depends_on "libxml2"
-  # depends_on :macos => :mountain_lion # error: unknown version
-  depends_on "openssl"
-  depends_on "qt"
-  depends_on "webp"
-  depends_on "zlib"
   depends_on "gst-plugins-good" => :optional
 
-  def install
-    # on Mavericks we want to target libc++, this requires a macx-clang flag
-    spec = (ENV.compiler == :clang && MacOS.version >= :mavericks) ? "macx-clang" : "macx-g++"
-    args = %W[-config release -spec #{spec}]
+  def cmake_args
+    args = %W[
+      -DCMAKE_INSTALL_PREFIX=#{prefix}
+      -DCMAKE_BUILD_TYPE=Release
+      -DCMAKE_FIND_FRAMEWORK=LAST
+      -DCMAKE_VERBOSE_MAKEFILE=ON
+      -Wno-dev
+    ]
+    args
+  end
 
+  def install
+    args = cmake_args
+    args << "-DPORT=Qt"
+    args << "-DENABLE_TOOLS=OFF"
+    args << "-DCMAKE_MACOSX_RPATH=OFF"
+    args << "-DEGPF_SET_RPATH=OFF"
+    args << "-DCMAKE_SKIP_RPATH=ON"
+    args << "-DCMAKE_SKIP_INSTALL_RPATH=ON"
+
+    # Fuck up rpath
+    # inreplace "Source/cmake/OptionsQt.cmake", "RPATH\ ON", "RPATH\ OFF"
     mkdir "build" do
-      system "#{Formula["qt"].opt_bin}/qmake", "../WebKit.pro", *args
-      system "make"
-      system "make", "install"
+      system "cmake", "-G", build.with?("ninja") ? "Ninja" : "Unix Makefiles", *args, ".."
+      system "cmake", "--build", ".", "--target", "all", "--", "-j", Hardware::CPU.cores
+      system "cmake", "--build", ".", "--target", "install", "--", "-j", Hardware::CPU.cores
     end
 
     # rename the .so files
@@ -255,14 +273,3 @@ __END__
  EXTERN_C size_t xpc_array_get_count(xpc_object_t);
  EXTERN_C const char* xpc_array_get_string(xpc_object_t, size_t index);
  EXTERN_C void xpc_array_set_string(xpc_object_t, size_t index, const char* string);
-
---- a/Tools/qmake/projects/run_cmake.pro 2017-06-17 13:46:54.000000000 +0300
-+++ b/Tools/qmake/projects/run_cmake.pro 2018-09-08 23:41:06.397523110 +0300
-@@ -22,6 +22,7 @@
-         PORT=Qt \
-         CMAKE_BUILD_TYPE=$$configuration \
-         CMAKE_TOOLCHAIN_FILE=$$toolchain_file \
-+        CMAKE_INSTALL_PREFIX=/usr/local/Cellar/qt5-webkit/5.12.0
-         USE_LIBHYPHEN=OFF
-
-     !isEmpty(_QMAKE_SUPER_CACHE_) {
