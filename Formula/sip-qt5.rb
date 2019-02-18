@@ -79,8 +79,9 @@ class SipQt5 < Formula
       m.generate()
     EOS
     (testpath/"run.py").write <<~EOS
-      import PyQt5.sip
       from test import Test
+      import PyQt5.sip
+      import sip
       t = Test()
       t.test()
     EOS
