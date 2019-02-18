@@ -52,7 +52,6 @@ class PyqtQt5 < Formula
         Network
         Quick
         Svg
-        WebEngineWidgets
         Widgets
         Xml
       ].each { |mod| system "#{Formula["python"].opt_bin}/python3", "-c", "import PyQt5.Qt#{mod}" }
