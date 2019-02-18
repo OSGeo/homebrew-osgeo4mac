@@ -1,1 +1,0 @@
-../Formula/qgis.rb
