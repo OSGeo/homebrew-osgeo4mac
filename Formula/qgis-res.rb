@@ -189,12 +189,13 @@ class QgisRes < Formula
     if build.with?("complete")
       res_optional = ['argparse', 'asn1crypto', 'atlas', 'backports.functools_lru_cache', 'beautifulsoup4', 'blosc', 'bottleneck', \
         'cffi', 'cryptography', 'decorator', 'descartes', 'ExifRead', 'Fiona', 'geopandas', 'geopy', 'geos', 'gitdb', 'gitdb2', 'GitPython', \
-        'gmt-python', 'gnm', 'h5py', 'ipython', 'ipython_genutils', 'jsonschema', 'jupyter', 'jupyter_core', 'lidar', 'lxml', 'mpmath', 'nbformat', \
+        'gnm', 'h5py', 'ipython', 'ipython_genutils', 'jsonschema', 'jupyter', 'jupyter_core', 'lidar', 'lxml', 'mpmath', 'nbformat', \
         'networkx', 'nltk', 'nose2', 'numexpr', 'olefile', 'openpyxl', 'palettable', 'pandas', 'pandas_oracle', 'pandas-datareader', 'pgi', \
         'plotly', 'ply', 'pubsub', 'py-postgresql', 'py2oracle', 'pycparser', 'pymssql', 'PyMySQL', 'pyodbc', 'PyPubSub', \
-        'pyqtgraph', 'Pyro4', 'PySAL', 'pytables', 'pytest', 'pytils', 'qtpy', 'retrying', 'Rtree', 'scikit-learn', 'seaborn', 'Shapely', 'simplejson', 'smmap', \
+        'pyqtgraph', 'Pyro4', 'PySAL', 'pytest', 'pytils', 'qtpy', 'retrying', 'Rtree', 'scikit-learn', 'seaborn', 'Shapely', 'simplejson', 'smmap', \
         'smmap2', 'sqlalchemy', 'statsmodels', 'subprocess32', 'sympy', 'test', 'tools', 'traitlets', 'whitebox', 'xlrd', 'xlsxwriter', 'xlwt']
 
+      # others: gmt-python, pytables
       res_optional.each do |r|
         venv.pip_install r
       end
