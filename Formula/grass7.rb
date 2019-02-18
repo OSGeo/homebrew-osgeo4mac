@@ -4,7 +4,7 @@ class Grass7 < Formula
   desc "Geographic Resources Analysis Support System"
   homepage "https://grass.osgeo.org/"
 
-  revision 3
+  revision 4
 
   # svn: E230001: Server SSL certificate verification failed: issuer is not trusted
   # head "https://svn.osgeo.org/grass/grass/trunk", :using => :svn
@@ -471,8 +471,8 @@ class Grass7 < Formula
       file << "\n"
       file << "export GRASS_LD_LIBRARY_PATH=#{prefix}/grass-#{version}/lib"
       file << "\n"
-      file << "export GRASS_PERL=#{Formula["perl"].opt_bin}/perl"
-      file << "\n"
+      # file << "export GRASS_PERL=#{Formula["perl"].opt_bin}/perl"
+      # file << "\n"
       file << "export PROJ_LIB=#{Formula["proj"].opt_lib}"
       file << "\n"
       file << "export GEOTIFF_CSV=#{Formula["libgeotiff"].opt_share}/epsg_csv"
