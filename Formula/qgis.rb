@@ -48,6 +48,13 @@ class Qgis < Formula
 
   head "https://github.com/qgis/QGIS.git", :branch => "master"
 
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    sha256 "8b91d03ad1d27f1b3fb288050ad4079f85a946e0363f52391a1e6ba3f967dd74" => :mojave
+    sha256 "8b91d03ad1d27f1b3fb288050ad4079f85a946e0363f52391a1e6ba3f967dd74" => :high_sierra
+    sha256 "8b91d03ad1d27f1b3fb288050ad4079f85a946e0363f52391a1e6ba3f967dd74" => :sierra
+  end
+
   # fix FindQsci and FindPyQt5
   patch :DATA
 
