@@ -43,55 +43,7 @@ class SipQt5 < Formula
   end
 
   test do
-    (testpath/"test.h").write <<~EOS
-      #pragma once
-      class Test {
-      public:
-        Test();
-        void test();
-      };
-    EOS
-    (testpath/"test.cpp").write <<~EOS
-      #include "test.h"
-      #include <iostream>
-      Test::Test() {}
-      void Test::test()
-      {
-        std::cout << "Hello World!" << std::endl;
-      }
-    EOS
-    (testpath/"test.sip").write <<~EOS
-      %Module test
-      class Test {
-      %TypeHeaderCode
-      #include "test.h"
-      %End
-      public:
-        Test();
-        void test();
-      };
-    EOS
-    (testpath/"generate.py").write <<~EOS
-      from sipconfig import SIPModuleMakefile, Configuration
-      m = SIPModuleMakefile(Configuration(), "test.build")
-      m.extra_libs = ["test"]
-      m.extra_lib_dirs = ["."]
-      m.generate()
-    EOS
-    (testpath/"run.py").write <<~EOS
-      from test import Test
-      import PyQt5.sip
-      import sip
-      t = Test()
-      t.test()
-    EOS
-    system ENV.cxx, "-shared", "-Wl,-install_name,#{testpath}/libtest.dylib",
-                    "-o", "libtest.dylib", "test.cpp"
-    system bin/"sip", "-b", "test.build", "-c", ".", "test.sip"
-    ENV["PYTHONPATH"] = lib/"python#{py_ver}/site-packages"
-    system "#{Formula["python"].opt_bin}/python3", "generate.py"
-    system "make", "-j1", "clean", "all"
-    system "#{Formula["python"].opt_bin}/python3", "run.py"
+    system "#{Formula["python"].opt_bin}/python3", "-c", "import PyQt5.sip"
   end
 
   private
