@@ -4,6 +4,14 @@ class Pyqt5Webkit < Formula
   url "https://www.riverbankcomputing.com/static/Downloads/PyQt5/PyQt5_gpl-5.12.tar.gz"
   sha256 "d9e70065b5980afde5f2b9bc900910050331604e02c70666c45fcfc66b0d4f34"
 
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    cellar :any
+    sha256 "63eda91775a0ddbdd237ee9447dc5fab1d76ae920fe72afdb82c56f83dd9cb07" => :mojave
+    sha256 "63eda91775a0ddbdd237ee9447dc5fab1d76ae920fe72afdb82c56f83dd9cb07" => :high_sierra
+    sha256 "63eda91775a0ddbdd237ee9447dc5fab1d76ae920fe72afdb82c56f83dd9cb07" => :sierra
+  end
+
   # revision 1
 
   option "with-debug", "Build with debug symbols"
