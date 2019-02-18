@@ -4,6 +4,14 @@ class SipQt5 < Formula
   url "https://www.riverbankcomputing.com/static/Downloads/sip/sip-4.19.14.tar.gz"
   sha256 "0ef3765dbcc3b8131f83e60239f49508f82205b33cae5408c405e2e2f2d0af87"
 
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    cellar :any_skip_relocation
+    sha256 "4f5bc7de198decd35a5c0602433fbad9eae7c698816399f8e4e289c93646d00e" => :mojave
+    sha256 "4f5bc7de198decd35a5c0602433fbad9eae7c698816399f8e4e289c93646d00e" => :high_sierra
+    sha256 "4f5bc7de198decd35a5c0602433fbad9eae7c698816399f8e4e289c93646d00e" => :sierra
+  end
+
   # revision 1
 
   head "https://www.riverbankcomputing.com/hg/sip", :using => :hg
