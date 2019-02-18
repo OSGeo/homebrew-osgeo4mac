@@ -11,6 +11,13 @@ class QgisLtrAT2 < Formula
     url "https://github.com/qgis/QGIS/archive/final-2_18_28.tar.gz"
     sha256 "977380578a1dfd80861d25324fd841adab97647a15cb8582f748946dbd23277c"
   end
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    sha256 "78a60f8a233aeec26ce7393f0d5af7124ff1b5fffe598a02f259e6a9e041c978" => :mojave
+    sha256 "78a60f8a233aeec26ce7393f0d5af7124ff1b5fffe598a02f259e6a9e041c978" => :high_sierra
+    sha256 "78a60f8a233aeec26ce7393f0d5af7124ff1b5fffe598a02f259e6a9e041c978" => :sierra
+  end
+
 
   def pour_bottle?
     brewed_python?
