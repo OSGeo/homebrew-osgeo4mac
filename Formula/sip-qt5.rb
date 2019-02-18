@@ -12,7 +12,6 @@ class SipQt5 < Formula
 
   def install
     ENV.prepend_path "PATH", Formula["python"].opt_libexec/"bin"
-
     if build.head?
       # Link the Mercurial repository into the download directory so
       # build.py can use it to figure out a version number.
@@ -80,6 +79,7 @@ class SipQt5 < Formula
       m.generate()
     EOS
     (testpath/"run.py").write <<~EOS
+      import PyQt5.sip
       from test import Test
       t = Test()
       t.test()
