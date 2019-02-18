@@ -13,8 +13,6 @@
   "qgis-214": "qgis2-ltr",
   "qt-mysql": "qt4-mysql",
   "saga-gis": "saga-gis-lts",
-  "qgis2-ltr": "qgis-ltr@2.18",
-  "qgis2": "qgis-ltr@2.18",
   "qgis3": "qgis",
   "qgis-ltr@2.18": "qgis-ltr@2",
 }

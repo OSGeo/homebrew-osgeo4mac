@@ -1,1 +1,0 @@
-../Formula/qgis-ltr@2.18.rb
