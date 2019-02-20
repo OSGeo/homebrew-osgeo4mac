@@ -40,11 +40,11 @@ end
 class Qgis < Formula
   desc "Open Source Geographic Information System"
   homepage "https://www.qgis.org"
-  url "https://github.com/qgis/QGIS/archive/c4ef7697074667704ef602fa683e858b9545690a.tar.gz"
-  sha256 "3bba4d51594771f772439a48b51ca3fcb047b8936070e875855d7397d72b94f8"
+  url "https://github.com/qgis/QGIS/archive/9500d397205a817f3cbc6149f086dc161d3f80d1.tar.gz"
+  sha256 "728af33fd7aeda574aa84b9388f9f92c369ed1a172ffd9c8ee9dd3fcbd035fc2"
   version "3.4.4"
 
-  revision 3
+  revision 4
 
   head "https://github.com/qgis/QGIS.git", :branch => "master"
 
@@ -1079,13 +1079,13 @@ class Qgis < Formula
     (prefix/"QGIS.app/Contents/Resources/python").install_symlink Dir["#{Formula["qgis-res"].opt_libexec}/vendor/lib/python#{py_ver}/site-packages/*"]
     (prefix/"QGIS.app/Contents/Resources/python/PyQt5").install_symlink Dir["#{Formula["sip-qt5"].opt_lib}/python#{py_ver}/site-packages/PyQt5/*"]
     ln_s "#{Formula["sip-qt5"].opt_lib}/python#{py_ver}/site-packages/sipconfig.py", "#{prefix}/QGIS.app/Contents/Resources/python/sipconfig.py"
-    ln_s "#{Formula["sip-qt5"].opt_lib}/python#{py_ver}/site-packages/sipconfig.py", "#{prefix}/QGIS.app/Contents/Resources/python/sipdistutils.py"
+    ln_s "#{Formula["sip-qt5"].opt_lib}/python#{py_ver}/site-packages/sipdistutils.py", "#{prefix}/QGIS.app/Contents/Resources/python/sipdistutils.py"
     (prefix/"QGIS.app/Contents/Resources/python/PyQt5").install_symlink Dir["#{Formula["pyqt-qt5"].opt_lib}/python#{py_ver}/site-packages/PyQt5/*"]
     (prefix/"QGIS.app/Contents/Resources/python/PyQt5").install_symlink Dir["#{Formula["pyqt5-webkit"].opt_lib}/python#{py_ver}/site-packages/PyQt5/*"]
     (prefix/"QGIS.app/Contents/Resources/python/PyQt5").install_symlink Dir["#{Formula["qscintilla2-qt5"].opt_lib}/python#{py_ver}/site-packages/PyQt5/*"]
     (prefix/"QGIS.app/Contents/Resources/python").install_symlink Dir["#{Formula["matplotlib"].opt_lib}/python#{py_ver}/site-packages/*"]
-    # # (prefix/"QGIS.app/Contents/Resources/python").install_symlink Dir["#{Formula["numpy"].opt_lib}/python#{py_ver}/site-packages/*"]
-    # # (prefix/"QGIS.app/Contents/Resources/python").install_symlink Dir["#{Formula["scipy"].opt_lib}/python#{py_ver}/site-packages/*"]
+    # (prefix/"QGIS.app/Contents/Resources/python").install_symlink Dir["#{Formula["numpy"].opt_lib}/python#{py_ver}/site-packages/*"]
+    # (prefix/"QGIS.app/Contents/Resources/python").install_symlink Dir["#{Formula["scipy"].opt_lib}/python#{py_ver}/site-packages/*"]
     (prefix/"QGIS.app/Contents/Resources/python").install_symlink Dir["#{Formula["gdal2-python"].opt_lib}/python#{py_ver}/site-packages/*"]
 
     # fix ImportError: No module named site for gdal_*.py
