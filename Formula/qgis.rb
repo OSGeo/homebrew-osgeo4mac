@@ -40,11 +40,11 @@ end
 class Qgis < Formula
   desc "Open Source Geographic Information System"
   homepage "https://www.qgis.org"
-  url "https://github.com/qgis/QGIS/archive/9500d397205a817f3cbc6149f086dc161d3f80d1.tar.gz"
-  sha256 "728af33fd7aeda574aa84b9388f9f92c369ed1a172ffd9c8ee9dd3fcbd035fc2"
-  version "3.4.4"
+  url "https://github.com/qgis/QGIS/archive/58734527abdbaab95719a48a4a64ea05abd70b44.tar.gz"
+  sha256 "00918ea2a38bb93384c71522be968d4102c4aafddb9d57072100983f7c1f24b5"
+  version "3.6.0"
 
-  revision 4
+  # revision 1
 
   head "https://github.com/qgis/QGIS.git", :branch => "master"
 
@@ -1076,7 +1076,7 @@ class Qgis < Formula
     qgis_bin.write(bin_cmds.join("\n"))
     qgis_bin.chmod 0755
 
-    # link the python modules
+    # link python modules
     (prefix/"QGIS.app/Contents/Resources/python").install_symlink Dir["#{Formula["qgis-res"].opt_libexec}/vendor/lib/python#{py_ver}/site-packages/*"]
     (prefix/"QGIS.app/Contents/Resources/python/PyQt5").install_symlink Dir["#{Formula["sip-qt5"].opt_lib}/python#{py_ver}/site-packages/PyQt5/*"]
     ln_s "#{Formula["sip-qt5"].opt_lib}/python#{py_ver}/site-packages/sipconfig.py", "#{prefix}/QGIS.app/Contents/Resources/python/sipconfig.py"
@@ -1385,3 +1385,15 @@ __END__
             </item>
             <item>
              <widget class="QLabel" name="label_3">
+
+
+--- a/src/core/qgsstringutils.cpp
++++ b/src/core/qgsstringutils.cpp
+@@ -19,6 +19,7 @@
+ #include <QStringList>
+ #include <QTextBoundaryFinder>
+ #include <QRegularExpression>
++#include <cstdlib>
+
+ QString QgsStringUtils::capitalize( const QString &string, QgsStringUtils::Capitalization capitalization )
+ {
