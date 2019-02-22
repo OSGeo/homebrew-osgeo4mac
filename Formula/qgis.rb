@@ -1387,30 +1387,42 @@ __END__
              <widget class="QLabel" name="label_3">
 
 
+# --- a/src/core/qgsstringutils.cpp
+# +++ b/src/core/qgsstringutils.cpp
+# @@ -481,6 +481,8 @@
+#
+#      while ( strCurrent < strLength )
+#      {
+# +      int (*_abs)( int ) = & std::abs; // Needed to resolve ambiguity for OS X compilation
+# +
+#        // positive wrap value = desired maximum line width to wrap
+#        // negative wrap value = desired minimum line width before wrap
+#        if ( useMaxLineLength )
+# @@ -490,13 +492,13 @@
+#          if ( strHit == lastHit || strHit == -1 )
+#          {
+#            //if no new backward delimiter found, try to locate forward
+# -          strHit = lines.at( i ).indexOf( rx, strCurrent + std::abs( length ) );
+# +          strHit = lines.at( i ).indexOf( rx, strCurrent + _abs( length ) );
+#          }
+#          lastHit = strHit;
+#        }
+#        else
+#        {
+# -        strHit = lines.at( i ).indexOf( rx, strCurrent + std::abs( length ) );
+# +        strHit = lines.at( i ).indexOf( rx, strCurrent + _abs( length ) );
+#        }
+#        if ( strHit > -1 )
+#        {
+
+
 --- a/src/core/qgsstringutils.cpp
 +++ b/src/core/qgsstringutils.cpp
-@@ -481,6 +481,8 @@
+@@ -19,6 +19,7 @@
+ #include <QStringList>
+ #include <QTextBoundaryFinder>
+ #include <QRegularExpression>
++#include <cstdlib>
 
-     while ( strCurrent < strLength )
-     {
-+      int (*_abs)( int ) = & std::abs; // Needed to resolve ambiguity for OS X compilation
-+
-       // positive wrap value = desired maximum line width to wrap
-       // negative wrap value = desired minimum line width before wrap
-       if ( useMaxLineLength )
-@@ -490,13 +492,13 @@
-         if ( strHit == lastHit || strHit == -1 )
-         {
-           //if no new backward delimiter found, try to locate forward
--          strHit = lines.at( i ).indexOf( rx, strCurrent + std::abs( length ) );
-+          strHit = lines.at( i ).indexOf( rx, strCurrent + _abs( length ) );
-         }
-         lastHit = strHit;
-       }
-       else
-       {
--        strHit = lines.at( i ).indexOf( rx, strCurrent + std::abs( length ) );
-+        strHit = lines.at( i ).indexOf( rx, strCurrent + _abs( length ) );
-       }
-       if ( strHit > -1 )
-       {
+ QString QgsStringUtils::capitalize( const QString &string, QgsStringUtils::Capitalization capitalization )
+ {
