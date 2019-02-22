@@ -41,7 +41,7 @@ class Qgis < Formula
   desc "Open Source Geographic Information System"
   homepage "https://www.qgis.org"
   url "https://github.com/qgis/QGIS/archive/58734527abdbaab95719a48a4a64ea05abd70b44.tar.gz"
-  sha256 "728af33fd7aeda574aa84b9388f9f92c369ed1a172ffd9c8ee9dd3fcbd035fc2"
+  sha256 "00918ea2a38bb93384c71522be968d4102c4aafddb9d57072100983f7c1f24b5"
   version "3.6.0"
 
   # revision 1
