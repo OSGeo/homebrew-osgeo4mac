@@ -11,9 +11,10 @@ class Qpsql < Formula
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
     cellar :any
-    sha256 "329de22a52ff950401516164f73dfc31ccbe77d73360985a9ead1d6063c5d027" => :mojave
-    sha256 "329de22a52ff950401516164f73dfc31ccbe77d73360985a9ead1d6063c5d027" => :high_sierra
-    sha256 "329de22a52ff950401516164f73dfc31ccbe77d73360985a9ead1d6063c5d027" => :sierra
+    rebuild 1
+    sha256 "bccba8ce8c0e1ffa2695b6b7c2da1ce74de1cd27954500902cafd8a49c0947c8" => :mojave
+    sha256 "bccba8ce8c0e1ffa2695b6b7c2da1ce74de1cd27954500902cafd8a49c0947c8" => :high_sierra
+    sha256 "bccba8ce8c0e1ffa2695b6b7c2da1ce74de1cd27954500902cafd8a49c0947c8" => :sierra
   end
 
   depends_on "pkg-config" => :build
