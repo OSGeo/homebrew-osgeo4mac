@@ -37,7 +37,7 @@ class UnlinkedQGIS < Requirement
   end
 end
 
-class Qgis < Formula
+class QgisLtr < Formula
   desc "Open Source Geographic Information System"
   homepage "https://www.qgis.org"
   url "https://github.com/qgis/QGIS/archive/final-3_4_5.tar.gz"
