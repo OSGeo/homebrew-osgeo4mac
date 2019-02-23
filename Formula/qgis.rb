@@ -50,10 +50,9 @@ class Qgis < Formula
 
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    rebuild 1
-    sha256 "d4c69c12a6448d02d27724240b5060f56ab8cc8f454e6bd96c02ba57fa2b017c" => :mojave
-    sha256 "d4c69c12a6448d02d27724240b5060f56ab8cc8f454e6bd96c02ba57fa2b017c" => :high_sierra
-    sha256 "d4c69c12a6448d02d27724240b5060f56ab8cc8f454e6bd96c02ba57fa2b017c" => :sierra
+    sha256 "2305d2a6f5a29e816e8f0f856bc6e4a59555c63e6bd6ecc466b47a9bc4f3bb5f" => :mojave
+    sha256 "2305d2a6f5a29e816e8f0f856bc6e4a59555c63e6bd6ecc466b47a9bc4f3bb5f" => :high_sierra
+    sha256 "2305d2a6f5a29e816e8f0f856bc6e4a59555c63e6bd6ecc466b47a9bc4f3bb5f" => :sierra
   end
 
   # fix FindQsci and FindPyQt5
