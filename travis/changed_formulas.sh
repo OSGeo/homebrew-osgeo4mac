@@ -24,7 +24,7 @@ else
 	done
 
 	# keep formulas only
-	#FORMULAS=$(sed -n -E 's#^Formula/(.+)\.rb$#\1#p' <<< $FILES)
+	# FORMULAS=$(sed -n -E 's#^Formula/(.+)\.rb$#\1#p' <<< $FILES)
 	# skip formulas
   comm -1 -3 <(cat travis/skip-formulas.txt | sort -u ) <(echo ${FORMULAS} | tr ' ' '\n' | sort -u )
 fi

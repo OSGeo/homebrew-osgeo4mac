@@ -44,7 +44,7 @@ taudem
 "
 
 bl=" $(brew list)"
-#echo -n ${bl}
+# echo -n ${bl}
 non_dep_f=''
 for f in ${un_f};do
   non_dep_f+="$(echo -n ${bl} | egrep -o " ${f}\S*") "
