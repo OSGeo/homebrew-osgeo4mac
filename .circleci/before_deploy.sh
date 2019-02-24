@@ -50,9 +50,9 @@ fi
 
 
 # Build the bottles
-BUILT_BOTTLES=
+# BUILT_BOTTLES=
 
-pushd /tmp/workspace/bottles
+pushd /tmp/workspace/bottles/
   BOTTLE_ROOT=https://dl.bintray.com/homebrew-osgeo/osgeo-bottles
   for f in ${CHANGED_FORMULAE};do
     echo "Updating changed formula ${f} with new bottles..."
@@ -60,15 +60,16 @@ pushd /tmp/workspace/bottles
     # Do Merge bottles with the formula
     # Don't commit anything, we'll do that after updating all the formulae
     # Catch the eror and store it to a variable
-    if result=$(brew bottle --merge --write --no-commit ${f}*.json 2>&1); then
-      BUILT_BOTTLES="$BUILT_BOTTLES ${f}"
-    else
+    brew bottle --merge --write --no-commit ${f}*.json
+    # if result=$(brew bottle --merge --write --no-commit ${f}*.json 2>&1); then
+    #   BUILT_BOTTLES="$BUILT_BOTTLES ${f}"
+    # else
       # If there's an error, remove the json and bottle files, we don't want them anymore.
-      echo "Unable to bottle ${f}"
-      echo $result
-      rm ${f}*.json
-      rm ${f}*.tar.gz
-    fi
+    #  echo "Unable to bottle ${f}"
+    #  echo $result
+    #  rm ${f}*.json
+    #  rm ${f}*.tar.gz
+    # fi
   done
 popd
 
