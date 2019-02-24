@@ -17,7 +17,9 @@
 
 set -e
 
-ls -lah /tmp/workspace/bottles/
+# ls -lah /tmp/workspace/bottles/
+
+cd ${HOMEBREW_REPOSITORY}/Library/Taps/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}
 
 # Setup Git configuration
 COMMIT_USER=$(git log --format='%an' ${CIRCLE_SHA1}^\!)
@@ -49,17 +51,23 @@ if ! git checkout "$CIRCLE_BRANCH"; then
     return 1
 fi
 
+BUILT_BOTTLES=
 pushd /tmp/workspace/bottles/
   for f in ${CHANGED_FORMULAE};do
     echo "Updating changed formula ${f} with new bottles..."
 
-    TAP_PATH=$(brew --repo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME)
-    mkdir -p $TAP_PATH
-    cp -a ./ $TAP_PATH/
-    brew tap --repair
-    cd $TAP_PATH
-    git reset --hard origin/$CIRCLE_BRANCH
-    brew bottle --merge --write --no-commit ${f}*.json
+    # Do Merge bottles with the formula
+    # Don't commit anything, we'll do that after updating all the formulae
+    # Catch the eror and store it to a variable
+    if result=$(brew bottle --merge --write --no-commit ${f}*.json 2>&1); then
+      BUILT_BOTTLES="$BUILT_BOTTLES ${f}"
+    else
+     # If there's an error, remove the json and bottle files, we don't want them anymore.
+     echo "Unable to bottle ${f}"
+     echo $result
+     rm ${f}*.json
+     rm ${f}*.tar.gz
+    fi
   done
 popd
 
