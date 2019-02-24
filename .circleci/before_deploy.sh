@@ -76,7 +76,7 @@ fi
 
 # Set up the keys
 # Decrypt the circle_deploy_key.enc key into /tmp/circle_deploy_key
-openssl aes-256-cbc -d -in circle_deploy_key.enc -out /tmp/circle_deploy_key -k $REPO_ENC_KEY
+openssl aes-256-cbc -k ${REPO_ENC_KEY} -d -in circle_deploy_key.enc -out /tmp/circle_deploy_key
 
 # Make sure only the current user can read the private key
 chmod 600 /tmp/circle_deploy_key
