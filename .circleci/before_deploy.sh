@@ -83,7 +83,7 @@ echo "Decrypt key"
 # openssl aes-256-cbc -iv "${REPO_ENC_IV}" -K "${REPO_ENC_KEY}" -d -in circle_deploy_key.enc -out /tmp/circle_deploy_key
 # openssl aes-256-cbc -k ${SSH_KEY} -d -in circle_deploy_key.enc -out /tmp/circle_deploy_key
 
-openssl aes-256-cbc -d -in circle_deploy_key.enc -out /tmp/circle_deploy_key -k ${SSH_KEY}
+openssl aes-256-cbc -d -in circle_deploy_key.enc -out /tmp/circle_deploy_key -k $SSH_KEY
 
 # Make sure only the current user can read the private key
 chmod 600 /tmp/circle_deploy_key
