@@ -20,7 +20,7 @@
 mkdir /tmp/bottles
 cd /tmp/bottles
 
-pushd bottles
+pushd /tmp/bottles
   BOTTLE_ROOT=https://dl.bintray.com/homebrew-osgeo/osgeo-bottles
   for f in ${CHANGED_FORMULAE};do
     echo "Bottling changed formula ${f}..."
