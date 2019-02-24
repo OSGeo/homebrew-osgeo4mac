@@ -101,6 +101,12 @@ jobs:
       - store_artifacts:
           path: /tmp/workspace/bottles
           destination: bottles
+      # Move the repository code to our home directory in the CircleCI build
+      - checkout
+      # Add deployment key fingerprint for CircleCI to use for a push
+      - add_ssh_keys:
+          fingerprints:
+            - "${KEY_FINGERPRINT}"
       - run:
           name: Commit bottles
           command: .circleci/before_deploy.sh
