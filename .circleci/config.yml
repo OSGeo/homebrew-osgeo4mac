@@ -32,8 +32,6 @@ build_steps: &build_steps
         name: Build bottles
         no_output_timeout: 30m
         command: |
-          mkdir /tmp/bottles
-          cd /tmp/bottles
           .circleci/after_script.sh
     - persist_to_workspace:
         root: /tmp
@@ -73,11 +71,11 @@ jobs:
             - /usr/local/Homebrew/Library/Taps/homebrew
             - /usr/local/Homebrew/Library/Taps/brewsci
 
-  # sierra-build:
-  #   <<: *build_steps
-  #   <<: *filter
-  #   macos:
-  #     xcode: "8.3.3"
+  sierra-build:
+    <<: *build_steps
+    <<: *filter
+    macos:
+      xcode: "8.3.3"
 
   high_sierra-build:
     <<: *build_steps
@@ -142,16 +140,16 @@ workflows:
       - high_sierra-build:
           requires:
             - update-homebrew
-      # - sierra-build:
-      #     requires:
-      #       - update-homebrew
+      - sierra-build:
+          requires:
+            - update-homebrew
       - collect-bottles:
           filters:
             tags:
               only: deploy
           requires:
             - high_sierra-build
-            # - build-sierra
+            - sierra-build
       - deploy:
           requires:
             - high_sierra-build

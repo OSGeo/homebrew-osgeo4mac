@@ -17,7 +17,10 @@
 
 set -e
 
-ls -lah /tmp/workspace/bottles/
+mkdir /tmp/bottles
+cd /tmp/bottles
+
+ls -lah /tmp/bottles/
 # Setup Git configuration
 COMMIT_USER=$(git log --format='%an' ${CIRCLE_SHA1}^\!)
 COMMIT_EMAIL=$(git log --format='%ae' ${CIRCLE_SHA1}^\!)
