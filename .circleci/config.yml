@@ -20,7 +20,7 @@ build_steps: &build_steps
        name: Update environment variables
        command: |
          .circleci/set_env.sh
-         openssl aes-256-cbc -d -in circle_deploy_key.enc -out /tmp/circle_deploy_key -k ${SSH_PASSPHRASE}
+         openssl aes-256-cbc -d -in circle_deploy_key.enc -out /tmp/circle_deploy_key -k ${SSH_KEY}
          chmod 600 /tmp/circle_deploy_key
          echo 'echo ${SSH_PASSPHRASE}' > /tmp/askpass && chmod +x /tmp/askpass
          eval "$(ssh-agent -s)"
