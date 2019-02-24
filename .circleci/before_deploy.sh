@@ -79,10 +79,12 @@ fi
 echo "Decrypt key"
 openssl aes-256-cbc -d -K ${REPO_ENC_KEY} -iv ${REPO_ENC_IV} -in circle_deploy_key.enc -out /tmp/circle_deploy_key
 # openssl aes-256-cbc -K ${REPO_ENC_KEY} -iv ${REPO_ENC_IV} -in circle_deploy_key.enc -out /tmp/circle_deploy_key -d
-# openssl aes-256-cbc -d -in circle_deploy_key.enc -out /tmp/circle_deploy_key -k ${SSH_PASSPHRASE}
 # openssl aes-256-cbc -k ${SSH_PASSPHRASE} -d -in circle_deploy_key.enc -out /tmp/circle_deploy_key
 # openssl aes-256-cbc -iv "${REPO_ENC_IV}" -K "${REPO_ENC_KEY}" -d -in circle_deploy_key.enc -out /tmp/circle_deploy_key
-openssl aes-256-cbc -k ${SSH_KEY} -d -in circle_deploy_key.enc -out /tmp/circle_deploy_key
+# openssl aes-256-cbc -k ${SSH_KEY} -d -in circle_deploy_key.enc -out /tmp/circle_deploy_key
+
+openssl aes-256-cbc -d -in circle_deploy_key.enc -out /tmp/circle_deploy_key -k ${SSH_KEY}
+
 # Make sure only the current user can read the private key
 chmod 600 /tmp/circle_deploy_key
 # Create a script to return the passphrase environment variable to ssh-add
