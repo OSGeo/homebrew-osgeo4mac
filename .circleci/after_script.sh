@@ -49,6 +49,8 @@ pushd /tmp/bottles
       sed -i '' s@high_sierra@mojave@g ${json}
     done
 
+    echo "Updating changed formula ${f} with new bottles..."
+
     # Do Merge bottles with the formula
     # Don't commit anything, we'll do that after updating all the formulae
     # Catch the eror and store it to a variable
