@@ -43,6 +43,13 @@ class QgisLtr < Formula
   url "https://github.com/qgis/QGIS/archive/final-3_4_5.tar.gz"
   sha256 "3183ebd2465ec44555e20dbb790ccff639a9da6eb4bce1e123ae030b1b42c57c"
 
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    sha256 "c4d95c15b65d16347dbe172fb45705685a8d1d3e2f4f3c57439c8db0494a5687" => :mojave
+    sha256 "c4d95c15b65d16347dbe172fb45705685a8d1d3e2f4f3c57439c8db0494a5687" => :high_sierra
+    sha256 "c4d95c15b65d16347dbe172fb45705685a8d1d3e2f4f3c57439c8db0494a5687" => :sierra
+  end
+
   # revision 1
 
   head "https://github.com/qgis/QGIS.git", :branch => "release-3_4"
