@@ -17,7 +17,7 @@
 
 set -e
 
-ls -lah /tmp/workspace
+ls -lah /tmp/workspace/bottles/
 # Setup Git configuration
 COMMIT_USER=$(git log --format='%an' ${CIRCLE_SHA1}^\!)
 COMMIT_EMAIL=$(git log --format='%ae' ${CIRCLE_SHA1}^\!)
@@ -52,7 +52,7 @@ fi
 # Build the bottles
 BUILT_BOTTLES=
 
-pushd bottles
+pushd /tmp/workspace/bottles
   BOTTLE_ROOT=https://dl.bintray.com/homebrew-osgeo/osgeo-bottles
   for f in ${CHANGED_FORMULAE};do
     echo "Updating changed formula ${f} with new bottles..."
