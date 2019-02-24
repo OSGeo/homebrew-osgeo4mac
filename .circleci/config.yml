@@ -150,11 +150,11 @@ workflows:
             tags:
               only: deploy
           requires:
-            - build-high_sierra
+            - high_sierra-build
             # - build-sierra
       - deploy:
           requires:
-            - build-high_sierra
+            - high_sierra-build
           filters:
             branches:
               only: master
@@ -163,7 +163,7 @@ workflows:
       #       tags:
       #         only: deploy
       #     requires:
-      #       - build-high_sierra
+      #       - high_sierra-build
       #       # - build-sierra
 
 # notify:
