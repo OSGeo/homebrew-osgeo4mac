@@ -20,6 +20,8 @@
 mkdir /tmp/bottles
 cd /tmp/bottles
 
+BUILT_BOTTLES=
+
 pushd /tmp/bottles
   BOTTLE_ROOT=https://dl.bintray.com/homebrew-osgeo/osgeo-bottles
   for f in ${CHANGED_FORMULAE};do
@@ -46,5 +48,18 @@ pushd /tmp/bottles
     for json in ${f}*.mojave.bottle*.json; do
       sed -i '' s@high_sierra@mojave@g ${json}
     done
+
+    # Do Merge bottles with the formula
+    # Don't commit anything, we'll do that after updating all the formulae
+    # Catch the eror and store it to a variable
+    if result=$(brew bottle --merge --write --no-commit ${f}*.json 2>&1); then
+      BUILT_BOTTLES="$BUILT_BOTTLES ${f}"
+    else
+      # If there's an error, remove the json and bottle files, we don't want them anymore.
+      echo "Unable to bottle ${f}"
+      echo $result
+      rm ${f}*.json
+      rm ${f}*.tar.gz
+    fi
   done
 popd
