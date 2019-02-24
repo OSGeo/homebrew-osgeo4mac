@@ -161,6 +161,6 @@ workflows:
       #       - build-high_sierra
       #       # - build-sierra
 
-notify:
-  webhooks:
-    - url: https://circleci.com/hooks/github
+# notify:
+#   webhooks:
+#     - url: https://circleci.com/hooks/github
