@@ -76,12 +76,13 @@ fi
 
 # Set up the keys
 # Decrypt the circle_deploy_key.enc key into /tmp/circle_deploy_key
+echo "Decrypt key"
 openssl aes-256-cbc -d -K ${REPO_ENC_KEY} -iv ${REPO_ENC_IV} -in circle_deploy_key.enc -out /tmp/circle_deploy_key
 # openssl aes-256-cbc -K ${REPO_ENC_KEY} -iv ${REPO_ENC_IV} -in circle_deploy_key.enc -out /tmp/circle_deploy_key -d
 # openssl aes-256-cbc -d -in circle_deploy_key.enc -out /tmp/circle_deploy_key -k ${SSH_PASSPHRASE}
 # openssl aes-256-cbc -k ${SSH_PASSPHRASE} -d -in circle_deploy_key.enc -out /tmp/circle_deploy_key
 # openssl aes-256-cbc -iv "${REPO_ENC_IV}" -K "${REPO_ENC_KEY}" -d -in circle_deploy_key.enc -out /tmp/circle_deploy_key
-
+openssl aes-256-cbc -k ${SSH_KEY} -d -in circle_deploy_key.enc -out /tmp/circle_deploy_key
 # Make sure only the current user can read the private key
 chmod 600 /tmp/circle_deploy_key
 # Create a script to return the passphrase environment variable to ssh-add
@@ -96,12 +97,13 @@ DISPLAY=":0.0" SSH_ASKPASS="/tmp/askpass" setsid ssh-add /tmp/circle_deploy_key 
 # Run semantic-release after all the above is set.
 
 # Now do the commit and push
-
+echo "Commit"
 git add -vA ${HOMEBREW_REPOSITORY}/Library/Taps/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/Formula/*.rb
 git commit -m "Updated bottles for: ${f}
 
 Committed for ${COMMIT_USER}<${COMMIT_EMAIL}>
 [ci skip]"
 
+echo "Push"
 # Now that we're all set up, we can push.
 git push ${SSH_REPO} $CIRCLE_BRANCH

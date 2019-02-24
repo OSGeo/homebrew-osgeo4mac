@@ -18,14 +18,7 @@ build_steps: &build_steps
         cp -a ./ $repo/
     - run:
        name: Update environment variables
-       command: |
-         .circleci/set_env.sh
-         openssl aes-256-cbc -k ${SSH_KEY} -d -in circle_deploy_key.enc -out /tmp/circle_deploy_key
-         chmod 600 /tmp/circle_deploy_key
-         echo 'echo ${SSH_PASSPHRASE}' > /tmp/askpass && chmod +x /tmp/askpass
-         eval "$(ssh-agent -s)"
-         brew install util-linux # for setsid
-         DISPLAY=":0.0" SSH_ASKPASS="/tmp/askpass" setsid ssh-add /tmp/circle_deploy_key </dev/null
+       command: .circleci/set_env.sh
     - run:
        name: Before install script
        command: .circleci/before_install.sh
