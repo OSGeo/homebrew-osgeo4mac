@@ -138,8 +138,13 @@ workflows:
   version: 2
   test-bot:
     jobs:
-      - build-high_sierra
-      # - build-sierra
+      - update-homebrew
+      - high_sierra-build:
+          requires:
+            - update-homebrew
+      # - sierra-build:
+      #     requires:
+      #       - update-homebrew
       - collect-bottles:
           filters:
             tags:
