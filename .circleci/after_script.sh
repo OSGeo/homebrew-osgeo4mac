@@ -23,7 +23,7 @@ ls
 mkdir /tmp/bottles
 cd /tmp/bottles
 
-BUILT_BOTTLES=
+# BUILT_BOTTLES=
 
 pushd /tmp/bottles
   BOTTLE_ROOT=https://dl.bintray.com/homebrew-osgeo/osgeo-bottles
@@ -52,30 +52,30 @@ pushd /tmp/bottles
       sed -i '' s@high_sierra@mojave@g ${json}
     done
 
-    echo "Updating changed formula ${f} with new bottles..."
-
-    # Do Merge bottles with the formula
-    # Don't commit anything, we'll do that after updating all the formulae
-    # Catch the eror and store it to a variable
-    if result=$(brew bottle --merge --write --no-commit ${f}*.json 2>&1); then
-      BUILT_BOTTLES="$BUILT_BOTTLES ${f}"
-    else
-     # If there's an error, remove the json and bottle files, we don't want them anymore.
-     echo "Unable to bottle ${f}"
-     echo $result
-     rm ${f}*.json
-     rm ${f}*.tar.gz
-    fi
+    # echo "Updating changed formula ${f} with new bottles..."
+    #
+    # # Do Merge bottles with the formula
+    # # Don't commit anything, we'll do that after updating all the formulae
+    # # Catch the eror and store it to a variable
+    # if result=$(brew bottle --merge --write --no-commit ${f}*.json 2>&1); then
+    #   BUILT_BOTTLES="$BUILT_BOTTLES ${f}"
+    # else
+    #  # If there's an error, remove the json and bottle files, we don't want them anymore.
+    #  echo "Unable to bottle ${f}"
+    #  echo $result
+    #  rm ${f}*.json
+    #  rm ${f}*.tar.gz
+    # fi
   done
   ls
 popd
 
-cd ${HOMEBREW_REPOSITORY}/Library/Taps/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}
-
-# Now do the commit and push
-
-git add -vA Formula/*.rb
-git commit -m "Updated bottles for: ${BUILT_BOTTLES}
-
-Committed for ${COMMIT_USER}<${COMMIT_EMAIL}>
-[ci skip]"
+# cd ${HOMEBREW_REPOSITORY}/Library/Taps/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}
+#
+# # Now do the commit and push
+#
+# git add -vA Formula/*.rb
+# git commit -m "Updated bottles for: ${BUILT_BOTTLES}
+#
+# Committed for ${COMMIT_USER}<${COMMIT_EMAIL}>
+# [ci skip]"
