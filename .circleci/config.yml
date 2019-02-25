@@ -35,16 +35,16 @@ build_steps: &build_steps
         command: |
           .circleci/after_script.sh
     - persist_to_workspace:
-        root: /tmp
+        root: /bottles # tmp
         paths:
-          - bottles/*
+          # - bottles/*
           # if the formula does not change or if a file is updated/uploaded:
           # The specified paths did not match any files in /tmp
           # - ./*.json
           # - ./*.tar.gz
-          # - ./
+          - ./
     - store_test_results:
-        path: /tmp/bottles
+        path: /bottles # /tmp/bottles
 
 workflow_filter: &filter
   filters:
@@ -103,9 +103,9 @@ jobs:
           name: Set env
           command: .circleci/set_env.sh
       - attach_workspace:
-          at: /tmp/workspace
+          at: bottles # /tmp/workspace
       - store_artifacts:
-          path: /tmp/workspace/bottles
+          path: ./ # /tmp/workspace/bottles
           destination: bottles
 
   deploy:
