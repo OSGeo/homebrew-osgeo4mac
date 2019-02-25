@@ -59,8 +59,8 @@ pushd /tmp/workspace/bottles
     # Do Merge bottles with the formula
     # Don't commit anything, we'll do that after updating all the formulae
     # Catch the eror and store it to a variable
-    brew bottle --merge --write --no-commit ${f}*.json
-    # if result=$(brew bottle --merge --write --no-commit ${f}*.json 2>&1); then
+    # brew bottle --merge --write --no-commit ${f}*.json
+    if result=$(brew bottle --merge --write --no-commit ${f}*.json 2>&1); then
       BUILT_BOTTLES="$BUILT_BOTTLES ${f}"
     else
       # If there's an error, remove the json and bottle files, we don't want them anymore.
