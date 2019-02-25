@@ -14,6 +14,39 @@
 #   (at your option) any later version.                                   #
 #                                                                         #
 ###########################################################################
+set -e
+
+ls -lah /tmp/workspace/bottles/
+
+# Setup Git configuration
+COMMIT_USER=$(git log --format='%an' ${CIRCLE_SHA1}^\!)
+COMMIT_EMAIL=$(git log --format='%ae' ${CIRCLE_SHA1}^\!)
+git config user.name "Geo Ninja"
+git config user.email "qgisninja@gmail.com"
+REPO=$(git config remote.origin.url)
+SSH_REPO=${REPO/https:\/\/github.com\//git@github.com:}
+
+# Checkout on the proper branch
+# see https://gist.github.com/mitchellkrogza/a296ab5102d7e7142cc3599fca634203
+head_ref=$(git rev-parse HEAD)
+if [[ $? -ne 0 || ! $head_ref ]]; then
+    err "failed to get HEAD reference"
+    return 1
+fi
+branch_ref=$(git rev-parse "$CIRCLE_BRANCH")
+if [[ $? -ne 0 || ! $branch_ref ]]; then
+    err "failed to get $CIRCLE_BRANCH reference"
+    return 1
+fi
+if [[ $head_ref != $branch_ref ]]; then
+    msg "HEAD ref ($head_ref) does not match $CIRCLE_BRANCH ref ($branch_ref)"
+    err "someone may have pushed new commits before this build cloned the repo"
+    return 1
+fi
+if ! git checkout "$CIRCLE_BRANCH"; then
+    err "failed to checkout $CIRCLE_BRANCH"
+    return 1
+fi
 
 # Build the actual bottles
 # In Travis, this used to be part of the deploy phase, but now it needs to run as part of the original build process, but only on master.
@@ -65,3 +98,15 @@ pushd /tmp/bottles
     fi
   done
 popd
+
+# Now do the commit and push
+echo "Commit"
+git add -vA Formula/*.rb
+git commit -m "Updated bottles for: $BUILT_BOTTLES
+
+Committed for ${COMMIT_USER}<${COMMIT_EMAIL}>
+[ci skip]"
+
+echo "Push"
+# Now that we're all set up, we can push.
+git push $SSH_REPO $CIRCLE_BRANCH
