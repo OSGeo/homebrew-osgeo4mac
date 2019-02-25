@@ -35,7 +35,7 @@ build_steps: &build_steps
           - "${KEY_FINGERPRINT}"
     - run:
         name: Avoid hosts unknown for github
-        command: echo -e “Host github.com\n\tStrictHostKeyChecking no\n” > ~/.ssh/config
+        command: echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
     - run:
         name: Build bottles
         no_output_timeout: 30m
