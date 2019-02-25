@@ -49,28 +49,28 @@ if ! git checkout "$CIRCLE_BRANCH"; then
     return 1
 fi
 
-# BUILT_BOTTLES=
-# mkdir -p /tmp/workspace/bottles
-#
-# pushd /tmp/workspace/bottles
-#   for f in ${CHANGED_FORMULAE};do
-#     echo "Updating changed formula ${f} with new bottles..."
-#
-#     # Do Merge bottles with the formula
-#     # Don't commit anything, we'll do that after updating all the formulae
-#     # Catch the eror and store it to a variable
-#     brew bottle --merge --write --no-commit ${f}*.json
-#     # if result=$(brew bottle --merge --write --no-commit ${f}*.json 2>&1); then
-#       BUILT_BOTTLES="$BUILT_BOTTLES ${f}"
-#     else
-#       # If there's an error, remove the json and bottle files, we don't want them anymore.
-#       echo "Unable to bottle ${f}"
-#       echo $result
-#       rm ${f}*.json
-#       rm ${f}*.tar.gz
-#     fi
-#   done
-# popd
+BUILT_BOTTLES=
+mkdir -p /tmp/workspace/bottles
+
+pushd /tmp/workspace/bottles
+  for f in ${CHANGED_FORMULAE};do
+    echo "Updating changed formula ${f} with new bottles..."
+
+    # Do Merge bottles with the formula
+    # Don't commit anything, we'll do that after updating all the formulae
+    # Catch the eror and store it to a variable
+    brew bottle --merge --write --no-commit ${f}*.json
+    # if result=$(brew bottle --merge --write --no-commit ${f}*.json 2>&1); then
+      BUILT_BOTTLES="$BUILT_BOTTLES ${f}"
+    else
+      # If there's an error, remove the json and bottle files, we don't want them anymore.
+      echo "Unable to bottle ${f}"
+      echo $result
+      rm ${f}*.json
+      rm ${f}*.tar.gz
+    fi
+  done
+popd
 
 # Set up the keys
 # Decrypt the circle_deploy_key.enc key into /tmp/circle_deploy_key
@@ -79,17 +79,17 @@ echo "Decrypt key"
 # openssl aes-256-cbc -K $REPO_ENC_KEY -iv $REPO_ENC_IV -in circle_deploy_key.enc -out /tmp/circle_deploy_key -d
 # openssl aes-256-cbc -iv "$REPO_ENC_IV" -K "$REPO_ENC_KEY" -d -in circle_deploy_key.enc -out /tmp/circle_deploy_key
 # openssl aes-256-cbc -k $SSH_PASSPHRASE -d -in circle_deploy_key.enc -out /tmp/circle_deploy_key
-openssl aes-256-cbc -d -in circle_deploy_key.enc -out /tmp/circle_deploy_key -k $SSH_PASSPHRASE
+# openssl aes-256-cbc -d -in circle_deploy_key.enc -out /tmp/circle_deploy_key -k $SSH_PASSPHRASE
 
 # Make sure only the current user can read the private key
-chmod 600 /tmp/circle_deploy_key
+# chmod 600 /tmp/circle_deploy_key
 # Create a script to return the passphrase environment variable to ssh-add
-echo 'echo ${SSH_PASSPHRASE}' > /tmp/askpass && chmod +x /tmp/askpass
+# echo 'echo ${SSH_PASSPHRASE}' > /tmp/askpass && chmod +x /tmp/askpass
 # Start the authentication agent
-eval "$(ssh-agent -s)"
+# eval "$(ssh-agent -s)"
 # Add the key to the authentication agent
-brew install util-linux # for setsid
-DISPLAY=":0.0" SSH_ASKPASS="/tmp/askpass" setsid ssh-add /tmp/circle_deploy_key </dev/null
+# brew install util-linux # for setsid
+# DISPLAY=":0.0" SSH_ASKPASS="/tmp/askpass" setsid ssh-add /tmp/circle_deploy_key </dev/null
 # ssh-add /tmp/circle_deploy_key
 # checkout, restore_cache, run: yarn install, save_cache, etc.
 # Run semantic-release after all the above is set.
