@@ -148,8 +148,7 @@ workflows:
             - sierra-build
       - deploy:
           requires:
-            - high_sierra-build
-            - sierra-build
+            - collect-bottles
           filters:
             branches:
               only: master

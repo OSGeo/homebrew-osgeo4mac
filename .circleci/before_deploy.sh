@@ -17,7 +17,11 @@
 
 set -e
 
-ls -lah /bottles
+pwd
+
+ls
+
+# ls -lah bottles
 
 # Setup Git configuration
 COMMIT_USER=$(git log --format='%an' ${CIRCLE_SHA1}^\!)
@@ -51,7 +55,8 @@ fi
 
 BUILT_BOTTLES=
 
-pushd /bottles
+pushd bottles
+  ls
   for f in ${CHANGED_FORMULAE};do
     echo "Updating changed formula ${f} with new bottles..."
 
@@ -69,6 +74,7 @@ pushd /bottles
       rm ${f}*.tar.gz
     fi
   done
+  ls
 popd
 
 # Set up the keys
