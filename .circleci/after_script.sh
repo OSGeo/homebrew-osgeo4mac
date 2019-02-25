@@ -17,10 +17,8 @@
 
 # Build the actual bottles
 # In Travis, this used to be part of the deploy phase, but now it needs to run as part of the original build process, but only on master.
-mkdir /tmp/bottles
-cd /tmp/bottles
-
-BUILT_BOTTLES=
+mkdir -p /tmp/bottles
+# cd /tmp/bottles
 
 pushd /tmp/bottles
   BOTTLE_ROOT=https://dl.bintray.com/homebrew-osgeo/osgeo-bottles
