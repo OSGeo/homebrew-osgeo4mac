@@ -97,6 +97,8 @@ pushd /tmp/bottles
   done
 popd
 
+# Add the mirror repository as a git remote
+git remote set-url origin git@github.com:OSGeo/homebrew-osgeo4mac.git
 # Now do the commit and push
 echo "Commit"
 git add -vA Formula/*.rb

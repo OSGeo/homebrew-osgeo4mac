@@ -29,15 +29,10 @@ build_steps: &build_steps
     - run:
         name: Install changed formulae
         command: .circleci/script.sh
-    # Move the repository code to our home directory in the CircleCI build
-    - checkout
     # Add deployment key fingerprint for CircleCI to use for a push
     - add_ssh_keys:
         fingerprints:
           - "${KEY_FINGERPRINT}"
-    # Add the mirror repository as a git remote
-    - run: |
-        git remote set-url origin git@github.com:OSGeo/homebrew-osgeo4mac.git
     - run:
         name: Build bottles
         no_output_timeout: 30m
