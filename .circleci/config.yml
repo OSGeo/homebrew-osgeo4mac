@@ -115,7 +115,7 @@ jobs:
           brew install hub
           TAP_PATH=$(brew --repo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME)
           mkdir -p $TAP_PATH
-          cp -r -a ./ $TAP_PATH/
+          # cp -a ./ $TAP_PATH/
           brew tap --repair
           # create pull request
           cd $TAP_PATH
