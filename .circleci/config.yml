@@ -7,7 +7,6 @@ build_steps: &build_steps
         brew update-reset
         brew --env
         brew config
-    # Move the repository code to our home directory in the CircleCI build
     - checkout
     - run: |
         git remote set-url origin $CIRCLE_REPOSITORY_URL
@@ -35,16 +34,11 @@ build_steps: &build_steps
         command: |
           .circleci/after_script.sh
     - persist_to_workspace:
-        root: /bottles # tmp
+        root: /tmp
         paths:
-          # - bottles/*
-          # if the formula does not change or if a file is updated/uploaded:
-          # The specified paths did not match any files in /tmp
-          # - ./*.json
-          # - ./*.tar.gz
-          - ./
+          - bottles/*
     - store_test_results:
-        path: /bottles # /tmp/bottles
+        path: /tmp/bottles
 
 workflow_filter: &filter
   filters:
@@ -92,20 +86,16 @@ jobs:
   collect-bottles:
     macos:
       xcode: "10.1.0"
-    filters:
-      tags:
-        only: deploy
+    # filters:
+    #   tags:
+    #     only: deploy
     # docker:
     #   - image: linuxbrew/brew
     steps:
-      - checkout
-      - run:
-          name: Set env
-          command: .circleci/set_env.sh
       - attach_workspace:
-          at: bottles # /tmp/workspace
+          at: /tmp/workspace
       - store_artifacts:
-          path: ./ # /tmp/workspace/bottles
+          path: /tmp/workspace/bottles
           destination: bottles
 
   deploy:
@@ -124,9 +114,10 @@ jobs:
           name: Commit bottles
           command: .circleci/before_deploy.sh
       - run:
-          name: Bintray upload
+          name: Deploy
           command: |
-            curl -T ./bottles/*.tar.gz -u${BINTRAY_USER}:${BINTRAY_API_KEY} https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles
+            ls
+            curl -T bottles/*.tar.gz -u${BINTRAY_USER}:${BINTRAY_API_KEY} https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles
 
 workflows:
   version: 2
