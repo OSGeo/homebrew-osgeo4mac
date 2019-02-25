@@ -37,6 +37,8 @@ build_steps: &build_steps
         root: /tmp
         paths:
           - bottles/*
+    - store_test_results:
+        path: /tmp/bottles
 
 workflow_filter: &filter
   filters:
@@ -90,8 +92,6 @@ jobs:
     # docker:
     #   - image: linuxbrew/brew
     steps:
-      - store_test_results:
-          path: /tmp/bottles
       - attach_workspace:
           at: /tmp/workspace
       - store_artifacts:
