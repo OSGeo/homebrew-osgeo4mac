@@ -149,6 +149,7 @@ workflows:
       - deploy:
           requires:
             - high_sierra-build
+            - sierra-build
           filters:
             branches:
               only: master
