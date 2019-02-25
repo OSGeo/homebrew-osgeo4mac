@@ -15,6 +15,8 @@
 #                                                                         #
 ###########################################################################
 
+cd ${HOMEBREW_REPOSITORY}/Library/Taps/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}
+
 # Setup Git configuration
 COMMIT_USER=$(git log --format='%an' ${CIRCLE_SHA1}^\!)
 COMMIT_EMAIL=$(git log --format='%ae' ${CIRCLE_SHA1}^\!)
