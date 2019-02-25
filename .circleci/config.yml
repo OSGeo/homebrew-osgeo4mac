@@ -35,14 +35,14 @@ build_steps: &build_steps
         command: |
           .circleci/after_script.sh
     - persist_to_workspace:
-        root: /tmp/bottles # /tmp
+        root: /tmp
         paths:
+          - bottles/*
           # if the formula does not change or if a file is updated/uploaded:
           # The specified paths did not match any files in /tmp
-          # - bottles/*
           # - ./*.json
           # - ./*.tar.gz
-          - ./*
+          # - ./
     - store_test_results:
         path: /tmp/bottles
 
