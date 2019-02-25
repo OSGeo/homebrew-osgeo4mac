@@ -95,25 +95,3 @@ pushd /tmp/bottles
     fi
   done
 popd
-
-cd ${HOMEBREW_REPOSITORY}/Library/Taps/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}
-
-# Add the mirror repository as a git remote
-# git remote set-url origin git@github.com:OSGeo/homebrew-osgeo4mac.git
-
-# Now do the commit and push
-echo "Commit"
-git add -vA Formula/*.rb
-git commit -m "Updated bottles for: $BUILT_BOTTLES
-
-Committed for ${COMMIT_USER}<${COMMIT_EMAIL}>
-[ci skip]"
-
-echo "Push"
-# Now that we're all set up, we can push.
-# git push $SSH_REPO $CIRCLE_BRANCH
-# git push --set-upstream $SSH_REPO $CIRCLE_BRANCH
-
-git checkout -b $CIRCLE_BRANCH
-git remote set-url origin set-url origin git@github.com:OSGeo/homebrew-osgeo4mac.git
-git push --set-upstream --force origin $CIRCLE_BRANCH

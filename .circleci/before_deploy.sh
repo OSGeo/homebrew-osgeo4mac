@@ -19,8 +19,6 @@ set -e
 
 ls -lah /tmp/workspace/bottles/
 
-cd ${HOMEBREW_REPOSITORY}/Library/Taps/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}
-
 # Setup Git configuration
 COMMIT_USER=$(git log --format='%an' ${CIRCLE_SHA1}^\!)
 COMMIT_EMAIL=$(git log --format='%ae' ${CIRCLE_SHA1}^\!)
@@ -81,7 +79,7 @@ echo "Decrypt key"
 # openssl aes-256-cbc -K $REPO_ENC_KEY -iv $REPO_ENC_IV -in circle_deploy_key.enc -out /tmp/circle_deploy_key -d
 # openssl aes-256-cbc -iv "$REPO_ENC_IV" -K "$REPO_ENC_KEY" -d -in circle_deploy_key.enc -out /tmp/circle_deploy_key
 # openssl aes-256-cbc -k $SSH_PASSPHRASE -d -in circle_deploy_key.enc -out /tmp/circle_deploy_key
-# openssl aes-256-cbc -d -in circle_deploy_key.enc -out /tmp/circle_deploy_key -k $SSH_PASSPHRASE
+openssl aes-256-cbc -d -in circle_deploy_key.enc -out /tmp/circle_deploy_key -k $SSH_PASSPHRASE
 
 # Make sure only the current user can read the private key
 chmod 600 /tmp/circle_deploy_key
@@ -96,14 +94,20 @@ DISPLAY=":0.0" SSH_ASKPASS="/tmp/askpass" setsid ssh-add /tmp/circle_deploy_key 
 # checkout, restore_cache, run: yarn install, save_cache, etc.
 # Run semantic-release after all the above is set.
 
+cd ${HOMEBREW_REPOSITORY}/Library/Taps/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}
+
+# Add the mirror repository as a git remote
+# git remote set-url origin git@github.com:OSGeo/homebrew-osgeo4mac.git
+
 # Now do the commit and push
 echo "Commit"
-git add -vA ${HOMEBREW_REPOSITORY}/Library/Taps/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/Formula/*.rb
-git commit -m "Updated bottles for: ${f}
+git add -vA Formula/*.rb
+git commit -m "Updated bottles for: $BUILT_BOTTLES
 
 Committed for ${COMMIT_USER}<${COMMIT_EMAIL}>
 [ci skip]"
 
 echo "Push"
 # Now that we're all set up, we can push.
-git push ${SSH_REPO} $CIRCLE_BRANCH
+git push $SSH_REPO $CIRCLE_BRANCH
+# git push --set-upstream $SSH_REPO $CIRCLE_BRANCH

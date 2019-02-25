@@ -29,13 +29,6 @@ build_steps: &build_steps
     - run:
         name: Install changed formulae
         command: .circleci/script.sh
-    # Add deployment key fingerprint for CircleCI to use for a push
-    - add_ssh_keys:
-        fingerprints:
-          - "${KEY_FINGERPRINT}"
-    - run:
-        name: Avoid hosts unknown for github
-        command: echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
     - run:
         name: Build bottles
         no_output_timeout: 30m
@@ -109,9 +102,16 @@ jobs:
       - store_artifacts:
           path: /tmp/workspace/bottles
           destination: bottles
-      # - run:
-      #     name: Commit bottles
-      #     command: .circleci/before_deploy.sh
+      # Add deployment key fingerprint for CircleCI to use for a push
+      - add_ssh_keys:
+          fingerprints:
+            - "${KEY_FINGERPRINT}"
+      - run:
+          name: Avoid hosts unknown for github
+          command: echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
+      - run:
+          name: Commit bottles
+          command: .circleci/before_deploy.sh
 
   deploy:
     machine:
