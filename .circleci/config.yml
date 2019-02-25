@@ -87,9 +87,9 @@ jobs:
   collect-bottles:
     macos:
       xcode: "10.1.0"
-    # filters:
-    #   tags:
-    #     only: deploy
+    filters:
+      tags:
+        only: deploy
     # docker:
     #   - image: linuxbrew/brew
     steps:
