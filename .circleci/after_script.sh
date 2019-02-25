@@ -15,8 +15,6 @@
 #                                                                         #
 ###########################################################################
 
-cd ${HOMEBREW_REPOSITORY}/Library/Taps/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}
-
 # Setup Git configuration
 COMMIT_USER=$(git log --format='%an' ${CIRCLE_SHA1}^\!)
 COMMIT_EMAIL=$(git log --format='%ae' ${CIRCLE_SHA1}^\!)
@@ -100,6 +98,9 @@ popd
 
 # Add the mirror repository as a git remote
 git remote set-url origin git@github.com:OSGeo/homebrew-osgeo4mac.git
+
+cd ${HOMEBREW_REPOSITORY}/Library/Taps/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}
+
 # Now do the commit and push
 echo "Commit"
 git add -vA Formula/*.rb
