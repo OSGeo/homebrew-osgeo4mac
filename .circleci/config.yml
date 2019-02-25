@@ -102,6 +102,11 @@ jobs:
       - store_artifacts:
           path: /tmp/workspace/bottles
           destination: bottles
+
+  deploy:
+    machine:
+      enabled: true
+    steps:
       # Add deployment key fingerprint for CircleCI to use for a push
       - add_ssh_keys:
           fingerprints:
@@ -112,15 +117,10 @@ jobs:
       - run:
           name: Commit bottles
           command: .circleci/before_deploy.sh
-
-  deploy:
-    machine:
-      enabled: true
-    steps:
       - run:
-          name: Deploy
+          name: Bintray upload
           command: |
-            curl -T *.tar.gz -u${BINTRAY_USER}:${BINTRAY_API_KEY} https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles
+            curl -T /tmp/workspace/bottles/*.tar.gz -u${BINTRAY_USER}:${BINTRAY_API_KEY} https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles
 
 workflows:
   version: 2
