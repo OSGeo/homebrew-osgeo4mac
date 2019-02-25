@@ -35,7 +35,6 @@ build_steps: &build_steps
         command: |
           .circleci/after_script.sh
     - persist_to_workspace:
-        root: /tmp
         root: /tmp/bottles # /tmp
         paths:
           # if the formula does not change or if a file is updated/uploaded:
