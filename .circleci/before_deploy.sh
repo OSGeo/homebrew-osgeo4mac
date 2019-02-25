@@ -17,7 +17,7 @@
 
 set -e
 
-ls -lah /tmp/workspace/bottles/
+ls -lah /bottles
 
 # Setup Git configuration
 COMMIT_USER=$(git log --format='%an' ${CIRCLE_SHA1}^\!)
@@ -50,9 +50,8 @@ if ! git checkout "$CIRCLE_BRANCH"; then
 fi
 
 BUILT_BOTTLES=
-mkdir -p /tmp/workspace/bottles
 
-pushd /tmp/workspace/bottles
+pushd /bottles
   for f in ${CHANGED_FORMULAE};do
     echo "Updating changed formula ${f} with new bottles..."
 
