@@ -99,7 +99,7 @@ popd
 cd ${HOMEBREW_REPOSITORY}/Library/Taps/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}
 
 # Add the mirror repository as a git remote
-git remote set-url origin git@github.com:OSGeo/homebrew-osgeo4mac.git
+# git remote set-url origin git@github.com:OSGeo/homebrew-osgeo4mac.git
 
 # Now do the commit and push
 echo "Commit"
@@ -112,4 +112,5 @@ Committed for ${COMMIT_USER}<${COMMIT_EMAIL}>
 echo "Push"
 # Now that we're all set up, we can push.
 # git push $SSH_REPO $CIRCLE_BRANCH
-git push
+
+git push --set-upstream $SSH_REPO $CIRCLE_BRANCH
