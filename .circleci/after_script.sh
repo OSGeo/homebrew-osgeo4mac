@@ -112,5 +112,5 @@ Committed for ${COMMIT_USER}<${COMMIT_EMAIL}>
 echo "Push"
 # Now that we're all set up, we can push.
 # git push $SSH_REPO $CIRCLE_BRANCH
-
-git push --set-upstream $SSH_REPO $CIRCLE_BRANCH
+# git push --set-upstream $SSH_REPO $CIRCLE_BRANCH
+git push origin $CIRCLE_BRANCH
