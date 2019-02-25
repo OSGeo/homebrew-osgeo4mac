@@ -26,25 +26,25 @@ SSH_REPO=${REPO/https:\/\/github.com\//git@github.com:}
 
 # Checkout on the proper branch
 # see https://gist.github.com/mitchellkrogza/a296ab5102d7e7142cc3599fca634203
-head_ref=$(git rev-parse HEAD)
-if [[ $? -ne 0 || ! $head_ref ]]; then
-    err "failed to get HEAD reference"
-    return 1
-fi
-branch_ref=$(git rev-parse "$CIRCLE_BRANCH")
-if [[ $? -ne 0 || ! $branch_ref ]]; then
-    err "failed to get $CIRCLE_BRANCH reference"
-    return 1
-fi
-if [[ $head_ref != $branch_ref ]]; then
-    msg "HEAD ref ($head_ref) does not match $CIRCLE_BRANCH ref ($branch_ref)"
-    err "someone may have pushed new commits before this build cloned the repo"
-    return 1
-fi
-if ! git checkout "$CIRCLE_BRANCH"; then
-    err "failed to checkout $CIRCLE_BRANCH"
-    return 1
-fi
+# head_ref=$(git rev-parse HEAD)
+# if [[ $? -ne 0 || ! $head_ref ]]; then
+#     err "failed to get HEAD reference"
+#     return 1
+# fi
+# branch_ref=$(git rev-parse "$CIRCLE_BRANCH")
+# if [[ $? -ne 0 || ! $branch_ref ]]; then
+#     err "failed to get $CIRCLE_BRANCH reference"
+#     return 1
+# fi
+# if [[ $head_ref != $branch_ref ]]; then
+#     msg "HEAD ref ($head_ref) does not match $CIRCLE_BRANCH ref ($branch_ref)"
+#     err "someone may have pushed new commits before this build cloned the repo"
+#     return 1
+# fi
+# if ! git checkout "$CIRCLE_BRANCH"; then
+#     err "failed to checkout $CIRCLE_BRANCH"
+#     return 1
+# fi
 
 # Build the actual bottles
 # In Travis, this used to be part of the deploy phase, but now it needs to run as part of the original build process, but only on master.
