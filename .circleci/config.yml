@@ -101,10 +101,13 @@ jobs:
       # Add deployment key fingerprint for CircleCI to use for a push
       - add_ssh_keys:
           fingerprints:
-            - "${KEY_FINGERPRINT}"
+            - "3b:fb:a8:34:ee:79:ae:a2:f1:9c:fe:ec:90:3e:d3:5f"
       - run:
           name: Avoid hosts unknown for github
           command: echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
+      - run:
+         name: Update environment variables
+         command: .circleci/set_env.sh
       - run:
           name: Commit bottles
           command: .circleci/before_deploy.sh
@@ -123,7 +126,7 @@ jobs:
           git remote set-url origin $CIRCLE_REPOSITORY_URL
           # git remote set-url origin https://$CIRCLE_PROJECT_USERNAME:$GITHUB_TOKEN@github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
           git add -vA Formula/*.rb
-          git commit -m "Updated bottles for: ${BUILT_BOTTLES} - Committed for ${COMMIT_USER}<${COMMIT_EMAIL}> [ci skip]"
+          git commit -m "Updated bottles ${RELEASE_TAG} - Committed for ${COMMIT_USER}<${COMMIT_EMAIL}> [ci skip]"
           git push --set-upstream --force origin "$RELEASE_TAG#pr"
           hub pull-request -m "$(git log -1 --pretty=%B)"
       - store_artifacts:
