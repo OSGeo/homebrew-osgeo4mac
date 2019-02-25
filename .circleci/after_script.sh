@@ -112,5 +112,8 @@ Committed for ${COMMIT_USER}<${COMMIT_EMAIL}>
 echo "Push"
 # Now that we're all set up, we can push.
 # git push $SSH_REPO $CIRCLE_BRANCH
-# git push --set-upstream $SSH_REPO $CIRCLE_BRANCH
-git push --force
+# git push --set-upstream $SSH_REPO $CIRCLE_BRANCH
+
+git checkout -b $CIRCLE_BRANCH
+git remote set-url origin set-url origin git@github.com:OSGeo/homebrew-osgeo4mac.git
+git push --set-upstream --force origin $CIRCLE_BRANCH
