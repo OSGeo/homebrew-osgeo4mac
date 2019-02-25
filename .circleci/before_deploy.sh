@@ -21,7 +21,7 @@ pwd
 
 ls
 
-# ls -lah bottles
+# ls -lah bottles/
 
 # Setup Git configuration
 COMMIT_USER=$(git log --format='%an' ${CIRCLE_SHA1}^\!)
@@ -54,6 +54,7 @@ if ! git checkout "$CIRCLE_BRANCH"; then
 fi
 
 BUILT_BOTTLES=
+mkdir -p bottles
 
 pushd bottles
   ls
