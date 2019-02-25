@@ -107,6 +107,7 @@ jobs:
     machine:
       enabled: true
     steps:
+      - checkout
       # Add deployment key fingerprint for CircleCI to use for a push
       - add_ssh_keys:
           fingerprints:
