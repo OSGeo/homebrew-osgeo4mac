@@ -126,7 +126,7 @@ jobs:
       - run:
           name: Bintray upload
           command: |
-            curl -T /tmp/workspace/bottles/*.tar.gz -u${BINTRAY_USER}:${BINTRAY_API_KEY} https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles
+            curl -T ./bottles/*.tar.gz -u${BINTRAY_USER}:${BINTRAY_API_KEY} https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles
 
 workflows:
   version: 2
