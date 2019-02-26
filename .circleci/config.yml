@@ -179,6 +179,11 @@ jobs:
           # # /usr/local/opt/openssl/bin/openssl aes-256-cbc -e -in circle_deploy_key.pkcs8 -out circle_deploy_key.pkcs8.enc -k ${SSH_PASSPHRASE}
           # # used without keys, it seems that circleCI does not decrypt
           # /usr/local/opt/openssl/bin/openssl aes-256-cbc -k ${SSH_PASSPHRASE} -d -in circle_deploy_key.pkcs8.enc -out /tmp/circle_deploy_key.pkcs8
+
+          # openssl aes-256-cbc -K $REPO_ENC_KEY -iv $REPO_ENC_IV -in circle_deploy_key.enc -out /tmp/circle_deploy_key -d
+          # openssl aes-256-cbc -iv "$REPO_ENC_IV" -K "$REPO_ENC_KEY" -d -in circle_deploy_key.enc -out /tmp/circle_deploy_key
+          # openssl aes-256-cbc -d -in circle_deploy_key.enc -out /tmp/circle_deploy_key -k $SSH_PASSPHRASE
+
           # chmod 600 /tmp/circle_deploy_key.pkcs8
           # echo 'echo ${SSH_PASSPHRASE}' > /tmp/askpass && chmod +x /tmp/askpass
           # eval "$(/usr/local/opt/openssh/bin/ssh-agent -s)"
@@ -215,8 +220,8 @@ jobs:
           git add -vA Formula/*.rb
           git commit -m "Updated bottles ${RELEASE_TAG} - Committed for ${COMMIT_USER}<${COMMIT_EMAIL}> [ci skip]"
           git push --set-upstream --force origin "$RELEASE_TAG#pr"
-          brew install hub
-          hub pull-request -m "$(git log -1 --pretty=%B)"
+          # brew install hub
+          # hub pull-request -m "$(git log -1 --pretty=%B)"
       - store_artifacts:
           path: /tmp/workspace/bottles
           destination: bottles
