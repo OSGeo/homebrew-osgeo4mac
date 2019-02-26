@@ -100,15 +100,15 @@ jobs:
           git config --global user.email "qgisninja@gmail.com"
       # Add deployment key fingerprint for CircleCI to use for a push
       # error?: There are no configured ssh keys to install
-      - add_ssh_keys:
-          fingerprints:
-            - "${KEY_FINGERPRINT}"
-      - run:
-          name: Avoid hosts unknown for github
-          command: |
-            echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
-            cat ~/.ssh/config
-            ssh-add -l
+      # - add_ssh_keys:
+      #     fingerprints:
+      #       - "${KEY_FINGERPRINT}"
+      # - run:
+      #     name: Avoid hosts unknown for github
+      #     command: |
+      #       echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
+      #       cat ~/.ssh/config
+      #       ssh-add -l
       - run:
          name: Update environment variables
          command: .circleci/set_env.sh
@@ -127,7 +127,7 @@ jobs:
           RELEASE_TAG=$(echo "$CIRCLE_BRANCH" | sed -nE 's/(^[@a-z0-9\.\-]+-[0-9\._]+)#(macos-)?bottle$/\1/p')
           git checkout -b "$RELEASE_TAG#pr"
           # git remote set-url origin https://$CIRCLE_PROJECT_USERNAME:$GITHUB_TOKEN@github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
-          # git remote set-url origin $CIRCLE_REPOSITORY_URL
+          git remote set-url origin $CIRCLE_REPOSITORY_URL
           # brew reinstall openssl
           # brew reinstall openssh
           # # brew unlink openssl && brew link --force openssl
@@ -201,6 +201,17 @@ jobs:
           # # End fix temporary
           # /usr/local/opt/openssh/bin/ssh-add -l
           # # /usr/local/opt/openssh/bin/ssh-add -d # delete identity; -D for delete all identities
+
+          # Begin fix temporary
+          chmod 600 circle_deploy_key
+          eval "$(ssh-agent -s)"
+          echo -e "Host github.com\n\tHostName\tgithub.com\n\tUser\t\tgit\n\tIdentityFile\tcircle_deploy_key\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
+          cat ~/.ssh/config
+          brew install https://raw.githubusercontent.com/hudochenkov/homebrew-sshpass/master/sshpass.rb
+          sshpass -p passphrase ssh-add circle_deploy_key
+          ssh-add -l
+          # End fix temporary
+
           git add -vA Formula/*.rb
           git commit -m "Updated bottles ${RELEASE_TAG} - Committed for ${COMMIT_USER}<${COMMIT_EMAIL}> [ci skip]"
           git push --set-upstream --force origin "$RELEASE_TAG#pr"
