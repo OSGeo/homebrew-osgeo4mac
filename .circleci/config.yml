@@ -125,14 +125,16 @@ jobs:
           git checkout -b "$RELEASE_TAG#pr"
           git remote set-url origin $CIRCLE_REPOSITORY_URL
           # git remote set-url origin https://$CIRCLE_PROJECT_USERNAME:$GITHUB_TOKEN@github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
-          # brew install openssl
+          brew reinstall openssl
           openssl version
-          openssl aes-256-cbc -k ${SSH_PASSPHRASE} -d -in circle_deploy_key.enc -out /tmp/circle_deploy_key
+          /usr/local/opt/openssl/bin/openssl version
+          /usr/local/opt/openssl/bin/openssl aes-256-cbc -k ${SSH_PASSPHRASE} -d -in circle_deploy_key.enc -out /tmp/circle_deploy_key
           chmod 600 /tmp/circle_deploy_key
           echo 'echo ${SSH_PASSPHRASE}' > /tmp/askpass && chmod +x /tmp/askpass
           eval "$(ssh-agent -s)"
           brew install util-linux # for setsid
           DISPLAY=":0.0" SSH_ASKPASS="/tmp/askpass" setsid ssh-add /tmp/circle_deploy_key </dev/null
+          ssh-add -l
           git add -vA Formula/*.rb
           git commit -m "Updated bottles ${RELEASE_TAG} - Committed for ${COMMIT_USER}<${COMMIT_EMAIL}> [ci skip]"
           git push --set-upstream --force origin "$RELEASE_TAG#pr"
