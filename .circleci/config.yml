@@ -99,12 +99,15 @@ jobs:
           git config --global user.name "Geo Ninja"
           git config --global user.email "qgisninja@gmail.com"
       # Add deployment key fingerprint for CircleCI to use for a push
-      # - add_ssh_keys:
-      #     fingerprints:
-      #       - "${KEY_FINGERPRINT}"
-      # - run:
-      #     name: Avoid hosts unknown for github
-      #     command: echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
+      - add_ssh_keys:
+          fingerprints:
+            - "${KEY_FINGERPRINT}"
+      - run:
+          name: Avoid hosts unknown for github
+          command: |
+            echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
+            cat ~/.ssh/config
+            ssh-add -l
       - run:
          name: Update environment variables
          command: .circleci/set_env.sh
@@ -122,80 +125,81 @@ jobs:
           brew bottle --merge --write --no-commit /tmp/workspace/bottles/*.json
           RELEASE_TAG=$(echo "$CIRCLE_BRANCH" | sed -nE 's/(^[@a-z0-9\.\-]+-[0-9\._]+)#(macos-)?bottle$/\1/p')
           git checkout -b "$RELEASE_TAG#pr"
-          git remote set-url origin $CIRCLE_REPOSITORY_URL
           # git remote set-url origin https://$CIRCLE_PROJECT_USERNAME:$GITHUB_TOKEN@github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
-          brew reinstall openssl
-          brew reinstall openssh
-          # brew unlink openssl && brew link --force openssl
-          # brew unlink openssh && brew link --force openssh
-          openssl version
-          /usr/local/opt/openssl/bin/openssl version
-          ssh -V
-          /usr/local/opt/openssh/bin/ssh -V
-          # https://circleci.com/docs/2.0/gh-bb-integration/
-          # https://circleci.com/docs/2.0/add-ssh-key/
-          # Recent updates in ssh-keygen don’t generate the key in PEM format by default.
-          # If your private key does not start with -----BEGIN RSA PRIVATE KEY-----
-          # enforce PEM format by generating the key with:
-          # /usr/local/opt/openssh/bin/ssh-keygen -m pem -t rsa -C "qgisninja@gmail.com" -f circle_deploy_key -N "${SSH_PASSPHRASE}"
-          # Since CircleCI cannot decrypt SSH keys, every new key must have an empty passphrase.
-          # CircleCI also will not accept OpenSSH’s default file format - use ssh-keygen -m pem if you are
-          # using OpenSSH to generate your key.
-          # https://github.com/Droobledores/testing
-          # /usr/local/opt/openssh/bin/ssh-keygen -t rsa -b 4096 -C "qgisninja@gmail.com" -f circle_deploy_key -N "${SSH_PASSPHRASE}"
-          # https://bbs.archlinux.org/viewtopic.php?id=239724
-          # /usr/local/opt/openssl/bin/openssl rsa -in circle_deploy_key -out circle_deploy_key.enc
-          # /usr/local/opt/openssl/bin/openssl rsa -aes256 -in circle_deploy_key.enc -out circle_deploy_key
-          # Fingerprint
-          # /usr/local/opt/openssh/bin/ssh-keygen -E md5 -lf circle_deploy_key
-          # https://superuser.com/questions/1370877/ssh-error-loading-key-id-rsa-invalid-format
-          # Try loading the key into the openssl
-          # /usr/local/opt/openssl/bin/openssl rsa -noout -text < circle_deploy_key
-          # /usr/local/opt/openssl/bin/openssl pkey -noout -text < circle_deploy_key
-          # Try converting it to PKCS#8 format
-          # umask 077
-          # /usr/local/opt/openssl/bin/openssl pkey < circle_deploy_key > circle_deploy_key.pkcs8
-          # /usr/local/opt/openssl/bin/openssl rsa < circle_deploy_key > circle_deploy_key.pkcs8
-          # /usr/local/opt/openssh/bin/ssh-keygen -E md5 -lf circle_deploy_key.pkcs8
-          # OpenSSH has been built without OpenSSL support? Even though ssh -V says the support was enabled,
-          # that does not automatically mean the ssh-add binary is the same – it might come from a different
-          # partial installation.
-          type -a /usr/local/opt/openssh/bin/ssh
-          type -a /usr/local/opt/openssh/bin/ssh-add
-          # Verify that it's linked to libcrypto
-          otool -L /usr/local/opt/openssh/bin/ssh-add # ldd /usr/bin/ssh-add
-          # Encrypted key
-          # /usr/local/opt/openssl/bin/openssl aes-256-cbc -e -p -in git_deploy_key -out git_deploy_key.enc -K `/usr/local/opt/openssl/bin/openssl rand -hex 32` -iv `/usr/local/opt/openssl/bin/openssl rand -hex 16`
-          # salt=SSSSSSSSSSSSSSSS
-          # key=KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
-          # iv =VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
-          # /usr/local/opt/openssl/bin/openssl aes-256-cbc -d -K $REPO_ENC_KEY -iv $REPO_ENC_IV -in circle_deploy_key.pkcs8.enc -out /tmp/circle_deploy_key.pkcs8
-          # for some reason you get this error when trying to decrypt: iv undefined
-          # https://github.com/circleci/encrypted-files
-          # /usr/local/opt/openssl/bin/openssl aes-256-cbc -e -in circle_deploy_key.pkcs8 -out circle_deploy_key.pkcs8.enc -k ${SSH_PASSPHRASE}
-          /usr/local/opt/openssl/bin/openssl aes-256-cbc -k ${SSH_PASSPHRASE} -d -in circle_deploy_key.pkcs8.enc -out /tmp/circle_deploy_key.pkcs8
-          chmod 600 /tmp/circle_deploy_key.pkcs8
-          echo 'echo ${SSH_PASSPHRASE}' > /tmp/askpass && chmod +x /tmp/askpass
-          eval "$(/usr/local/opt/openssh/bin/ssh-agent -s)"
-          echo -e "Host github.com\n\tHostName\tgithub.com\n\tUser\t\tgit\n\tIdentityFile\ttmp/circle_deploy_key.pkcs8\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
-          cat ~/.ssh/config
-          head -n 1 /tmp/circle_deploy_key.pkcs8
-          /usr/local/opt/openssh/bin/ssh-add -l
-          brew install util-linux # for setsid
-          # DISPLAY=":0.0" SSH_ASKPASS="/tmp/askpass" setsid /usr/local/opt/openssh/bin/ssh-add /tmp/circle_deploy_key.pkcs8 </dev/null
-          # Error loading key "/tmp/circle_deploy_key.pkcs8": invalid format
-          # Begin fix temporary
-          # it may be because it is encrypted
-          # https://superuser.com/questions/988185/how-to-avoid-being-asked-enter-passphrase-for-key-when-im-doing-ssh-operatio
-          # https://stackoverflow.com/questions/41774464/travis-ci-ssh-add-asking-for-my-passphrase
-          brew install https://raw.githubusercontent.com/hudochenkov/homebrew-sshpass/master/sshpass.rb
-          # add "-m pem -t rsa" for -----BEGIN RSA PRIVATE KEY-----
-          /usr/local/opt/openssh/bin/ssh-keygen -p -P "${SSH_PASSPHRASE}" -N "" -m pem -t rsa -f /tmp/circle_deploy_key.pkcs8
-          sshpass -p passphrase /usr/local/opt/openssh/bin/ssh-add /tmp/circle_deploy_key.pkcs8
-          head -n 1 /tmp/circle_deploy_key.pkcs8
-          # End fix temporary
-          /usr/local/opt/openssh/bin/ssh-add -l
-          # /usr/local/opt/openssh/bin/ssh-add -d # delete identity; -D for delete all identities
+          git remote set-url origin $CIRCLE_REPOSITORY_URL
+          # brew reinstall openssl
+          # brew reinstall openssh
+          # # brew unlink openssl && brew link --force openssl
+          # # brew unlink openssh && brew link --force openssh
+          # openssl version
+          # /usr/local/opt/openssl/bin/openssl version
+          # ssh -V
+          # /usr/local/opt/openssh/bin/ssh -V
+          # # https://circleci.com/docs/2.0/gh-bb-integration/
+          # # https://circleci.com/docs/2.0/add-ssh-key/
+          # # Recent updates in ssh-keygen don’t generate the key in PEM format by default.
+          # # If your private key does not start with -----BEGIN RSA PRIVATE KEY-----
+          # # enforce PEM format by generating the key with:
+          # # /usr/local/opt/openssh/bin/ssh-keygen -m pem -t rsa -C "qgisninja@gmail.com" -f circle_deploy_key -N "${SSH_PASSPHRASE}"
+          # # Since CircleCI cannot decrypt SSH keys, every new key must have an empty passphrase.
+          # # CircleCI also will not accept OpenSSH’s default file format - use ssh-keygen -m pem if you are
+          # # using OpenSSH to generate your key.
+          # # https://github.com/Droobledores/testing
+          # # /usr/local/opt/openssh/bin/ssh-keygen -t rsa -b 4096 -C "qgisninja@gmail.com" -f circle_deploy_key -N "${SSH_PASSPHRASE}"
+          # # https://bbs.archlinux.org/viewtopic.php?id=239724
+          # # /usr/local/opt/openssl/bin/openssl rsa -in circle_deploy_key -out circle_deploy_key.enc
+          # # /usr/local/opt/openssl/bin/openssl rsa -aes256 -in circle_deploy_key.enc -out circle_deploy_key
+          # # Fingerprint
+          # # /usr/local/opt/openssh/bin/ssh-keygen -E md5 -lf circle_deploy_key
+          # # https://superuser.com/questions/1370877/ssh-error-loading-key-id-rsa-invalid-format
+          # # Try loading the key into the openssl
+          # # /usr/local/opt/openssl/bin/openssl rsa -noout -text < circle_deploy_key
+          # # /usr/local/opt/openssl/bin/openssl pkey -noout -text < circle_deploy_key
+          # # Try converting it to PKCS#8 format
+          # # umask 077
+          # # /usr/local/opt/openssl/bin/openssl pkey < circle_deploy_key > circle_deploy_key.pkcs8
+          # # /usr/local/opt/openssl/bin/openssl rsa < circle_deploy_key > circle_deploy_key.pkcs8
+          # # /usr/local/opt/openssh/bin/ssh-keygen -E md5 -lf circle_deploy_key.pkcs8
+          # # OpenSSH has been built without OpenSSL support? Even though ssh -V says the support was enabled,
+          # # that does not automatically mean the ssh-add binary is the same – it might come from a different
+          # # partial installation.
+          # type -a /usr/local/opt/openssh/bin/ssh
+          # type -a /usr/local/opt/openssh/bin/ssh-add
+          # # Verify that it's linked to libcrypto
+          # otool -L /usr/local/opt/openssh/bin/ssh-add # ldd /usr/bin/ssh-add
+          # # Encrypted key
+          # # /usr/local/opt/openssl/bin/openssl aes-256-cbc -e -p -in git_deploy_key -out git_deploy_key.enc -K `/usr/local/opt/openssl/bin/openssl rand -hex 32` -iv `/usr/local/opt/openssl/bin/openssl rand -hex 16`
+          # # salt=SSSSSSSSSSSSSSSS
+          # # key=KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+          # # iv =VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
+          # # /usr/local/opt/openssl/bin/openssl aes-256-cbc -d -K $REPO_ENC_KEY -iv $REPO_ENC_IV -in circle_deploy_key.pkcs8.enc -out /tmp/circle_deploy_key.pkcs8
+          # # for some reason you get this error when trying to decrypt: iv undefined
+          # # https://github.com/circleci/encrypted-files
+          # # /usr/local/opt/openssl/bin/openssl aes-256-cbc -e -in circle_deploy_key.pkcs8 -out circle_deploy_key.pkcs8.enc -k ${SSH_PASSPHRASE}
+          # # used without keys, it seems that circleCI does not decrypt
+          # /usr/local/opt/openssl/bin/openssl aes-256-cbc -k ${SSH_PASSPHRASE} -d -in circle_deploy_key.pkcs8.enc -out /tmp/circle_deploy_key.pkcs8
+          # chmod 600 /tmp/circle_deploy_key.pkcs8
+          # echo 'echo ${SSH_PASSPHRASE}' > /tmp/askpass && chmod +x /tmp/askpass
+          # eval "$(/usr/local/opt/openssh/bin/ssh-agent -s)"
+          # echo -e "Host github.com\n\tHostName\tgithub.com\n\tUser\t\tgit\n\tIdentityFile\ttmp/circle_deploy_key.pkcs8\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
+          # cat ~/.ssh/config
+          # head -n 1 /tmp/circle_deploy_key.pkcs8
+          # # /usr/local/opt/openssh/bin/ssh-add -l
+          # brew install util-linux # for setsid
+          # # DISPLAY=":0.0" SSH_ASKPASS="/tmp/askpass" setsid /usr/local/opt/openssh/bin/ssh-add /tmp/circle_deploy_key.pkcs8 </dev/null
+          # # Error loading key "/tmp/circle_deploy_key.pkcs8": invalid format
+          # # Begin fix temporary
+          # # it may be because it is encrypted
+          # # https://superuser.com/questions/988185/how-to-avoid-being-asked-enter-passphrase-for-key-when-im-doing-ssh-operatio
+          # # https://stackoverflow.com/questions/41774464/travis-ci-ssh-add-asking-for-my-passphrase
+          # brew install https://raw.githubusercontent.com/hudochenkov/homebrew-sshpass/master/sshpass.rb
+          # # add "-m pem -t rsa" for -----BEGIN RSA PRIVATE KEY-----
+          # /usr/local/opt/openssh/bin/ssh-keygen -p -P "${SSH_PASSPHRASE}" -N "" -m pem -t rsa -f /tmp/circle_deploy_key.pkcs8
+          # sshpass -p passphrase /usr/local/opt/openssh/bin/ssh-add /tmp/circle_deploy_key.pkcs8
+          # head -n 1 /tmp/circle_deploy_key.pkcs8
+          # # End fix temporary
+          # /usr/local/opt/openssh/bin/ssh-add -l
+          # # /usr/local/opt/openssh/bin/ssh-add -d # delete identity; -D for delete all identities
           git add -vA Formula/*.rb
           git commit -m "Updated bottles ${RELEASE_TAG} - Committed for ${COMMIT_USER}<${COMMIT_EMAIL}> [ci skip]"
           git push --set-upstream --force origin "$RELEASE_TAG#pr"
