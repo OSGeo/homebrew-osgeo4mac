@@ -123,7 +123,9 @@ jobs:
           name: Deploy
           command: |
             ls
-            curl -T bottles/*.tar.gz -u${BINTRAY_USER}:${BINTRAY_API_KEY} https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles
+            ls /tmp/bottles
+            ls /tmp/workspace/bottles
+            curl -T /tmp/workspace/bottles/*.tar.gz -u${BINTRAY_USER}:${BINTRAY_API_KEY} https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles
 
 workflows:
   version: 2
