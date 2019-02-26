@@ -99,9 +99,9 @@ jobs:
           git config --global user.name "Geo Ninja"
           git config --global user.email "qgisninja@gmail.com"
       # Add deployment key fingerprint for CircleCI to use for a push
-      - add_ssh_keys:
-          fingerprints:
-            - "${KEY_FINGERPRINT}"
+      # - add_ssh_keys:
+      #     fingerprints:
+      #       - "${KEY_FINGERPRINT}"
       # - run:
       #     name: Avoid hosts unknown for github
       #     command: echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
@@ -112,7 +112,6 @@ jobs:
           name: Commit bottles
           command: .circleci/before_deploy.sh
       - run: |
-          brew install hub
           TAP_PATH=$(brew --repo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME)
           mkdir -p $TAP_PATH
           # cp -a ./ $TAP_PATH/
@@ -156,13 +155,14 @@ jobs:
           # Try converting it to PKCS#8 format
           # umask 077
           # /usr/local/opt/openssl/bin/openssl pkey < circle_deploy_key > circle_deploy_key.pkcs8
+          # /usr/local/opt/openssl/bin/openssl rsa < circle_deploy_key > circle_deploy_key.pkcs8
           # /usr/local/opt/openssh/bin/ssh-keygen -E md5 -lf circle_deploy_key.pkcs8
           # OpenSSH has been built without OpenSSL support? Even though ssh -V says the support was enabled,
           # that does not automatically mean the ssh-add binary is the same – it might come from a different
           # partial installation.
           type -a /usr/local/opt/openssh/bin/ssh
           type -a /usr/local/opt/openssh/bin/ssh-add
-          # Verify that it's linked to libcrypto.so
+          # Verify that it's linked to libcrypto
           otool -L /usr/local/opt/openssh/bin/ssh-add # ldd /usr/bin/ssh-add
           # https://github.com/circleci/encrypted-files
           # /usr/local/opt/openssl/bin/openssl aes-256-cbc -e -in circle_deploy_key.pkcs8 -out circle_deploy_key.pkcs8.enc -k ${SSH_PASSPHRASE}
@@ -177,6 +177,7 @@ jobs:
           git add -vA Formula/*.rb
           git commit -m "Updated bottles ${RELEASE_TAG} - Committed for ${COMMIT_USER}<${COMMIT_EMAIL}> [ci skip]"
           git push --set-upstream --force origin "$RELEASE_TAG#pr"
+          brew install hub
           hub pull-request -m "$(git log -1 --pretty=%B)"
       - store_artifacts:
           path: /tmp/workspace/bottles
