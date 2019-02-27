@@ -45,12 +45,21 @@ build_steps: &build_steps
           cat ~/.ssh/config
           ssh-add -l
     - run:
-        name: Build bottles, commit and upload to bintray
+        name: Build bottles and commit for new formula
         no_output_timeout: 30m
         command: |
           .circleci/after_script.sh
           # # fix if not file in /tmp/bottles
           # echo "fix" > /tmp/bottles/fix.txt
+    - run:
+        name: Upload to Bintray
+        no_output_timeout: 30m
+        command: |
+          ls /tmp/bottles
+          echo "Upload to Bintray..."
+          echo "Bintray user: $HOMEBREW_BINTRAY_USER - ${HOMEBREW_BINTRAY_USER}"
+          curl -T "{$(echo ./tmp/bottles/*.tar.gz | tr ' ' ',')}" -u${HOMEBREW_BINTRAY_USER}:${HOMEBREW_BINTRAY_KEY} https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles/bottles/0.1/
+
     - persist_to_workspace:
         root: /tmp
         paths:

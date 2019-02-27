@@ -100,12 +100,6 @@ pushd /tmp/bottles
   ls
 popd
 
-ls
-ls /tmp/bottles
-
-echo "Upload to Bintray..."
-curl -T "{$(echo ./tmp/bottles/*.tar.gz | tr ' ' ',')}" -u${BINTRAY_USER}:${BINTRAY_API_KEY} https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles/bottles/0.1/
-
 # cd ${HOMEBREW_REPOSITORY}/Library/Taps/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}
 
 # Now do the commit and push
