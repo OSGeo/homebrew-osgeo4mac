@@ -114,11 +114,21 @@ jobs:
           name: Commit bottles
           command: |
             .circleci/before_deploy.sh
-            if [ "$CIRCLE_BRANCH" = "master" ]; then
-              ls /tmp
+            # This hook will add [ci skip] the the commit messages for bottle DSL
+            # so that travis-ci does not re-build a duplicate bottle on pushing.
+            echo 'echo "\n\n[ci skip]" >> "$1"' > .git/hooks/commit-msg; chmod +x .git/hooks/commit-msg
+            # This hook will add [ci skip] the the commit messages for bottle DSL
+            # so that travis-ci does not re-build a duplicate bottle on pushing.
+            ls /tmp
+            cd /tmp/workspace/bottles
+            ls
+            if [ "$CIRCLE_BRANCH" = "$CIRCLE_BRANCH" ] && [ ls *.{json,tar.gz} ]; then
               brew update;
-              cd /tmp/workspace/bottles
-              brew test-bot --ci-upload --git-name=$BINTRAY_USER --git-email=$BINTRAY_EMAIL --bintray-org=BINTRAY_ORG;
+              TAP_BOTTLE_ROOT_URL=https://dl.bintray.com/homebrew-osgeo/osgeo-bottles
+              brew test-bot --ci-upload --root-url=$TAP_BOTTLE_ROOT_URL --git-name=$HOMEBREW_BINTRAY_USER --git-email=HOMEBREW_BINTRAY_EMAIL --bintray-org=$HOMEBREW_BINTRAY_ORG;
+              brew pull --bottle --bintray-org=$HOMEBREW_BINTRAY_ORG --test-bot-user=$HOMEBREW_BINTRAY_USER $CIRCLE_PULL_REQUEST
+            else
+              echo "==> No bottle found in the bucket, skipping --ci-upload";
             fi
       - store_artifacts:
           path: /tmp/workspace/bottles
