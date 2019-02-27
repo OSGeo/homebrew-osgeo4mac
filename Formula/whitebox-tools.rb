@@ -5,7 +5,7 @@ class WhiteboxTools < Formula
   sha256 "1a96a037a83f3c1b83eff03c586ae6783bd6abcf04d8b0f9f0724cbe348352a8"
   version "0.14.1"
 
-  revision 14
+  revision 15
 
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
