@@ -10,7 +10,7 @@ build_steps: &build_steps
          echo "$CIRCLE_PULL_REQUEST" >> /tmp/pull.txt
          ls /tmp
          head -n 1 /tmp/pull.txt
-         echo "export PULL_REQUEST=$(head -n 1 /tmp/pull.txt)" >> $BASH_ENV
+         export PULL_REQUEST="head -n 1 /tmp/pull.txt"
          echo "Pull: $PULL_REQUEST"
     # - run: |
     #     brew --version
@@ -134,7 +134,7 @@ jobs:
             echo "$CIRCLE_PULL_REQUEST" >> /tmp/pull.txt
             ls /tmp
             head -n 1 /tmp/pull.txt
-            echo "export PULL_REQUEST=$(head -n 1 /tmp/pull.txt)" >> $BASH_ENV
+            export PULL_REQUEST="head -n 1 /tmp/pull.txt"
             echo "Pull: $PULL_REQUEST"
             .circleci/before_deploy.sh
             # This hook will add [ci skip] the the commit messages for bottle DSL
