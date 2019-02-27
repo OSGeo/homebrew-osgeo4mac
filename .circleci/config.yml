@@ -91,20 +91,10 @@ jobs:
     #     only: deploy
     docker:
       - image: linuxbrew/brew
+    working_directory: ~/project # $CIRCLE_WORKING_DIRECTORY
     steps:
       - attach_workspace:
           at: /tmp/workspace
-      - store_artifacts:
-          path: /tmp/workspace/bottles
-          destination: bottles
-
-  deploy:
-    # machine:
-    #   enabled: true
-    docker:
-      - image: linuxbrew/brew
-    working_directory: ~/project # $CIRCLE_WORKING_DIRECTORY
-    steps:
       - checkout
       # fix for ERROR: The key you are authenticating with has been marked as read only.
       # is using the first key that is found, the one assigned in Checkout keys
@@ -121,20 +111,56 @@ jobs:
             cat ~/.ssh/config
             ssh-add -l
       - run:
-          name: Before deploy
+          name: Commit bottles
           command: |
-            # curl https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/$CIRCLE_BUILD_NUM/artifacts?circle-token=$CIRCLE_TOKEN
-            cd /tmp
-            curl https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/$CIRCLE_BUILD_NUM/artifacts | grep -o 'https://[^"]*' > list.txt
-            wget --content-disposition --trust-server-names -i list.txt
-      - checkout
-      - run:
-          name: Before deploy
-          command: .circleci/before_deploy.sh
-      - run:
-          name: Upload to Bintray deploy
-          command: |
-            curl -T /tmp/*.tar.gz -u${BINTRAY_USER}:${BINTRAY_API_KEY} https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles/bottles/0.1/
+            .circleci/before_deploy.sh
+            if [ "$CIRCLE_BRANCH" = "master" ]; then
+              ls /tmp
+              brew update;
+              cd /tmp/workspace/bottles
+              brew test-bot --ci-upload --git-name=$BINTRAY_USER --git-email=$BINTRAY_EMAIL --bintray-org=BINTRAY_ORG;
+            fi
+      - store_artifacts:
+          path: /tmp/workspace/bottles
+          destination: bottles
+
+  # deploy:
+  #   # machine:
+  #   #   enabled: true
+  #   docker:
+  #     - image: linuxbrew/brew
+  #   working_directory: ~/project # $CIRCLE_WORKING_DIRECTORY
+  #   steps:
+  #     - checkout
+  #     # fix for ERROR: The key you are authenticating with has been marked as read only.
+  #     # is using the first key that is found, the one assigned in Checkout keys
+  #     # not Add deploy key
+  #     # https://circleci.com/gh/OSGeo/homebrew-osgeo4mac/edit#checkout
+  #     # Add deployment key fingerprint for CircleCI to use for a push
+  #     - add_ssh_keys:
+  #         fingerprints:
+  #           - "${KEY_FINGERPRINT}"
+  #     - run:
+  #         name: Avoid hosts unknown for github
+  #         command: |
+  #           echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
+  #           cat ~/.ssh/config
+  #           ssh-add -l
+  #     - run:
+  #         name: Before deploy
+  #         command: |
+  #           # curl https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/$CIRCLE_BUILD_NUM/artifacts?circle-token=$CIRCLE_TOKEN
+  #           cd /tmp
+  #           curl https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/$CIRCLE_BUILD_NUM/artifacts | grep -o 'https://[^"]*' > list.txt
+  #           wget --content-disposition --trust-server-names -i list.txt
+  #     - checkout
+  #     - run:
+  #         name: Before deploy
+  #         command: .circleci/before_deploy.sh
+  #     - run:
+  #         name: Upload to Bintray deploy
+  #         command: |
+  #           curl -T /tmp/*.tar.gz -u${BINTRAY_USER}:${BINTRAY_API_KEY} https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles/bottles/0.1/
 
 workflows:
   version: 2
@@ -144,22 +170,22 @@ workflows:
       - high_sierra-build:
           requires:
             - update-homebrew
-      - sierra-build:
-          requires:
-            - update-homebrew
+      # - sierra-build:
+      #     requires:
+      #       - update-homebrew
       - collect-bottles:
           filters:
             tags:
               only: deploy
           requires:
             - high_sierra-build
-            - sierra-build
-      - deploy:
-          requires:
-            - collect-bottles
-          filters:
-            branches:
-              only: master
+            # - sierra-build
+      # - deploy:
+      #     requires:
+      #       - collect-bottles
+      #     filters:
+      #       branches:
+      #         only: master
 
 # notify:
 #   webhooks:

@@ -54,7 +54,7 @@ if ! git checkout "$CIRCLE_BRANCH"; then
 fi
 
 BUILT_BOTTLES=
-pushd /tmp # /tmp/workspace/bottles/
+pushd /tmp/workspace/bottles/
   for f in ${CHANGED_FORMULAE};do
     echo "Updating changed formula ${f} with new bottles..."
 
