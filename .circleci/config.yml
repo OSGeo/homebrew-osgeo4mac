@@ -3,16 +3,7 @@ build_steps: &build_steps
     - checkout
     - run:
        name: Update environment variables
-       command: |
-         .circleci/set_env.sh
-         # fix get pull url in collect-bottles for master
-         # PULL_REQUEST=$(git pull --dry-run)
-         echo "$CIRCLE_PULL_REQUEST" >> /tmp/pull.txt
-         ls /tmp
-         head -n 1 /tmp/pull.txt
-         export PULL_REQUEST=$(head -n 1 /tmp/pull.txt)
-         echo "export PULL_REQUEST=$PULL_REQUEST" >> $BASH_ENV
-         echo "Pull: $PULL_REQUEST"
+       command: .circleci/set_env.sh
     # - run: |
     #     brew --version
     #     brew remove $(brew list)
@@ -44,6 +35,15 @@ build_steps: &build_steps
         no_output_timeout: 30m
         command: |
           .circleci/after_script.sh
+    - run:
+       name: Save pull url
+       command: |
+         # fix get pull url in collect-bottles for master
+         # PULL_REQUEST=$(git pull --dry-run)
+         echo "$CIRCLE_PULL_REQUEST" >> /tmp/bottles/pull.txt
+         export PULL_REQUEST=$(head -n 1 /tmp/bottles/pull.txt)
+         echo "export PULL_REQUEST=$PULL_REQUEST" >> $BASH_ENV
+         echo "Pull: $PULL_REQUEST"
     - persist_to_workspace:
         root: /tmp
         paths:
@@ -130,9 +130,9 @@ jobs:
       - run:
           name: Commit bottles
           command: |
-            ls /tmp
-            head -n 1 /tmp/pull.txt
-            export PULL_REQUEST=$(head -n 1 /tmp/pull.txt)
+            ls /tmp/workspace
+            ls /tmp/workspace/bottles
+            export PULL_REQUEST=$(head -n 1 /tmp/workspace/bottles/pull.txt)
             echo "export PULL_REQUEST=$PULL_REQUEST" >> $BASH_ENV
             echo "Pull: $PULL_REQUEST"
             .circleci/before_deploy.sh
