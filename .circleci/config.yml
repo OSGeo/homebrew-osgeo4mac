@@ -3,7 +3,12 @@ build_steps: &build_steps
     - checkout
     - run:
        name: Update environment variables
-       command: .circleci/set_env.sh
+       command: |
+         .circleci/set_env.sh
+         # fix get pull url in collect-bottles for master
+         echo 'https://github.com/OSGeo/homebrew-osgeo4mac/pull/745' >> /tmp/pull.txt
+         export PULL_REQUEST=$(head -n 1 /tmp/pull.txt)
+         echo 'Pull: $PULL_REQUEST'
     # - run: |
     #     brew --version
     #     brew remove $(brew list)
@@ -121,8 +126,11 @@ jobs:
       - run:
           name: Commit bottles
           command: |
-            PULL_REQUEST=$(git pull --dry-run)
-            echo "Pull: $PULL_REQUEST"
+            # fix get pull url in collect-bottles for master
+            echo 'https://github.com/OSGeo/homebrew-osgeo4mac/pull/745' >> /tmp/pull.txt
+            # PULL_REQUEST=$(git pull --dry-run)
+            export PULL_REQUEST=$(head -n 1 /tmp/pull.txt)
+            echo 'Pull: $PULL_REQUEST'
             .circleci/before_deploy.sh
             # This hook will add [ci skip] the the commit messages for bottle DSL
             # so that travis-ci does not re-build a duplicate bottle on pushing.
@@ -136,7 +144,7 @@ jobs:
               ls
               echo "Test bot..."
               brew test-bot --skip-setup --root-url=https://dl.bintray.com/homebrew-osgeo/osgeo-bottles --git-name=geo-ninja --git-email=qgisninja@gmail.com --bintray-org=homebrew-osgeo;
-              echo "Pull bottle: $PULL_REQUEST"
+              echo "Pull bottle..."
               brew pull --bottle --bintray-org=homebrew-osgeos --test-bot-user="geo-ninja" $PULL_REQUEST
             fi
       # - store_artifacts:
