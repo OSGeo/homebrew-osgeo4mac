@@ -1,5 +1,8 @@
 build_steps: &build_steps
   steps:
+    - run:
+       name: Update environment variables
+       command: .circleci/set_env.sh
     - run: |
         brew --version
         brew remove $(brew list)
@@ -16,9 +19,6 @@ build_steps: &build_steps
         repo=$(brew --repo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME)
         mkdir -p $repo
         cp -a ./ $repo/
-    - run:
-       name: Update environment variables
-       command: .circleci/set_env.sh
     - run:
        name: Before install script
        command: .circleci/before_install.sh
@@ -76,20 +76,12 @@ jobs:
     <<: *filter
     macos:
       xcode: "8.3.3"
-    environment:
-      CIRCLE_REPOSITORY_URL: https://github.com/OSGeo/homebrew-osgeo4mac
-      HOMEBREW_DEVELOPER: 1
-      HOMEBREW_NO_AUTO_UPDATE: 1
 
   high_sierra-build:
     <<: *build_steps
     <<: *filter
     macos:
       xcode: "10.1.0"
-    environment:
-      CIRCLE_REPOSITORY_URL: https://github.com/OSGeo/homebrew-osgeo4mac
-      HOMEBREW_DEVELOPER: 1
-      HOMEBREW_NO_AUTO_UPDATE: 1
 
   collect-bottles:
     macos:
@@ -97,10 +89,6 @@ jobs:
     # filters:
     #   tags:
     #     only: deploy
-    environment:
-      CIRCLE_REPOSITORY_URL: https://github.com/OSGeo/homebrew-osgeo4mac
-      HOMEBREW_DEVELOPER: 1
-      HOMEBREW_NO_AUTO_UPDATE: 1
     # docker:
     #   - image: linuxbrew/brew
     # working_directory: ~/project # $CIRCLE_WORKING_DIRECTORY
@@ -108,12 +96,12 @@ jobs:
       - attach_workspace:
           at: /tmp/workspace
       - checkout
-      - run: |
-          git config --global user.name "geo-ninja"
-          git config --global user.email "qgisninja@gmail.com"
       - run:
          name: Update environment variables
          command: .circleci/set_env.sh
+      - run: |
+          git config --global user.name "geo-ninja"
+          git config --global user.email "qgisninja@gmail.com"
       # fix for ERROR: The key you are authenticating with has been marked as read only.
       # is using the first key that is found, the one assigned in Checkout keys
       # not Add deploy key
@@ -137,7 +125,7 @@ jobs:
             # echo 'echo "\n\n[ci skip]" >> "$1"' > .git/hooks/commit-msg; chmod +x .git/hooks/commit-msg
             # This hook will add [ci skip] the the commit messages for bottle DSL
             # so that travis-ci does not re-build a duplicate bottle on pushing.
-            if [ "$CIRCLE_BRANCH" = "$CIRCLE_BRANCH" ]; then
+            if [ "$CIRCLE_BRANCH" = "$CIRCLE_BRANCH" ] && [ "$CHANGED_FORMULAE" != "" ]; then
               brew tap homebrew/test-bot
               export HOMEBREW_BINTRAY_USER=nickrobison
               cd /tmp/workspace/bottles
@@ -145,9 +133,9 @@ jobs:
               brew test-bot --skip-setup --root-url=https://dl.bintray.com/homebrew-osgeo/osgeo-bottles --git-name=geo-ninja --git-email=qgisninja@gmail.com --bintray-org=homebrew-osgeo;
               brew pull --bottle --bintray-org=homebrew-osgeos --test-bot-user="geo-ninja" $CIRCLE_PULL_REQUEST
             fi
-      - store_artifacts:
-          path: /tmp/workspace/bottles
-          destination: bottles
+      # - store_artifacts:
+      #     path: /tmp/workspace/bottles
+      #     destination: bottles
 
   # deploy:
   #   # machine:
