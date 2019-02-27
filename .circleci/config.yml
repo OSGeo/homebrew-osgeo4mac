@@ -137,14 +137,14 @@ jobs:
             # echo 'echo "\n\n[ci skip]" >> "$1"' > .git/hooks/commit-msg; chmod +x .git/hooks/commit-msg
             # This hook will add [ci skip] the the commit messages for bottle DSL
             # so that travis-ci does not re-build a duplicate bottle on pushing.
-            # if [ "$CIRCLE_BRANCH" = "$CIRCLE_BRANCH" ]; then
-            brew tap homebrew/test-bot
-            export HOMEBREW_BINTRAY_USER=nickrobison
-            cd /tmp/workspace/bottles
-            ls
-            brew test-bot --skip-setup --root-url=https://dl.bintray.com/homebrew-osgeo/osgeo-bottles --git-name=geo-ninja --git-email=qgisninja@gmail.com --bintray-org=homebrew-osgeo;
-            brew pull --bottle --bintray-org=homebrew-osgeos --test-bot-user="geo-ninja" $CIRCLE_PULL_REQUEST
-            # fi
+            if [ "$CIRCLE_BRANCH" = "$CIRCLE_BRANCH" ]; then
+              brew tap homebrew/test-bot
+              export HOMEBREW_BINTRAY_USER=nickrobison
+              cd /tmp/workspace/bottles
+              ls
+              brew test-bot --skip-setup --root-url=https://dl.bintray.com/homebrew-osgeo/osgeo-bottles --git-name=geo-ninja --git-email=qgisninja@gmail.com --bintray-org=homebrew-osgeo;
+              brew pull --bottle --bintray-org=homebrew-osgeos --test-bot-user="geo-ninja" $CIRCLE_PULL_REQUEST
+            fi
       - store_artifacts:
           path: /tmp/workspace/bottles
           destination: bottles
