@@ -110,10 +110,11 @@ jobs:
           # fix for ERROR: The key you are authenticating with has been marked as read only.
           # is using the first key that is found, the one assigned in Checkout keys
           # https://circleci.com/gh/OSGeo/homebrew-osgeo4mac/edit#checkout
-          name: SSH - Delete identities
+          # not Add deploy key
+          name: SSH
           command: |
             ssh-add -l
-            ssh-add -D
+            # ssh-add -D # Delete identities
       # Add deployment key fingerprint for CircleCI to use for a push
       - add_ssh_keys:
           fingerprints:
