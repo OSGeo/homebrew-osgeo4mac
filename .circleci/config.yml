@@ -137,8 +137,8 @@ jobs:
               echo "Test bot..."
               HOMEBREW_BINTRAY_USER=${HOMEBREW_BINTRAY_USER} HOMEBREW_BINTRAY_KEY=${HOMEBREW_BINTRAY_KEY} brew test-bot --skip-setup --root-url=https://dl.bintray.com/homebrew-osgeo/osgeo-bottles --git-name=${HOMEBREW_BINTRAY_USER} --git-email=${HOMEBREW_BINTRAY_EMAIL} --bintray-org=homebrew-osgeo;
               echo "Pull bottle..."
-              HOMEBREW_BINTRAY_USER=${HOMEBREW_BINTRAY_USER HOMEBREW_BINTRAY_KEY=${HOMEBREW_BINTRAY_KEY} brew pull --bottle --bintray-org=homebrew-osgeo --test-bot-user=geo-ninja $CIRCLE_PULL_REQUEST
-              # HOMEBREW_BINTRAY_USER=${HOMEBREW_BINTRAY_USER HOMEBREW_BINTRAY_KEY=$(security find-generic-password -s bintray-api-key -a ${HOMEBREW_BINTRAY_USER} -w) brew pull --bottle --bintray-org=homebrew-osgeo --test-bot-user=geo-ninja $CIRCLE_PULL_REQUEST
+              HOMEBREW_BINTRAY_USER=${HOMEBREW_BINTRAY_USER} HOMEBREW_BINTRAY_KEY=${HOMEBREW_BINTRAY_KEY} brew pull --bottle --bintray-org=homebrew-osgeo --test-bot-user=geo-ninja $CIRCLE_PULL_REQUEST
+              # HOMEBREW_BINTRAY_USER=${HOMEBREW_BINTRAY_USER} HOMEBREW_BINTRAY_KEY=$(security find-generic-password -s bintray-api-key -a ${HOMEBREW_BINTRAY_USER} -w) brew pull --bottle --bintray-org=homebrew-osgeo --test-bot-user=geo-ninja $CIRCLE_PULL_REQUEST
             fi
       - store_artifacts:
           path: /tmp/workspace/bottles
