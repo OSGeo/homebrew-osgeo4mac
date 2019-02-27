@@ -44,3 +44,7 @@ ulimit -c unlimited
            echo "export HOMEBREW_BINTRAY_USER=${HOMEBREW_BINTRAY_USER}" >> $BASH_ENV
            echo "export HOMEBREW_BINTRAY_KEY=${HOMEBREW_BINTRAY_KEY}" >> $BASH_ENV
            echo "export HOMEBREW_BINTRAY_EMAIL=${HOMEBREW_BINTRAY_EMAIL}" >> $BASH_ENV
+           # export HOMEBREW_GIT_NAME="${HOMEBREW_GIT_NAME}" # git-name
+           # export HOMEBREW_GIT_EMAIL="${HOMEBREW_GIT_EMAIL}" # git-email
+           # echo "export HOMEBREW_GIT_NAME=${HOMEBREW_GIT_NAME}" >> $BASH_ENV
+           # echo "export HOMEBREW_GIT_EMAIL=${HOMEBREW_GIT_EMAIL}" >> $BASH_ENV
