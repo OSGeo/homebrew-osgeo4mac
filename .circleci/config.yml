@@ -107,14 +107,10 @@ jobs:
     steps:
       - checkout
       - run:
-          # fix for ERROR: The key you are authenticating with has been marked as read only.
-          # is using the first key that is found, the one assigned in Checkout keys
-          # https://circleci.com/gh/OSGeo/homebrew-osgeo4mac/edit#checkout
-          # not Add deploy key
-          name: SSH
-          command: |
-            ssh-add -l
-            # ssh-add -D # Delete identities
+      # fix for ERROR: The key you are authenticating with has been marked as read only.
+      # is using the first key that is found, the one assigned in Checkout keys
+      # not Add deploy key
+      # https://circleci.com/gh/OSGeo/homebrew-osgeo4mac/edit#checkout
       # Add deployment key fingerprint for CircleCI to use for a push
       - add_ssh_keys:
           fingerprints:
@@ -126,18 +122,20 @@ jobs:
             cat ~/.ssh/config
             ssh-add -l
       - run:
-          name: Commit bottles
+          name: Before deploy
+          command: |
+            # curl https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/$CIRCLE_BUILD_NUM/artifacts?circle-token=$CIRCLE_TOKEN
+            cd /tmp
+            curl https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/$CIRCLE_BUILD_NUM/artifacts | grep -o 'https://[^"]*' > list.txt
+            wget --content-disposition --trust-server-names -i list.txt
+      - checkout
+      - run:
+          name: Before deploy
           command: .circleci/before_deploy.sh
       - run:
-          # check path for bottles
-          name: Check directories
+          name: Upload to Bintray deploy
           command: |
-            ls
-            ls /tmp
-      - run:
-          name: Upload to Bintray
-          command: |
-            curl -T /tmp/workspace/bottles/*.tar.gz -u${BINTRAY_USER}:${BINTRAY_API_KEY} https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles
+            curl -T /tmp/*.tar.gz -u${BINTRAY_USER}:${BINTRAY_API_KEY} https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles/bottles/0.1/
 
 workflows:
   version: 2
