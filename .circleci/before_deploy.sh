@@ -19,6 +19,7 @@ set -e
 
 pwd
 ls
+ls /tmp
 
 # ls -lah /tmp/workspace/bottles/
 
@@ -52,25 +53,25 @@ if ! git checkout "$CIRCLE_BRANCH"; then
     return 1
 fi
 
-# BUILT_BOTTLES=
-# pushd /tmp/workspace/bottles/
-#   for f in ${CHANGED_FORMULAE};do
-#     echo "Updating changed formula ${f} with new bottles..."
-#
-#     # Do Merge bottles with the formula
-#     # Don't commit anything, we'll do that after updating all the formulae
-#     # Catch the eror and store it to a variable
-#     if result=$(brew bottle --merge --write --no-commit ${f}*.json 2>&1); then
-#       BUILT_BOTTLES="$BUILT_BOTTLES ${f}"
-#     else
-#      # If there's an error, remove the json and bottle files, we don't want them anymore.
-#      echo "Unable to bottle ${f}"
-#      echo $result
-#      rm ${f}*.json
-#      rm ${f}*.tar.gz
-#     fi
-#   done
-# popd
+BUILT_BOTTLES=
+pushd /tmp # /tmp/workspace/bottles/
+  for f in ${CHANGED_FORMULAE};do
+    echo "Updating changed formula ${f} with new bottles..."
+
+    # Do Merge bottles with the formula
+    # Don't commit anything, we'll do that after updating all the formulae
+    # Catch the eror and store it to a variable
+    if result=$(brew bottle --merge --write --no-commit ${f}*.json 2>&1); then
+      BUILT_BOTTLES="$BUILT_BOTTLES ${f}"
+    else
+     # If there's an error, remove the json and bottle files, we don't want them anymore.
+     echo "Unable to bottle ${f}"
+     echo $result
+     rm ${f}*.json
+     rm ${f}*.tar.gz
+    fi
+  done
+popd
 
 # Set up the keys
 # Decrypt the circle_deploy_key.enc key into /tmp/circle_deploy_key
@@ -91,11 +92,10 @@ fi
 
 # Now do the commit and push
 
-# git add -vA Formula/*.rb
-# git commit -m "Updated bottles for: ${BUILT_BOTTLES}
+git add -vA Formula/*.rb
+git commit -m "Updated bottles for: ${BUILT_BOTTLES}
 
-# Committed for ${COMMIT_USER}<${COMMIT_EMAIL}>
-# [ci skip]"
+Committed for ${COMMIT_USER}<${COMMIT_EMAIL}> - [ci skip]"
 
 # Now that we're all set up, we can push.
 git push ${SSH_REPO} $CIRCLE_BRANCH
