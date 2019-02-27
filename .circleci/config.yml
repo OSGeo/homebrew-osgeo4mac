@@ -1,5 +1,6 @@
 build_steps: &build_steps
   steps:
+    - checkout
     - run:
        name: Update environment variables
        command: .circleci/set_env.sh
@@ -10,7 +11,6 @@ build_steps: &build_steps
         brew update-reset
         brew --env
         brew config
-    - checkout
     - run: |
         git remote set-url origin $CIRCLE_REPOSITORY_URL
         git fetch origin
