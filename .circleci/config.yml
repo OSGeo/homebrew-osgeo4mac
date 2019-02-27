@@ -129,23 +129,25 @@ jobs:
       - run:
           name: Commit for new bottles and upload to bintray
           command: |
-            if [ "$CIRCLE_BRANCH" = "master" ] && [ "$CHANGED_FORMULAE" != "" ]; then
-              export HOMEBREW_BINTRAY_USER=nickrobison
+            if [ "$CIRCLE_BRANCH" = "$CIRCLE_BRANCH" ] && [ "$CHANGED_FORMULAE" != "" ]; then
               export PULL_REQUEST=$(head -n 1 /tmp/workspace/bottles/pull.txt)
               echo "export PULL_REQUEST=$PULL_REQUEST" >> $BASH_ENV
               echo "Pull: $PULL_REQUEST"
               # This hook will add [ci skip] the the commit messages for bottle DSL
-              # so that travis-ci does not re-build a duplicate bottle on pushing.
-              # echo 'echo "\n\n[ci skip]" >> "$1"' > .git/hooks/commit-msg; chmod +x .git/hooks/commit-msg
+              # so that ci does not re-build a duplicate bottle on pushing.
+              # touch .git/hooks/commit-msg
+              cp -r ./commit-msg.sh .git/hooks/commit-msg
+              echo 'echo "\n\n[ci skip]" >> "$1"' >> .git/hooks/commit-msg; chmod +x .git/hooks/commit-msg
               # This hook will add [ci skip] the the commit messages for bottle DSL
               # so that travis-ci does not re-build a duplicate bottle on pushing.
               .circleci/before_deploy.sh
               cd /tmp/workspace/bottles
               brew tap homebrew/test-bot
               echo "Test bot..."
-              brew test-bot --skip-setup --root-url=https://dl.bintray.com/homebrew-osgeo/osgeo-bottles --git-name=geo-ninja --git-email=qgisninja@gmail.com --bintray-org=homebrew-osgeo;
+              brew test-bot --skip-setup --root-url=https://dl.bintray.com/homebrew-osgeo/osgeo-bottles --git-name=$HOMEBREW_BINTRAY_USER --git-email=$HOMEBREW_BINTRAY_EMAIL --bintray-org=homebrew-osgeo;
               echo "Pull bottle..."
-              brew pull --bottle --bintray-org=homebrew-osgeos --test-bot-user="geo-ninja" $PULL_REQUEST
+              HOMEBREW_BINTRAY_USER=$HOMEBREW_BINTRAY_USER HOMEBREW_BINTRAY_KEY=$HOMEBREW_BINTRAY_KEY brew pull --bottle --bintray-org=homebrew-osgeo --test-bot-user=geo-ninja $PULL_REQUEST
+              # HOMEBREW_BINTRAY_USER=$HOMEBREW_BINTRAY_USER HOMEBREW_BINTRAY_KEY=$(security find-generic-password -s bintray-api-key -a $HOMEBREW_BINTRAY_USER -w) brew pull --bottle --bintray-org=homebrew-osgeo --test-bot-user=geo-ninja $PULL_REQUEST
             fi
       - store_artifacts:
           path: /tmp/workspace/bottles
