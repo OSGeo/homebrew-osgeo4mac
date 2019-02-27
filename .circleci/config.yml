@@ -121,6 +121,8 @@ jobs:
       - run:
           name: Commit bottles
           command: |
+            PULL_REQUEST=$(git pull --dry-run)
+            echo "Pull: $PULL_REQUEST"
             .circleci/before_deploy.sh
             # This hook will add [ci skip] the the commit messages for bottle DSL
             # so that travis-ci does not re-build a duplicate bottle on pushing.
@@ -133,9 +135,8 @@ jobs:
               cd /tmp/workspace/bottles
               ls
               echo "Test bot..."
-              PULL_REQUEST=$(git pull --dry-run)
-              echo "Pull bottle...$PULL_REQUEST"
               brew test-bot --skip-setup --root-url=https://dl.bintray.com/homebrew-osgeo/osgeo-bottles --git-name=geo-ninja --git-email=qgisninja@gmail.com --bintray-org=homebrew-osgeo;
+              echo "Pull bottle: $PULL_REQUEST"
               brew pull --bottle --bintray-org=homebrew-osgeos --test-bot-user="geo-ninja" $PULL_REQUEST
             fi
       # - store_artifacts:
