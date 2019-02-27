@@ -20,6 +20,7 @@ set -e
 pwd
 ls
 ls /tmp
+ls /tmp/workspace
 
 # ls -lah /tmp/workspace/bottles/
 
