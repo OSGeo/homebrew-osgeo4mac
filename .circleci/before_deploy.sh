@@ -17,12 +17,6 @@
 
 set -e
 
-pwd
-ls
-ls /tmp
-ls /tmp/workspace
-ls /tmp/workspace/bottles
-
 # ls -lah /tmp/workspace/bottles/
 
 # Setup Git configuration
