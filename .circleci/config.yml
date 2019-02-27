@@ -132,10 +132,10 @@ jobs:
             echo 'echo "\n\n[ci skip]" >> "$1"' >> .git/hooks/commit-msg; chmod +x .git/hooks/commit-msg
             # This hook will add [ci skip] the the commit messages for bottle DSL
             # so that travis-ci does not re-build a duplicate bottle on pushing.
-            cd /tmp/workspace/bottles
             brew tap homebrew/test-bot
             echo "Test bot..."
             echo "Bintray user: $HOMEBREW_BINTRAY_USER"
+            cd /tmp/workspace/bottles
             brew test-bot --skip-setup --root-url=https://dl.bintray.com/homebrew-osgeo/osgeo-bottles --git-name="${HOMEBREW_BINTRAY_USER}" --git-email="${HOMEBREW_BINTRAY_EMAIL}" --bintray-org=homebrew-osgeo
             # echo "Pull bottle..."
             # HOMEBREW_BINTRAY_USER="${HOMEBREW_BINTRAY_USER}" HOMEBREW_BINTRAY_KEY="${HOMEBREW_BINTRAY_KEY}" brew pull --bottle --bintray-org=homebrew-osgeo --test-bot-user=geo-ninja "${CIRCLE_PULL_REQUEST}"
@@ -148,6 +148,8 @@ jobs:
   # deploy:
   #   # machine:
   #   #   enabled: true
+  #  macos:
+  #    xcode: "10.1.0"
   #   docker:
   #     - image: linuxbrew/brew
   #   working_directory: ~/project # $CIRCLE_WORKING_DIRECTORY
