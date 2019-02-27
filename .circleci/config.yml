@@ -106,6 +106,21 @@ jobs:
     working_directory: ~/project # $CIRCLE_WORKING_DIRECTORY
     steps:
       - checkout
+      - run:
+          # check path for bottles
+          name: Check directories
+          command: |
+            ls
+            ls /tmp/bottles
+            ls /tmp/workspace/bottles
+      - run:
+          # fix for ERROR: The key you are authenticating with has been marked as read only.
+          # is using the first key that is found, the one assigned in Checkout keys
+          # https://circleci.com/gh/OSGeo/homebrew-osgeo4mac/edit#checkout
+          name: SSH - Delete identities
+          command: |
+            ssh-add -l
+            ssh-add -D
       # Add deployment key fingerprint for CircleCI to use for a push
       - add_ssh_keys:
           fingerprints:
@@ -120,11 +135,8 @@ jobs:
           name: Commit bottles
           command: .circleci/before_deploy.sh
       - run:
-          name: Deploy
+          name: Upload to Bintray
           command: |
-            ls
-            ls /tmp/bottles
-            ls /tmp/workspace/bottles
             curl -T /tmp/workspace/bottles/*.tar.gz -u${BINTRAY_USER}:${BINTRAY_API_KEY} https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles
 
 workflows:
