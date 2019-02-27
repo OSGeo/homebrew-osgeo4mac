@@ -21,6 +21,7 @@ pwd
 ls
 ls /tmp
 ls /tmp/workspace
+ls /tmp/workspace/bottles
 
 # ls -lah /tmp/workspace/bottles/
 
@@ -89,7 +90,7 @@ popd
 # checkout, restore_cache, run: yarn install, save_cache, etc.
 # Run semantic-release after all the above is set.
 
-# cd ${HOMEBREW_REPOSITORY}/Library/Taps/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}
+cd ${HOMEBREW_REPOSITORY}/Library/Taps/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}
 
 # Now do the commit and push
 
