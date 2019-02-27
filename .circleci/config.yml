@@ -4,13 +4,13 @@ build_steps: &build_steps
     - run:
        name: Update environment variables
        command: .circleci/set_env.sh
-    - run: |
-        brew --version
-        brew remove $(brew list)
-        rm -rf /usr/local/Homebrew/Library/Taps/
-        brew update-reset
-        brew --env
-        brew config
+    # - run: |
+    #     brew --version
+    #     brew remove $(brew list)
+    #     rm -rf /usr/local/Homebrew/Library/Taps/
+    #     brew update-reset
+    #     brew --env
+    #     brew config
     - run: |
         git remote set-url origin $CIRCLE_REPOSITORY_URL
         git fetch origin
