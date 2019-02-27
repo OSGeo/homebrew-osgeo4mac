@@ -38,3 +38,9 @@ ulimit -c unlimited
            echo 'export HOMEBREW_NO_AUTO_UPDATE=1' >> $BASH_ENV
            echo 'export HOMEBREW_PREFIX=/usr/local' >> $BASH_ENV
            echo 'export CIRCLE_REPOSITORY_URL=https://github.com/OSGeo/homebrew-osgeo4mac' >> $BASH_ENV
+           export HOMEBREW_BINTRAY_USER="${HOMEBREW_BINTRAY_USER}"
+           export HOMEBREW_BINTRAY_KEY="${HOMEBREW_BINTRAY_KEY}"
+           export HOMEBREW_BINTRAY_KEY="${HOMEBREW_BINTRAY_EMAIL}"
+           echo "export HOMEBREW_BINTRAY_USER=${HOMEBREW_BINTRAY_USER}" >> $BASH_ENV
+           echo "export HOMEBREW_BINTRAY_KEY=${HOMEBREW_BINTRAY_KEY}" >> $BASH_ENV
+           echo "export HOMEBREW_BINTRAY_EMAIL=${HOMEBREW_BINTRAY_EMAIL}" >> $BASH_ENV
