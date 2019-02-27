@@ -6,9 +6,12 @@ build_steps: &build_steps
        command: |
          .circleci/set_env.sh
          # fix get pull url in collect-bottles for master
-         echo 'https://github.com/OSGeo/homebrew-osgeo4mac/pull/745' >> /tmp/pull.txt
-         export PULL_REQUEST=$(head -n 1 /tmp/pull.txt)
-         echo 'Pull: $PULL_REQUEST'
+         # PULL_REQUEST=$(git pull --dry-run)
+         echo "$CIRCLE_PULL_REQUEST" >> /tmp/pull.txt
+         ls /tmp
+         head -n 1 /tmp/pull.txt
+         echo "export PULL_REQUEST=$(head -n 1 /tmp/pull.txt)" >> $BASH_ENV
+         echo "Pull: $PULL_REQUEST"
     # - run: |
     #     brew --version
     #     brew remove $(brew list)
@@ -127,10 +130,12 @@ jobs:
           name: Commit bottles
           command: |
             # fix get pull url in collect-bottles for master
-            echo 'https://github.com/OSGeo/homebrew-osgeo4mac/pull/745' >> /tmp/pull.txt
             # PULL_REQUEST=$(git pull --dry-run)
-            export PULL_REQUEST=$(head -n 1 /tmp/pull.txt)
-            echo 'Pull: $PULL_REQUEST'
+            echo "$CIRCLE_PULL_REQUEST" >> /tmp/pull.txt
+            ls /tmp
+            head -n 1 /tmp/pull.txt
+            echo "export PULL_REQUEST=$(head -n 1 /tmp/pull.txt)" >> $BASH_ENV
+            echo "Pull: $PULL_REQUEST"
             .circleci/before_deploy.sh
             # This hook will add [ci skip] the the commit messages for bottle DSL
             # so that travis-ci does not re-build a duplicate bottle on pushing.
