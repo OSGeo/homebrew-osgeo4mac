@@ -11,7 +11,7 @@ build_steps: &build_steps
     - run: |
         git remote set-url origin $CIRCLE_REPOSITORY_URL
         git fetch origin
-        git config --global user.name "Geo Ninja"
+        git config --global user.name "geo-ninja"
         git config --global user.email "qgisninja@gmail.com"
         repo=$(brew --repo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME)
         mkdir -p $repo
@@ -76,26 +76,44 @@ jobs:
     <<: *filter
     macos:
       xcode: "8.3.3"
+    environment:
+      CIRCLE_REPOSITORY_URL: https://github.com/OSGeo/homebrew-osgeo4mac
+      HOMEBREW_DEVELOPER: 1
+      HOMEBREW_NO_AUTO_UPDATE: 1
 
   high_sierra-build:
     <<: *build_steps
     <<: *filter
     macos:
       xcode: "10.1.0"
+    environment:
+      CIRCLE_REPOSITORY_URL: https://github.com/OSGeo/homebrew-osgeo4mac
+      HOMEBREW_DEVELOPER: 1
+      HOMEBREW_NO_AUTO_UPDATE: 1
 
   collect-bottles:
-    # macos:
-    #   xcode: "10.1.0"
+    macos:
+      xcode: "10.1.0"
     # filters:
     #   tags:
     #     only: deploy
-    docker:
-      - image: linuxbrew/brew
-    working_directory: ~/project # $CIRCLE_WORKING_DIRECTORY
+    environment:
+      CIRCLE_REPOSITORY_URL: https://github.com/OSGeo/homebrew-osgeo4mac
+      HOMEBREW_DEVELOPER: 1
+      HOMEBREW_NO_AUTO_UPDATE: 1
+    # docker:
+    #   - image: linuxbrew/brew
+    # working_directory: ~/project # $CIRCLE_WORKING_DIRECTORY
     steps:
       - attach_workspace:
           at: /tmp/workspace
       - checkout
+      - run: |
+          git config --global user.name "geo-ninja"
+          git config --global user.email "qgisninja@gmail.com"
+      - run:
+         name: Update environment variables
+         command: .circleci/set_env.sh
       # fix for ERROR: The key you are authenticating with has been marked as read only.
       # is using the first key that is found, the one assigned in Checkout keys
       # not Add deploy key
@@ -108,6 +126,8 @@ jobs:
           name: Avoid hosts unknown for github
           command: |
             echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
+            cat ~/.ssh/config
+            ssh-add -l
       - run:
           name: Commit bottles
           command: |
@@ -120,8 +140,10 @@ jobs:
             # if [ "$CIRCLE_BRANCH" = "$CIRCLE_BRANCH" ]; then
             brew tap homebrew/test-bot
             export HOMEBREW_BINTRAY_USER=nickrobison
-            brew test-bot --skip-setup --root-url=https://dl.bintray.com/homebrew-osgeo/osgeo-bottles --git-name="Geo Ninja" --git-email=qgisninja@gmail.com --bintray-org=homebrew-osgeo;
-            brew pull --bottle --bintray-org=homebrew-osgeos --test-bot-user="Geo Ninja" $CIRCLE_PULL_REQUEST
+            cd /tmp/workspace/bottles
+            ls
+            brew test-bot --skip-setup --root-url=https://dl.bintray.com/homebrew-osgeo/osgeo-bottles --git-name=geo-ninja --git-email=qgisninja@gmail.com --bintray-org=homebrew-osgeo;
+            brew pull --bottle --bintray-org=homebrew-osgeos --test-bot-user="geo-ninja" $CIRCLE_PULL_REQUEST
             # fi
       - store_artifacts:
           path: /tmp/workspace/bottles

@@ -22,7 +22,7 @@ set -e
 # Setup Git configuration
 COMMIT_USER=$(git log --format='%an' ${CIRCLE_SHA1}^\!)
 COMMIT_EMAIL=$(git log --format='%ae' ${CIRCLE_SHA1}^\!)
-git config user.name "Geo Ninja"
+git config user.name "geo-ninja"
 git config user.email "qgisninja@gmail.com"
 REPO=$(git config remote.origin.url)
 SSH_REPO=${REPO/https:\/\/github.com\//git@github.com:}
