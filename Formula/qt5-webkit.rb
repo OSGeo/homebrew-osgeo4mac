@@ -1,7 +1,7 @@
 class Qt5Webkit < Formula
   desc "Classes for a WebKit2 based implementation and a new QML API"
   homepage "https://www.qt.io/developers"
-  url "https://github.com/qt/qtwebkit/archive/72cfbd7664f21fcc0e62b869a6b01bf73eb5e7da.zip",
+  url "https://github.com/qt/qtwebkit/archive/72cfbd7664f21fcc0e62b869a6b01bf73eb5e7da.tar.gz",
   sha256 "2e393e7429387437cbfef56ec839329663e9b136ea68997d1e1cdd2f4d9d3ae0"
   version "5.12.1"
 
