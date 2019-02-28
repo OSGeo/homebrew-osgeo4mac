@@ -112,3 +112,13 @@ Committed for ${COMMIT_USER}<${COMMIT_EMAIL}>
 
 # Now that we're all set up, we can push.
 git push ${SSH_REPO} $CIRCLE_BRANCH
+
+cd /tmp/bottles
+echo "Upload to Bintray..."
+echo "Bintray user: $HOMEBREW_BINTRAY_USER - ${HOMEBREW_BINTRAY_USER}"
+
+files=$(echo *.tar.gz | tr ' ' ',')
+echo "Files: $files"
+# echo ls -p | grep -v / | tr '\n' ',' > bottles.txt
+curl -T "{$files}" -u${HOMEBREW_BINTRAY_USER}:${HOMEBREW_BINTRAY_KEY} https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles/bottles/0.1/
+# curl -T "{$(echo ./tmp/bottles/*.tar.gz | tr ' ' ',')}" -u${HOMEBREW_BINTRAY_USER}:${HOMEBREW_BINTRAY_KEY} https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles/bottles/0.1/

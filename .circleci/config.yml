@@ -49,17 +49,8 @@ build_steps: &build_steps
         no_output_timeout: 30m
         command: |
           .circleci/after_script.sh
-          # # fix if not file in /tmp/bottles
-          # echo "fix" > /tmp/bottles/fix.txt
-    - run:
-        name: Upload to Bintray
-        no_output_timeout: 30m
-        command: |
-          ls /tmp/bottles
-          echo "Upload to Bintray..."
-          echo "Bintray user: $HOMEBREW_BINTRAY_USER - ${HOMEBREW_BINTRAY_USER}"
-          curl -T "{$(echo ./tmp/bottles/*.tar.gz | tr ' ' ',')}" -u${HOMEBREW_BINTRAY_USER}:${HOMEBREW_BINTRAY_KEY} https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles/bottles/0.1/
-
+          # fix if not file in /tmp/bottles
+          echo "fix" > /tmp/bottles/fix.txt
     - persist_to_workspace:
         root: /tmp
         paths:
@@ -67,9 +58,9 @@ build_steps: &build_steps
     - store_test_results:
         path: /tmp/bottles
     - attach_workspace:
-        at: /tmp/workspace
+        at: /tmp
     - store_artifacts:
-        path: /tmp/workspace/bottles
+        path: /tmp/bottles
         destination: bottles
 
 workflow_filter: &filter
