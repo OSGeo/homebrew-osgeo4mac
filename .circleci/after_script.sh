@@ -100,8 +100,6 @@ pushd /tmp/bottles
   ls
 popd
 
-# cd ${HOMEBREW_REPOSITORY}/Library/Taps/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}
-
 # Now do the commit and push
 echo "Commit and push..."
 git add -vA Formula/*.rb
@@ -115,10 +113,8 @@ git push ${SSH_REPO} $CIRCLE_BRANCH
 
 cd /tmp/bottles
 echo "Upload to Bintray..."
-echo "Bintray user: $HOMEBREW_BINTRAY_USER - ${HOMEBREW_BINTRAY_USER}"
+echo "Bintray user: $BINTRAY_USER"
 
 files=$(echo *.tar.gz | tr ' ' ',')
 echo "Files: $files"
-# echo ls -p | grep -v / | tr '\n' ',' > bottles.txt
-curl -T "{$files}" -u${HOMEBREW_BINTRAY_USER}:${HOMEBREW_BINTRAY_KEY} https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles/bottles/0.1/
-# curl -T "{$(echo ./tmp/bottles/*.tar.gz | tr ' ' ',')}" -u${HOMEBREW_BINTRAY_USER}:${HOMEBREW_BINTRAY_KEY} https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles/bottles/0.1/
+curl -T "{$files}" -u${BINTRAY_USER}:${BINTRAY_API} https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles/bottles/0.1/
