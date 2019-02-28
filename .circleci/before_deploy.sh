@@ -69,9 +69,6 @@ if [ "$CIRCLE_BRANCH" != "master" ]; then
     done
   popd
 
-  # Now that we're all set up, we can push.
-  git push ${SSH_REPO} $CIRCLE_BRANCH
-
   echo "Upload to Bintray..."
 
   ls
@@ -92,4 +89,7 @@ if [ "$CIRCLE_BRANCH" != "master" ]; then
 
   Committed for ${COMMIT_USER}<${COMMIT_EMAIL}>
   [ci skip]"
+
+  # Now that we're all set up, we can push.
+  git push ${SSH_REPO} $CIRCLE_BRANCH
 fi

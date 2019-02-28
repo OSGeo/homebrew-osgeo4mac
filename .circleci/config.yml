@@ -142,6 +142,8 @@ jobs:
       xcode: "10.1.0"
     steps:
       - checkout
+      - run: ls /tmp
+      - run: ls /tmp/workspace/bottles
       - run: brew install jfrog-cli-go
       - run: jfrog bt config --user=${BINTRAY_USER} --key=${BINTRAY_API} --licenses=MIT
       - run: echo "jfrog" > /tmp/workspace/bottles/jfrog-deploy.txt
