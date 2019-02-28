@@ -15,7 +15,7 @@
 #                                                                         #
 ###########################################################################
 
-if [ "$CIRCLE_BRANCH" == "master" ] && [ "$CHANGED_FORMULAE" != "" ]; then
+# if [ "$CIRCLE_BRANCH" == "master" ] && [ "$CHANGED_FORMULAE" != "" ]; then
 
   # # Setup Git configuration
   # COMMIT_USER=$(git log --format='%an' ${CIRCLE_SHA1}^\!)
@@ -115,4 +115,4 @@ if [ "$CIRCLE_BRANCH" == "master" ] && [ "$CHANGED_FORMULAE" != "" ]; then
   # files=$(echo *.tar.gz | tr ' ' ',')
   # curl -T "{$files}" -u${BINTRAY_USER}:${BINTRAY_API} https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles/bottles/0.1/
 
-fi
+# fi
