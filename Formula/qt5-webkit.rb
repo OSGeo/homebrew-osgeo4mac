@@ -1,9 +1,8 @@
 class Qt5Webkit < Formula
   desc "Classes for a WebKit2 based implementation and a new QML API"
   homepage "https://www.qt.io/developers"
-  url "https://github.com/qt/qtwebkit.git",
-    :branch => "5.212",
-    :commit => "72cfbd7664f21fcc0e62b869a6b01bf73eb5e7da"
+  url "https://github.com/qt/qtwebkit/archive/72cfbd7664f21fcc0e62b869a6b01bf73eb5e7da.tar.gz"
+  sha256 "2e393e7429387437cbfef56ec839329663e9b136ea68997d1e1cdd2f4d9d3ae0"
   version "5.12.1"
 
   bottle do
@@ -14,7 +13,7 @@ class Qt5Webkit < Formula
     sha256 "dc31f6418403e8c7ea7282be54c0be71aadf53f21dd02b68f028ea3d6d27111a" => :sierra
   end
 
-  # revision 1
+  revision 1
 
   # from the developer: "https://github.com/annulen/webkit.git"
   head "https://github.com/qt/qtwebkit.git"

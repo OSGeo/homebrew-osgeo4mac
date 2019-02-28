@@ -49,6 +49,12 @@ before_install:
     else
       echo "Changed formulae are ${CHANGED_FORMULAE}";
     fi
+  - if [ "${CHANGED_FORMULAE}" == "qt5-webkit" ] || [ "${CHANGED_FORMULAE}" == "qgis" ] || [ "${CHANGED_FORMULAE}" == "qgis-ltr" ]; then
+      echo "Skipping CI; These formulas exceed the time limit in Travis CI.";
+      exit 0 || true;
+      travis_terminate 0;
+      exit 1;
+    fi
   - export HOMEBREW_REPOSITORY="$(brew --repo)"
   - sudo chown -R "$USER":admin "${HOMEBREW_REPOSITORY}"
   - git -C "${HOMEBREW_REPOSITORY}" reset --hard origin/master
