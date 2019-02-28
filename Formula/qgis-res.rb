@@ -10,7 +10,7 @@ class QgisRes < Formula
   homepage "https://www.qgis.org"
   url "https://gist.githubusercontent.com/dakcarto/11385561/raw/e49f75ecec96ed7d6d3950f45ad3f30fe94d4fb2/pyqgis_startup.py"
   sha256 "385dce925fc2d29f05afd6508bc1f46ec84c0bc607cc0c8dfce78a4bb93b9c4e"
-  version "3.4.4"
+  version "3.6.0"
 
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
@@ -23,9 +23,9 @@ class QgisRes < Formula
 
   # revision 1
 
-  option "with-complete", "Build with others modules"
-  option "with-r", "Build with modules referred to R"
-  option "with-r-sethrfore", "Build with modules referred to R (only if you use this version)"
+  # option "with-complete", "Build with others modules"
+  # option "with-r", "Build with modules referred to R"
+  # option "with-r-sethrfore", "Build with modules referred to R (only if you use this version)"
 
   depends_on "pkg-config" => :build
   depends_on "gcc" => :build # for gfortran # numpy
@@ -47,7 +47,7 @@ class QgisRes < Formula
   depends_on "pyqt-qt5"
 
   # for rpy2
-  if build.with?("r#{"-sethrfore" if build.with? "r-sethrfore"}")
+  # if build.with?("r#{"-sethrfore" if build.with? "r-sethrfore"}")
     depends_on "gettext"
     depends_on "readline"
     depends_on "pcre"
@@ -55,9 +55,9 @@ class QgisRes < Formula
     depends_on "bzip2"
     depends_on "libiconv"
     depends_on "icu4c"
-  end
+  # end
 
-  if build.with?("complete")
+  # if build.with?("complete")
     depends_on "swig"
     depends_on "libagg"
     depends_on "libpng"
@@ -88,18 +88,18 @@ class QgisRes < Formula
     depends_on "unixodbc" # for pyodbc
     depends_on "pyside" # for pyqtgraph / required llvm
     depends_on "freetds" # for pymssql
-  end
+  # end
 
-  if build.with?("r")
+  # if build.with?("r")
     depends_on "r"
-  end
+  # end
 
   # R with more support
   # https://github.com/adamhsparks/setup_macOS_for_R
   # fix: rpy2 requires finding R
-  if build.with?("r-sethrfore")
-    depends_on "sethrfore/r-srf/r"
-  end
+  # if build.with?("r-sethrfore")
+  #   depends_on "sethrfore/r-srf/r"
+  # end
 
   # pyqgis_startup.py
   # TODO: add one for Py3 (only necessary when macOS ships a Python3 or 3rd-party isolation is needed)
@@ -195,7 +195,7 @@ class QgisRes < Formula
     #     "install", "--prefix=#{libexec}/vendor"
     # end
 
-    if build.with?("complete")
+    # if build.with?("complete")
       res_optional = ['argparse', 'asn1crypto', 'atlas', 'backports.functools_lru_cache', 'beautifulsoup4', 'blosc', 'bottleneck', \
         'cffi', 'cryptography', 'decorator', 'descartes', 'ExifRead', 'Fiona', 'geopandas', 'geopy', 'geos', 'gitdb', 'gitdb2', 'GitPython', \
         'gnm', 'h5py', 'ipython', 'ipython_genutils', 'jsonschema', 'jupyter', 'jupyter_core', 'lidar', 'lxml', 'mpmath', 'nbformat', \
@@ -208,9 +208,9 @@ class QgisRes < Formula
       res_optional.each do |r|
         venv.pip_install r
       end
-    end
+    # end
 
-    if build.with?("r#{"-sethrfore" if build.with? "r-sethrfore"}")
+    # if build.with?("r#{"-sethrfore" if build.with? "r-sethrfore"}")
       res_r = ['rpy2', 'sphinxcontrib-websupport']
 
       res_r.each do |r|
@@ -219,7 +219,7 @@ class QgisRes < Formula
       # fix ModuleNotFoundError: No module named 'pip.req'
       system libexec/"vendor/bin/pip3", "install", "--upgrade", "-v", "setuptools", "pip==9.0.3", "wheel"
       venv.pip_install "pyRscript"
-    end
+    # end
 
     # upgrade pip
     system libexec/"vendor/bin/pip3", "install", "--upgrade", "-v", "setuptools", "pip", "wheel"
@@ -240,28 +240,28 @@ class QgisRes < Formula
 
       EOS
 
-    if build.without?("r") && build.with?("r-sethrfore")
-      s += <<~EOS
-        You can use the \e[32m--with-r\e[0m flag to install modules associated with R.
-
-      EOS
-    end
-
-    if build.with?("r")
-      s += <<~EOS
-        You can use the \e[32m--with-r-sethrfore\e[0m flag to install modules associated with R, with more support (only if you use this version).
-
-      EOS
-    end
-
-    if build.without?("complete")
-      s += <<~EOS
-        You can use the \e[32m--with-complete\e[0m flag to install more modules.
-
-        \033[31mThis is highly recommended if you will install QGIS with optional support.\e[0m
-
-      EOS
-    end
+    # if build.without?("r") && build.with?("r-sethrfore")
+    #   s += <<~EOS
+    #     You can use the \e[32m--with-r\e[0m flag to install modules associated with R.
+    #
+    #   EOS
+    # end
+    #
+    # if build.with?("r")
+    #   s += <<~EOS
+    #     You can use the \e[32m--with-r-sethrfore\e[0m flag to install modules associated with R, with more support (only if you use this version).
+    #
+    #   EOS
+    # end
+    #
+    # if build.without?("complete")
+    #   s += <<~EOS
+    #     You can use the \e[32m--with-complete\e[0m flag to install more modules.
+    #
+    #     \033[31mThis is highly recommended if you will install QGIS with optional support.\e[0m
+    #
+    #   EOS
+    # end
     s
   end
 
