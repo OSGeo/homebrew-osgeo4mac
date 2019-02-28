@@ -23,7 +23,10 @@ build_steps: &build_steps
     - run:
         name: Build bottles
         no_output_timeout: 30m
-        command: .circleci/after_script.sh
+        command: |
+          .circleci/after_script.sh
+          # if the formula does not change or if a file is updated/uploaded:
+          echo "build-num-${CIRCLE_BUILD_NUM}" > /tmp/bottles/build-num-${CIRCLE_BUILD_NUM}.txt
     - persist_to_workspace:
         root: /tmp
         paths:
