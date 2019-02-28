@@ -43,6 +43,7 @@ before_install:
   - export CHANGED_FORMULAE=$(./travis/changed_formulas.sh)
   - if [ "${CHANGED_FORMULAE}" == "" ]; then
       echo "Skipping CI; no changed formulae found in $TRAVIS_BUILD_DIR";
+      exit 0 || true;
       travis_terminate 0;
       exit 1;
     else
