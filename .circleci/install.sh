@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 ###########################################################################
-#    homebrew-osgeo4mac travis ci - install.sh
+#    homebrew-osgeo4mac circle ci - install.sh
 #    ---------------------
-#    Date                 : Dec 2016
+#    Date                 : Dec 2019
 #    Copyright            : (C) 2016 by Boundless Spatial, Inc.
-#    Author               : Larry Shaffer
+#    Author               : Larry Shaffer - FJ Perini
 #    Email                : lshaffer at boundlessgeo dot com
 ###########################################################################
 #                                                                         #

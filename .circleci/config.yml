@@ -4,13 +4,6 @@ build_steps: &build_steps
     - run:
        name: Update environment variables
        command: .circleci/set_env.sh
-    # - run: |
-    #     brew --version
-    #     brew remove $(brew list)
-    #     rm -rf /usr/local/Homebrew/Library/Taps/
-    #     brew update-reset
-    #     brew --env
-    #     brew config
     - run:
        name: Git config
        command: |
@@ -18,11 +11,8 @@ build_steps: &build_steps
          git fetch origin
          git config --global user.name "geo-ninja"
          git config --global user.email "qgisninja@gmail.com"
-         # repo=$(brew --repo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME)
-         # mkdir -p $repo
-         # cp -a ./ $repo/
     - run:
-       name: Before install script
+       name: Before install
        command: .circleci/before_install.sh
     - run:
        name: Install dependencies
@@ -30,38 +20,33 @@ build_steps: &build_steps
     - run:
         name: Install changed formulae
         command: .circleci/script.sh
-    # fix for ERROR: The key you are authenticating with has been marked as read only.
-    # is using the first key that is found, the one assigned in Checkout keys
-    # not Add deploy key
-    # https://circleci.com/gh/OSGeo/homebrew-osgeo4mac/edit#checkout
-    # Add deployment key fingerprint for CircleCI to use for a push
-    - add_ssh_keys:
-        fingerprints:
-          - "${KEY_FINGERPRINT}"
+    # # fix for ERROR: The key you are authenticating with has been marked as read only.
+    # # is using the first key that is found, the one assigned in Checkout keys
+    # # not Add deploy key
+    # # https://circleci.com/gh/OSGeo/homebrew-osgeo4mac/edit#checkout
+    # # Add deployment key fingerprint for CircleCI to use for a push
+    # - add_ssh_keys:
+    #     fingerprints:
+    #       - "${KEY_FINGERPRINT}"
+    # - run:
+    #     name: Avoid hosts unknown for github
+    #     command: |
+    #       echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
     - run:
-        name: Avoid hosts unknown for github
-        command: |
-          echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
-          cat ~/.ssh/config
-          ssh-add -l
-    - run:
-        name: Build bottles and commit for new formula
+        name: Build bottles
         no_output_timeout: 30m
-        command: |
-          .circleci/after_script.sh
-          # fix if not file in /tmp/bottles
-          echo "fix" > /tmp/bottles/fix.txt
+        command: .circleci/after_script.sh
     - persist_to_workspace:
         root: /tmp
         paths:
           - bottles/*
     - store_test_results:
         path: /tmp/bottles
-    - attach_workspace:
-        at: /tmp
-    - store_artifacts:
-        path: /tmp/bottles
-        destination: bottles
+    # - attach_workspace:
+    #     at: /tmp/workspace
+    # - store_artifacts:
+    #     path: /tmp/workspace/bottles
+    #     destination: bottles
 
 workflow_filter: &filter
   filters:
@@ -106,109 +91,73 @@ jobs:
     macos:
       xcode: "10.1.0"
 
-  # collect-bottles:
-  #   macos:
-  #     xcode: "10.1.0"
-  #   # filters:
-  #   #   tags:
-  #   #     only: deploy
-  #   # docker:
-  #   #   - image: linuxbrew/brew
-  #   # working_directory: ~/project # $CIRCLE_WORKING_DIRECTORY
-  #   steps:
-  #     - attach_workspace:
-  #         at: /tmp/workspace
-  #     - checkout
-  #     - run:
-  #        name: Update environment variables
-  #        command: .circleci/set_env.sh
-  #     - run: |
-  #         git config --global user.name "geo-ninja"
-  #         git config --global user.email "qgisninja@gmail.com"
-  #     # fix for ERROR: The key you are authenticating with has been marked as read only.
-  #     # is using the first key that is found, the one assigned in Checkout keys
-  #     # not Add deploy key
-  #     # https://circleci.com/gh/OSGeo/homebrew-osgeo4mac/edit#checkout
-  #     # Add deployment key fingerprint for CircleCI to use for a push
-  #     - add_ssh_keys:
-  #         fingerprints:
-  #           - "${KEY_FINGERPRINT}"
-  #     - run:
-  #         name: Avoid hosts unknown for github
-  #         command: |
-  #           echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
-  #           cat ~/.ssh/config
-  #           ssh-add -l
-  #     - run:
-  #         name: Commit for new bottles and upload to bintray
-  #         command: |
-  #           .circleci/before_deploy.sh
-  #           # if [ "$CIRCLE_BRANCH" != "false" ] && [ "$CHANGED_FORMULAE" != "" ]; then
-  #           # This hook will add [ci skip] the the commit messages for bottle DSL
-  #           # so that ci does not re-build a duplicate bottle on pushing.
-  #           # touch .git/hooks/commit-msg
-  #           cp -r ./commit-msg.sh .git/hooks/commit-msg
-  #           echo 'echo "\n\n[ci skip]" >> "$1"' >> .git/hooks/commit-msg; chmod +x .git/hooks/commit-msg
-  #           # This hook will add [ci skip] the the commit messages for bottle DSL
-  #           # so that travis-ci does not re-build a duplicate bottle on pushing.
-  #           brew tap homebrew/test-bot
-  #           echo "Test bot..."
-  #           echo "Bintray user: $HOMEBREW_BINTRAY_USER"
-  #           cd /tmp/workspace/bottles
-  #           brew test-bot --skip-setup --root-url=https://dl.bintray.com/homebrew-osgeo/osgeo-bottles --git-name="${HOMEBREW_BINTRAY_USER}" --git-email="${HOMEBREW_BINTRAY_EMAIL}" --bintray-org=homebrew-osgeo
-  #           # echo "Pull bottle..."
-  #           # HOMEBREW_BINTRAY_USER="${HOMEBREW_BINTRAY_USER}" HOMEBREW_BINTRAY_KEY="${HOMEBREW_BINTRAY_KEY}" brew pull --bottle --bintray-org=homebrew-osgeo --test-bot-user=geo-ninja "${CIRCLE_PULL_REQUEST}"
-  #           # HOMEBREW_BINTRAY_USER="${HOMEBREW_BINTRAY_USER}" HOMEBREW_BINTRAY_KEY="$(security find-generic-password -s bintray-api-key -a "${HOMEBREW_BINTRAY_USER}" -w)" brew pull --bottle --bintray-org=homebrew-osgeo --test-bot-user=geo-ninja "${CIRCLE_PULL_REQUEST}"
-  #           # fi
-  #     - store_artifacts:
-  #         path: /tmp/workspace/bottles
-  #         destination: bottles
+  collect-bottles:
+    macos:
+      xcode: "10.1.0"
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - checkout
+      - run:
+         name: Update environment variables
+         command: .circleci/set_env.sh
+      - run:
+         name: Git config
+         command: |
+           git config --global user.name "geo-ninja"
+           git config --global user.email "qgisninja@gmail.com"
+      # fix for ERROR: The key you are authenticating with has been marked as read only.
+      # is using the first key that is found, the one assigned in Checkout keys
+      # not Add deploy key
+      # Add deployment key fingerprint for CircleCI to use for a push
+      - add_ssh_keys:
+          fingerprints:
+            - "${KEY_FINGERPRINT}"
+      - run:
+          name: Avoid hosts unknown for github
+          command: |
+            echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
+      - run:
+          name: Commit for new bottles and upload to bintray
+          command: |
+            ls
+            ls /tmp
+            ls /tmp/workspace
+            ls /tmp/workspace/bottles
+            .circleci/before_deploy.sh
+            if [ "$CIRCLE_BRANCH" == "master" ] && [ "$CHANGED_FORMULAE" != "" ]; then
+            # This hook will add [ci skip] the the commit messages for bottle DSL
+            # so that ci does not re-build a duplicate bottle on pushing.
+            # touch .git/hooks/commit-msg
+            cp -r ./commit-msg.sh .git/hooks/commit-msg
+            cat .git/hooks/commit-msg
+            # echo 'echo "\n\n[ci skip]" >> "$1"' >> .git/hooks/commit-msg; chmod +x .git/hooks/commit-msg
+            # This hook will add [ci skip] the the commit messages for bottle DSL
+            # so that circle-ci does not re-build a duplicate bottle on pushing.
+            fi
+      # - store_artifacts:
+      #     path: /tmp/workspace/bottles
+      #     destination: bottles
 
-  # deploy:
-  #   # machine:
-  #   #   enabled: true
-  #  macos:
-  #    xcode: "10.1.0"
-  #   docker:
-  #     - image: linuxbrew/brew
-  #   working_directory: ~/project # $CIRCLE_WORKING_DIRECTORY
-  #   steps:
-  #     - checkout
-  #     - run:
-  #        name: Update environment variables
-  #        command: .circleci/set_env.sh
-  #     - run: |
-  #         git config --global user.name "geo-ninja"
-  #         git config --global user.email "qgisninja@gmail.com"
-  #     fix for ERROR: The key you are authenticating with has been marked as read only.
-  #     is using the first key that is found, the one assigned in Checkout keys
-  #     not Add deploy key
-  #     https://circleci.com/gh/OSGeo/homebrew-osgeo4mac/edit#checkout
-  #     Add deployment key fingerprint for CircleCI to use for a push
-  #     - add_ssh_keys:
-  #         fingerprints:
-  #           - "${KEY_FINGERPRINT}"
-  #     - run:
-  #         name: Avoid hosts unknown for github
-  #         command: |
-  #           echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
-  #           cat ~/.ssh/config
-  #           ssh-add -l
-  #     - run:
-  #         name: Before deploy
-  #         command: |
-  #           # curl https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/$CIRCLE_BUILD_NUM/artifacts?circle-token=$CIRCLE_TOKEN
-  #           cd /tmp
-  #           curl https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/$CIRCLE_BUILD_NUM/artifacts | grep -o 'https://[^"]*' > list.txt
-  #           wget --content-disposition --trust-server-names -i list.txt
-  #     - checkout
-  #     - run:
-  #         name: Before deploy
-  #         command: .circleci/before_deploy.sh
-  #     - run:
-  #         name: Upload to Bintray deploy
-  #         command: |
-  #           curl -T "{$(echo ./tmp/bottles/*.tar.gz | tr ' ' ',')}" -u${BINTRAY_USER}:${BINTRAY_API_KEY} https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles/bottles/0.1/
+  deploy:
+    macos:
+      xcode: "10.1.0"
+    steps:
+      - checkout
+      - run:
+          name: Deploy - Upload to bintray
+          command: |
+            ls /tmp
+            ls /tmp/workspace/bottles
+            cd /tmp/workspace/bottles
+            brew install jfrog-cli-go
+            jfrog bt config --user=${BINTRAY_USER} --key=${BINTRAY_API} --licenses=MIT
+            echo "jfrog" > jfrog-deploy.txt
+            jfrog bt upload --publish=true "jfrog-deploy.txt" homebrew-osgeo/osgeo-bottles/bottles/0.1/
+            # jfrog bt upload --publish=true "/tmp/workspace/bottles/*" homebrew-osgeo/osgeo-bottles/bottles/0.1/
+      - store_artifacts:
+          path: /tmp/workspace/bottles
+          destination: bottles
 
 workflows:
   version: 2
@@ -221,20 +170,13 @@ workflows:
       # - sierra-build:
       #     requires:
       #       - update-homebrew
-      # - collect-bottles:
-      #     filters:
-      #       tags:
-      #         only: deploy
-      #     requires:
-      #       - high_sierra-build
-      #       - sierra-build
-      # - deploy:
-      #     requires:
-      #       - collect-bottles
-      #     filters:
-      #       branches:
-      #         only: master
-
-# notify:
-#   webhooks:
-#     - url: https://circleci.com/hooks/github
+      - collect-bottles:
+          requires:
+            - high_sierra-build
+            # - sierra-build
+      - deploy:
+          requires:
+            - collect-bottles
+          filters:
+            branches:
+              only: master

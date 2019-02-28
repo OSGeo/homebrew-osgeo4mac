@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 ###########################################################################
-#    homebrew-osgeo4mac travis ci - after_script.sh
+#    homebrew-osgeo4mac circle ci - after_script.sh
 #    ---------------------
-#    Date                 : Dec 2016
+#    Date                 : Dec 2019
 #    Copyright            : (C) 2016 by Boundless Spatial, Inc.
-#    Author               : Larry Shaffer
+#    Author               : Larry Shaffer - FJ Perini
 #    Email                : lshaffer at boundlessgeo dot com
 ###########################################################################
 #                                                                         #
@@ -15,106 +15,104 @@
 #                                                                         #
 ###########################################################################
 
-pwd
-ls
+# if [ "$CIRCLE_BRANCH" == "master" ] && [ "$CHANGED_FORMULAE" != "" ]; then
 
-# Setup Git configuration
-COMMIT_USER=$(git log --format='%an' ${CIRCLE_SHA1}^\!)
-COMMIT_EMAIL=$(git log --format='%ae' ${CIRCLE_SHA1}^\!)
-git config user.name "geo-ninja"
-git config user.email "qgisninja@gmail.com"
-REPO=$(git config remote.origin.url)
-SSH_REPO=${REPO/https:\/\/github.com\//git@github.com:}
+  # # Setup Git configuration
+  # COMMIT_USER=$(git log --format='%an' ${CIRCLE_SHA1}^\!)
+  # COMMIT_EMAIL=$(git log --format='%ae' ${CIRCLE_SHA1}^\!)
+  # git config user.name "geo-ninja"
+  # git config user.email "qgisninja@gmail.com"
+  # REPO=$(git config remote.origin.url)
+  # SSH_REPO=${REPO/https:\/\/github.com\//git@github.com:}
+  #
+  # # Checkout on the proper branch
+  # # see https://gist.github.com/mitchellkrogza/a296ab5102d7e7142cc3599fca634203
+  # head_ref=$(git rev-parse HEAD)
+  # if [[ $? -ne 0 || ! $head_ref ]]; then
+  #     err "failed to get HEAD reference"
+  #     return 1
+  # fi
+  # branch_ref=$(git rev-parse "$CIRCLE_BRANCH")
+  # if [[ $? -ne 0 || ! $branch_ref ]]; then
+  #     err "failed to get $CIRCLE_BRANCH reference"
+  #     return 1
+  # fi
+  # if [[ $head_ref != $branch_ref ]]; then
+  #     msg "HEAD ref ($head_ref) does not match $CIRCLE_BRANCH ref ($branch_ref)"
+  #     err "someone may have pushed new commits before this build cloned the repo"
+  #     return 1
+  # fi
+  # if ! git checkout "$CIRCLE_BRANCH"; then
+  #     err "failed to checkout $CIRCLE_BRANCH"
+  #     return 1
+  # fi
 
-# Checkout on the proper branch
-# see https://gist.github.com/mitchellkrogza/a296ab5102d7e7142cc3599fca634203
-head_ref=$(git rev-parse HEAD)
-if [[ $? -ne 0 || ! $head_ref ]]; then
-    err "failed to get HEAD reference"
-    return 1
-fi
-branch_ref=$(git rev-parse "$CIRCLE_BRANCH")
-if [[ $? -ne 0 || ! $branch_ref ]]; then
-    err "failed to get $CIRCLE_BRANCH reference"
-    return 1
-fi
-if [[ $head_ref != $branch_ref ]]; then
-    msg "HEAD ref ($head_ref) does not match $CIRCLE_BRANCH ref ($branch_ref)"
-    err "someone may have pushed new commits before this build cloned the repo"
-    return 1
-fi
-if ! git checkout "$CIRCLE_BRANCH"; then
-    err "failed to checkout $CIRCLE_BRANCH"
-    return 1
-fi
+  # Build the actual bottles
+  # In Travis, this used to be part of the deploy phase, but now it needs to run as part of the original build process, but only on master.
+  mkdir /tmp/bottles
 
-# Build the actual bottles
-# In Travis, this used to be part of the deploy phase, but now it needs to run as part of the original build process, but only on master.
-mkdir /tmp/bottles
-# cd /tmp/bottles
+  BUILT_BOTTLES=
 
-BUILT_BOTTLES=
+  pushd /tmp/bottles
+    BOTTLE_ROOT=https://dl.bintray.com/homebrew-osgeo/osgeo-bottles
+    for f in ${CHANGED_FORMULAE};do
+      echo "Bottling changed formula ${f}..."
+      brew bottle --verbose --json --root-url=${BOTTLE_ROOT} osgeo/osgeo4mac/${f}
 
-pushd /tmp/bottles
-  BOTTLE_ROOT=https://dl.bintray.com/homebrew-osgeo/osgeo-bottles
-  for f in ${CHANGED_FORMULAE};do
-    echo "Bottling changed formula ${f}..."
-    brew bottle --verbose --json --root-url=${BOTTLE_ROOT} osgeo/osgeo4mac/${f}
+      for art in ${f}*.sierra.bottle.*; do
+          # Remove double dashes introduced by the latest changes to Homebrew bottling.
+          # This may need to be reverted later, but this at least normalizes the bottle names with what's in the json files.
+          # Move the sierra bottle and json file
+          mv ${art} ${art/--/-}
+      done
 
-    for art in ${f}*.sierra.bottle.*; do
+      # temporary duplication of 10.3-Xcode-10.x-built bottles to 10.4 bottles
+      # Do the bottle duplication per formula, so we can merge the changes
+      for art in ${f}*.high_sierra.bottle.*; do
+        new_name=${art/.high_sierra./.mojave.}
         # Remove double dashes introduced by the latest changes to Homebrew bottling.
         # This may need to be reverted later, but this at least normalizes the bottle names with what's in the json files.
-        # Move the sierra bottle and json file
+        cp -a ${art} ${new_name/--/-}
+        # Move the high_sierra bottle and json file
         mv ${art} ${art/--/-}
+      done
+      for json in ${f}*.mojave.bottle*.json; do
+        sed -i '' s@high_sierra@mojave@g ${json}
+      done
+
+      # echo "Updating changed formula ${f} with new bottles..."
+      #
+      # # Do Merge bottles with the formula
+      # # Don't commit anything, we'll do that after updating all the formulae
+      # # Catch the eror and store it to a variable
+      # if result=$(brew bottle --merge --write --no-commit ${f}*.json 2>&1); then
+      #   BUILT_BOTTLES="$BUILT_BOTTLES ${f}"
+      # else
+      #  # If there's an error, remove the json and bottle files, we don't want them anymore.
+      #  echo "Unable to bottle ${f}"
+      #  echo $result
+      #  rm ${f}*.json
+      #  rm ${f}*.tar.gz
+      # fi
     done
+    ls
+  popd
 
-    # temporary duplication of 10.3-Xcode-10.x-built bottles to 10.4 bottles
-    # Do the bottle duplication per formula, so we can merge the changes
-    for art in ${f}*.high_sierra.bottle.*; do
-      new_name=${art/.high_sierra./.mojave.}
-      # Remove double dashes introduced by the latest changes to Homebrew bottling.
-      # This may need to be reverted later, but this at least normalizes the bottle names with what's in the json files.
-      cp -a ${art} ${new_name/--/-}
-      # Move the high_sierra bottle and json file
-      mv ${art} ${art/--/-}
-    done
-    for json in ${f}*.mojave.bottle*.json; do
-      sed -i '' s@high_sierra@mojave@g ${json}
-    done
+  # # Now do the commit and push
+  # echo "Commit and push..."
+  # git add -vA Formula/*.rb
+  # git commit -m "Updated bottles for: ${BUILT_BOTTLES}
+  #
+  # Committed for ${COMMIT_USER}<${COMMIT_EMAIL}>
+  # [ci skip]"
+  #
+  # # Now that we're all set up, we can push.
+  # git push ${SSH_REPO} $CIRCLE_BRANCH
+  #
+  #
+  # echo "Upload to Bintray..."
+  # cd /tmp/bottles
+  # files=$(echo *.tar.gz | tr ' ' ',')
+  # curl -T "{$files}" -u${BINTRAY_USER}:${BINTRAY_API} https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles/bottles/0.1/
 
-    echo "Updating changed formula ${f} with new bottles..."
-
-    # Do Merge bottles with the formula
-    # Don't commit anything, we'll do that after updating all the formulae
-    # Catch the eror and store it to a variable
-    if result=$(brew bottle --merge --write --no-commit ${f}*.json 2>&1); then
-      BUILT_BOTTLES="$BUILT_BOTTLES ${f}"
-    else
-     # If there's an error, remove the json and bottle files, we don't want them anymore.
-     echo "Unable to bottle ${f}"
-     echo $result
-     rm ${f}*.json
-     rm ${f}*.tar.gz
-    fi
-  done
-  ls
-popd
-
-# Now do the commit and push
-echo "Commit and push..."
-git add -vA Formula/*.rb
-git commit -m "Updated bottles for: ${BUILT_BOTTLES}
-
-Committed for ${COMMIT_USER}<${COMMIT_EMAIL}>
-[ci skip]"
-
-# Now that we're all set up, we can push.
-git push ${SSH_REPO} $CIRCLE_BRANCH
-
-cd /tmp/bottles
-echo "Upload to Bintray..."
-echo "Bintray user: $BINTRAY_USER"
-
-files=$(echo *.tar.gz | tr ' ' ',')
-echo "Files: $files"
-curl -T "{$files}" -u${BINTRAY_USER}:${BINTRAY_API} https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles/bottles/0.1/
+# fi
