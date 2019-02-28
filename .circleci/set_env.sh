@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 ###########################################################################
-#    homebrew-osgeo4mac travis ci - script.sh
+#    homebrew-osgeo4mac circle ci - script.sh
 #    ---------------------
-#    Date                 : Dec 2016
+#    Date                 : Dec 2019
 #    Copyright            : (C) 2016 by Boundless Spatial, Inc.
-#    Author               : Larry Shaffer
+#    Author               : Larry Shaffer -  FJ Perini
 #    Email                : lshaffer at boundlessgeo dot com
 ###########################################################################
 #                                                                         #
@@ -38,13 +38,3 @@ ulimit -c unlimited
            echo 'export HOMEBREW_NO_AUTO_UPDATE=1' >> $BASH_ENV
            echo 'export HOMEBREW_PREFIX=/usr/local' >> $BASH_ENV
            echo 'export CIRCLE_REPOSITORY_URL=https://github.com/OSGeo/homebrew-osgeo4mac' >> $BASH_ENV
-           export HOMEBREW_BINTRAY_USER="${HOMEBREW_BINTRAY_USER}"
-           export HOMEBREW_BINTRAY_KEY="${HOMEBREW_BINTRAY_KEY}"
-           export HOMEBREW_BINTRAY_KEY="${HOMEBREW_BINTRAY_EMAIL}"
-           echo "export HOMEBREW_BINTRAY_USER=${HOMEBREW_BINTRAY_USER}" >> $BASH_ENV
-           echo "export HOMEBREW_BINTRAY_KEY=${HOMEBREW_BINTRAY_KEY}" >> $BASH_ENV
-           echo "export HOMEBREW_BINTRAY_EMAIL=${HOMEBREW_BINTRAY_EMAIL}" >> $BASH_ENV
-           # export HOMEBREW_GIT_NAME="${HOMEBREW_GIT_NAME}" # git-name
-           # export HOMEBREW_GIT_EMAIL="${HOMEBREW_GIT_EMAIL}" # git-email
-           # echo "export HOMEBREW_GIT_NAME=${HOMEBREW_GIT_NAME}" >> $BASH_ENV
-           # echo "export HOMEBREW_GIT_EMAIL=${HOMEBREW_GIT_EMAIL}" >> $BASH_ENV
