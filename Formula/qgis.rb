@@ -126,7 +126,7 @@ class Qgis < Formula
   depends_on "openssl"
   depends_on "qjson"
   depends_on "unixodbc"
-  depends_on "libiodbc"
+  # depends_on "libiodbc"
   depends_on "freetds"
   depends_on "psqlodbc"
   depends_on "libpq"
