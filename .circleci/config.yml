@@ -37,19 +37,23 @@ build_steps: &build_steps
         no_output_timeout: 30m
         command: |
           .circleci/after_script.sh
-          # fix if not file in /tmp/bottles
+          # fix for persist workspace
+          cd /tmp/bottles
+          [ -f fix.txt ] && rm fix.txt
           echo "fix" > /tmp/bottles/fix.txt
+    - checkout
     - persist_to_workspace:
         root: /tmp
         paths:
           - bottles/*
     - store_test_results:
         path: /tmp/bottles
-    - attach_workspace:
-        at: /tmp
-    - store_artifacts:
-        path: /tmp/bottles
-        destination: bottles
+    # - attach_workspace:
+    #     at: /tmp/workspace
+    # - store_artifacts:
+    #     path: /tmp/workspace/bottles
+    #     destination: bottles
+
 
 workflow_filter: &filter
   filters:
@@ -124,12 +128,13 @@ jobs:
             ls
             ls /tmp
             .circleci/before_deploy.sh
-            if [ "$CIRCLE_BRANCH" == "master" ] && [ "$CHANGED_FORMULAE" != "" ]; then
+            if [ "$CIRCLE_BRANCH" != "master" ] && [ "$CHANGED_FORMULAE" != "" ]; then
             # This hook will add [ci skip] the the commit messages for bottle DSL
             # so that ci does not re-build a duplicate bottle on pushing.
             # touch .git/hooks/commit-msg
             cp -r ./commit-msg.sh .git/hooks/commit-msg
-            echo 'echo "\n\n[ci skip]" >> "$1"' >> .git/hooks/commit-msg; chmod +x .git/hooks/commit-msg
+            cat .git/hooks/commit-msg
+            # echo 'echo "\n\n[ci skip]" >> "$1"' >> .git/hooks/commit-msg; chmod +x .git/hooks/commit-msg
             # This hook will add [ci skip] the the commit messages for bottle DSL
             # so that circle-ci does not re-build a duplicate bottle on pushing.
             fi
