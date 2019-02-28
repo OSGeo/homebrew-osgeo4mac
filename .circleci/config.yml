@@ -103,8 +103,6 @@ jobs:
       - run:
           name: Commit for new bottles and upload to bintray
           command: |
-            .circleci/before_deploy.sh
-            - checkout
             if [ "$CIRCLE_BRANCH" == "master" ] && [ "$CHANGED_FORMULAE" != "" ]; then
             # This hook will add [ci skip] the the commit messages for bottle DSL
             # so that ci does not re-build a duplicate bottle on pushing.
@@ -112,9 +110,8 @@ jobs:
             cp -r ./commit-msg.sh .git/hooks/commit-msg
             cat .git/hooks/commit-msg
             # echo 'echo "\n\n[ci skip]" >> "$1"' >> .git/hooks/commit-msg; chmod +x .git/hooks/commit-msg
-            # This hook will add [ci skip] the the commit messages for bottle DSL
-            # so that circle-ci does not re-build a duplicate bottle on pushing.
             fi
+            .circleci/before_deploy.sh
       - store_artifacts:
           path: /tmp/workspace/bottles
           destination: bottles
@@ -127,8 +124,6 @@ jobs:
   #     - run:
   #         name: Deploy - Upload to bintray
   #         command: |
-  #           ls /tmp
-  #           ls /tmp/workspace/bottles
   #           cd /tmp/workspace/bottles
   #           brew install jfrog-cli-go
   #           jfrog bt config --user=${BINTRAY_USER} --key=${BINTRAY_API} --licenses=MIT
