@@ -12,7 +12,7 @@ build_steps: &build_steps
          git config --global user.name "geo-ninja"
          git config --global user.email "qgisninja@gmail.com"
     - run:
-       name: Before install script
+       name: Before install
        command: .circleci/before_install.sh
     - run:
        name: Install dependencies
@@ -101,9 +101,11 @@ jobs:
       - run:
          name: Update environment variables
          command: .circleci/set_env.sh
-      - run: |
-          git config --global user.name "geo-ninja"
-          git config --global user.email "qgisninja@gmail.com"
+    - run:
+       name: Git config
+       command: |
+         git config --global user.name "geo-ninja"
+         git config --global user.email "qgisninja@gmail.com"
       # fix for ERROR: The key you are authenticating with has been marked as read only.
       # is using the first key that is found, the one assigned in Checkout keys
       # not Add deploy key
@@ -123,7 +125,7 @@ jobs:
             ls /tmp/workspace
             ls /tmp/workspace/bottles
             .circleci/before_deploy.sh
-            if [ "$CIRCLE_BRANCH" != "master" ] && [ "$CHANGED_FORMULAE" != "" ]; then
+            if [ "$CIRCLE_BRANCH" == "master" ] && [ "$CHANGED_FORMULAE" != "" ]; then
             # This hook will add [ci skip] the the commit messages for bottle DSL
             # so that ci does not re-build a duplicate bottle on pushing.
             # touch .git/hooks/commit-msg
@@ -142,13 +144,17 @@ jobs:
       xcode: "10.1.0"
     steps:
       - checkout
-      - run: ls /tmp
-      - run: ls /tmp/workspace/bottles
-      - run: brew install jfrog-cli-go
-      - run: jfrog bt config --user=${BINTRAY_USER} --key=${BINTRAY_API} --licenses=MIT
-      - run: echo "jfrog" > /tmp/workspace/bottles/jfrog-deploy.txt
-      - run: jfrog bt upload --publish=true "/tmp/workspace/bottles/jfrog-deploy.txt" homebrew-osgeo/osgeo-bottles/bottles/0.1/
-      # - run: jfrog bt upload --publish=true "/tmp/workspace/bottles/*" homebrew-osgeo/osgeo-bottles/bottles/0.1/
+      - run:
+          name: Deploy - Upload to bintray
+          command: |
+            ls /tmp
+            ls /tmp/workspace/bottles
+            cd /tmp/workspace/bottles
+            brew install jfrog-cli-go
+            jfrog bt config --user=${BINTRAY_USER} --key=${BINTRAY_API} --licenses=MIT
+            echo "jfrog" > jfrog-deploy.txt
+            jfrog bt upload --publish=true "jfrog-deploy.txt" homebrew-osgeo/osgeo-bottles/bottles/0.1/
+            # jfrog bt upload --publish=true "/tmp/workspace/bottles/*" homebrew-osgeo/osgeo-bottles/bottles/0.1/
       - store_artifacts:
           path: /tmp/workspace/bottles
           destination: bottles

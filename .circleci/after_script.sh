@@ -15,7 +15,7 @@
 #                                                                         #
 ###########################################################################
 
-if [ "$CIRCLE_BRANCH" != "master" ]; then
+if [ "$CIRCLE_BRANCH" == "master" ] && [ "$CHANGED_FORMULAE" != "" ]; then
 
   # # Setup Git configuration
   # COMMIT_USER=$(git log --format='%an' ${CIRCLE_SHA1}^\!)

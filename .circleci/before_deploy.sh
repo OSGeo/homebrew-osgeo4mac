@@ -17,7 +17,7 @@
 
 set -e
 
-if [ "$CIRCLE_BRANCH" != "master" ]; then
+if [ "$CIRCLE_BRANCH" == "master" ] && [ "$CHANGED_FORMULAE" != "" ]; then
 
   # Setup Git configuration
   COMMIT_USER=$(git log --format='%an' ${CIRCLE_SHA1}^\!)
@@ -69,19 +69,6 @@ if [ "$CIRCLE_BRANCH" != "master" ]; then
     done
   popd
 
-  echo "Upload to Bintray..."
-
-  ls
-  ls /tmp
-  cd /tmp/workspace/bottles/
-  files=$(echo *.tar.gz | tr ' ' ',')
-  curl -T "{$files}" -u${BINTRAY_USER}:${BINTRAY_API} https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles/bottles/0.1/
-
-  brew install jfrog-cli-go
-  jfrog bt config --user=${BINTRAY_USER} --key=${BINTRAY_API} --licenses=MIT
-  echo "jfrog" > /tmp/workspace/bottles/jfrog-before.txt
-  jfrog bt upload --publish=true "/tmp/workspace/bottles/jfrog-before.txt" homebrew-osgeo/osgeo-bottles/bottles/0.1/
-
   # Now do the commit and push
   echo "Commit and push..."
   git add -vA Formula/*.rb
@@ -92,4 +79,18 @@ if [ "$CIRCLE_BRANCH" != "master" ]; then
 
   # Now that we're all set up, we can push.
   git push ${SSH_REPO} $CIRCLE_BRANCH
+
+  echo "Upload to Bintray..."
+
+  ls
+  ls /tmp
+  cd /tmp/workspace/bottles/
+  files=$(echo *.tar.gz | tr ' ' ',')
+  curl -T "{$files}" -u${BINTRAY_USER}:${BINTRAY_API} https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles/bottles/0.1/
+
+  brew install jfrog-cli-go
+  jfrog bt config --user=${BINTRAY_USER} --key=${BINTRAY_API} --licenses=MIT
+  echo "jfrog" > jfrog-before.txt
+  jfrog bt upload --publish=true "jfrog-before.txt" homebrew-osgeo/osgeo-bottles/bottles/0.1/
+
 fi
