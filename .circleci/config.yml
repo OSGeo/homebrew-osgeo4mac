@@ -36,21 +36,10 @@ build_steps: &build_steps
         name: Build bottles
         no_output_timeout: 30m
         command: .circleci/after_script.sh
-    - run:
-        name: Fix for Persist Workspace
-        command: |
-          echo "fix" > /tmp/bottles/fix.txt
-    - checkout
     - persist_to_workspace:
         root: /tmp
         paths:
           - bottles/*
-    - run:
-        name: Fix for Attaching Workspace
-        command: |
-          rm /tmp/bottles/fix.txt
-          ls /tmp
-          ls /tmp/bottles
     - store_test_results:
         path: /tmp/bottles
     # - attach_workspace:
