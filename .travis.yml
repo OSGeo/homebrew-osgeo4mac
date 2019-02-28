@@ -69,24 +69,25 @@ script: ./travis/script.sh
 
 after_script: ./travis/after_script.sh
 
+before_deploy:
+  # Get the deploy key by using Travis's stored variables to decrypt deploy_key.enc
+  # Decrypt the travis_deploy_key.enc key into /tmp/travis_deploy_key
+  - openssl aes-256-cbc -K $encrypted_key -iv $encrypted_iv -in travis_deploy_key.enc -out /tmp/travis_deploy_key -d
+  # Make sure only the current user can read the private key
+  - chmod 600 /tmp/travis_deploy_key
+  # Create a script to return the passphrase environment variable to ssh-add
+  - echo 'echo ${SSH_PASSPHRASE}' > /tmp/askpass && chmod +x /tmp/askpass
+  # Start the authentication agent
+  - eval "$(ssh-agent -s)"
+  # Add the key to the authentication agent
+  - brew install util-linux # for setsid
+  - DISPLAY=":0.0" SSH_ASKPASS="/tmp/askpass" setsid ssh-add /tmp/travis_deploy_key </dev/null
+  # add changes
+  - ./travis/before_deploy.sh
+
+
 # is disabled to use circle CI
 
-# before_deploy:
-#   # Get the deploy key by using Travis's stored variables to decrypt deploy_key.enc
-#   # Decrypt the travis_deploy_key.enc key into /tmp/travis_deploy_key
-#   - openssl aes-256-cbc -K $encrypted_key -iv $encrypted_iv -in travis_deploy_key.enc -out /tmp/travis_deploy_key -d
-#   # Make sure only the current user can read the private key
-#   - chmod 600 /tmp/travis_deploy_key
-#   # Create a script to return the passphrase environment variable to ssh-add
-#   - echo 'echo ${SSH_PASSPHRASE}' > /tmp/askpass && chmod +x /tmp/askpass
-#   # Start the authentication agent
-#   - eval "$(ssh-agent -s)"
-#   # Add the key to the authentication agent
-#   - brew install util-linux # for setsid
-#   - DISPLAY=":0.0" SSH_ASKPASS="/tmp/askpass" setsid ssh-add /tmp/travis_deploy_key </dev/null
-#   # add changes
-#   - ./travis/before_deploy.sh
-#
 # deploy:
 #   skip_cleanup: true
 #   provider: bintray
@@ -94,16 +95,16 @@ after_script: ./travis/after_script.sh
 #   user: nickrobison
 #   key:
 #     secure: "nEmP/uU8N+TbbX3zWED62CsjPxoDjXcOF3RtAENW/4qVBdI9r7dFmyE4WAW732Ttd1PbANPz7Lz494j2TS2hbn2R4yQ9CuIllsnjey/ve6TAq1FfYSruBuMGLK/7EJ/cSfZWsOBex7b68UeVlvyAra3ck6y9j1ouzF9RKEtCx3P/w3heLN5Fl0pNUCzwknrdBFGfTQRy8NSQnYo/8mpIQbCrXEQThJ4PZY/7s5tqDOv3tAesPTdoGmoNWWBoQe8ZnrwSutskcm6Nsf5nz64i44vai9Xx+9U3QpHDvzuAXOzwxFBGk1dfsnLRp/P71QrDYuqnMEExmfdZAWYK0o0JLuwsecOfSvG2C14fAp1rA2GNWMK9SViYxeYnJgwenGgd7FBci6N052mvyv3+52xGc7aHUlp74PvqYEv8LoILdOlG9jGj1jS41seQyW7Qyg6VYfQ+f1Vp4kUupH3EE53QgJzM6rVyFI9qmkThJTN0ZhUzIhwrTqUfceMkWyeYKd7/hk6AUxhYNZehtR7xH8pf1vibLifUr978M4vyutSwJ4xnaJKTvuUdA0d2GQHAuEDwfqPlYcIUDbKOVmbKj+SifKdSlcwGTYunzmKkJskA9DzYIbUjKe00jluAvjGZuoCIbIKdqlH1ntTUoW5OCpE09TmIZdh/SURRKo7QsfLNQ0I="
-  # S3 bucket upload, which is not working right now
-  # provider: s3
-  # access_key_id:
-  #   secure: JxG4/zxgbYvKqX4kJTZdQxvAL+EHqmmi4OEjAOY+KUFAP4t9l5aLEYh6brjHF07kDyFyjMt8G7Hf+SZeznA/JGe8NaliXfCnxLH7ftApCP3l/Tl73z3wXnGL1L7EljiO0EbwlsJUM23B+01BMalzBfyLYOEc61LfSuJsEFFa/ck=
-  # secret_access_key:
-  #   secure: ZdsR1FsY6ER6w6KvF9rjxY4s7GjLXRkT9Rmv4GWyL9+pcHI/4/2KMfab6gj1sQdbc2ocfBgGXR8hQZHi+NZPyTnHbIXf5n2YenLo9NyOHwNs1qiJgxXgtYvhtI/NXCcD9JgX5i5BRR3jkPqJBRe70CmoTwv29kR5Tp158tr3gIg=
-  # bucket: osgeo4mac
-  # local-dir: bottles
-  # upload-dir: bottles
-  # acl: public_read
-  on:
-    branch: master
-    repo: OSGeo/homebrew-osgeo4mac
+#   # S3 bucket upload, which is not working right now
+#   # provider: s3
+#   # access_key_id:
+#   #   secure: JxG4/zxgbYvKqX4kJTZdQxvAL+EHqmmi4OEjAOY+KUFAP4t9l5aLEYh6brjHF07kDyFyjMt8G7Hf+SZeznA/JGe8NaliXfCnxLH7ftApCP3l/Tl73z3wXnGL1L7EljiO0EbwlsJUM23B+01BMalzBfyLYOEc61LfSuJsEFFa/ck=
+#   # secret_access_key:
+#   #   secure: ZdsR1FsY6ER6w6KvF9rjxY4s7GjLXRkT9Rmv4GWyL9+pcHI/4/2KMfab6gj1sQdbc2ocfBgGXR8hQZHi+NZPyTnHbIXf5n2YenLo9NyOHwNs1qiJgxXgtYvhtI/NXCcD9JgX5i5BRR3jkPqJBRe70CmoTwv29kR5Tp158tr3gIg=
+#   # bucket: osgeo4mac
+#   # local-dir: bottles
+#   # upload-dir: bottles
+#   # acl: public_read
+#   on:
+#     branch: master
+#     repo: OSGeo/homebrew-osgeo4mac

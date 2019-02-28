@@ -38,14 +38,16 @@ build_steps: &build_steps
         command: |
           .circleci/after_script.sh
           # fix for persist workspace
-          cd /tmp/bottles
-          [ -f fix.txt ] && rm fix.txt
           echo "fix" > /tmp/bottles/fix.txt
     - checkout
     - persist_to_workspace:
         root: /tmp
         paths:
           - bottles/*
+    - run:
+        command: |
+          # fix for Attaching Workspace
+          rm /tmp/bottles/fix.txt
     - store_test_results:
         path: /tmp/bottles
     # - attach_workspace:
@@ -98,7 +100,7 @@ jobs:
     macos:
       xcode: "10.1.0"
 
-  upload-bottles:
+  collect-bottles:
     macos:
       xcode: "10.1.0"
     steps:
@@ -138,6 +140,20 @@ jobs:
             # This hook will add [ci skip] the the commit messages for bottle DSL
             # so that circle-ci does not re-build a duplicate bottle on pushing.
             fi
+      # - store_artifacts:
+      #     path: /tmp/workspace/bottles
+      #     destination: bottles
+
+  deploy:
+    macos:
+      xcode: "10.1.0"
+    steps:
+      - checkout
+      - run: brew install jfrog-cli-go
+      - run: jfrog bt config --user=${BINTRAY_USER} --key=${BINTRAY_API} --licenses=MIT
+      - run: echo "fix" > /tmp/workspace/bottles/jfrog.txt
+      - run: jfrog bt upload --publish=true "/tmp/workspace/bottles/jfrog.txt" homebrew-osgeo/osgeo-bottles/bottles/0.1/
+      # - run: jfrog bt upload --publish=true "/tmp/workspace/bottles/*" homebrew-osgeo/osgeo-bottles/bottles/0.1/
       - store_artifacts:
           path: /tmp/workspace/bottles
           destination: bottles
@@ -153,7 +169,13 @@ workflows:
       - sierra-build:
           requires:
             - update-homebrew
-      - upload-bottles:
+      - collect-bottles:
           requires:
             - high_sierra-build
             - sierra-build
+      - deploy:
+          requires:
+            - collect-bottles
+          filters:
+            branches:
+              only: master
