@@ -44,6 +44,7 @@ before_install:
   - if [ "${CHANGED_FORMULAE}" == "" ]; then
       echo "Skipping CI; no changed formulae found in $TRAVIS_BUILD_DIR";
       travis_terminate 0;
+      exit 1;
     else
       echo "Changed formulae are ${CHANGED_FORMULAE}";
     fi
