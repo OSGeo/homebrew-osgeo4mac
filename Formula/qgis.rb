@@ -356,19 +356,22 @@ class Qgis < Formula
     # to ensure that the patches are applied
     mkdir "#{prefix}/QGIS.app/Contents/Resources/python/plugins/"
 
-    if build.with?("orfeo") || brewed_orfeo?
-      resource("otb").stage do
-        cp_r "./otb", "#{buildpath}/python/plugins/"
+    # OTB is available from branch_3.8
+    unless build.head?
+      if build.with?("orfeo") || brewed_orfeo?
+        resource("otb").stage do
+          cp_r "./otb", "#{buildpath}/python/plugins/"
+        end
+        resource("OtbUtils").stage do
+          cp_r "./OtbUtils.diff", "#{buildpath}"
+        end
+        resource("OtbAlgorithmProvider").stage do
+          cp_r "./OtbAlgorithmProvider.diff", "#{buildpath}"
+        end
+        system "patch", "-p1", "-i", "#{buildpath}/OtbUtils.diff"
+        system "patch", "-p1", "-i", "#{buildpath}/OtbAlgorithmProvider.diff"
+        cp_r "#{buildpath}/python/plugins/otb", "#{prefix}/QGIS.app/Contents/Resources/python/plugins/"
       end
-      resource("OtbUtils").stage do
-        cp_r "./OtbUtils.diff", "#{buildpath}"
-      end
-      resource("OtbAlgorithmProvider").stage do
-        cp_r "./OtbAlgorithmProvider.diff", "#{buildpath}"
-      end
-      system "patch", "-p1", "-i", "#{buildpath}/OtbUtils.diff"
-      system "patch", "-p1", "-i", "#{buildpath}/OtbAlgorithmProvider.diff"
-      cp_r "#{buildpath}/python/plugins/otb", "#{prefix}/QGIS.app/Contents/Resources/python/plugins/"
     end
 
     if build.with? "r#{build.with?("r-sethrfore") ? "-sethrfore" : ""}" || brewed_r?
