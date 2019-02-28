@@ -30,7 +30,7 @@ build_steps: &build_steps
           - bottles/*
           # if the formula does not change or if a file is updated/uploaded:
           # The specified paths did not match any files in /tmp
-          - ./
+          - ./*.json
     - store_test_results:
         path: /tmp/bottles
 
