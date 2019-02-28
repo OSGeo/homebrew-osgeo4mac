@@ -40,11 +40,11 @@ end
 class Qgis < Formula
   desc "Open Source Geographic Information System"
   homepage "https://www.qgis.org"
-  url "https://github.com/qgis/QGIS/archive/58734527abdbaab95719a48a4a64ea05abd70b44.tar.gz"
-  sha256 "00918ea2a38bb93384c71522be968d4102c4aafddb9d57072100983f7c1f24b5"
+  url "https://github.com/qgis/QGIS/archive/ec30c48de9e8a8da6be19a033b4fc3fc5a8bae02.tar.gz"
+  sha256 "a1de3c80802ba59bc081fb4297f3897f0e54e04f480b7ff95da1b1e713e6c629"
   version "3.6.0"
 
-  # revision 1
+  revision 1
 
   head "https://github.com/qgis/QGIS.git", :branch => "master"
 
@@ -242,41 +242,36 @@ class Qgis < Formula
 
   # R Plugin
   resource "r" do
-    url "https://github.com/north-road/qgis-processing-r.git",
-      :branch => "master",
-      :commit => "eb270b01c24c63313eb3debb23dc197df5036e75"
-    version "1.0.2"
+    url "https://github.com/north-road/qgis-processing-r/archive/e8e1d3e5060ea9563382b7307ae6cdc27179bf75.tar.gz"
+    sha256 "f7a2857eebbbbd6a5f1330ffc0fce86ed52e2e472ce3a81fe174e7137e80d873"
+    version "1.0.3"
   end
 
   # OTB Plugin
   resource "otb" do
-    url "https://gitlab.orfeo-toolbox.org/orfeotoolbox/qgis-otb-plugin.git",
-      :branch => "master",
-      :commit => "f7fb2b4d0a1311d06edc0d11310353bf8311b2c5"
+    url "https://gitlab.orfeo-toolbox.org/orfeotoolbox/qgis-otb-plugin/-/archive/f7fb2b4d0a1311d06edc0d11310353bf8311b2c5/qgis-otb-plugin-f7fb2b4d0a1311d06edc0d11310353bf8311b2c5.tar.gz"
+    sha256 "fd4d836e9f89c621a115554d6e1051c9c7a75119903b673277566c76dbe5bc44"
     version "1.2"
   end
 
   # WhiteboxTools Plugin
   resource "whitebox" do
-    url "https://github.com/alexbruy/processing-whitebox.git",
-      :branch => "master",
-      :commit => "5cbd81240e2a4e08fa0df515bf3dbf11957998ea"
+    url "https://github.com/alexbruy/processing-whitebox/archive/5cbd81240e2a4e08fa0df515bf3dbf11957998ea.tar.gz"
+    sha256 "4ccf112dae81447842ccaa08a86d3c5fa12b0a1087e8dc485723a5c8737ebbd9"
     version "0.9.0"
   end
 
   # TauDEM Plugin
   resource "taudem" do
-    url "https://github.com/alexbruy/processing-taudem.git",
-      :branch => "master",
-      :commit => "38dc454c477b6a6e917f2b3777dc69ed3ecd6062"
+    url "https://github.com/alexbruy/processing-taudem/archive/38dc454c477b6a6e917f2b3777dc69ed3ecd6062.tar.gz"
+    sha256 "7df793ae6a26ed65b6b15a8c8151b7f8598118b9f8da920eb260049d7c57229d"
     version "2.0.0"
   end
 
-  # TauDEM Plugin
+  # LAStools Plugin
   resource "lastools" do
-    url "https://github.com/rapidlasso/LAStoolsPluginQGIS3.git",
-      :branch => "master",
-      :commit => "5b297ddbc6dab4f5c323d637e284f77809970927"
+    url "https://github.com/rapidlasso/LAStoolsPluginQGIS3/archive/5b297ddbc6dab4f5c323d637e284f77809970927.tar.gz"
+    sha256 "bd7c30627948e554705c54d73e6e64a7b7283d1dd59847019f794219b71ad844"
     version "1.2"
   end
 
@@ -1384,15 +1379,3 @@ __END__
             </item>
             <item>
              <widget class="QLabel" name="label_3">
-
-
---- a/src/core/qgsstringutils.cpp
-+++ b/src/core/qgsstringutils.cpp
-@@ -19,6 +19,7 @@
- #include <QStringList>
- #include <QTextBoundaryFinder>
- #include <QRegularExpression>
-+#include <cstdlib>
-
- QString QgsStringUtils::capitalize( const QString &string, QgsStringUtils::Capitalization capitalization )
- {
