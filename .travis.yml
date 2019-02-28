@@ -11,7 +11,7 @@ sudo: required
 
 branches:
   except:
-    - circleci
+    - master
 
 # /usr/local subdirs are Homebrew components
 # cache:
@@ -86,7 +86,7 @@ before_deploy:
   - ./travis/before_deploy.sh
 
 
-# is disabled to use circle CI
+# is disabled to use Circle CI
 
 # deploy:
 #   skip_cleanup: true
