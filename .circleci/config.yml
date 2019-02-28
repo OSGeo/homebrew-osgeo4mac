@@ -20,18 +20,6 @@ build_steps: &build_steps
     - run:
         name: Install changed formulae
         command: .circleci/script.sh
-    # # fix for ERROR: The key you are authenticating with has been marked as read only.
-    # # is using the first key that is found, the one assigned in Checkout keys
-    # # not Add deploy key
-    # # https://circleci.com/gh/OSGeo/homebrew-osgeo4mac/edit#checkout
-    # # Add deployment key fingerprint for CircleCI to use for a push
-    # - add_ssh_keys:
-    #     fingerprints:
-    #       - "${KEY_FINGERPRINT}"
-    # - run:
-    #     name: Avoid hosts unknown for github
-    #     command: |
-    #       echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
     - run:
         name: Build bottles
         no_output_timeout: 30m
@@ -42,11 +30,6 @@ build_steps: &build_steps
           - bottles/*
     - store_test_results:
         path: /tmp/bottles
-    # - attach_workspace:
-    #     at: /tmp/workspace
-    # - store_artifacts:
-    #     path: /tmp/workspace/bottles
-    #     destination: bottles
 
 workflow_filter: &filter
   filters:
@@ -108,8 +91,8 @@ jobs:
            git config --global user.email "qgisninja@gmail.com"
       # fix for ERROR: The key you are authenticating with has been marked as read only.
       # is using the first key that is found, the one assigned in Checkout keys
-      # not Add deploy key
-      # Add deployment key fingerprint for CircleCI to use for a push
+      # not Add deploy key (Checkout keys)
+      # Add deployment key fingerprint (SSH Permissions) for CircleCI to use for a push
       - add_ssh_keys:
           fingerprints:
             - "${KEY_FINGERPRINT}"
@@ -120,11 +103,8 @@ jobs:
       - run:
           name: Commit for new bottles and upload to bintray
           command: |
-            ls
-            ls /tmp
-            ls /tmp/workspace
-            ls /tmp/workspace/bottles
             .circleci/before_deploy.sh
+            - checkout
             if [ "$CIRCLE_BRANCH" == "master" ] && [ "$CHANGED_FORMULAE" != "" ]; then
             # This hook will add [ci skip] the the commit messages for bottle DSL
             # so that ci does not re-build a duplicate bottle on pushing.
@@ -135,29 +115,29 @@ jobs:
             # This hook will add [ci skip] the the commit messages for bottle DSL
             # so that circle-ci does not re-build a duplicate bottle on pushing.
             fi
-      # - store_artifacts:
-      #     path: /tmp/workspace/bottles
-      #     destination: bottles
-
-  deploy:
-    macos:
-      xcode: "10.1.0"
-    steps:
-      - checkout
-      - run:
-          name: Deploy - Upload to bintray
-          command: |
-            ls /tmp
-            ls /tmp/workspace/bottles
-            cd /tmp/workspace/bottles
-            brew install jfrog-cli-go
-            jfrog bt config --user=${BINTRAY_USER} --key=${BINTRAY_API} --licenses=MIT
-            echo "jfrog" > jfrog-deploy.txt
-            jfrog bt upload --publish=true "jfrog-deploy.txt" homebrew-osgeo/osgeo-bottles/bottles/0.1/
-            # jfrog bt upload --publish=true "/tmp/workspace/bottles/*" homebrew-osgeo/osgeo-bottles/bottles/0.1/
       - store_artifacts:
           path: /tmp/workspace/bottles
           destination: bottles
+
+  # deploy:
+  #   macos:
+  #     xcode: "10.1.0"
+  #   steps:
+  #     - checkout
+  #     - run:
+  #         name: Deploy - Upload to bintray
+  #         command: |
+  #           ls /tmp
+  #           ls /tmp/workspace/bottles
+  #           cd /tmp/workspace/bottles
+  #           brew install jfrog-cli-go
+  #           jfrog bt config --user=${BINTRAY_USER} --key=${BINTRAY_API} --licenses=MIT
+  #           echo "jfrog" > jfrog-deploy.txt
+  #           jfrog bt upload --publish=true "jfrog-deploy.txt" homebrew-osgeo/osgeo-bottles/bottles/0.1/
+  #           # jfrog bt upload --publish=true "/tmp/workspace/bottles/*" homebrew-osgeo/osgeo-bottles/bottles/0.1/
+  #     - store_artifacts:
+  #         path: /tmp/workspace/bottles
+  #         destination: bottles
 
 workflows:
   version: 2
@@ -167,16 +147,16 @@ workflows:
       - high_sierra-build:
           requires:
             - update-homebrew
-      # - sierra-build:
-      #     requires:
-      #       - update-homebrew
+      - sierra-build:
+          requires:
+            - update-homebrew
       - collect-bottles:
           requires:
             - high_sierra-build
-            # - sierra-build
-      - deploy:
-          requires:
-            - collect-bottles
-          filters:
-            branches:
-              only: master
+            - sierra-build
+      # - deploy:
+      #     requires:
+      #       - collect-bottles
+      #     filters:
+      #       branches:
+      #         only: master

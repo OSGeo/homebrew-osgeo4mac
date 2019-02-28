@@ -82,15 +82,8 @@ if [ "$CIRCLE_BRANCH" == "master" ] && [ "$CHANGED_FORMULAE" != "" ]; then
 
   echo "Upload to Bintray..."
 
-  ls
-  ls /tmp
   cd /tmp/workspace/bottles/
   files=$(echo *.tar.gz | tr ' ' ',')
   curl -T "{$files}" -u${BINTRAY_USER}:${BINTRAY_API} https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles/bottles/0.1/
-
-  brew install jfrog-cli-go
-  jfrog bt config --user=${BINTRAY_USER} --key=${BINTRAY_API} --licenses=MIT
-  echo "jfrog" > jfrog-before.txt
-  jfrog bt upload --publish=true "jfrog-before.txt" homebrew-osgeo/osgeo-bottles/bottles/0.1/
 
 fi
