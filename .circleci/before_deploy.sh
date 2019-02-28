@@ -69,19 +69,13 @@ if [ "$CIRCLE_BRANCH" != "master" ]; then
     done
   popd
 
-  # Now do the commit and push
-  echo "Commit and push..."
-  git add -vA Formula/*.rb
-  git commit -m "Updated bottles for: ${BUILT_BOTTLES}
-
-  Committed for ${COMMIT_USER}<${COMMIT_EMAIL}>
-  [ci skip]"
-
   # Now that we're all set up, we can push.
   git push ${SSH_REPO} $CIRCLE_BRANCH
 
   echo "Upload to Bintray..."
 
+  ls
+  ls /tmp
   cd /tmp/workspace/bottles/
   files=$(echo *.tar.gz | tr ' ' ',')
   curl -T "{$files}" -u${BINTRAY_USER}:${BINTRAY_API} https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles/bottles/0.1/
@@ -91,4 +85,11 @@ if [ "$CIRCLE_BRANCH" != "master" ]; then
   echo "jfrog" > /tmp/workspace/bottles/jfrog-before.txt
   jfrog bt upload --publish=true "/tmp/workspace/bottles/jfrog-before.txt" homebrew-osgeo/osgeo-bottles/bottles/0.1/
 
+  # Now do the commit and push
+  echo "Commit and push..."
+  git add -vA Formula/*.rb
+  git commit -m "Updated bottles for: ${BUILT_BOTTLES}
+
+  Committed for ${COMMIT_USER}<${COMMIT_EMAIL}>
+  [ci skip]"
 fi

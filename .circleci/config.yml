@@ -120,6 +120,8 @@ jobs:
           command: |
             ls
             ls /tmp
+            ls /tmp/workspace
+            ls /tmp/workspace/bottles
             .circleci/before_deploy.sh
             if [ "$CIRCLE_BRANCH" != "master" ] && [ "$CHANGED_FORMULAE" != "" ]; then
             # This hook will add [ci skip] the the commit messages for bottle DSL
@@ -157,13 +159,13 @@ workflows:
       - high_sierra-build:
           requires:
             - update-homebrew
-      - sierra-build:
-          requires:
-            - update-homebrew
+      # - sierra-build:
+      #     requires:
+      #       - update-homebrew
       - collect-bottles:
           requires:
             - high_sierra-build
-            - sierra-build
+            # - sierra-build
       - deploy:
           requires:
             - collect-bottles
