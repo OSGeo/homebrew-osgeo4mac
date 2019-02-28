@@ -102,16 +102,7 @@ jobs:
             echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
       - run:
           name: Commit for new bottles and upload to bintray
-          command: |
-            if [ "$CIRCLE_BRANCH" == "master" ] && [ "$CHANGED_FORMULAE" != "" ]; then
-              # This hook will add [ci skip] the the commit messages for bottle DSL
-              # so that ci does not re-build a duplicate bottle on pushing.
-              # touch .git/hooks/commit-msg
-              # cp -r ./commit-msg.sh .git/hooks/commit-msg
-              cat .git/hooks/commit-msg
-              # echo 'echo "\n\n[ci skip]" >> "$1"' >> .git/hooks/commit-msg; chmod +x .git/hooks/commit-msg
-            fi
-            .circleci/before_deploy.sh
+          command: .circleci/before_deploy.sh
       - store_artifacts:
           path: /tmp/workspace/bottles
           destination: bottles
