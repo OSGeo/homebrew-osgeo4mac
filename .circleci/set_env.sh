@@ -1,4 +1,4 @@
-#!/usr/bin/env bash -eo pipefail
+#!/usr/bin/env bash
 ###########################################################################
 #    homebrew-osgeo4mac circle ci - script.sh
 #    ---------------------
@@ -22,7 +22,7 @@ ulimit -c unlimited
            export CHANGED_FORMULAE=$(.circleci/changed_formulas.sh)
            if [ "$CHANGED_FORMULAE" == "" ]; then
              echo "Skipping CI, no changed formulae found";
-             exit 1;
+             exit 0;
            else
              echo "Changed formulae are ${CHANGED_FORMULAE}";
            fi
