@@ -49,6 +49,8 @@ build_steps: &build_steps
         name: Fix for Attaching Workspace
         command: |
           rm /tmp/bottles/fix.txt
+          ls /tmp
+          ls /tmp/bottles
     - store_test_results:
         path: /tmp/bottles
     # - attach_workspace:
