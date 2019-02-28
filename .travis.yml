@@ -11,7 +11,7 @@ sudo: required
 
 branches:
   except:
-    - master
+    - circleci
 
 # /usr/local subdirs are Homebrew components
 # cache:

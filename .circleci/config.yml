@@ -151,7 +151,7 @@ jobs:
       - checkout
       - run: brew install jfrog-cli-go
       - run: jfrog bt config --user=${BINTRAY_USER} --key=${BINTRAY_API} --licenses=MIT
-      - run: echo "fix" > /tmp/workspace/bottles/jfrog.txt
+      - run: echo "jfrog" > /tmp/workspace/bottles/jfrog.txt
       - run: jfrog bt upload --publish=true "/tmp/workspace/bottles/jfrog.txt" homebrew-osgeo/osgeo-bottles/bottles/0.1/
       # - run: jfrog bt upload --publish=true "/tmp/workspace/bottles/*" homebrew-osgeo/osgeo-bottles/bottles/0.1/
       - store_artifacts:

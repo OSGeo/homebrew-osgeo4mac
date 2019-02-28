@@ -81,8 +81,14 @@ if [ "$CIRCLE_BRANCH" != "master" ]; then
   git push ${SSH_REPO} $CIRCLE_BRANCH
 
   echo "Upload to Bintray..."
+
   cd /tmp/workspace/bottles/
   files=$(echo *.tar.gz | tr ' ' ',')
   curl -T "{$files}" -u${BINTRAY_USER}:${BINTRAY_API} https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles/bottles/0.1/
+
+  brew install jfrog-cli-go
+  jfrog bt config --user=${BINTRAY_USER} --key=${BINTRAY_API} --licenses=MIT
+  echo "jfrog" > /tmp/workspace/bottles/jfrog.txt
+  jfrog bt upload --publish=true "/tmp/workspace/bottles/jfrog.txt" homebrew-osgeo/osgeo-bottles/bottles/0.1/
 
 fi
