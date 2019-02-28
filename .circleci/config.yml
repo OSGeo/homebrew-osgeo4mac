@@ -23,14 +23,14 @@ build_steps: &build_steps
     - run:
         name: Build bottles
         no_output_timeout: 30m
-        command: .circleci/after_script.sh
+        command: |
+          .circleci/after_script.sh
+          # if the formula does not change or if a file is updated/uploaded:
+          echo "build-num-$CIRCLE_BUILD_NUM" > /tmp/bottles
     - persist_to_workspace:
         root: /tmp
         paths:
           - bottles/*
-          # if the formula does not change or if a file is updated/uploaded:
-          # The specified paths did not match any files in /tmp
-          - /*.json
     - store_test_results:
         path: /tmp/bottles
 
