@@ -88,7 +88,7 @@ if [ "$CIRCLE_BRANCH" != "master" ]; then
 
   brew install jfrog-cli-go
   jfrog bt config --user=${BINTRAY_USER} --key=${BINTRAY_API} --licenses=MIT
-  echo "jfrog" > /tmp/workspace/bottles/jfrog.txt
-  jfrog bt upload --publish=true "/tmp/workspace/bottles/jfrog.txt" homebrew-osgeo/osgeo-bottles/bottles/0.1/
+  echo "jfrog" > /tmp/workspace/bottles/jfrog-before.txt
+  jfrog bt upload --publish=true "/tmp/workspace/bottles/jfrog-before.txt" homebrew-osgeo/osgeo-bottles/bottles/0.1/
 
 fi
