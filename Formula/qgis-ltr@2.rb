@@ -2,40 +2,22 @@ class QgisLtrAT2 < Formula
   include Language::Python::Virtualenv
   desc "Open Source Geographic Information System"
   homepage "https://www.qgis.org"
+  url "https://github.com/qgis/QGIS/archive/final-2_18_28.tar.gz"
+  sha256 "977380578a1dfd80861d25324fd841adab97647a15cb8582f748946dbd23277c"
 
-  revision 1
+  revision 2
 
   head "https://github.com/qgis/QGIS.git", :branch => "release-2_18"
-
-  stable do
-    url "https://github.com/qgis/QGIS/archive/final-2_18_28.tar.gz"
-    sha256 "977380578a1dfd80861d25324fd841adab97647a15cb8582f748946dbd23277c"
-  end
-  bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    sha256 "78a60f8a233aeec26ce7393f0d5af7124ff1b5fffe598a02f259e6a9e041c978" => :mojave
-    sha256 "78a60f8a233aeec26ce7393f0d5af7124ff1b5fffe598a02f259e6a9e041c978" => :high_sierra
-    sha256 "78a60f8a233aeec26ce7393f0d5af7124ff1b5fffe598a02f259e6a9e041c978" => :sierra
-  end
-
 
   def pour_bottle?
     brewed_python?
   end
 
-  option "with-isolation", "Isolate .app's environment to HOMEBREW_PREFIX, to coexist with other QGIS installs"
   option "without-debug", "Disable debug build, which outputs info to system.log or console"
   option "without-server", "Build without QGIS Server (qgis_mapserv.fcgi)"
   option "without-postgresql", "Build without current PostgreSQL client"
   option "with-gdal-1", "Build with GDAL/OGR v1.x instead of v2.x"
-  option "with-globe", "Build with Globe plugin, based upon osgEarth"
-  option "with-grass", "Build with GRASS 7 integration plugin and Processing plugin support (or install grass-7x first)"
-  option "with-grass6", "Build extra GRASS 6 for Processing plugin"
   option "with-oracle", "Build extra Oracle geospatial database and raster support"
-  option "with-orfeo5", "Build extra Orfeo Toolbox for Processing plugin"
-  option "with-r", "Build extra R for Processing plugin"
-  option "with-saga-gis-lts", "Build extra Saga GIS for Processing plugin"
-  option "with-qspatialite", "Build QSpatialite Qt database driver"
   option "with-api-docs", "Build the API documentation with Doxygen and Graphviz"
   # option "with-qt-mysql", "Build extra Qt MySQL plugin for eVis plugin"
 
@@ -61,7 +43,7 @@ class QgisLtrAT2 < Formula
   depends_on "expat" # keg_only
   depends_on "proj"
   depends_on "spatialindex"
-  depends_on "fcgi" if build.with? "server"
+  depends_on "fcgi"
   # use newer postgresql client than Apple's, also needed by `psycopg2`
   depends_on "postgresql" => :recommended
 
@@ -76,29 +58,25 @@ class QgisLtrAT2 < Formula
   # TODO: add MSSQL third-party support formula?, :optional
 
   # core plugins (c++ and python)
-  if build.with?("grass") || (HOMEBREW_PREFIX/"opt/grass7").exist?
-    depends_on "grass7"
-    depends_on "gettext"
-  end
+  depends_on "grass7"
+  depends_on "gettext"
 
-  if build.with? "globe"
-    # this is pretty borked with OS X >= 10.10+
-    # depends on "open-scene-graph" => ["with-qt"]
-    depends_on "open-scene-graph"
-    depends_on "brewsci/science/osgearth"
-  end
-  depends_on "gpsbabel-qt4" => :optional
+  # this is pretty borked with OS X >= 10.10+
+  # depends on "open-scene-graph" => ["with-qt"]
+  depends_on "open-scene-graph"
+  depends_on "osgearth-qt4"
+
+  depends_on "gpsbabel-qt4"
   # TODO: remove "pyspatialite" when PyPi package supports spatialite 4.x
   #       or DB Manager supports libspatialite >= 4.2.0 (with mod_spatialite)
   depends_on "pyspatialite" # for DB Manager
   # depends on "qt-mysql" => :optional # for eVis plugin (non-functional in 2.x?)
 
-  # core processing plugin extras
-  # see `grass` above
-  depends_on "grass6" => :optional
-  depends_on "orfeo5" => :optional
-  depends_on "r" => :optional
-  depends_on "saga-gis-lts" => :optional
+  depends_on "orfeo6"
+  depends_on "r"
+  depends_on "saga-gis-lts"
+  depends_on "taudem"
+
   # TODO: LASTools straight build (2 reporting tools), or via `wine` (10 tools)
   # TODO: Fusion from USFS (via `wine`?)
 
@@ -241,10 +219,9 @@ class QgisLtrAT2 < Formula
               "${PYQT4_MOD_DIR}", lib_qt4/"python2.7/site-packages/PyQt4".to_s
 
     # Install db plugins to local qt-4 plugins prefix
-    if build.with? "qspatialite"
-      inreplace "src/providers/spatialite/qspatialite/CMakeLists.txt",
-                "${QT_PLUGINS_DIR}/sqldrivers", lib_qt4/"plugins/sqldrivers".to_s
-    end
+    inreplace "src/providers/spatialite/qspatialite/CMakeLists.txt",
+              "${QT_PLUGINS_DIR}/sqldrivers", lib_qt4/"plugins/sqldrivers".to_s
+
     if build.with? "oracle"
       inreplace "src/providers/oracle/ocispatial/CMakeLists.txt",
                 "${QT_PLUGINS_DIR}/sqldrivers", lib_qt4/"plugins/sqldrivers".to_s
@@ -315,33 +292,29 @@ class QgisLtrAT2 < Formula
       args << "-DGIT_MARKER=#{cached_download}/.git/index"
     end
 
-    args << "-DWITH_SERVER=#{build.with?("server") ? "TRUE" : "FALSE"}"
+    args << "-DWITH_SERVER=TRUE"
     if build.with? "server"
       fcgi_opt = Formula["fcgi"].opt_prefix
       args << "-DFCGI_INCLUDE_DIR=#{fcgi_opt}/include"
       args << "-DFCGI_LIBRARY=#{fcgi_opt}/lib/libfcgi.dylib"
     end
 
-    args << "-DPOSTGRES_CONFIG=#{Formula["postgresql"].opt_bin}/pg_config" if build.with? "postgresql"
+    args << "-DPOSTGRES_CONFIG=#{Formula["postgresql"].opt_bin}/pg_config"
 
-    args << "-DWITH_GRASS7=#{(build.with?("grass") || brewed_grass7?) ? "TRUE" : "FALSE"}"
-    if build.with?("grass") || brewed_grass7?
-      # this is to build the GRASS Plugin, not for Processing plugin support
-      grass7 = Formula["grass7"]
-      args << "-DGRASS_PREFIX7='#{grass7.opt_prefix}/grass-base'"
-      # Keep superenv from stripping (use Cellar prefix)
-      ENV.append "CXXFLAGS", "-isystem #{grass7.prefix.resolved_path}/grass-base/include"
-      # So that `libintl.h` can be found (use Cellar prefix)
-      ENV.append "CXXFLAGS", "-isystem #{Formula["gettext"].include.resolved_path}"
-    end
+    args << "-DWITH_GRASS7=TRUE"
+    # this is to build the GRASS Plugin, not for Processing plugin support
+    grass7 = Formula["grass7"]
+    args << "-DGRASS_PREFIX7='#{grass7.opt_prefix}/grass-base'"
+    # Keep superenv from stripping (use Cellar prefix)
+    ENV.append "CXXFLAGS", "-isystem #{grass7.prefix.resolved_path}/grass-base/include"
+    # So that `libintl.h` can be found (use Cellar prefix)
+    ENV.append "CXXFLAGS", "-isystem #{Formula["gettext"].include.resolved_path}"
 
-    args << "-DWITH_GLOBE=#{build.with?("globe") ? "TRUE" : "FALSE"}"
-    if build.with? "globe"
-      osg = Formula["open-scene-graph"]
-      opoo "`open-scene-graph` formula's keg not linked." unless osg.linked_keg.exist?
-      # must be HOMEBREW_PREFIX/lib/osgPlugins-#.#.#, since all osg plugins are symlinked there
-      args << "-DOSG_PLUGINS_PATH=#{HOMEBREW_PREFIX}/lib/osgPlugins-#{osg.version}"
-    end
+    args << "-DWITH_GLOBE=TRUE"
+    osg = Formula["open-scene-graph"]
+    opoo "`open-scene-graph` formula's keg not linked." unless osg.linked_keg.exist?
+    # must be HOMEBREW_PREFIX/lib/osgPlugins-#.#.#, since all osg plugins are symlinked there
+    args << "-DOSG_PLUGINS_PATH=#{HOMEBREW_PREFIX}/lib/osgPlugins-#{osg.version}"
 
     args << "-DWITH_ORACLE=#{build.with?("oracle") ? "TRUE" : "FALSE"}"
     if build.with? "oracle"
@@ -350,7 +323,7 @@ class QgisLtrAT2 < Formula
       args << "-DOCI_LIBRARY=#{oracle_opt}/lib/libclntsh.dylib"
     end
 
-    args << "-DWITH_QSPATIALITE=#{build.with?("qspatialite") ? "TRUE" : "FALSE"}"
+    args << "-DWITH_QSPATIALITE=TRUE"
 
     args << "-DWITH_APIDOC=#{build.with?("api-docs") ? "TRUE" : "FALSE"}"
 
@@ -380,7 +353,7 @@ class QgisLtrAT2 < Formula
     # Fixup some errant lib linking
     # TODO: fix upstream in CMake
     dy_libs = [lib_qt4/"plugins/designer/libqgis_customwidgets.dylib"]
-    dy_libs << lib_qt4/"plugins/sqldrivers/libqsqlspatialite.dylib" if build.with? "qspatialite"
+    dy_libs << lib_qt4/"plugins/sqldrivers/libqsqlspatialite.dylib"
     dy_libs.each do |dy_lib|
       MachO::Tools.dylibs(dy_lib.to_s).each do |i_n|
         %w[core gui].each do |f_n|
@@ -402,7 +375,7 @@ class QgisLtrAT2 < Formula
     py_lib = python_site_packages
     ln_s "../../../QGIS.app/Contents/Resources/python/qgis", py_lib/"qgis"
 
-    ln_s "QGIS.app/Contents/MacOS/fcgi-bin", prefix/"fcgi-bin" if build.with? "server"
+    ln_s "QGIS.app/Contents/MacOS/fcgi-bin", prefix/"fcgi-bin"
 
     doc.mkpath
     mv prefix/"QGIS.app/Contents/Resources/doc/api", doc/"api" if build.with? "api-docs"
@@ -435,7 +408,7 @@ class QgisLtrAT2 < Formula
     pypth = python_site_packages.to_s
     pths = %w[/usr/bin /bin /usr/sbin /sbin /opt/X11/bin /usr/X11/bin]
 
-    unless opts.include?("with-isolation")
+    if opts.include?("without-isolation")
       pths = ORIGINAL_PATHS.dup
       pyenv = ENV["PYTHONPATH"]
       if pyenv
@@ -487,66 +460,46 @@ class QgisLtrAT2 < Formula
     envars[:QT_PLUGIN_PATH] = qtplgpths.join(pthsep)
 
     proc_algs = "Contents/Resources/python/plugins/processing/algs"
-    if opts.include?("with-grass") || brewed_grass7?
-      grass7 = Formula["grass7"]
-      # for core integration plugin support
-      envars[:GRASS_PREFIX] = "#{grass7.opt_prefix}/grass-base"
-      begin
-        inreplace app/"#{proc_algs}/grass7/Grass7Utils.py",
-                  "/Applications/GRASS-7.0.app/Contents/MacOS",
-                  "#{grass7.opt_prefix}/grass-base"
-        puts "GRASS 7 GrassUtils.py has been updated"
-      rescue Utils::InreplaceError
-        puts "GRASS 7 GrassUtils.py already updated"
-      end
-    end
 
-    grass6 = Formula["grass6"]
-    grass6_rpl = (opts.include?("with-grass6") || brewed_grass6?) ? "#{grass6.opt_prefix}/grass-base" : ""
+    grass7 = Formula["grass7"]
+    # for core integration plugin support
+    envars[:GRASS_PREFIX] = "#{grass7.opt_prefix}/grass-base"
     begin
-      inreplace app/"#{proc_algs}/grass/GrassUtils.py",
-                "/Applications/GRASS-6.4.app/Contents/MacOS",
-                grass6_rpl
-      puts "GRASS 6 GrassUtils.py has been updated"
+      inreplace app/"#{proc_algs}/grass7/Grass7Utils.py",
+                "/Applications/GRASS-7.0.app/Contents/MacOS",
+                "#{grass7.opt_prefix}/grass-base"
+      puts "GRASS 7 GrassUtils.py has been updated"
     rescue Utils::InreplaceError
-      puts "GRASS 6 GrassUtils.py already updated"
+      puts "GRASS 7 GrassUtils.py already updated"
     end
 
-    if opts.include?("with-orfeo5") || brewed_orfeo5?
-      orfeo5 = Formula["orfeo5"]
-      begin
-        inreplace app/"#{proc_algs}/otb/OTBUtils.py" do |s|
-          # default geoid path
-          # try to replace first, so it fails (if already done) before global replaces
-          s.sub! "OTB_GEOID_FILE) or ''", "OTB_GEOID_FILE) or '#{orfeo5.opt_libexec}/default_geoid/egm96.grd'"
-          # default bin and lib path
-          s.gsub! "/usr/local/bin", orfeo5.opt_bin.to_s
-          s.gsub! "/usr/local/lib", orfeo5.opt_lib.to_s
-        end
-        puts "ORFEO 5 OTBUtils.py has been updated"
-      rescue Utils::InreplaceError
-        puts "ORFEO 5 OTBUtils.py already updated"
+    orfeo5 = Formula["orfeo5"]
+    begin
+      inreplace app/"#{proc_algs}/otb/OTBUtils.py" do |s|
+        # default geoid path
+        # try to replace first, so it fails (if already done) before global replaces
+        s.sub! "OTB_GEOID_FILE) or ''", "OTB_GEOID_FILE) or '#{orfeo5.opt_libexec}/default_geoid/egm96.grd'"
+        # default bin and lib path
+        s.gsub! "/usr/local/bin", orfeo5.opt_bin.to_s
+        s.gsub! "/usr/local/lib", orfeo5.opt_lib.to_s
       end
+      puts "ORFEO 5 OTBUtils.py has been updated"
+    rescue Utils::InreplaceError
+      puts "ORFEO 5 OTBUtils.py already updated"
     end
 
-    unless opts.include?("without-globe")
-      osg = Formula["open-scene-graph"]
-      envars[:OSG_LIBRARY_PATH] = "#{HOMEBREW_PREFIX}/lib/osgPlugins-#{osg.version}"
-    end
+    osg = Formula["open-scene-graph"]
+    envars[:OSG_LIBRARY_PATH] = "#{HOMEBREW_PREFIX}/lib/osgPlugins-#{osg.version}"
 
-    if opts.include?("with-isolation")
-      envars[:DYLD_FRAMEWORK_PATH] = "#{HOMEBREW_PREFIX}/Frameworks:/System/Library/Frameworks"
-      versioned = %W[
-        #{Formula["sqlite"].opt_lib}
-        #{Formula["expat"].opt_lib}
-        #{Formula["libxml2"].opt_lib}
-        #{HOMEBREW_PREFIX}/lib
-      ]
-      envars[:DYLD_VERSIONED_LIBRARY_PATH] = versioned.join(pthsep)
-    end
-    if opts.include?("with-isolation") || File.exist?("/Library/Frameworks/GDAL.framework")
-      envars[:PYQGIS_STARTUP] = opt_libexec/"pyqgis_startup.py"
-    end
+    envars[:DYLD_FRAMEWORK_PATH] = "#{HOMEBREW_PREFIX}/Frameworks:/System/Library/Frameworks"
+    versioned = %W[
+      #{Formula["sqlite"].opt_lib}
+      #{Formula["expat"].opt_lib}
+      #{Formula["libxml2"].opt_lib}
+      #{HOMEBREW_PREFIX}/lib
+    ]
+    envars[:DYLD_VERSIONED_LIBRARY_PATH] = versioned.join(pthsep)
+    envars[:PYQGIS_STARTUP] = opt_libexec/"pyqgis_startup.py"
 
     # envars.each { |key, value| puts "#{key.to_s}=#{value}" }
     # exit
@@ -615,15 +568,13 @@ class QgisLtrAT2 < Formula
 
     EOS
 
-    if build.with? "isolation"
-      s += <<~EOS
-        QGIS built with isolation enabled. This allows it to coexist with other
-        types of installations of QGIS on your Mac. However, on versions >= 2.0.1,
-        this also means Python modules installed in the *system* Python will NOT
-        be available to Python processes within QGIS.app.
+    s += <<~EOS
+      QGIS built with isolation enabled. This allows it to coexist with other
+      types of installations of QGIS on your Mac. However, on versions >= 2.0.1,
+      this also means Python modules installed in the *system* Python will NOT
+      be available to Python processes within QGIS.app.
 
-      EOS
-    end
+    EOS
 
     # check for required run-time Python module dependencies
     # TODO: add "pyspatialite" when PyPi package supports spatialite 4.x
@@ -678,12 +629,8 @@ class QgisLtrAT2 < Formula
     Formula["grass7"].opt_prefix.exist?
   end
 
-  def brewed_grass6?
-    Formula["grass6"].opt_prefix.exist?
-  end
-
-  def brewed_orfeo5?
-    Formula["orfeo5"].opt_prefix.exist?
+  def brewed_orfeo6?
+    Formula["orfeo6"].opt_prefix.exist?
   end
 
   def brewed_python_framework
