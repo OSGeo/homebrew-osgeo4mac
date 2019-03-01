@@ -44,7 +44,7 @@ class Qgis < Formula
   sha256 "a1de3c80802ba59bc081fb4297f3897f0e54e04f480b7ff95da1b1e713e6c629"
   version "3.6.0"
 
-  revision 1
+  revision 2
 
   head "https://github.com/qgis/QGIS.git", :branch => "master"
 
@@ -80,7 +80,6 @@ class Qgis < Formula
   option "with-postgresql10", "Build with PostgreSQL 10 client"
   option "with-qspatialite", "Build QSpatialite Qt database driver"
   option "with-r", "Build extra R for Processing plugin"
-  option "with-r-sethrfore", "Build extra R for Processing plugin (only if you are going to install with this version of R)"
   option "with-saga", "Build extra Saga GIS (LTS) for Processing plugin"
   option "with-server", "Build with QGIS Server (qgis_mapserv.fcgi)"
   option "with-taudem", "Build with TauDEM, Terrain Analysis Using Digital Elevation Models for hydrology"
@@ -219,14 +218,12 @@ class Qgis < Formula
   depends_on "orfeo6" if build.with?("orfeo")
 
   if build.with?("r")
-    depends_on "r"
-  end
-
-  # R with more support
-  # https://github.com/adamhsparks/setup_macOS_for_R
-  # fix: will not build if the R version does not match
-  if build.with?("r-sethrfore")
-    depends_on "sethrfore/r-srf/r"
+    # R with more support
+    # https://github.com/adamhsparks/setup_macOS_for_R
+    # fix: will not build if the R version does not match
+    unless File.exists?(File.join("#{HOMEBREW_PREFIX}/opt", "r"))
+      depends_on "r"
+    end
   end
 
   depends_on "saga-gis-lts" if build.with?("saga")
@@ -374,7 +371,7 @@ class Qgis < Formula
       end
     end
 
-    if build.with? "r#{build.with?("r-sethrfore") ? "-sethrfore" : ""}" || brewed_r?
+    if build.with?("r") || brewed_r?
       resource("r").stage do
         cp_r "./processing_r", "#{prefix}/QGIS.app/Contents/Resources/python/plugins/"
       end
@@ -961,7 +958,7 @@ class Qgis < Formula
       end
     end
 
-    if opts.include?("with-r" || "with-r-sethrfore") || brewed_r?
+    if opts.include?("with-r") || brewed_r?
       begin
         inreplace "#{proc_plugins}/processing_r/processing/provider.py" do |s|
         s.gsub! "'Activate'), False))", "'Activate'), True))"
@@ -1230,7 +1227,8 @@ class Qgis < Formula
   # end
 
   def brewed_r?
-    Formula["r"].opt_prefix.exist?
+    File.exists?(File.join("#{HOMEBREW_PREFIX}/opt", "r"))
+    # Formula["r"].opt_prefix.exist?
   end
 
   def brewed_lastools?
