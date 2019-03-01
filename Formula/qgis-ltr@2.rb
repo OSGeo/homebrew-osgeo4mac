@@ -306,7 +306,10 @@ class QgisLtrAT2 < Formula
     # So that `libintl.h` can be found (use Cellar prefix)
     ENV.append "CXXFLAGS", "-isystem #{Formula["gettext"].include.resolved_path}"
 
-    args << "-DWITH_GLOBE=TRUE"
+    # The following variables are used in this project, but they are set to NOTFOUND.
+    # Please set them or make sure they are set and tested correctly in the CMake files:
+    # OSGQT_LIBRARY
+    # args << "-DWITH_GLOBE=TRUE"
     osg = Formula["open-scene-graph"]
     opoo "`open-scene-graph` formula's keg not linked." unless osg.linked_keg.exist?
     # must be HOMEBREW_PREFIX/lib/osgPlugins-#.#.#, since all osg plugins are symlinked there
