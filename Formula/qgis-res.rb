@@ -90,15 +90,19 @@ class QgisRes < Formula
   # end
 
   # if build.with?("r")
-    depends_on "r"
+  #   depends_on "r"
   # end
-
   # R with more support
   # https://github.com/adamhsparks/setup_macOS_for_R
   # fix: rpy2 requires finding R
   # if build.with?("r-sethrfore")
   #   depends_on "sethrfore/r-srf/r"
   # end
+
+  # fix for sethrfore/r-srf/r
+  unless File.exists?(File.join("#{HOMEBREW_PREFIX}/opt", "r"))
+    depends_on "r"
+  end
 
   # pyqgis_startup.py
   # TODO: add one for Py3 (only necessary when macOS ships a Python3 or 3rd-party isolation is needed)
