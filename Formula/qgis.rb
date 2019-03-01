@@ -221,9 +221,10 @@ class Qgis < Formula
     # R with more support
     # https://github.com/adamhsparks/setup_macOS_for_R
     # fix: will not build if the R version does not match
-    unless File.exists?(File.join("#{HOMEBREW_PREFIX}/opt", "r"))
-      depends_on "r"
-    end
+    # If you installed sethrfore/r-srf/r, before installing
+    # rename "/usr/local/opt/r" to "/usr/local/opt/r-bk"
+    # and then restore it after installing qgis
+    depends_on "r"
   end
 
   depends_on "saga-gis-lts" if build.with?("saga")
