@@ -229,49 +229,128 @@ class QgisLtrAT2 < Formula
                 "${QT_PLUGINS_DIR}/sqldrivers", lib_qt4/"plugins/sqldrivers".to_s
     end
 
+    cmake_prefixes = %w[
+      qt
+      qscintilla2-qt4
+      qwt
+      qwtpolar
+      qca
+      qtkeychain
+      gdal2
+      gsl
+      geos
+      proj
+      libspatialite
+      spatialindex
+      expat
+      sqlite
+      libzip
+      flex
+      bison
+      fcgi
+    ].freeze
+
+    # force CMake to search HB/opt paths first, so headers in HB/include are not found instead;
+    # specifically, ensure any gdal v1 includes are not used
+    args << "-DCMAKE_PREFIX_PATH=#{cmake_prefixes.map { |f| Formula[f.to_s].opt_prefix }.join(";")}"
+
     qwt_fw = Formula["qwt-qt4"].opt_lib/"qwt.framework"
     qwtpolar_fw = Formula["qwtpolar-qt4"].opt_lib/"qwtpolar.framework"
-    qsci_opt = Formula["qscintilla2-qt4"].opt_prefix
-    args = std_cmake_args
-    args << "-DCMAKE_BUILD_TYPE=RelWithDebInfo" if build.with? "debug" # override
+    qca_fw = Formula["qca"].opt_lib/"qca-qt4.framework"
     args += %W[
       -DBISON_EXECUTABLE=#{Formula["bison"].opt_bin}/bison
+      -DEXPAT_INCLUDE_DIR=#{Formula["expat"].opt_include}
+      -DEXPAT_LIBRARY=#{Formula["expat"].opt_lib}/libexpat.dylib
       -DFLEX_EXECUTABLE=#{Formula["flex"].opt_bin}/flex
-      -DENABLE_TESTS=FALSE
-      -DENABLE_MODELTEST=FALSE
-      -DSUPPRESS_QT_WARNINGS=TRUE
-      -DQWT_INCLUDE_DIR=#{qwt_fw}/Headers
-      -DQWT_LIBRARY=#{qwt_fw}/qwt
+      -DPROJ_INCLUDE_DIR=#{Formula["proj"].opt_include}
+      -DPROJ_LIBRARY=#{Formula["proj"].opt_lib}/libproj.dylib
+      -DQCA_INCLUDE_DIR=#{qca_fw}/Headers
+      -DQCA_LIBRARY=#{qca_fw}/qca-qt4
       -DQWTPOLAR_INCLUDE_DIR=#{qwtpolar_fw}/Headers
       -DQWTPOLAR_LIBRARY=#{qwtpolar_fw}/qwtpolar
-      -DQSCINTILLA_INCLUDE_DIR=#{qsci_opt}/libexec/include
-      -DQSCINTILLA_LIBRARY=#{qsci_opt}/libexec/lib/libqscintilla2.dylib
-      -DQSCI_SIP_DIR=#{qsci_opt}/share/sip-qt4
+      -DQWT_INCLUDE_DIR=#{qwt_fw}/Headers
+      -DQWT_LIBRARY=#{qwt_fw}/qwt
+      -DSPATIALINDEX_INCLUDE_DIR=#{Formula["spatialindex"].opt_include}
+      -DSPATIALINDEX_LIBRARY=#{Formula["spatialindex"].opt_lib}/libspatialindex.dylib
+      -DSQLITE3_INCLUDE_DIR=#{Formula["sqlite"].opt_include}
+      -DSQLITE3_LIBRARY=#{Formula["sqlite"].opt_lib}/libsqlite3.dylib
+      -DLIBZIP_CONF_INCLUDE_DIR=#{Formula["libzip"].opt_lib}/pkgconfig
+      -DLIBZIP_INCLUDE_DIR=#{Formula["libzip"].opt_include}
+      -DLIBZIP_LIBRARY=#{Formula["libzip"].opt_lib}/libzip.dylib
+      -DSPATIALITE_INCLUDE_DIR=#{Formula["libspatialite"].opt_include}
+      -DSPATIALITE_LIBRARY=#{Formula["libspatialite"].opt_lib}/libspatialite.dylib
+      -DLIBTASN1_INCLUDE_DIR=#{Formula["libtasn1"].opt_include}
+      -DLIBTASN1_LIBRARY=#{Formula["libtasn1"].opt_lib}/libtasn1.dylib
       -DWITH_QWTPOLAR=TRUE
       -DWITH_INTERNAL_QWTPOLAR=FALSE
+      -DWITH_QSCIAPI=FALSE
+      -DWITH_CUSTOM_WIDGETS=TRUE
+      -DWITH_ASTYLE=FALSE
       -DQGIS_MACAPP_BUNDLE=0
       -DQGIS_MACAPP_INSTALL_DEV=FALSE
-      -DWITH_QSCIAPI=FALSE
-      -DWITH_STAGED_PLUGINS=TRUE
-      -DWITH_GRASS=FALSE
-      -DWITH_CUSTOM_WIDGETS=TRUE
     ]
 
-    if build.without? "gdal-1"
-      args << "-DGDAL_LIBRARY=#{Formula["gdal2"].opt_lib}/libgdal.dylib"
-      args << "-DGDAL_INCLUDE_DIR=#{Formula["gdal2"].opt_include}"
-      # These specific includes help ensure any gdal v1 includes are not
-      # accidentally pulled from /usr/local/include
-      # In CMakeLists.txt throughout QGIS source tree these includes may come
-      # before opt/gdal2/include; 'fixing' many CMakeLists.txt may be unwise
-      args << "-DGEOS_INCLUDE_DIR=#{Formula["geos"].opt_include}"
-      args << "-DGSL_INCLUDE_DIR=#{Formula["gsl"].opt_include}"
-      args << "-DPROJ_INCLUDE_DIR=#{Formula["proj"].opt_include}"
-      args << "-DQCA_INCLUDE_DIR=#{Formula["qca-qt4"].opt_lib}/qca.framework/Headers"
-      args << "-DSPATIALINDEX_INCLUDE_DIR=#{Formula["spatialindex"].opt_include}/spatialindex"
-      args << "-DSPATIALITE_INCLUDE_DIR=#{Formula["libspatialite"].opt_include}"
-      args << "-DSQLITE3_INCLUDE_DIR=#{Formula["sqlite"].opt_include}"
-    end
+    # Build unit tests
+    args << "-DENABLE_TESTS=FALSE"
+    # Enable QT ModelTest (not for production)
+    args << "-DENABLE_MODELTEST=FALSE"
+    # Perform coverage tests
+    args << "-DENABLE_COVERAGE=FALSE"
+
+    args << "-DSIP_BINARY_PATH=#{Formula["sip-qt4"].opt_bin}/sip"
+    args << "-DSIP_DEFAULT_SIP_DIR=#{HOMEBREW_PREFIX}/share/sip"
+    args << "-DSIP_INCLUDE_DIR=#{Formula["sip-qt4"].opt_include}"
+
+    args << "-DQSCI_SIP_DIR=#{HOMEBREW_PREFIX}/share/sip" # Qsci/qscimod5.sip
+    args << "-DQSCINTILLA_INCLUDE_DIR=#{Formula["qscintilla2-qt4"].opt_include}" # Qsci/qsciglobal.h
+    args << "-DQSCINTILLA_LIBRARY=#{Formula["qscintilla2-qt4"].opt_lib}/libqscintilla2.dylib"
+
+    # disable CCache
+    args << "-DUSE_CCACHE=OFF"
+
+    # Determines whether QGIS core should be built
+    args << "-DWITH_CORE=TRUE"
+
+    # Determines whether QGIS GUI library (and everything built on top of it) should be built
+    args << "-DWITH_GUI=TRUE"
+
+    # Determines whether QGIS analysis library should be built
+    # args << "-DWITH_ANALYSIS=TRUE"
+
+    # Determines whether QGIS desktop should be built
+    args << "-DWITH_DESKTOP=TRUE"
+
+    # Determines whether QGIS Quick library should be built
+    args << "-DWITH_QUICK=FALSE"
+
+    # Determines whether MDAL support should be built
+    args << "-DWITH_INTERNAL_MDAL=TRUE"
+
+    # Determines whether GeoReferencer plugin should be built
+    args << "-DWITH_GEOREFERENCER=TRUE"
+
+    # Determines whether std::thread_local should be used
+    args << "-DWITH_THREAD_LOCAL=TRUE"
+
+    # Determines whether Qt5SerialPort should be tried for GPS positioning
+    # args << "-DWITH_QT5SERIALPORT=TRUE"
+
+    # Use Clang tidy
+    args << "-DWITH_CLANG_TIDY=FALSE"
+
+    # try to configure and build python bindings by default
+    # determines whether python bindings should be built
+    args << "-DWITH_BINDINGS=TRUE"
+    # by default bindings will be installed only to QGIS directory
+    # someone might want to install it to python site-packages directory
+    # as otherwise user has to use PYTHONPATH environment variable to add
+    # QGIS bindings to package search path
+    # install bindings to global python directory? (might need root)
+    args << "-DBINDINGS_GLOBAL_INSTALL=FALSE"
+    # Stage-install core Python plugins to run from build directory? (utilities and console are always staged)
+    args << "-DWITH_STAGED_PLUGINS=TRUE"
+    # Determines whether Python modules in staged or installed locations are byte-compiled"
+    args << "-DWITH_PY_COMPILE=FALSE"
 
     # Python Configuration
      args << "-DPYTHON_EXECUTABLE='#{`python2 -c "import sys; print(sys.executable)"`.chomp}'"
@@ -331,6 +410,19 @@ class QgisLtrAT2 < Formula
     args << "-DWITH_QSPATIALITE=TRUE"
 
     args << "-DWITH_APIDOC=#{build.with?("api-docs") ? "TRUE" : "FALSE"}"
+
+    # prefer opt_prefix for CMake modules that find versioned prefix by default
+    # this keeps non-critical dependency upgrades from breaking QGIS linking
+    args << "-DGDAL_CONFIG=#{Formula["gdal2"].opt_bin}/gdal-config"
+    args << "-DGDAL_INCLUDE_DIR=#{Formula["gdal2"].opt_include}"
+    args << "-DGDAL_LIBRARY=#{Formula["gdal2"].opt_lib}/libgdal.dylib"
+    args << "-DGEOS_CONFIG=#{Formula["geos"].opt_bin}/geos-config"
+    args << "-DGEOS_INCLUDE_DIR=#{Formula["geos"].opt_include}"
+    args << "-DGEOS_LIBRARY=#{Formula["geos"].opt_lib}/libgeos_c.dylib"
+    args << "-DGSL_CONFIG=#{Formula["gsl"].opt_bin}/gsl-config"
+    args << "-DGSL_INCLUDE_DIR=#{Formula["gsl"].opt_include}"
+    args << "-DGSL_LIBRARIES='-L#{Formula["gsl"].opt_lib} -lgsl -lgslcblas'"
+
 
     # Avoid ld: framework not found QtSql
     # (https://github.com/Homebrew/homebrew-science/issues/23)
