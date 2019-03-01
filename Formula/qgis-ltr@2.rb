@@ -56,7 +56,7 @@ class QgisLtrAT2 < Formula
   # TODO: add MSSQL third-party support formula?, :optional
 
   # core plugins (c++ and python)
-  depends_on "grass7"
+  # depends_on "grass7"
   depends_on "gettext"
 
   # this is pretty borked with OS X >= 10.10+
@@ -72,7 +72,7 @@ class QgisLtrAT2 < Formula
 
   depends_on "orfeo6"
   depends_on "r"
-  depends_on "saga-gis-lts" => :optional
+  # depends_on "saga-gis-lts" => :optional
   depends_on "taudem"
 
   # TODO: LASTools straight build (2 reporting tools), or via `wine` (10 tools)
@@ -303,14 +303,14 @@ class QgisLtrAT2 < Formula
 
     args << "-DPOSTGRES_CONFIG=#{Formula["postgresql"].opt_bin}/pg_config"
 
-    args << "-DWITH_GRASS7=TRUE"
-    # this is to build the GRASS Plugin, not for Processing plugin support
-    grass7 = Formula["grass7"]
-    args << "-DGRASS_PREFIX7='#{grass7.opt_prefix}/grass-base'"
-    # Keep superenv from stripping (use Cellar prefix)
-    ENV.append "CXXFLAGS", "-isystem #{grass7.prefix.resolved_path}/grass-base/include"
-    # So that `libintl.h` can be found (use Cellar prefix)
-    ENV.append "CXXFLAGS", "-isystem #{Formula["gettext"].include.resolved_path}"
+    # args << "-DWITH_GRASS7=TRUE"
+    # # this is to build the GRASS Plugin, not for Processing plugin support
+    # grass7 = Formula["grass7"]
+    # args << "-DGRASS_PREFIX7='#{grass7.opt_prefix}/grass-base'"
+    # # Keep superenv from stripping (use Cellar prefix)
+    # ENV.append "CXXFLAGS", "-isystem #{grass7.prefix.resolved_path}/grass-base/include"
+    # # So that `libintl.h` can be found (use Cellar prefix)
+    # ENV.append "CXXFLAGS", "-isystem #{Formula["gettext"].include.resolved_path}"
 
     # The following variables are used in this project, but they are set to NOTFOUND.
     # Please set them or make sure they are set and tested correctly in the CMake files:
@@ -445,9 +445,7 @@ class QgisLtrAT2 < Formula
     end
 
     # We need to manually add the saga lts path, since it's keg only
-    if build.with? "saga-gis-lts"
-      pths.insert(0, Formula["saga-gis-lts"].opt_bin.to_s)
-    end
+    # pths.insert(0, Formula["saga-gis-lts"].opt_bin.to_s)
 
     envars = {
       :PATH => pths.join(pthsep),
@@ -466,17 +464,17 @@ class QgisLtrAT2 < Formula
 
     proc_algs = "Contents/Resources/python/plugins/processing/algs"
 
-    grass7 = Formula["grass7"]
-    # for core integration plugin support
-    envars[:GRASS_PREFIX] = "#{grass7.opt_prefix}/grass-base"
-    begin
-      inreplace app/"#{proc_algs}/grass7/Grass7Utils.py",
-                "/Applications/GRASS-7.0.app/Contents/MacOS",
-                "#{grass7.opt_prefix}/grass-base"
-      puts "GRASS 7 GrassUtils.py has been updated"
-    rescue Utils::InreplaceError
-      puts "GRASS 7 GrassUtils.py already updated"
-    end
+    # grass7 = Formula["grass7"]
+    # # for core integration plugin support
+    # envars[:GRASS_PREFIX] = "#{grass7.opt_prefix}/grass-base"
+    # begin
+    #   inreplace app/"#{proc_algs}/grass7/Grass7Utils.py",
+    #             "/Applications/GRASS-7.0.app/Contents/MacOS",
+    #             "#{grass7.opt_prefix}/grass-base"
+    #   puts "GRASS 7 GrassUtils.py has been updated"
+    # rescue Utils::InreplaceError
+    #   puts "GRASS 7 GrassUtils.py already updated"
+    # end
 
     orfeo5 = Formula["orfeo5"]
     begin
