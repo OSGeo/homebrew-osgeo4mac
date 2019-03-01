@@ -198,6 +198,9 @@ class QgisLtrAT2 < Formula
   end
 
   def install
+    ENV.cxx11
+
+    ENV.append "CXXFLAGS", "-Wno-c++11-narrowing -std=c++11"
 
     # Install python dependencies
     venv = virtualenv_create(libexec/'vendor')
