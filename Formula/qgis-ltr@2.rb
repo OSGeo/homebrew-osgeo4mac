@@ -259,7 +259,7 @@ class QgisLtrAT2 < Formula
 
     qwt_fw = Formula["qwt-qt4"].opt_lib/"qwt.framework"
     qwtpolar_fw = Formula["qwtpolar-qt4"].opt_lib/"qwtpolar.framework"
-    qca_fw = Formula["qca-qt4"].opt_lib/"qca-qt4.framework"
+    qca_fw = Formula["qca"].opt_lib/"qca-qt4.framework"
     qsci_opt = Formula["qscintilla2-qt4"].opt_prefix
     args += %W[
       -DBISON_EXECUTABLE=#{Formula["bison"].opt_bin}/bison
