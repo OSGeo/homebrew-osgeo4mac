@@ -48,12 +48,8 @@ class QgisLtrAT2 < Formula
   depends_on "postgresql" => :recommended
 
   # core providers
-  if build.with? "gdal-1"
-    depends_on "gdal"
-  else
-    depends_on "gdal2"
-    depends_on "gdal2-python"
-  end
+  depends_on "gdal2-python"
+
   depends_on "oracle-client-sdk" if build.with? "oracle"
   # TODO: add MSSQL third-party support formula?, :optional
 
@@ -74,7 +70,7 @@ class QgisLtrAT2 < Formula
 
   depends_on "orfeo6"
   depends_on "r"
-  depends_on "saga-gis-lts"
+  depends_on "saga-gis-lts" => :optional
   depends_on "taudem"
 
   # TODO: LASTools straight build (2 reporting tools), or via `wine` (10 tools)
