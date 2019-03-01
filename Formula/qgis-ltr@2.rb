@@ -18,7 +18,6 @@ class QgisLtrAT2 < Formula
   option "without-debug", "Disable debug build, which outputs info to system.log or console"
   option "without-server", "Build without QGIS Server (qgis_mapserv.fcgi)"
   option "without-postgresql", "Build without current PostgreSQL client"
-  option "with-gdal-1", "Build with GDAL/OGR v1.x instead of v2.x"
   option "with-oracle", "Build extra Oracle geospatial database and raster support"
   option "with-api-docs", "Build the API documentation with Doxygen and Graphviz"
   # option "with-qt-mysql", "Build extra Qt MySQL plugin for eVis plugin"
@@ -37,6 +36,7 @@ class QgisLtrAT2 < Formula
   depends_on "pyqt-qt4"
   depends_on "qca-qt4"
   depends_on "qscintilla2-qt4"
+  depends_on "qtkeychain-qt4"
   depends_on "qwt-qt4"
   depends_on "qwtpolar-qt4"
   depends_on "qjson-qt4"
@@ -230,12 +230,12 @@ class QgisLtrAT2 < Formula
     end
 
     cmake_prefixes = %w[
-      qt
+      qt-4
       qscintilla2-qt4
-      qwt
-      qwtpolar
-      qca
-      qtkeychain
+      qwt-qt4
+      qwtpolar-qt4
+      qca-qt4
+      qtkeychain-qt4
       gdal2
       gsl
       geos
@@ -256,7 +256,8 @@ class QgisLtrAT2 < Formula
 
     qwt_fw = Formula["qwt-qt4"].opt_lib/"qwt.framework"
     qwtpolar_fw = Formula["qwtpolar-qt4"].opt_lib/"qwtpolar.framework"
-    qca_fw = Formula["qca"].opt_lib/"qca-qt4.framework"
+    qca_fw = Formula["qca-qt4"].opt_lib/"qca-qt4.framework"
+    qsci_opt = Formula["qscintilla2-qt4"].opt_prefix
     args += %W[
       -DBISON_EXECUTABLE=#{Formula["bison"].opt_bin}/bison
       -DEXPAT_INCLUDE_DIR=#{Formula["expat"].opt_include}
@@ -288,6 +289,10 @@ class QgisLtrAT2 < Formula
       -DWITH_ASTYLE=FALSE
       -DQGIS_MACAPP_BUNDLE=0
       -DQGIS_MACAPP_INSTALL_DEV=FALSE
+
+      -DQSCINTILLA_INCLUDE_DIR=#{qsci_opt}/libexec/include
+      -DQSCINTILLA_LIBRARY=#{qsci_opt}/libexec/lib/libqscintilla2.dylib
+      -DQSCI_SIP_DIR=#{qsci_opt}/share/sip-qt4
     ]
 
     # Build unit tests
@@ -296,14 +301,6 @@ class QgisLtrAT2 < Formula
     args << "-DENABLE_MODELTEST=FALSE"
     # Perform coverage tests
     args << "-DENABLE_COVERAGE=FALSE"
-
-    args << "-DSIP_BINARY_PATH=#{Formula["sip-qt4"].opt_bin}/sip"
-    args << "-DSIP_DEFAULT_SIP_DIR=#{HOMEBREW_PREFIX}/share/sip"
-    args << "-DSIP_INCLUDE_DIR=#{Formula["sip-qt4"].opt_include}"
-
-    args << "-DQSCI_SIP_DIR=#{HOMEBREW_PREFIX}/share/sip" # Qsci/qscimod5.sip
-    args << "-DQSCINTILLA_INCLUDE_DIR=#{Formula["qscintilla2-qt4"].opt_include}" # Qsci/qsciglobal.h
-    args << "-DQSCINTILLA_LIBRARY=#{Formula["qscintilla2-qt4"].opt_lib}/libqscintilla2.dylib"
 
     # disable CCache
     args << "-DUSE_CCACHE=OFF"
@@ -568,7 +565,7 @@ class QgisLtrAT2 < Formula
     #   puts "GRASS 7 GrassUtils.py already updated"
     # end
 
-    orfeo5 = Formula["orfeo5"]
+    orfeo5 = Formula["orfeo6"]
     begin
       inreplace app/"#{proc_algs}/otb/OTBUtils.py" do |s|
         # default geoid path
