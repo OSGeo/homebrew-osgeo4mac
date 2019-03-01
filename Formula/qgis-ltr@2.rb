@@ -229,6 +229,9 @@ class QgisLtrAT2 < Formula
                 "${QT_PLUGINS_DIR}/sqldrivers", lib_qt4/"plugins/sqldrivers".to_s
     end
 
+    args = std_cmake_args
+    args << "-DCMAKE_BUILD_TYPE=RelWithDebInfo" if build.with? "debug" # override
+
     cmake_prefixes = %w[
       qt-4
       qscintilla2-qt4
