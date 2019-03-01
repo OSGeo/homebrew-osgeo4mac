@@ -20,7 +20,7 @@ class QgisRes < Formula
     sha256 "86e100d0a757f9b2314dc2c61e842c9446a0d0cfbc69b3408dab4bf046641c14" => :sierra
   end
 
-  # revision 1
+  revision 1
 
   # option "with-complete", "Build with others modules"
   # option "with-r", "Build with modules referred to R"
@@ -90,7 +90,7 @@ class QgisRes < Formula
   # end
 
   # if build.with?("r")
-    depends_on "r"
+  #   depends_on "r"
   # end
 
   # R with more support
@@ -99,6 +99,10 @@ class QgisRes < Formula
   # if build.with?("r-sethrfore")
   #   depends_on "sethrfore/r-srf/r"
   # end
+
+  unless File.exists?(File.join("#{HOMEBREW_PREFIX}/opt", "r"))
+    depends_on "r"
+  end
 
   # pyqgis_startup.py
   # TODO: add one for Py3 (only necessary when macOS ships a Python3 or 3rd-party isolation is needed)
