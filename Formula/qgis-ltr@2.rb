@@ -232,10 +232,6 @@ class QgisLtrAT2 < Formula
     args = std_cmake_args
     args << "-DCMAKE_BUILD_TYPE=RelWithDebInfo" if build.with? "debug" # override
 
-    # force CMake to search HB/opt paths first, so headers in HB/include are not found instead;
-    # specifically, ensure any gdal v1 includes are not used
-    args << "-DCMAKE_PREFIX_PATH=#{cmake_prefixes.map { |f| Formula[f.to_s].opt_prefix }.join(";")}"
-
     qwt_fw = Formula["qwt-qt4"].opt_lib/"qwt.framework"
     qwtpolar_fw = Formula["qwtpolar-qt4"].opt_lib/"qwtpolar.framework"
     qca_fw = Formula["qca"].opt_lib/"qca-qt4.framework"
