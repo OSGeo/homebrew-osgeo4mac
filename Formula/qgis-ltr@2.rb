@@ -9,6 +9,8 @@ class QgisLtrAT2 < Formula
 
   head "https://github.com/qgis/QGIS.git", :branch => "release-2_18"
 
+  patch :DATA
+
   def pour_bottle?
     brewed_python?
   end
@@ -688,3 +690,17 @@ class QgisLtrAT2 < Formula
     quiet_system python_exec, "-c", "import sys;sys.path.insert(1, '#{python_qt4_site_packages}'); import #{mod}"
   end
 end
+
+
+__END__
+
+--- a/src/app/dwg/libdxfrw/drw_classes.cpp
++++ b/src/app/dwg/libdxfrw/drw_classes.cpp
+@@ -19,6 +19,7 @@
+
+ #include "qgslogger.h"
+
++#include <stdbool.h>
+
+ void DRW_Class::parseCode( int code, dxfReader *reader )
+ {
