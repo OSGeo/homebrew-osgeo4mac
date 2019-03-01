@@ -232,27 +232,6 @@ class QgisLtrAT2 < Formula
     args = std_cmake_args
     args << "-DCMAKE_BUILD_TYPE=RelWithDebInfo" if build.with? "debug" # override
 
-    cmake_prefixes = %w[
-      qt-4
-      qscintilla2-qt4
-      qwt-qt4
-      qwtpolar-qt4
-      qca-qt4
-      qtkeychain-qt4
-      gdal2
-      gsl
-      geos
-      proj
-      libspatialite
-      spatialindex
-      expat
-      sqlite
-      libzip
-      flex
-      bison
-      fcgi
-    ].freeze
-
     # force CMake to search HB/opt paths first, so headers in HB/include are not found instead;
     # specifically, ensure any gdal v1 includes are not used
     args << "-DCMAKE_PREFIX_PATH=#{cmake_prefixes.map { |f| Formula[f.to_s].opt_prefix }.join(";")}"
