@@ -5,7 +5,7 @@ class LiblasGdal2 < Formula
   sha256 "fa2afafb8ec7c81c4216e51de51cf845c99575e7d6efbd22ad311ca8a55ce189"
   version "1.8.1"
 
-  revision 4
+  revision 5
 
   head "https://github.com/libLAS/libLAS.git"
 
@@ -31,7 +31,7 @@ class LiblasGdal2 < Formula
   depends_on "libtiff"
   depends_on "proj"
   depends_on "libxml2"
-  # oracle
+  # other: oracle
 
   # for laszip 3.2.9
   # Failed to open /laszip/include/laszip/laszip.hpp file
@@ -81,6 +81,8 @@ class LiblasGdal2 < Formula
       system "make", "test" if build.bottle? || build.with?("test")
       system "make", "install"
 
+      # fix for liblas-config
+      # for some reason it does not build
       bin.install resource("liblas-config")
     end
 
