@@ -25,11 +25,14 @@ class LiblasGdal2 < Formula
   depends_on "libgeotiff"
   depends_on "gdal2"
   depends_on "boost"
-  depends_on "laszip" # or laszip@2.2 # if build.with? "laszip"
+  depends_on "laszip@2.2" # if build.with? "laszip"
   depends_on "zlib"
   depends_on "jpeg"
   depends_on "libtiff"
   depends_on "proj"
+
+  # for laszip 3.2.9
+  # Failed to open /laszip/include/laszip/laszip.hpp file
 
   # is built from a more recent commit, the patches are already applied
   # See: https://github.com/libLAS/libLAS/issues/140
@@ -60,8 +63,8 @@ class LiblasGdal2 < Formula
 
       # if build.with? "laszip"
         args << "-DWITH_LASZIP=ON"
-        args << "-DLASZIP_INCLUDE_DIR=#{Formula['laszip'].opt_include}"
-        args << "-DLASZIP_LIBRARY=#{Formula['laszip'].opt_lib}/liblaszip.dylib"
+        args << "-DLASZIP_INCLUDE_DIR=#{Formula['laszip@2.2'].opt_include}"
+        args << "-DLASZIP_LIBRARY=#{Formula['laszip@2.2'].opt_lib}/liblaszip.dylib"
       # end
 
       system "cmake", "..", *args
