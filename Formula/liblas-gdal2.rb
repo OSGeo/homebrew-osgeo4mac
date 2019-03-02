@@ -1,8 +1,8 @@
 class LiblasGdal2 < Formula
   desc "C/C++ library for reading and writing the LAS LiDAR format"
   homepage "https://liblas.org/"
-  url "http://download.osgeo.org/liblas/libLAS-1.8.1.tar.bz2"
-  sha256 "9adb4a98c63b461ed2bc82e214ae522cbd809cff578f28511122efe6c7ea4e76"
+  url "https://github.com/libLAS/libLAS/archive/09d45518776489508f34098f1c159f58b856f459.tar.gz"
+  sha256 "fa2afafb8ec7c81c4216e51de51cf845c99575e7d6efbd22ad311ca8a55ce189"
 
   revision 4
 
@@ -19,7 +19,7 @@ class LiblasGdal2 < Formula
   keg_only "other version built against older gdal is in main tap"
 
   option "with-test", "Verify during install with `make test`"
-  option "with-laszip", "Build with laszip support"
+  # option "with-laszip", "Build with laszip support"
 
   depends_on "cmake" => :build
   depends_on "libgeotiff"
