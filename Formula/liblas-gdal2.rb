@@ -3,6 +3,7 @@ class LiblasGdal2 < Formula
   homepage "https://liblas.org/"
   url "https://github.com/libLAS/libLAS/archive/09d45518776489508f34098f1c159f58b856f459.tar.gz"
   sha256 "fa2afafb8ec7c81c4216e51de51cf845c99575e7d6efbd22ad311ca8a55ce189"
+  version "1.8.1"
 
   revision 4
 
@@ -30,6 +31,8 @@ class LiblasGdal2 < Formula
   depends_on "jpeg"
   depends_on "libtiff"
   depends_on "proj"
+  depends_on "libxml2"
+  # oracle
 
   # for laszip 3.2.9
   # Failed to open /laszip/include/laszip/laszip.hpp file
@@ -49,6 +52,13 @@ class LiblasGdal2 < Formula
   #   url "https://github.com/libLAS/libLAS/commit/49606470.patch?full_index=1"
   #   sha256 "5590aef61a58768160051997ae9753c2ae6fc5b7da8549707dfd9a682ce439c8"
   # end
+
+  # fix for liblas-config
+  resource "liblas-config" do
+    url "https://gist.githubusercontent.com/fjperini/746634c101b0ffc8926baaf55d5cf793/raw/9f775eeea0b44c278a748a69d3827251156d2aa0/liblas-config"
+    sha256 "5278bf1c151d018aae850c126cdafaf2de2d4d38b2648b066cee1c9d993c4214"
+    version "1.8.1"
+  end
 
   def install
     ENV.cxx11
@@ -71,6 +81,8 @@ class LiblasGdal2 < Formula
       system "make"
       system "make", "test" if build.bottle? || build.with?("test")
       system "make", "install"
+
+      bin.install resource("liblas-config")
     end
 
     # Fix rpath value, to ensure grass7 grabs the correct dylib
