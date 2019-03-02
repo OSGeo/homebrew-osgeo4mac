@@ -26,13 +26,13 @@ class SagaGisLts < Formula
 
   keg_only "LTS version is specifically for working with QGIS"
 
-  option "with-app", "Build SAGA.app Package"
+  # option "with-app", "Build SAGA.app Package"
 
   depends_on "automake" => :build
   depends_on "autoconf" => :build
   depends_on "libtool" => :build
   depends_on "pkg-config" => :build
-  depends_on "osgeo/osgeo4mac/gdal2"
+  depends_on "gdal2" # (gdal-curl, gdal-filegdb, gdal-hdf4)
   depends_on "proj"
   depends_on "wxmac"
   depends_on "geos"
@@ -43,22 +43,23 @@ class SagaGisLts < Formula
   depends_on "swig"
   depends_on "xz" # lzma
   depends_on "giflib"
-  depends_on "opencv@2" # required or: 'opencv/cv.h' and 'opencv2/core/version.hpp' file not found
-  depends_on "unixodbc" => :recommended
-  depends_on "libharu" => :recommended
-  depends_on "qhull" => :recommended # instead of looking for triangle
+  depends_on "opencv@2"
+  depends_on "unixodbc"
+  depends_on "libharu"
+  depends_on "qhull" # instead of looking for triangle
+  depends_on "postgresql"
+  depends_on "python@2"
+  depends_on "liblas"
+  depends_on "poppler"
+  depends_on "hdf4"
+  depends_on "hdf5"
+  depends_on "netcdf"
+  depends_on "sqlite"
+  depends_on "wxmac"
   # Vigra support builds, but dylib in saga shows 'failed' when loaded
   # Also, using --with-python will trigger vigra to be built with it, which
   # triggers a source (re)build of boost --with-python
-  depends_on "osgeo/osgeo4mac/vigra" => :optional
-  depends_on "postgresql" => :optional
-  depends_on "python@2" => :optional
-  depends_on "liblas" => :optional
-  depends_on "poppler" => :optional
-  depends_on "osgeo/osgeo4mac/hdf4" => :optional
-  depends_on "hdf5" => :optional
-  depends_on "netcdf" => :optional
-  depends_on "sqlite" => :optional
+  depends_on "vigra" => :optional
 
   resource "app_icon" do
     url "https://osgeo4mac.s3.amazonaws.com/src/saga_gui.icns"
@@ -94,7 +95,7 @@ class SagaGisLts < Formula
     cd "saga-gis"
 
     # fix homebrew-specific header location for qhull
-    inreplace "src/modules/grid/grid_gridding/nn/delaunay.c", "qhull/", "libqhull/" if build.with? "qhull"
+    inreplace "src/modules/grid/grid_gridding/nn/delaunay.c", "qhull/", "libqhull/" # if build.with? "qhull"
 
     # libfire and triangle are for non-commercial use only, skip them
     args = %W[
@@ -111,15 +112,15 @@ class SagaGisLts < Formula
     # --enable-unicode
 
     args << "--disable-odbc" if build.without? "unixodbc"
-    args << "--disable-triangle" if build.with? "qhull"
-    args << "--with-postgresql=#{Formula["postgresql"].opt_bin}/pg_config" if build.with? "postgresql"
-    args << "--with-python" if build.with? "python"
+    args << "--disable-triangle" # if build.with? "qhull"
+    args << "--with-postgresql=#{Formula["postgresql"].opt_bin}/pg_config" # if build.with? "postgresql"
+    args << "--with-python" # if build.with? "python"
 
     system "autoreconf", "-i"
     system "./configure", *args
     system "make", "install"
 
-    if build.with? "app"
+    # if build.with? "app"
       (prefix/"SAGA.app/Contents/PkgInfo").write "APPLSAGA"
       (prefix/"SAGA.app/Contents/Resources").install resource("app_icon")
 
@@ -159,11 +160,11 @@ class SagaGisLts < Formula
           ln_s "#{bin}/saga_gui", "saga_gui"
         end
       end
-    end
+    # end
   end
 
   def caveats
-    if build.with? "app"
+    # if build.with? "app"
       <<~EOS
       SAGA.app was installed in:
         #{prefix}
@@ -174,7 +175,7 @@ class SagaGisLts < Formula
       Note that the SAGA GUI does not work very well yet.
       It has problems with creating a preferences file in the correct location and sometimes won't shut down (use Activity Monitor to force quit if necessary).
       EOS
-    end
+    # end
   end
 
   test do
