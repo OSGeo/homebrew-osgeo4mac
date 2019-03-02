@@ -49,7 +49,7 @@ class SagaGisLts < Formula
   depends_on "qhull" # instead of looking for triangle
   depends_on "postgresql"
   depends_on "python@2"
-  depends_on "liblas"
+  depends_on "liblas-gdal2"
   depends_on "poppler"
   depends_on "hdf4"
   depends_on "hdf5"
@@ -72,6 +72,7 @@ class SagaGisLts < Formula
     # SKIP liblas support until SAGA supports > 1.8.1, which should support GDAL 2;
     #      otherwise, SAGA binaries may lead to multiple GDAL versions being loaded
     # See: https://github.com/libLAS/libLAS/issues/106
+    #      Update: https://github.com/libLAS/libLAS/issues/106
 
     # https://sourceforge.net/p/saga-gis/wiki/Compiling%20SAGA%20on%20Mac%20OS%20X/
     # configure FEATURES CXX="CXX" CPPFLAGS="DEFINES GDAL_H $PROJ_H" LDFLAGS="GDAL_SRCH PROJ_SRCH LINK_MISC"
