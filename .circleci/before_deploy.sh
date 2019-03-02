@@ -84,6 +84,7 @@ if [ "$CIRCLE_BRANCH" == "master" ] && [ "$CHANGED_FORMULAE" != "" ]; then
 
   cd /tmp/workspace/bottles/
   files=$(echo *.tar.gz | tr ' ' ',')
-  curl -T "{$files}" -u${BINTRAY_USER}:${BINTRAY_API} https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles/bottles/0.1/;publish=1
-
+  curl -X PUT -T "{$files}" -u ${BINTRAY_USER}:${BINTRAY_API} "https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles/bottles/0.1/;publish=1"
+  # was added: -X PUT
+  # alternative for publish: -H "X-Bintray-Publish: 1"
 fi
