@@ -4,7 +4,7 @@ class LiblasGdal2 < Formula
   url "http://download.osgeo.org/liblas/libLAS-1.8.1.tar.bz2"
   sha256 "9adb4a98c63b461ed2bc82e214ae522cbd809cff578f28511122efe6c7ea4e76"
 
-  revision 3
+  revision 4
 
   head "https://github.com/libLAS/libLAS.git"
 
@@ -25,24 +25,27 @@ class LiblasGdal2 < Formula
   depends_on "libgeotiff"
   depends_on "gdal2"
   depends_on "boost"
-  depends_on "laszip@2.2" if build.with? "laszip"
+  depends_on "laszip" # or laszip@2.2 # if build.with? "laszip"
   depends_on "zlib"
   depends_on "jpeg"
   depends_on "libtiff"
   depends_on "proj"
 
+  # is built from a more recent commit, the patches are already applied
+  # See: https://github.com/libLAS/libLAS/issues/140
+
   # Fix ambiguous method error when building against GDAL 2.3
-  patch do
-    url "https://github.com/nickrobison/libLAS/commit/ec10e274ee765aa54e7c71c8b44d2c7494e63804.patch?full_index=1"
-    sha256 "3f8aefa1073aa32de01175cd217773020d93e5fb44a4592d76644a242bb89a3c"
-  end
+  # patch do
+  #   url "https://github.com/nickrobison/libLAS/commit/ec10e274ee765aa54e7c71c8b44d2c7494e63804.patch?full_index=1"
+  #   sha256 "3f8aefa1073aa32de01175cd217773020d93e5fb44a4592d76644a242bb89a3c"
+  # end
 
   # Fix build for Xcode 9 with upstream commit
   # Remove in next version
-  patch do
-    url "https://github.com/libLAS/libLAS/commit/49606470.patch?full_index=1"
-    sha256 "5590aef61a58768160051997ae9753c2ae6fc5b7da8549707dfd9a682ce439c8"
-  end
+  # patch do
+  #   url "https://github.com/libLAS/libLAS/commit/49606470.patch?full_index=1"
+  #   sha256 "5590aef61a58768160051997ae9753c2ae6fc5b7da8549707dfd9a682ce439c8"
+  # end
 
   def install
     ENV.cxx11
@@ -55,11 +58,11 @@ class LiblasGdal2 < Formula
       ENV["Boost_LIBRARY_DIRS"] = "#{HOMEBREW_PREFIX}/lib"
       args = ["-DWITH_GEOTIFF=ON", "-DWITH_GDAL=ON"] + std_cmake_args
 
-      if build.with? "laszip"
+      # if build.with? "laszip"
         args << "-DWITH_LASZIP=ON"
-        args << "-DLASZIP_INCLUDE_DIR=#{Formula['laszip@2.2'].opt_include}"
-        args << "-DLASZIP_LIBRARY=#{Formula['laszip@2.2'].opt_lib}/liblaszip.dylib"
-      end
+        args << "-DLASZIP_INCLUDE_DIR=#{Formula['laszip'].opt_include}"
+        args << "-DLASZIP_LIBRARY=#{Formula['laszip'].opt_lib}/liblaszip.dylib"
+      # end
 
       system "cmake", "..", *args
       system "make"
