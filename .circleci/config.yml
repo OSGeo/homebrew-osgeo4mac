@@ -104,13 +104,13 @@ jobs:
           name: Avoid hosts unknown for github
           command: |
             echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
-      - run:
-          name: Build bottles
-          no_output_timeout: 30m
-          command: |
-            echo "Upload build num, need for download bottles from artifacts..."
-            echo "${CIRCLE_BUILD_NUM}" > "/tmp/build-num-${CHANGED_FORMULAE}.txt"
-            curl -X PUT -T "/tmp/build-num-${CHANGED_FORMULAE}.txt" -u ${BINTRAY_USER}:${BINTRAY_API} -H "X-Bintray-Publish: 1" https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles/bottles/0.1/
+      # - run:
+      #     name: Upload build num
+      #     command: |
+      #       echo "Upload build num, need for download bottles from artifacts..."
+      #       echo "${CIRCLE_BUILD_NUM}" > "/tmp/build-num-${CHANGED_FORMULAE}.txt"
+      #       curl -X PUT -T "/tmp/build-num-${CHANGED_FORMULAE}.txt" -u ${BINTRAY_USER}:${BINTRAY_API} -H "X-Bintray-Publish: 1" https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles/bottles/0.1/
+
       - run:
           name: Commit for new bottles and upload to bintray
           command: .circleci/before_deploy.sh
