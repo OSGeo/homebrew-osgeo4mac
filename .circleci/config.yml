@@ -25,7 +25,6 @@ build_steps: &build_steps
         no_output_timeout: 30m
         command: |
           .circleci/after_script.sh
-          echo "Upload build num, need for download bottles from artifacts..."
           # fix if the formula does not change or if a file is updated/uploaded
           echo "${CIRCLE_BUILD_NUM}" > /tmp/bottles/build-num-${CIRCLE_BUILD_NUM}.txt
     - persist_to_workspace:
