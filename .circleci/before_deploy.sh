@@ -17,7 +17,7 @@
 
 set -e
 
-if [ "$CIRCLE_BRANCH" == "master" ] && [ "$CHANGED_FORMULAE" != "" ]; then
+if [ "$CIRCLE_BRANCH" != "master" ] && [ "$CHANGED_FORMULAE" != "" ]; then
 
   # Setup Git configuration
   COMMIT_USER=$(git log --format='%an' ${CIRCLE_SHA1}^\!)
@@ -78,11 +78,29 @@ if [ "$CIRCLE_BRANCH" == "master" ] && [ "$CHANGED_FORMULAE" != "" ]; then
   [ci skip]"
 
   # Now that we're all set up, we can push.
-  git push ${SSH_REPO} $CIRCLE_BRANCH
+  git push $CIRCLE_BRANCH $CIRCLE_BRANCH
+fi
+
+if [ "$CIRCLE_BRANCH" == "master" ] && [ "$CHANGED_FORMULAE" != "" ]; then
 
   echo "Upload to Bintray..."
 
+  mkdir /tmp/workspace/bottles/
   cd /tmp/workspace/bottles/
+
+  echo "${CIRCLE_BUILD_NUM}" > "build-num-${CHANGED_FORMULAE}.txt"
+  curl -X PUT -T "build-num-${BUILT_BOTTLES}.txt" -u ${BINTRAY_USER}:${BINTRAY_API} -H "X-Bintray-Publish: 1" https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles/bottles/0.1/
+  # use ggprep instead of gprep
+  brew install grep
+  # BUILD_NUM=$(ggrep -Po "(\d+\.)+(\d+\.)+\d" build-num-${BUILT_BOTTLES}.txt | head -n 1)
+  BUILD_NUM=$(ggrep -Po "(\d+\d)" build-num-${CHANGED_FORMULAE}.txt | head -n 1)
+  echo "Build: $BUILD_NUM"
+  # curl https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/$CIRCLE_BUILD_NUM/artifacts?circle-token=$CIRCLE_TOKEN
+  curl https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/$BUILD_NUM/artifacts | grep -o 'https://[^"]*' > bottles.txt
+  wget --content-disposition --trust-server-names -i bottles.txt
+  cat bottles.txt
+  ls
+
   files=$(echo *.tar.gz | tr ' ' ',')
   curl -X PUT -T "{$files}" -u ${BINTRAY_USER}:${BINTRAY_API} -H "X-Bintray-Publish: 1" https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles/bottles/0.1/
 fi

@@ -18,6 +18,7 @@
 set -o errexit
 set -o xtrace
 
+if [ "$CIRCLE_BRANCH" != "master" ] && [ "$CHANGED_FORMULAE" != "" ]; then
 for f in ${CHANGED_FORMULAE};do
 
   echo 'Setting up, before install'
@@ -101,3 +102,4 @@ for f in ${CHANGED_FORMULAE};do
   fi
 
 done
+fi

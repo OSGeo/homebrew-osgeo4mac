@@ -17,6 +17,7 @@
 
 set -e
 
+if [ "$CIRCLE_BRANCH" != "master" ] && [ "$CHANGED_FORMULAE" != "" ]; then
 echo ${CHANGED_FORMULAE}
 
 for f in ${CHANGED_FORMULAE};do
@@ -47,3 +48,4 @@ for f in ${CHANGED_FORMULAE};do
   # brew postinstall ${f}
   brew test ${TRAVIS_REPO_SLUG}/${f}
 done
+fi
