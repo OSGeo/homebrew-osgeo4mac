@@ -41,7 +41,6 @@ build_steps: &build_steps
           echo "Upload build num, need for download bottles from artifacts..."
           echo "${CIRCLE_BUILD_NUM}" > "/tmp/${CIRCLE_BUILD_NUM}-${CHANGED_FORMULAE}.txt"
           curl -X PUT -T "/tmp/build-num-${CHANGED_FORMULAE}.txt" -u ${BINTRAY_USER}:${BINTRAY_API} -H "X-Bintray-Publish: 1" https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles/bottles/0.1/
-    - persist_to_workspace:
 
 workflow_filter: &filter
   filters:
