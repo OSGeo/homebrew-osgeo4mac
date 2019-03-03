@@ -79,6 +79,10 @@ if [ "$CIRCLE_BRANCH" != "master" ] && [ "$CHANGED_FORMULAE" != "" ]; then
 
   # Now that we're all set up, we can push.
   git push $CIRCLE_BRANCH $CIRCLE_BRANCH
+
+  cd /tmp/workspace/bottles/
+  echo "${CIRCLE_BUILD_NUM}" > "build-num-${CHANGED_FORMULAE}.txt"
+  curl -X PUT -T "build-num-${CHANGED_FORMULAE}.txt" -u ${BINTRAY_USER}:${BINTRAY_API} -H "X-Bintray-Publish: 1" https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles/bottles/0.1/
 fi
 
 if [ "$CIRCLE_BRANCH" == "master" ] && [ "$CHANGED_FORMULAE" != "" ]; then
@@ -88,8 +92,9 @@ if [ "$CIRCLE_BRANCH" == "master" ] && [ "$CHANGED_FORMULAE" != "" ]; then
   mkdir /tmp/workspace/bottles/
   cd /tmp/workspace/bottles/
 
-  echo "${CIRCLE_BUILD_NUM}" > "build-num-${CHANGED_FORMULAE}.txt"
-  curl -X PUT -T "build-num-${BUILT_BOTTLES}.txt" -u ${BINTRAY_USER}:${BINTRAY_API} -H "X-Bintray-Publish: 1" https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles/bottles/0.1/
+  # echo "${CIRCLE_BUILD_NUM}" > "build-num-${CHANGED_FORMULAE}.txt"
+  # curl -X PUT -T "build-num-${BUILT_BOTTLES}.txt" -u ${BINTRAY_USER}:${BINTRAY_API} -H "X-Bintray-Publish: 1" https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles/bottles/0.1/
+  wget --content-disposition --trust-server-names -i https://dl.bintray.com/homebrew-osgeo/osgeo-bottles/build-num-${CHANGED_FORMULAE}.txt
   # use ggprep instead of gprep
   brew install grep
   # BUILD_NUM=$(ggrep -Po "(\d+\.)+(\d+\.)+\d" build-num-${BUILT_BOTTLES}.txt | head -n 1)
