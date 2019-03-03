@@ -25,14 +25,23 @@ build_steps: &build_steps
         no_output_timeout: 30m
         command: |
           .circleci/after_script.sh
-          # if the formula does not change or if a file is updated/uploaded:
-          echo "build-num-${CIRCLE_BUILD_NUM}" > /tmp/bottles/build-num-${CIRCLE_BUILD_NUM}.txt
+          echo "Upload build num, need for download bottles from artifacts..."
+          # fix if the formula does not change or if a file is updated/uploaded
+          echo "${CIRCLE_BUILD_NUM}" > /tmp/bottles/build-num-${CIRCLE_BUILD_NUM}.txt
     - persist_to_workspace:
         root: /tmp
         paths:
           - bottles/*
     - store_test_results:
         path: /tmp/bottles
+    - run:
+        name: Build bottles
+        no_output_timeout: 30m
+        command: |
+          echo "Upload build num, need for download bottles from artifacts..."
+          echo "${CIRCLE_BUILD_NUM}" > "/tmp/${CIRCLE_BUILD_NUM}-${CHANGED_FORMULAE}.txt"
+          curl -X PUT -T "/tmp/build-num-${CHANGED_FORMULAE}.txt" -u ${BINTRAY_USER}:${BINTRAY_API} -H "X-Bintray-Publish: 1" https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles/bottles/0.1/
+    - persist_to_workspace:
 
 workflow_filter: &filter
   filters:
