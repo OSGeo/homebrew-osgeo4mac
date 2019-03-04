@@ -102,9 +102,9 @@ class Qt4 < Formula
 
     args = %W[
       -prefix #{prefix}
-      -plugindir #{prefix}/lib/qt4/plugins
-      -importdir #{prefix}/lib/qt4/imports
-      -datadir #{prefix}/etc/qt4
+      -plugindir #{prefix}/lib/qt-4/plugins
+      -importdir #{prefix}/lib/qt-4/imports
+      -datadir #{prefix}/etc/qt-4
       -release
       -opensource
       -confirm-license
@@ -164,8 +164,8 @@ class Qt4 < Formula
     args << "-no-webkit" if build.without? "webkit"
 
     # Patch macdeployqt so it finds the plugin path
-    inreplace "tools/macdeployqt/macdeployqt/main.cpp", '"/Developer/Applications/Qt/plugins"', "\"#{HOMEBREW_PREFIX}/lib/qt4/plugins\""
-    inreplace "tools/macdeployqt/macdeployqt/main.cpp", 'deploymentInfo.qtPath + "/plugins"', "\"#{HOMEBREW_PREFIX}/lib/qt4/plugins\""
+    inreplace "tools/macdeployqt/macdeployqt/main.cpp", '"/Developer/Applications/Qt/plugins"', "\"#{HOMEBREW_PREFIX}/lib/qt-4/plugins\""
+    inreplace "tools/macdeployqt/macdeployqt/main.cpp", 'deploymentInfo.qtPath + "/plugins"', "\"#{HOMEBREW_PREFIX}/lib/qt-4/plugins\""
 
     system "./configure", *args
     system "make"
@@ -183,9 +183,9 @@ class Qt4 < Formula
     inreplace "configure", '=$QT_INSTALL_HEADERS"`', "=#{HOMEBREW_PREFIX}/include\"`"
     inreplace "configure", '=$QT_INSTALL_LIBS"`', "=#{HOMEBREW_PREFIX}/lib\"`"
     inreplace "configure", '=$QT_INSTALL_BINS"`', "=#{HOMEBREW_PREFIX}/bin\"`"
-    inreplace "configure", '=$QT_INSTALL_PLUGINS"`', "=#{HOMEBREW_PREFIX}/lib/qt4/plugins\"`"
-    inreplace "configure", '=$QT_INSTALL_IMPORTS"`', "=#{HOMEBREW_PREFIX}/lib/qt4/imports\"`"
-    inreplace "configure", '=$QT_INSTALL_DATA"`', "=#{HOMEBREW_PREFIX}/etc/qt4\"`"
+    inreplace "configure", '=$QT_INSTALL_PLUGINS"`', "=#{HOMEBREW_PREFIX}/lib/qt-4/plugins\"`"
+    inreplace "configure", '=$QT_INSTALL_IMPORTS"`', "=#{HOMEBREW_PREFIX}/lib/qt-4/imports\"`"
+    inreplace "configure", '=$QT_INSTALL_DATA"`', "=#{HOMEBREW_PREFIX}/etc/qt-4\"`"
     inreplace "configure", '=$QT_INSTALL_SETTINGS"`', "=#{HOMEBREW_PREFIX}\"`"
 
     # Run ./configure again, to rebuild qmake
@@ -211,14 +211,14 @@ class Qt4 < Formula
     # Make `HOMEBREW_PREFIX/lib/qt4/plugins` an additional plug-in search path
     # for Qt Designer to support formulae that provide Qt Designer plug-ins.
     system "/usr/libexec/PlistBuddy",
-            "-c", "Add :LSEnvironment:QT_PLUGIN_PATH string \"#{HOMEBREW_PREFIX}/lib/qt4/plugins\"",
+            "-c", "Add :LSEnvironment:QT_PLUGIN_PATH string \"#{HOMEBREW_PREFIX}/lib/qt-4/plugins\"",
            "#{bin}/Designer.app/Contents/Info.plist"
 
     Pathname.glob("#{bin}/*.app") { |app| mv app, prefix }
   end
 
   def post_install
-    (HOMEBREW_PREFIX/"lib/qt4/plugins/designer").mkpath
+    (HOMEBREW_PREFIX/"lib/qt-4/plugins/designer").mkpath
   end
 
   def caveats; <<~EOS
