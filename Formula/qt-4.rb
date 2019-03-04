@@ -55,6 +55,9 @@ class Qt4 < Formula
     sha256 "5e81df9a1c35a5aec21241a82707ad6ac198b2e44928389722b64da341260c5d"
   end
 
+  # build failures due to comparison between pointer and zero
+  patch :DATA
+
   keg_only "deprecated in homebrew-core for macOS >= Sierra (10.12)"
 
   # option "with-qt3support", "Build with deprecated Qt3Support module support"
@@ -249,3 +252,30 @@ class Qt4 < Formula
     # assert_match(/GitHub/, pipe_output(testpath/"qtnetwork-test 2>&1", nil, 0))
   end
 end
+
+__END__
+
+--- a/src/3rdparty/webkit/Source/WebCore/html/HTMLImageElement.cpp
++++ b/src/3rdparty/webkit/Source/WebCore/html/HTMLImageElement.cpp
+@@ -74,7 +74,7 @@
+     RefPtr<HTMLImageElement> image = adoptRef(new HTMLImageElement(imgTag, document));
+     if (optionalWidth)
+         image->setWidth(*optionalWidth);
+-    if (optionalHeight > 0)
++    if (optionalHeight)
+         image->setHeight(*optionalHeight);
+     return image.release();
+ }
+
+
+--- a/tools/linguist/linguist/messagemodel.cpp
++++ b/tools/linguist/linguist/messagemodel.cpp
+@@ -183,7 +183,7 @@
+         if (ContextItem *c = one->findContext(oc->context())) {
+             for (int j = 0; j < oc->messageCount(); ++j) {
+                 MessageItem *m = oc->messageItem(j);
+-                if (c->findMessage(m->text(), m->comment()) >= 0)
++                if (c->findMessage(m->text(), m->comment()))
+                     ++inBoth;
+             }
+         }
