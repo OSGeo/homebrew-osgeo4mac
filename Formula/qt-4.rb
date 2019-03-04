@@ -208,7 +208,7 @@ class Qt4 < Formula
       include.install_symlink path => path.parent.basename(".framework")
     end
 
-    # Make `HOMEBREW_PREFIX/lib/qt4/plugins` an additional plug-in search path
+    # Make `HOMEBREW_PREFIX/lib/qt-4/plugins` an additional plug-in search path
     # for Qt Designer to support formulae that provide Qt Designer plug-ins.
     system "/usr/libexec/PlistBuddy",
             "-c", "Add :LSEnvironment:QT_PLUGIN_PATH string \"#{HOMEBREW_PREFIX}/lib/qt-4/plugins\"",
