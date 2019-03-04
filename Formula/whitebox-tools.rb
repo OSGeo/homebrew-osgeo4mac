@@ -10,9 +10,10 @@ class WhiteboxTools < Formula
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
     cellar :any_skip_relocation
-    sha256 "39586f95a1a3d2b41372ef1b5c07fc7f74082c899adac04f27288438fb0fcaf7" => :mojave
-    sha256 "39586f95a1a3d2b41372ef1b5c07fc7f74082c899adac04f27288438fb0fcaf7" => :high_sierra
-    sha256 "fb0a2980391282c1c6b2ba35d5d804b974abddde4e4a533ef3221f1493d1a95a" => :sierra
+    rebuild 1
+    sha256 "a94aefc8e401992fc121d58ffa20c2380276db3a73f97596c92b92936a7215c6" => :mojave
+    sha256 "a94aefc8e401992fc121d58ffa20c2380276db3a73f97596c92b92936a7215c6" => :high_sierra
+    sha256 "906d1ecf493446f142c7f3528285b3683eb4ef4b64dc9138f5f591b386bfb7f4" => :sierra
   end
 
   def install
