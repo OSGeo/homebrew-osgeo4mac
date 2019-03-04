@@ -56,6 +56,7 @@ class Qt4 < Formula
   end
 
   # build failures due to comparison between pointer and zero
+  # see: https://github.com/qt/qttools/commit/7138c963f9d1258bc1b49cb4d63c3e2b7d0ccfda
   patch :DATA
 
   keg_only "deprecated in homebrew-core for macOS >= Sierra (10.12)"
@@ -268,14 +269,14 @@ __END__
  }
 
 
---- a/tools/linguist/linguist/messagemodel.cpp
-+++ b/tools/linguist/linguist/messagemodel.cpp
-@@ -183,7 +183,7 @@
-         if (ContextItem *c = one->findContext(oc->context())) {
-             for (int j = 0; j < oc->messageCount(); ++j) {
-                 MessageItem *m = oc->messageItem(j);
--                if (c->findMessage(m->text(), m->comment()) >= 0)
-+                if (c->findMessage(m->text(), m->comment()))
-                     ++inBoth;
-             }
-         }
+# --- a/tools/linguist/linguist/messagemodel.cpp
+# +++ b/tools/linguist/linguist/messagemodel.cpp
+# @@ -183,7 +183,7 @@
+#          if (ContextItem *c = one->findContext(oc->context())) {
+#              for (int j = 0; j < oc->messageCount(); ++j) {
+#                  MessageItem *m = oc->messageItem(j);
+# -                if (c->findMessage(m->text(), m->comment()) >= 0)
+# +                if (c->findMessage(m->text(), m->comment()))
+#                      ++inBoth;
+#              }
+#          }
