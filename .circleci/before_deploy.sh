@@ -19,9 +19,6 @@ set -e
 
 if [ "$CIRCLE_BRANCH" == "master" ] && [ "$CHANGED_FORMULAE" != "" ]; then
 
-  mkdir /tmp/workspace/bottles/
-  cd /tmp/workspace/bottles/
-
   echo "Download bottles from artifacts..."
 
   # echo "${CIRCLE_BUILD_NUM}" > "build-num-${CHANGED_FORMULAE}.txt"
@@ -34,16 +31,10 @@ if [ "$CIRCLE_BRANCH" == "master" ] && [ "$CHANGED_FORMULAE" != "" ]; then
   # echo "Build: $BUILD_NUM"
   # curl https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/$CIRCLE_BUILD_NUM/artifacts?circle-token=$CIRCLE_TOKEN
   # curl https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/$BUILD_NUM/artifacts | grep -o 'https://[^"]*' > bottles.txt
-  curl https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/latest/artifacts | grep -o 'https://[^"]*' > bottles.txt
-  wget --content-disposition --trust-server-names -i bottles.txt
-  cat bottles.txt
-  ls
-
-  echo "Upload to Bintray..."
-
-  files=$(echo *.tar.gz | tr ' ' ',')
-  curl -X PUT -T "{$files}" -u ${BINTRAY_USER}:${BINTRAY_API} -H "X-Bintray-Publish: 1" https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles/bottles/0.1/
-
+  curl https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/latest/artifacts | grep -o 'https://[^"]*' > /tmp/workspace/bottles/bottles.txt
+  wget --content-disposition --trust-server-names -i /tmp/workspace/bottles/bottles.txt
+  cat /tmp/workspace/bottles/bottles.txt
+  ls /tmp/workspace/bottles
 
   # Setup Git configuration
   COMMIT_USER=$(git log --format='%an' ${CIRCLE_SHA1}^\!)
@@ -108,7 +99,7 @@ if [ "$CIRCLE_BRANCH" == "master" ] && [ "$CHANGED_FORMULAE" != "" ]; then
 
   # echo "Upload to Bintray..."
 
-  # cd /tmp/workspace/bottles/
-  # files=$(echo *.tar.gz | tr ' ' ',')
-  # curl -X PUT -T "{$files}" -u ${BINTRAY_USER}:${BINTRAY_API} -H "X-Bintray-Publish: 1" https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles/bottles/0.1/
+  cd /tmp/workspace/bottles/
+  files=$(echo *.tar.gz | tr ' ' ',')
+  curl -X PUT -T "{$files}" -u ${BINTRAY_USER}:${BINTRAY_API} -H "X-Bintray-Publish: 1" https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles/bottles/0.1/
 fi
