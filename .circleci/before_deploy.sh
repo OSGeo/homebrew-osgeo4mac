@@ -17,10 +17,10 @@
 
 set -e
 
-mkdir /tmp/workspace/bottles/
-cd /tmp/workspace/bottles/
-
 if [ "$CIRCLE_BRANCH" == "master" ] && [ "$CHANGED_FORMULAE" != "" ]; then
+
+  mkdir /tmp/workspace/bottles/
+  cd /tmp/workspace/bottles/
 
   echo "Download bottles from artifacts..."
 
