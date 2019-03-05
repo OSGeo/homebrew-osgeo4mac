@@ -6,6 +6,9 @@ class Qscintilla2Qt4 < Formula
 
   revision 1
 
+  option "without-plugin", "Skip building the Qt Designer plugin"
+  option "without-python@2", "Skip building the Python bindings"
+
   depends_on "python@2" => :recommended
   depends_on "sip-qt4"
   depends_on "qt@4"
@@ -29,11 +32,7 @@ class Qscintilla2Qt4 < Formula
 
     # On Mavericks we want to target libc++, this requires an
     # unsupported/macx-clang-libc++ flag.
-    if ENV.compiler == :clang && MacOS.version >= :mavericks
-      spec = "unsupported/macx-clang-libc++"
-    else
-      spec = "macx-g++"
-    end
+    spec = (ENV.compiler == :clang && MacOS.version >= :mavericks) ? "macx-clang" : "macx-g++"
     args = %W[-config release -spec #{spec}]
 
     cd "Qt4Qt5" do
@@ -42,14 +41,15 @@ class Qscintilla2Qt4 < Formula
         s.gsub! "$$[QT_INSTALL_HEADERS]", libexec/"include"
         s.gsub! "$$[QT_INSTALL_TRANSLATIONS]", prefix/"trans"
         s.gsub! "$$[QT_INSTALL_DATA]", prefix/"data"
+        s.gsub! "$$[QT_HOST_DATA]", prefix/"data"
       end
 
       inreplace "features/qscintilla2.prf" do |s|
-        s.gsub! "$$[QT_INSTALL_LIBS]", libexec/"lib"
-        s.gsub! "$$[QT_INSTALL_HEADERS]", libexec/"include"
+        s.gsub! "$$[QT_INSTALL_LIBS]", lib
+        s.gsub! "$$[QT_INSTALL_HEADERS]", include
       end
 
-      system "qmake", "qscintilla.pro", *args
+      system "#{Formula["qt@4"].bin}/qmake", "qscintilla.pro", *args
       system "make"
       system "make", "install"
     end
@@ -88,7 +88,7 @@ class Qscintilla2Qt4 < Formula
           s.sub! "$$[QT_INSTALL_PLUGINS]", "#{lib}/qt4/plugins"
           s.sub! "$$[QT_INSTALL_LIBS]", libexec/"lib"
         end
-        system "qmake", "designer.pro", *args
+        system "#{Formula["qt@4"].bin}/qmake", "designer.pro", *args
         system "make"
         system "make", "install"
       end
