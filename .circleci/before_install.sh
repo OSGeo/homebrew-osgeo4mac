@@ -29,6 +29,7 @@ for f in ${CHANGED_FORMULAE};do
   nix_f="
   gdal
   postgis
+  sip
   "
 
   for f in ${nix_f}; do

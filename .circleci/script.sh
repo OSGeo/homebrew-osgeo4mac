@@ -17,6 +17,8 @@
 
 set -e
 
+rm /usr/local/Homebrew/Library/Taps/homebrew/homebrew-core/Formula/sip.rb
+
 echo ${CHANGED_FORMULAE}
 
 for f in ${CHANGED_FORMULAE};do
