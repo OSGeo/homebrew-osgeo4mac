@@ -20,33 +20,36 @@ class Pyqt < Formula
   depends_on "dbus" => :optional
 
   def install
-    args = ["--confirm-license",
-            "--bindir=#{bin}",
-            "--destdir=#{lib}/python#{py_ver}/site-packages",
-            "--stubsdir=#{lib}/python#{py_ver}/site-packages/PyQt5",
-            "--sipdir=#{share}/sip/PyQt5", # Qt5
-            # sip.h could not be found automatically
-            "--sip-incdir=#{Formula["sip-qt5"].opt_include}",
-            "--qmake=#{Formula["qt"].bin}/qmake",
-            # Force deployment target to avoid libc++ issues
-            "QMAKE_MACOSX_DEPLOYMENT_TARGET=#{MacOS.version}",
-            "--qml-plugindir=#{pkgshare}/plugins",
-            "--verbose",
-            "--sip=#{Formula["sip-qt5"].opt_bin}/sip",
-            #  ERROR: Unknown module(s) in QT
-            "--disable=QtWebKit",
-            "--disable=QtWebKitWidgets",
-            "--disable=QAxContainer",
-            "--disable=QtX11Extras",
-            "--disable=QtWinExtras",
-            "--disable=Enginio",
-            "--no-dist-info"
-           ]
+    ["python2", "python3"].each do |python|
+      version = Language::Python.major_minor_version python
+      args = ["--confirm-license",
+              "--bindir=#{bin}",
+              "--destdir=#{lib}/python#{version}/site-packages",
+              "--stubsdir=#{lib}/python#{version}/site-packages/PyQt5",
+              "--sipdir=#{share}/sip/PyQt5", # Qt5
+              # sip.h could not be found automatically
+              "--sip-incdir=#{Formula["sip"].opt_include}",
+              "--qmake=#{Formula["qt"].bin}/qmake",
+              # Force deployment target to avoid libc++ issues
+              "QMAKE_MACOSX_DEPLOYMENT_TARGET=#{MacOS.version}",
+              "--qml-plugindir=#{pkgshare}/plugins",
+              "--verbose",
+              "--sip=#{Formula["sip"].opt_bin}/sip",
+              #  ERROR: Unknown module(s) in QT
+              "--disable=QtWebKit",
+              "--disable=QtWebKitWidgets",
+              "--disable=QAxContainer",
+              "--disable=QtX11Extras",
+              "--disable=QtWinExtras",
+              "--disable=Enginio",
+              "--no-dist-info"
+             ]
 
-    system "#{Formula["python"].opt_bin}/python3", "configure.py", *args
-    system "make"
-    system "make", "install"
-    system "make", "clean"
+      system "#{Formula["python"].opt_bin}/python3", "configure.py", *args
+      system "make"
+      system "make", "install"
+      system "make", "clean"
+    end
   end
 
   test do
@@ -63,11 +66,5 @@ class Pyqt < Formula
         Widgets
         Xml
       ].each { |mod| system "#{Formula["python"].opt_bin}/python3", "-c", "import PyQt5.Qt#{mod}" }
-  end
-
-  private
-
-  def py_ver
-    `#{Formula["python"].opt_bin}/python3 -c 'import sys;print("{0}.{1}".format(sys.version_info[0],sys.version_info[1]))'`.strip
   end
 end

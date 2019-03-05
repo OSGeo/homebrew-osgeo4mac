@@ -30,6 +30,7 @@ for f in ${CHANGED_FORMULAE};do
   gdal
   postgis
   sip
+  pyqt
   "
 
   for f in ${nix_f}; do

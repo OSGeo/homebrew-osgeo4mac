@@ -17,6 +17,11 @@
 
 set -e
 
+# rm /usr/local/Homebrew/Library/Taps/homebrew/homebrew-core/Formula/sip.rb
+# rm /usr/local/Homebrew/Library/Taps/homebrew/homebrew-core/Formula/pyqt.rb
+
+brew tap-pin osgeo/osgeo4mac
+
 for f in ${CHANGED_FORMULAE};do
   echo "Installing dependencies for changed formula ${f}..."
   FLAGS="--only-dependencies --build-bottle"
