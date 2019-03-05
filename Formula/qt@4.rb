@@ -7,9 +7,10 @@ class QtAT4 < Formula
 
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    rebuild 1
-    sha256 "b144bc04f10d95c1855ab79d69e0a2905694eb0165907846c8b153fa64ff1f67" => :high_sierra
-    sha256 "b144bc04f10d95c1855ab79d69e0a2905694eb0165907846c8b153fa64ff1f67" => :sierra
+    cellar :any
+    sha256 "32148547bbbc0d9e8a4f2c0af678700085051a5d8a3b22d83e481bfc44523d09" => :mojave
+    sha256 "32148547bbbc0d9e8a4f2c0af678700085051a5d8a3b22d83e481bfc44523d09" => :high_sierra
+    sha256 "f2c7094a77f3dc3515e4857170b658992c1f3d422ab15494a25c3c128d6ad9b6" => :sierra
   end
 
   revision 1
