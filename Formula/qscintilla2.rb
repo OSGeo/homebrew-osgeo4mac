@@ -48,7 +48,8 @@ class Qscintilla2 < Formula
 
     cd "Python" do
       (share/"sip/PyQt5/Qsci").mkpath
-      Language::Python.each_python(build) do |python, version|
+      ["python2", "python3"].each do |python|
+        version = Language::Python.major_minor_version python
         system python, "configure.py", "-o", lib, "-n", include,
                        "--apidir=#{prefix}/qsci",
                        "--destdir=#{lib}/python#{version}/site-packages/PyQt5",
