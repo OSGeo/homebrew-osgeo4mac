@@ -1,16 +1,10 @@
 class Qscintilla2Qt4 < Formula
   desc "Port to Qt of the Scintilla editing component"
   homepage "https://www.riverbankcomputing.com/software/qscintilla/intro"
-  url "https://downloads.sf.net/project/pyqt/QScintilla2/QScintilla-2.9.3/QScintilla_gpl-2.9.3.tar.gz"
-  sha256 "98aab93d73b05635867c2fc757acb383b5856a0b416e3fd7659f1879996ddb7e"
+  url "https://www.riverbankcomputing.com/static/Downloads/QScintilla/QScintilla_gpl-2.11.1.tar.gz"
+  sha256 "dae54d19e43dba5a3f98ac084fc0bcfa6fb713fa851f1783a01404397fd722f5"
 
-  bottle do
-    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
-    cellar :any
-    rebuild 1
-    sha256 "4901834123c98962f50c4fa4fd7c48b46c926e846cd0b4390a2cd79d45e93e2b" => :high_sierra
-    sha256 "4901834123c98962f50c4fa4fd7c48b46c926e846cd0b4390a2cd79d45e93e2b" => :sierra
-  end
+  revision 1
 
   option "without-plugin", "Skip building the Qt Designer plugin"
   option "without-python@2", "Skip building the Python bindings"
@@ -20,7 +14,7 @@ class Qscintilla2Qt4 < Formula
   if build.with? "python@2"
     depends_on "pyqt-qt4"
   else
-    depends_on "qt-4"
+    depends_on "qt@4"
   end
 
   # Fix build with Xcode 8 "error: implicit instantiation of undefined template"
@@ -73,11 +67,11 @@ class Qscintilla2Qt4 < Formula
         Language::Python.each_python(build) do |python, version|
           lib.mkpath
           (share/sip_dir).mkpath
-          ENV["PYTHONPATH"] = "#{HOMEBREW_PREFIX}/lib/qt-4/python#{version}/site-packages"
+          ENV["PYTHONPATH"] = "#{HOMEBREW_PREFIX}/lib/qt4/python#{version}/site-packages"
           system python, "configure.py", "-o", libexec/"lib", "-n", libexec/"include",
                            "--apidir=#{prefix}/qsci",
-                           "--destdir=#{lib}/qt-4/python#{version}/site-packages/PyQt4",
-                           "--stubsdir=#{lib}/qt-4/python#{version}/site-packages/PyQt4",
+                           "--destdir=#{lib}/qt4/python#{version}/site-packages/PyQt4",
+                           "--stubsdir=#{lib}/qt4/python#{version}/site-packages/PyQt4",
                            "--sip-incdir=#{sip_f.opt_libexec}/include",
                            "--qsci-sipdir=#{share}/#{sip_dir}",
                            "--pyqt-sipdir=#{Formula["pyqt-qt4"].opt_share}/#{sip_dir}",
@@ -93,7 +87,7 @@ class Qscintilla2Qt4 < Formula
       mkpath prefix/"plugins/designer"
       cd "designer-Qt4Qt5" do
         inreplace "designer.pro" do |s|
-          s.sub! "$$[QT_INSTALL_PLUGINS]", "#{lib}/qt-4/plugins"
+          s.sub! "$$[QT_INSTALL_PLUGINS]", "#{lib}/qt4/plugins"
           s.sub! "$$[QT_INSTALL_LIBS]", libexec/"lib"
         end
         system "qmake", "designer.pro", *args
@@ -108,14 +102,14 @@ class Qscintilla2Qt4 < Formula
     s += "Headers installed in #{opt_libexec}/include\n\n"
     s += "Python modules installed in:\n"
     Language::Python.each_python(build) do |_python, version|
-      s += "  #{HOMEBREW_PREFIX}/lib/qt-4/python#{version}/site-packages/PyQt4"
+      s += "  #{HOMEBREW_PREFIX}/lib/qt4/python#{version}/site-packages/PyQt4"
     end
     s
   end
 
   test do
     Language::Python.each_python(build) do |python, version|
-      ENV["PYTHONPATH"] = "#{HOMEBREW_PREFIX}/lib/qt-4/python#{version}/site-packages"
+      ENV["PYTHONPATH"] = "#{HOMEBREW_PREFIX}/lib/qt4/python#{version}/site-packages"
       Pathname("test.py").write <<~EOS
       import PyQt4.Qsci
       assert("QsciLexer" in dir(PyQt4.Qsci))
