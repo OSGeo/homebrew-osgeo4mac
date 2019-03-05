@@ -35,7 +35,7 @@ class Sip < Formula
       version = Language::Python.major_minor_version python
       system python, "configure.py",
                      "--deployment-target=#{MacOS.version}",
-                     "--destdir=#{lib}/python#{py_ver}/site-packages",
+                     "--destdir=#{lib}/python#{version}/site-packages",
                      "--bindir=#{bin}",
                      "--incdir=#{include}",
                      "--sipdir=#{HOMEBREW_PREFIX}/share/sip",
@@ -57,11 +57,5 @@ class Sip < Formula
 
   test do
     system "#{Formula["python"].opt_bin}/python3", "-c", "import PyQt5.sip"
-  end
-
-  private
-
-  def py_ver
-    `#{Formula["python"].opt_bin}/python3 -c 'import sys;print("{0}.{1}".format(sys.version_info[0],sys.version_info[1]))'`.strip
   end
 end
