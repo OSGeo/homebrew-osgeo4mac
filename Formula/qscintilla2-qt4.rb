@@ -45,8 +45,8 @@ class Qscintilla2Qt4 < Formula
       end
 
       inreplace "features/qscintilla2.prf" do |s|
-        s.gsub! "$$[QT_INSTALL_LIBS]", lib
-        s.gsub! "$$[QT_INSTALL_HEADERS]", include
+        s.gsub! "$$[QT_INSTALL_LIBS]", libexec/"lib"
+        s.gsub! "$$[QT_INSTALL_HEADERS]", libexec/"include"
       end
 
       system "#{Formula["qt@4"].bin}/qmake", "qscintilla.pro", *args
