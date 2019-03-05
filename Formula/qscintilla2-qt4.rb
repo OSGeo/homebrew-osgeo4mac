@@ -32,8 +32,11 @@ class Qscintilla2Qt4 < Formula
 
     # On Mavericks we want to target libc++, this requires an
     # unsupported/macx-clang-libc++ flag.
-    spec = (ENV.compiler == :clang && MacOS.version >= :mavericks) ? "macx-clang" : "macx-g++"
-    args = %W[-config release -spec #{spec}]
+    if ENV.compiler == :clang && MacOS.version >= :mavericks
+      spec = "unsupported/macx-clang-libc++"
+    else
+      spec = "macx-g++"
+    end
 
     cd "Qt4Qt5" do
       inreplace "qscintilla.pro" do |s|
