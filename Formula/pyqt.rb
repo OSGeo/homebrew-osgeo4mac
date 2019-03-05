@@ -7,10 +7,10 @@ class Pyqt < Formula
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
     cellar :any
-    rebuild 1
-    sha256 "e478c59fc564c156abd42a72667e3a4fbc011415b2932c3e01e28b8aabaabed4" => :mojave
-    sha256 "e478c59fc564c156abd42a72667e3a4fbc011415b2932c3e01e28b8aabaabed4" => :high_sierra
-    sha256 "94bb657efa44cb84ecdd231c9a9248cd37efbcc621cdad9176de706532d654b3" => :sierra
+    rebuild 2
+    sha256 "12f463e9864fa48666532834d1535b957548a3eed495d296ee45243485d4b162" => :mojave
+    sha256 "12f463e9864fa48666532834d1535b957548a3eed495d296ee45243485d4b162" => :high_sierra
+    sha256 "47f6f415976db68d642a53282d1a5ede4630ccf244b06cdcd930ed789612bdae" => :sierra
   end
 
   revision 1
