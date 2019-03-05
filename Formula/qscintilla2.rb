@@ -1,4 +1,4 @@
-class Qscintilla2Qt5 < Formula
+class Qscintilla2 < Formula
   desc "Port to Qt of the Scintilla editing component"
   homepage "https://www.riverbankcomputing.com/software/qscintilla/intro"
   url "https://www.riverbankcomputing.com/static/Downloads/QScintilla/QScintilla_gpl-2.11.1.tar.gz"
@@ -14,12 +14,10 @@ class Qscintilla2Qt5 < Formula
 
   # revision 1
 
-  # patch :DATA
-
   depends_on "python" => :recommended
-  depends_on "sip-qt5"
+  depends_on "sip"
   depends_on "qt"
-  depends_on "pyqt-qt5"
+  depends_on "pyqt"
 
   def install
     spec = (ENV.compiler == :clang && MacOS.version >= :mavericks) ? "macx-clang" : "macx-g++"
@@ -48,25 +46,26 @@ class Qscintilla2Qt5 < Formula
     ENV["QMAKEFEATURES"] = prefix/"data/mkspecs/features"
 
     cd "Python" do
+      Language::Python.each_python(build) do |python, version|
         (share/"sip/PyQt5/Qsci").mkpath
 
-        system "#{Formula["python"].opt_bin}/python3", "configure.py", "-o", lib, "-n", include,
-                          "--apidir=#{prefix}/qsci",
-                          "--destdir=#{lib}/python#{py_ver}/site-packages/PyQt5",
-                          "--stubsdir=#{lib}/python#{py_ver}/site-packages/PyQt5",
-                          "--qsci-sipdir=#{share}/sip/PyQt5",
-                          "--qsci-incdir=#{include}",
-                          "--qsci-libdir=#{lib}",
-                          "--pyqt=PyQt5",
-                          "--pyqt-sipdir=#{Formula["pyqt-qt5"].opt_share}/sip/PyQt5",
-                          "--sip-incdir=#{Formula["sip-qt5"].opt_include}",
-                          "--spec=#{spec}",
-                          "--no-dist-info",
-                          "--verbose"
+        system python, "configure.py", "-o", lib, "-n", include,
+                       "--apidir=#{prefix}/qsci",
+                       "--destdir=#{lib}/python#{py_ver}/site-packages/PyQt5",
+                       "--stubsdir=#{lib}/python#{py_ver}/site-packages/PyQt5",
+                       "--qsci-sipdir=#{share}/sip/PyQt5",
+                       "--qsci-incdir=#{include}",
+                       "--qsci-libdir=#{lib}",
+                       "--pyqt=PyQt5",
+                       "--pyqt-sipdir=#{Formula["pyqt"].opt_share}/sip/PyQt5",
+                       "--sip-incdir=#{Formula["sip"].opt_include}",
+                       "--spec=#{spec}",
+                       "--no-dist-info",
+                       "--verbose"
         system "make"
         system "make", "install"
         system "make", "clean"
-
+      end
         (share/"sip/PyQt5/Qsci").install Dir["sip/*.sip"]
     end
   end
@@ -76,26 +75,8 @@ class Qscintilla2Qt5 < Formula
       import PyQt5.Qsci
       assert("QsciLexer" in dir(PyQt5.Qsci))
     EOS
-    system "#{Formula["python"].opt_bin}/python3", "test.py"
-  end
-
-  private
-
-  def py_ver
-    `#{Formula["python"].opt_bin}/python3 -c 'import sys;print("{0}.{1}".format(sys.version_info[0],sys.version_info[1]))'`.strip
+    Language::Python.each_python(build) do |python, _version|
+      system python, "test.py"
+    end
   end
 end
-
-__END__
-
---- a/Python/configure.py
-+++ b/Python/configure.py
-@@ -276,7 +276,7 @@
-         the target configuration.
-         """
-
--        return 'sip/qscimod5.sip' if target_configuration.pyqt_package == 'PyQt5' else 'sip/qscimod4.sip'
-+        return 'sip/PyQt5/Qsci/qscimod5.sip' if target_configuration.pyqt_package == 'PyQt5' else 'sip/qscimod4.sip'
-
-     @staticmethod
-     def get_sip_installs(target_configuration):

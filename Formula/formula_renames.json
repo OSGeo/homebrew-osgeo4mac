@@ -18,4 +18,5 @@
   "qt-4": "qt@4",
   "sip-qt5": "sip",
   "pyqt-qt5": "pyqt",
+  "qscintilla2-qt5": "qscintilla2",
 }
