@@ -1,0 +1,45 @@
+diff --git a/src/corelib/kernel/qobjectdefs.h b/src/corelib/kernel/qobjectdefs.h
+index 0e0a3be..248ed91 100644
+--- a/src/corelib/kernel/qobjectdefs.h
++++ b/src/corelib/kernel/qobjectdefs.h
+@@ -153,16 +153,39 @@ inline void qYouForgotTheQ_OBJECT_Macro(T1, T2) {}
+ #define Q_OBJECT_GETSTATICMETAOBJECT
+ #endif
+ 
++#if defined(Q_CC_CLANG) && !defined(Q_CC_INTEL)
++#  define Q_CC_CLANG_VERSION ((__clang_major__ * 100) + __clang_minor__)
++#  if Q_CC_CLANG_VERSION >= 306
++#    define QT_WARNING_PUSH                 _Pragma("clang diagnostic push")
++#    define QT_WARNING_POP                  _Pragma("clang diagnostic pop")
++#    define Q_OBJECT_NO_OVERRIDE_WARNING    _Pragma("clang diagnostic ignored \"-Winconsistent-missing-override\"")
++#  endif
++#elif defined(Q_CC_GNU) && !defined(Q_CC_INTEL)
++#  define Q_CC_GNU_VERSION          (__GNUC__ * 100 + __GNUC_MINOR__)
++#  if Q_CC_GNU_VERSION >= 501
++#    define QT_WARNING_PUSH                 _Pragma("GCC diagnostic push")
++#    define QT_WARNING_POP                  _Pragma("GCC diagnostic pop")
++#    define Q_OBJECT_NO_OVERRIDE_WARNING    _Pragma("GCC diagnostic ignored \"-Wsuggest-override\"")
++#  endif
++#else
++#  define QT_WARNING_PUSH
++#  define QT_WARNING_POP
++#  define Q_OBJECT_NO_OVERRIDE_WARNING
++#endif
++
+ /* tmake ignore Q_OBJECT */
+ #define Q_OBJECT \
+ public: \
+     Q_OBJECT_CHECK \
++    QT_WARNING_PUSH \
++    Q_OBJECT_NO_OVERRIDE_WARNING \
+     static const QMetaObject staticMetaObject; \
+     Q_OBJECT_GETSTATICMETAOBJECT \
+     virtual const QMetaObject *metaObject() const; \
+     virtual void *qt_metacast(const char *); \
+-    QT_TR_FUNCTIONS \
+     virtual int qt_metacall(QMetaObject::Call, int, void **); \
++    QT_WARNING_POP \
++    QT_TR_FUNCTIONS \
+ private: \
+     Q_DECL_HIDDEN static const QMetaObjectExtraData staticMetaObjectExtraData; \
+     Q_DECL_HIDDEN static void qt_static_metacall(QObject *, QMetaObject::Call, int, void **);
