@@ -6,16 +6,10 @@ class Qscintilla2Qt4 < Formula
 
   revision 1
 
-  option "without-plugin", "Skip building the Qt Designer plugin"
-  option "without-python@2", "Skip building the Python bindings"
-
   depends_on "python@2" => :recommended
-
-  if build.with? "python@2"
-    depends_on "pyqt-qt4"
-  else
-    depends_on "qt@4"
-  end
+  depends_on "sip-qt4"
+  depends_on "qt@4"
+  depends_on "pyqt-qt4"
 
   # Fix build with Xcode 8 "error: implicit instantiation of undefined template"
   # Originally reported 7 Oct 2016 https://www.riverbankcomputing.com/pipermail/qscintilla/2016-October/001160.html
