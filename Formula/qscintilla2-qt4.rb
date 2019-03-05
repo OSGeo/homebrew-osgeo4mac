@@ -6,6 +6,8 @@ class Qscintilla2Qt4 < Formula
 
   revision 1
 
+  patch :DATA
+
   option "without-plugin", "Skip building the Qt Designer plugin"
   option "without-python@2", "Skip building the Python bindings"
 
@@ -121,3 +123,15 @@ class Qscintilla2Qt4 < Formula
     end
   end
 end
+
+__END__
+
+--- a/Qt4Qt5/Qsci/qsciscintillabase.h
++++ b/Qt4Qt5/Qsci/qsciscintillabase.h
+@@ -27,6 +27,7 @@
+ #include <QByteArray>
+ #include <QPoint>
+ #include <QTimer>
++#include <QUrl>
+
+ #include <Qsci/qsciglobal.h>
