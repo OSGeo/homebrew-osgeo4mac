@@ -6,6 +6,14 @@ class PyqtQt4 < Formula
 
   revision 1
 
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    cellar :any
+    sha256 "6cc52fb9defbcc3959b99020bd087365ce9f93ff54ed8754c0fd518bea105b0e" => :mojave
+    sha256 "6cc52fb9defbcc3959b99020bd087365ce9f93ff54ed8754c0fd518bea105b0e" => :high_sierra
+    sha256 "7ee477f5c8a86c0680a5176872cc24038aab03b2b425bc3a127a68787fa0ed2d" => :sierra
+  end
+
   depends_on "python@2" => :recommended
   depends_on "qt@4"
   depends_on "sip-qt4"
