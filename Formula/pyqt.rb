@@ -56,9 +56,7 @@ class Pyqt < Formula
   test do
     system "#{bin}/pyuic5", "--version"
     system "#{bin}/pylupdate5", "-version"
-
-    ["python2", "python3"].each do |python|
-      system python, "-c", "import PyQt5"
+    system "#{Formula["python"].opt_bin}/python3", "-c", "import PyQt5"
       %w[
         Gui
         Location
@@ -68,7 +66,6 @@ class Pyqt < Formula
         Svg
         Widgets
         Xml
-      ].each { |mod| system python, "-c", "import PyQt5.Qt#{mod}" }
-    end
+      ].each { |mod| system "#{Formula["python"].opt_bin}/python3", "-c", "import PyQt5.Qt#{mod}" }
   end
 end
