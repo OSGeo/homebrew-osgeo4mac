@@ -31,6 +31,7 @@ for f in ${CHANGED_FORMULAE};do
   postgis
   sip
   pyqt
+  qscintilla2
   "
 
   for f in ${nix_f}; do
