@@ -12,7 +12,7 @@ class Sip < Formula
     sha256 "4f5bc7de198decd35a5c0602433fbad9eae7c698816399f8e4e289c93646d00e" => :sierra
   end
 
-  # revision 1
+  revision 1
 
   head "https://www.riverbankcomputing.com/hg/sip", :using => :hg
 
