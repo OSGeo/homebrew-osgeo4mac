@@ -37,6 +37,12 @@ class QtAT4 < Formula
     sha256 "69713c9bcedace4c167273822da14247760c6dcff4949251af6a7b5f93bca9aa"
   end
 
+  # Patch for stricter compiler restrictions on High Sierra
+  patch :p0 do
+    url "https://raw.githubusercontent.com/OSGeo/homebrew-osgeo4mac/master/patches/qt%404/linguist-findmessage-null-check.patch"
+    sha256 "db68bf8397eb404c9620c6bb1ada5e98369420b1ea44f2da8c43c718814b5b3b"
+  end
+
   # Patch for QFixed compiler issue in QCoreTextFontEngine
   patch :p1 do
     url "https://raw.githubusercontent.com/OSGeo/homebrew-osgeo4mac/master/patches/qt%404/qfixed.patch"
@@ -52,15 +58,9 @@ class QtAT4 < Formula
   # build failures due to comparison between pointer and zero
   # see: https://github.com/qt/qttools/commit/7138c963f9d1258bc1b49cb4d63c3e2b7d0ccfda
   # Patch for spurious QObject warnings
-  patch :p1 do
-    url "https://raw.githubusercontent.com/OSGeo/homebrew-osgeo4mac/master/patches/qt%404/comparison-between-pointer-and-zero.patch"
-    sha256 "6477aa9a171973804f0bb39777042b4700718543ab9f2258b7cad54312ce74cb"
-  end
-
-  # Patch for stricter compiler restrictions on High Sierra
-  patch :p0 do
-    url "https://raw.githubusercontent.com/OSGeo/homebrew-osgeo4mac/master/patches/qt%404/linguist-findmessage-null-check.patch"
-    sha256 "db68bf8397eb404c9620c6bb1ada5e98369420b1ea44f2da8c43c718814b5b3b"
+  patch do
+    url "https://raw.githubusercontent.com/OSGeo/homebrew-osgeo4mac/master/patches/qt%404/comparison-between-pointer-and-zero.diff"
+    sha256 "720311b22d8d98501f702a4fd9dc75926c046e5e656dbb1a8f68c894be7d2e52"
   end
 
   # keg_only "deprecated in homebrew-core for macOS >= Sierra (10.12)"
