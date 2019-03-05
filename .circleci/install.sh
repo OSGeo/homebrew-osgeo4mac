@@ -19,6 +19,7 @@ set -e
 
 rm /usr/local/Homebrew/Library/Taps/homebrew/homebrew-core/Formula/sip.rb
 rm /usr/local/Homebrew/Library/Taps/homebrew/homebrew-core/Formula/pyqt.rb
+rm /usr/local/Homebrew/Library/Taps/homebrew/homebrew-core/Formula/qscintilla2.rb
 
 brew tap-pin osgeo/osgeo4mac
 
