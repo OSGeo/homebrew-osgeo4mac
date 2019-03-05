@@ -79,8 +79,13 @@ class Qscintilla2Qt4 < Formula
                            "--stubsdir=#{lib}/qt4/python#{version}/site-packages/PyQt4",
                            "--sip-incdir=#{sip_f.opt_libexec}/include",
                            "--qsci-sipdir=#{share}/#{sip_dir}",
-                           "--pyqt-sipdir=#{Formula["pyqt-qt4"].opt_share}/#{sip_dir}",
-                           "--spec=#{spec}"
+                           # "--qsci-incdir=#{include}",
+                           # "--qsci-libdir=#{lib}",
+                           "--pyqt=PyQt4",
+                           "--pyqt-sipdir=#{Formula["pyqt-qt4"].opt_share}/#{sip_dir}", # PyQt4
+                           "--spec=#{spec}",
+                           "--no-dist-info",
+                           "--verbose"
           system "make"
           system "make", "install"
           system "make", "clean"
