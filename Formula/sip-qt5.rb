@@ -34,8 +34,8 @@ class SipQt5 < Formula
                    "--destdir=#{lib}/python#{py_ver}/site-packages",
                    "--bindir=#{bin}",
                    "--incdir=#{include}",
-                   "--sipdir=#{HOMEBREW_PREFIX}/share/sip",
-                   "--sip-module=PyQt5.sip"
+                   "--sipdir=#{HOMEBREW_PREFIX}/share/sip"
+                   # "--sip-module=PyQt5.sip"
     system "make"
     system "make", "install"
     system "make", "clean"
