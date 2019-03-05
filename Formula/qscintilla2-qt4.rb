@@ -38,6 +38,8 @@ class Qscintilla2Qt4 < Formula
       spec = "macx-g++"
     end
 
+    args = %W[-config release -spec #{spec}]
+
     cd "Qt4Qt5" do
       inreplace "qscintilla.pro" do |s|
         s.gsub! "$$[QT_INSTALL_LIBS]", libexec/"lib"
