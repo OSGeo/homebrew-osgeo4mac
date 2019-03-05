@@ -2,7 +2,7 @@ class PyqtQt4 < Formula
   desc "Python bindings for Qt"
   homepage "https://www.riverbankcomputing.com/software/pyqt/intro"
   url "https://sourceforge.net/projects/pyqt/files/PyQt4/PyQt-4.12.3/PyQt4_gpl_mac-4.12.3.tar.gz/download"
-  sha256 "3224ab2c4d392891eb0abbc2bf076fef2ead3a5bb36ceae2383df4dda00ccce5"
+  sha256 "293e4be7dd741db72b1265e062ea14332ba5532741314f64eb935d141570305f"
 
   revision 1
 
