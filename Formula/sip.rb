@@ -41,9 +41,10 @@ class Sip < Formula
                      "--sipdir=#{HOMEBREW_PREFIX}/share/sip",
                      "--sip-module=PyQt5.sip",
                      "--no-dist-info"
-    system "make"
-    system "make", "install"
-    system "make", "clean"
+      system "make"
+      system "make", "install"
+      system "make", "clean"
+    end
   end
 
   def post_install
