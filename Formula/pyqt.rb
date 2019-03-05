@@ -13,10 +13,10 @@ class Pyqt < Formula
     sha256 "94bb657efa44cb84ecdd231c9a9248cd37efbcc621cdad9176de706532d654b3" => :sierra
   end
 
-  # revision 1
+  revision 1
 
   depends_on "python" => :recommended
-  depends_on "sip"
+  depends_on "osgeo/osgeo4mac/sip"
   depends_on "qt"
   depends_on "dbus" => :optional
 
@@ -29,13 +29,13 @@ class Pyqt < Formula
               "--stubsdir=#{lib}/python#{version}/site-packages/PyQt5",
               "--sipdir=#{share}/sip/PyQt5", # Qt5
               # sip.h could not be found automatically
-              "--sip-incdir=#{Formula["sip"].opt_include}",
+              "--sip-incdir=#{Formula["osgeo/osgeo4mac/sip"].opt_include}",
               "--qmake=#{Formula["qt"].bin}/qmake",
               # Force deployment target to avoid libc++ issues
               "QMAKE_MACOSX_DEPLOYMENT_TARGET=#{MacOS.version}",
               "--qml-plugindir=#{pkgshare}/plugins",
               "--verbose",
-              "--sip=#{Formula["sip"].opt_bin}/sip",
+              "--sip=#{Formula["osgeo/osgeo4mac/sip"].opt_bin}/sip",
               #  ERROR: Unknown module(s) in QT
               "--disable=QtWebKit",
               "--disable=QtWebKitWidgets",
@@ -56,7 +56,9 @@ class Pyqt < Formula
   test do
     system "#{bin}/pyuic5", "--version"
     system "#{bin}/pylupdate5", "-version"
-    system "#{Formula["python"].opt_bin}/python3", "-c", "import PyQt5"
+
+    ["python2", "python3"].each do |python|
+      system python, "-c", "import PyQt5"
       %w[
         Gui
         Location
@@ -66,6 +68,7 @@ class Pyqt < Formula
         Svg
         Widgets
         Xml
-      ].each { |mod| system "#{Formula["python"].opt_bin}/python3", "-c", "import PyQt5.Qt#{mod}" }
+      ].each { |mod| system python, "-c", "import PyQt5.Qt#{mod}" }
+    end
   end
 end
