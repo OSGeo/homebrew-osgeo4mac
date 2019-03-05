@@ -1,4 +1,4 @@
-class PyqtQt5 < Formula
+class Pyqt < Formula
   desc "Python bindings for v5 of Qt"
   homepage "https://www.riverbankcomputing.com/software/pyqt/download5"
   url "https://www.riverbankcomputing.com/static/Downloads/PyQt5/PyQt5_gpl-5.12.tar.gz"
@@ -15,7 +15,7 @@ class PyqtQt5 < Formula
   # revision 1
 
   depends_on "python" => :recommended
-  depends_on "sip-qt5"
+  depends_on "sip"
   depends_on "qt"
   depends_on "dbus" => :optional
 
