@@ -23,6 +23,10 @@ class Qscintilla2Qt4 < Formula
   # end
 
   def install
+    ENV.cxx11
+
+    ENV.append "CXXFLAGS", "-std=c++11"
+
     # On Mavericks we want to target libc++, this requires an
     # unsupported/macx-clang-libc++ flag.
     if ENV.compiler == :clang && MacOS.version >= :mavericks
