@@ -20,46 +20,50 @@ class QtAT4 < Formula
   # https://code.qt.io/cgit/qt/qtbase.git/commit/?id=b06304e164ba47351fa292662c1e6383c081b5ca
   # if MacOS.version >= :el_capitan
   patch do
-    url "https://raw.githubusercontent.com/Homebrew/formula-patches/480b7142c4e2ae07de6028f672695eb927a34875/qt/el-capitan.patch"
+    url "https://raw.githubusercontent.com/OSGeo/homebrew-osgeo4mac/master/patches/qt%404/el-capitan.patch"
     sha256 "c8a0fa819c8012a7cb70e902abb7133fc05235881ce230235d93719c47650c4e"
   end
   # end
 
   # Backport of Qt5 patch to fix an issue with null bytes in QSetting strings.
   patch do
-    url "https://raw.githubusercontent.com/cartr/homebrew-qt4/41669527a2aac6aeb8a5eeb58f440d3f3498910a/patches/qsetting-nulls.patch"
+    url "https://raw.githubusercontent.com/OSGeo/homebrew-osgeo4mac/master/patches/qt%404/qsetting-nulls.patch"
     sha256 "0deb4cd107853b1cc0800e48bb36b3d5682dc4a2a29eb34a6d032ac4ffe32ec3"
   end
 
   # Patch to fix build on macOS High Sierra
   patch :p0 do
-    url "https://raw.githubusercontent.com/cartr/homebrew-qt4/c957b2d755c762b77142e35f68cddd7f0986bc7b/patches/qt4-versions-without-underscores.patch"
+    url "https://raw.githubusercontent.com/OSGeo/homebrew-osgeo4mac/master/patches/qt%404/qt4-versions-without-underscores.patch"
     sha256 "69713c9bcedace4c167273822da14247760c6dcff4949251af6a7b5f93bca9aa"
-  end
-
-  # Patch for stricter compiler restrictions on High Sierra
-  patch :p0 do
-    url "https://raw.githubusercontent.com/cartr/homebrew-qt4/c957b2d755c762b77142e35f68cddd7f0986bc7b/patches/linguist-findmessage-null-check.patch"
-    sha256 "db68bf8397eb404c9620c6bb1ada5e98369420b1ea44f2da8c43c718814b5b3b"
   end
 
   # Patch for QFixed compiler issue in QCoreTextFontEngine
   patch :p1 do
-    url "https://raw.githubusercontent.com/cartr/homebrew-qt4/22a6e328b6d911b3c1cedcaadb2882dda728f8a7/patches/qfixed.patch"
+    url "https://raw.githubusercontent.com/OSGeo/homebrew-osgeo4mac/master/patches/qt%404/qfixed.patch"
     sha256 "4ca3df71470f755917bc903dfee0b6a6e1d2788322b9d71d810b3bb80b3f8c8a"
   end
 
   # Patch for spurious QObject warnings
   patch :p1 do
-    url "https://raw.githubusercontent.com/cartr/homebrew-qt4/b7bc7818aa11c809209032554a990b1cef7edacc/patches/qobject-spurious-warnings.patch"
+    url "https://raw.githubusercontent.com/OSGeo/homebrew-osgeo4mac/master/patches/qt%404/qobject-spurious-warnings.patch"
     sha256 "5e81df9a1c35a5aec21241a82707ad6ac198b2e44928389722b64da341260c5d"
   end
 
   # build failures due to comparison between pointer and zero
   # see: https://github.com/qt/qttools/commit/7138c963f9d1258bc1b49cb4d63c3e2b7d0ccfda
-  patch :DATA
+  # Patch for spurious QObject warnings
+  patch :p1 do
+    url "https://raw.githubusercontent.com/OSGeo/homebrew-osgeo4mac/master/patches/qt%404/comparison-between-pointer-and-zero.patch"
+    sha256 "6477aa9a171973804f0bb39777042b4700718543ab9f2258b7cad54312ce74cb"
+  end
 
-  keg_only "deprecated in homebrew-core for macOS >= Sierra (10.12)"
+  # Patch for stricter compiler restrictions on High Sierra
+  patch :p0 do
+    url "https://raw.githubusercontent.com/OSGeo/homebrew-osgeo4mac/master/patches/qt%404/linguist-findmessage-null-check.patch"
+    sha256 "db68bf8397eb404c9620c6bb1ada5e98369420b1ea44f2da8c43c718814b5b3b"
+  end
+
+  # keg_only "deprecated in homebrew-core for macOS >= Sierra (10.12)"
 
   # option "with-qt3support", "Build with deprecated Qt3Support module support"
   option "with-docs", "Build documentation"
@@ -238,7 +242,7 @@ class QtAT4 < Formula
   end
 
   # WebKit is no longer included for security reasons. If you absolutely
-  # need it, it can be installed with `brew install qt-webkit@2.3`.
+  # need it, it can be installed with `brew install qt4-webkit`.
 
   test do
     # QMAKESPEC has not been set, so configuration cannot be deduced.
