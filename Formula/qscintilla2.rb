@@ -14,7 +14,8 @@ class Qscintilla2 < Formula
 
   revision 1
 
-  depends_on "python" => :recommended
+  depends_on "python"
+  depends_on "python@2"
   depends_on "osgeo/osgeo4mac/sip"
   depends_on "qt"
   depends_on "osgeo/osgeo4mac/pyqt"
@@ -46,9 +47,8 @@ class Qscintilla2 < Formula
     ENV["QMAKEFEATURES"] = prefix/"data/mkspecs/features"
 
     cd "Python" do
+      (share/"sip/PyQt5/Qsci").mkpath
       Language::Python.each_python(build) do |python, version|
-        (share/"sip/PyQt5/Qsci").mkpath
-
         system python, "configure.py", "-o", lib, "-n", include,
                        "--apidir=#{prefix}/qsci",
                        "--destdir=#{lib}/python#{version}/site-packages/PyQt5",
@@ -75,8 +75,6 @@ class Qscintilla2 < Formula
       import PyQt5.Qsci
       assert("QsciLexer" in dir(PyQt5.Qsci))
     EOS
-    Language::Python.each_python(build) do |python, _version|
-      system python, "test.py"
-    end
+    system "#{Formula["python"].opt_bin}/python3", "test.py"
   end
 end
