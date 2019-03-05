@@ -16,4 +16,5 @@
   "qgis3": "qgis",
   "qgis-ltr@2.18": "qgis-ltr@2",
   "qt-4": "qt@4",
+  "sip-qt5": "sip",
 }

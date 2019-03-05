@@ -1,4 +1,4 @@
-class SipQt5 < Formula
+class Sip < Formula
   desc "Tool to create Python bindings for C and C++ libraries"
   homepage "https://www.riverbankcomputing.com/software/sip/intro"
   url "https://www.riverbankcomputing.com/static/Downloads/sip/sip-4.19.14.tar.gz"
@@ -12,14 +12,17 @@ class SipQt5 < Formula
     sha256 "4f5bc7de198decd35a5c0602433fbad9eae7c698816399f8e4e289c93646d00e" => :sierra
   end
 
-  # revision 1
+  revision 1
 
   head "https://www.riverbankcomputing.com/hg/sip", :using => :hg
 
-  depends_on "python" => :recommended
+  depends_on "python"
+  depends_on "python@2"
 
   def install
     ENV.prepend_path "PATH", Formula["python"].opt_libexec/"bin"
+    ENV.delete("SDKROOT") # Avoid picking up /Application/Xcode.app paths
+
     if build.head?
       # Link the Mercurial repository into the download directory so
       # build.py can use it to figure out a version number.
@@ -28,14 +31,16 @@ class SipQt5 < Formula
       system "#{Formula["python"].opt_bin}/python3", "build.py", "prepare"
     end
 
-    ENV.delete("SDKROOT") # Avoid picking up /Application/Xcode.app paths
-    system "#{Formula["python"].opt_bin}/python3", "configure.py",
-                   "--deployment-target=#{MacOS.version}",
-                   "--destdir=#{lib}/python#{py_ver}/site-packages",
-                   "--bindir=#{bin}",
-                   "--incdir=#{include}",
-                   "--sipdir=#{HOMEBREW_PREFIX}/share/sip",
-                   "--sip-module=PyQt5.sip"
+    ["python2", "python3"].each do |python|
+      version = Language::Python.major_minor_version python
+      system python, "configure.py",
+                     "--deployment-target=#{MacOS.version}",
+                     "--destdir=#{lib}/python#{version}/site-packages",
+                     "--bindir=#{bin}",
+                     "--incdir=#{include}",
+                     "--sipdir=#{HOMEBREW_PREFIX}/share/sip",
+                     "--sip-module=PyQt5.sip",
+                     "--no-dist-info"
     system "make"
     system "make", "install"
     system "make", "clean"
@@ -52,11 +57,5 @@ class SipQt5 < Formula
 
   test do
     system "#{Formula["python"].opt_bin}/python3", "-c", "import PyQt5.sip"
-  end
-
-  private
-
-  def py_ver
-    `#{Formula["python"].opt_bin}/python3 -c 'import sys;print("{0}.{1}".format(sys.version_info[0],sys.version_info[1]))'`.strip
   end
 end
