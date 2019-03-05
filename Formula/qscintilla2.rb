@@ -15,9 +15,9 @@ class Qscintilla2 < Formula
   # revision 1
 
   depends_on "python" => :recommended
-  depends_on "sip"
+  depends_on "osgeo/osgeo4mac/sip"
   depends_on "qt"
-  depends_on "pyqt"
+  depends_on "osgeo/osgeo4mac/pyqt"
 
   def install
     spec = (ENV.compiler == :clang && MacOS.version >= :mavericks) ? "macx-clang" : "macx-g++"
@@ -51,14 +51,14 @@ class Qscintilla2 < Formula
 
         system python, "configure.py", "-o", lib, "-n", include,
                        "--apidir=#{prefix}/qsci",
-                       "--destdir=#{lib}/python#{py_ver}/site-packages/PyQt5",
-                       "--stubsdir=#{lib}/python#{py_ver}/site-packages/PyQt5",
+                       "--destdir=#{lib}/python#{version}/site-packages/PyQt5",
+                       "--stubsdir=#{lib}/python#{version}/site-packages/PyQt5",
                        "--qsci-sipdir=#{share}/sip/PyQt5",
                        "--qsci-incdir=#{include}",
                        "--qsci-libdir=#{lib}",
                        "--pyqt=PyQt5",
-                       "--pyqt-sipdir=#{Formula["pyqt"].opt_share}/sip/PyQt5",
-                       "--sip-incdir=#{Formula["sip"].opt_include}",
+                       "--pyqt-sipdir=#{Formula["osgeo/osgeo4mac/pyqt"].opt_share}/sip/PyQt5",
+                       "--sip-incdir=#{Formula["osgeo/osgeo4mac/sip"].opt_include}",
                        "--spec=#{spec}",
                        "--no-dist-info",
                        "--verbose"
