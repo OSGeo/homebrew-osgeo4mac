@@ -3,7 +3,7 @@ class QgisLtrAT2 < Formula
   desc "Open Source Geographic Information System"
   homepage "https://www.qgis.org"
 
-  revision 1
+  revision 2
 
   head "https://github.com/qgis/QGIS.git", :branch => "release-2_18"
 
@@ -48,14 +48,14 @@ class QgisLtrAT2 < Formula
     depends_on "doxygen" => :build
   end
   depends_on "python@2"
-  depends_on "qt-4"
-  depends_on "sip-qt4"
-  depends_on "pyqt-qt4"
-  depends_on "qca-qt4"
-  depends_on "qscintilla2-qt4"
-  depends_on "qwt-qt4"
-  depends_on "qwtpolar-qt4"
-  depends_on "qjson-qt4"
+  depends_on "qt"
+  depends_on "sip"
+  depends_on "pyqt"
+  depends_on "qca"
+  depends_on "qscintilla2"
+  depends_on "qwt"
+  depends_on "qwtpolar"
+  depends_on "qjson"
   depends_on "gsl"
   depends_on "sqlite" # keg_only
   depends_on "expat" # keg_only
@@ -76,10 +76,10 @@ class QgisLtrAT2 < Formula
   # TODO: add MSSQL third-party support formula?, :optional
 
   # core plugins (c++ and python)
-  if build.with?("grass") || (HOMEBREW_PREFIX/"opt/grass7").exist?
+  # if build.with?("grass") || (HOMEBREW_PREFIX/"opt/grass7").exist?
     depends_on "grass7"
     depends_on "gettext"
-  end
+  # end
 
   if build.with? "globe"
     # this is pretty borked with OS X >= 10.10+
@@ -87,7 +87,7 @@ class QgisLtrAT2 < Formula
     depends_on "open-scene-graph"
     depends_on "brewsci/science/osgearth"
   end
-  depends_on "gpsbabel-qt4" => :optional
+  depends_on "gpsbabel" => :optional
   # TODO: remove "pyspatialite" when PyPi package supports spatialite 4.x
   #       or DB Manager supports libspatialite >= 4.2.0 (with mod_spatialite)
   depends_on "pyspatialite" # for DB Manager
@@ -98,7 +98,7 @@ class QgisLtrAT2 < Formula
   depends_on "grass6" => :optional
   depends_on "orfeo5" => :optional
   depends_on "r" => :optional
-  depends_on "saga-gis-lts" => :optional
+  depends_on "saga-gis-lts" # => :optional
   # TODO: LASTools straight build (2 reporting tools), or via `wine` (10 tools)
   # TODO: Fusion from USFS (via `wine`?)
 
@@ -250,9 +250,9 @@ class QgisLtrAT2 < Formula
                 "${QT_PLUGINS_DIR}/sqldrivers", lib_qt4/"plugins/sqldrivers".to_s
     end
 
-    qwt_fw = Formula["qwt-qt4"].opt_lib/"qwt.framework"
-    qwtpolar_fw = Formula["qwtpolar-qt4"].opt_lib/"qwtpolar.framework"
-    qsci_opt = Formula["qscintilla2-qt4"].opt_prefix
+    qwt_fw = Formula["qwt"].opt_lib/"qwt.framework"
+    qwtpolar_fw = Formula["qwtpolar"].opt_lib/"qwtpolar.framework"
+    qsci_opt = Formula["qscintilla2"].opt_prefix
     args = std_cmake_args
     args << "-DCMAKE_BUILD_TYPE=RelWithDebInfo" if build.with? "debug" # override
     args += %W[
@@ -267,7 +267,7 @@ class QgisLtrAT2 < Formula
       -DQWTPOLAR_LIBRARY=#{qwtpolar_fw}/qwtpolar
       -DQSCINTILLA_INCLUDE_DIR=#{qsci_opt}/libexec/include
       -DQSCINTILLA_LIBRARY=#{qsci_opt}/libexec/lib/libqscintilla2.dylib
-      -DQSCI_SIP_DIR=#{qsci_opt}/share/sip-qt4
+      -DQSCI_SIP_DIR=#{qsci_opt}/share/sip/PyQt5
       -DWITH_QWTPOLAR=TRUE
       -DWITH_INTERNAL_QWTPOLAR=FALSE
       -DQGIS_MACAPP_BUNDLE=0
@@ -288,7 +288,7 @@ class QgisLtrAT2 < Formula
       args << "-DGEOS_INCLUDE_DIR=#{Formula["geos"].opt_include}"
       args << "-DGSL_INCLUDE_DIR=#{Formula["gsl"].opt_include}"
       args << "-DPROJ_INCLUDE_DIR=#{Formula["proj"].opt_include}"
-      args << "-DQCA_INCLUDE_DIR=#{Formula["qca-qt4"].opt_lib}/qca.framework/Headers"
+      args << "-DQCA_INCLUDE_DIR=#{Formula["qca"].opt_lib}/qca.framework/Headers"
       args << "-DSPATIALINDEX_INCLUDE_DIR=#{Formula["spatialindex"].opt_include}/spatialindex"
       args << "-DSPATIALITE_INCLUDE_DIR=#{Formula["libspatialite"].opt_include}"
       args << "-DSQLITE3_INCLUDE_DIR=#{Formula["sqlite"].opt_include}"
@@ -457,13 +457,13 @@ class QgisLtrAT2 < Formula
     end
 
     # prepend qt-4 based utils to PATH (reverse order)
-    pths.insert(0, Formula["qca-qt4"].opt_bin.to_s)
-    pths.insert(0, Formula["pyqt-qt4"].opt_bin.to_s)
-    pths.insert(0, "#{Formula["sip-qt4"].opt_libexec}/bin")
+    pths.insert(0, Formula["qca"].opt_bin.to_s)
+    pths.insert(0, Formula["pyqt"].opt_bin.to_s)
+    pths.insert(0, "#{Formula["sip"].opt_libexec}/bin")
     pths.insert(0, Formula["qt-4"].opt_bin.to_s)
 
-    if opts.include?("with-gpsbabel-qt4")
-      pths.insert(0, Formula["gpsbabel-qt4"].opt_bin.to_s)
+    if opts.include?("with-gpsbabel")
+      pths.insert(0, Formula["gpsbabel"].opt_bin.to_s)
     end
 
     # We need to manually add the saga lts path, since it's keg only
@@ -534,7 +534,7 @@ class QgisLtrAT2 < Formula
       envars[:OSG_LIBRARY_PATH] = "#{HOMEBREW_PREFIX}/lib/osgPlugins-#{osg.version}"
     end
 
-    if opts.include?("with-isolation")
+    # if opts.include?("with-isolation")
       envars[:DYLD_FRAMEWORK_PATH] = "#{HOMEBREW_PREFIX}/Frameworks:/System/Library/Frameworks"
       versioned = %W[
         #{Formula["sqlite"].opt_lib}
@@ -543,10 +543,10 @@ class QgisLtrAT2 < Formula
         #{HOMEBREW_PREFIX}/lib
       ]
       envars[:DYLD_VERSIONED_LIBRARY_PATH] = versioned.join(pthsep)
-    end
-    if opts.include?("with-isolation") || File.exist?("/Library/Frameworks/GDAL.framework")
+    # end
+    # if opts.include?("with-isolation") || File.exist?("/Library/Frameworks/GDAL.framework")
       envars[:PYQGIS_STARTUP] = opt_libexec/"pyqgis_startup.py"
-    end
+    # end
 
     # envars.each { |key, value| puts "#{key.to_s}=#{value}" }
     # exit
@@ -615,7 +615,7 @@ class QgisLtrAT2 < Formula
 
     EOS
 
-    if build.with? "isolation"
+    # if build.with? "isolation"
       s += <<~EOS
         QGIS built with isolation enabled. This allows it to coexist with other
         types of installations of QGIS on your Mac. However, on versions >= 2.0.1,
@@ -623,7 +623,7 @@ class QgisLtrAT2 < Formula
         be available to Python processes within QGIS.app.
 
       EOS
-    end
+    # end
 
     # check for required run-time Python module dependencies
     # TODO: add "pyspatialite" when PyPi package supports spatialite 4.x
@@ -649,7 +649,7 @@ class QgisLtrAT2 < Formula
     unless module_importable? "PyQt4.Qsci"
       s += <<~EOS
         QScintilla Python module is needed by QGIS during run-time.
-        Ensure `qscintilla2-qt4` formula is linked.
+        Ensure `qscintilla2` formula is linked.
 
       EOS
     end
