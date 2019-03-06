@@ -12,9 +12,10 @@ class Qscintilla2 < Formula
     sha256 "75ec91b6d960882cda9355ec94c35e2f2b2468b4ea389ff75e3cc0554794a0f5" => :sierra
   end
 
-  # revision 1
+  revision 1
 
-  depends_on "python" => :recommended
+  depends_on "python"
+  depends_on "python@2"
   depends_on "osgeo/osgeo4mac/sip"
   depends_on "qt"
   depends_on "osgeo/osgeo4mac/pyqt"
@@ -46,9 +47,9 @@ class Qscintilla2 < Formula
     ENV["QMAKEFEATURES"] = prefix/"data/mkspecs/features"
 
     cd "Python" do
-      Language::Python.each_python(build) do |python, version|
-        (share/"sip/PyQt5/Qsci").mkpath
-
+      (share/"sip/PyQt5/Qsci").mkpath
+      ["#{Formula["python@2"].opt_bin}/python2", "#{Formula["python3"].opt_bin}/python3"].each do |python|
+        version = Language::Python.major_minor_version python
         system python, "configure.py", "-o", lib, "-n", include,
                        "--apidir=#{prefix}/qsci",
                        "--destdir=#{lib}/python#{version}/site-packages/PyQt5",
@@ -75,8 +76,6 @@ class Qscintilla2 < Formula
       import PyQt5.Qsci
       assert("QsciLexer" in dir(PyQt5.Qsci))
     EOS
-    Language::Python.each_python(build) do |python, _version|
-      system python, "test.py"
-    end
+    system "#{Formula["python"].opt_bin}/python3", "test.py"
   end
 end
