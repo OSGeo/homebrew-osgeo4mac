@@ -352,8 +352,6 @@ class Qgis < Formula
     printf  "      Try after doing: \e[32m$ brew unlink gettext && brew link --force gettext\e[0m  \e[1;33m(***)\e[0m\n\n"
     printf  "\n\033[31mWe recommend that you run on the terminal\e[0m \e[1;33m(*)\e[0m\033[31m,\e[1;33m(**)\e[0m \033[31mand\e[0m \e[1;33m(***)\e[0m \033[31mbefore installation,\e[0m\n"
     printf  "\n\033[31mto make sure everything works correctly.\e[0m\n\n"
-    printf  "\n\033[31mIf you will use additional supports, we recommend that you first install \e[1;34mqgis-res\e[0m \033[31mwith\e[0m \e[1;33m--with-r\e[0m  \033[31mor\e[0m \e[1;33m--with-r-sethrfore\e[0m, \033[31mand\e[0m \e[1;33m--with-complete\e[0m,\e[0m\n"
-    printf  "\n\033[31mto ensure that you have all the necessary modules.\e[0m\n\n"
     printf "\033[31mThe installation will continue, but remember the above.\e[0m\n"
 
     30.downto(0) do |i|
