@@ -2,22 +2,12 @@ class QgisLtrAT2 < Formula
   include Language::Python::Virtualenv
   desc "Open Source Geographic Information System"
   homepage "https://www.qgis.org"
+  url "https://github.com/qgis/QGIS/archive/final-2_18_28.tar.gz"
+  sha256 "977380578a1dfd80861d25324fd841adab97647a15cb8582f748946dbd23277c"
 
-  revision 1
+  revision 2
 
   head "https://github.com/qgis/QGIS.git", :branch => "release-2_18"
-
-  stable do
-    url "https://github.com/qgis/QGIS/archive/final-2_18_28.tar.gz"
-    sha256 "977380578a1dfd80861d25324fd841adab97647a15cb8582f748946dbd23277c"
-  end
-  bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    sha256 "78a60f8a233aeec26ce7393f0d5af7124ff1b5fffe598a02f259e6a9e041c978" => :mojave
-    sha256 "78a60f8a233aeec26ce7393f0d5af7124ff1b5fffe598a02f259e6a9e041c978" => :high_sierra
-    sha256 "78a60f8a233aeec26ce7393f0d5af7124ff1b5fffe598a02f259e6a9e041c978" => :sierra
-  end
-
 
   def pour_bottle?
     brewed_python?
@@ -48,14 +38,14 @@ class QgisLtrAT2 < Formula
     depends_on "doxygen" => :build
   end
   depends_on "python@2"
-  depends_on "qt-4"
-  depends_on "sip-qt4"
-  depends_on "pyqt-qt4"
-  depends_on "qca-qt4"
-  depends_on "qscintilla2-qt4"
-  depends_on "qwt-qt4"
-  depends_on "qwtpolar-qt4"
-  depends_on "qjson-qt4"
+  depends_on "qt"
+  depends_on "sip"
+  depends_on "pyqt"
+  depends_on "qca"
+  depends_on "qscintilla2"
+  depends_on "qwt"
+  depends_on "qwtpolar"
+  depends_on "qjson"
   depends_on "gsl"
   depends_on "sqlite" # keg_only
   depends_on "expat" # keg_only
@@ -87,7 +77,7 @@ class QgisLtrAT2 < Formula
     depends_on "open-scene-graph"
     depends_on "brewsci/science/osgearth"
   end
-  depends_on "gpsbabel-qt4" => :optional
+  depends_on "gpsbabel" => :optional
   # TODO: remove "pyspatialite" when PyPi package supports spatialite 4.x
   #       or DB Manager supports libspatialite >= 4.2.0 (with mod_spatialite)
   depends_on "pyspatialite" # for DB Manager
@@ -232,27 +222,27 @@ class QgisLtrAT2 < Formula
     # Set bundling level back to 0 (the default in all versions prior to 1.8.0)
     # so that no time and energy is wasted copying the Qt frameworks into QGIS.
 
-    # Install custom widgets Designer plugin to local qt-4 plugins prefix
+    # Install custom widgets Designer plugin to local qt plugins prefix
     inreplace "src/customwidgets/CMakeLists.txt",
-              "${QT_PLUGINS_DIR}/designer", lib_qt4/"plugins/designer".to_s
+              "${QT_PLUGINS_DIR}/designer", lib/"plugins/designer".to_s
 
     # Fix custom widgets Designer module install path
     inreplace "CMakeLists.txt",
-              "${PYQT4_MOD_DIR}", lib_qt4/"python2.7/site-packages/PyQt4".to_s
+              "${PYQT5_MOD_DIR}", lib/"python2.7/site-packages/PyQt5".to_s
 
-    # Install db plugins to local qt-4 plugins prefix
+    # Install db plugins to local qt plugins prefix
     if build.with? "qspatialite"
       inreplace "src/providers/spatialite/qspatialite/CMakeLists.txt",
-                "${QT_PLUGINS_DIR}/sqldrivers", lib_qt4/"plugins/sqldrivers".to_s
+                "${QT_PLUGINS_DIR}/sqldrivers", lib/"plugins/sqldrivers".to_s
     end
     if build.with? "oracle"
       inreplace "src/providers/oracle/ocispatial/CMakeLists.txt",
-                "${QT_PLUGINS_DIR}/sqldrivers", lib_qt4/"plugins/sqldrivers".to_s
+                "${QT_PLUGINS_DIR}/sqldrivers", lib/"plugins/sqldrivers".to_s
     end
 
-    qwt_fw = Formula["qwt-qt4"].opt_lib/"qwt.framework"
-    qwtpolar_fw = Formula["qwtpolar-qt4"].opt_lib/"qwtpolar.framework"
-    qsci_opt = Formula["qscintilla2-qt4"].opt_prefix
+    qwt_fw = Formula["qwt"].opt_lib/"qwt.framework"
+    qwtpolar_fw = Formula["qwtpolar"].opt_lib/"qwtpolar.framework"
+    qsci_opt = Formula["qscintilla2"].opt_prefix
     args = std_cmake_args
     args << "-DCMAKE_BUILD_TYPE=RelWithDebInfo" if build.with? "debug" # override
     args += %W[
@@ -267,7 +257,7 @@ class QgisLtrAT2 < Formula
       -DQWTPOLAR_LIBRARY=#{qwtpolar_fw}/qwtpolar
       -DQSCINTILLA_INCLUDE_DIR=#{qsci_opt}/libexec/include
       -DQSCINTILLA_LIBRARY=#{qsci_opt}/libexec/lib/libqscintilla2.dylib
-      -DQSCI_SIP_DIR=#{qsci_opt}/share/sip-qt4
+      -DQSCI_SIP_DIR=#{qsci_opt}/share/sip/PyQt5
       -DWITH_QWTPOLAR=TRUE
       -DWITH_INTERNAL_QWTPOLAR=FALSE
       -DQGIS_MACAPP_BUNDLE=0
@@ -288,8 +278,8 @@ class QgisLtrAT2 < Formula
       args << "-DGEOS_INCLUDE_DIR=#{Formula["geos"].opt_include}"
       args << "-DGSL_INCLUDE_DIR=#{Formula["gsl"].opt_include}"
       args << "-DPROJ_INCLUDE_DIR=#{Formula["proj"].opt_include}"
-      args << "-DQCA_INCLUDE_DIR=#{Formula["qca-qt4"].opt_lib}/qca.framework/Headers"
-      args << "-DSPATIALINDEX_INCLUDE_DIR=#{Formula["spatialindex"].opt_include}/spatialindex"
+      args << "-DQCA_INCLUDE_DIR=#{Formula["qca"].opt_lib}/qca.framework/Headers"
+      args << "-DSPATIALINDEX_INCLUDE_DIR=#{Formula["spatialindex"].opt_include}"
       args << "-DSPATIALITE_INCLUDE_DIR=#{Formula["libspatialite"].opt_include}"
       args << "-DSQLITE3_INCLUDE_DIR=#{Formula["sqlite"].opt_include}"
     end
@@ -304,9 +294,9 @@ class QgisLtrAT2 < Formula
     # see: https://github.com/Homebrew/homebrew/pull/28597
     ENV["PYTHONHOME"] = brewed_python_framework.to_s if brewed_python?
 
-    # handle custom site-packages for qt-4 keg-only modules and packages
+    # handle custom site-packages for qt keg-only modules and packages
     ENV.prepend_path "PYTHONPATH", python_site_packages
-    ENV.append_path "PYTHONPATH", python_qt4_site_packages
+    ENV.append_path "PYTHONPATH", python_qt_site_packages
     ENV.prepend_path "PATH", libexec/'vendor/bin/'
 
     # find git revision for HEAD build
@@ -356,7 +346,7 @@ class QgisLtrAT2 < Formula
 
     # Avoid ld: framework not found QtSql
     # (https://github.com/Homebrew/homebrew-science/issues/23)
-    ENV.append "CXXFLAGS", "-F#{Formula["qt-4"].opt_lib}"
+    ENV.append "CXXFLAGS", "-F#{Formula["qt"].opt_lib}"
 
     # handle some compiler warnings
     ENV["CXX_EXTRA_FLAGS"] = "-Wno-unused-private-field -Wno-deprecated-register"
@@ -379,8 +369,8 @@ class QgisLtrAT2 < Formula
 
     # Fixup some errant lib linking
     # TODO: fix upstream in CMake
-    dy_libs = [lib_qt4/"plugins/designer/libqgis_customwidgets.dylib"]
-    dy_libs << lib_qt4/"plugins/sqldrivers/libqsqlspatialite.dylib" if build.with? "qspatialite"
+    dy_libs = [lib/"plugins/designer/libqgis_customwidgets.dylib"]
+    dy_libs << lib/"plugins/sqldrivers/libqsqlspatialite.dylib" if build.with? "qspatialite"
     dy_libs.each do |dy_lib|
       MachO::Tools.dylibs(dy_lib.to_s).each do |i_n|
         %w[core gui].each do |f_n|
@@ -447,8 +437,8 @@ class QgisLtrAT2 < Formula
       pths = pths.insert(0, HOMEBREW_PREFIX/"bin")
     end
 
-    # set qt-4's then install's libexec/python2.7/site-packages first, so app will work if unlinked
-    pypths = %W[#{python_qt4_site_packages} #{opt_libexec}/python2.7/site-packages #{pypth}]
+    # set qt's then install's libexec/python2.7/site-packages first, so app will work if unlinked
+    pypths = %W[#{python_qt_site_packages} #{opt_libexec}/python2.7/site-packages #{pypth}]
 
     unless opts.include?("with-gdal-1")
       pths.insert(0, Formula["gdal2"].opt_bin.to_s)
@@ -456,14 +446,14 @@ class QgisLtrAT2 < Formula
       pypths.insert(0, "#{Formula["gdal2-python"].opt_lib}/python2.7/site-packages")
     end
 
-    # prepend qt-4 based utils to PATH (reverse order)
-    pths.insert(0, Formula["qca-qt4"].opt_bin.to_s)
-    pths.insert(0, Formula["pyqt-qt4"].opt_bin.to_s)
-    pths.insert(0, "#{Formula["sip-qt4"].opt_libexec}/bin")
-    pths.insert(0, Formula["qt-4"].opt_bin.to_s)
+    # prepend qt based utils to PATH (reverse order)
+    pths.insert(0, Formula["qca"].opt_bin.to_s)
+    pths.insert(0, Formula["pyqt"].opt_bin.to_s)
+    pths.insert(0, "#{Formula["sip"].opt_libexec}/bin")
+    pths.insert(0, Formula["qt"].opt_bin.to_s)
 
-    if opts.include?("with-gpsbabel-qt4")
-      pths.insert(0, Formula["gpsbabel-qt4"].opt_bin.to_s)
+    if opts.include?("with-gpsbabel")
+      pths.insert(0, Formula["gpsbabel"].opt_bin.to_s)
     end
 
     # We need to manually add the saga lts path, since it's keg only
@@ -480,9 +470,9 @@ class QgisLtrAT2 < Formula
 
     # handle multiple Qt plugins directories
     qtplgpths = %W[
-      #{opt_lib}/qt-4/plugins
-      #{hb_lib_qt4}/plugins
-      #{Formula["qt-4"].opt_prefix}/plugins
+      #{opt_lib}/qt/plugins
+      #{hb_lib_qt}/plugins
+      #{Formula["qt"].opt_prefix}/plugins
     ]
     envars[:QT_PLUGIN_PATH] = qtplgpths.join(pthsep)
 
@@ -611,7 +601,7 @@ class QgisLtrAT2 < Formula
             bundle they are not.
 
       For standalone Python development, set the following environment variable:
-        export PYTHONPATH=#{libexec/"python2.7/site-packages"}:#{python_qt4_site_packages}:#{python_site_packages}:$PYTHONPATH
+        export PYTHONPATH=#{libexec/"python2.7/site-packages"}:#{python_qt_site_packages}:#{python_site_packages}:$PYTHONPATH
 
     EOS
 
@@ -646,13 +636,13 @@ class QgisLtrAT2 < Formula
       EOS
     end
     # TODO: remove this when libqscintilla.dylib becomes core build dependency?
-    unless module_importable? "PyQt4.Qsci"
-      s += <<~EOS
-        QScintilla Python module is needed by QGIS during run-time.
-        Ensure `qscintilla2-qt4` formula is linked.
-
-      EOS
-    end
+    # unless module_importable? "PyQt5.Qsci"
+    #   s += <<~EOS
+    #     QScintilla Python module is needed by QGIS during run-time.
+    #     Ensure `qscintilla2` formula is linked.
+    #
+    #   EOS
+    # end
 
     s += <<~EOS
       If you have built GRASS 6.4.x or 7.0.x support for the Processing plugin set
@@ -718,23 +708,23 @@ class QgisLtrAT2 < Formula
     libexec/"vendor/lib/python2.7/site-packages"
   end
 
-  def hb_lib_qt4
-    HOMEBREW_PREFIX/"lib/qt-4"
+  def hb_lib_qt
+    HOMEBREW_PREFIX/"lib/qt"
   end
 
-  def python_qt4_site_packages
-    hb_lib_qt4/"python2.7/site-packages"
+  def python_qt_site_packages
+    hb_lib_qt/"python2.7/site-packages"
   end
 
-  def lib_qt4
-    lib/"qt-4"
+  def lib_qt
+    lib/"qt"
   end
 
-  def opt_lib_qt4
-    opt_lib/"qt-4"
+  def opt_lib_qt
+    opt_lib/"qt"
   end
 
   def module_importable?(mod)
-    quiet_system python_exec, "-c", "import sys;sys.path.insert(1, '#{python_qt4_site_packages}'); import #{mod}"
+    quiet_system python_exec, "-c", "import sys;sys.path.insert(1, '#{python_qt_site_packages}'); import #{mod}"
   end
 end
