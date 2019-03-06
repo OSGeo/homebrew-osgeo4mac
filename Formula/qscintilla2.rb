@@ -12,7 +12,7 @@ class Qscintilla2 < Formula
     sha256 "75ec91b6d960882cda9355ec94c35e2f2b2468b4ea389ff75e3cc0554794a0f5" => :sierra
   end
 
-  revision 1
+  revision 2
 
   depends_on "python"
   depends_on "python@2"
