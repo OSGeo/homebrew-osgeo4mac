@@ -13,15 +13,16 @@ class Pyqt < Formula
     sha256 "47f6f415976db68d642a53282d1a5ede4630ccf244b06cdcd930ed789612bdae" => :sierra
   end
 
-  revision 1
+  revision 2
 
-  depends_on "python" => :recommended
+  depends_on "python"
+  depends_on "python@2"
   depends_on "osgeo/osgeo4mac/sip"
   depends_on "qt"
   depends_on "dbus" => :optional
 
   def install
-    ["python2", "python3"].each do |python|
+    ["#{Formula["python@2"].opt_bin}/python2", "#{Formula["python"].opt_bin}/python3"].each do |python|
       version = Language::Python.major_minor_version python
       args = ["--confirm-license",
               "--bindir=#{bin}",
@@ -46,7 +47,7 @@ class Pyqt < Formula
               "--no-dist-info"
              ]
 
-      system "#{Formula["python"].opt_bin}/python3", "configure.py", *args
+      system python, "configure.py", *args
       system "make"
       system "make", "install"
       system "make", "clean"
