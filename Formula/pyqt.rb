@@ -13,7 +13,7 @@ class Pyqt < Formula
     sha256 "47f6f415976db68d642a53282d1a5ede4630ccf244b06cdcd930ed789612bdae" => :sierra
   end
 
-  revision 2
+  revision 3
 
   depends_on "python"
   depends_on "python@2"
