@@ -1,23 +1,19 @@
 class PyqtQt4 < Formula
   desc "Python bindings for Qt"
   homepage "https://www.riverbankcomputing.com/software/pyqt/intro"
-  url "https://sourceforge.net/projects/pyqt/files/PyQt4/PyQt-4.12.3/PyQt4_gpl_mac-4.12.3.tar.gz/download"
-  sha256 "293e4be7dd741db72b1265e062ea14332ba5532741314f64eb935d141570305f"
-
-  revision 1
+  url "https://downloads.sf.net/project/pyqt/PyQt4/PyQt-4.11.4/PyQt-mac-gpl-4.11.4.tar.gz"
+  sha256 "f178ba12a814191df8e9f87fb95c11084a0addc827604f1a18a82944225ed918"
 
   bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    cellar :any
-    sha256 "6cc52fb9defbcc3959b99020bd087365ce9f93ff54ed8754c0fd518bea105b0e" => :mojave
-    sha256 "6cc52fb9defbcc3959b99020bd087365ce9f93ff54ed8754c0fd518bea105b0e" => :high_sierra
-    sha256 "7ee477f5c8a86c0680a5176872cc24038aab03b2b425bc3a127a68787fa0ed2d" => :sierra
+    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
+    rebuild 1
+    sha256 "00d6c9ee4e673050ebc4bdf7fbd7f95689981fe7e2186bc8be4f1ab16c07a1bd" => :high_sierra
+    sha256 "00d6c9ee4e673050ebc4bdf7fbd7f95689981fe7e2186bc8be4f1ab16c07a1bd" => :sierra
   end
 
   depends_on "python@2" => :recommended
-  depends_on "qt@4"
+  depends_on "qt-4"
   depends_on "sip-qt4"
-  # depends_on "qt4-webkit" => :recommended
 
   def install
     if build.without? "python@2"
@@ -33,19 +29,13 @@ class PyqtQt4 < Formula
     ENV.prepend_path "PATH", "#{Formula["sip-qt4"].opt_libexec}/bin"
 
     Language::Python.each_python(build) do |python, version|
-      ENV["PYTHONPATH"] = "#{HOMEBREW_PREFIX}/lib/qt4/python#{version}/site-packages"
+      ENV["PYTHONPATH"] = "#{HOMEBREW_PREFIX}/lib/qt-4/python#{version}/site-packages"
 
-      args = ["--confirm-license",
-              "--bindir=#{bin}",
-              "--destdir=#{lib}/qt4/python#{version}/site-packages",
-              # "--stubsdir=#{lib}/qt4/python#{version}/site-packages/PyQt4",
-              "--sipdir=#{share}/sip-qt4" # PyQt4
-              # sip.h could not be found automatically
-              # "--sip-incdir=#{Formula["sip-qt4"].opt_libexec}/include",
-              # "--qmake=#{Formula["qt@4"].bin}/qmake",
-              # Force deployment target to avoid libc++ issues
-              # "QMAKE_MACOSX_DEPLOYMENT_TARGET=#{MacOS.version}",
-              # "--verbose"
+      args = %W[
+        --confirm-license
+        --bindir=#{bin}
+        --destdir=#{lib}/qt-4/python#{version}/site-packages
+        --sipdir=#{share}/sip-qt4
       ]
 
       # We need to run "configure.py" so that pyqtconfig.py is generated, which
@@ -60,7 +50,7 @@ class PyqtQt4 < Formula
       # interfere with the build using configure-ng.py, we run configure.py in a
       # temporary directory and only retain the pyqtconfig.py from that.
 
-      oldargs = args + %W[--plugin-destdir=#{lib}/qt4/plugins]
+      oldargs = args + %W[--plugin-destdir=#{lib}/qt-4/plugins]
 
       require "tmpdir"
       dir = Dir.mktmpdir
@@ -76,7 +66,7 @@ class PyqtQt4 < Formula
           inreplace "pyqtconfig.py",
                     "#{HOMEBREW_CELLAR}/#{name}/#{installed_version}",
                     opt_prefix
-          (lib/"qt4/python#{version}/site-packages/PyQt4").install "pyqtconfig.py"
+          (lib/"qt-4/python#{version}/site-packages/PyQt4").install "pyqtconfig.py"
         end
       ensure
         remove_entry_secure dir
@@ -87,16 +77,9 @@ class PyqtQt4 < Formula
         args << "--spec" << "unsupported/macx-clang-libc++"
       end
 
-      # When building PyQt4 for Python >= 3.5, it tries to build and install
-      # type checking stubs outside its sandbox. This commit fixes this by
-      # disabling the stubs.
-      # This only affects Python >= 3.5, and those builds currently fail, so no
-      # version bump or bottle rebuild is needed.
-      args << "--no-stubs"
-
       ngargs = args + %W[
         --sip-incdir=#{Formula["sip-qt4"].opt_libexec}/include
-        --designer-plugindir=#{lib}/qt4/plugins/designer
+        --designer-plugindir=#{lib}/qt-4/plugins/designer
       ]
 
       system python, "configure-ng.py", *ngargs
@@ -110,37 +93,36 @@ class PyqtQt4 < Formula
     s = "Phonon support is broken.\n\n"
     s += "Python modules in:\n"
     Language::Python.each_python(build) do |_python, version|
-      s += "  #{HOMEBREW_PREFIX}/lib/qt4/python#{version}/site-packages/PyQt4"
+      s += "  #{HOMEBREW_PREFIX}/lib/qt-4/python#{version}/site-packages/PyQt4"
     end
     s
   end
 
   test do
-    # it is temporarily disabled
-    # Language::Python.each_python(build) do |python, version|
-    #   ENV["PYTHONPATH"] = HOMEBREW_PREFIX/"lib/qt4/python#{version}/site-packages"
-    #   system "#{bin}/pyuic4", "--version"
-    #   system "#{bin}/pylupdate4", "-version"
-    #   system python, "-c", "import PyQt4"
-    #   %w[
-    #     Qt
-    #     QtCore
-    #     QtDeclarative
-    #     QtDesigner
-    #     QtGui
-    #     QtHelp
-    #     QtMultimedia
-    #     QtNetwork
-    #     QtOpenGL
-    #     QtScript
-    #     QtScriptTools
-    #     QtSql
-    #     QtSvg
-    #     QtTest
-    #     QtWebKit
-    #     QtXml
-    #     QtXmlPatterns
-    #   ].each { |mod| system python, "-c", "import PyQt4.#{mod}" }
-    # end
+    Language::Python.each_python(build) do |python, version|
+      ENV["PYTHONPATH"] = HOMEBREW_PREFIX/"lib/qt-4/python#{version}/site-packages"
+      system "#{bin}/pyuic4", "--version"
+      system "#{bin}/pylupdate4", "-version"
+      system python, "-c", "import PyQt4"
+      %w[
+        Qt
+        QtCore
+        QtDeclarative
+        QtDesigner
+        QtGui
+        QtHelp
+        QtMultimedia
+        QtNetwork
+        QtOpenGL
+        QtScript
+        QtScriptTools
+        QtSql
+        QtSvg
+        QtTest
+        QtWebKit
+        QtXml
+        QtXmlPatterns
+      ].each { |mod| system python, "-c", "import PyQt4.#{mod}" }
+    end
   end
 end

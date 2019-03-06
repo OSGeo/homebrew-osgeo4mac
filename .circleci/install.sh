@@ -17,15 +17,6 @@
 
 set -e
 
-rm /usr/local/Homebrew/Library/Taps/homebrew/homebrew-core/Formula/sip.rb
-rm /usr/local/Homebrew/Library/Taps/homebrew/homebrew-core/Formula/pyqt.rb
-rm /usr/local/Homebrew/Library/Taps/homebrew/homebrew-core/Formula/qscintilla2.rb
-
-brew tap osgeo/osgeo4mac
-brew tap-pin osgeo/osgeo4mac
-
-brew cleanup
-
 for f in ${CHANGED_FORMULAE};do
   echo "Installing dependencies for changed formula ${f}..."
   FLAGS="--only-dependencies --build-bottle"

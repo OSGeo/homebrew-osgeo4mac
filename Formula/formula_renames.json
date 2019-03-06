@@ -15,8 +15,4 @@
   "saga-gis": "saga-gis-lts",
   "qgis3": "qgis",
   "qgis-ltr@2.18": "qgis-ltr@2",
-  "qt-4": "qt@4",
-  "sip-qt5": "sip",
-  "pyqt-qt5": "pyqt",
-  "qscintilla2-qt5": "qscintilla2",
 }
