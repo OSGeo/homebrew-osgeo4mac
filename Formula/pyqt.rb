@@ -21,7 +21,27 @@ class Pyqt < Formula
   depends_on "qt"
   depends_on "dbus" => :optional
 
+  resource "setuptools" do
+    url "https://files.pythonhosted.org/packages/c2/f7/c7b501b783e5a74cf1768bc174ee4fb0a8a6ee5af6afa92274ff964703e0/setuptools-40.8.0.zip"
+    sha256 "6e4eec90337e849ade7103723b9a99631c1f0d19990d6e8412dc42f5ae8b304d"
+  end
+
+  resource "enum34" do
+    url "https://files.pythonhosted.org/packages/e8/26/a6101edcf724453845c850281b96b89a10dac6bd98edebc82634fccce6a5/enum34-1.1.6.zip"
+    sha256 "2d81cbbe0e73112bdfe6ef8576f2238f2ba27dd0d55752a776c41d38b7da2850"
+  end
+
   def install
+    ENV.prepend_create_path "PYTHONPATH", "#{libexec}/lib/python2.7/site-packages"
+
+    resource("setuptools").stage do
+      system "#{Formula["python@2"].opt_bin}/python2", "setup.py", "install", "--prefix=#{libexec}", "--single-version-externally-managed", "--record=installed.txt"
+    end
+
+    resource("enum34").stage do
+      system "#{Formula["python@2"].opt_bin}/python2", "setup.py", "install", "--prefix=#{libexec}", "--optimize=1"
+    end
+
     ["#{Formula["python@2"].opt_bin}/python2", "#{Formula["python"].opt_bin}/python3"].each do |python|
       version = Language::Python.major_minor_version python
       args = ["--confirm-license",
