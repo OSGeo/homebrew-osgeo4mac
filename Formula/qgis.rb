@@ -44,7 +44,7 @@ class Qgis < Formula
   sha256 "21017354351df6a4ddf1e8e6280e3ec345bdd4f8ddb1f33ee957030dc8c95b29"
   version "3.6.0"
 
-  revision 3
+  revision 4
 
   head "https://github.com/qgis/QGIS.git", :branch => "master"
 
@@ -173,7 +173,7 @@ class Qgis < Formula
 
   # core plugins (c++ and python)
   # if build.with?("grass") || (HOMEBREW_PREFIX/"opt/grass7").exist?
-    depends_on "grass7" # optional
+    depends_on "grass7"
     depends_on "gettext"
   # end
 
@@ -212,15 +212,15 @@ class Qgis < Formula
   # depends_on "qtds" # obsolete from Qt 4.7
   # depends_on "qoci" # from oracle-client-sdk?
 
-  depends_on "gpsbabel" # optional # GPS Tools plugin
+  depends_on "gpsbabel" # GPS Tools plugin
 
   # core processing plugin extras
   # see `grass` above
-  depends_on "orfeo6" # optional if build.with?("orfeo")
-  depends_on "saga-gis-lts" # optional if build.with?("saga")
-  depends_on "whitebox-tools" # optional if build.with?("whitebox")
-  depends_on "lastools" # optional
-  depends_on "taudem" # optional
+  depends_on "orfeo6" # if build.with?("orfeo")
+  depends_on "saga-gis-lts" # if build.with?("saga")
+  depends_on "whitebox-tools" # if build.with?("whitebox")
+  depends_on "lastools"
+  depends_on "taudem"
 
   # if build.with?("r")
     # R with more support
@@ -229,7 +229,7 @@ class Qgis < Formula
     # If you installed sethrfore/r-srf/r, before installing
     # rename "/usr/local/opt/r" to "/usr/local/Cellar/r-bk"
     # and then restore it after installing qgis
-    depends_on "r" => # optional
+  depends_on "r" => # optional
   # end
 
   # TODO: LASTools straight build (2 reporting tools), or via `wine` (10 tools)
