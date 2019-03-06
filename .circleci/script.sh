@@ -17,6 +17,8 @@
 
 set -e
 
+ulimit -n 1024
+
 echo ${CHANGED_FORMULAE}
 
 for f in ${CHANGED_FORMULAE};do
