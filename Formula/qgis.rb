@@ -40,11 +40,11 @@ end
 class Qgis < Formula
   desc "Open Source Geographic Information System"
   homepage "https://www.qgis.org"
-  url "https://github.com/qgis/QGIS/archive/ec30c48de9e8a8da6be19a033b4fc3fc5a8bae02.tar.gz"
-  sha256 "a1de3c80802ba59bc081fb4297f3897f0e54e04f480b7ff95da1b1e713e6c629"
+  url "https://github.com/qgis/QGIS/archive/5d61b66762ed2f1da301516247ecbe864439cb5b.tar.gz"
+  sha256 "21017354351df6a4ddf1e8e6280e3ec345bdd4f8ddb1f33ee957030dc8c95b29"
   version "3.6.0"
 
-  revision 2
+  revision 3
 
   head "https://github.com/qgis/QGIS.git", :branch => "master"
 
@@ -68,17 +68,17 @@ class Qgis < Formula
   option "without-postgresql", "Build without current PostgreSQL client"
   option "without-pyqt5-webkit", "Build without webkit python bindings"
   option "without-qgis-res", "Build without QGIS Resources support"
-  option "without-server", "Build without QGIS Server (qgis_mapserv.fcgi)"
-  option "with-3d", "Build with 3D Map View panel"
   option "with-api-docs", "Build the API documentation with Doxygen and Graphviz"
-  option "with-gpsbabel", "Build with GPSBabel. Read, write and manipulate GPS waypoints in a variety of formats"
-  option "with-grass", "Build with GRASS 7 integration plugin and Processing plugin support (or install grass-7x first)"
   option "with-isolation", "Isolate .app's environment to HOMEBREW_PREFIX, to coexist with other QGIS installs"
-  option "with-lastools", "Build with LAStools, efficient tools for LiDAR processing. Contains LASlib, a C++ programming API for reading / writing LIDAR data stored in standard LAS format."
   option "with-mssql", "Build with Microsoft ODBC Driver for SQL Server"
   option "with-oracle", "Build extra Oracle geospatial database and raster support"
-  option "with-orfeo", "Build extra Orfeo Toolbox for Processing plugin"
   option "with-postgresql10", "Build with PostgreSQL 10 client"
+  option "without-server", "Build without QGIS Server (qgis_mapserv.fcgi)"
+  option "with-3d", "Build with 3D Map View panel"
+  option "with-gpsbabel", "Build with GPSBabel. Read, write and manipulate GPS waypoints in a variety of formats"
+  option "with-grass", "Build with GRASS 7 integration plugin and Processing plugin support (or install grass-7x first)"
+  option "with-lastools", "Build with LAStools, efficient tools for LiDAR processing. Contains LASlib, a C++ programming API for reading / writing LIDAR data stored in standard LAS format."
+  option "with-orfeo", "Build extra Orfeo Toolbox for Processing plugin"
   option "with-qspatialite", "Build QSpatialite Qt database driver"
   option "with-r", "Build extra R for Processing plugin"
   option "with-saga", "Build extra Saga GIS (LTS) for Processing plugin"
@@ -87,7 +87,7 @@ class Qgis < Formula
   option "with-whitebox", "Build with Whitebox Tools, an advanced geospatial data analysis platform"
   # option "with-globe", "Build with Globe plugin, based upon osgEarth"
 
-  deprecated_option "with-saga-gis-lts" => "with-saga"
+  # deprecated_option "with-saga-gis-lts" => "with-saga"
 
   depends_on UnlinkedQGIS
 
@@ -165,17 +165,17 @@ class Qgis < Formula
   depends_on "qgis-res" => :recommended
 
   # fcgi
-  if build.with?("server")
-    depends_on "fcgi"
+  # if build.with?("server")
+    depends_on "fcgi" => :recommended
     depends_on "spawn-fcgi"
     depends_on "lighttpd"
-  end
+  # end
 
   # core plugins (c++ and python)
-  if build.with?("grass") || (HOMEBREW_PREFIX/"opt/grass7").exist?
-    depends_on "grass7"
+  # if build.with?("grass") || (HOMEBREW_PREFIX/"opt/grass7").exist?
+    depends_on "grass7" => :recommended # optional
     depends_on "gettext"
-  end
+  # end
 
   # the Globe Plugin for QGIS 3 is still not available,
   # only for QGIS 2 and it does not support a larger version than OSGearh v2.7.
@@ -186,7 +186,7 @@ class Qgis < Formula
   #   depends_on "osgearth-qt5"
   # end
 
-  depends_on "gpsbabel" => :optional # GPS Tools plugin
+  depends_on "gpsbabel" => :recommended # optional # GPS Tools plugin
 
   # TODO: remove "pyspatialite" when PyPi package supports spatialite 4.x
   #       or DB Manager supports libspatialite >= 4.2.0 (with mod_spatialite)
@@ -216,98 +216,110 @@ class Qgis < Formula
 
   # core processing plugin extras
   # see `grass` above
-  depends_on "orfeo6" if build.with?("orfeo")
+  depends_on "orfeo6" => :recommended # optional if build.with?("orfeo")
 
-  if build.with?("r")
+  # if build.with?("r")
     # R with more support
     # https://github.com/adamhsparks/setup_macOS_for_R
     # fix: will not build if the R version does not match
     # If you installed sethrfore/r-srf/r, before installing
-    # rename "/usr/local/opt/r" to "/usr/local/opt/r-bk"
+    # rename "/usr/local/opt/r" to "/usr/local/Cellar/r-bk"
     # and then restore it after installing qgis
-    depends_on "r"
-  end
+    depends_on "r" => :recommended # optional
+  # end
 
-  depends_on "saga-gis-lts" if build.with?("saga")
+  depends_on "saga-gis-lts" => :recommended # optional if build.with?("saga")
 
-  depends_on "whitebox-tools" if build.with?("whitebox")
+  depends_on "whitebox-tools" => :recommended # optional if build.with?("whitebox")
 
-  depends_on "lastools" => :optional
+  depends_on "lastools" => :recommended # optional
 
-  depends_on "taudem" => :optional
+  depends_on "taudem" => :recommended # optional
 
   # TODO: LASTools straight build (2 reporting tools), or via `wine` (10 tools)
   # TODO: Fusion from USFS (via `wine`?)
 
   # R Plugin
-  resource "r" do
-    url "https://github.com/north-road/qgis-processing-r/archive/e8e1d3e5060ea9563382b7307ae6cdc27179bf75.tar.gz"
-    sha256 "f7a2857eebbbbd6a5f1330ffc0fce86ed52e2e472ce3a81fe174e7137e80d873"
-    version "1.0.3"
+  if build.with?("r") || Formula["r"].opt_prefix.exist?
+    resource "r" do
+      url "https://github.com/north-road/qgis-processing-r/archive/51371402c0200b6649fa3daa8ca8067e83aa6c15.tar.gz"
+      sha256 "f6309e1edc334f76938f46a396c71e986b1910dd8c4c58936cad8d7fad54a346"
+      version "1.0.5"
+    end
   end
 
   # OTB Plugin
-  resource "otb" do
-    url "https://gitlab.orfeo-toolbox.org/orfeotoolbox/qgis-otb-plugin/-/archive/f7fb2b4d0a1311d06edc0d11310353bf8311b2c5/qgis-otb-plugin-f7fb2b4d0a1311d06edc0d11310353bf8311b2c5.tar.gz"
-    sha256 "fd4d836e9f89c621a115554d6e1051c9c7a75119903b673277566c76dbe5bc44"
-    version "1.2"
+  unless build.head?
+    if build.with?("orfeo") || Formula["orfeo6"].opt_prefix.exist?
+      resource "otb" do
+        url "https://gitlab.orfeo-toolbox.org/orfeotoolbox/qgis-otb-plugin/-/archive/a9de121852c6a81a66f6ee1178690a52187de3bc/qgis-otb-plugin-a9de121852c6a81a66f6ee1178690a52187de3bc.tar.gz"
+        sha256 "4b6dfb99913315d7def76f05a292cd4a40e2def9419b38cb9f6dc61ede5c0a66"
+        version "1.2"
+      end
+
+      # Patch: OtbUtils
+      resource "OtbUtils" do
+        url "https://gist.githubusercontent.com/fjperini/dc45ed0f637ae7dc8ec543a701e012f6/raw/c2b6bbafd6a9439bba903403f14c1b3c1ec3683d/OtbUtils.diff"
+        sha256 "b02c2fba5751dea84284072c590ce969ef215bb54e06cc2043ccbaf4449189e5"
+      end
+
+      # Patch: OtbAlgorithmProvider
+      resource "OtbAlgorithmProvider" do
+        url "https://gist.githubusercontent.com/fjperini/d8fe440818814c0800e5071a0ccb4f70/raw/034e1dc2950749fcf70b2fd2925df11aa6deaae3/OtbAlgorithmProvider.diff"
+        sha256 "add76b970cee0c42bd56af50da1f77e1a214ae8912e6b8e3da6e82611ecc30b5"
+      end
+    end
   end
 
   # WhiteboxTools Plugin
-  resource "whitebox" do
-    url "https://github.com/alexbruy/processing-whitebox/archive/5cbd81240e2a4e08fa0df515bf3dbf11957998ea.tar.gz"
-    sha256 "4ccf112dae81447842ccaa08a86d3c5fa12b0a1087e8dc485723a5c8737ebbd9"
-    version "0.9.0"
+  if build.with?("whitebox") || Formula["whitebox-tools"].opt_prefix.exist?
+    resource "whitebox" do
+      url "https://github.com/alexbruy/processing-whitebox/archive/5cbd81240e2a4e08fa0df515bf3dbf11957998ea.tar.gz"
+      sha256 "4ccf112dae81447842ccaa08a86d3c5fa12b0a1087e8dc485723a5c8737ebbd9"
+      version "0.9.0"
+    end
+
+    # Patch: whiteboxProvider
+    resource "whiteboxProvider" do
+      url "https://gist.githubusercontent.com/fjperini/fcb9f964c5396ab8b72c874a8db41b1d/raw/154deb8f17d52d11f1fba2642d43df2b1d0d936d/whiteboxProvider.diff"
+      sha256 "e95191b38765d6072c1a637e735114cce03d53173e47b96626bb30930b5e9c7f"
+    end
   end
 
   # TauDEM Plugin
-  resource "taudem" do
-    url "https://github.com/alexbruy/processing-taudem/archive/38dc454c477b6a6e917f2b3777dc69ed3ecd6062.tar.gz"
-    sha256 "7df793ae6a26ed65b6b15a8c8151b7f8598118b9f8da920eb260049d7c57229d"
-    version "2.0.0"
+  if build.with?("taudem") || Formula["taudem"].opt_prefix.exist?
+    resource "taudem" do
+      url "https://github.com/alexbruy/processing-taudem/archive/38dc454c477b6a6e917f2b3777dc69ed3ecd6062.tar.gz"
+      sha256 "7df793ae6a26ed65b6b15a8c8151b7f8598118b9f8da920eb260049d7c57229d"
+      version "2.0.0"
+    end
+
+    # Patch: taudemProvider
+    resource "taudemProvider" do
+      url "https://gist.githubusercontent.com/fjperini/1899e20e0286058a74116aecf466f0a0/raw/a2fc2c7a31c747fca5fbed4e885a6503fe6a5d4c/taudemProvider.diff"
+      sha256 "39a494f886d00011a0101b40715d828465592f304590438a7658d03298950cf5"
+    end
+
+    # Patch: taudemUtils
+    resource "taudemUtils" do
+      url "https://gist.githubusercontent.com/fjperini/f3e5ed0e964f4b7ead80a7c39a7115f6/raw/c3c8cca96d51156d0f60fe487b5b848faa3d0c2c/taudemUtils.diff"
+      sha256 "3cf403f74c2ed67f6cdfb87c04cf0b09b085fb9f77ddde9be1d7f2ac12fe53a3"
+    end
   end
 
   # LAStools Plugin
-  resource "lastools" do
-    url "https://github.com/rapidlasso/LAStoolsPluginQGIS3/archive/5b297ddbc6dab4f5c323d637e284f77809970927.tar.gz"
-    sha256 "bd7c30627948e554705c54d73e6e64a7b7283d1dd59847019f794219b71ad844"
-    version "1.2"
-  end
+  if build.with?("lastools") || Formula["lastools"].opt_prefix.exist?
+    resource "lastools" do
+      url "https://github.com/rapidlasso/LAStoolsPluginQGIS3/archive/5b297ddbc6dab4f5c323d637e284f77809970927.tar.gz"
+      sha256 "bd7c30627948e554705c54d73e6e64a7b7283d1dd59847019f794219b71ad844"
+      version "1.2"
+    end
 
-  # Patch: OtbUtils
-  resource "OtbUtils" do
-    url "https://gist.githubusercontent.com/fjperini/dc45ed0f637ae7dc8ec543a701e012f6/raw/abda623ca0861c0dda5b68f6590168400254a98c/OtbUtils.diff"
-    sha256 "dc0a0e083046006d37b90d17856f580b677e6e34724e4b19e387b0102bc8defe"
-  end
-
-  # Patch: OtbAlgorithmProvider
-  resource "OtbAlgorithmProvider" do
-    url "https://gist.githubusercontent.com/fjperini/d8fe440818814c0800e5071a0ccb4f70/raw/4d286cb59a137c84198f203ee3ac037963baba23/OtbAlgorithmProvider.diff"
-    sha256 "0392533435901dd396809f9cc2302ac501a60cacac3708b859f13edcd1d9142c"
-  end
-
-  # Patch: whiteboxProvider
-  resource "whiteboxProvider" do
-    url "https://gist.githubusercontent.com/fjperini/fcb9f964c5396ab8b72c874a8db41b1d/raw/154deb8f17d52d11f1fba2642d43df2b1d0d936d/whiteboxProvider.diff"
-    sha256 "e95191b38765d6072c1a637e735114cce03d53173e47b96626bb30930b5e9c7f"
-  end
-
-  # Patch: taudemProvider
-  resource "taudemProvider" do
-    url "https://gist.githubusercontent.com/fjperini/1899e20e0286058a74116aecf466f0a0/raw/a2fc2c7a31c747fca5fbed4e885a6503fe6a5d4c/taudemProvider.diff"
-    sha256 "39a494f886d00011a0101b40715d828465592f304590438a7658d03298950cf5"
-  end
-
-  # Patch: taudemUtils
-  resource "taudemUtils" do
-    url "https://gist.githubusercontent.com/fjperini/f3e5ed0e964f4b7ead80a7c39a7115f6/raw/c3c8cca96d51156d0f60fe487b5b848faa3d0c2c/taudemUtils.diff"
-    sha256 "3cf403f74c2ed67f6cdfb87c04cf0b09b085fb9f77ddde9be1d7f2ac12fe53a3"
-  end
-
-  # Patch: LAStoolsProvider
-  resource "LAStoolsProvider" do
-    url "https://gist.githubusercontent.com/fjperini/d6dd9f294be338fba4a05959b845f095/raw/4da2e9e0bd931ad00b3ca66777c3a9d50cde18ba/LAStoolsProvider.diff"
-    sha256 "82656a9fd6f42056d5c2a5487f2429b7f2c66c83287852fb644517abccecc563"
+    # Patch: LAStoolsProvider
+    resource "LAStoolsProvider" do
+      url "https://gist.githubusercontent.com/fjperini/d6dd9f294be338fba4a05959b845f095/raw/4da2e9e0bd931ad00b3ca66777c3a9d50cde18ba/LAStoolsProvider.diff"
+      sha256 "82656a9fd6f42056d5c2a5487f2429b7f2c66c83287852fb644517abccecc563"
+    end
   end
 
   def install
@@ -340,8 +352,6 @@ class Qgis < Formula
     printf  "      Try after doing: \e[32m$ brew unlink gettext && brew link --force gettext\e[0m  \e[1;33m(***)\e[0m\n\n"
     printf  "\n\033[31mWe recommend that you run on the terminal\e[0m \e[1;33m(*)\e[0m\033[31m,\e[1;33m(**)\e[0m \033[31mand\e[0m \e[1;33m(***)\e[0m \033[31mbefore installation,\e[0m\n"
     printf  "\n\033[31mto make sure everything works correctly.\e[0m\n\n"
-    printf  "\n\033[31mIf you will use additional supports, we recommend that you first install \e[1;34mqgis-res\e[0m \033[31mwith\e[0m \e[1;33m--with-r\e[0m  \033[31mor\e[0m \e[1;33m--with-r-sethrfore\e[0m, \033[31mand\e[0m \e[1;33m--with-complete\e[0m,\e[0m\n"
-    printf  "\n\033[31mto ensure that you have all the necessary modules.\e[0m\n\n"
     printf "\033[31mThe installation will continue, but remember the above.\e[0m\n"
 
     30.downto(0) do |i|
@@ -455,11 +465,11 @@ class Qgis < Formula
               "${PYQT5_MOD_DIR}", lib/"python#{py_ver}/site-packages/PyQt5".to_s
 
     # install db plugins to local qt plugins prefix
-    if build.with? "qspatialite"
+    # if build.with? "qspatialite"
       mkdir lib/"qt/plugins/sqldrivers"
       inreplace "external/qspatialite/CMakeLists.txt",
                 "${QT_PLUGINS_DIR}/sqldrivers", lib/"qt/plugins/sqldrivers".to_s
-    end
+    # end
     if build.with? "oracle"
       mkdir lib/"qt/plugins/sqldrivers"
       inreplace "src/providers/oracle/ocispatial/CMakeLists.txt",
@@ -474,6 +484,8 @@ class Qgis < Formula
       qt5-webkit
       pyqt5-webkit
       qscintilla2-qt5
+      pyqt-qt5
+      sip-qt5
       qwt
       qwtpolar
       qca
@@ -537,10 +549,11 @@ class Qgis < Formula
       -DQT5_3DEXTRA_INCLUDE_DIR=#{Formula["qt"].opt_lib}/cmake/Qt53DExtras
       -DQt5WebKitWidgets_DIR=#{Formula["qt5-webkit"].opt_lib}/cmake/Qt5WebKitWidgets
       -DQt5WebKit_DIR=#{Formula["qt5-webkit"].opt_lib}/cmake/Qt5WebKit
-      -DQGIS_MACAPP_BUNDLE=0
-      -DQGIS_MACAPP_INSTALL_DEV=FALSE
-      -DQGIS_APP_NAME=QGIS-HB
     ]
+
+    args << "-DQGIS_MACAPP_BUNDLE=0"
+    args << "-DQGIS_MACAPP_INSTALL_DEV=FALSE"
+    # args << "-DQGIS_APP_NAME=QGIS-HB"
 
     # Build unit tests
     args << "-DENABLE_TESTS=FALSE"
@@ -725,11 +738,13 @@ class Qgis < Formula
       args << "-DOCI_LIBRARY=#{oracle_opt}/lib/libclntsh.dylib"
     end
 
-    args << "-DWITH_QSPATIALITE=#{build.with?("qspatialite") ? "TRUE" : "FALSE"}"
+    # args << "-DWITH_QSPATIALITE=#{build.with?("qspatialite") ? "TRUE" : "FALSE"}"
+    args << "-DWITH_QSPATIALITE=TRUE"
 
     args << "-DWITH_APIDOC=#{build.with?("api-docs") ? "TRUE" : "FALSE"}"
 
-    args << "-DWITH_3D=#{build.with?("3d") ? "TRUE" : "FALSE"}"
+    # args << "-DWITH_3D=#{build.with?("3d") ? "TRUE" : "FALSE"}"
+    args << "-DWITH_3D=TRUE"
 
     # args << "-DWITH_QTWEBKIT=#{build.with?("qt5-webkit") ? "TRUE" : "FALSE"}"
     # if build.with? "qt5-webkit"
@@ -798,7 +813,7 @@ class Qgis < Formula
     # fixup some errant lib linking
     # TODO: fix upstream in CMake
     dy_libs = [lib/"qt/plugins/designer/libqgis_customwidgets.dylib"]
-    dy_libs << lib/"qt/plugins/sqldrivers/libqsqlspatialite.dylib" if build.with? "qspatialite"
+    dy_libs << lib/"qt/plugins/sqldrivers/libqsqlspatialite.dylib" # if build.with? "qspatialite"
     dy_libs << lib/"qt/plugins/sqldrivers/libqsqlocispatial.dylib" if build.with? "oracle"
     dy_libs.each do |dy_lib|
       MachO::Tools.dylibs(dy_lib.to_s).each do |i_n|
@@ -943,33 +958,38 @@ class Qgis < Formula
       end
     end
 
-    if opts.include?("with-orfeo") || brewed_orfeo?
-      orfeo = Formula["orfeo6"]
-      # envars[:QGIS_PLUGINPATH] = "#{orfeo.opt_prefix}"
-      begin
-        inreplace "#{proc_plugins}/otb/OTBUtils.py" do |s|
-        # default geoid path
-        # try to replace first, so it fails (if already done) before global replaces
-        s.sub! "OTB_FOLDER", "#{orfeo.opt_prefix}"
-        s.sub! "OTB_APP_FOLDER", "#{orfeo.opt_lib}/otb/applications"
-        s.sub! "OTB_GEOID_FILE", "#{orfeo.opt_libexec}/default_geoid/egm96.grd"
+    # OTB is available from branch_3.8
+    unless build.head?
+      if opts.include?("with-orfeo") || brewed_orfeo?
+        orfeo = Formula["orfeo6"]
+        # envars[:QGIS_PLUGINPATH] = "#{orfeo.opt_prefix}"
+        begin
+          inreplace "#{proc_plugins}/otb/OTBUtils.py" do |s|
+          # default geoid path
+          # try to replace first, so it fails (if already done) before global replaces
+          s.sub! "OTB_FOLDER", "#{orfeo.opt_prefix}"
+          s.sub! "OTB_APP_FOLDER", "#{orfeo.opt_lib}/otb/applications"
+          s.sub! "OTB_GEOID_FILE", "#{orfeo.opt_libexec}/default_geoid/egm96.grd"
+          end
+          puts "ORFEO 6 OTBUtils.py has been updated"
+          rescue Utils::InreplaceError
+          puts "ORFEO 6 OTBUtils.py already updated"
         end
-        puts "ORFEO 6 OTBUtils.py has been updated"
-        rescue Utils::InreplaceError
-        puts "ORFEO 6 OTBUtils.py already updated"
       end
     end
 
-    if opts.include?("with-r") || brewed_r?
-      begin
-        inreplace "#{proc_plugins}/processing_r/processing/provider.py" do |s|
-        s.gsub! "'Activate'), False))", "'Activate'), True))"
-        end
-        puts "R RAlgorithmProvider.py has been updated"
-        rescue Utils::InreplaceError
-        puts "R provider.py already updated"
-      end
-    end
+    # Remove setting to activate provider
+    # See: https://github.com/north-road/qgis-processing-r/commit/7d8d182962392297690c02f77829b8cd64b5e8a9#diff-ce2ac984448f961cfa0f7e446bdbd4ca
+    # if opts.include?("with-r") || brewed_r?
+    #   begin
+    #     inreplace "#{proc_plugins}/processing_r/processing/provider.py" do |s|
+    #     s.gsub! "'Activate'), False))", "'Activate'), True))"
+    #     end
+    #     puts "R RAlgorithmProvider.py has been updated"
+    #     rescue Utils::InreplaceError
+    #     puts "R provider.py already updated"
+    #   end
+    # end
 
     if opts.include?("with-whitebox") || brewed_whitebox?
       begin
@@ -1142,7 +1162,7 @@ class Qgis < Formula
       EOS
     end
 
-    if build.with?("lastools")
+    if build.with?("lastools") || brewed_lastools?
       s += <<~EOS
 
         You installed LAStools!
@@ -1160,7 +1180,7 @@ class Qgis < Formula
       EOS
     end
 
-    if build.with?("grass")
+    if build.with?("grass") || brewed_grass?
       s += <<~EOS
         If you have built GRASS 7 for the Processing plugin set the following in QGIS
 
@@ -1229,8 +1249,7 @@ class Qgis < Formula
   # end
 
   def brewed_r?
-    File.exists?(File.join("#{HOMEBREW_PREFIX}/opt", "r"))
-    # Formula["r"].opt_prefix.exist?
+    Formula["r"].opt_prefix.exist?
   end
 
   def brewed_lastools?

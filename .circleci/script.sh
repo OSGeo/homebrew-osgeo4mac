@@ -17,6 +17,11 @@
 
 set -e
 
+ulimit -n 1024
+
+# fix error: 'libintl.h' file not found
+brew unlink gettext && brew link --force gettext
+
 echo ${CHANGED_FORMULAE}
 
 for f in ${CHANGED_FORMULAE};do
