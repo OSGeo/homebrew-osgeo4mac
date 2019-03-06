@@ -24,6 +24,10 @@ rm /usr/local/Homebrew/Library/Taps/homebrew/homebrew-core/Formula/qscintilla2.r
 brew tap osgeo/osgeo4mac
 brew tap-pin osgeo/osgeo4mac
 
+brew install osgeo/osgeo4mac/sip
+brew install osgeo/osgeo4mac/pyqt
+brew install osgeo/osgeo4mac/qscintilla2
+
 brew cleanup
 
 for f in ${CHANGED_FORMULAE};do
