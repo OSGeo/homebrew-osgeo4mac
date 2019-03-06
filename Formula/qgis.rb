@@ -467,11 +467,11 @@ class Qgis < Formula
               "${PYQT5_MOD_DIR}", lib/"python#{py_ver}/site-packages/PyQt5".to_s
 
     # install db plugins to local qt plugins prefix
-    if build.with? "qspatialite"
+    # if build.with? "qspatialite"
       mkdir lib/"qt/plugins/sqldrivers"
       inreplace "external/qspatialite/CMakeLists.txt",
                 "${QT_PLUGINS_DIR}/sqldrivers", lib/"qt/plugins/sqldrivers".to_s
-    end
+    # end
     if build.with? "oracle"
       mkdir lib/"qt/plugins/sqldrivers"
       inreplace "src/providers/oracle/ocispatial/CMakeLists.txt",
