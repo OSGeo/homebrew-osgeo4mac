@@ -39,10 +39,10 @@ class QgisLtrAT2 < Formula
   end
   depends_on "python@2"
   depends_on "qt"
-  depends_on "sip"
-  depends_on "pyqt"
+  depends_on "osgeo/osgeo4mac/sip"
+  depends_on "osgeo/osgeo4mac/pyqt"
   depends_on "qca"
-  depends_on "qscintilla2"
+  depends_on "osgeo/osgeo4mac/qscintilla2"
   depends_on "qwt"
   depends_on "qwtpolar"
   depends_on "qjson"
