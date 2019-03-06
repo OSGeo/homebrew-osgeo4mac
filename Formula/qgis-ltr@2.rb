@@ -3,7 +3,7 @@ class QgisLtrAT2 < Formula
   desc "Open Source Geographic Information System"
   homepage "https://www.qgis.org"
 
-  revision 2
+  revision 3
 
   head "https://github.com/qgis/QGIS.git", :branch => "release-2_18"
 
