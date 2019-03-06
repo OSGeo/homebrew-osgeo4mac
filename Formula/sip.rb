@@ -7,10 +7,9 @@ class Sip < Formula
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
     cellar :any_skip_relocation
-    rebuild 1
-    sha256 "8c58738fb6a0b9c365fb2797ca5baa8041a890b681005b240fe70d6a87a7592b" => :mojave
-    sha256 "8c58738fb6a0b9c365fb2797ca5baa8041a890b681005b240fe70d6a87a7592b" => :high_sierra
-    sha256 "1902e507b0c5746f31b2410c19b52dc8477f97beec8ca9096fc718a72afb80fc" => :sierra
+    sha256 "400b6e19cd04594eef4c1bc0f959bfb4d817b9a15717310f3735a836ac445cfe" => :mojave
+    sha256 "400b6e19cd04594eef4c1bc0f959bfb4d817b9a15717310f3735a836ac445cfe" => :high_sierra
+    sha256 "e215e0bcb49b86570d54294b8e3be21f4c053f0fe410935b603799b1733ac88b" => :sierra
   end
 
   revision 3
