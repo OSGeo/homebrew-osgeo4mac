@@ -4,6 +4,14 @@ class Qscintilla2 < Formula
   url "https://www.riverbankcomputing.com/static/Downloads/QScintilla/QScintilla_gpl-2.11.1.tar.gz"
   sha256 "dae54d19e43dba5a3f98ac084fc0bcfa6fb713fa851f1783a01404397fd722f5"
 
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    cellar :any
+    sha256 "0fcc7fcfa6488163ef36fe782c61bc9992abd9a137a3ebe45086f2471cb1a281" => :mojave
+    sha256 "0fcc7fcfa6488163ef36fe782c61bc9992abd9a137a3ebe45086f2471cb1a281" => :high_sierra
+    sha256 "0fcc7fcfa6488163ef36fe782c61bc9992abd9a137a3ebe45086f2471cb1a281" => :sierra
+  end
+
   revision 2
 
   depends_on "python"
