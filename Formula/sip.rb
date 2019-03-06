@@ -13,7 +13,7 @@ class Sip < Formula
     sha256 "1902e507b0c5746f31b2410c19b52dc8477f97beec8ca9096fc718a72afb80fc" => :sierra
   end
 
-  revision 2
+  revision 3
 
   head "https://www.riverbankcomputing.com/hg/sip", :using => :hg
 
@@ -32,7 +32,7 @@ class Sip < Formula
       system "#{Formula["python"].opt_bin}/python3", "build.py", "prepare"
     end
 
-    ["python2", "python3"].each do |python|
+    ["#{Formula["python@2"].opt_bin}/python2", "#{Formula["python"].opt_bin}/python3"].each do |python|
       version = Language::Python.major_minor_version python
       system python, "configure.py",
                      "--deployment-target=#{MacOS.version}",
