@@ -40,11 +40,11 @@ end
 class Qgis < Formula
   desc "Open Source Geographic Information System"
   homepage "https://www.qgis.org"
-  url "https://github.com/qgis/QGIS/archive/5d61b66762ed2f1da301516247ecbe864439cb5b.tar.gz"
-  sha256 "21017354351df6a4ddf1e8e6280e3ec345bdd4f8ddb1f33ee957030dc8c95b29"
+  url "https://github.com/qgis/QGIS/archive/aff4f23559bc24a6979d35d02b11995a2d4f6bac.tar.gz"
+  sha256 "3a22e10cbbe8efac803d2b883a3727786424516c0042dd514032e6cf59f2a018"
   version "3.6.0"
 
-  revision 3
+  revision 4
 
   head "https://github.com/qgis/QGIS.git", :branch => "master"
 
@@ -162,20 +162,22 @@ class Qgis < Formula
   # pygments - MetaSearch
   # yaml - Processing
   # many useful modules are incorporated
-  depends_on "qgis-res" => :recommended
+  depends_on "qgis-res"
 
   # fcgi
   # if build.with?("server")
-    depends_on "fcgi" => :recommended
-    depends_on "spawn-fcgi"
-    depends_on "lighttpd"
+  depends_on "fcgi"
+  depends_on "spawn-fcgi"
+  depends_on "lighttpd"
   # end
 
   # core plugins (c++ and python)
   # if build.with?("grass") || (HOMEBREW_PREFIX/"opt/grass7").exist?
-    depends_on "grass7" => :recommended # optional
-    depends_on "gettext"
+  depends_on "grass7" # optional
+  depends_on "gettext"
   # end
+
+  depends_on "gpsbabel" # optional # GPS Tools plugin
 
   # the Globe Plugin for QGIS 3 is still not available,
   # only for QGIS 2 and it does not support a larger version than OSGearh v2.7.
@@ -186,8 +188,6 @@ class Qgis < Formula
   #   depends_on "osgearth-qt5"
   # end
 
-  depends_on "gpsbabel" => :recommended # optional # GPS Tools plugin
-
   # TODO: remove "pyspatialite" when PyPi package supports spatialite 4.x
   #       or DB Manager supports libspatialite >= 4.2.0 (with mod_spatialite)
   # TODO: what to do for Py3 and pyspatialite?
@@ -195,9 +195,9 @@ class Qgis < Formula
 
   # use newer postgresql client than Apple's, also needed by `psycopg2`
   if build.with?("postgresql10")
-    depends_on "postgresql@10" => :recommended
+    depends_on "postgresql@10"
   else
-    depends_on "postgresql" => :recommended
+    depends_on "postgresql"
   end
 
   depends_on "oracle-client-sdk" if build.with?("oracle")
@@ -216,7 +216,11 @@ class Qgis < Formula
 
   # core processing plugin extras
   # see `grass` above
-  depends_on "orfeo6" => :recommended # optional if build.with?("orfeo")
+  depends_on "orfeo6" # optional if build.with?("orfeo")
+  depends_on "saga-gis-lts" # optional if build.with?("saga")
+  depends_on "whitebox-tools" # optional if build.with?("whitebox")
+  depends_on "lastools" # optional
+  depends_on "taudem" # optional
 
   # if build.with?("r")
     # R with more support
@@ -225,16 +229,8 @@ class Qgis < Formula
     # If you installed sethrfore/r-srf/r, before installing
     # rename "/usr/local/opt/r" to "/usr/local/Cellar/r-bk"
     # and then restore it after installing qgis
-    depends_on "r" => :recommended # optional
+  depends_on "r" # optional
   # end
-
-  depends_on "saga-gis-lts" => :recommended # optional if build.with?("saga")
-
-  depends_on "whitebox-tools" => :recommended # optional if build.with?("whitebox")
-
-  depends_on "lastools" => :recommended # optional
-
-  depends_on "taudem" => :recommended # optional
 
   # TODO: LASTools straight build (2 reporting tools), or via `wine` (10 tools)
   # TODO: Fusion from USFS (via `wine`?)
