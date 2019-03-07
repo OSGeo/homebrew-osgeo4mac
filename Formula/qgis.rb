@@ -40,11 +40,11 @@ end
 class Qgis < Formula
   desc "Open Source Geographic Information System"
   homepage "https://www.qgis.org"
-  url "https://github.com/qgis/QGIS/archive/5d61b66762ed2f1da301516247ecbe864439cb5b.tar.gz"
-  sha256 "21017354351df6a4ddf1e8e6280e3ec345bdd4f8ddb1f33ee957030dc8c95b29"
+  url "https://github.com/qgis/QGIS/archive/aff4f23559bc24a6979d35d02b11995a2d4f6bac.tar.gz"
+  sha256 "3a22e10cbbe8efac803d2b883a3727786424516c0042dd514032e6cf59f2a018"
   version "3.6.0"
 
-  revision 3
+  revision 4
 
   head "https://github.com/qgis/QGIS.git", :branch => "master"
 
