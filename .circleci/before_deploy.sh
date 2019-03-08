@@ -22,7 +22,7 @@ mkdir /tmp/artifacts
 cd /tmp/artifacts
   echo "Download bottles from artifacts..."
   brew install wget
-  wget --content-disposition --trust-server-names -i https://dl.bintray.com/homebrew-osgeo/osgeo-bottles/${CHANGED_FORMULAE}-${CIRCLE_BUILD_NUM}.txt
+  wget --content-disposition --trust-server-names -i https://bintray.com/api/ui/download/homebrew-osgeo/osgeo-bottles/${CHANGED_FORMULAE}-${CIRCLE_BUILD_NUM}.txt
   # use ggprep instead of gprep
   brew install grep
   BUILD_NUM=$(ggrep -Po "(\d+\d)" ${CHANGED_FORMULAE}-${CIRCLE_BUILD_NUM}.txt | head -n 1)
