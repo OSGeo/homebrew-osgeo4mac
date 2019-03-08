@@ -107,9 +107,8 @@ jobs:
           name: Upload build num
           command: |
             echo "Upload build num, need for download bottles from artifacts..."
-            echo "${CIRCLE_BUILD_NUM}" > "/tmp/build-num-$BUILD_NUM-${CHANGED_FORMULAE}.txt"
-            echo "Binstray user: $BINTRAY_USER"
-            curl -X PUT -T "/tmp/build-num-$BUILD_NUM-${CHANGED_FORMULAE}.txt" -u ${BINTRAY_USER}:${BINTRAY_API} -H "X-Bintray-Publish: 1" https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles/bottles/0.1/
+            echo "${CIRCLE_BUILD_NUM}" > "/tmp/${CHANGED_FORMULAE}-${CIRCLE_BUILD_NUM}.txt"
+            curl -X PUT -T "/tmp/${CHANGED_FORMULAE}-${CIRCLE_BUILD_NUM}.txt" -u ${BINTRAY_USER}:${BINTRAY_API} -H "X-Bintray-Publish: 1" https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles/bottles/0.1/
       - run:
           name: Commit for new bottles and upload to bintray
           command: .circleci/before_deploy.sh

@@ -21,13 +21,13 @@ if [ "$CIRCLE_BRANCH" != "master" ] && [ "$CHANGED_FORMULAE" != "" ]; then
 mkdir /tmp/artifacts
 cd /tmp/artifacts
   echo "Download bottles from artifacts..."
-  wget --content-disposition --trust-server-names -i https://dl.bintray.com/homebrew-osgeo/osgeo-bottles/build-num-$BUILD_NUM-${CHANGED_FORMULAE}.txt
+  brew install wget
+  wget --content-disposition --trust-server-names -i https://dl.bintray.com/homebrew-osgeo/osgeo-bottles/${CHANGED_FORMULAE}-${CIRCLE_BUILD_NUM}.txt
   # use ggprep instead of gprep
   brew install grep
-  BUILD_NUM=$(ggrep -Po "(\d+\d)" build-num-$BUILD_NUM-${CHANGED_FORMULAE}.txt | head -n 1)
+  BUILD_NUM=$(ggrep -Po "(\d+\d)" ${CHANGED_FORMULAE}-${CIRCLE_BUILD_NUM}.txt | head -n 1)
   echo "Build: $BUILD_NUM"
   curl https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/$BUILD_NUM/artifacts?circle-token=$CIRCLE_TOKEN | grep -o 'https://[^"]*' > bottles.txt
-  brew install wget
   wget --content-disposition --trust-server-names -i bottles.txt
   cat bottles.txt
   ls /tmp/artifacts
