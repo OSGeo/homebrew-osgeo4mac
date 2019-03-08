@@ -22,12 +22,12 @@ mkdir /tmp/artifacts
 cd /tmp/artifacts
   echo "Download bottles from artifacts..."
   brew install wget
-  wget --content-disposition --trust-server-names -i https://bintray.com/api/ui/download/homebrew-osgeo/osgeo-bottles/${CHANGED_FORMULAE}-${CIRCLE_BUILD_NUM}.txt
-  # use ggprep instead of gprep
-  brew install grep
-  BUILD_NUM=$(ggrep -Po "(\d+\d)" ${CHANGED_FORMULAE}-${CIRCLE_BUILD_NUM}.txt | head -n 1)
-  echo "Build: $BUILD_NUM"
-  curl https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/$BUILD_NUM/artifacts?circle-token=$CIRCLE_TOKEN | grep -o 'https://[^"]*' > bottles.txt
+  # wget --content-disposition --trust-server-names -i https://bintray.com/api/ui/download/homebrew-osgeo/osgeo-bottles/${CHANGED_FORMULAE}-${CIRCLE_BUILD_NUM}.txt
+  # # use ggprep instead of gprep
+  # brew install grep
+  # BUILD_NUM=$(ggrep -Po "(\d+\d)" ${CHANGED_FORMULAE}-${CIRCLE_BUILD_NUM}.txt | head -n 1)
+  # echo "Build: $BUILD_NUM"
+  curl https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/latest/artifacts?circle-token=$CIRCLE_TOKEN | grep -o 'https://[^"]*' > bottles.txt
   wget --content-disposition --trust-server-names -i bottles.txt
   cat bottles.txt
   ls /tmp/artifacts
