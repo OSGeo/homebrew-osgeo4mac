@@ -20,6 +20,7 @@
 # to run as part of the original build process, but only on master.
 mkdir /tmp/bottles
 
+if [ "$CIRCLE_BRANCH" != "master" ] && [ "$CHANGED_FORMULAE" != "" ]; then
 pushd /tmp/bottles
   BOTTLE_ROOT=https://dl.bintray.com/homebrew-osgeo/osgeo-bottles
   for f in ${CHANGED_FORMULAE};do
@@ -49,3 +50,4 @@ pushd /tmp/bottles
   done
   ls
 popd
+fi

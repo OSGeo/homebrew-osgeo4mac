@@ -18,7 +18,7 @@
 set -e
 
 ulimit -n 1024
-
+if [ "$CIRCLE_BRANCH" != "master" ] && [ "$CHANGED_FORMULAE" != "" ]; then
 # fix error: 'libintl.h' file not found
 brew unlink gettext && brew link --force gettext
 
@@ -52,3 +52,4 @@ for f in ${CHANGED_FORMULAE};do
   # brew postinstall ${f}
   brew test ${TRAVIS_REPO_SLUG}/${f}
 done
+fi

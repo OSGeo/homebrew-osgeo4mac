@@ -19,6 +19,22 @@ set -e
 
 if [ "$CIRCLE_BRANCH" == "master" ] && [ "$CHANGED_FORMULAE" != "" ]; then
 
+  echo "Download bottles from artifacts..."
+  # echo "${CIRCLE_BUILD_NUM}" > "build-num-${CHANGED_FORMULAE}.txt"
+  # curl -X PUT -T "build-num-${BUILT_BOTTLES}.txt" -u ${BINTRAY_USER}:${BINTRAY_API} -H "X-Bintray-Publish: 1" https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles/bottles/0.1/
+  wget --content-disposition --trust-server-names -i https://dl.bintray.com/homebrew-osgeo/osgeo-bottles/build-num-${CHANGED_FORMULAE}.txt
+  # use ggprep instead of gprep
+  brew install grep
+  # BUILD_NUM=$(ggrep -Po "(\d+\.)+(\d+\.)+\d" build-num-${BUILT_BOTTLES}.txt | head -n 1)
+  BUILD_NUM=$(ggrep -Po "(\d+\d)" build-num-${CHANGED_FORMULAE}.txt | head -n 1)
+  echo "Build: $BUILD_NUM"
+  # curl https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/$CIRCLE_BUILD_NUM/artifacts?circle-token=$CIRCLE_TOKEN
+  curl https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/$BUILD_NUM/artifacts?circle-token=$CIRCLE_TOKEN | grep -o 'https://[^"]*' > bottles.txt
+  # curl https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/latest/artifacts | grep -o 'https://[^"]*' > /tmp/workspace/bottles/bottles.txt
+  wget --content-disposition --trust-server-names -i /tmp/workspace/bottles/bottles.txt
+  cat /tmp/workspace/bottles/bottles.txt
+  ls /tmp/workspace/bottles
+
   # Setup Git configuration
   COMMIT_USER=$(git log --format='%an' ${CIRCLE_SHA1}^\!)
   COMMIT_EMAIL=$(git log --format='%ae' ${CIRCLE_SHA1}^\!)

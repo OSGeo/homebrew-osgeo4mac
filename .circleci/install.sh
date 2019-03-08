@@ -17,7 +17,7 @@
 
 set -e
 ulimit -n 1024
-
+if [ "$CIRCLE_BRANCH" != "master" ] && [ "$CHANGED_FORMULAE" != "" ]; then
 for f in ${CHANGED_FORMULAE};do
   echo "Installing dependencies for changed formula ${f}..."
   FLAGS="--only-dependencies --build-bottle"
@@ -35,3 +35,4 @@ for f in ${CHANGED_FORMULAE};do
     fi
   done
 done
+fi
