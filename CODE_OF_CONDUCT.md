@@ -2,9 +2,7 @@
 
 This code of conduct governs how we behave in any OSGeo forum or event and whenever we will be judged by our actions. We expect it to be honored by everyone who participates in the OSGeo community formally or informally, or claims any affiliation with the OSGeo Foundation.
 
-Version: 1.0
-
-Date: May 2015
+Version: 1.0 | Date: May 2015
 
 ### Introduction
 
@@ -22,37 +20,33 @@ OSGeo welcomes and encourages participation by everyone. We are committed to bei
 
 We strive to:
 
-* Be open.
+* **Be open**.
 
-  We invite anyone to participate in our community. We preferably use public methods of communication for project-related messages, unless discussing something sensitive. This applies to messages for help or project-related support, too; not only is a public support request much more likely to result in an answer to a question, it also makes sure that any inadvertent mistakes made by people answering will be more easily detected and corrected.
+  We invite anyone to participate in our community. We preferably use **public methods of communication** for project-related messages, unless discussing something sensitive. This applies to messages for help or project-related support, too; not only is a public support request much more likely to result in an answer to a question, it also makes sure that any inadvertent mistakes made by people answering will be more easily detected and corrected.
 
-* Be empathetic, welcoming, friendly, and patient.
+* **Be empathetic, welcoming, friendly, and patient**.
 
-  We work together to resolve conflict, assume good intentions, and do our best to act in an empathetic fashion. We may all experience some frustration from time to time, but we do not allow frustration to turn into a personal attack. A community where people feel uncomfortable or threatened is not a productive one. Note that we have a multi-cultural, multi-lingual community and some of us are non-native speakers. We should be respectful when dealing with other community members as well as with people outside our community.
+  We work together to resolve conflict, assume good intentions, and do our best to act in an empathetic fashion. We may all experience some frustration from time to time, but we do not allow frustration to turn into a personal attack. A community where people feel uncomfortable or threatened is not a productive one. Note that we have a multi-cultural, multi-lingual community and some of us are non-native speakers. We should **be respectful when dealing with other community members as well as with people outside our community**.
 
-* Be collaborative.
+* **Be collaborative**.
 
   Our work will be used by other people, and in turn we will depend on the work of others. When we make something for the benefit of OSGeo, we are willing to explain to others how it works, so that they can build on the work to make it even better. Any decision we make will affect users and colleagues, and we take those consequences seriously when making decisions.
 
-* Be inquisitive.
+* **Be inquisitive**.
 
-  Nobody knows everything! Asking questions early avoids many problems later, so questions are encouraged, though they may be directed to the appropriate forum. Those who are asked should be responsive and helpful, within the context of our shared goal of improving OSGeo.
+  **Nobody knows everything!** Asking questions early avoids many problems later, so questions are encouraged, though they may be directed to the appropriate forum. Those who are asked should be responsive and helpful, within the context of our shared goal of improving OSGeo.
 
-* Be careful in the words that we choose.
+* **Be careful in the words that we choose**.
 
   Whether we are participating as professionals or volunteers, we value professionalism in all interactions, and take responsibility for our own speech. Be kind to others. Do not insult or put down other participants.
 
-* Be concise
+* **Be concise**.
 
-  Keep in mind that what you write once will be read by hundreds of persons. Writing a short email means people can understand the conversation as efficiently as possible. Short emails should always strive to be empathetic, welcoming, friendly and patient. When a long explanation is necessary, consider adding a summary.
+  Keep in mind that what you write once will be read by hundreds of persons. Writing a **short** email means people can understand the conversation as efficiently as possible. Short emails should always strive to be empathetic, welcoming, friendly and patient. When a long explanation is necessary, consider adding a summary.
 
+* **Step down considerately**.
 
-
-
-
-* Step down considerately.
-
-  Members of every project come and go. When somebody leaves or disengages from the project they should tell people they are leaving and take the proper steps to ensure that others can pick up where they left off. In doing so, they should remain respectful of those who continue to participate in the project and should not misrepresent the project’s goals or achievements. Likewise, community members should respect any individual’s choice to leave the project.
+  Members of every project come and go. When somebody leaves or disengages from the project they should tell people they are leaving and take the **proper steps to ensure that others can pick up where they left off**. In doing so, they should remain respectful of those who continue to participate in the project and should not misrepresent the project’s goals or achievements. Likewise, community members should respect any individual’s choice to leave the project.
 
 ### Anti-Harassment
 
@@ -77,8 +71,4 @@ If you believe someone is breaking this code of conduct, you may reply to them, 
 
 All OSGeo projects and events should reference this Code of Conduct using text similar to:
 
-*Participants at <event> are expected to act respectfully toward others in accordance with the http://www.osgeo.org/code_of_conduct.*
-
-or
-
-*Contributors to <project> are expected to act respectfully toward others in accordance with the http://www.osgeo.org/code_of_conduct.*
+*Contributors to homebrew-osgeo4mac project are expected to act respectfully toward others in accordance with the http://www.osgeo.org/code_of_conduct.*
