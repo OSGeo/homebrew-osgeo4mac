@@ -2,13 +2,13 @@ namespace :search do
   desc 'Generate the files needed for search functionality'
   task :init do
     puts 'Creating search data json file...'
-    mkdir_p 'assets/js'
-    touch 'assets/js/search-data.json'
+    mkdir_p '/assets/js'
+    touch '/assets/js/search-data.json'
     content = %Q[{{ page.content | markdownify | strip_html | escape_once | remove: 'Table of contents' | remove: '```'  | remove: '---' | replace: '\\', ' ' | normalize_whitespace }}]
     puts 'Done.'
     puts 'Generating content...'
 
-    File.open('assets/js/search-data.json', 'w') do |f|
+    File.open('/assets/js/search-data.json', 'w') do |f|
       f.puts '---
 ---
 {

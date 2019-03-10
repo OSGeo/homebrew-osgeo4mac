@@ -5,13 +5,13 @@ description: "This is the homebrew's tap for the stable versions of the OSGeo ge
 permalink: /
 ---
 
-![](assets/images/osgeo-logo-brew-rgb.png)
+![](/assets/images/osgeo-logo-brew-rgb.png)
 
 <p class="fs-7 text-center"><b>Welcomed to the Homebrew OSGeo documentation page</b></p>
 
 First, and foremost, please read below. 
 
-![](assets/images/important-notice.png){: .d-block .mx-auto width="300"}
+![](/assets/images/important-notice.png){: .d-block .mx-auto width="300"}
 
 We are currently doing reforms in the tap trying to improve and make it easier to use it. Right now, our main aim is to create a QGIS formula to generate a bottle on the server that will install a complete QGIS version with all the standard plugins, plus some nice additions. All without the need by the end user to build QGIS  in their local machine. 
 
@@ -23,6 +23,6 @@ Not to mention that we are running into some trouble at the moment and we are pr
 
 If you are interested in collaborating more close with us in the repo maintenance, formula development or just have an idea to take this tap further, please tell us. Any help, idea or suggestion is really welcomed because we want this top to be useful to people that are interested into use QGIS and the rest of the OSGeo toolset on macOS. 
 
-In addition to the normal communication over the issue tracker in this repo we also have a have a [slack ![](assets/images/slack-icon-24px.png) workplace](https://homebrew-osgeo4mac.slack.com/) were we discuss repo matters in a more dynamic way. If you want to join us, because you are interested into collaborate in the discussion please tell us. 
+In addition to the normal communication over the issue tracker in this repo we also have a have a [slack ![](/assets/images/slack-icon-24px.png) workplace](https://homebrew-osgeo4mac.slack.com/) were we discuss repo matters in a more dynamic way. If you want to join us, because you are interested into collaborate in the discussion please tell us. 
 
 **Thanks!** 🙏
