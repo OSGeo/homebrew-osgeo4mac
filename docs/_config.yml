@@ -15,8 +15,8 @@
 # in the templates via {{ site.myvariable }}.
 title: OSGeo
 description: A page for documentation
-baseurl: "/homebrew-osgeo4mac/" # the subpath of your site, e.g. /blog
-url: "https://osgeo.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "https://osgeo.github.io/homebrew-osgeo4mac" # the base hostname & protocol for your site, e.g. http://example.com
 
 permalink: pretty
 exclude: ["node_modules/", "*.gemspec", "*.gem", "Gemfile", "Gemfile.lock", "package.json", "package-lock.json",  "script/", "LICENSE.txt", "lib/", "bin/", "README.md", "Rakefile"]
