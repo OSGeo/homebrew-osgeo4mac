@@ -1,4 +1,6 @@
-![docs/assets/osgeo-logo-brew-rgb.png](docs/assets/osgeo-logo-brew-rgb.png)
+![docs/assets/images/osgeo-logo-brew-rgb.png](docs/assets/images/osgeo-logo-brew-rgb.png)
+
+
 
 # Homebrew-osgeo4mac
 
@@ -19,7 +21,7 @@ $ brew install https://raw.githubusercontent.com/OSGeo/homebrew-osgeo4mac/master
 
 ## Docs
 
-Run `brew help`, `man brew`, check the [Homebrew documentation][] or the [tap documentation][osgeo4mac-docs].
+Run `brew help`, `man brew`, check the [Homebrew documentation](https://github.com/Homebrew/brew/tree/master/docs#readme) or the [tap documentation][osgeo4mac-docs].
 
 ## Help wanted :sos:
 
