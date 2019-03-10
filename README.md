@@ -19,9 +19,7 @@ $ brew install https://raw.githubusercontent.com/OSGeo/homebrew-osgeo4mac/master
 
 ## Docs
 
-Run `brew help`, `man brew`, or check the Homebrew [documentation][].
-
-
+Run `brew help`, `man brew`, check the [Homebrew documentation][] or the [tap documentation][osgeo4mac-docs].
 
 
 
@@ -34,3 +32,4 @@ Run `brew help`, `man brew`, or check the Homebrew [documentation][].
 [qgis]: https://www.qgis.org
 [homebrew-core]: https://github.com/Homebrew/homebrew-core
 [taps-docs]: https://docs.brew.sh/Taps
+[osgeo4mac-docs]: https://osgeo.github.io/homebrew-osgeo4mac/
