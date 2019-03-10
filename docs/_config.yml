@@ -13,21 +13,41 @@
 # you will see them accessed via {{ site.title }}, {{ site.github_repo }}, and so on.
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
-title: OSGeo
-description: A page for documentation
-baseurl: "/homebrew-osgeo4mac/" # the subpath of your site, e.g. /blog
-url: "https://osgeo.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+title: Homebrew OSGeo4mac Docs
+description: This is the doc's page for the Homebrew's OSGeo4mac tap
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "https://osgeo.github.io/homebrew-osgeo4mac" # the base hostname & protocol for your site, e.g. http://example.com
 
 permalink: pretty
-exclude: ["node_modules/", "*.gemspec", "*.gem", "Gemfile", "Gemfile.lock", "package.json", "package-lock.json",  "script/", "LICENSE.txt", "lib/", "bin/", "README.md", "Rakefile"]
+exclude: 
+  - node_modules/
+  - "*.gemspec"
+  - "*.gem"
+  - Gemfile
+  - Gemfile.lock
+  - package.json
+  - package-lock.json
+  - script/
+  - LICENSE.txt
+  - lib/	
+  - bin/	
+  - README.md
+  - Rakefile
+
+plugins: 
+  - jemoji
+  - jekyll-include-cache
 
 # Enable or disable the site search
 search_enabled: true
 
 # Aux links for the upper right navigation
 aux_links:
-  "Docs on Wiki":
-    - "//github.com/OSGeo/homebrew-osgeo4mac/wiki"
+  "Homebrew's OSGeo4mac on GitHub":
+    - "//github.com/OSGeo/homebrew-osgeo4mac/"
+
+footer_text: "If you have any question or problem please open an 
+[issue](https://github.com/OSGeo/homebrew-osgeo4mac/issues/new/choose) to contact the maintainers."
 
 # Color scheme currently only supports "dark" or nil (default)
 color_scheme: nil

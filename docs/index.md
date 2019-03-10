@@ -5,34 +5,24 @@ description: "This is the homebrew's tap for the stable versions of the OSGeo ge
 permalink: /
 ---
 
-## Welcomed to the Homebrew OSGeo Page for documentation.
+![](/assets/images/osgeo-logo-brew-rgb.png)
+
+<p class="fs-7 text-center"><b>Welcomed to the Homebrew OSGeo documentation page</b></p>
+
+First, and foremost, please read below. 
+
+![](/assets/images/important-notice.png){: .d-block .mx-auto width="300"}
+
+We are currently doing reforms in the tap trying to improve and make it easier to use it. Right now, our main aim is to create a QGIS formula to generate a bottle on the server that will install a complete QGIS version with all the standard plugins, plus some nice additions. All without the need by the end user to build QGIS  in their local machine. 
+
+Not to mention that we are running into some trouble at the moment and we are probably going to make you run in some too. We apologize for all the problems and we hope in the following weeks everything go to normal. 
 
 ------
 
-This is the [homebrew's][homebrew] tap for the **stable** versions of the [OSGeo][osgeo] geospatial toolset. Right now our main focus is to provide and up-to-date [QGIS][qgis] formulae easy to install to the end user. The tap includes formulae that may not be specifically from an OSGeo project, but do extend the toolset's functionality.
+## Help wanted :sos:
 
-## How do I install these formulae?
+If you are interested in collaborating more close with us in the repo maintenance, formula development or just have an idea to take this tap further, please tell us. Any help, idea or suggestion is really welcomed because we want this top to be useful to people that are interested into use QGIS and the rest of the OSGeo toolset on macOS. 
 
-Just `brew tap osgeo/osgeo4mac` and then `brew install <formula>`. Easy, isn't it?
+In addition to the normal communication over the issue tracker in this repo we also have a have a [slack ![](/assets/images/slack-icon-24px.png) workplace](https://homebrew-osgeo4mac.slack.com/) were we discuss repo matters in a more dynamic way. If you want to join us, because you are interested into collaborate in the discussion please tell us. 
 
-You can also install via URL:
-
-```shell
-$ brew install https://raw.githubusercontent.com/OSGeo/homebrew-osgeo4mac/master/Formula/<formula>.rb
-```
-
-## Docs
-
-Run `brew help`, `man brew`, or check the Homebrew [documentation][].
-
-[homebrew]:http://brew.sh
-[taps]:https://github.com/Homebrew/homebrew-versions
-[documentation]:https://github.com/Homebrew/brew/tree/master/docs#readme
-[osgeo]: https://www.osgeo.org
-[qgis]: https://www.qgis.org
-[homebrew-core]: https://github.com/Homebrew/homebrew-core
-[taps-docs]: https://docs.brew.sh/Taps
-
-
-
-**Build Status**: [![CircleCI](https://circleci.com/gh/OSGeo/homebrew-osgeo4mac.svg?style=svg)](https://circleci.com/gh/OSGeo/homebrew-osgeo4mac)
+**Thanks!** 🙏

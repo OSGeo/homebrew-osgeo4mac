@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Developing on QGIS using OSGeo4Mac
-nav_order: 3
+nav_order: 4
 ---
 
 # Developing on QGIS using OSGeo4Mac
@@ -145,11 +145,7 @@ The scripts will be used when configuring the QGIS project in Qt Creator.
 
 * Define Homebrew's Qt as an available version:
 
-  ![Qt Creator Qt Versions](http://drive.dakotacarto.com/osgeo4mac/QtCreator_osgeo4mac_QtVersions_8bA.png)
-
 * Define a new Kit that uses Homebrew's Qt
-
-  ![Qt Creator Kit](http://drive.dakotacarto.com/osgeo4mac/QtCreator_osgeo4mac_Kits_8bA.png)
 
   If the Xcode Command Line Tools are installed properly, and on Mac OS X 10.9, the LLDB debugger should be found. If not, you may have to locate it.
 
@@ -161,8 +157,6 @@ The scripts will be used when configuring the QGIS project in Qt Creator.
 
 * Select `File -> Open File or Project...` and browse/open `/path/to/source/of/QGIS/CMakeLists.txt` which opens the CMake Wizard:
 
-  ![Qt Creator CMake Wizard](http://drive.dakotacarto.com/osgeo4mac/QtCreator_osgeo4mac_QGIS-CMakeWizard_8bA.png)
-
 * Run `qgis-cmake-options.py` (ensure HOMEBREW_PREFIX environment variable is set) and paste the result in the **Arguments:** field.
 
 * Generate the Unix Makefiles. If there are errors, they will have to be resolved, or the project can not be initialized and opened.
@@ -172,8 +166,6 @@ The scripts will be used when configuring the QGIS project in Qt Creator.
 Once the project has been initialized, you need to set up the build steps for the QGIS source. While the scripts are not necessary, they reduce the number of build steps needed and simplify building QGIS outside of Qt Creator as well. If you forgo the scripts, you will need to investigate them in order to help set up your own custom build steps.
 
 * Configure project with environment variables and to use the build and install scripts:
-
-  ![Qt Creator Project](http://drive.dakotacarto.com/osgeo4mac/QtCreator_osgeo4mac_QGIS-Project_8bA.png)
 
   The `make staged-plugins-pyc` (`-j #` is the number of available CPU cores) command stages/installs the core Python plugins to the build directory, so you can run QGIS.app directly from there, without having to run `make install`. It is a separate step to limit what needs rebuilt when editing on core files, which only require rebuilding with the build script once the core plugins have been staged. There is no need to re-stage the core plugins unless something about them has changed.
 
@@ -186,8 +178,6 @@ Once the project has been initialized, you need to set up the build steps for th
 ## Build QGIS
 
 Select the `all` target and click **Build Project "qgis-x.x.x"**. (Showing the **Compile Output** tab allows log output of the build.)
-
-![Qt Creator Build](http://drive.dakotacarto.com/osgeo4mac/QtCreator_osgeo4mac_QGIS-Build_8bA.png)
 
 Unless the source code is unstable, you do not have to `make install`. If the core plugins are staged with `make staged-plugins` or `make staged-plugins-pyc` after the build, you should be able to run the QGIS.app directly from the build directory.
 
@@ -222,19 +212,13 @@ The unit tests do not have a complete success rate across all platforms. See [QG
 
 * Consider adding `qgis-cmake-options.py` as an external tool in Qt Creator:
 
-  ![CMake Options Tool](http://drive.dakotacarto.com/osgeo4mac/QtCreator_osgeo4mac_QGIS-CMakeOptions_8bA.png)
-
 * Consider adding `prepare-commit.sh` as an external tool in Qt Creator:
-
-  ![Qt Creator Prepare Commit](http://drive.dakotacarto.com/osgeo4mac/QtCreator_osgeo4mac_QGIS-PrepareCommit_8bA.png)
 
   If you have done an initial build using CMake option `-D WITH_ASTYLE=TRUE` (default for `qgis-cmake-options.py`) then a `qgisstyle` utility was built and installed to `/path/to/source/of/QGIS/scripts` and the `prepare-commit.sh` script can be used to clean up staged changes _prior_ to committing to locally cloned repository. This fixes up your code and makes it meet syntax guidelines. It is highly recommended you do this prior to your commits that will comprise pull requests to the QGIS project.
 
 ## PyCharm Configuration
 
 You can add the `qgis.core`, `qgis.gui`, etc. modules' parent path to the `sys.path` of your PyCharm project's Python interpreter (here using Homebrew's Python):
-
-![PyCharm qgis modules](http://drive.dakotacarto.com/osgeo4mac/QtCreator_osgeo4mac_QGIS-PyCharm_8bA.png)
 
 You will need to add the following `/path/to/QGIS/build/dir/output/python` to access the `qgis` modules.
 

@@ -4,6 +4,8 @@ title: Installing QGIS 3
 nav_order: 1
 ---
 
+![](/assets/images/qgis3-logo.png)
+
 # Installing QGIS 3
 
 To install the last version of QGIS 3 you just have to run in your terminal `brew install qgis`. Running this command in your terminal you download and install a precompiled [bottle](https://docs.brew.sh/Bottles) of QGIS 3 build with most of the available options. Check below the options with the bottle is build.
@@ -108,5 +110,7 @@ $ brew unlink gettext python && brew link --force gettext python
 ```
 
 ## Mind the CI
+
+**Build status**: [![CircleCI](https://circleci.com/gh/OSGeo/homebrew-osgeo4mac.svg?style=svg)](https://circleci.com/gh/OSGeo/homebrew-osgeo4mac)
 
 You have to keep in mind that if the bottle is able to build in our building server —aka CI— and it isn't able to to build or install in your machine, the problem is probably related to your local environment. We can help, but we don't promise anything. You can check the state of the build on the readme file, but you have to keep in mind, also, that some times the state is marked as failed by an error unrelated to the build, but to the deployment. Usually it can't upload the bottles to the bottle server and we upload them manually.
