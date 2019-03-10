@@ -34,6 +34,9 @@ exclude:
   - README.md
   - Rakefile
 
+plugins: 
+  - jemoji
+  - jekyll-include-cache
 
 # Enable or disable the site search
 search_enabled: true
