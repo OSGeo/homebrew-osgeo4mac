@@ -15,8 +15,8 @@
 # in the templates via {{ site.myvariable }}.
 title: Homebrew OSGeo4mac Docs
 description: This is the doc's page for the Homebrew's OSGeo4mac tap
-baseurl: # the subpath of your site, e.g. /blog
-url: https://osgeo.github.io/homebrew-osgeo4mac # the base hostname & protocol for your site, e.g. http://example.com
+baseurl: "/homebrew-osgeo4mac" # the subpath of your site, e.g. /blog
+url: "https://osgeo.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 
 permalink: pretty
 exclude: 
