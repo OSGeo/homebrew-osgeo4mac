@@ -21,7 +21,7 @@ Not to mention that we are running into some trouble at the moment and we are pr
 
 ------
 
-### :sos: Help wanted
+## :sos: Help wanted
 
 If you are interested in collaborating more close with us in the repo maintenance, formula development or just have an idea to take this tap further, please tell us. Any help, idea or suggestion is really welcomed because we want this top to be useful to people that are interested into use QGIS and the rest of the OSGeo toolset on macOS. 
 
