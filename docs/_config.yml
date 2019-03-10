@@ -46,6 +46,9 @@ aux_links:
   "Homebrew's OSGeo4mac on GitHub":
     - "//github.com/OSGeo/homebrew-osgeo4mac/"
 
+footer_text: "If you have any question or problem please open an 
+[issue](https://github.com/OSGeo/homebrew-osgeo4mac/issues/new/choose) to contact the maintainers."
+
 # Color scheme currently only supports "dark" or nil (default)
 color_scheme: nil
 
