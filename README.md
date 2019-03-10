@@ -21,8 +21,11 @@ $ brew install https://raw.githubusercontent.com/OSGeo/homebrew-osgeo4mac/master
 
 Run `brew help`, `man brew`, check the [Homebrew documentation][] or the [tap documentation][osgeo4mac-docs].
 
+## Help wanted :sos:
 
+If you are interested in collaborating more close with us in the repo maintenance, formula development or just have an idea to take this tap further, please tell us. Any help, idea or suggestion is really welcomed because we want this top to be useful to people that are interested into use QGIS and the rest of the OSGeo toolset on macOS. 
 
+In addition to the normal communication over the issue tracker in this repo we also have a have a slack  workplace were we discuss repo matters in a more dynamic way. If you want to join us, because you are interested into collaborate in the discussion please tell us. 
 
 
 [homebrew]:http://brew.sh
