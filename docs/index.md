@@ -5,9 +5,7 @@ description: "This is the homebrew's tap for the stable versions of the OSGeo ge
 permalink: /
 ---
 
-<p class="fs-6 text-center"><b>Welcomed to the Homebrew OSGeo documentation page</b></p>
-
-First, and foremost, please read below. 
+<p class="fs-8 text-center"><b>Homebrew OSGeo documentation page</b></p>
 
 <div markdown="1">
 important
@@ -23,7 +21,7 @@ Not to mention that we are running into some trouble at the moment and we are pr
 
 ------
 
-### Help wanted :sos:
+### :sos: Help wanted
 
 If you are interested in collaborating more close with us in the repo maintenance, formula development or just have an idea to take this tap further, please tell us. Any help, idea or suggestion is really welcomed because we want this top to be useful to people that are interested into use QGIS and the rest of the OSGeo toolset on macOS. 
 
