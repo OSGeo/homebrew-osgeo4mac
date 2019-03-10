@@ -11,7 +11,7 @@ permalink: /
 
 First, and foremost, please read below. 
 
-<p align="center"><img align="center" width="300" src="/assets/images/important-notice.png"></p>
+![](/assets/images/important-notice.png){: .d-block .mx-auto width="300"}
 
 We are currently doing reforms in the tap trying to improve and make it easier to use it. Right now, our main aim is to create a QGIS formula to generate a bottle on the server that will install a complete QGIS version with all the standard plugins, plus some nice additions. All without the need by the end user to build QGIS  in their local machine. 
 
