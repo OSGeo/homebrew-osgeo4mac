@@ -41,7 +41,13 @@ Steps to reproduce the behavior:
 
 **Additional context**
 
-<!-- Please provide any relevant information about your setup. This is important in case the issue is not reproducible except for under certain conditions. -->
+<!-- Please provide any relevant information about your setup. This is important in case the issue is not reproducible except for under certain conditions. Run a `brew doctor` and paster the output below could be a good idea. -->
+
+`brew doctor` output: 
+
+```shell
+# paste here the output of your brew doctor output. Delete this line please. 
+```
 
 **Logs**
 
