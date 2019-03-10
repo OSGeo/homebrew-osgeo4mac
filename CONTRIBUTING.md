@@ -11,7 +11,7 @@ First time contributing to Homebrew-osgeo4mac? Read our [Code of Conduct](CODE_O
 * Read [the Hombrew Troubleshooting Checklist](https://docs.brew.sh/Troubleshooting). 
 * Read the how to [report issues](https://github.com/OSGeo/homebrew-osgeo4mac/wiki/Reporting-issues) and the [troubleshooting](https://github.com/OSGeo/homebrew-osgeo4mac/wiki/Troubleshooting).  
 * [Search](https://github.com/OSGeo/homebrew-osgeo4mac/issues) for same issue or similar to yours in the repo. 
-* If there is no similar issue, open or closed, [open an issue](https://github.com/OSGeo/homebrew-osgeo4mac/issues/new) on the repo.
+* If there is no similar issue, open or closed, [open an issue](https://github.com/OSGeo/homebrew-osgeo4mac/issues/new/choose) on the repo.
 
 ### To submit a version upgrade for the `foo` formula
 
