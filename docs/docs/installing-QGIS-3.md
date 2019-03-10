@@ -4,7 +4,7 @@ title: Installing QGIS 3
 nav_order: 1
 ---
 
-![](/assets/images/qgis3-logo.png)
+![](assets/images/qgis3-logo.png)
 
 # Installing QGIS 3
 

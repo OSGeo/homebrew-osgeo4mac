@@ -6,8 +6,9 @@
   {% endif %}
 
   <title>{{ page.title }} - {{ site.title }}</title>
-  <link rel="stylesheet" href="{{ "/assets/css/just-the-docs.css" | absolute_url }}">
-  <link rel="shortcut icon" type="image/png" href="{{ "/assets/images/favicon.png" | absolute_url }}">
+  <link rel="stylesheet" href="{{ "assets/css/just-the-docs.css" | absolute_url }}">
+  <link rel="shortcut icon" type="image/png" href="{{ "assets/images/favicon.png" | absolute_url }}">
+  <base href="{{ site.url }}{{ site.baseurl }}">
 
   {% if site.ga_tracking != nil %}
     <script>
@@ -19,9 +20,9 @@
   {% endif %}
 
   {% if site.search_enabled != nil %}
-    <script type="text/javascript" src="{{ "/assets/js/vendor/lunr.min.js" | absolute_url }}"></script>
+    <script type="text/javascript" src="{{ "assets/js/vendor/lunr.min.js" | absolute_url }}"></script>
   {% endif %}
-  <script type="text/javascript" src="{{ "/assets/js/just-the-docs.js" | absolute_url }}"></script>
+  <script type="text/javascript" src="{{ "assets/js/just-the-docs.js" | absolute_url }}"></script>
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
