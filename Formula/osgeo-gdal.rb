@@ -243,6 +243,8 @@ class OsgeoGdal < Formula
       # Just using --enable-pdf-plugin isn't enough (we don't want the plugin built here)
       inreplace "GDALmake.opt.in", "PDF_PLUGIN),yes", "PDF_PLUGIN),no"
 
+      args = configure_args
+
       system "./configure", *args
       system "make"
       system "make", "install"
