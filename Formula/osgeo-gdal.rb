@@ -57,6 +57,8 @@ class OsgeoGdal < Formula
   depends_on "swig"
   depends_on "mdbtools"
   depends_on "libzip"
+  depends_on "openssl"
+  depends_on "cryptopp"
   # depends_on "charls" # Cask
 
   if build.with?("postgresql10")
@@ -141,10 +143,10 @@ class OsgeoGdal < Formula
       "--with-ingres=no",
       "--with-xerces=#{Formula["xerces-c"].opt_prefix}",
       "--with-xerces-inc=#{Formula["xerces-c"].opt_include}",
-      "--with-xerces-lib=#{Formula["xerces-c"].opt_lib}",
+      "--with-xerces-lib=#{Formula["xerces-c"].opt_lib}/libxerces-c-3.2.dylib",
       "--with-expat=#{Formula["expat"].opt_prefix}",
       "--with-expat-inc=#{Formula["expat"].opt_include}",
-      "--with-expat-lib=#{Formula["expat"].opt_lib}",
+      "--with-expat-lib=#{Formula["expat"].opt_lib}/libexpat.dylib",
       # "--with-libkml=#{Formula["libkml-dev"].opt_prefix}",
       # "--with-libkml-inc=#{Formula["libkml-dev"].opt_include}",
       # "--with-libkml-lib=#{Formula["libkml-dev"].opt_lib}",
@@ -170,7 +172,7 @@ class OsgeoGdal < Formula
       "--with-opencl",
       # "--with-opencl-include",
       # "--with-opencl-lib",
-      # "--with-freexl=#{Formula["freexl"].opt_prefix}",
+      "--with-freexl=#{Formula["freexl"].opt_prefix}",
       "--with-libjson-c=#{Formula["json-c"].opt_prefix}",
       # "--without-pam",
       "--with-poppler=no",
@@ -181,7 +183,7 @@ class OsgeoGdal < Formula
       # "--with-pdfium-lib",
       # "--with-pdfium-extra-lib-for-test",
       # "--with-gdal-ver",
-      "--with-macosx-framework",
+      # "--with-macosx-framework",
       "--with-perl=no",
       "--with-python=no",
       "--with-java=yes",
@@ -192,7 +194,7 @@ class OsgeoGdal < Formula
       # "--with-rasdaman=no",
       "--with-armadillo=#{Formula["armadillo"].opt_prefix}",
       "--with-cryptopp=#{Formula["cryptopp"].opt_prefix}",
-      "--with-crypto=#{Formula["openssl"].opt_prefix}",
+      "--with-crypto=yes",
       "--without-lerc",
       # "--with-null",
       # "--without-php",
