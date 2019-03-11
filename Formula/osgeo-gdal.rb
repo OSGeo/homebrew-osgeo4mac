@@ -35,7 +35,7 @@ class OsgeoGdal < Formula
   depends_on "libtiff"
   depends_on "proj"
   depends_on "numpy"
-  depends_on "libkml-dev"
+  # depends_on "libkml-dev"
   depends_on "armadillo"
   depends_on "sfcgal"
   depends_on "netcdf"
@@ -145,9 +145,9 @@ class OsgeoGdal < Formula
       "--with-expat=#{Formula["expat"].opt_prefix}",
       "--with-expat-inc=#{Formula["expat"].opt_include}",
       "--with-expat-lib=#{Formula["expat"].opt_lib}",
-      "--with-libkml=#{Formula["libkml-dev"].opt_prefix}",
-      "--with-libkml-inc=#{Formula["libkml-dev"].opt_include}",
-      "--with-libkml-lib=#{Formula["libkml-dev"].opt_lib}",
+      # "--with-libkml=#{Formula["libkml-dev"].opt_prefix}",
+      # "--with-libkml-inc=#{Formula["libkml-dev"].opt_include}",
+      # "--with-libkml-lib=#{Formula["libkml-dev"].opt_lib}",
       "--with-odbc=#{Formula["unixodbc"].opt_prefix}",
       "--with-dods-root=/usr/local",
       "--with-curl=#{Formula["curl"].opt_bin}/curl-config",
