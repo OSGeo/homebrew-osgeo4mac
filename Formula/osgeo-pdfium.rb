@@ -8,6 +8,14 @@ class OsgeoPdfium < Formula
 
   revision 1
 
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    cellar :any_skip_relocation
+    sha256 "0ade6a9309d78ff85232cd3482bbc62cba37a7ebb429e89987ab7760a47cf50c" => :mojave
+    sha256 "0ade6a9309d78ff85232cd3482bbc62cba37a7ebb429e89987ab7760a47cf50c" => :high_sierra
+    sha256 "1291540693ad1a91dbccf2979b4e0ea79ec73743958ba28ca657ac2a18c04632" => :sierra
+  end
+
   keg_only "newer version of pdfium may be installed"
 
   depends_on "python@2" => :build # gyp doesn't run under 2.6 or lower
