@@ -15,4 +15,5 @@
   "saga-gis": "saga-gis-lts",
   "qgis3": "qgis",
   "qgis-ltr@2.18": "qgis-ltr@2",
+  "libkml-dev": "osgeo-libkml",
 }
