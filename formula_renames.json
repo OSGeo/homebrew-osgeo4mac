@@ -3,5 +3,6 @@
   "qgis2": "qgis-ltr@2",
   "libkml-dev": "osgeo-libkml",
   "hdf4": "osgeo-hdf4",
+  "fyba": "osgeo-fyba",
   "gdal2": "osgeo-gdal"
 }
