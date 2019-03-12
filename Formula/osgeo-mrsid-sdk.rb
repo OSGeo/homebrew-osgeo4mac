@@ -1,6 +1,6 @@
 require File.expand_path("../../Strategies/cache-download", Pathname.new(__FILE__).realpath)
 
-class MrsidSdk < Formula
+class OsgeoMrsidSdk < Formula
   desc "MrSID format decoder libs for MG4 (raster and LiDAR), MG3, MG2, JP2"
   homepage "https://www.lizardtech.com/developer/"
   url "file://#{HOMEBREW_CACHE}/MrSID_DSDK-9.5.1.4427-darwin14.universal.clang60.tar.gz",
@@ -8,11 +8,13 @@ class MrsidSdk < Formula
   version "9.5.1.4427"
   sha256 "286843f4a22845835a06626327eed67216e403a54e17d8b10a675663d41b9829"
 
+  # revision 1
+
   option "with-bindings", "Include Lidar Python and Ruby bindings"
   option "with-docs", "Intall documentation and examples for SDKs"
 
   # this is an odd one: only needs the share/gdal components
-  depends_on "gdal2" => :build
+  depends_on "osgeo-gdal" => :build
 
   def install
     # first strip unnecessary installs
