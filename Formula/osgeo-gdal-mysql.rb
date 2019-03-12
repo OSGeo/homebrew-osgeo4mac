@@ -65,6 +65,7 @@ class OsgeoGdalMysql < Formula
       to set the following enviroment variable:
 
         export GDAL_DRIVER_PATH=#{HOMEBREW_PREFIX}/lib/gdalplugins
+
     EOS
   end
 
