@@ -4,5 +4,6 @@
   "libkml-dev": "osgeo-libkml",
   "hdf4": "osgeo-hdf4",
   "fyba": "osgeo-fyba",
-  "gdal2": "osgeo-gdal"
+  "gdal2": "osgeo-gdal",
+  "gdal2-sosi": "osgeo-gdal-sosi"
 }
