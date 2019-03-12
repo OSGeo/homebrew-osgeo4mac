@@ -6,7 +6,7 @@ class OsgeoPdfium < Formula
       :revision => "b5009c4df5aa4ff923ede1c5deba1aa4be43199b"
   version "0.0.1"
 
-  # revision 1
+  revision 1
 
   keg_only "newer version of pdfium may be installed"
 
