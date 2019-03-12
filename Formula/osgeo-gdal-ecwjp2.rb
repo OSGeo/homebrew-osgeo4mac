@@ -1,4 +1,4 @@
-class Gdal2Ecwjp2 < Formula
+class OsgeoGdalEcwjp2 < Formula
   desc "GDAL/OGR 2.x plugin for ECW driver"
   homepage "http://www.gdal.org/frmt_ecw.html"
   url "http://download.osgeo.org/gdal/2.4.0/gdal-2.4.0.tar.gz"

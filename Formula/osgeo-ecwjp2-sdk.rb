@@ -16,7 +16,7 @@ class EcwJpeg2000SDK < Requirement
   end
 end
 
-class OssgeoEcwjp2Sdk < Formula
+class OsgeoEcwjp2Sdk < Formula
   desc "Decompression library for ECW- and JPEG2000-compressed imagery"
   homepage "http://www.hexagongeospatial.com/products/provider-suite/erdas-ecw-jp2-sdk"
   url "https://osgeo4mac.s3.amazonaws.com/src/dummy.tar.gz"
