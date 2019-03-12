@@ -4,6 +4,21 @@
   "libkml-dev": "osgeo-libkml",
   "hdf4": "osgeo-hdf4",
   "fyba": "osgeo-fyba",
+  "ogdi": "osgeo-ogdi",
+  "filegdb-api": "osgeo-filegdb-api",
+  "oracle-client-sdk": "osgeo-oracle-client-sdk",
+  "pdfium-gdal2": "osgeo-pdfium",
+  "ecwjp2-sdk": "osgeo-ecwjp2-sdk",
+  "mrsid-sdk": "osgeo-mrsid-sdk",
   "gdal2": "osgeo-gdal",
-  "gdal2-sosi": "osgeo-gdal-sosi"
+  "gdal2-sosi": "osgeo-gdal-sosi",
+  "gdal2-ecwjp2": "osgeo-gdal-ecwjp2",
+  "gdal2-filegdb": "osgeo-gdal-filegdb",
+  "gdal2-mdb": "osgeo-gdal-mdb",
+  "gdal2-mrsid": "osgeo-gdal-mrsid",
+  "gdal2-mysql": "osgeo-gdal-mysql",
+  "gdal2-ogdi": "osgeo-gdal-ogdi",
+  "gdal2-oracle": "osgeo-gdal-oracle",
+  "gdal2-pdf": "osgeo-gdal-pdf",
+  "gdal2-python": "osgeo-gdal-python"
 }

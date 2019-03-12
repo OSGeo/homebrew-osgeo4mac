@@ -1,23 +1,18 @@
-class Gdal2Ogdi < Formula
+class OsgeoGdalOgdi < Formula
   desc "GDAL/OGR 2.x plugin for OGDI driver"
   homepage "http://www.gdal.org/drv_ogdi.html"
   url "http://download.osgeo.org/gdal/2.4.0/gdal-2.4.0.tar.gz"
   sha256 "a568cf3dc7bb203ae12a48e1eb2a42302cded499ef6eccaf9e8f09187d8ce75a"
 
-   bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    cellar :any
-    rebuild 1
-    sha256 "ff632510f24c3707cff5c998cd40c466c60287d81f240ea38ccf50140c702e38" => :mojave
-    sha256 "ff632510f24c3707cff5c998cd40c466c60287d81f240ea38ccf50140c702e38" => :high_sierra
-    sha256 "ff632510f24c3707cff5c998cd40c466c60287d81f240ea38ccf50140c702e38" => :sierra
-  end
+  # revision 1
 
-  depends_on "ogdi"
-  depends_on "gdal2"
+  head "https://github.com/OSGeo/gdal.git", :branch => "master"
+
+  depends_on "osgeo-ogdi"
+  depends_on "osgeo-gdal"
 
   def gdal_majmin_ver
-    gdal_ver_list = Formula["gdal2"].version.to_s.split(".")
+    gdal_ver_list = Formula["osgeo-gdal"].version.to_s.split(".")
     "#{gdal_ver_list[0]}.#{gdal_ver_list[1]}"
   end
 
@@ -27,7 +22,7 @@ class Gdal2Ogdi < Formula
 
   def install
     ENV.cxx11
-    ogdi_opt = Formula["ogdi"].opt_prefix
+    ogdi_opt = Formula["osgeo-ogdi"].opt_prefix
 
     gdal_plugins = lib/gdal_plugins_subdirectory
     gdal_plugins.mkpath
@@ -83,7 +78,7 @@ class Gdal2Ogdi < Formula
 
   test do
     ENV["GDAL_DRIVER_PATH"] = "#{HOMEBREW_PREFIX}/lib/gdalplugins"
-    gdal_opt_bin = Formula["gdal2"].opt_bin
+    gdal_opt_bin = Formula["osgeo-gdal"].opt_bin
     out = shell_output("#{gdal_opt_bin}/ogrinfo --formats")
     assert_match "OGR_OGDI -vector- (ro): OGDI Vectors (VPF, VMAP, DCW)", out
   end

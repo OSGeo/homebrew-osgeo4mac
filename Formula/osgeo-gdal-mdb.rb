@@ -1,15 +1,19 @@
-class Gdal2Mdb < Formula
+class OsgeoGdalMdb < Formula
   desc "GDAL/OGR 2.x plugin for MDB driver"
   homepage "http://www.gdal.org/drv_mdb.html"
   url "http://download.osgeo.org/gdal/2.4.0/gdal-2.4.0.tar.gz"
   sha256 "a568cf3dc7bb203ae12a48e1eb2a42302cded499ef6eccaf9e8f09187d8ce75a"
+
+  # revision 1
+
+  head "https://github.com/OSGeo/gdal.git", :branch => "master"
 
   # bottle do
   #   never (runtime JAVA version may change too much, or be different from Travis CI)
   # end
 
   depends_on :java
-  depends_on "gdal2"
+  depends_on "osgeo-gdal"
   depends_on "libtiff"
   depends_on "libgeotiff"
 
@@ -33,7 +37,7 @@ class Gdal2Mdb < Formula
   end
 
   def gdal_majmin_ver
-    gdal_ver_list = Formula["gdal2"].version.to_s.split(".")
+    gdal_ver_list = Formula["osgeo-gdal"].version.to_s.split(".")
     "#{gdal_ver_list[0]}.#{gdal_ver_list[1]}"
   end
 
@@ -172,7 +176,7 @@ class Gdal2Mdb < Formula
     # puts "JAVA_HOME=#{ENV["JAVA_HOME"]}"
     # puts "CLASSPATH=#{ENV["CLASSPATH"]}"
     ENV["GDAL_DRIVER_PATH"] = "#{HOMEBREW_PREFIX}/lib/gdalplugins"
-    gdal_opt_bin = Formula["gdal2"].opt_bin
+    gdal_opt_bin = Formula["odgeo-gdal"].opt_bin
     system "#{gdal_opt_bin}/ogrinfo", "--format", "MDB"
     resource("test-mdb").stage testpath
     system "#{gdal_opt_bin}/ogrinfo", "-ro", testpath/"Atlantic.mdb".to_s

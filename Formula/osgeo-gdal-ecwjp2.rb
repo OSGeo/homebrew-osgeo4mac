@@ -4,15 +4,19 @@ class Gdal2Ecwjp2 < Formula
   url "http://download.osgeo.org/gdal/2.4.0/gdal-2.4.0.tar.gz"
   sha256 "a568cf3dc7bb203ae12a48e1eb2a42302cded499ef6eccaf9e8f09187d8ce75a"
 
+  # revision 1
+
+  head "https://github.com/OSGeo/gdal.git", :branch => "master"
+
   # bottle do
   #   never
   # end
 
-  depends_on "ecwjp2-sdk"
-  depends_on "gdal2"
+  depends_on "osgeo-ecwjp2-sdk"
+  depends_on "osgeo-gdal"
 
   def gdal_majmin_ver
-    gdal_ver_list = Formula["gdal2"].version.to_s.split(".")
+    gdal_ver_list = Formula["osgeo-gdal"].version.to_s.split(".")
     "#{gdal_ver_list[0]}.#{gdal_ver_list[1]}"
   end
 
@@ -23,7 +27,7 @@ class Gdal2Ecwjp2 < Formula
   def install
     ENV.cxx11
 
-    ecwjp2_opt = Formula["ecwjp2-sdk"].opt_prefix
+    ecwjp2_opt = Formula["osgeo-ecwjp2-sdk"].opt_prefix
     ecwjp2_opt_include = ecwjp2_opt/"include/ECWJP2"
 
     gdal_plugins = lib/gdal_plugins_subdirectory
@@ -68,12 +72,12 @@ class Gdal2Ecwjp2 < Formula
 
   test do
     ENV["GDAL_DRIVER_PATH"] = "#{HOMEBREW_PREFIX}/lib/gdalplugins"
-    gdal_opt_bin = Formula["gdal2"].opt_bin
+    gdal_opt_bin = Formula["osgeo-gdal"].opt_bin
     out = shell_output("#{gdal_opt_bin}/gdalinfo --formats")
     assert_match "ECW -raster- (rov)", out
     assert_match "JP2ECW -raster,vector- (rov)", out
 
-    ecwjp2_test = Formula["ecwjp2-sdk"].opt_prefix/"test"
+    ecwjp2_test = Formula["osgeo-ecwjp2-sdk"].opt_prefix/"test"
     out = shell_output("#{gdal_opt_bin}/gdalinfo #{ecwjp2_test}/RGB_8bit.ecw")
     assert_match "Driver: ECW/ERDAS Compressed Wavelets", out
     assert_match "Size is 4320, 2160", out

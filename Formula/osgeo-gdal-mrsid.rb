@@ -1,18 +1,22 @@
-class Gdal2Mrsid < Formula
+class OsgeoGdalMrsid < Formula
   desc "GDAL/OGR 2 plugin for MrSID raster and LiDAR drivers"
   homepage "http://www.gdal.org/frmt_mrsid.html"
   url "http://download.osgeo.org/gdal/2.4.0/gdal-2.4.0.tar.gz"
   sha256 "a568cf3dc7bb203ae12a48e1eb2a42302cded499ef6eccaf9e8f09187d8ce75a"
 
+  # revision 1
+
+  head "https://github.com/OSGeo/gdal.git", :branch => "master"
+
   # bottle do
   #   never
   # end
 
-  depends_on "mrsid-sdk"
-  depends_on "gdal2"
+  depends_on "osgeo-mrsid-sdk"
+  depends_on "osgeo-gdal"
 
   def gdal_majmin_ver
-    gdal_ver_list = Formula["gdal2"].version.to_s.split(".")
+    gdal_ver_list = Formula["osgeo-gdal"].version.to_s.split(".")
     "#{gdal_ver_list[0]}.#{gdal_ver_list[1]}"
   end
 
@@ -22,7 +26,7 @@ class Gdal2Mrsid < Formula
 
   def install
     ENV.cxx11
-    mrsid_sdk_opt = Formula["mrsid-sdk"].opt_prefix
+    mrsid_sdk_opt = Formula["osgeo-mrsid-sdk"].opt_prefix
 
     gdal_plugins = lib/gdal_plugins_subdirectory
     gdal_plugins.mkpath
@@ -77,7 +81,7 @@ class Gdal2Mrsid < Formula
 
   test do
     ENV["GDAL_DRIVER_PATH"] = "#{HOMEBREW_PREFIX}/lib/gdalplugins"
-    gdal_opt_bin = Formula["gdal2"].opt_bin
+    gdal_opt_bin = Formula["osgeo-gdal"].opt_bin
     out = shell_output("#{gdal_opt_bin}/gdalinfo --formats")
     assert_match "MG4Lidar -raster- (ro)", out
     assert_match "MrSID -raster- (rov)", out

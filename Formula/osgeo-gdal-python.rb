@@ -1,21 +1,6 @@
-class NoGdal2Python < Requirement
-  fatal true
-  satisfy(:build_env => false) { !Gdal2Python.gdal2_py2_exist? && !Gdal2Python.gdal2_py3_exist? }
-
-  def message
-    s = "`gdal2` formula already installed with Python 2 or 3 bindings:\n"
-    s += "  #{Gdal2Python.gdal2_python("python@2")}\n" if Gdal2Python.gdal2_py2_exist?
-    s += "  #{Gdal2Python.gdal2_python("python")}\n" if Gdal2Python.gdal2_py3_exist?
-    s += "`gdal2` install options:\n"
-    s += "  gdal2 #{Gdal2Python.gdal2_opts.to_a.join(" ")}\n"
-    s += "Install latest `gdal2`, which installs no Python bindings:\n"
-    s + "  `brew reinstall gdal2` or `brew upgrade gdal2`"
-  end
-end
-
-class Gdal2Python < Formula
+class OsgeoGdalPython < Formula
   def self.gdal2
-    Formula["gdal2"]
+    Formula["osgeo-gdal"]
   end
 
   def gdal2
@@ -49,28 +34,17 @@ class Gdal2Python < Formula
   url "http://download.osgeo.org/gdal/2.4.0/gdal-2.4.0.tar.gz"
   sha256 "a568cf3dc7bb203ae12a48e1eb2a42302cded499ef6eccaf9e8f09187d8ce75a"
 
-  bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    cellar :any
-    rebuild 1
-    sha256 "c98ea5f15fc6d97c124e7a0afffcb4a28b16bf5649972bdb6456fa8fe264a356" => :mojave
-    sha256 "c98ea5f15fc6d97c124e7a0afffcb4a28b16bf5649972bdb6456fa8fe264a356" => :high_sierra
-    sha256 "c98ea5f15fc6d97c124e7a0afffcb4a28b16bf5649972bdb6456fa8fe264a356" => :sierra
-  end
-  
-  head do
-    url "https://svn.osgeo.org/gdal/trunk/gdal"
-    depends_on "doxygen" => :build
-  end
+  # revision 1
+
+  head "https://github.com/OSGeo/gdal.git", :branch => "master"
 
   keg_only "older version of gdal is in main tap and installs similar components"
 
   depends_on "swig" => :build
-  depends_on "gdal2"
-  depends_on NoGdal2Python
   depends_on "python@2" => :recommended
   depends_on "python" => :recommended
   depends_on "numpy"
+  depends_on "osgeo-gdal"
 
   resource "autotest" do
     url "http://download.osgeo.org/gdal/2.4.0/gdalautotest-2.4.0.tar.gz"

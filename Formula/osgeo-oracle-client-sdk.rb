@@ -1,11 +1,13 @@
 require File.expand_path("../../Strategies/cache-download", Pathname.new(__FILE__).realpath)
 
-class OracleClientSdk < Formula
+class OsgeoOracleClientSdk < Formula
   desc "Oracle database C/C++ client libs, command-line tools and SDK"
   homepage "https://www.oracle.com/technetwork/topics/intel-macsoft-096467.html"
   url "https://osgeo4mac.s3.amazonaws.com/src/dummy.tar.gz"
   version (MacOS.version < :el_capitan) ? "12.1.0.2.0-2" : "12.2.0.1.0-2"
   sha256 "e7776e2ff278d6460300bd69a26d7383e6c5e2fbeb17ff12998255e7fc4c9511"
+
+  # revision 1
 
   option "with-basic", "Install Oracle's Basic client, instead of Basic Lite"
 
