@@ -9,6 +9,14 @@ class OsgeoFilegdbApi < Formula
 
   head "https://github.com/Esri/file-geodatabase-api.git", :branch => "master"
 
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    cellar :any
+    sha256 "5d0737d480cacb6d13b5cb5883ba8daeb197ae99ef3cc7d7f4bcfc87aa242ebd" => :mojave
+    sha256 "5d0737d480cacb6d13b5cb5883ba8daeb197ae99ef3cc7d7f4bcfc87aa242ebd" => :high_sierra
+    sha256 "39854ee9fc01e80f14a5cafdbbf868c349d612955820d3407c588ff099f28e4d" => :sierra
+  end
+
   option "with-docs", "Intall API documentation and sample code"
 
   def install
