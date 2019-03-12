@@ -7,6 +7,16 @@ class OsgeoLibkml < Formula
 
   revision 1
 
+  head "https://github.com/google/libkml.git", :branch => "master"
+
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    cellar :any
+    sha256 "3fabac80a848cec660adbba3aa0c9965bd03eb3e70e23e464b6706f897b5ccfb" => :mojave
+    sha256 "3fabac80a848cec660adbba3aa0c9965bd03eb3e70e23e464b6706f897b5ccfb" => :high_sierra
+    sha256 "d142c373ff382e20f8113a3490a595a4b5732d809ad06a95e46539766df3fdc5" => :sierra
+  end
+
   keg_only "older version is in main tap and installs similar components"
 
   depends_on "autoconf" => :build
