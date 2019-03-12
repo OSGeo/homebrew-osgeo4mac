@@ -5,7 +5,7 @@ class OsgeoFilegdbApi < Formula
   version "1.5.1"
   sha256 "78b52650b3be72eacb985fd744f6766e8d57f60a3317055c5a23b1d181ae8ab2"
 
-  # revision 1
+  revision 1
 
   head "https://github.com/Esri/file-geodatabase-api.git", :branch => "master"
 
