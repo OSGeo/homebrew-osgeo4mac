@@ -16,4 +16,5 @@
   "qgis3": "qgis",
   "qgis-ltr@2.18": "qgis-ltr@2",
   "libkml-dev": "osgeo-libkml",
+  "hdf4": "osgeo-hdf4",
 }
