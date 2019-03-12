@@ -1,23 +1,18 @@
-class Gdal2Sosi < Formula
+class OsgeoGdalSosi < Formula
   desc "GDAL/OGR 2.x plugin for SOSI driver"
   homepage "https://trac.osgeo.org/gdal/wiki/SOSI"
   url "http://download.osgeo.org/gdal/2.4.0/gdal-2.4.0.tar.gz"
   sha256 "a568cf3dc7bb203ae12a48e1eb2a42302cded499ef6eccaf9e8f09187d8ce75a"
 
-   bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    cellar :any
-    rebuild 1
-    sha256 "e2b53af83491bb85e0d21279e6c69a39b6491fdaf45db968b681719efffe1b7f" => :mojave
-    sha256 "e2b53af83491bb85e0d21279e6c69a39b6491fdaf45db968b681719efffe1b7f" => :high_sierra
-    sha256 "e2b53af83491bb85e0d21279e6c69a39b6491fdaf45db968b681719efffe1b7f" => :sierra
-  end
+  # revision 1
 
-  depends_on "fyba"
-  depends_on "gdal2"
+  head "https://github.com/OSGeo/gdal.git", :branch => "master"
+
+  depends_on "osgeo-fyba"
+  depends_on "osgeo-gdal"
 
   def gdal_majmin_ver
-    gdal_ver_list = Formula["gdal2"].version.to_s.split(".")
+    gdal_ver_list = Formula["osgeo-gdal"].version.to_s.split(".")
     "#{gdal_ver_list[0]}.#{gdal_ver_list[1]}"
   end
 
@@ -27,7 +22,7 @@ class Gdal2Sosi < Formula
 
   def install
     ENV.cxx11
-    fyba_opt = Formula["fyba"].opt_prefix
+    fyba_opt = Formula["osgeo-fyba"].opt_prefix
 
     gdal_plugins = lib/gdal_plugins_subdirectory
     gdal_plugins.mkpath
@@ -71,7 +66,7 @@ class Gdal2Sosi < Formula
 
   test do
     ENV["GDAL_DRIVER_PATH"] = "#{HOMEBREW_PREFIX}/lib/gdalplugins"
-    gdal_opt_bin = Formula["gdal2"].opt_bin
+    gdal_opt_bin = Formula["osgeo-gdal"].opt_bin
     out = shell_output("#{gdal_opt_bin}/ogrinfo --formats")
     assert_match "SOSI -vector- (ro)", out
   end
