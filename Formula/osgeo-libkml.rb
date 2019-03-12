@@ -5,7 +5,7 @@ class OsgeoLibkml < Formula
   sha256 "667cd86b7e66e38c71c054526e49c6ee9558b506c9ddec9e6de14b87e18c0072"
   version "1.3"
 
-  # revision 1
+  revision 1
 
   keg_only "older version is in main tap and installs similar components"
 
