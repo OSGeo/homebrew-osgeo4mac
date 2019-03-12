@@ -14,8 +14,9 @@ class OsgeoHdf4 < Formula
   depends_on "gcc" if build.with? "fortran"
 
   bottle do
-    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
     cellar :any
+    sha256 "be48da2298fb994b4ba96202cd209078e278e69d505d5364470ebddd9acaba94" => :mojave
     sha256 "be48da2298fb994b4ba96202cd209078e278e69d505d5364470ebddd9acaba94" => :high_sierra
     sha256 "be48da2298fb994b4ba96202cd209078e278e69d505d5364470ebddd9acaba94" => :sierra
   end
