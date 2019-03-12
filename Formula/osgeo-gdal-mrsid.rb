@@ -1,4 +1,4 @@
-class OsgeoGdalMrsidSdk < Formula
+class OsgeoGdalMrsid < Formula
   desc "GDAL/OGR 2 plugin for MrSID raster and LiDAR drivers"
   homepage "http://www.gdal.org/frmt_mrsid.html"
   url "http://download.osgeo.org/gdal/2.4.0/gdal-2.4.0.tar.gz"
