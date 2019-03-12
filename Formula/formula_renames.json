@@ -1,7 +1,0 @@
-{
-  "qgis3": "qgis",
-  "qgis2": "qgis-ltr@2",
-  "libkml-dev": "osgeo-libkml",
-  "hdf4": "osgeo-hdf4",
-  "gdal2": "osgeo-gdal",
-}
