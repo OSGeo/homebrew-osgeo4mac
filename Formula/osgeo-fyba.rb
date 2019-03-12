@@ -4,7 +4,7 @@ class OsgeoFyba < Formula
   url "https://github.com/kartverket/fyba/archive/4.1.1.tar.gz"
   sha256 "99f658d52e8fd8997118bb6207b9c121500700996d9481a736683474e2534179"
 
-  # revision 1
+  revision 1
 
   head "https://github.com/kartverket/fyba.git", :branch => "master"
 
