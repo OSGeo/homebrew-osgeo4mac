@@ -1,16 +1,12 @@
-class Fyba < Formula
+class OsgeoFyba < Formula
   desc "Library to read/write Norwegian National geodata standard (SOSI) files"
   homepage "https://github.com/kartverket/fyba"
   url "https://github.com/kartverket/fyba/archive/4.1.1.tar.gz"
   sha256 "99f658d52e8fd8997118bb6207b9c121500700996d9481a736683474e2534179"
 
-  bottle do
-    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
-    cellar :any
-    rebuild 1
-    sha256 "360465bd604a2ef3c672c86664903a40cc216f6b55b3e7ff2f25ae67ac57ea2f" => :high_sierra
-    sha256 "360465bd604a2ef3c672c86664903a40cc216f6b55b3e7ff2f25ae67ac57ea2f" => :sierra
-  end
+  # revision 1
+
+  head "https://github.com/kartverket/fyba.git", :branch => "master"
 
   depends_on "autoconf" => :build
   depends_on "automake" => :build
