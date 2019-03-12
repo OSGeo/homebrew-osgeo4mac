@@ -8,6 +8,14 @@ class OsgeoFyba < Formula
 
   head "https://github.com/kartverket/fyba.git", :branch => "master"
 
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    cellar :any
+    sha256 "9966047d61d968941f24082a9bd7a9bcef59bd3df81bc864a35fd44287991909" => :mojave
+    sha256 "9966047d61d968941f24082a9bd7a9bcef59bd3df81bc864a35fd44287991909" => :high_sierra
+    sha256 "4a2c603626d62a08824f5739d831967fea36c09d5c1150b0923f8c804063f56c" => :sierra
+  end
+
   depends_on "autoconf" => :build
   depends_on "automake" => :build
   depends_on "libtool" => :build
