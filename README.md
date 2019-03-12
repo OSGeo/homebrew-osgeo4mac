@@ -19,6 +19,19 @@ You can also install via URL:
 $ brew install https://raw.githubusercontent.com/OSGeo/homebrew-osgeo4mac/master/Formula/<formula>.rb
 ```
 
+## Renaming formulae
+
+Currently we are renaming formulae. 
+
+We recommend to run `brew migrate <old-formula-name>` to move your install in your cellar from the old name to the new name and unlink and link to the new keg if necessary. 
+
+You can also just uninstall the old formula and reinstall the formula with the new name with: 
+
+```shell
+$ brew uninstall --ignore-depencencies <old-formula-name> 
+$ brew install <new-formula-name> 
+```
+
 ## Docs
 
 Run `brew help`, `man brew`, check the [Homebrew documentation](https://github.com/Homebrew/brew/tree/master/docs#readme) or the [tap documentation][osgeo4mac-docs].
