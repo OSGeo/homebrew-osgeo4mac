@@ -58,9 +58,11 @@ class OsgeoGdal < Formula
   depends_on "openjpeg"
   depends_on "zstd"
   depends_on "webp"
+
   # Vector libraries
   depends_on "unixodbc" # OS X version is not complete enough
   depends_on "xerces-c"
+
   # Other libraries
   depends_on "xz" # get liblzma compression algorithm library from XZutils
 
@@ -165,18 +167,19 @@ class OsgeoGdal < Formula
       "--with-poppler=no",
       "--with-podofo=no",
       "--with-pdfium=no",
-
+      "--with-kea=no",
+      "--with-teigha=no",
+      "--with-mdb=no",
+      "--with-dds=no",
+      "--with-hdfs=no",
+      "--with-j2lura=no",
+      "--with-rasterlite2=no",
+      "--with-rasdaman=no",
       # "--with-charls",
-      # "--with-rasterlite2",
-      # "--with-rasdaman",
 
       # "--with-boost-lib-path",
       # "--with-mongocxxv3",
-      # "--with-kea",
-      # "--with-j2lura",
-      # "--with-teigha",
       # "--with-teigha-plt",
-      # "--with-mdb",
       # "--with-jvm-lib",
       # "--with-jvm-lib-add-rpath",
       # "--with-cpp14",
@@ -193,12 +196,10 @@ class OsgeoGdal < Formula
       # "--with-rename-internal-libgeotiff-symbols",
       # "--with-rename-internal-shapelib-symbols",
       # "--with-gnu-ld",
-      # "--with-dds",
       # "--with-spatialite-soname",
       # "--with-sde-version",
       # "--with-gdal-ver",
       # "--with-macosx-framework",
-      # "--with-hdfs",
       # "--with-null",
       # "--with-podofo-lib",
       # "--with-podofo-extra-lib-for-test",
@@ -320,7 +321,7 @@ class OsgeoGdal < Formula
 
         export GDAL_DRIVER_PATH=#{HOMEBREW_PREFIX}/lib/gdalplugins
 
-      PYTHON BINDINGS are now built in a separate formula: gdal2-python
+      PYTHON BINDINGS are now built in a separate formula: osgeo-gdal-python
     EOS
     s
   end
