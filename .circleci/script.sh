@@ -20,6 +20,8 @@ set -e
 ulimit -n 1024
 
 # fix error: 'libintl.h' file not found
+# build qgis with grass
+brew reinstall gettext
 brew unlink gettext && brew link --force gettext
 
 echo ${CHANGED_FORMULAE}
