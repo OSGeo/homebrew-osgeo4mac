@@ -11,6 +11,14 @@ class OsgeoGdal < Formula
     depends_on "doxygen" => :build
   end
 
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    cellar :any
+    sha256 "09d2186f7f8c63533697bec5c91525e1b25116d22e7f2498117fdf6640713470" => :mojave
+    sha256 "09d2186f7f8c63533697bec5c91525e1b25116d22e7f2498117fdf6640713470" => :high_sierra
+    sha256 "fd316043261567dccd72fe994af8b9c08945ca21c8a284a0298be1358e60cd00" => :sierra
+  end
+
   keg_only "older version of gdal is in main tap and installs similar components"
 
   option "with-postgresql10", "Build with PostgreSQL 10 client"
