@@ -1,4 +1,4 @@
-class Hdf4 < Formula
+class OsgeoHdf4 < Formula
   homepage "http://www.hdfgroup.org"
   url "https://support.hdfgroup.org/ftp/HDF/releases/HDF4.2.13/src/hdf-4.2.13.tar.gz"
   sha256 "be9813c1dc3712c2df977d4960e1f13f20f447dfa8c3ce53331d610c1f470483"
