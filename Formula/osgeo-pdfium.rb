@@ -1,4 +1,4 @@
-class PdfiumGdal2 < Formula
+class OsgeoPdfium < Formula
   desc "Google-contributed PDF library (without V8 JavaScript engine)"
   homepage "https://pdfium.googlesource.com/pdfium/"
   url "https://github.com/rouault/pdfium.git",
@@ -6,11 +6,7 @@ class PdfiumGdal2 < Formula
       :revision => "b5009c4df5aa4ff923ede1c5deba1aa4be43199b"
   version "0.0.1"
 
-  bottle do
-    root_url "https://osgeo4mac.s3.amazonaws.com/bottles"
-    cellar :any_skip_relocation
-    sha256 "fe5fdc234a1c6486bd3d9d4a559574cdc4125462d4a1e04a2a42286e775b2c3c" => :sierra
-  end
+  # revision 1
 
   keg_only "newer version of pdfium may be installed"
 
@@ -26,7 +22,12 @@ class PdfiumGdal2 < Formula
   end
 
   def install
-    # ENV.libstdcxx
+    #ENV.libstdcxx
+
+    link_misc = "-arch x86_64 -mmacosx-version-min=10.9 -isysroot #{MacOS::Xcode.prefix}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX#{MacOS.version}.sdk -lstdc++"
+
+    ENV.append "LDFLAGS", "#{link_misc} -stdlib=libc++"
+    ENV.append "CPATH", "#{MacOS::Xcode.prefix}/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1"
 
     # need to move git checkout into gclient solutions directory
     base_install = Dir[".*", "*"] - [".", "..", ".brew_home"]
@@ -50,7 +51,7 @@ class PdfiumGdal2 < Formula
       system "./build/gyp_pdfium"
 
       xcodebuild "SDKROOT=#{MacOS.sdk_path}",
-                 "MACOSX_DEPLOYMENT_TARGET=10.8",
+                 "MACOSX_DEPLOYMENT_TARGET=10.9",
                  "SYMROOT=#{build_dir}",
                  "ONLY_ACTIVE_ARCH=YES",
                  "-configuration", "Release",
@@ -68,7 +69,7 @@ class PdfiumGdal2 < Formula
 
       cd "third_party" do
         xcodebuild "SDKROOT=#{MacOS.sdk_path}",
-                   "MACOSX_DEPLOYMENT_TARGET=10.8",
+                   "MACOSX_DEPLOYMENT_TARGET=10.9",
                    "SYMROOT=#{build_dir}",
                    "ONLY_ACTIVE_ARCH=YES",
                    "-configuration", "Release",
@@ -85,7 +86,7 @@ class PdfiumGdal2 < Formula
       cd "samples" do
         inreplace "pdfium_test.cc", /(delete platform;)/, "//\\1"
         xcodebuild "SDKROOT=#{MacOS.sdk_path}",
-                   "MACOSX_DEPLOYMENT_TARGET=10.8",
+                   "MACOSX_DEPLOYMENT_TARGET=10.9",
                    "SYMROOT=#{build_dir}",
                    "ONLY_ACTIVE_ARCH=YES",
                    "-configuration", "Release",
@@ -106,6 +107,16 @@ class PdfiumGdal2 < Formula
 
       # test data
       (libexec/"testing/resources").install Dir["testing/resources/*"]
+
+      # fix public/*.h not found
+      cd "#{include}/pdfium" do
+        mkdir "public"
+        mv "fpdf_progressive.h", "./public/fpdf_progressive.h"
+        mv "fpdfview.h", "./public/fpdfview.h"
+
+        ln_s "./public/fpdf_progressive.h", "./fpdf_progressive.h"
+        ln_s "./public/fpdfview.h", "./fpdfview.h"
+      end
 
       cd "build/Release" do
         (lib/"pdfium").install Dir["lib*.a"]

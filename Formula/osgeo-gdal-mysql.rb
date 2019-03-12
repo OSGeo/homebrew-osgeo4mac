@@ -1,22 +1,18 @@
-class Gdal2Mysql < Formula
+class OsgeoGdalMysql < Formula
   desc "GDAL/OGR 2 plugin for MySQL driver"
   homepage "http://www.gdal.org/drv_mysql.html"
   url "http://download.osgeo.org/gdal/2.4.0/gdal-2.4.0.tar.gz"
   sha256 "a568cf3dc7bb203ae12a48e1eb2a42302cded499ef6eccaf9e8f09187d8ce75a"
 
-  bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    rebuild 1
-    sha256 "f5be3cb041222b6ff94f71c6209ae92b3b79c151d9232ba46be7c12220bf655a" => :mojave
-    sha256 "f5be3cb041222b6ff94f71c6209ae92b3b79c151d9232ba46be7c12220bf655a" => :high_sierra
-    sha256 "f5be3cb041222b6ff94f71c6209ae92b3b79c151d9232ba46be7c12220bf655a" => :sierra
-  end
+  # revision 1
+
+  head "https://github.com/OSGeo/gdal.git", :branch => "master"
 
   depends_on "mysql" => :build # adds openssl
-  depends_on "gdal2"
+  depends_on "osgeo-gdal"
 
   def gdal_majmin_ver
-    gdal_ver_list = Formula["gdal2"].version.to_s.split(".")
+    gdal_ver_list = Formula["osgeo-gdal"].version.to_s.split(".")
     "#{gdal_ver_list[0]}.#{gdal_ver_list[1]}"
   end
 
@@ -74,7 +70,7 @@ class Gdal2Mysql < Formula
 
   test do
     ENV["GDAL_DRIVER_PATH"] = "#{HOMEBREW_PREFIX}/lib/gdalplugins"
-    gdal_opt_bin = Formula["gdal2"].opt_bin
+    gdal_opt_bin = Formula["osgeo-gdal"].opt_bin
     out = shell_output("#{gdal_opt_bin}/ogrinfo --formats")
     assert_match "MySQL -vector- (rw+)", out
   end

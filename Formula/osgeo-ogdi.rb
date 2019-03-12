@@ -1,18 +1,12 @@
-class Ogdi < Formula
+class OsgeoOgdi < Formula
   desc "Open Geographic Datastore Interface - client/server API for GIS"
   homepage "https://ogdi.sourceforge.io/"
-  url "https://github.com/libogdi/ogdi/archive/ogdi_3_2_1.tar.gz"
-  sha256 "6086147f66c35f7cc7012bfeff2c74d7681e0419d75009e7b35e1f827a3458ce"
+  url "https://github.com/libogdi/ogdi/archive/ogdi_4_0_0.tar.gz"
+  sha256 "d0f1a9a7127e296d6e8e064d94b5a81bac91b5d4914bb7e5abec51cb0609cac5"
 
   # revision 1
 
-  bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    rebuild 1
-    sha256 "7b4a512d136ca1ee971f5641cf5633dda90b6e5f45c0bbe909160d2204a4a299" => :mojave
-    sha256 "7b4a512d136ca1ee971f5641cf5633dda90b6e5f45c0bbe909160d2204a4a299" => :high_sierra
-    sha256 "7b4a512d136ca1ee971f5641cf5633dda90b6e5f45c0bbe909160d2204a4a299" => :sierra
-  end
+  head "https://github.com/libogdi/ogdi.git", :branch => "master"
 
   # depends on "autoconf" => :build
   # depends on "automake" => :build

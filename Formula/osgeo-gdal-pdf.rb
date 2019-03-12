@@ -1,38 +1,28 @@
-class Gdal2Pdf < Formula
+class OsgeoGdalPdf < Formula
   desc "GDAL/OGR 2.x plugin for PDF driver"
   homepage "http://www.gdal.org/frmt_pdf.html"
   url "http://download.osgeo.org/gdal/2.4.0/gdal-2.4.0.tar.gz"
   sha256 "a568cf3dc7bb203ae12a48e1eb2a42302cded499ef6eccaf9e8f09187d8ce75a"
 
-  bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    rebuild 1
-    sha256 "1abf5ba0a7110416877cf094fc07143da3316455a4dd022275212072f4688c59" => :mojave
-    sha256 "1abf5ba0a7110416877cf094fc07143da3316455a4dd022275212072f4688c59" => :high_sierra
-    sha256 "1abf5ba0a7110416877cf094fc07143da3316455a4dd022275212072f4688c59" => :sierra
-  end
+  # revision 1
 
-  option "without-poppler", "Build without additional Poppler support"
-  option "with-pdfium", "Build with PDFium support"
-  option "with-podofo", "Build with additional PoDoFo support"
+  head "https://github.com/OSGeo/gdal.git", :branch => "master"
 
-  if build.with? "poppler"
-    depends_on "pkg-config" => :build
-    depends_on "cairo"
-    depends_on "fontconfig"
-    depends_on "freetype"
-    depends_on "gettext"
-    depends_on "glib"
-    depends_on "gobject-introspection"
-    depends_on "jpeg"
-    depends_on "libpng"
-    depends_on "libtiff"
-    depends_on "libgeotiff"
-    depends_on "openjpeg"
-  end
-  depends_on "pdfium-gdal2" if build.with? "pdfium"
-  depends_on "podofo" => :optional
-  depends_on "gdal2"
+  depends_on "pkg-config" => :build
+  depends_on "cairo"
+  depends_on "fontconfig"
+  depends_on "freetype"
+  depends_on "gettext"
+  depends_on "glib"
+  depends_on "gobject-introspection"
+  depends_on "jpeg"
+  depends_on "libpng"
+  depends_on "libtiff"
+  depends_on "libgeotiff"
+  depends_on "openjpeg"
+  depends_on "podofo"
+  depends_on "osgeo-pdfium"
+  depends_on "osgeo-gdal"
 
   # various deps needed for configuring
   depends_on "json-c"
@@ -49,7 +39,7 @@ class Gdal2Pdf < Formula
   end
 
   def gdal_majmin_ver
-    gdal_ver_list = Formula["gdal2"].version.to_s.split(".")
+    gdal_ver_list = Formula["osgeo-gdal"].version.to_s.split(".")
     "#{gdal_ver_list[0]}.#{gdal_ver_list[1]}"
   end
 
@@ -76,10 +66,11 @@ class Gdal2Pdf < Formula
     ]
 
     # PDF-supporting backends for writing
-    args << "--with-pdfium=" + (build.with?("pdfium") ? Formula["pdfium-gdal2"].opt_prefix : "no")
+    args << "--with-pdfium=#{Formula["osgeo-pdfium"].opt_prefix}"
+
     # poppler is locally vendored
-    args << "--with-poppler=" + (build.with?("poppler") ? "#{libexec}/poppler" : "no")
-    args << "--with-podofo=" + (build.with?("podofo") ? Formula["podofo"].opt_prefix : "no")
+    args << "--with-poppler=#{libexec}/poppler"
+    args << "--with-podofo=#{Formula["podofo"].opt_prefix}"
 
     # nix all other configure tests, i.e. minimal base gdal build
     without_pkgs = %w[
@@ -101,10 +92,6 @@ class Gdal2Pdf < Formula
   end
 
   def install
-    if build.without?("pdfium") && build.without?("poppler") && build.without?("podofo")
-      opoo "Need to have at least one PDF supporting library enabled for basic read support"
-    end
-
     gdal_plugins = lib/gdal_plugins_subdirectory
     gdal_plugins.mkpath
 
@@ -117,28 +104,26 @@ class Gdal2Pdf < Formula
     # ENV["CXXFLAGS"] = "-mmacosx-version-min=10.8"
     # ENV["MACOSX_DEPLOYMENT_TARGET"] = "10.8"
 
-    if build.with? "poppler"
-      # locally vendor dependency
-      resource("poppler").stage do
-        # Temp fix for supporting new OpenJPEG 2.x version, which is API/ABI compatible with OpenJPEG 2.2
-        opj_ver_list = Formula["openjpeg"].version.to_s.split(".")
-        opj_ver = "#{opj_ver_list[0]}.#{opj_ver_list[1]}"
-        ENV["LIBOPENJPEG_CFLAGS"] = "-I#{Formula["openjpeg"].opt_include}/openjpeg-#{opj_ver}"
+    # locally vendor dependency
+    resource("poppler").stage do
+      # Temp fix for supporting new OpenJPEG 2.x version, which is API/ABI compatible with OpenJPEG 2.2
+      opj_ver_list = Formula["openjpeg"].version.to_s.split(".")
+      opj_ver = "#{opj_ver_list[0]}.#{opj_ver_list[1]}"
+      ENV["LIBOPENJPEG_CFLAGS"] = "-I#{Formula["openjpeg"].opt_include}/openjpeg-#{opj_ver}"
 
-        inreplace "poppler.pc.in", "Cflags: -I${includedir}/poppler",
-                  "Cflags: -I${includedir}/poppler -I${includedir}"
+      inreplace "poppler.pc.in", "Cflags: -I${includedir}/poppler",
+                "Cflags: -I${includedir}/poppler -I${includedir}"
 
-        system "./configure", "--disable-dependency-tracking",
-               "--prefix=#{libexec}/poppler",
-               "--enable-xpdf-headers",
-               "--enable-poppler-glib",
-               "--disable-gtk-test",
-               "--enable-introspection=no",
-               "--disable-poppler-qt4"
-        system "make", "install"
-        resource("poppler-data").stage do
-          system "make", "install", "prefix=#{libexec}/poppler"
-        end
+      system "./configure", "--disable-dependency-tracking",
+             "--prefix=#{libexec}/poppler",
+             "--enable-xpdf-headers",
+             "--enable-poppler-glib",
+             "--disable-gtk-test",
+             "--enable-introspection=no",
+             "--disable-poppler-qt4"
+      system "make", "install"
+      resource("poppler-data").stage do
+        system "make", "install", "prefix=#{libexec}/poppler"
       end
     end
 
@@ -173,13 +158,8 @@ class Gdal2Pdf < Formula
 
   test do
     ENV["GDAL_DRIVER_PATH"] = "#{HOMEBREW_PREFIX}/lib/gdalplugins"
-    gdal_opt_bin = Formula["gdal2"].opt_bin
+    gdal_opt_bin = Formula["osgeo-gdal"].opt_bin
     out = shell_output("#{gdal_opt_bin}/gdalinfo --formats")
-    if build.without?("pdfium") && build.without?("poppler") && build.without?("podofo")
-      # just native gdal write support
-      assert_match "PDF -raster,vector- (w+): Geospatial PDF", out
-    else
-      assert_match "PDF -raster,vector- (rw+vs): Geospatial PDF", out
-    end
+    assert_match "PDF -raster,vector- (rw+vs): Geospatial PDF", out
   end
 end
