@@ -1,11 +1,10 @@
 class OsgeoHdf4 < Formula
   homepage "http://www.hdfgroup.org"
-  url "https://support.hdfgroup.org/ftp/HDF/releases/HDF4.2.13/src/hdf-4.2.13.tar.gz"
-  sha256 "be9813c1dc3712c2df977d4960e1f13f20f447dfa8c3ce53331d610c1f470483"
+  url "https://support.hdfgroup.org/ftp/HDF/releases/HDF4.2.14/src/hdf-4.2.14.tar.gz"
+  sha256 "2d383e87c8a0ca6a5352adbd1d5546e6cc43dc21ff7d90f93efa644d85c0b14a"
 
   option "with-fortran", "Build Fortran interface."
   option "with-tests", "Run the test suite (may fail)"
-
 
   depends_on "cmake" => :build
   depends_on "pkg-config" => :build
