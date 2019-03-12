@@ -2,8 +2,8 @@ class OsgeoFilegdbApi < Formula
   desc "ESRI File Geodatabase C++ API libraries"
   homepage "https://github.com/Esri/file-geodatabase-api"
   url "https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_1.5.1/FileGDB_API_1_5_1-64clang.zip"
-  version "1.5.1"
   sha256 "78b52650b3be72eacb985fd744f6766e8d57f60a3317055c5a23b1d181ae8ab2"
+  version "1.5.1"
 
   revision 1
 
