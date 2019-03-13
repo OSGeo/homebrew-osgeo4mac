@@ -10,6 +10,13 @@ class OsgeoSagaLts < Formula
 
   head "https://git.code.sf.net/p/saga-gis/code.git", :branch => "release-2-3-lts"
 
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    sha256 "700eb8a1e1ab0e85ed668ed70721d1aba71c33e988cbe511c5a63c100fba8222" => :mojave
+    sha256 "700eb8a1e1ab0e85ed668ed70721d1aba71c33e988cbe511c5a63c100fba8222" => :high_sierra
+    sha256 "d962a016d89ce90b3633f1d04f6a3d224b36cdd65bddc497b421d4b390939496" => :sierra
+  end
+
   # - saga_api, CSG_Table::Del_Records(): bug fix, check record count correctly
   # - fix clang
   # - io_gdal, org_driver: do not use methods marked as deprecated in GDAL 2.0
