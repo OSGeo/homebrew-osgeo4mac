@@ -1,10 +1,10 @@
-class Grass7 < Formula
+class OsgeoGrass < Formula
   include Language::Python::Virtualenv
 
   desc "Geographic Resources Analysis Support System"
   homepage "https://grass.osgeo.org/"
 
-  revision 4
+  # revision 1
 
   # svn: E230001: Server SSL certificate verification failed: issuer is not trusted
   # head "https://svn.osgeo.org/grass/grass/trunk", :using => :svn
@@ -21,28 +21,21 @@ class Grass7 < Formula
     patch :DATA
   end
 
-  bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    cellar :any
-    sha256 "d25a072fe68961945c8e42d45e0166c3ad838a07adfd69a4829aee7c243632c3" => :mojave
-    sha256 "d25a072fe68961945c8e42d45e0166c3ad838a07adfd69a4829aee7c243632c3" => :high_sierra
-    sha256 "d25a072fe68961945c8e42d45e0166c3ad838a07adfd69a4829aee7c243632c3" => :sierra
-  end
-
   option "without-gui", "Build without WxPython interface. Command line tools still available"
-  option "with-others", "Build with other optional dependencies"
-  option "with-r", "Build with R support"
-  option "with-r-sethrfore", "Build with R support (only if you are going to install with this version of R)"
+  # option "with-others", "Build with other optional dependencies"
+  # option "with-r", "Build with R support"
+  # option "with-r-sethrfore", "Build with R support (only if you are going to install with this version of R)"
   option "with-avce00", "Build with AVCE00 support: Make Arc/Info (binary) Vector Coverages appear as E00"
   option "with-aqua", "Build with experimental Aqua GUI backend"
-  option "with-app", "Build GRASS.app Package"
-  option "with-liblas", "Build with LibLAS-with-GDAL2 support"
-  option "with-postgresql", "Build with PostgreSQL support"
-  option "with-mysql", "Build with MySQL support"
-  option "with-pthread", "Build with PThread support"
+  #option "with-app", "Build GRASS.app Package"
+  #option "with-liblas", "Build with LibLAS-with-GDAL2 support"
+  #option "with-postgresql", "Build with PostgreSQL support"
+  #option "with-mysql", "Build with MySQL support"
+  #option "with-pthread", "Build with PThread support"
   # option "with-openmp", "Build with openmp support"
   # option "with-opendwg", "Build with OpenDWG support"
   # option "with-pdal", "Build with PDAL support" # Build - Error: /vector/v.in.pdal
+  option "with-postgresql10", "Build with PostgreSQL 10 client"
 
   depends_on "autoconf" => :build
   depends_on "automake" => :build
@@ -65,7 +58,6 @@ class Grass7 < Formula
   depends_on "regex-opt"
   depends_on "proj"
   depends_on "geos"
-  depends_on "gdal2"
   depends_on "readline"
   depends_on "lapack"
   depends_on "openblas"
@@ -81,6 +73,8 @@ class Grass7 < Formula
   depends_on "byacc" # yacc
   depends_on "subversion" # for g.extension
   depends_on "openjpeg" # for Pillow
+  depends_on "osgeo-gdal"
+  depends_on "osgeo-gdal-python"
 
   depends_on :x11 if build.without? "aqua" # needs to find at least X11/include/GL/gl.h
 
@@ -95,33 +89,34 @@ class Grass7 < Formula
 
   # optional dependencies
 
-  depends_on "liblas-gdal2" if build.with? "liblas"
+  depends_on "osgeo-liblas" # if build.with? "liblas"
 
-  depends_on "mysql" if build.with? "mysql"
-  if build.with? "postgresql"
+  depends_on "mysql" # if build.with? "mysql"
+
+  if build.with?("postgresql10")
+    depends_on "postgresql@10"
+  else
     depends_on "postgresql"
-    depends_on "libpq"
   end
 
   depends_on "avce00" => :optional # avcimport
 
-  if build.with? "r"
-    depends_on "r"
-  end
+  # if build.with? "r"
+  depends_on "r"
+  # end
 
   # R with more support
   # https://github.com/adamhsparks/setup_macOS_for_R
   # fix: will not build if the R version does not match
-  if build.with? "r-sethrfore"
-    depends_on "sethrfore/r-srf/r"
-  end
+  # if build.with? "r-sethrfore"
+  #   depends_on "sethrfore/r-srf/r"
+  # end
 
   # depends_on "pdal" => :optional
   # depends_on "libomp" if build.with? "openmp"
 
   # other dependencies
   if build.with? "others"
-    depends_on "gdal2-python"
     depends_on "gpsbabel"
     depends_on "netpbm" # mpeg_encode or ppmtompeg
     depends_on "openssl"
@@ -138,10 +133,9 @@ class Grass7 < Formula
     depends_on "gdbm"
     depends_on "mesa"
     depends_on "mesalib-glw"
-    depends_on "openmotif"
     depends_on "desktop-file-utils"
     depends_on "fontconfig"
-    depends_on "lesstif"
+    depends_on "openmotif" # or lesstif
     depends_on "libjpeg-turbo"
     depends_on "cfitsio"
     depends_on "imagemagick"
@@ -353,25 +347,28 @@ class Grass7 < Formula
     # Disable some dependencies that don't build correctly on older version of MacOS
     args << "--without-fftw" if build.without? "fftw"
 
-    args << "--with-liblas=#{Formula["liblas-gdal2"].opt_bin}/liblas-config" if build.with? "liblas"
+    args << "--with-liblas=#{Formula["osgeo-liblas"].opt_bin}/liblas-config" # if build.with? "liblas"
 
-    if build.with? "postgresql"
-      args << "--with-postgres"
+    args << "--with-postgres"
+    if build.with?("postgresql10")
+      args << "--with-postgres-includes=#{Formula["postgres@10"].opt_include}"
+      args << "--with-postgres-libs=#{Formula["postgres@10"].opt_lib}"
+    else
       args << "--with-postgres-includes=#{Formula["postgres"].opt_include}"
       args << "--with-postgres-libs=#{Formula["postgres"].opt_lib}"
     end
 
-    if build.with? "mysql"
-      args << "--with-mysql"
-      args << "--with-mysql-includes=#{Formula["mysql"].opt_include}/mysql"
-      args << "--with-mysql-libs=#{Formula["mysql"].opt_lib}"
-    end
+    # if build.with? "mysql"
+    args << "--with-mysql"
+    args << "--with-mysql-includes=#{Formula["mysql"].opt_include}/mysql"
+    args << "--with-mysql-libs=#{Formula["mysql"].opt_lib}"
+    # end
 
-    if build.with? "pthread"
-      args << "--with-pthread"
-      args << "--with-pthread-includes=#{Formula["boost"].opt_include}/boost/thread"
-      args << "--with-pthread-libs=#{Formula["boost"].opt_lib}"
-    end
+    # if build.with? "pthread"
+    args << "--with-pthread"
+    args << "--with-pthread-includes=#{Formula["boost"].opt_include}/boost/thread"
+    args << "--with-pthread-libs=#{Formula["boost"].opt_lib}"
+    # end
 
     # if build.with? "opendwg"
     #   args << "--with-opendwg"
