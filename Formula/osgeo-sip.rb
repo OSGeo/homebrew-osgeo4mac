@@ -8,6 +8,14 @@ class OsgeoSip < Formula
 
   head "https://www.riverbankcomputing.com/hg/sip", :using => :hg
 
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    cellar :any_skip_relocation
+    sha256 "ad0e3c923a1eb9ae6c93e7fe39d30fca96a9f6e77e383cc0088b915b6d14467d" => :mojave
+    sha256 "ad0e3c923a1eb9ae6c93e7fe39d30fca96a9f6e77e383cc0088b915b6d14467d" => :high_sierra
+    sha256 "826c8da791d81f6190a648f0515fcd6131b24a640979715e2b14ea0730715d51" => :sierra
+  end
+
   depends_on "python"
   depends_on "python@2"
 
