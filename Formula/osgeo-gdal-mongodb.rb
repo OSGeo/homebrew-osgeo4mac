@@ -1,26 +1,21 @@
-class Gdal2Mongodb < Formula
+class OsgeoGdalMongodb < Formula
   desc "GDAL/OGR 2.x plugin for MongoDB driver"
   homepage "http://www.gdal.org/drv_mongodb.html"
   url "http://download.osgeo.org/gdal/2.4.0/gdal-2.4.0.tar.gz"
   sha256 "a568cf3dc7bb203ae12a48e1eb2a42302cded499ef6eccaf9e8f09187d8ce75a"
 
-  bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    cellar :any
-    rebuild 1
-    sha256 "231881a5a2154ffc40e690167243f5077fb098a41fe162d081df57144253ca95" => :mojave
-    sha256 "231881a5a2154ffc40e690167243f5077fb098a41fe162d081df57144253ca95" => :high_sierra
-    sha256 "231881a5a2154ffc40e690167243f5077fb098a41fe162d081df57144253ca95" => :sierra
-  end
+  # revision 1
 
-  depends_on "gdal2"
+  head "https://github.com/OSGeo/gdal.git", :branch => "master"
+
+  depends_on "boost"
   depends_on "libtiff"
   depends_on "libgeotiff"
-  depends_on "mongo-cxx-driver-legacy"
-  depends_on "boost"
+  depends_on "osgeo-gdal"
+  depends_on "osgeo-mongo-cxx-driver-legacy"
 
   def gdal_majmin_ver
-    gdal_ver_list = Formula["gdal2"].version.to_s.split(".")
+    gdal_ver_list = Formula["osgeo-gdal"].version.to_s.split(".")
     "#{gdal_ver_list[0]}.#{gdal_ver_list[1]}"
   end
 
@@ -41,7 +36,7 @@ class Gdal2Mongodb < Formula
       "--with-macosx-framework",
     ]
 
-    args << "--with-mongocxx=#{Formula["mongo-cxx-driver-legacy"].opt_prefix}"
+    args << "--with-mongocxx=#{Formula["osgeo-mongo-cxx-driver-legacy"].opt_prefix}"
 
     # nix all other configure tests, i.e. minimal base gdal build
     without_pkgs = %w[
@@ -94,7 +89,7 @@ class Gdal2Mongodb < Formula
     ]
 
     # Add the Mongo lib
-    args.concat %W[-L#{Formula["mongo-cxx-driver-legacy"].opt_lib} -lmongoclient]
+    args.concat %W[-L#{Formula["osgeo-mongo-cxx-driver-legacy"].opt_lib} -lmongoclient]
 
     # build and install shared plugin
     system ENV.cxx, *args
@@ -111,7 +106,7 @@ class Gdal2Mongodb < Formula
 
   test do
     ENV["GDAL_DRIVER_PATH"] = "#{HOMEBREW_PREFIX}/lib/gdalplugins"
-    gdal_opt_bin = Formula["gdal2"].opt_bin
+    gdal_opt_bin = Formula["osgeo-gdal"].opt_bin
     system "#{gdal_opt_bin}/ogrinfo", "--format", "MongoDB"
   end
 end
