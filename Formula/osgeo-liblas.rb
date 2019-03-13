@@ -1,21 +1,13 @@
-class LiblasGdal2 < Formula
+class OsgeoLiblas < Formula
   desc "C/C++ library for reading and writing the LAS LiDAR format"
   homepage "https://liblas.org/"
   url "https://github.com/libLAS/libLAS/archive/09d45518776489508f34098f1c159f58b856f459.tar.gz"
   sha256 "fa2afafb8ec7c81c4216e51de51cf845c99575e7d6efbd22ad311ca8a55ce189"
   version "1.8.1"
 
-  revision 5
+  # revision 1
 
-  head "https://github.com/libLAS/libLAS.git"
-
-   bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    rebuild 1
-    sha256 "b91252d142aed9a6c942819761d96540b9285d2c5f7e2ed6df186e87b8c46fcd" => :mojave
-    sha256 "b91252d142aed9a6c942819761d96540b9285d2c5f7e2ed6df186e87b8c46fcd" => :high_sierra
-    sha256 "ac9c3ab79c5d04eab5da3ff1896ec1618b5377220198187eb635ee1c5cee8902" => :sierra
-  end
+  head "https://github.com/libLAS/libLAS.git", :branch => "master"
 
   keg_only "other version built against older gdal is in main tap"
 
@@ -24,14 +16,14 @@ class LiblasGdal2 < Formula
 
   depends_on "cmake" => :build
   depends_on "libgeotiff"
-  depends_on "gdal2"
   depends_on "boost"
-  depends_on "laszip@2.2" # if build.with? "laszip"
   depends_on "zlib"
   depends_on "jpeg"
   depends_on "libtiff"
   depends_on "proj"
   depends_on "libxml2"
+  depends_on "osgeo-gdal"
+  depends_on "osgeo-laszip@2" # if build.with? "laszip"
   # other: oracle
 
   # for laszip 3.2.9
