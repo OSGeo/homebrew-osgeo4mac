@@ -21,6 +21,7 @@
   "gdal2-oracle": "osgeo-gdal-oracle",
   "gdal2-pdf": "osgeo-gdal-pdf",
   "gdal2-python": "osgeo-gdal-python",
+  "gdal2-grass7": "osgeo-gdal-grass",
   "laszip@2.2": "osgeo-laszip@2",
   "liblas-gdal2": "osgeo-liblas",
   "grass7": "osgeo-grass"
