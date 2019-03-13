@@ -52,7 +52,7 @@ class OsgeoSagaLts < Formula
   # Vigra support builds, but dylib in saga shows 'failed' when loaded
   # Also, using --with-python will trigger vigra to be built with it, which
   # triggers a source (re)build of boost --with-python
-  depends_on "osgeo-vigra" # => :optional
+  depends_on "osgeo-vigra" => :optional
 
   if build.with?("postgresql10")
     depends_on "postgresql@10"
