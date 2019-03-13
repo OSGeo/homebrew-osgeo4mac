@@ -6,7 +6,7 @@ class OsgeoSagaLts < Formula
       :revision => "b6f474f8af4af7f0ff82548cc6f88c53547d91f5"
   version "2.3.2"
 
-  # revision 1
+  revision 1
 
   head "https://git.code.sf.net/p/saga-gis/code.git", :branch => "release-2-3-lts"
 
@@ -52,7 +52,7 @@ class OsgeoSagaLts < Formula
   # Vigra support builds, but dylib in saga shows 'failed' when loaded
   # Also, using --with-python will trigger vigra to be built with it, which
   # triggers a source (re)build of boost --with-python
-  depends_on "osgeo-vigra" # => :optional
+  depends_on "osgeo-vigra" => :optional
 
   if build.with?("postgresql10")
     depends_on "postgresql@10"
