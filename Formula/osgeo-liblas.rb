@@ -9,6 +9,13 @@ class OsgeoLiblas < Formula
 
   head "https://github.com/libLAS/libLAS.git", :branch => "master"
 
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    sha256 "04a9890ff6c4cb8cef71c35563ff8eb6ed5261029b29ecabcb49655eb38005e4" => :mojave
+    sha256 "04a9890ff6c4cb8cef71c35563ff8eb6ed5261029b29ecabcb49655eb38005e4" => :high_sierra
+    sha256 "6de5c0702cd01e6657b1e88cd6077687cd369bc3f9ae2f5bec8a00e4fbf7d055" => :sierra
+  end
+
   keg_only "other version built against older gdal is in main tap"
 
   option "with-test", "Verify during install with `make test`"
