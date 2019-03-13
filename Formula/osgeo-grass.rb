@@ -20,6 +20,14 @@ class OsgeoGrass < Formula
     # no_symbolic_links
     patch :DATA
   end
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    cellar :any
+    sha256 "d46769985f1e9d8159b8b2b02d4d6c9fdb2cd44d4b0c6ac291dbee3525323779" => :mojave
+    sha256 "d46769985f1e9d8159b8b2b02d4d6c9fdb2cd44d4b0c6ac291dbee3525323779" => :high_sierra
+    sha256 "57f13876bd9f9ae91ed65352b8a853a6c31f5e7b2159ad07359b2e058ce1c257" => :sierra
+  end
+
 
   option "without-gui", "Build without WxPython interface. Command line tools still available"
   option "with-aqua", "Build with experimental Aqua GUI backend"
