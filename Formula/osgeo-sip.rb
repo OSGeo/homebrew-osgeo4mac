@@ -53,7 +53,7 @@ class OsgeoSip < Formula
     ["#{Formula["python@2"].opt_bin}/python2", "#{Formula["python"].opt_bin}/python3"].each do |python|
       version = Language::Python.major_minor_version python
       ENV["PYTHONPATH"] = lib/"python#{version}/site-packages"
-      system python, "-c", "import PyQt5.sip"
+      system python, "-c", '"import PyQt5.sip"'
     end
   end
 end
