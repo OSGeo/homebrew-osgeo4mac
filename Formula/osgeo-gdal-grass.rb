@@ -4,7 +4,7 @@ class OsgeoGdalGrass < Formula
   url "https://download.osgeo.org/gdal/2.4.0/gdal-grass-2.4.0.tar.gz"
   sha256 "7f5c7f03504449524da5e6bb0042a4b4338d5e77e8bf70e694f59744801d695e"
 
-  # revision 1
+  revision 1
 
   depends_on "osgeo-gdal"
   depends_on "osgeo-grass"
