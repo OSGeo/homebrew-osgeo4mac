@@ -73,16 +73,14 @@ class OsgeoPyqt < Formula
       version = Language::Python.major_minor_version python
       ENV["PYTHONPATH"] = lib/"python#{version}/site-packages"
       system python, "-c", '"import PyQt5"'
-      %w[
-        Gui
-        Location
-        Multimedia
-        Network
-        Quick
-        Svg
-        Widgets
-        Xml
-      ].each { |mod| system python, "-c", '"import PyQt5.Qt#{mod}"' }
+      system python, "-c", '"import PyQt5.QtGui"'
+      system python, "-c", '"import PyQt5.QtLocation"'
+      system python, "-c", '"import PyQt5.QtMultimedia"'
+      system python, "-c", '"import PyQt5.QtNetwork"'
+      system python, "-c", '"import PyQt5.QtQuick"'
+      system python, "-c", '"import PyQt5.QtSvg"'
+      system python, "-c", '"import PyQt5.QtWidgets"'
+      system python, "-c", '"import PyQt5.QtXml"'
     end
   end
 end
