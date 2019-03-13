@@ -1,19 +1,12 @@
-class MongoCxxDriverLegacy < Formula
+class OsgeoMongoCxxDriverLegacy < Formula
   desc "C++ driver for MongoDB"
   homepage "https://github.com/mongodb/mongo-cxx-driver"
   url "https://github.com/mongodb/mongo-cxx-driver/archive/legacy-1.1.3.tar.gz"
   sha256 "50304162f706c2c73e04f200cdac767cb2c55d47cf724811cbfc8bb34a0fd6bc"
 
-  revision 2
+  # revision 1
 
-  bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    cellar :any
-    rebuild 1
-    sha256 "0ac7f303bcdb3078cd103bd47a34f3e3780844184ae412afa59cc4de9046a7d8" => :mojave
-    sha256 "0ac7f303bcdb3078cd103bd47a34f3e3780844184ae412afa59cc4de9046a7d8" => :high_sierra
-    sha256 "0ac7f303bcdb3078cd103bd47a34f3e3780844184ae412afa59cc4de9046a7d8" => :sierra
-  end
+  head "https://github.com/mongodb/mongo-cxx-driver.git", :branch => "releases/legacy"
 
   keg_only "Newer driver in homebrew core"
 
@@ -55,7 +48,6 @@ class MongoCxxDriverLegacy < Formula
     #   "-L#{lib}", "-lmongoclient", "-pthread", "-lboost_thread-mt", "-lboost_system", "-lboost_regex", "-std=c++11", "-stdlib=libc++"
     # assert_match "couldn't connect : couldn't connect to server 0.0.0.0:27017 (0.0.0.0), address resolved to 0.0.0.0",
     #   shell_output("./test mongodb://0.0.0.0 2>&1", 1)
-    #
     # end
 
     # resource("bson_test").stage do
@@ -63,7 +55,6 @@ class MongoCxxDriverLegacy < Formula
     #   "-I#{include}",
     #   "-L#{lib}", "-lmongoclient", "-lboost_thread-mt", "-lboost_system",  "-lboost_regex", "-std=c++11", "-stdlib=libc++"
     #   system "./test"
-    #
     # end
   end
 end

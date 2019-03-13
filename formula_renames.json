@@ -24,5 +24,6 @@
   "gdal2-grass7": "osgeo-gdal-grass",
   "laszip@2.2": "osgeo-laszip@2",
   "liblas-gdal2": "osgeo-liblas",
-  "grass7": "osgeo-grass"
+  "grass7": "osgeo-grass",
+  "mongo-cxx-driver-legacy": "osgeo-mongo-cxx-driver-legacy"
 }
