@@ -27,5 +27,6 @@
   "liblas-gdal2": "osgeo-liblas",
   "grass7": "osgeo-grass",
   "mongo-cxx-driver-legacy": "osgeo-mongo-cxx-driver-legacy",
-  "vigra": "osgeo-vigra"
+  "vigra": "osgeo-vigra",
+  "saga-gis-lts": "osgeo-saga-lts"
 }

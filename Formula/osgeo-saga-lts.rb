@@ -1,4 +1,4 @@
-class SagaGisLts < Formula
+class OsgeoSagaLts < Formula
   desc "System for Automated Geoscientific Analyses - Long Term Support"
   homepage "http://saga-gis.org"
   url "https://git.code.sf.net/p/saga-gis/code.git",
@@ -6,17 +6,9 @@ class SagaGisLts < Formula
       :revision => "b6f474f8af4af7f0ff82548cc6f88c53547d91f5"
   version "2.3.2"
 
-  revision 4
+  # revision 1
 
   head "https://git.code.sf.net/p/saga-gis/code.git", :branch => "release-2-3-lts"
-
-  bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    rebuild 2
-    sha256 "2a9b53a7c49fd53f1da84e1180aeed1cfe10ca696b2630ebc79c4e94fc7ccd20" => :mojave
-    sha256 "2a9b53a7c49fd53f1da84e1180aeed1cfe10ca696b2630ebc79c4e94fc7ccd20" => :high_sierra
-    sha256 "676e964e889d25e8cfab852cecc8b30052ae62e20d3cdbe08ff53f3969217128" => :sierra
-  end
 
   # - saga_api, CSG_Table::Del_Records(): bug fix, check record count correctly
   # - fix clang
@@ -26,17 +18,18 @@ class SagaGisLts < Formula
 
   keg_only "LTS version is specifically for working with QGIS"
 
-  # option "with-app", "Build SAGA.app Package"
+  option "with-postgresql10", "Build with PostgreSQL 10 client"
+  option "with-app", "Build SAGA.app Package"
 
   depends_on "automake" => :build
   depends_on "autoconf" => :build
   depends_on "libtool" => :build
   depends_on "pkg-config" => :build
-  depends_on "gdal2" # (gdal-curl, gdal-filegdb, gdal-hdf4)
+  depends_on "python@2"
   depends_on "proj"
   depends_on "wxmac"
+  depends_on "wxpython"
   depends_on "geos"
-  depends_on "laszip"
   depends_on "jasper"
   depends_on "fftw"
   depends_on "libtiff"
@@ -47,19 +40,25 @@ class SagaGisLts < Formula
   depends_on "unixodbc"
   depends_on "libharu"
   depends_on "qhull" # instead of looking for triangle
-  depends_on "postgresql"
-  depends_on "python@2"
-  depends_on "liblas-gdal2"
   depends_on "poppler"
   depends_on "hdf4"
   depends_on "hdf5"
   depends_on "netcdf"
   depends_on "sqlite"
-  depends_on "wxmac"
+  depends_on "osgeo-laszip@2"
+  depends_on "osgeo-gdal" # (gdal-curl, gdal-filegdb, gdal-hdf4)
+  depends_on "osgeo-liblas"
+
   # Vigra support builds, but dylib in saga shows 'failed' when loaded
   # Also, using --with-python will trigger vigra to be built with it, which
   # triggers a source (re)build of boost --with-python
-  depends_on "vigra" => :optional
+  depends_on "osgeo-vigra" # => :optional
+
+  if build.with?("postgresql10")
+    depends_on "postgresql@10"
+  else
+    depends_on "postgresql"
+  end
 
   resource "app_icon" do
     url "https://osgeo4mac.s3.amazonaws.com/src/saga_gui.icns"
@@ -93,6 +92,9 @@ class SagaGisLts < Formula
     # Disable narrowing warnings when compiling in C++11 mode.
     ENV.append "CXXFLAGS", "-Wno-c++11-narrowing -std=c++11"
 
+    ENV.append "PYTHON_VERSION", "2.7"
+    ENV.append "PYTHON", "#{Formula["python@2"].opt_bin}/python2"
+
     cd "saga-gis"
 
     # fix homebrew-specific header location for qhull
@@ -114,14 +116,20 @@ class SagaGisLts < Formula
 
     args << "--disable-odbc" if build.without? "unixodbc"
     args << "--disable-triangle" # if build.with? "qhull"
-    args << "--with-postgresql=#{Formula["postgresql"].opt_bin}/pg_config" # if build.with? "postgresql"
-    args << "--with-python" # if build.with? "python"
+
+    args << "--enable-python" # if build.with? "python"
+
+    if build.with?("postgresql10")
+      args << "--with-postgresql=#{Formula["postgresql@10"].opt_bin}/pg_config"
+    else
+      args << "--with-postgresql=#{Formula["postgresql"].opt_bin}/pg_config" # if build.with? "postgresql"
+    end
 
     system "autoreconf", "-i"
     system "./configure", *args
     system "make", "install"
 
-    # if build.with? "app"
+    if build.with? "app"
       (prefix/"SAGA.app/Contents/PkgInfo").write "APPLSAGA"
       (prefix/"SAGA.app/Contents/Resources").install resource("app_icon")
 
@@ -161,11 +169,11 @@ class SagaGisLts < Formula
           ln_s "#{bin}/saga_gui", "saga_gui"
         end
       end
-    # end
+    end
   end
 
   def caveats
-    # if build.with? "app"
+    if build.with? "app"
       <<~EOS
       SAGA.app was installed in:
         #{prefix}
@@ -176,7 +184,7 @@ class SagaGisLts < Formula
       Note that the SAGA GUI does not work very well yet.
       It has problems with creating a preferences file in the correct location and sometimes won't shut down (use Activity Monitor to force quit if necessary).
       EOS
-    # end
+    end
   end
 
   test do
