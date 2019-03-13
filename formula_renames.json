@@ -30,5 +30,6 @@
   "vigra": "osgeo-vigra",
   "saga-gis-lts": "osgeo-saga-lts",
   "sip-qt5": "osgeo-sip",
-  "pyqt-qt5": "osgeo-pyqt"
+  "pyqt-qt5": "osgeo-pyqt",
+  "qscintilla2-qt5": "osgeo-qscintilla2"
 }
