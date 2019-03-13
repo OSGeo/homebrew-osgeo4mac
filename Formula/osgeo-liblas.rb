@@ -5,7 +5,7 @@ class OsgeoLiblas < Formula
   sha256 "fa2afafb8ec7c81c4216e51de51cf845c99575e7d6efbd22ad311ca8a55ce189"
   version "1.8.1"
 
-  # revision 1
+  revision 1
 
   head "https://github.com/libLAS/libLAS.git", :branch => "master"
 
