@@ -11,9 +11,10 @@ class OsgeoLiblas < Formula
 
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    sha256 "04a9890ff6c4cb8cef71c35563ff8eb6ed5261029b29ecabcb49655eb38005e4" => :mojave
-    sha256 "04a9890ff6c4cb8cef71c35563ff8eb6ed5261029b29ecabcb49655eb38005e4" => :high_sierra
-    sha256 "6de5c0702cd01e6657b1e88cd6077687cd369bc3f9ae2f5bec8a00e4fbf7d055" => :sierra
+    rebuild 1
+    sha256 "aef25fadb19a6765d0ee04af746a193478414ac02ac4fb7f634d7304f0751534" => :mojave
+    sha256 "aef25fadb19a6765d0ee04af746a193478414ac02ac4fb7f634d7304f0751534" => :high_sierra
+    sha256 "93a4c126b58d663c863e02c567f81d927e77fa371bc4ca483da0ec8e6de06219" => :sierra
   end
 
   keg_only "other version built against older gdal is in main tap"
