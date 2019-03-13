@@ -6,6 +6,14 @@ class OsgeoGdalGrass < Formula
 
   revision 1
 
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    cellar :any
+    sha256 "0296f0d0e666a9750e7645e869b812e71332bad5f2a4efe890e2ceb0a4d9af26" => :mojave
+    sha256 "0296f0d0e666a9750e7645e869b812e71332bad5f2a4efe890e2ceb0a4d9af26" => :high_sierra
+    sha256 "a97025ccc1b28e197f9e10f879511b4e8ec0eca04f1159e6eb96cff240317b47" => :sierra
+  end
+
   depends_on "osgeo-gdal"
   depends_on "osgeo-grass"
 
