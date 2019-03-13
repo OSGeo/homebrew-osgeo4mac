@@ -194,6 +194,7 @@ class OsgeoSagaLts < Formula
 end
 
 __END__
+
 --- a/saga-gis/src/saga_core/saga_api/table.cpp
 +++ b/saga-gis/src/saga_core/saga_api/table.cpp
 @@ -901,7 +901,7 @@
