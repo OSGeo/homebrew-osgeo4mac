@@ -4,6 +4,14 @@ class OsgeoPyqt < Formula
   url "https://www.riverbankcomputing.com/static/Downloads/PyQt5/PyQt5_gpl-5.12.tar.gz"
   sha256 "d9e70065b5980afde5f2b9bc900910050331604e02c70666c45fcfc66b0d4f34"
 
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    cellar :any
+    sha256 "0a8ec37399feac35404c93a0fd13bf04662ed7dcc2213f1f750fb38a366d96eb" => :mojave
+    sha256 "0a8ec37399feac35404c93a0fd13bf04662ed7dcc2213f1f750fb38a366d96eb" => :high_sierra
+    sha256 "6e8f1c208400c36f9fc13efe61136e647e69486fc4cb301120f69bd71aed4a03" => :sierra
+  end
+
   # revision 1
 
   depends_on "python"
