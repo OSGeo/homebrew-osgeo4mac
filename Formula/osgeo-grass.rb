@@ -22,20 +22,20 @@ class OsgeoGrass < Formula
   end
 
   option "without-gui", "Build without WxPython interface. Command line tools still available"
-  # option "with-others", "Build with other optional dependencies"
+  option "with-aqua", "Build with experimental Aqua GUI backend"
+  option "with-app", "Build GRASS.app Package"
+  option "with-avce00", "Build with AVCE00 support: Make Arc/Info (binary) Vector Coverages appear as E00"
+  option "with-postgresql10", "Build with PostgreSQL 10 client"
+  option "with-others", "Build with other optional dependencies"
   # option "with-r", "Build with R support"
   # option "with-r-sethrfore", "Build with R support (only if you are going to install with this version of R)"
-  option "with-avce00", "Build with AVCE00 support: Make Arc/Info (binary) Vector Coverages appear as E00"
-  option "with-aqua", "Build with experimental Aqua GUI backend"
-  #option "with-app", "Build GRASS.app Package"
-  #option "with-liblas", "Build with LibLAS-with-GDAL2 support"
-  #option "with-postgresql", "Build with PostgreSQL support"
-  #option "with-mysql", "Build with MySQL support"
-  #option "with-pthread", "Build with PThread support"
+  # option "with-liblas", "Build with LibLAS-with-GDAL2 support"
+  # option "with-postgresql", "Build with PostgreSQL support"
+  # option "with-mysql", "Build with MySQL support"
+  # option "with-pthread", "Build with PThread support"
   # option "with-openmp", "Build with openmp support"
   # option "with-opendwg", "Build with OpenDWG support"
   # option "with-pdal", "Build with PDAL support" # Build - Error: /vector/v.in.pdal
-  option "with-postgresql10", "Build with PostgreSQL 10 client"
 
   depends_on "autoconf" => :build
   depends_on "automake" => :build
@@ -103,13 +103,6 @@ class OsgeoGrass < Formula
 
   # if build.with? "r"
   depends_on "r"
-  # end
-
-  # R with more support
-  # https://github.com/adamhsparks/setup_macOS_for_R
-  # fix: will not build if the R version does not match
-  # if build.with? "r-sethrfore"
-  #   depends_on "sethrfore/r-srf/r"
   # end
 
   # depends_on "pdal" => :optional
