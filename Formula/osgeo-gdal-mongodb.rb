@@ -8,6 +8,14 @@ class OsgeoGdalMongodb < Formula
 
   head "https://github.com/OSGeo/gdal.git", :branch => "master"
 
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    cellar :any
+    sha256 "cea1742c26822aca3ad63f3109ec4938510d51d38ce9d96fc6e9be9e33a74b8c" => :mojave
+    sha256 "cea1742c26822aca3ad63f3109ec4938510d51d38ce9d96fc6e9be9e33a74b8c" => :high_sierra
+    sha256 "4147fc23b0518f81e28ac95e25de170ad38f94f962ca479dd037931e26aceb2a" => :sierra
+  end
+
   depends_on "boost"
   depends_on "libtiff"
   depends_on "libgeotiff"
