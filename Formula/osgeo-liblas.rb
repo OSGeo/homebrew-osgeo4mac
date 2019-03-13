@@ -5,7 +5,7 @@ class OsgeoLiblas < Formula
   sha256 "fa2afafb8ec7c81c4216e51de51cf845c99575e7d6efbd22ad311ca8a55ce189"
   version "1.8.1"
 
-  revision 1
+  revision 2
 
   head "https://github.com/libLAS/libLAS.git", :branch => "master"
 
@@ -54,8 +54,8 @@ class OsgeoLiblas < Formula
 
   # fix for liblas-config
   resource "liblas-config" do
-    url "https://gist.githubusercontent.com/fjperini/746634c101b0ffc8926baaf55d5cf793/raw/9f775eeea0b44c278a748a69d3827251156d2aa0/liblas-config"
-    sha256 "5278bf1c151d018aae850c126cdafaf2de2d4d38b2648b066cee1c9d993c4214"
+    url "https://gist.githubusercontent.com/fjperini/746634c101b0ffc8926baaf55d5cf793/raw/d6bb4a0732c215a9c62fdb795bdabcf1ae8191ac/liblas-config"
+    sha256 "e45e9d99f0ff6f8e2b045ddd46007b7c6b3c6afd3620c36994ae3b54e49b17e7"
     version "1.8.1"
   end
 
