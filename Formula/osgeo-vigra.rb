@@ -1,27 +1,19 @@
-class Vigra < Formula
+class OsgeoVigra < Formula
   include Language::Python::Virtualenv
   desc "Image processing and analysis library"
   homepage "https://ukoethe.github.io/vigra/"
   url "https://github.com/ukoethe/vigra/releases/download/Version-1-11-1/vigra-1.11.1-src.tar.gz"
   sha256 "a5564e1083f6af6a885431c1ee718bad77d11f117198b277557f8558fa461aaf"
 
-  revision 1
+  # revision 1
 
-  head "https://github.com/ukoethe/vigra.git"
-
-  bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    cellar :any
-    sha256 "6370fe2b781f16562a1c42e2085d0ae3a70a3620c23f82c80f21ad0dd906386e" => :mojave
-    sha256 "6370fe2b781f16562a1c42e2085d0ae3a70a3620c23f82c80f21ad0dd906386e" => :high_sierra
-    sha256 "6370fe2b781f16562a1c42e2085d0ae3a70a3620c23f82c80f21ad0dd906386e" => :sierra
-  end
+  head "https://github.com/ukoethe/vigra.git", :branch => "master"
 
   option "without-test", "skip tests"
+  option "with-python3", "Build with Python 3 (for Saga GIS no LTS)"
 
   deprecated_option "without-check" => "without-test"
 
-  depends_on "python" => :optional
   depends_on "cmake" => :build
   depends_on "boost" => :build
   depends_on "jpeg"
@@ -30,7 +22,13 @@ class Vigra < Formula
   depends_on "numpy"
   depends_on "hdf5" => :recommended
   depends_on "fftw" => :recommended
-  depends_on "openexr" => :optional
+  depends_on "openexr" # => :optional
+
+  if build.with? "python3"
+    depends_on "python"
+  else
+    depends_on "python@2" # => :optional
+  end
 
   patch do
     url "https://git.archlinux.org/svntogit/community.git/plain/trunk/fix-incorrect-template-parameter-type.patch?h=packages/vigra"
@@ -54,23 +52,28 @@ class Vigra < Formula
 
   # vigra python bindings requires boost-python
   # see https://packages.ubuntu.com/saucy/python-vigra
-  depends_on "boost-python" => "c++11" if build.with? "python"
+  depends_on "boost-python" => "c++11" # if build.with? "python"
 
   def install
     ENV.cxx11
     ENV.append "CXXFLAGS", "-ftemplate-depth=512"
 
-    if build.with? "python"
-      venv = virtualenv_create(libexec)
-      venv.pip_install resources
-    end
+    # if build.with? "python"
+    venv = virtualenv_create(libexec)
+    venv.pip_install resources
+    # end
 
     cmake_args = std_cmake_args
     cmake_args << "-DWITH_VIGRANUMPY=0" if build.without? :python
     cmake_args << "-DWITH_HDF5=0" if build.without? "hdf5"
-    cmake_args << "-DWITH_OPENEXR=1" if build.with? "openexr"
-    cmake_args << "-DVIGRANUMPY_INSTALL_DIR=#{lib}/python2.7/site-packages" if build.with? :python
-    cmake_args << "-DPYTHON_EXECUTABLE=#{Formula["python"].opt_bin}/python3" if build.with? :python
+    cmake_args << "-DWITH_OPENEXR=1" # if build.with? "openexr"
+    # cmake_args << "-DVIGRANUMPY_INSTALL_DIR=#{lib}/python2.7/site-packages" # if build.with? :python # not used by the project
+
+    if build.with? "python3"
+      cmake_args << "-DPYTHON_EXECUTABLE=#{Formula["python"].opt_bin}/python3"
+    else
+      cmake_args << "-DPYTHON_EXECUTABLE=#{Formula["python@2"].opt_bin}/python2" # if build.with? :python
+    end
 
     mkdir "build" do
       system "cmake", "..", *cmake_args
