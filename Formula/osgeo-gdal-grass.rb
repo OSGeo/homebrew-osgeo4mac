@@ -1,25 +1,16 @@
-class Gdal2Grass7 < Formula
+class OsgeoGdalGrass < Formula
   desc "GDAL/OGR 2.x plugin for GRASS 7"
   homepage "https://www.gdal.org"
   url "https://download.osgeo.org/gdal/2.4.0/gdal-grass-2.4.0.tar.gz"
   sha256 "7f5c7f03504449524da5e6bb0042a4b4338d5e77e8bf70e694f59744801d695e"
 
-  revision 1
+  # revision 1
 
-  bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    cellar :any
-    rebuild 1
-    sha256 "33340b8ecb171839029f6462d444b2bf0a4a4db01fc8018cbfdeadc6c6d1eebf" => :mojave
-    sha256 "33340b8ecb171839029f6462d444b2bf0a4a4db01fc8018cbfdeadc6c6d1eebf" => :high_sierra
-    sha256 "33340b8ecb171839029f6462d444b2bf0a4a4db01fc8018cbfdeadc6c6d1eebf" => :sierra
-  end
-
-  depends_on "gdal2"
-  depends_on "grass7"
+  depends_on "osgeo-gdal"
+  depends_on "osgeo-grass"
 
   def gdal_majmin_ver
-    gdal_ver_list = Formula["gdal2"].version.to_s.split(".")
+    gdal_ver_list = Formula["osgeo-gdal"].version.to_s.split(".")
     "#{gdal_ver_list[0]}.#{gdal_ver_list[1]}"
   end
 
@@ -29,11 +20,11 @@ class Gdal2Grass7 < Formula
 
   def install
     ENV.cxx11
-    gdal = Formula["gdal2"]
+    gdal = Formula["osgeo-gdal"]
     gdal_plugins = lib/gdal_plugins_subdirectory
     gdal_plugins.mkpath
 
-    grass = Formula["grass7"]
+    grass = Formula["osgeo-grass"]
 
     # due to DYLD_LIBRARY_PATH no longer being setable, strictly define extension
     inreplace "Makefile.in", ".so", ".dylib"
@@ -61,7 +52,7 @@ class Gdal2Grass7 < Formula
 
   test do
     ENV["GDAL_DRIVER_PATH"] = "#{HOMEBREW_PREFIX}/lib/gdalplugins"
-    gdal_opt_bin = Formula["gdal2"].opt_bin
+    gdal_opt_bin = Formula["osgeo-gdal"].opt_bin
     out = shell_output("#{gdal_opt_bin}/gdalinfo --formats")
     assert_match "GRASS -raster- (ro)", out
     out = shell_output("#{gdal_opt_bin}/ogrinfo --formats")
