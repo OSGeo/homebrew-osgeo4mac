@@ -9,6 +9,14 @@ class OsgeoVigra < Formula
 
   head "https://github.com/ukoethe/vigra.git", :branch => "master"
 
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    cellar :any
+    sha256 "b7039ec5e4a8256a0bb85f0bb581a80d9ab8e77d5a0059c23ea3034a92408ad4" => :mojave
+    sha256 "b7039ec5e4a8256a0bb85f0bb581a80d9ab8e77d5a0059c23ea3034a92408ad4" => :high_sierra
+    sha256 "112c97bbf2a438d46876324b984a3222ec9550bf1fcae1f49f5ed7908c07e5f1" => :sierra
+  end
+
   option "without-test", "skip tests"
   option "with-python3", "Build with Python 3 (for Saga GIS no LTS)"
 
