@@ -35,5 +35,6 @@
   "qt5-webkit": "osgeo-qt-webkit",
   "pyqt5-webkit": "osgeo-pyqt-webkit",
   "qpsql": "osgeo-qt-psql",
-  "qmysql": "osgeo-qt-mysql"
+  "qmysql": "osgeo-qt-mysql",
+  "qodbc": "osgeo-qt-odbc"
 }

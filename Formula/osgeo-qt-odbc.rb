@@ -1,4 +1,4 @@
-class Qodbc < Formula
+class OsgeoQtOdbc < Formula
   desc "Qt SQL Database Driver - QODBC for Open Database Connectivity (ODBC)"
   homepage "https://doc.qt.io/qt-5/sql-driver.html"
   url "https://download.qt.io/official_releases/qt/5.12/5.12.1/single/qt-everywhere-src-5.12.1.tar.xz"
@@ -7,15 +7,6 @@ class Qodbc < Formula
   # revision 1
 
   head "https://code.qt.io/qt/qt5.git", :branch => "5.12", :shallow => false
-
-  bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    cellar :any
-    rebuild 1
-    sha256 "58b94eda833370b80e866c348afb8a7bc3797137e07733b9ca319803b1878bfa" => :mojave
-    sha256 "58b94eda833370b80e866c348afb8a7bc3797137e07733b9ca319803b1878bfa" => :high_sierra
-    sha256 "58b94eda833370b80e866c348afb8a7bc3797137e07733b9ca319803b1878bfa" => :sierra
-  end
 
   depends_on "pkg-config" => :build
   depends_on "libiconv"
