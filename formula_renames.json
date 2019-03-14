@@ -32,5 +32,6 @@
   "sip-qt5": "osgeo-sip",
   "pyqt-qt5": "osgeo-pyqt",
   "qscintilla2-qt5": "osgeo-qscintilla2",
-  "qt5-webkit": "osgeo-qt-webkit"
+  "qt5-webkit": "osgeo-qt-webkit",
+  "pyqt5-webkit": "osgeo-pyqt-webkit"
 }
