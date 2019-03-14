@@ -6,6 +6,14 @@ class OsgeoPyqtWebkit < Formula
 
   revision 1
 
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    cellar :any
+    sha256 "c0a23916da434f5896525cbd46543bf88b297c2ea5599694eb2a3a0c35fd2727" => :mojave
+    sha256 "c0a23916da434f5896525cbd46543bf88b297c2ea5599694eb2a3a0c35fd2727" => :high_sierra
+    sha256 "11d15c318ad4eed1a8be01526f3204466a332922dafeb976e30f8b96f0226c31" => :sierra
+  end
+
   option "with-debug", "Build with debug symbols"
 
   keg_only "PyQt 5 Webkit has CMake issues when linked"
