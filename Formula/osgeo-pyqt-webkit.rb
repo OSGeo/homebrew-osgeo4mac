@@ -8,6 +8,11 @@ class OsgeoPyqtWebkit < Formula
 
   option "with-debug", "Build with debug symbols"
 
+  keg_only "PyQt 5 Webkit has CMake issues when linked"
+  # Error: Failed to fix install linkage
+  # adding -DCMAKE_INSTALL_NAME_DIR=#{lib} and -DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON
+  # to the CMake arguments will fix the problem.
+
   depends_on "python"
   depends_on "python@2"
   depends_on "qt"
@@ -19,11 +24,11 @@ class OsgeoPyqtWebkit < Formula
     # sneak the WebKit modules into the Qt.modules setup before referencing in .pro files
     wk_mods = Formula["osgeo-qt-webkit"].opt_prefix/"mkspecs/modules"
     inreplace "configure.py" do |s|
-        s.sub! /('TEMPLATE = lib'\])/,
-               "\\1\n" + <<-EOS
-      pro_lines.append('include(#{wk_mods}/qt_lib_webkit.pri)')
-      pro_lines.append('include(#{wk_mods}/qt_lib_webkitwidgets.pri)')
-      EOS
+      s.sub! /('TEMPLATE = lib'\])/,
+             "\\1\n" + <<-EOS
+    pro_lines.append('include(#{wk_mods}/qt_lib_webkit.pri)')
+    pro_lines.append('include(#{wk_mods}/qt_lib_webkitwidgets.pri)')
+    EOS
     end
 
     ["#{Formula["python@2"].opt_bin}/python2", "#{Formula["python"].opt_bin}/python3"].each do |python|
