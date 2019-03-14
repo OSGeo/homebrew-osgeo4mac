@@ -4,7 +4,7 @@ class OsgeoQtPsql < Formula
   url "https://download.qt.io/official_releases/qt/5.12/5.12.1/single/qt-everywhere-src-5.12.1.tar.xz"
   sha256 "caffbd625c7bc10ff8c5c7a27dbc7d84fa4de146975c0e1ffe904b514ccd6da4"
 
-  # revision 1
+  revision 1
 
   head "https://code.qt.io/qt/qt5.git", :branch => "5.12", :shallow => false
 
