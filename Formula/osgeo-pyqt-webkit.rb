@@ -8,6 +8,11 @@ class OsgeoPyqtWebkit < Formula
 
   option "with-debug", "Build with debug symbols"
 
+  keg_only "PyQt 5 Webkit has CMake issues when linked"
+  # Error: Failed to fix install linkage
+  # adding -DCMAKE_INSTALL_NAME_DIR=#{lib} and -DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON
+  # to the CMake arguments will fix the problem.
+
   depends_on "python"
   depends_on "python@2"
   depends_on "qt"
