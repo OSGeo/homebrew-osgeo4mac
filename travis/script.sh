@@ -23,7 +23,7 @@ for f in ${CHANGED_FORMULAE};do
   # fix error: Unable to import PyQt5.QtCore
   # build qscintilla2
   if [ "$(echo ${deps} | grep -c 'osgeo-pyqt')" != "0" ];then
-    brew reinstall osgeo-pyqt
+    brew reinstall ${TRAVIS_REPO_SLUG}/osgeo-pyqt
     brew unlink osgeo-pyqt && brew link osgeo-pyqt --force
     system "python2", "-c", '"import PyQt5.QtCore"'
     system "python3", "-c", '"import PyQt5.QtCore"'
