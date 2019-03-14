@@ -39,10 +39,11 @@ for f in ${CHANGED_FORMULAE};do
     system "python3", "-c", '"import PyQt5.QtCore"'
   fi
 
-#  if [[ $(brew list --versions ${f}) ]]; then
-#    echo "Clearing previously installed/cached formula ${f}..."
-#    brew uninstall --force --ignore-dependencies ${f} || true
-#  fi
+  # if [[ $(brew list --versions ${f}) ]]; then
+  #   echo "Clearing previously installed/cached formula ${f}..."
+  #   brew uninstall --force --ignore-dependencies ${f} || true
+  # fi
+
   echo "Installing changed formula ${f}..."
   # Default installation flag set
   FLAGS="--build-bottle"
