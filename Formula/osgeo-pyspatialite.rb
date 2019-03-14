@@ -1,7 +1,8 @@
-class Pyspatialite < Formula
+class OsgeoPyspatialite < Formula
   desc "DB-API 2.0 interface for SQLite with Spatialite"
-  homepage "https://code.google.com/p/pyspatialite/"
-  revision 3
+  homepage "https://code.google.com/p/pyspatialite"
+
+  # revision 1
 
   head "https://code.google.com/p/pyspatialite/", :using => :hg
 
@@ -19,13 +20,6 @@ class Pyspatialite < Formula
     end
   end
 
-  bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    cellar :any
-    sha256 "e2f2181b5477ca75a0f4218280e2ed3c6130cdefbbc659234a2292e64362985d" => :high_sierra
-    sha256 "e2f2181b5477ca75a0f4218280e2ed3c6130cdefbbc659234a2292e64362985d" => :sierra
-  end
-
   depends_on "python@2"
   depends_on "geos"
   depends_on "proj"
@@ -40,8 +34,8 @@ class Pyspatialite < Formula
       library_dirs=#{HOMEBREW_PREFIX}/lib:#{HOMEBREW_PREFIX}/opt/sqlite/lib
     EOS
 
-    system "python", "setup.py", "build"
-    system "python", "setup.py", "install", "--prefix=#{prefix}"
+    system "#{Formula["python@2"].opt_bin}/python2", "setup.py", "build"
+    system "#{Formula["python@2"].opt_bin}/python2", "setup.py", "install", "--prefix=#{prefix}"
   end
 
   test do
