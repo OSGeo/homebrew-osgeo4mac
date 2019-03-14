@@ -28,7 +28,6 @@ brew reinstall osgeo-pyqt
 brew unlink osgeo-pyqt && brew link osgeo-pyqt --force
 system "python2", "-c", '"import PyQt5.QtCore"'
 system "python3", "-c", '"import PyQt5.QtCore"'
-brew uninstall osgeo-pyqt
 # fi
 
 # fix error: 'libintl.h' file not found
@@ -50,7 +49,7 @@ for f in ${CHANGED_FORMULAE};do
   # Default installation flag set
   FLAGS="--build-bottle"
 
-  brew install ${FLAGS} ${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/${f}&
+  brew reinstall ${FLAGS} ${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/${f}&
   PID=$!
   # add progress to ensure Travis doesn't complain about no output
   while true; do
