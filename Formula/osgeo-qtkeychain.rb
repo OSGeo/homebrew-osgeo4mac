@@ -1,19 +1,12 @@
-class Qtkeychain < Formula
+class OsgeoQtkeychain < Formula
   desc "Platform-independent Qt-based API for storing passwords securely"
   homepage "https://github.com/frankosterfeld/qtkeychain"
   url "https://github.com/frankosterfeld/qtkeychain/archive/v0.9.1.tar.gz"
   sha256 "9c2762d9d0759a65cdb80106d547db83c6e9fdea66f1973c6e9014f867c6f28e"
 
-  head "https://github.com/frankosterfeld/qtkeychain.git", :using => :git
+  # revision 1
 
-  bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    cellar :any
-    rebuild 1
-    sha256 "f4349f3ff6c1fd1740c19e32596da4fc1c96361f371f0182ef9a84a65901e8df" => :mojave
-    sha256 "f4349f3ff6c1fd1740c19e32596da4fc1c96361f371f0182ef9a84a65901e8df" => :high_sierra
-    sha256 "f4349f3ff6c1fd1740c19e32596da4fc1c96361f371f0182ef9a84a65901e8df" => :sierra
-  end
+  head "https://github.com/frankosterfeld/qtkeychain.git", :using => :git
 
   option "with-static", "Build static in addition to shared library"
   option "with-translations", "Generate Qt translation (.ts) files"
