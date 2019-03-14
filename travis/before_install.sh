@@ -70,10 +70,10 @@ for f in ${CHANGED_FORMULAE};do
     mkdir -p ${HOME}/Library/Python/${PY_VER}/lib/python/site-packages
     echo 'import site; site.addsitedir("${HOMEBREW_PREFIX}/lib/python${PY_VER}/site-packages")' \
       >> ${HOME}/Library/Python/${PY_VER}/lib/python/site-packages/homebrew.pth
-    echo 'import site; site.addsitedir("${HOMEBREW_PREFIX}/opt/gdal2/lib/python${PY_VER}/site-packages")' \
+    echo 'import site; site.addsitedir("${HOMEBREW_PREFIX}/opt/osgeo-gdal/lib/python${PY_VER}/site-packages")' \
       >> ${HOME}/Library/Python/${PY_VER}/lib/python/site-packages/gdal2.pth
 
-    if [[ "${f}" =~ "gdal2" ]];then
+    if [[ "${f}" =~ "osgeo-gdal" ]];then
       echo "Installing GDAL 2 Python3 dependencies"
       ${HOMEBREW_PREFIX}/bin/pip3 install numpy
     fi
@@ -97,21 +97,21 @@ for f in ${CHANGED_FORMULAE};do
     mkdir -p ${HOME}/Library/Python/${PY_VER}/lib/python/site-packages
     echo 'import site; site.addsitedir("${HOMEBREW_PREFIX}/lib/python${PY_VER}/site-packages")' \
       >> ${HOME}/Library/Python/${PY_VER}/lib/python/site-packages/homebrew.pth
-    echo 'import site; site.addsitedir("${HOMEBREW_PREFIX}/opt/gdal2/lib/python${PY_VER}/site-packages")' \
+    echo 'import site; site.addsitedir("${HOMEBREW_PREFIX}/opt/osgeo-gdal/lib/python${PY_VER}/site-packages")' \
       >> ${HOME}/Library/Python/${PY_VER}/lib/python/site-packages/gdal2.pth
 
-    if [[ "${f}" =~ "gdal2" ]];then
+    if [[ "${f}" =~ "osgeo-gdal" ]];then
       echo "Installing GDAL 2 Python2 dependencies"
       ${HOMEBREW_PREFIX}/bin/pip2 install numpy
     fi
   fi
   # Special handling of grass7, because it needs to be unlinked
-  if [ "$(echo ${deps} | grep -c 'grass7')" != "0" ];then
+  if [ "$(echo ${deps} | grep -c 'osgeo-grass')" != "0" ];then
     echo "Installing and unlinking grass7"
     # GDAL gets its numpy installed via pip, but grass also has a dependency, so we need to force it.
     brew install numpy || brew link --overwrite numpy
-    brew install grass7
-    brew unlink grass7
+    brew install osgeo-grass
+    brew unlink osgeo-grass
   fi
 
 done

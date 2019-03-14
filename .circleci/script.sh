@@ -19,14 +19,25 @@ set -e
 
 ulimit -n 1024
 
-# fix error: 'libintl.h' file not found
-# build qgis with grass
-brew reinstall gettext
-brew unlink gettext && brew link --force gettext
-
 echo ${CHANGED_FORMULAE}
 
 for f in ${CHANGED_FORMULAE};do
+  deps=$(brew deps --include-build ${f})
+  # fix error: 'libintl.h' file not found
+  # build qgis with grass
+  if [ "$(echo ${deps} | grep -c 'osgeo-grass')" != "0" ];then
+    brew reinstall gettext
+    brew unlink gettext && brew link --force gettext
+  fi
+
+  # fix error: Unable to import PyQt5.QtCore
+  # build qscintilla2
+  if [ "$(echo ${deps} | grep -c 'osgeo-pyqt')" != "0" ];then
+    brew reinstall osgeo-pyqt
+    brew unlink osgeo-pyqt && brew link osgeo-pyqt --force
+    system python, "-c", '"import PyQt5.QtCore"'
+  fi
+
 #  if [[ $(brew list --versions ${f}) ]]; then
 #    echo "Clearing previously installed/cached formula ${f}..."
 #    brew uninstall --force --ignore-dependencies ${f} || true
