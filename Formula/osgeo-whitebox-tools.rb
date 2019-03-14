@@ -5,7 +5,7 @@ class OsgeoWhiteboxTools < Formula
   sha256 "6e425ddf43f1c9cdcd9f00c9766a66fd42f5477aac30a5bc9b96784f9fb4c026"
   version "0.14.1"
 
-  # revision 1
+  revision 1
 
   def install
     cp_r buildpath.to_s, prefix.to_s
