@@ -41,5 +41,6 @@
   "pyspatialite": "osgeo-pyspatialite",
   "six": "osgeo-six",
   "taudem": "osgeo-taudem",
-  "shark": "osgeo-shark"
+  "shark": "osgeo-shark",
+  "whitebox-tools": "osgeo-whitebox-tools"
 }
