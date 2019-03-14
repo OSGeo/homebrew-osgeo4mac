@@ -4,7 +4,7 @@ class OsgeoQtkeychain < Formula
   url "https://github.com/frankosterfeld/qtkeychain/archive/v0.9.1.tar.gz"
   sha256 "9c2762d9d0759a65cdb80106d547db83c6e9fdea66f1973c6e9014f867c6f28e"
 
-  # revision 1
+  revision 1
 
   head "https://github.com/frankosterfeld/qtkeychain.git", :using => :git
 
