@@ -5,7 +5,7 @@ class OsgeoQtWebkit < Formula
   sha256 "2e393e7429387437cbfef56ec839329663e9b136ea68997d1e1cdd2f4d9d3ae0"
   version "5.12.1"
 
-  # revision 1
+  revision 1
 
   # from the developer: "https://github.com/annulen/webkit.git"
   head "https://github.com/qt/qtwebkit.git"
