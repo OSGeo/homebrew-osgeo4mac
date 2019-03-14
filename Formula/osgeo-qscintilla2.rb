@@ -4,7 +4,7 @@ class OsgeoQscintilla2 < Formula
   url "https://www.riverbankcomputing.com/static/Downloads/QScintilla/QScintilla_gpl-2.11.1.tar.gz"
   sha256 "dae54d19e43dba5a3f98ac084fc0bcfa6fb713fa851f1783a01404397fd722f5"
 
-  revision 2
+  revision 1
 
   depends_on "python"
   depends_on "python@2"
