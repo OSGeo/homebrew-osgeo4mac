@@ -1,20 +1,11 @@
-class Qt5Webkit < Formula
+class OsgeoQtWebkit < Formula
   desc "Classes for a WebKit2 based implementation and a new QML API"
   homepage "https://www.qt.io/developers"
   url "https://github.com/qt/qtwebkit/archive/72cfbd7664f21fcc0e62b869a6b01bf73eb5e7da.tar.gz"
   sha256 "2e393e7429387437cbfef56ec839329663e9b136ea68997d1e1cdd2f4d9d3ae0"
   version "5.12.1"
 
-  bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    cellar :any
-    rebuild 1
-    sha256 "d53156ce9ad6e810ed216c7e0071da5a490a55120310ba787f439e25f6e9f3ee" => :mojave
-    sha256 "d53156ce9ad6e810ed216c7e0071da5a490a55120310ba787f439e25f6e9f3ee" => :high_sierra
-    sha256 "a67c4f352f0825316f70d269f90158079dc229cacea94dd35a8878c8bf954cf2" => :sierra
-  end
-
-  revision 2
+  # revision 1
 
   # from the developer: "https://github.com/annulen/webkit.git"
   head "https://github.com/qt/qtwebkit.git"
