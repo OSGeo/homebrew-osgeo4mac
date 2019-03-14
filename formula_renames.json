@@ -39,5 +39,6 @@
   "qodbc": "osgeo-qt-odbc",
   "qtkeychain": "osgeo-qtkeychain",
   "pyspatialite": "osgeo-pyspatialite",
-  "six": "osgeo-six"
+  "six": "osgeo-six",
+  "taudem": "osgeo-taudem"
 }
