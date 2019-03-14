@@ -1,4 +1,4 @@
-class Qmysql < Formula
+class OsgeoQtMysql < Formula
   desc "Qt SQL Database Driver - QMYSQL for MySQL 4 and higher"
   homepage "https://doc.qt.io/qt-5/sql-driver.html"
   url "https://download.qt.io/official_releases/qt/5.12/5.12.1/single/qt-everywhere-src-5.12.1.tar.xz"
@@ -7,15 +7,6 @@ class Qmysql < Formula
   # revision 1
 
   head "https://code.qt.io/qt/qt5.git", :branch => "5.12", :shallow => false
-
-  bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    cellar :any
-    rebuild 2
-    sha256 "b7201ca1c1969713c0f3665071193021bad012788d72676bda371320239d680a" => :mojave
-    sha256 "b7201ca1c1969713c0f3665071193021bad012788d72676bda371320239d680a" => :high_sierra
-    sha256 "b7201ca1c1969713c0f3665071193021bad012788d72676bda371320239d680a" => :sierra
-  end
 
   depends_on "pkg-config" => :build
   depends_on "libiconv"
