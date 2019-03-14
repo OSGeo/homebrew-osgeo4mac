@@ -8,6 +8,14 @@ class OsgeoQtkeychain < Formula
 
   head "https://github.com/frankosterfeld/qtkeychain.git", :using => :git
 
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    cellar :any
+    sha256 "7b17b3e09a5bc5f3ae4e1d3351f3d4b4986441b26d27077351f175053ae7bb41" => :mojave
+    sha256 "7b17b3e09a5bc5f3ae4e1d3351f3d4b4986441b26d27077351f175053ae7bb41" => :high_sierra
+    sha256 "5a4f0e79fbe6a3b11aa90326cf29491d60711afeee91f6a61ae8851130846661" => :sierra
+  end
+
   option "with-static", "Build static in addition to shared library"
   option "with-translations", "Generate Qt translation (.ts) files"
 
