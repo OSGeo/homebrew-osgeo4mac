@@ -40,5 +40,6 @@
   "qtkeychain": "osgeo-qtkeychain",
   "pyspatialite": "osgeo-pyspatialite",
   "six": "osgeo-six",
-  "taudem": "osgeo-taudem"
+  "taudem": "osgeo-taudem",
+  "shark": "osgeo-shark"
 }
