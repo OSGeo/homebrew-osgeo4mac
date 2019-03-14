@@ -7,9 +7,9 @@ class OsgeoQscintilla2 < Formula
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
     cellar :any
-    sha256 "fffceefad0318de50b6ff212e2d947d0e4c5ef9eccc214cd0c9c09759bc2d203" => :mojave
-    sha256 "fffceefad0318de50b6ff212e2d947d0e4c5ef9eccc214cd0c9c09759bc2d203" => :high_sierra
-    sha256 "fffceefad0318de50b6ff212e2d947d0e4c5ef9eccc214cd0c9c09759bc2d203" => :sierra
+    sha256 "ca1d29b9a5f633f10f0cad2616ed5368b2c560f66000dfdd3506a32e98f8bbd4" => :mojave
+    sha256 "ca1d29b9a5f633f10f0cad2616ed5368b2c560f66000dfdd3506a32e98f8bbd4" => :high_sierra
+    sha256 "ca1d29b9a5f633f10f0cad2616ed5368b2c560f66000dfdd3506a32e98f8bbd4" => :sierra
   end
 
   revision 1
