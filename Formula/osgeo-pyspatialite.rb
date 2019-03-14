@@ -19,6 +19,14 @@ class OsgeoPyspatialite < Formula
       sha256 "8696caaadfc6edf9aa159fe61ed44ce1eac23da2fd68c242148fc2218e6c6901"
     end
   end
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    cellar :any
+    sha256 "688bd53195ba337462aa64ad99adf040058fd2ca110b61889f131e3ed77ccd13" => :mojave
+    sha256 "688bd53195ba337462aa64ad99adf040058fd2ca110b61889f131e3ed77ccd13" => :high_sierra
+    sha256 "cf4354ad4491e84e976ae0af14ce4490cf8b3646f46061915a5a2fb307f69877" => :sierra
+  end
+
 
   depends_on "python@2"
   depends_on "geos"
