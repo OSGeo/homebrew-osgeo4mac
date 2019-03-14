@@ -38,7 +38,9 @@ brew tap brewsci/bio || true
 # Keeps gcc from being linked
 brew cask uninstall oclint || true
 
-brew update || brew update
+# brew update || brew update
+# brew update - slow
+brew update-reset
 
 # Set up ccache (doesn't work with `brew install <formula>`)
 #brew install ccache

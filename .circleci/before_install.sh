@@ -35,7 +35,9 @@ for f in ${CHANGED_FORMULAE};do
     brew uninstall --force --ignore-dependencies ${f} || true
   done
 
-  brew update > /dev/null
+  # brew update > /dev/null
+  # brew update - slow
+  brew update-reset
 
   echo "Homebrew setup for changed formula ${f}..."
   deps=$(brew deps --include-build ${f})

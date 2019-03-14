@@ -35,7 +35,8 @@ for f in ${CHANGED_FORMULAE};do
   if [ "$(echo ${deps} | grep -c 'osgeo-pyqt')" != "0" ];then
     brew reinstall osgeo-pyqt
     brew unlink osgeo-pyqt && brew link osgeo-pyqt --force
-    system python, "-c", '"import PyQt5.QtCore"'
+    system "python2", "-c", '"import PyQt5.QtCore"'
+    system "python3", "-c", '"import PyQt5.QtCore"'
   fi
 
 #  if [[ $(brew list --versions ${f}) ]]; then
