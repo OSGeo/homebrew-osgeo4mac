@@ -49,7 +49,7 @@ before_install:
     else
       echo "Changed formulae are ${CHANGED_FORMULAE}";
     fi
-  - if [ "${CHANGED_FORMULAE}" == "qt5-webkit" ] || [ "${CHANGED_FORMULAE}" == "qgis" ] || [ "${CHANGED_FORMULAE}" == "qgis-ltr" ]; then
+  - if [ "${CHANGED_FORMULAE}" == "osgeo-qt-webkit" ] || [ "${CHANGED_FORMULAE}" == "osgeo-qgis" ] || [ "${CHANGED_FORMULAE}" == "osgeo-qgis-ltr" ]; then
       echo "Skipping CI; These formulas exceed the time limit in Travis CI.";
       exit 0 || true;
       travis_terminate 0;

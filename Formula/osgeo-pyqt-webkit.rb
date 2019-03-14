@@ -8,7 +8,8 @@ class OsgeoPyqtWebkit < Formula
 
   option "with-debug", "Build with debug symbols"
 
-  depends_on "python" => :recommended
+  depends_on "python"
+  depends_on "python@2"
   depends_on "qt"
   depends_on "osgeo-sip"
   depends_on "osgeo-pyqt"
