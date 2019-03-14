@@ -4,7 +4,7 @@ class OsgeoShark < Formula
   url "https://github.com/Shark-ML/Shark/archive/v4.0.1.tar.gz"
   sha256 "1caf9c73c5ebf54f9543a090e2b05ac646f95559aa1de483cd7662c378c1ec21"
 
-  # revision 1
+  revision 1
 
   head "https://github.com/Shark-ML/Shark.git", :branch => "master"
 
