@@ -19,11 +19,11 @@ class OsgeoPyqtWebkit < Formula
     # sneak the WebKit modules into the Qt.modules setup before referencing in .pro files
     wk_mods = Formula["osgeo-qt-webkit"].opt_prefix/"mkspecs/modules"
     inreplace "configure.py" do |s|
-      s.sub! /('TEMPLATE = lib'\])/,
-             "\\1\n" + <<-EOS
-    pro_lines.append('include(#{wk_mods}/qt_lib_webkit.pri)')
-    pro_lines.append('include(#{wk_mods}/qt_lib_webkitwidgets.pri)')
-    EOS
+        s.sub! /('TEMPLATE = lib'\])/,
+               "\\1\n" + <<-EOS
+      pro_lines.append('include(#{wk_mods}/qt_lib_webkit.pri)')
+      pro_lines.append('include(#{wk_mods}/qt_lib_webkitwidgets.pri)')
+      EOS
     end
 
     ["#{Formula["python@2"].opt_bin}/python2", "#{Formula["python"].opt_bin}/python3"].each do |python|
