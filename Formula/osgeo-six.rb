@@ -1,12 +1,10 @@
-class Six < Formula
-  include Language::Python::Virtualenv
-
+class OsgeoSix < Formula
   desc "Python 2 and 3 compatibility utilities"
   homepage "https://pypi.python.org/pypi/six"
   url "https://github.com/benjaminp/six/archive/1.12.0.tar.gz"
   sha256 "0ce7aef70d066b8dda6425c670d00c25579c3daad8108b3e3d41bef26003c852"
 
-  revision 1
+  # revision 1
 
   head "https://github.com/benjaminp/six.git", :branch => "master"
 
@@ -33,7 +31,7 @@ class Six < Formula
   end
 
   def install
-    ["python2", "python3"].each do |python|
+    ["#{Formula["python@2"].opt_bin}/python2", "#{Formula["python"].opt_bin}/python3"].each do |python|
       xy = Language::Python.major_minor_version python
       ENV.prepend_create_path "PYTHONPATH", "#{libexec}/lib/python#{xy}/site-packages"
 

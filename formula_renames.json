@@ -38,5 +38,6 @@
   "qmysql": "osgeo-qt-mysql",
   "qodbc": "osgeo-qt-odbc",
   "qtkeychain": "osgeo-qtkeychain",
-  "pyspatialite": "osgeo-pyspatialite"
+  "pyspatialite": "osgeo-pyspatialite",
+  "six": "osgeo-six"
 }
