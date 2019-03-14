@@ -4,7 +4,7 @@ class OsgeoPyqtWebkit < Formula
   url "https://www.riverbankcomputing.com/static/Downloads/PyQt5/PyQt5_gpl-5.12.tar.gz"
   sha256 "d9e70065b5980afde5f2b9bc900910050331604e02c70666c45fcfc66b0d4f34"
 
-  # revision 1
+  revision 1
 
   option "with-debug", "Build with debug symbols"
 
