@@ -19,12 +19,6 @@ set -e
 
 for f in ${CHANGED_FORMULAE};do
   deps=$(brew deps --include-build ${f})
-  # fix error: 'libintl.h' file not found
-  # build qgis with grass
-  if [ "$(echo ${deps} | grep -c 'osgeo-grass')" != "0" ];then
-    brew reinstall gettext
-    brew unlink gettext && brew link --force gettext
-  fi
 
   # fix error: Unable to import PyQt5.QtCore
   # build qscintilla2
@@ -33,6 +27,13 @@ for f in ${CHANGED_FORMULAE};do
     brew unlink osgeo-pyqt && brew link osgeo-pyqt --force
     system "python2", "-c", '"import PyQt5.QtCore"'
     system "python3", "-c", '"import PyQt5.QtCore"'
+  fi
+
+  # fix error: 'libintl.h' file not found
+  # build qgis with grass
+  if [ "$(echo ${deps} | grep -c 'osgeo-grass')" != "0" ];then
+    brew reinstall gettext
+    brew unlink gettext && brew link --force gettext
   fi
 
   # if [[ $(brew list --versions ${f}) ]]; then

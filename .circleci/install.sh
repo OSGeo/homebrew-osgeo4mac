@@ -22,7 +22,7 @@ for f in ${CHANGED_FORMULAE};do
   echo "Installing dependencies for changed formula ${f}..."
   FLAGS="--only-dependencies --build-bottle"
 
-  brew install ${FLAGS} ${TRAVIS_REPO_SLUG}/${f}&
+  brew install ${FLAGS} ${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/${f}&
   PID=$!
   # add progress to ensure Travis doesn't complain about no output
   while true; do
