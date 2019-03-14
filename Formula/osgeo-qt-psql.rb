@@ -1,4 +1,4 @@
-class Qpsql < Formula
+class OsgeoQtPsql < Formula
   desc "Qt SQL Database Driver - QPSQL for PostgreSQL"
   homepage "https://doc.qt.io/qt-5/sql-driver.html"
   url "https://download.qt.io/official_releases/qt/5.12/5.12.1/single/qt-everywhere-src-5.12.1.tar.xz"
@@ -7,15 +7,6 @@ class Qpsql < Formula
   # revision 1
 
   head "https://code.qt.io/qt/qt5.git", :branch => "5.12", :shallow => false
-
-  bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    cellar :any
-    rebuild 1
-    sha256 "bccba8ce8c0e1ffa2695b6b7c2da1ce74de1cd27954500902cafd8a49c0947c8" => :mojave
-    sha256 "bccba8ce8c0e1ffa2695b6b7c2da1ce74de1cd27954500902cafd8a49c0947c8" => :high_sierra
-    sha256 "bccba8ce8c0e1ffa2695b6b7c2da1ce74de1cd27954500902cafd8a49c0947c8" => :sierra
-  end
 
   depends_on "pkg-config" => :build
   depends_on "libiconv"
