@@ -4,7 +4,7 @@ class OsgeoInsighttoolkit < Formula
   url "https://downloads.sourceforge.net/project/itk/itk/4.13/InsightToolkit-4.13.1.tar.gz"
   sha256 "fdcfd218bd6f99d1826c5fb18bb2d60ebc906e9589d70576c60360d7c6715147"
 
-  # revision 1
+  revision 1
 
   head "git://itk.org/ITK.git"
 
