@@ -143,11 +143,11 @@ class OsgeoVtk < Formula
     # args << "-DVTK_GROUP_ENABLE_Views:STRING=WANT"
     # args << "-DVTK_GROUP_ENABLE_Qt:STRING=WANT"
     # args << "-DVTK_GROUP_ENABLE_Web:STRING=WANT"
-    #
+
     # args << "-DVTK_Group_Rendering:BOOL=ON"
     # args << "-DVTK_Group_StandAlone:BOOL=ON"
     # args << "-DVTK_Group_Imaging:BOOL=ON"
-    # args << "-DVTK_Group_MPI:BOOL=ON"
+    # args << "-DVTK_Group_MPI:BOOL=OFF"
     # args << "-DVTK_Group_Views:BOOL=ON"
     # args << "-DVTK_Group_Qt:BOOL=ON"
     # args << "-DVTK_Group_Web:BOOL=ON"
