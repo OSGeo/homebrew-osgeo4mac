@@ -1,19 +1,12 @@
-class Insighttoolkit < Formula
+class OsgeoInsighttoolkit < Formula
   desc "ITK is a toolkit for performing registration and segmentation"
   homepage "https://www.itk.org"
   url "https://downloads.sourceforge.net/project/itk/itk/4.13/InsightToolkit-4.13.1.tar.gz"
   sha256 "fdcfd218bd6f99d1826c5fb18bb2d60ebc906e9589d70576c60360d7c6715147"
 
-  revision 1
+  # revision 1
 
   head "git://itk.org/ITK.git"
-
-  bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    sha256 "a584d23e24d37809937abc612d2e865bf7e16340f63ee060b02f819abe92ff44" => :mojave
-    sha256 "a584d23e24d37809937abc612d2e865bf7e16340f63ee060b02f819abe92ff44" => :high_sierra
-    sha256 "a584d23e24d37809937abc612d2e865bf7e16340f63ee060b02f819abe92ff44" => :sierra
-  end
 
   option :cxx11
   option "with-examples", "Compile and install various examples"
@@ -26,23 +19,23 @@ class Insighttoolkit < Formula
   cxx11dep = build.cxx11? ? ["c++11"] : []
 
   depends_on "cmake" => :build
-  depends_on "opencv@2" => [:optional] + cxx11dep
-  depends_on "python@2" => :optional
-  depends_on "python" => :optional
+  depends_on "opencv@2" => [:recommended] + cxx11dep
+  depends_on "python@2" if build.with? "python2"
+  depends_on "python" => :recommended
   depends_on "fftw" => :recommended
   depends_on "hdf5" => [:recommended] + cxx11dep
   depends_on "jpeg" => :recommended
   depends_on "libpng" => :recommended
   depends_on "libtiff" => :recommended
-  depends_on "gdcm" => [:optional] + cxx11dep
+  depends_on "gdcm" => [:recommended] + cxx11dep
   depends_on "expat" unless OS.mac?
 
-  if build.with? "python3"
-    depends_on "vtk" => [:build, "with-python3", "without-python"] + cxx11dep
-  elsif build.with? "python"
-    depends_on "vtk" => [:build, "with-python"] + cxx11dep
+  if build.with? "python"
+    depends_on "osgeo-vtk" => [:build, "with-python", "without-python2"] + cxx11dep
+  elsif build.with? "python2"
+    depends_on "osgeo-vtk" => [:build, "with-python2", "without-python"] + cxx11dep
   else
-    depends_on "vtk" => [:build] + cxx11dep
+    depends_on "osgeo-vtk" => [:build] + cxx11dep
   end
 
   def install
@@ -81,8 +74,8 @@ class Insighttoolkit < Formula
 
     mkdir "itk-build" do
       if build.with?("python") || build.with?("python3")
-        python_executable = `which python`.strip if build.with? "python"
-        python_executable = `which python3`.strip if build.with? "python3"
+        python_executable = `which python2`.strip if build.with? "python2"
+        python_executable = `which python3`.strip if build.with? "python"
 
         python_prefix = `#{python_executable} -c 'import sys;print(sys.prefix)'`.chomp
         python_include = `#{python_executable} -c 'from distutils import sysconfig;print(sysconfig.get_python_inc(True))'`.chomp
