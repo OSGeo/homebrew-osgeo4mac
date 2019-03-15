@@ -5,7 +5,7 @@ class OsgeoVtk < Formula
   url "https://www.vtk.org/files/release/8.2/VTK-8.2.0.tar.gz"
   sha256 "34c3dc775261be5e45a8049155f7228b6bd668106c72a3c435d95730d17d57bb"
 
-  revision 1
+  revision 2
 
   head "https://github.com/Kitware/VTK.git"
 
@@ -57,7 +57,9 @@ class OsgeoVtk < Formula
   depends_on "osgeo-gdal"
   depends_on "osgeo-pyqt"
   depends_on "osgeo-qt-webkit"
-  depends_on :java
+
+  # JAVA_VERSION = "1.8" # "1.10+"
+  depends_on :java => ["1.8", :build] # JAVA_VERSION
 
   depends_on "eigen"
   depends_on "gl2ps"
@@ -88,6 +90,9 @@ class OsgeoVtk < Formula
     #     venv.pip_install r
     # end
 
+    cmd = Language::Java.java_home_cmd("1.8") # JAVA_VERSION
+    ENV["JAVA_HOME"] = Utils.popen_read(cmd).chomp
+
     args = std_cmake_args + %W[
       -DBUILD_SHARED_LIBS=ON
       -DBUILD_TESTING=OFF
@@ -111,7 +116,7 @@ class OsgeoVtk < Formula
       -DPYTHON_INCLUDE_DIR=#{python_include}
       -DVTK_PYTHON_SITE_PACKAGES_SUFFIX=#{py_site_packages}
       -DVTK_QT_VERSION:STRING=5
-      -DVTK_Group_Qt:BOOL=ON
+      -DVTK_Group_Qt=ON
       -DVTK_WRAP_PYTHON_SIP=ON
       -DSIP_PYQT_DIR=#{HOMEBREW_PREFIX}/share/sip/PyQt5
 
@@ -198,6 +203,58 @@ class OsgeoVtk < Formula
     inreplace Dir["#{lib}/cmake/**/vtkhdf5.cmake"].first,
       Formula["hdf5"].prefix.realpath,
       Formula["hdf5"].opt_prefix
+
+    # fix lib/python
+    # VTK_PYTHON_SITE_PACKAGES_SUFFIX by VTK_INSTALL_PYTHON_MODULE_DIR
+    mv "#{lib}/#{lib}/#{python_version}", "#{lib}/#{python_version}"
+    rm_r "#{lib}/usr"
+
+    # fix: Could not fix @rpath/libjawt.dylib
+    MachO::Tools.change_install_name("#{lib}/libvtkChartsCoreJava.dylib", "@rpath/libjawt.dylib", "#{ENV["JAVA_HOME"]}/jre/lib/libjawt.dylib")
+    MachO::Tools.change_install_name("#{lib}/libvtkDomainsChemistryJava.dylib", "@rpath/libjawt.dylib", "#{ENV["JAVA_HOME"]}/jre/lib/libjawt.dylib")
+    MachO::Tools.change_install_name("#{lib}/libvtkDomainsChemistryOpenGL2Java.dylib", "@rpath/libjawt.dylib", "#{ENV["JAVA_HOME"]}/jre/lib/libjawt.dylib")
+    MachO::Tools.change_install_name("#{lib}/libvtkDomainsParallelChemistryJava.dylib", "@rpath/libjawt.dylib", "#{ENV["JAVA_HOME"]}/jre/lib/libjawt.dylib")
+    MachO::Tools.change_install_name("#{lib}/libvtkFiltersHybridJava.dylib", "@rpath/libjawt.dylib", "#{ENV["JAVA_HOME"]}/jre/lib/libjawt.dylib")
+    MachO::Tools.change_install_name("#{lib}/libvtkFiltersParallelDIY2Java.dylib", "@rpath/libjawt.dylib", "#{ENV["JAVA_HOME"]}/jre/lib/libjawt.dylib")
+    MachO::Tools.change_install_name("#{lib}/libvtkFiltersParallelGeometryJava.dylib", "@rpath/libjawt.dylib", "#{ENV["JAVA_HOME"]}/jre/lib/libjawt.dylib")
+    MachO::Tools.change_install_name("#{lib}/libvtkFiltersParallelImagingJava.dylib", "@rpath/libjawt.dylib", "#{ENV["JAVA_HOME"]}/jre/lib/libjawt.dylib")
+    MachO::Tools.change_install_name("#{lib}/libvtkFiltersParallelJava.dylib", "@rpath/libjawt.dylib", "#{ENV["JAVA_HOME"]}/jre/lib/libjawt.dylib")
+    MachO::Tools.change_install_name("#{lib}/libvtkFiltersParallelMPIJava.dylib", "@rpath/libjawt.dylib", "#{ENV["JAVA_HOME"]}/jre/lib/libjawt.dylib")
+    MachO::Tools.change_install_name("#{lib}/libvtkGeovisCoreJava.dylib", "@rpath/libjawt.dylib", "#{ENV["JAVA_HOME"]}/jre/lib/libjawt.dylib")
+    MachO::Tools.change_install_name("#{lib}/libvtkIOExportJava.dylib", "@rpath/libjawt.dylib", "#{ENV["JAVA_HOME"]}/jre/lib/libjawt.dylib")
+    MachO::Tools.change_install_name("#{lib}/libvtkIOExportOpenGL2Java.dylib", "@rpath/libjawt.dylib", "#{ENV["JAVA_HOME"]}/jre/lib/libjawt.dylib")
+    MachO::Tools.change_install_name("#{lib}/libvtkIOExportPDFJava.dylib", "@rpath/libjawt.dylib", "#{ENV["JAVA_HOME"]}/jre/lib/libjawt.dylib")
+    MachO::Tools.change_install_name("#{lib}/libvtkIOImportJava.dylib", "@rpath/libjawt.dylib", "#{ENV["JAVA_HOME"]}/jre/lib/libjawt.dylib")
+    MachO::Tools.change_install_name("#{lib}/libvtkIOMINCJava.dylib", "@rpath/libjawt.dylib", "#{ENV["JAVA_HOME"]}/jre/lib/libjawt.dylib")
+    MachO::Tools.change_install_name("#{lib}/libvtkIOMPIParallelJava.dylib", "@rpath/libjawt.dylib", "#{ENV["JAVA_HOME"]}/jre/lib/libjawt.dylib")
+    MachO::Tools.change_install_name("#{lib}/libvtkIOParallelJava.dylib", "@rpath/libjawt.dylib", "#{ENV["JAVA_HOME"]}/jre/lib/libjawt.dylib")
+    MachO::Tools.change_install_name("#{lib}/libvtkInteractionImageJava.dylib", "@rpath/libjawt.dylib", "#{ENV["JAVA_HOME"]}/jre/lib/libjawt.dylib")
+    MachO::Tools.change_install_name("#{lib}/libvtkInteractionStyleJava.dylib", "@rpath/libjawt.dylib", "#{ENV["JAVA_HOME"]}/jre/lib/libjawt.dylib")
+    MachO::Tools.change_install_name("#{lib}/libvtkInteractionWidgetsJava.dylib", "@rpath/libjawt.dylib", "#{ENV["JAVA_HOME"]}/jre/lib/libjawt.dylib")
+    MachO::Tools.change_install_name("#{lib}/libvtkRenderingAnnotationJava.dylib", "@rpath/libjawt.dylib", "#{ENV["JAVA_HOME"]}/jre/lib/libjawt.dylib")
+    MachO::Tools.change_install_name("#{lib}/libvtkRenderingContext2DJava.dylib", "@rpath/libjawt.dylib", "#{ENV["JAVA_HOME"]}/jre/lib/libjawt.dylib")
+    MachO::Tools.change_install_name("#{lib}/libvtkRenderingContextOpenGL2Java.dylib", "@rpath/libjawt.dylib", "#{ENV["JAVA_HOME"]}/jre/lib/libjawt.dylib")
+    MachO::Tools.change_install_name("#{lib}/libvtkRenderingCoreJava.dylib", "@rpath/libjawt.dylib", "#{ENV["JAVA_HOME"]}/jre/lib/libjawt.dylib")
+    MachO::Tools.change_install_name("#{lib}/libvtkRenderingFreeTypeJava.dylib", "@rpath/libjawt.dylib", "#{ENV["JAVA_HOME"]}/jre/lib/libjawt.dylib")
+    MachO::Tools.change_install_name("#{lib}/libvtkRenderingGL2PSOpenGL2Java.dylib", "@rpath/libjawt.dylib", "#{ENV["JAVA_HOME"]}/jre/lib/libjawt.dylib")
+    MachO::Tools.change_install_name("#{lib}/libvtkRenderingImageJava.dylib", "@rpath/libjawt.dylib", "#{ENV["JAVA_HOME"]}/jre/lib/libjawt.dylib")
+    MachO::Tools.change_install_name("#{lib}/libvtkRenderingLICOpenGL2Java.dylib", "@rpath/libjawt.dylib", "#{ENV["JAVA_HOME"]}/jre/lib/libjawt.dylib")
+    MachO::Tools.change_install_name("#{lib}/libvtkRenderingLODJava.dylib", "@rpath/libjawt.dylib", "#{ENV["JAVA_HOME"]}/jre/lib/libjawt.dylib")
+    MachO::Tools.change_install_name("#{lib}/libvtkRenderingLabelJava.dylib", "@rpath/libjawt.dylib", "#{ENV["JAVA_HOME"]}/jre/lib/libjawt.dylib")
+    MachO::Tools.change_install_name("#{lib}/libvtkRenderingMatplotlibJava.dylib", "@rpath/libjawt.dylib", "#{ENV["JAVA_HOME"]}/jre/lib/libjawt.dylib")
+    MachO::Tools.change_install_name("#{lib}/libvtkRenderingOpenGL2Java.dylib", "@rpath/libjawt.dylib", "#{ENV["JAVA_HOME"]}/jre/lib/libjawt.dylib")
+    MachO::Tools.change_install_name("#{lib}/libvtkRenderingParallelJava.dylib", "@rpath/libjawt.dylib", "#{ENV["JAVA_HOME"]}/jre/lib/libjawt.dylib")
+    MachO::Tools.change_install_name("#{lib}/libvtkRenderingParallelLICJava.dylib", "@rpath/libjawt.dylib", "#{ENV["JAVA_HOME"]}/jre/lib/libjawt.dylib")
+    MachO::Tools.change_install_name("#{lib}/libvtkRenderingQtJava.dylib", "@rpath/libjawt.dylib", "#{ENV["JAVA_HOME"]}/jre/lib/libjawt.dylib")
+    MachO::Tools.change_install_name("#{lib}/libvtkRenderingSceneGraphJava.dylib", "@rpath/libjawt.dylib", "#{ENV["JAVA_HOME"]}/jre/lib/libjawt.dylib")
+    MachO::Tools.change_install_name("#{lib}/libvtkRenderingVolumeAMRJava.dylib", "@rpath/libjawt.dylib", "#{ENV["JAVA_HOME"]}/jre/lib/libjawt.dylib")
+    MachO::Tools.change_install_name("#{lib}/libvtkRenderingVolumeJava.dylib", "@rpath/libjawt.dylib", "#{ENV["JAVA_HOME"]}/jre/lib/libjawt.dylib")
+    MachO::Tools.change_install_name("#{lib}/libvtkRenderingVolumeOpenGL2Java.dylib", "@rpath/libjawt.dylib", "#{ENV["JAVA_HOME"]}/jre/lib/libjawt.dylib")
+    MachO::Tools.change_install_name("#{lib}/libvtkTestingRenderingJava.dylib", "@rpath/libjawt.dylib", "#{ENV["JAVA_HOME"]}/jre/lib/libjawt.dylib")
+    MachO::Tools.change_install_name("#{lib}/libvtkViewsContext2DJava.dylib", "@rpath/libjawt.dylib", "#{ENV["JAVA_HOME"]}/jre/lib/libjawt.dylib")
+    MachO::Tools.change_install_name("#{lib}/libvtkViewsCoreJava.dylib", "@rpath/libjawt.dylib", "#{ENV["JAVA_HOME"]}/jre/lib/libjawt.dylib")
+    MachO::Tools.change_install_name("#{lib}/libvtkViewsGeovisJava.dylib", "@rpath/libjawt.dylib", "#{ENV["JAVA_HOME"]}/jre/lib/libjawt.dylib")
+    MachO::Tools.change_install_name("#{lib}/libvtkViewsInfovisJava.dylib", "@rpath/libjawt.dylib", "#{ENV["JAVA_HOME"]}/jre/lib/libjawt.dylib")
   end
 
   test do
