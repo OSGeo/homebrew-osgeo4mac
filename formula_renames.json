@@ -42,5 +42,6 @@
   "six": "osgeo-six",
   "taudem": "osgeo-taudem",
   "shark": "osgeo-shark",
-  "whitebox-tools": "osgeo-whitebox-tools"
+  "whitebox-tools": "osgeo-whitebox-tools",
+  "insighttoolkit": "osgeo-insighttoolkit"
 }
