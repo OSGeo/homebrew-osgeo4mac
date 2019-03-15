@@ -9,6 +9,13 @@ class OsgeoVtk < Formula
 
   head "https://github.com/Kitware/VTK.git"
 
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    sha256 "94b0d0d35a20543782788b74b7907c701cf93f9838f39a8b4063ddb44b2ee572" => :mojave
+    sha256 "94b0d0d35a20543782788b74b7907c701cf93f9838f39a8b4063ddb44b2ee572" => :high_sierra
+    sha256 "d91cfdb064d0e2f8e299f98e888bbba9e8021e6a27cc360b552f7460a4ea07f9" => :sierra
+  end
+
   depends_on "cmake" => :build
   depends_on "boost"
   depends_on "fontconfig"
