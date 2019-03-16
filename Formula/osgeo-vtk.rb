@@ -5,7 +5,7 @@ class OsgeoVtk < Formula
   url "https://www.vtk.org/files/release/8.2/VTK-8.2.0.tar.gz"
   sha256 "34c3dc775261be5e45a8049155f7228b6bd668106c72a3c435d95730d17d57bb"
 
-  revision 3
+  revision 4
 
   head "https://github.com/Kitware/VTK.git"
 
@@ -79,8 +79,7 @@ class OsgeoVtk < Formula
     # These python extension modules were linked directly to a Python
     # framework binary. They should be linked with -undefined dynamic_lookup
     # instead of -lpython or -framework Python
-    ENV["PYTHON_LIBS"] = "-undefined dynamic_lookup"
-
+    # ENV["PYTHON_LIBS"] = "-undefined dynamic_lookup"
     # PYTHON_LDFLAGS=-undefined dynamic_lookup
     # PYTHON_EXTRA_LIBS=-undefined dynamic_lookup
     # PYTHON_EXTRA_LDFLAGS=-undefined dynamic_lookup
@@ -274,8 +273,8 @@ class OsgeoVtk < Formula
     # See "activemq", "jruby", etc. for examples.
     # The offending files are:
     #   /usr/local/opt/osgeo-vtk/lib/vtk.jar
-    libexec.install Dir["*"]
-    bin.install_symlink Dir["#{libexec}/bin/*"]
+    # libexec.install Dir["*"]
+    # bin.install_symlink Dir["#{libexec}/bin/*"]
   end
 
   test do
