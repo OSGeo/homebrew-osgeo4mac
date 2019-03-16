@@ -4,9 +4,17 @@ class OsgeoHexer < Formula
   url "https://github.com/hobu/hexer/archive/1.4.0.tar.gz"
   sha256 "886134fcdd75da2c50aa48624de19f5ae09231d5290812ec05f09f50319242cb"
 
-  # revision 1
+  revision 1
 
   head "https://github.com/hobu/hexer.git", :branch => "master"
+
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    cellar :any
+    sha256 "e3f489d850e4a76dd2f2a3a6625e35383a81e0a99b94039bd13815bef04256d7" => :mojave
+    sha256 "e3f489d850e4a76dd2f2a3a6625e35383a81e0a99b94039bd13815bef04256d7" => :high_sierra
+    sha256 "a7c8948e7b24a21afd3fe33aa46249a77a7d049cf63e745e18a3ccd0dca23190" => :sierra
+  end
 
   # Add cmath and limits headers to utils
   # Link with dl for curse on non-win32
