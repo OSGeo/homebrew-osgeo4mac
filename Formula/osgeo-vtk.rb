@@ -5,7 +5,7 @@ class OsgeoVtk < Formula
   url "https://www.vtk.org/files/release/8.2/VTK-8.2.0.tar.gz"
   sha256 "34c3dc775261be5e45a8049155f7228b6bd668106c72a3c435d95730d17d57bb"
 
-  revision 2
+  revision 3
 
   head "https://github.com/Kitware/VTK.git"
 
@@ -33,7 +33,6 @@ class OsgeoVtk < Formula
   depends_on "doxygen"
   depends_on "ffmpeg"
   depends_on "gnuplot"
-  depends_on "brewsci/bio/matplotlib"
 
   depends_on "tcl-tk"
   depends_on "unixodbc"
@@ -58,6 +57,7 @@ class OsgeoVtk < Formula
   depends_on "osgeo-gdal"
   depends_on "osgeo-pyqt"
   depends_on "osgeo-qt-webkit"
+  depends_on "osgeo-matplotlib"
 
   # JAVA_VERSION = "1.8" # "1.10+"
   depends_on :java => ["1.8", :build] # JAVA_VERSION
@@ -76,6 +76,16 @@ class OsgeoVtk < Formula
   # depends_on "osgeo-mpi4py"
 
   def install
+    # Warning: python modules have explicit framework links
+    # These python extension modules were linked directly to a Python
+    # framework binary. They should be linked with -undefined dynamic_lookup
+    # instead of -lpython or -framework Python
+    ENV["PYTHON_LIBS"] = "-undefined dynamic_lookup"
+
+    # PYTHON_LDFLAGS=-undefined dynamic_lookup
+    # PYTHON_EXTRA_LIBS=-undefined dynamic_lookup
+    # PYTHON_EXTRA_LDFLAGS=-undefined dynamic_lookup
+
     python_executable = `which python3`.strip
     python_prefix = `#{python_executable} -c 'import sys;print(sys.prefix)'`.chomp
     python_include = `#{python_executable} -c 'from distutils import sysconfig;print(sysconfig.get_python_inc(True))'`.chomp
@@ -147,7 +157,7 @@ class OsgeoVtk < Formula
     # disable for error build ThirdParty/mpi4py
     # args << "-DVTK_USE_MPI=OFF"
 
-    # args << "-Dmpi4py_INCLUDE_DIR=#{libexec}/vendor/lib/python#{python_version}/site-packages/mpi4py/include" # mpi4py
+    # args << "-Dmpi4py_INCLUDE_DIR=#{libexec}/vendor/lib/python#{python_version}/site-packages/mpi4py/include"
 
     # args << "-DVTK_GROUP_ENABLE_Rendering:STRING=WANT"
     # args << "-DVTK_GROUP_ENABLE_StandAlone:STRING=WANT"
@@ -206,7 +216,8 @@ class OsgeoVtk < Formula
       Formula["hdf5"].opt_prefix
 
     # fix lib/python
-    # VTK_PYTHON_SITE_PACKAGES_SUFFIX by VTK_INSTALL_PYTHON_MODULE_DIR
+    # maybe the reason is that it was changed VTK_INSTALL_PYTHON_MODULE_DIR
+    # by VTK_PYTHON_SITE_PACKAGES_SUFFIX
     mv "#{lib}/#{lib}/#{python_version}", "#{lib}/#{python_version}"
     rm_r "#{lib}/usr"
 
@@ -256,6 +267,16 @@ class OsgeoVtk < Formula
     MachO::Tools.change_install_name("#{lib}/libvtkViewsCoreJava.dylib", "@rpath/libjawt.dylib", "#{ENV["JAVA_HOME"]}/jre/lib/libjawt.dylib")
     MachO::Tools.change_install_name("#{lib}/libvtkViewsGeovisJava.dylib", "@rpath/libjawt.dylib", "#{ENV["JAVA_HOME"]}/jre/lib/libjawt.dylib")
     MachO::Tools.change_install_name("#{lib}/libvtkViewsInfovisJava.dylib", "@rpath/libjawt.dylib", "#{ENV["JAVA_HOME"]}/jre/lib/libjawt.dylib")
+
+    # Warning: JARs were installed to "/usr/local/opt/osgeo-vtk/lib"
+    # Installing JARs to "lib" can cause conflicts between packages.
+    # For Java software, it is typically better for the formula to
+    # install to "libexec" and then symlink or wrap binaries into "bin".
+    # See "activemq", "jruby", etc. for examples.
+    # The offending files are:
+    #   /usr/local/opt/osgeo-vtk/lib/vtk.jar
+    libexec.install Dir["*"]
+    bin.install_symlink Dir["#{libexec}/bin/*"]
   end
 
   test do
