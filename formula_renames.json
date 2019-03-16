@@ -44,5 +44,6 @@
   "shark": "osgeo-shark",
   "whitebox-tools": "osgeo-whitebox-tools",
   "insighttoolkit": "osgeo-insighttoolkit",
-  "hexer": "osgeo-hexer"
+  "hexer": "osgeo-hexer",
+  "opencollada": "osgeo-opencollada"
 }
