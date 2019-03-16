@@ -27,6 +27,14 @@ class OsgeoMatplotlib < Formula
 
   head "https://github.com/matplotlib/matplotlib.git", :branch => "master"
 
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    cellar :any
+    sha256 "13c1865adde20ef0e2c49e1bd0983f7c4eecaa9300973e24e42837959b91cfdf" => :mojave
+    sha256 "13c1865adde20ef0e2c49e1bd0983f7c4eecaa9300973e24e42837959b91cfdf" => :high_sierra
+    sha256 "843bd37dff0daa3a376c3519c1f33debb17523c8288ed16301fb0d3b6e676d37" => :sierra
+  end
+
   depends_on NoExternalPyCXXPackage => :build
   depends_on "pkg-config" => :build
   depends_on "gcc" => :build # for gfortran
