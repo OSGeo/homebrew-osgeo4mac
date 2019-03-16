@@ -11,9 +11,10 @@ class OsgeoVtk < Formula
 
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    sha256 "8984ac2912ddd6fdd9ee8888b08af98688e86b665cef548d8ef36ce29388c9b5" => :mojave
-    sha256 "8984ac2912ddd6fdd9ee8888b08af98688e86b665cef548d8ef36ce29388c9b5" => :high_sierra
-    sha256 "b7d7f43f44e2b40e06ab82eb8e6217fdaa121ab658e7713bfcd913c718d0bd9e" => :sierra
+    rebuild 1
+    sha256 "12c53fe71192dd5b1380c527fbfa0868fe551db147f92c99896ae8ffa6018f47" => :mojave
+    sha256 "12c53fe71192dd5b1380c527fbfa0868fe551db147f92c99896ae8ffa6018f47" => :high_sierra
+    sha256 "621d6c533add4a60579de6527de171e47be7ddc070dbf493c5a07c6790e72e1c" => :sierra
   end
 
   depends_on "cmake" => :build
