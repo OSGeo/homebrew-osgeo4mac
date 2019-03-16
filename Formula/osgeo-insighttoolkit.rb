@@ -4,7 +4,15 @@ class OsgeoInsighttoolkit < Formula
   url "https://downloads.sourceforge.net/project/itk/itk/4.13/InsightToolkit-4.13.1.tar.gz"
   sha256 "fdcfd218bd6f99d1826c5fb18bb2d60ebc906e9589d70576c60360d7c6715147"
 
-  revision 2
+  revision 1
+
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    cellar :any
+    sha256 "821a66bfa2f00ac11d6ee2b58215714593033cc06b452b2485ffa8820b1732e4" => :mojave
+    sha256 "821a66bfa2f00ac11d6ee2b58215714593033cc06b452b2485ffa8820b1732e4" => :high_sierra
+    sha256 "821a66bfa2f00ac11d6ee2b58215714593033cc06b452b2485ffa8820b1732e4" => :sierra
+  end
 
   head "git://itk.org/ITK.git"
 
