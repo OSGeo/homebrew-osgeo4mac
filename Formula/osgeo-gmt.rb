@@ -7,7 +7,7 @@ class OsgeoGmt < Formula
   mirror "https://fossies.org/linux/misc/GMT/gmt-5.4.5-src.tar.xz"
   sha256 "225629c7869e204d5f9f1a384c4ada43e243f83e1ed28bdca4f7c2896bf39ef6"
 
-  # revision 1
+  revision 1
 
   depends_on "cmake" => :build
   depends_on "fftw"
@@ -49,10 +49,10 @@ class OsgeoGmt < Formula
 
   # gmt-coast (optional) – coastlines
 
-  # resource "Sphinx" do
-  #   url "https://files.pythonhosted.org/packages/2a/86/8e1e8400bb6eca5ed960917952600fce90599e1cb0d20ddedd81ba163370/Sphinx-1.8.5.tar.gz"
-  #   sha256 "c7658aab75c920288a8cf6f09f244c6cfdae30d82d803ac1634d9f223a80ca08"
-  # end
+  resource "Sphinx" do
+    url "https://files.pythonhosted.org/packages/2a/86/8e1e8400bb6eca5ed960917952600fce90599e1cb0d20ddedd81ba163370/Sphinx-1.8.5.tar.gz"
+    sha256 "c7658aab75c920288a8cf6f09f244c6cfdae30d82d803ac1634d9f223a80ca08"
+  end
 
   def install
     # install python modules
@@ -83,9 +83,9 @@ class OsgeoGmt < Formula
     # args << "-DFLOCK:BOOL=TRUE" # not used by the project
     # args << "-DCMAKE_CXX_FLAGS_RELEASE"
 
-    args << "-DGMT_DATADIR=#{share}/gmt"
     args << "-DGMT_DOCDIR=#{share}/doc/gmt"
-    args << "-DGMT_MANDIR=#{share}/man" # #{man}
+    args << "-DGMT_MANDIR=#{man}"
+    # args << "-DGMT_DATADIR=#{share}/gmt"
 
     args << "-DPCRE_ROOT=#{Formula["pcre"].opt_prefix}" # PCRE_DIR
 
