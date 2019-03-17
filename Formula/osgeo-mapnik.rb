@@ -10,7 +10,7 @@ class OsgeoMapnik < Formula
   # version "3.0.22"
   # https://github.com/mapnik/mapnik/wiki/MacInstallation_Homebrew
 
-  # revision 1
+  revision 1
 
   head "https://github.com/mapnik/mapnik.git", :branch => "master"
 
