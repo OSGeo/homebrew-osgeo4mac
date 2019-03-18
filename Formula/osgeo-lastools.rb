@@ -1,22 +1,13 @@
-class Lastools < Formula
+class OsgeoLastools < Formula
   desc "Efficient tools for LiDAR processing. Contains LASlib, a C++ programming API for reading / writing LIDAR data stored in standard LAS format"
   homepage "https://rapidlasso.com/lastools"
-  url "https://github.com/LAStools/LAStools.git",
-    :branch => "master",
-    :commit => "18471441333cc84aa9f7a8c0ae6537286714f909"
-  version "19.01.27"
+  url "https://github.com/LAStools/LAStools/archive/dad4ee472038c21da0e3453756626113c95b8917.tar.gz"
+  sha256 "1cb31589ec15a51f3112106723e67d550bab8aba92d8bc10957452bb01d22196"
+  version "19.02.06"
 
-  revision 1
+  # revision 1
 
   head "https://github.com/LAStools/LAStools.git", :branch => "master"
-
-  bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    cellar :any_skip_relocation
-    sha256 "01ac14177e9032f62c88980de08d1715d2a004372a9f5d9e1695e4816298eb1b" => :mojave
-    sha256 "01ac14177e9032f62c88980de08d1715d2a004372a9f5d9e1695e4816298eb1b" => :high_sierra
-    sha256 "01ac14177e9032f62c88980de08d1715d2a004372a9f5d9e1695e4816298eb1b" => :sierra
-  end
 
   option "with-wine", "Use Wine to have more support"
 

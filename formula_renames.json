@@ -45,5 +45,6 @@
   "whitebox-tools": "osgeo-whitebox-tools",
   "insighttoolkit": "osgeo-insighttoolkit",
   "hexer": "osgeo-hexer",
-  "opencollada": "osgeo-opencollada"
+  "opencollada": "osgeo-opencollada",
+  "lastools": "osgeo-lastools"
 }
