@@ -9,6 +9,14 @@ class OsgeoNitro < Formula
 
   head "https://github.com/hobu/nitro.git", :branch => "master"
 
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    cellar :any
+    sha256 "2cfb9d67e88078462f73c812e7bdf66ea02d20349b6fd2ebf2af132a7346a60c" => :mojave
+    sha256 "2cfb9d67e88078462f73c812e7bdf66ea02d20349b6fd2ebf2af132a7346a60c" => :high_sierra
+    sha256 "5cc9c36fae4c7d1310cf74aed0d02e8e950884a37aba5c9d4e072623199d73d3" => :sierra
+  end
+
   depends_on "cmake" => :build
   depends_on "llvm" => :build
 
