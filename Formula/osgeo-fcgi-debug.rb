@@ -8,6 +8,14 @@ class OsgeoFcgiDebug < Formula
 
   head "https://github.com/lighttpd/fcgi-debug.git", branch: "master"
 
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    cellar :any
+    sha256 "674bace0a4d665e202d85b1179a60e2dd6987ca6540b16b2b5fc89656175b6a4" => :mojave
+    sha256 "674bace0a4d665e202d85b1179a60e2dd6987ca6540b16b2b5fc89656175b6a4" => :high_sierra
+    sha256 "2533dc7a2c288f6638e3996c64506543fb495cf8cffd27b165ff8d79b15d4065" => :sierra
+  end
+
   depends_on "cmake" => :build
   depends_on "pkg-config" => :build
   depends_on "libev"
