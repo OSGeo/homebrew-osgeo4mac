@@ -4,6 +4,14 @@ class OsgeoPoints2grid < Formula
   url "https://github.com/CRREL/points2grid/archive/1.3.1.tar.gz"
   sha256 "6e2f2d3bbfd6f0f5c2d0c7d263cbd5453745a6fbe3113a3a2a630a997f4a1807"
 
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    cellar :any
+    sha256 "40896708527e509a19c3c5d7d72b450f072ffac16d065ba9629498aa68225646" => :mojave
+    sha256 "40896708527e509a19c3c5d7d72b450f072ffac16d065ba9629498aa68225646" => :high_sierra
+    sha256 "84c8ebcfb7828a9e71b6970c701a6ae0dffeeb80584f24562b0f753cbb9268eb" => :sierra
+  end
+
   # revision 1
 
   head "https://github.com/CRREL/points2grid.git", :branch => "master"
