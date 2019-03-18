@@ -4,7 +4,7 @@ class OsgeoFcgiDebug < Formula
   url "https://github.com/lighttpd/fcgi-debug/archive/fcgi-debug-0.9.3.tar.gz"
   sha256 "b63f89c563c05c2a8beb0d2dbace893928291f8f7a7ae651ff7a328a8be64725"
 
-  # revision 1
+  revision 1
 
   head "https://github.com/lighttpd/fcgi-debug.git", branch: "master"
 
