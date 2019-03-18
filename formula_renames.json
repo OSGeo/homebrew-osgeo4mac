@@ -47,5 +47,6 @@
   "hexer": "osgeo-hexer",
   "opencollada": "osgeo-opencollada",
   "lastools": "osgeo-lastools",
-  "nitro": "osgeo-nitro"
+  "nitro": "osgeo-nitro",
+  "libnoise": "osgeo-libnoise"
 }

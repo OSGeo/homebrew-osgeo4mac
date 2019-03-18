@@ -1,14 +1,17 @@
-class Libnoise < Formula
+class OsgeoLibnoise < Formula
+  desc "Portable, open-source, coherent noise-generating library for C++"
   homepage "https://github.com/qknight/libnoise"
-  url "https://github.com/qknight/libnoise.git",
-      :revision => "ea2e5174ccbc4b30ccdb23e9685a18f3fff66596"
+  url "https://github.com/qknight/libnoise/archive/2fb16f638aac6868d550c735898f217cdefa3559.zip"
+  sha256 "6f19ddf41682a716713b12507215a0639f15cf12d94d3ae56256ae63aeb2c22b"
   version "1.0.0-cmake"
-  revision 1
+
+  # revision 1
 
   option "with-docs", "Install documentation"
 
   depends_on "cmake" => :build
   depends_on "doxygen" => :build if build.with? "docs"
+  depends_on "llvm" => :build
 
   resource "examples" do
     url "http://libnoise.sourceforge.net/downloads/examples.zip"
