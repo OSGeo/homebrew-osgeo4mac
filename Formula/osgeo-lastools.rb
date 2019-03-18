@@ -1,8 +1,8 @@
 class OsgeoLastools < Formula
   desc "Efficient tools for LiDAR processing. Contains LASlib, a C++ programming API for reading / writing LIDAR data stored in standard LAS format"
   homepage "https://rapidlasso.com/lastools"
-  url "https://github.com/LAStools/LAStools/archive/dad4ee472038c21da0e3453756626113c95b8917.tar.gz",
-  sha256 "d9db0c0a518aa6ac0359626f222707c6ca1b63a83cbf229d97a5999c9cde347b"
+  url "https://github.com/LAStools/LAStools/archive/dad4ee472038c21da0e3453756626113c95b8917.tar.gz"
+  sha256 "1cb31589ec15a51f3112106723e67d550bab8aba92d8bc10957452bb01d22196"
   version "19.02.06"
 
   # revision 1
