@@ -49,5 +49,6 @@
   "lastools": "osgeo-lastools",
   "nitro": "osgeo-nitro",
   "libnoise": "osgeo-libnoise",
-  "libght": "osgeo-libght"
+  "libght": "osgeo-libght",
+  "marble": "osgeo-marble"
 }
