@@ -5,13 +5,12 @@ class OsgeoLibnoise < Formula
   sha256 "6f19ddf41682a716713b12507215a0639f15cf12d94d3ae56256ae63aeb2c22b"
   version "1.0.0-cmake"
 
-  # revision 1
+  revision 1
 
   option "with-docs", "Install documentation"
 
   depends_on "cmake" => :build
   depends_on "doxygen" => :build if build.with? "docs"
-  depends_on "llvm" => :build
 
   resource "examples" do
     url "http://libnoise.sourceforge.net/downloads/examples.zip"
