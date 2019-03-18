@@ -1,7 +1,9 @@
-class FcgiDebug < Formula
+class OsgeoFcgiDebug < Formula
   desc "Helps trace FastCGI programs without having to strace them"
   homepage "http://redmine.lighttpd.net/projects/fcgi-debug/wiki"
   url "https://github.com/lighttpd/fcgi-debug/archive/fcgi-debug-0.9.3.tar.gz"
+
+  # revision 1
 
   head "https://github.com/lighttpd/fcgi-debug.git", branch: "master"
 
@@ -18,5 +20,9 @@ class FcgiDebug < Formula
       system "make"
       system "make", "install"
     end
+  end
+
+  test do
+    # TODO
   end
 end

@@ -50,5 +50,6 @@
   "nitro": "osgeo-nitro",
   "libnoise": "osgeo-libnoise",
   "libght": "osgeo-libght",
-  "marble": "osgeo-marble"
+  "marble": "osgeo-marble",
+  "fcgi-debug": "osgeo-fcgi-debug"
 }
