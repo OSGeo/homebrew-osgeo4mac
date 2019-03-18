@@ -3,10 +3,9 @@ class OsgeoLibght < Formula
   homepage "https://github.com/pramsey/libght"
   url "https://github.com/pramsey/libght/archive/e323c506b4180bb6de825c5d637f21f569da4cb4.tar.gz"
   sha256 "43a5b2909234fecdba17ecfc93ab6d254b14cdf0dac48d17d1481ac2d8e398b4"
-
-  # revision
-
   version "0.1.1"
+
+  revision 1
 
   head "https://github.com/pramsey/libght.git", :branch => "master"
 
