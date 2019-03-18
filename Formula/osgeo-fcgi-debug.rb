@@ -9,6 +9,7 @@ class OsgeoFcgiDebug < Formula
   head "https://github.com/lighttpd/fcgi-debug.git", branch: "master"
 
   depends_on "cmake" => :build
+  depends_on "pkg-config" => :build
   depends_on "libev"
   depends_on "glib"
 
