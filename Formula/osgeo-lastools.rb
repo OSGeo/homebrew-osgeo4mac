@@ -5,7 +5,7 @@ class OsgeoLastools < Formula
   sha256 "1cb31589ec15a51f3112106723e67d550bab8aba92d8bc10957452bb01d22196"
   version "19.02.06"
 
-  # revision 1
+  revision 1
 
   head "https://github.com/LAStools/LAStools.git", :branch => "master"
 
