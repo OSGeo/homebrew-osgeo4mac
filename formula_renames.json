@@ -48,5 +48,6 @@
   "opencollada": "osgeo-opencollada",
   "lastools": "osgeo-lastools",
   "nitro": "osgeo-nitro",
-  "libnoise": "osgeo-libnoise"
+  "libnoise": "osgeo-libnoise",
+  "libght": "osgeo-libght"
 }
