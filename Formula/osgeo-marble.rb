@@ -4,7 +4,7 @@ class OsgeoMarble < Formula
   sha256 "0bfd7ae576e42ebbddadc8c83c2fec5edaf462bcf284642b1002d36d751b24ee"
   version "18.12.3"
 
-  # revision 1
+  revision 1
 
   head "git://anongit.kde.org/marble"
 
