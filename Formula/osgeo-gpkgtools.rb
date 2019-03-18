@@ -1,15 +1,19 @@
 require 'formula'
 
-class Gpkgtools < Formula
+class OsgeoGpkgtools < Formula
+  desc "Some tools for the GeoPackage mapping (vector, tiles and raster) container"
   homepage 'https://launchpad.net/gpkgtools'
+
+  # revision 1
+
   head "lp:gpkgtools", :using => :bzr
 
   depends_on 'libspatialite'
   depends_on "python@2"
 
   resource "Pillow" do
-    url "https://files.pythonhosted.org/packages/0f/57/25be1a4c2d487942c3ed360f6eee7f41c5b9196a09ca71c54d1a33c968d9/Pillow-5.0.0.tar.gz"
-    sha256 "12f29d6c23424f704c66b5b68c02fe0b571504459605cfe36ab8158359b0e1bb"
+    url "https://files.pythonhosted.org/packages/3c/7e/443be24431324bd34d22dd9d11cc845d995bcd3b500676bcf23142756975/Pillow-5.4.1.tar.gz"
+    sha256 "5233664eadfa342c639b9b9977190d64ad7aca4edc51a966394d7e08e7f38a9f"
   end
 
   def install

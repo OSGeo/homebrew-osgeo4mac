@@ -51,5 +51,7 @@
   "libnoise": "osgeo-libnoise",
   "libght": "osgeo-libght",
   "marble": "osgeo-marble",
-  "fcgi-debug": "osgeo-fcgi-debug"
+  "fcgi-debug": "osgeo-fcgi-debug",
+  "gpkgtools": "osgeo-gpkgtools"
+
 }
