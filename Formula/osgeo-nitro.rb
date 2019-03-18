@@ -5,6 +5,8 @@ class OsgeoNitro < Formula
   version "2.7dev-5"
   sha256 "836433f8937e1598310d53f285c79784c63bd54677e8973b276c4ce9f5251b94"
 
+  revision 1
+
   head "https://github.com/hobu/nitro.git", :branch => "master"
 
   depends_on "cmake" => :build
