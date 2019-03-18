@@ -5,7 +5,7 @@ class OsgeoLiblas < Formula
   sha256 "fa2afafb8ec7c81c4216e51de51cf845c99575e7d6efbd22ad311ca8a55ce189"
   version "1.8.1"
 
-  revision 2
+  revision 3
 
   head "https://github.com/libLAS/libLAS.git", :branch => "master"
 
@@ -72,9 +72,9 @@ class OsgeoLiblas < Formula
       args = ["-DWITH_GEOTIFF=ON", "-DWITH_GDAL=ON"] + std_cmake_args
 
       # if build.with? "laszip"
-        args << "-DWITH_LASZIP=ON"
-        args << "-DLASZIP_INCLUDE_DIR=#{Formula['laszip@2.2'].opt_include}"
-        args << "-DLASZIP_LIBRARY=#{Formula['laszip@2.2'].opt_lib}/liblaszip.dylib"
+      args << "-DWITH_LASZIP=ON"
+      args << "-DLASZIP_INCLUDE_DIR=#{Formula['osgeo-laszip@2'].opt_include}"
+      args << "-DLASZIP_LIBRARY=#{Formula['osgeo-laszip@2'].opt_lib}/liblaszip.dylib"
       # end
 
       system "cmake", "..", *args
