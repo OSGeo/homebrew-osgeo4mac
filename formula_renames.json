@@ -53,6 +53,7 @@
   "marble": "osgeo-marble",
   "fcgi-debug": "osgeo-fcgi-debug",
   "gpkgtools": "osgeo-gpkgtools",
-  "pointcloud": "osgeo-pointcloud"
+  "pointcloud": "osgeo-pointcloud",
+  "postgis2": "osgeo-postg"
 
 }
