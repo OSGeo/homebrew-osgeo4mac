@@ -8,6 +8,14 @@ class OsgeoPostgis < Formula
 
   head "https://github.com/postgis/postgis.git", :branch => "master"
 
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    cellar :any
+    sha256 "577158759ea73a6e4ade7aadde8cfb47bd1a08fd10e7f28f62de5e617824d26b" => :mojave
+    sha256 "577158759ea73a6e4ade7aadde8cfb47bd1a08fd10e7f28f62de5e617824d26b" => :high_sierra
+    sha256 "e0363b449f3b36038ef6a19a0cdee52e298c4709aeb735794d64c3871ae81f19" => :sierra
+  end
+
   option "with-gui", "Build shp2pgsql-gui in addition to command line tools"
   option "with-html-docs", "Generate multi-file HTML documentation"
   option "with-api-docs", "Generate developer API documentation (long process)"
