@@ -1,47 +1,44 @@
-class Postgis2 < Formula
+class OsgeoPostgis < Formula
   desc "Adds support for geographic objects to PostgreSQL"
   homepage "https://postgis.net/"
-  url "https://download.osgeo.org/postgis/source/postgis-2.5.1.tar.gz"
-  sha256 "fb137056f43aae0e9d475dc5b7934eccce466f86f5ceeb69ec8b5cea26817a91"
+  url "https://github.com/postgis/postgis/archive/2.5.2.tar.gz"
+  sha256 "225aeaece00a1a6a9af15526af81bef2af27f4c198de820af1367a792ee1d1a9"
 
-  revision 1
+  # revision 1
 
-  bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    cellar :any
-    sha256 "87da7c30324e2dae8ae1c1a534857e24e5b649ccbe14cda3eaaa349af791d1ab" => :mojave
-    sha256 "87da7c30324e2dae8ae1c1a534857e24e5b649ccbe14cda3eaaa349af791d1ab" => :high_sierra
-    sha256 "87da7c30324e2dae8ae1c1a534857e24e5b649ccbe14cda3eaaa349af791d1ab" => :sierra
-  end
-
-  head do
-    url "https://svn.osgeo.org/postgis/trunk/"
-
-    depends_on "autoconf" => :build
-    depends_on "automake" => :build
-    depends_on "libtool" => :build
-  end
+  head "https://github.com/postgis/postgis.git", :branch => "master"
 
   option "with-gui", "Build shp2pgsql-gui in addition to command line tools"
-  option "with-protobuf-c", "Build with protobuf-c to enable Geobuf and Mapbox Vector Tile support"
   option "with-html-docs", "Generate multi-file HTML documentation"
   option "with-api-docs", "Generate developer API documentation (long process)"
-  # option "without-gdal", "Disable postgis raster support"
+  option "with-postgresql10", "Build with PostgreSQL 10 client"
+
+  # if build.head?
+  depends_on "autoconf" => :build
+  depends_on "automake" => :build
+  depends_on "libtool" => :build
+  # end
 
   depends_on "gpp" => :build
   depends_on "pkg-config" => :build
-  depends_on "gdal2" # for GeoJSON and raster handling
   depends_on "geos"
-  depends_on "gtk+" if build.with? "gui"
   depends_on "json-c" # for GeoJSON and raster handling
   depends_on "libiconv"
   depends_on "libxml2"
   depends_on "libxslt"
-  depends_on "pcre" # if build.with? "gdal" # libpcre
-  depends_on "postgresql"
+  depends_on "pcre"
   depends_on "proj"
-  depends_on "sfcgal" # => :optional # for advanced 2D/3D functions
-  depends_on "protobuf-c" => :optional # mapbox
+  depends_on "sfcgal" # for advanced 2D/3D functions
+  depends_on "protobuf-c" #  Geobuf and Mapbox Vector Tile support
+  depends_on "osgeo-gdal" # for GeoJSON and raster handling
+
+  if build.with?("postgresql10")
+    depends_on "postgresql@10"
+  else
+    depends_on "postgresql"
+  end
+
+  depends_on "gtk+" # if build.with? "gui"
 
   if build.with? "html-docs"
     depends_on "imagemagick"
@@ -66,14 +63,13 @@ class Postgis2 < Formula
 
     args = [
       "--with-projdir=#{Formula["proj"].opt_prefix}",
-      # "--with-json",
+      "--with-json",
       "--with-jsondir=#{Formula["json-c"].opt_prefix}",
-      "--with-pgconfig=#{Formula["postgresql"].opt_bin}/pg_config",
       "--with-raster",
       "--with-topology",
       "--datadir=${prefix}/share/${name}",
       "--with-address-standardizer",
-      "--with-gdalconfig=#{Formula["gdal2"].opt_bin}/gdal-config",
+      "--with-gdalconfig=#{Formula["osgeo-gdal"].opt_bin}/gdal-config",
       # Unfortunately, NLS support causes all kinds of headaches because
       # PostGIS gets all of its compiler flags from the PGXS makefiles. This
       # makes it nigh impossible to tell the buildsystem where our keg-only
@@ -81,22 +77,22 @@ class Postgis2 < Formula
       "--disable-nls",
     ]
 
-    # args << "--without-raster" if build.without? "gdal"
+    if build.with?("postgresql10")
+      args << "--with-pgconfig=#{Formula["postgresql@10"].opt_bin}/pg_config"
+    else
+      args << "--with-pgconfig=#{Formula["postgresql"].opt_bin}/pg_config"
+    end
 
     args << "--with-xsldir=#{Formula["docbook-xsl"].opt_prefix}/docbook-xsl" if build.with? "html-docs"
 
-    args << "--with-gui" if build.with? "gui"
+    args << "--with-gui" # if build.with? "gui"
 
-    # if build.with? "sfcgal"
-      args << "--with-sfcgal=#{Formula["sfcgal"].opt_bin}/sfcgal-config"
-    # end
+    args << "--with-sfcgal=#{Formula["sfcgal"].opt_bin}/sfcgal-config"
 
-    if build.with? "protobuf-c"
-     # args << "--with-protobuf"
-     args << "--with-protobufdir=#{Formula["protobuf-c"].opt_bin}"
-    end
+    args << "--with-protobuf"
+    args << "--with-protobufdir=#{Formula["protobuf-c"].opt_bin}"
 
-    system "./autogen.sh" if build.head?
+    system "./autogen.sh"
     system "./configure", *args
     system "make"
 
