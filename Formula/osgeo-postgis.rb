@@ -4,7 +4,7 @@ class OsgeoPostgis < Formula
   url "https://github.com/postgis/postgis/archive/2.5.2.tar.gz"
   sha256 "225aeaece00a1a6a9af15526af81bef2af27f4c198de820af1367a792ee1d1a9"
 
-  # revision 1
+  revision 1
 
   head "https://github.com/postgis/postgis.git", :branch => "master"
 
@@ -13,12 +13,9 @@ class OsgeoPostgis < Formula
   option "with-api-docs", "Generate developer API documentation (long process)"
   option "with-postgresql10", "Build with PostgreSQL 10 client"
 
-  # if build.head?
   depends_on "autoconf" => :build
   depends_on "automake" => :build
   depends_on "libtool" => :build
-  # end
-
   depends_on "gpp" => :build
   depends_on "pkg-config" => :build
   depends_on "geos"
@@ -38,7 +35,7 @@ class OsgeoPostgis < Formula
     depends_on "postgresql"
   end
 
-  depends_on "gtk+" # if build.with? "gui"
+  depends_on "gtk+" # for gui
 
   if build.with? "html-docs"
     depends_on "imagemagick"
@@ -85,7 +82,7 @@ class OsgeoPostgis < Formula
 
     args << "--with-xsldir=#{Formula["docbook-xsl"].opt_prefix}/docbook-xsl" if build.with? "html-docs"
 
-    args << "--with-gui" # if build.with? "gui"
+    args << "--with-gui"
 
     args << "--with-sfcgal=#{Formula["sfcgal"].opt_bin}/sfcgal-config"
 
