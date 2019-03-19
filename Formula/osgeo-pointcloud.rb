@@ -6,7 +6,7 @@ class OsgeoPointcloud < Formula
   # url "https://github.com/pgpointcloud/pointcloud/archive/v1.0.1.tar.gz"
   # sha256 "3fac2efe1263b0876c26fc77e28f3664b56aa1e142c92383f9eb5b828999d0e7"
 
-  # revision 1
+  revision 1
 
   head "https://github.com/pgpointcloud/pointcloud.git", :branch => "master"
 
