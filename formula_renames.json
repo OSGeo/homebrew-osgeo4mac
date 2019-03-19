@@ -52,6 +52,7 @@
   "libght": "osgeo-libght",
   "marble": "osgeo-marble",
   "fcgi-debug": "osgeo-fcgi-debug",
-  "gpkgtools": "osgeo-gpkgtools"
+  "gpkgtools": "osgeo-gpkgtools",
+  "pointcloud": "osgeo-pointcloud"
 
 }
