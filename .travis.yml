@@ -78,7 +78,7 @@ before_install:
   # clone thouroughly but we need a deep clone.
   - mkdir -p $(brew --repo $TRAVIS_REPO_SLUG)   # 1)
   # - mkdir -p "${HOMEBREW_REPOSITORY}/Library/Taps/${GH_USER}"
-  - rm -rf $(brew --repo $TRAVIS_REPO_SLUG)     # 2)
+  # - rm -rf $(brew --repo $TRAVIS_REPO_SLUG)     # 2)
   - ln -s $PWD $(brew --repo $TRAVIS_REPO_SLUG) # 3)
   # - ln -s "$TRAVIS_BUILD_DIR" "${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}"
   - git fetch --unshallow || true               # 4)
@@ -108,6 +108,17 @@ before_install: # IMPORTANT: HOMEBREW_DEVELOPER must not be set here.
   - /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
   - ./travis/before_install.sh
 
+  # Either xquartz was already installed at its latest version or it has
+  # been uninstalled. First, we put the cask back in place if it has not
+  # been uninstalled.
+  # - |
+  #   if [ -d ~/usr_local/Caskroom/xquartz ];
+  #   then sudo mv ~/usr_local/Caskroom /usr/local/Caskroom;
+  #   else travis_retry brew cask install xquartz; fi
+  # We still need the Homebrew ruby on macOS 10.12 and 10.11 because the
+  # system ruby uses an old openssl version ("tlsv1 alert protocol").
+  - travis_retry brew install libyaml gmp openssl@1.1 openssl
+
 install: ./travis/install.sh
 
 before_script: ./travis/before_script.sh
@@ -117,7 +128,6 @@ script: ./travis/script.sh
 after_script: ./travis/after_script.sh
 
 before_cache:
-  - brew install gmp
   # Scrub cache so that travis only caches stuff for installed formulae.
   - brew cleanup -s
   - brew cask cleanup
