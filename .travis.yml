@@ -76,11 +76,11 @@ before_install:
   # branch, and thus we cannot test our tap at the current pushed commit.
   # We also need to unshallow in 4) because sometimes travis does not
   # clone thouroughly but we need a deep clone.
-  - mkdir -p $(brew --repo $TRAVIS_REPO_SLUG)   # 1)
-  # - mkdir -p "${HOMEBREW_REPOSITORY}/Library/Taps/${GH_USER}"
+  # - mkdir -p $(brew --repo $TRAVIS_REPO_SLUG)   # 1)
+  - mkdir -p "${HOMEBREW_REPOSITORY}/Library/Taps/${GH_USER}"
   # - rm -rf $(brew --repo $TRAVIS_REPO_SLUG)     # 2)
-  - ln -s $PWD $(brew --repo $TRAVIS_REPO_SLUG) # 3)
-  # - ln -s "$TRAVIS_BUILD_DIR" "${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}"
+  # - ln -s $PWD $(brew --repo $TRAVIS_REPO_SLUG) # 3)
+  - ln -s "$TRAVIS_BUILD_DIR" "${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}"
   - git fetch --unshallow || true               # 4)
   - cd "${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}"
   - chmod -f 0644 ${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}/Formula/*.rb
