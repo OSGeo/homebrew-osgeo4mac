@@ -4,13 +4,13 @@ build_steps: &build_steps
     - run:
        name: Update environment variables
        command: .circleci/set_env.sh
-    - run:
-       name: Git config
-       command: |
-         git remote set-url origin $CIRCLE_REPOSITORY_URL
-         git fetch origin
-         git config --global user.name "geo-ninja"
-         git config --global user.email "qgisninja@gmail.com"
+    # - run:
+    #    name: Git config
+    #    command: |
+    #      git remote set-url origin $CIRCLE_REPOSITORY_URL
+    #      git fetch origin
+    #      git config --global user.name "geo-ninja"
+    #      git config --global user.email "qgisninja@gmail.com"
     - run:
        name: Before install
        command: .circleci/before_install.sh
@@ -87,11 +87,11 @@ jobs:
       - run:
          name: Update environment variables
          command: .circleci/set_env.sh
-      - run:
-         name: Git config
-         command: |
-           git config --global user.name "geo-ninja"
-           git config --global user.email "qgisninja@gmail.com"
+      # - run:
+      #    name: Git config
+      #    command: |
+      #      git config --global user.name "geo-ninja"
+      #      git config --global user.email "qgisninja@gmail.com"
       # fix for ERROR: The key you are authenticating with has been marked as read only.
       # is using the first key that is found, the one assigned in Checkout keys
       # not Add deploy key (Checkout keys)
