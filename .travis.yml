@@ -117,7 +117,7 @@ before_install: # IMPORTANT: HOMEBREW_DEVELOPER must not be set here.
   #   else travis_retry brew cask install xquartz; fi
   # We still need the Homebrew ruby on macOS 10.12 and 10.11 because the
   # system ruby uses an old openssl version ("tlsv1 alert protocol").
-  - travis_retry brew install libyaml gmp openssl@1.1 openssl
+  - travis_retry brew reinstall libyaml gmp openssl@1.1 openssl
 
 install: ./travis/install.sh
 
