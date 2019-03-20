@@ -39,6 +39,7 @@ done
 # brew tap caskroom/cask || true
 
 # Keeps gcc from being linked
+brew cask reinstall oclint || true
 brew cask uninstall oclint || true
 
 # brew update || brew update

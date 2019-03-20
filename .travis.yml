@@ -117,6 +117,7 @@ script: ./travis/script.sh
 after_script: ./travis/after_script.sh
 
 before_cache:
+  - brew install gmp
   # Scrub cache so that travis only caches stuff for installed formulae.
   - brew cleanup -s
   - brew cask cleanup
