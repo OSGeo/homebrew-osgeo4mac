@@ -81,7 +81,7 @@ before_install:
   # - rm -rf $(brew --repo $TRAVIS_REPO_SLUG)     # 2)
   # - ln -s $PWD $(brew --repo $TRAVIS_REPO_SLUG) # 3)
   - ln -s "$TRAVIS_BUILD_DIR" "${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}"
-  - git fetch --unshallow || true               # 4)
+  # - git fetch --unshallow || true               # 4)
   - cd "${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}"
   - chmod -f 0644 ${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}/Formula/*.rb
   - export TRAVIS_BUILD_DIR="${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}"
@@ -104,8 +104,8 @@ before_install: # IMPORTANT: HOMEBREW_DEVELOPER must not be set here.
   #    has weird 'unlinked kegs' and such;
   # 3) also because it takes a long time to 'brew update' from an old
   #    Homebrew anyway, so why not start fresh.
-  - mkdir ~/usr_local && sudo mv /usr/local/* ~/usr_local
-  - /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+  # - mkdir ~/usr_local && sudo mv /usr/local/* ~/usr_local
+  # - /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
   - ./travis/before_install.sh
 
   # Either xquartz was already installed at its latest version or it has
