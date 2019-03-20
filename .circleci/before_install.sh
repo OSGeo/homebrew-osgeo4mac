@@ -54,7 +54,7 @@ for f in ${CHANGED_FORMULAE};do
 
   if [ "$(echo ${deps} | grep -c '[python@2|python2]')" != "0" ];then
     echo "Installing and configuring Homebrew Python 2"
-    brew outdated python@2 || brew upgrade python@2
+    brew reinstall python@2
 
     # Set up Python .pth files
     # get python short version (major.minor)
@@ -77,7 +77,7 @@ for f in ${CHANGED_FORMULAE};do
 
   if [ "$(echo ${deps} | grep -c '[python|python3]')" != "0" ];then
     echo "Installing and configuring Homebrew Python 3"
-    brew outdated python || brew upgrade python
+    brew reinstall python
 
     # Set up Python .pth files
     # get python short version (major.minor)

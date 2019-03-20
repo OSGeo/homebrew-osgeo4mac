@@ -35,15 +35,16 @@ done
 
 # Add taps
 # brew tap brewsci/science || true
-brew tap brewsci/bio || true
-#brew tap caskroom/cask || true
+# brew tap brewsci/bio || true
+# brew tap caskroom/cask || true
 
 # Keeps gcc from being linked
+brew cask reinstall oclint || true
 brew cask uninstall oclint || true
 
 # brew update || brew update
 # brew update - slow
-brew update-reset
+# brew update-reset
 
 # Set up ccache (doesn't work with `brew install <formula>`)
 #brew install ccache

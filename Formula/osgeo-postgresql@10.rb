@@ -5,7 +5,7 @@ class OsgeoPostgresqlAT10 < Formula
   sha256 "83104a340b5eae7892776c36641be9deb790a52dd1b325bec8509bec65efbe4f"
   version "10.7"
 
-  revision 1
+  revision 2
 
   head "https://github.com/postgres/postgres.git", :branch => "REL_10_STABLE"
 
@@ -49,6 +49,8 @@ class OsgeoPostgresqlAT10 < Formula
     ]
 
     args << "--prefix=#{prefix}"
+    # This is to not have the reference to Cellar in the files
+    # Do not worry, in install they indicate where they should be installed
     args << "--datadir=#{HOMEBREW_PREFIX}/share/postgresql"
     args << "--libdir=#{HOMEBREW_PREFIX}/lib"
     args << "--sysconfdir=#{HOMEBREW_PREFIX}/etc"
@@ -101,7 +103,7 @@ class OsgeoPostgresqlAT10 < Formula
     # Attempting to fix that by adding a dependency on `open-sp` doesn't
     # work and the build errors out on generating the documentation, so
     # for now let's simply omit it so we can package Postgresql for Mojave.
-    if DevelopmentTools.clang_build_version >= 1000
+    # if DevelopmentTools.clang_build_version >= 1000
       system "make", "all"
       # system "make", "-C", "contrib", "install", "all", *args
       system "make", "-C", "contrib", "install", "all", "datadir=#{share}/postgresql",
@@ -115,14 +117,14 @@ class OsgeoPostgresqlAT10 < Formula
                                        "pkglibdir=#{lib}/postgresql",
                                        "docdir=#{doc}",
                                        "mandir=#{man}"
-    else
-      # system "make", "install-world", *args
-      system "make", "install-world", "datadir=#{share}/postgresql",
-                                      "libdir=#{lib}",
-                                      "pkglibdir=#{lib}/postgresql",
-                                      "docdir=#{doc}",
-                                      "mandir=#{man}"
-    end
+    # else
+    #   # system "make", "install-world", *args
+    #   system "make", "install-world", "datadir=#{share}/postgresql",
+    #                                   "libdir=#{lib}",
+    #                                   "pkglibdir=#{lib}/postgresql",
+    #                                   "docdir=#{doc}",
+    #                                   "mandir=#{man}"
+    # end
   end
 
   def post_install
@@ -177,8 +179,8 @@ class OsgeoPostgresqlAT10 < Formula
 
   test do
     # this was tested and it works
-    ENV["LC_ALL"]="en_US.UTF-8"
-    ENV["LC_CTYPE"]="en_US.UTF-8"
+    # ENV["LC_ALL"]="en_US.UTF-8"
+    # ENV["LC_CTYPE"]="en_US.UTF-8"
     # system "#{bin}/initdb", "pgdata"
     # system "#{bin}/initdb", testpath/"test"
     # assert_equal ("#{HOMEBREW_PREFIX}/share/postgresql").to_s, shell_output("#{bin}/pg_config --sharedir").chomp

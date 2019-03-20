@@ -21,7 +21,7 @@ for f in ${CHANGED_FORMULAE};do
   echo "Installing dependencies for changed formula ${f}..."
   FLAGS="--only-dependencies --build-bottle"
 
-  brew install -v ${FLAGS} ${TRAVIS_REPO_SLUG}/${f}&
+  brew install ${FLAGS} ${TRAVIS_REPO_SLUG}/${f}&
   PID=$!
   # add progress to ensure Travis doesn't complain about no output
   while true; do
