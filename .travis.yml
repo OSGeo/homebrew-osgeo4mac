@@ -13,9 +13,20 @@ branches:
   except:
     - circleci
 
+# (1) remember to use 'brew cleanup -s' at the end of the travis script;
+# otherwise, the $HOME/Library/Caches/Homebrew folder will be enormous
+# (~2GB for the 4 jobs). This is because this folder is already present on
+# osx images and it is big.
+# (2) For a time, I had removed $HOME/.cache/Homebrew (cache of Linuxbrew)
+# because it was also storing some logs in $HOME/.cache/Homebrew/Logs, making
+# the cache rebuilt every time.
 # /usr/local subdirs are Homebrew components
-# cache:
-#  directories:
+cache:
+  directories:
+    - "$HOME/.cache/pip"
+    - "$HOME/.gem/ruby"
+    - "$HOME/Library/Caches/Homebrew" # (1)
+    - "$HOME/.cache/Homebrew" # (2)
 #    - $HOME/Library/Caches/pip
 #    - /usr/local/Cellar
 #    - /usr/local/Frameworks
@@ -37,7 +48,6 @@ addons:
 before_install:
   - gem update --system
   - gem install bundler
-
   - export GH_USER=$(echo -n "${TRAVIS_REPO_SLUG}" | egrep -o '^[^/]+' | tr -d '\n')
   - export TRAVIS_COMMIT="$(git rev-parse --verify -q HEAD)"
   - export CHANGED_FORMULAE=$(./travis/changed_formulas.sh)
@@ -58,8 +68,20 @@ before_install:
   - export HOMEBREW_REPOSITORY="$(brew --repo)"
   - sudo chown -R "$USER":admin "${HOMEBREW_REPOSITORY}"
   - git -C "${HOMEBREW_REPOSITORY}" reset --hard origin/master
-  - mkdir -p "${HOMEBREW_REPOSITORY}/Library/Taps/${GH_USER}"
-  - ln -s "$TRAVIS_BUILD_DIR" "${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}"
+  # IMPORTANT STEP: link the tap inside brew to our current travis-cloned tap
+  # Step: 1) create the intermediate folders <user>/<repo> so that
+  # we can 2) remove <repo> and 3) replace it with a sym link
+  # that will point to the travis build folder.
+  # If we don't do that, the tap be cloned using the default master
+  # branch, and thus we cannot test our tap at the current pushed commit.
+  # We also need to unshallow in 4) because sometimes travis does not
+  # clone thouroughly but we need a deep clone.
+  - mkdir -p $(brew --repo $TRAVIS_REPO_SLUG)   # 1)
+  # - mkdir -p "${HOMEBREW_REPOSITORY}/Library/Taps/${GH_USER}"
+  - rm -rf $(brew --repo $TRAVIS_REPO_SLUG)     # 2)
+  - ln -s $PWD $(brew --repo $TRAVIS_REPO_SLUG) # 3)
+  # - ln -s "$TRAVIS_BUILD_DIR" "${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}"
+  - git fetch --unshallow || true               # 4)
   - cd "${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}"
   - chmod -f 0644 ${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}/Formula/*.rb
   - export TRAVIS_BUILD_DIR="${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}"
@@ -67,15 +89,42 @@ before_install:
   - export HOMEBREW_NO_AUTO_UPDATE=1
   - export HOMEBREW_PREFIX=$(brew --prefix)
   - ulimit -n 1024
+
+before_install: # IMPORTANT: HOMEBREW_DEVELOPER must not be set here.
+  # First we uninstall any outdated versions of xquartz; otherwise,
+  # Homebrew will complain of of older version (2.9.7) being outdated
+  # even though we install a new version. Remember that
+  # /usr/local/Caskroom will also be deleted below.
+  # - brew cask outdated xquartz || brew cask uninstall xquartz
+  # Three reasons not to use the /usr/local and Homebrew installations
+  # that come in the Travis CI images:
+  # 1) because Travis CI has installed many non-homebrew things into
+  #    /usr/local that randomly cause 'brew doctor' to fail;
+  # 2) after time, the osx image contains an outdated Homebrew that
+  #    has weird 'unlinked kegs' and such;
+  # 3) also because it takes a long time to 'brew update' from an old
+  #    Homebrew anyway, so why not start fresh.
+  - mkdir ~/usr_local && sudo mv /usr/local/* ~/usr_local
+  - /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
   - ./travis/before_install.sh
 
 install: ./travis/install.sh
 
-# before_script: ./travis/before_script.sh
+before_script: ./travis/before_script.sh
 
 script: ./travis/script.sh
 
 after_script: ./travis/after_script.sh
+
+before_cache:
+  # Scrub cache so that travis only caches stuff for installed formulae.
+  - brew cleanup -s
+  - brew cask cleanup
+  # Remove temporary stuff (idk why they put that in ~/.cache... that should be in /tmp)
+  - rm -f ~/Library/Caches/Homebrew/linkage.db ~/.cache/Homebrew/linkage.db
+  # List the formulae so that I understand why the cache is huge sometimes
+  - brew list
+  - du -h ~/Library/Caches/Homebrew || du -h ~/.cache/Homebrew/linkage.db
 
 before_deploy:
   # Get the deploy key by using Travis's stored variables to decrypt deploy_key.enc
@@ -92,7 +141,6 @@ before_deploy:
   - DISPLAY=":0.0" SSH_ASKPASS="/tmp/askpass" setsid ssh-add /tmp/travis_deploy_key </dev/null
   # add changes
   - ./travis/before_deploy.sh
-
 
 # is disabled to use Circle CI
 
