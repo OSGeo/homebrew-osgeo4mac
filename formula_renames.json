@@ -54,6 +54,6 @@
   "fcgi-debug": "osgeo-fcgi-debug",
   "gpkgtools": "osgeo-gpkgtools",
   "pointcloud": "osgeo-pointcloud",
-  "postgis2": "osgeo-postg"
+  "postgis2": "osgeo-postgis"
 
 }
