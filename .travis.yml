@@ -21,12 +21,12 @@ branches:
 # because it was also storing some logs in $HOME/.cache/Homebrew/Logs, making
 # the cache rebuilt every time.
 # /usr/local subdirs are Homebrew components
-cache:
-  directories:
-    - "$HOME/.cache/pip"
-    - "$HOME/.gem/ruby"
-    - "$HOME/Library/Caches/Homebrew" # (1)
-    - "$HOME/.cache/Homebrew" # (2)
+# cache:
+#   directories:
+#     - "$HOME/.cache/pip"
+#     - "$HOME/.gem/ruby"
+#     - "$HOME/Library/Caches/Homebrew" # (1)
+#     - "$HOME/.cache/Homebrew" # (2)
 #    - $HOME/Library/Caches/pip
 #    - /usr/local/Cellar
 #    - /usr/local/Frameworks
@@ -117,7 +117,7 @@ before_install: # IMPORTANT: HOMEBREW_DEVELOPER must not be set here.
   #   else travis_retry brew cask install xquartz; fi
   # We still need the Homebrew ruby on macOS 10.12 and 10.11 because the
   # system ruby uses an old openssl version ("tlsv1 alert protocol").
-  - travis_retry brew reinstall libyaml gmp openssl@1.1 openssl
+  # - travis_retry brew reinstall libyaml gmp openssl@1.1 openssl
 
 install: ./travis/install.sh
 
@@ -127,15 +127,15 @@ script: ./travis/script.sh
 
 after_script: ./travis/after_script.sh
 
-before_cache:
-  # Scrub cache so that travis only caches stuff for installed formulae.
-  - brew cleanup -s
-  - brew cask cleanup
-  # Remove temporary stuff (idk why they put that in ~/.cache... that should be in /tmp)
-  - rm -f ~/Library/Caches/Homebrew/linkage.db ~/.cache/Homebrew/linkage.db
-  # List the formulae so that I understand why the cache is huge sometimes
-  - brew list
-  - du -h ~/Library/Caches/Homebrew || du -h ~/.cache/Homebrew/linkage.db
+# before_cache:
+#   # Scrub cache so that travis only caches stuff for installed formulae.
+#   - brew cleanup -s
+#   - brew cask cleanup
+#   # Remove temporary stuff (idk why they put that in ~/.cache... that should be in /tmp)
+#   - rm -f ~/Library/Caches/Homebrew/linkage.db ~/.cache/Homebrew/linkage.db
+#   # List the formulae so that I understand why the cache is huge sometimes
+#   - brew list
+#   - du -h ~/Library/Caches/Homebrew || du -h ~/.cache/Homebrew/linkage.db
 
 before_deploy:
   # Get the deploy key by using Travis's stored variables to decrypt deploy_key.enc
