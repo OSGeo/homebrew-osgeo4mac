@@ -1,16 +1,28 @@
 build_steps: &build_steps
   steps:
+    - run:
+       name: Homebrew config
+       command: |
+         brew --version
+         brew remove $(brew list)
+         rm -rf /usr/local/Homebrew/Library/Taps/
+         brew update-reset
+         brew --env
+         brew config
     - checkout
+    - run:
+       name: Git config
+       command: |
+         git remote set-url origin $CIRCLE_REPOSITORY_URL
+         git fetch origin
+         git config --global user.name "geo-ninja"
+         git config --global user.email "qgisninja@gmail.com"
+         repo=$(brew --repo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME)
+         mkdir -p $repo
+         cp -a ./ $repo/
     - run:
        name: Update environment variables
        command: .circleci/set_env.sh
-    # - run:
-    #    name: Git config
-    #    command: |
-    #      git remote set-url origin $CIRCLE_REPOSITORY_URL
-    #      git fetch origin
-    #      git config --global user.name "geo-ninja"
-    #      git config --global user.email "qgisninja@gmail.com"
     - run:
        name: Before install
        command: .circleci/before_install.sh

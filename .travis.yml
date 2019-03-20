@@ -21,24 +21,24 @@ branches:
 # because it was also storing some logs in $HOME/.cache/Homebrew/Logs, making
 # the cache rebuilt every time.
 # /usr/local subdirs are Homebrew components
-# cache:
-#   directories:
-#     - "$HOME/.cache/pip"
-#     - "$HOME/.gem/ruby"
-#     - "$HOME/Library/Caches/Homebrew" # (1)
-#     - "$HOME/.cache/Homebrew" # (2)
-#    - $HOME/Library/Caches/pip
-#    - /usr/local/Cellar
-#    - /usr/local/Frameworks
-#    - /usr/local/Homebrew
-#    - /usr/local/bin
-#    - /usr/local/etc
-#    - /usr/local/include
-#    - /usr/local/lib
-#    - /usr/local/opt
-#    - /usr/local/share
-#    - /usr/local/var
-#  timeout: 900
+cache:
+  directories:
+    - "$HOME/.cache/pip"
+    - "$HOME/.gem/ruby"
+    - "$HOME/Library/Caches/Homebrew" # (1)
+    - "$HOME/.cache/Homebrew" # (2)
+    - $HOME/Library/Caches/pip
+#     - /usr/local/Cellar
+#     - /usr/local/Frameworks
+#     - /usr/local/Homebrew
+#     - /usr/local/bin
+#     - /usr/local/etc
+#     - /usr/local/include
+#     - /usr/local/lib
+#     - /usr/local/opt
+#     - /usr/local/share
+#     - /usr/local/var
+#   timeout: 900
 # before_cache:
 #  - ./travis/before_cache.sh
 
@@ -76,12 +76,12 @@ before_install:
   # branch, and thus we cannot test our tap at the current pushed commit.
   # We also need to unshallow in 4) because sometimes travis does not
   # clone thouroughly but we need a deep clone.
-  # - mkdir -p $(brew --repo $TRAVIS_REPO_SLUG)   # 1)
-  - mkdir -p "${HOMEBREW_REPOSITORY}/Library/Taps/${GH_USER}"
-  # - rm -rf $(brew --repo $TRAVIS_REPO_SLUG)     # 2)
-  # - ln -s $PWD $(brew --repo $TRAVIS_REPO_SLUG) # 3)
-  - ln -s "$TRAVIS_BUILD_DIR" "${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}"
-  # - git fetch --unshallow || true               # 4)
+  - mkdir -p $(brew --repo $TRAVIS_REPO_SLUG)   # 1)
+  # - mkdir -p "${HOMEBREW_REPOSITORY}/Library/Taps/${GH_USER}"
+  - rm -rf $(brew --repo $TRAVIS_REPO_SLUG)     # 2)
+  - ln -s $PWD $(brew --repo $TRAVIS_REPO_SLUG) # 3)
+  # - ln -s "$TRAVIS_BUILD_DIR" "${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}"
+  - git fetch --unshallow || true               # 4)
   - cd "${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}"
   - chmod -f 0644 ${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}/Formula/*.rb
   - export TRAVIS_BUILD_DIR="${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}"
@@ -104,8 +104,8 @@ before_install: # IMPORTANT: HOMEBREW_DEVELOPER must not be set here.
   #    has weird 'unlinked kegs' and such;
   # 3) also because it takes a long time to 'brew update' from an old
   #    Homebrew anyway, so why not start fresh.
-  # - mkdir ~/usr_local && sudo mv /usr/local/* ~/usr_local
-  # - /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+  - mkdir ~/usr_local && sudo mv /usr/local/* ~/usr_local
+  - /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
   - ./travis/before_install.sh
 
   # Either xquartz was already installed at its latest version or it has
@@ -117,7 +117,7 @@ before_install: # IMPORTANT: HOMEBREW_DEVELOPER must not be set here.
   #   else travis_retry brew cask install xquartz; fi
   # We still need the Homebrew ruby on macOS 10.12 and 10.11 because the
   # system ruby uses an old openssl version ("tlsv1 alert protocol").
-  # - travis_retry brew reinstall libyaml gmp openssl@1.1 openssl
+  - travis_retry brew install libyaml gmp openssl@1.1 openssl
 
 install: ./travis/install.sh
 
@@ -127,15 +127,15 @@ script: ./travis/script.sh
 
 after_script: ./travis/after_script.sh
 
-# before_cache:
-#   # Scrub cache so that travis only caches stuff for installed formulae.
-#   - brew cleanup -s
-#   - brew cask cleanup
-#   # Remove temporary stuff (idk why they put that in ~/.cache... that should be in /tmp)
-#   - rm -f ~/Library/Caches/Homebrew/linkage.db ~/.cache/Homebrew/linkage.db
-#   # List the formulae so that I understand why the cache is huge sometimes
-#   - brew list
-#   - du -h ~/Library/Caches/Homebrew || du -h ~/.cache/Homebrew/linkage.db
+before_cache:
+  # Scrub cache so that travis only caches stuff for installed formulae.
+  - brew cleanup -s
+  # - brew cask cleanup
+  # Remove temporary stuff (idk why they put that in ~/.cache... that should be in /tmp)
+  - rm -f ~/Library/Caches/Homebrew/linkage.db ~/.cache/Homebrew/linkage.db
+  # List the formulae so that I understand why the cache is huge sometimes
+  - brew list
+  - du -h ~/Library/Caches/Homebrew || du -h ~/.cache/Homebrew/linkage.db
 
 before_deploy:
   # Get the deploy key by using Travis's stored variables to decrypt deploy_key.enc

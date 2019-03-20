@@ -5,7 +5,7 @@ class OsgeoPostgresqlAT10 < Formula
   sha256 "83104a340b5eae7892776c36641be9deb790a52dd1b325bec8509bec65efbe4f"
   version "10.7"
 
-  revision 2
+  revision 4
 
   head "https://github.com/postgres/postgres.git", :branch => "REL_10_STABLE"
 

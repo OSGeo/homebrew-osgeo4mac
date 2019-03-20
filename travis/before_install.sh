@@ -44,7 +44,7 @@ brew cask uninstall oclint || true
 
 # brew update || brew update
 # brew update - slow
-brew update-reset
+# brew update-reset
 
 # Set up ccache (doesn't work with `brew install <formula>`)
 #brew install ccache
