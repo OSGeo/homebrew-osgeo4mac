@@ -19,7 +19,6 @@ class OsgeoPostgresqlAT10 < Formula
   depends_on "openssl"
   depends_on "readline"
   depends_on "tcl-tk"
-
   depends_on "krb5"
   depends_on "libxml2"
   depends_on "python"
@@ -124,8 +123,6 @@ class OsgeoPostgresqlAT10 < Formula
                                       "docdir=#{doc}",
                                       "mandir=#{man}"
     end
-
-    # mv "#{share}/#{name}", "#{lib}/posgresql"
   end
 
   def post_install
@@ -180,8 +177,8 @@ class OsgeoPostgresqlAT10 < Formula
 
   test do
     # this was tested and it works
-    # ENV["LC_ALL"]="en_US.UTF-8"
-    # ENV["LC_CTYPE"]="en_US.UTF-8"
+    ENV["LC_ALL"]="en_US.UTF-8"
+    ENV["LC_CTYPE"]="en_US.UTF-8"
     # system "#{bin}/initdb", "pgdata"
     # system "#{bin}/initdb", testpath/"test"
     # assert_equal ("#{HOMEBREW_PREFIX}/share/postgresql").to_s, shell_output("#{bin}/pg_config --sharedir").chomp
