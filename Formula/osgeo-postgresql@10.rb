@@ -9,6 +9,13 @@ class OsgeoPostgresqlAT10 < Formula
 
   head "https://github.com/postgres/postgres.git", :branch => "REL_10_STABLE"
 
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    sha256 "27ac3d3d40a94daf4f9d56d94d480b6ab7a0f23f5b433eb8dc881fa9bde0fe95" => :mojave
+    sha256 "27ac3d3d40a94daf4f9d56d94d480b6ab7a0f23f5b433eb8dc881fa9bde0fe95" => :high_sierra
+    sha256 "25acc8f955a1b5eb0815b3c5103a5f1a24e5c1905b2af68705c6a8cb49d6bc84" => :sierra
+  end
+
   keg_only :versioned_formula
 
   depends_on "pkg-config" => :build
