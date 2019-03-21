@@ -58,7 +58,7 @@ before_install:
   - export HOMEBREW_REPOSITORY="$(brew --repo)"
   - sudo chown -R "$USER":admin "${HOMEBREW_REPOSITORY}"
   - brew --version
-  - brew remove $(brew list)
+  # - brew remove $(brew list)
   - rm -rf /usr/local/Homebrew/Library/Taps/
   - brew update-reset
   - brew --env
