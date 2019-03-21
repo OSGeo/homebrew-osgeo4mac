@@ -40,7 +40,7 @@ cache:
 #     - /usr/local/var
 #   timeout: 900
 # before_cache:
-#  - ./travis/before_cache.sh
+#   - ./travis/before_cache.sh
 
 addons:
   ssh_known_hosts: github.com
@@ -48,6 +48,7 @@ addons:
 before_install:
   - gem update --system
   - gem install bundler
+
   - export GH_USER=$(echo -n "${TRAVIS_REPO_SLUG}" | egrep -o '^[^/]+' | tr -d '\n')
   - export TRAVIS_COMMIT="$(git rev-parse --verify -q HEAD)"
   - export CHANGED_FORMULAE=$(./travis/changed_formulas.sh)
@@ -67,6 +68,7 @@ before_install:
     fi
   - export HOMEBREW_REPOSITORY="$(brew --repo)"
   - sudo chown -R "$USER":admin "${HOMEBREW_REPOSITORY}"
+
   - brew --version
   - brew remove $(brew list)
   - rm -rf /usr/local/Homebrew/Library/Taps/
@@ -74,12 +76,12 @@ before_install:
   - brew --env
   - brew config
   - TRAVIS_REPOSITORY_URL=https://github.com/OSGeo/homebrew-osgeo4mac
-  - cd "${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}"
+  - git checkout $TRAVIS_BRANCH
   - git remote set-url origin $TRAVIS_REPOSITORY_URL
   - git fetch origin
   - git config --global user.name "geo-ninja"
   - git config --global user.email "qgisninja@gmail.com"
-  # - git -C "${HOMEBREW_REPOSITORY}" reset --hard origin/master
+
   # IMPORTANT STEP: link the tap inside brew to our current travis-cloned tap
   # Step: 1) create the intermediate folders <user>/<repo> so that
   # we can 2) remove <repo> and 3) replace it with a sym link
@@ -89,23 +91,26 @@ before_install:
   # We also need to unshallow in 4) because sometimes travis does not
   # clone thouroughly but we need a deep clone.
   # - mkdir -p $(brew --repo $TRAVIS_REPO_SLUG) # 1)
-  # - mkdir -p "${HOMEBREW_REPOSITORY}/Library/Taps/${GH_USER}"
-  - repo=$(brew --repo $TRAVIS_REPO_SLUG)
-  - mkdir -p $repo
-  - cp -a ./ $repo/
+  # - repo=$(brew --repo $TRAVIS_REPO_SLUG)
+  # - mkdir -p $repo
+  # - cp -a ./ $repo/
   # - rm -rf $(brew --repo $TRAVIS_REPO_SLUG)     # 2)
   # - ln -s $PWD $(brew --repo $TRAVIS_REPO_SLUG) # 3)
-  # - ln -s "$TRAVIS_BUILD_DIR" "${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}"
   # - git fetch --unshallow || true               # 4)
-  - cd "${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}"
+
+  # - git -C "${HOMEBREW_REPOSITORY}" reset --hard origin/master
+  # - mkdir -p "${HOMEBREW_REPOSITORY}/Library/Taps/${GH_USER}"
+  # - ln -s "$TRAVIS_BUILD_DIR" "${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}"
+  # - cd "${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}"
   - chmod -f 0644 ${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}/Formula/*.rb
   - export TRAVIS_BUILD_DIR="${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}"
   - export HOMEBREW_DEVELOPER=1
   - export HOMEBREW_NO_AUTO_UPDATE=1
   - export HOMEBREW_PREFIX=$(brew --prefix)
   - ulimit -n 1024
+  - ./travis/before_install.sh
 
-before_install: # IMPORTANT: HOMEBREW_DEVELOPER must not be set here.
+  # IMPORTANT: HOMEBREW_DEVELOPER must not be set here.
   # First we uninstall any outdated versions of xquartz; otherwise,
   # Homebrew will complain of of older version (2.9.7) being outdated
   # even though we install a new version. Remember that
@@ -167,6 +172,7 @@ before_deploy:
   - DISPLAY=":0.0" SSH_ASKPASS="/tmp/askpass" setsid ssh-add /tmp/travis_deploy_key </dev/null
   # add changes
   - ./travis/before_deploy.sh
+
 
 # is disabled to use Circle CI
 

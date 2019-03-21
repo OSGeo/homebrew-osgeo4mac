@@ -76,15 +76,16 @@ if [ "$CIRCLE_BRANCH" == "master" ] && [ "$CHANGED_FORMULAE" != "" ]; then
   Committed for ${COMMIT_USER}<${COMMIT_EMAIL}>
   [ci skip]"
 
-
   # fix if there is a new commit in master
   echo "Pull rebase..."
+  # git checkout $CIRCLE_BRANCH
+  # git merge master
   git pull --rebase
 
   # Now that we're all set up, we can push.
   git push ${SSH_REPO} $CIRCLE_BRANCH
 
-  # echo "Upload to Bintray..."
+  echo "Upload to Bintray..."
 
   cd /tmp/workspace/bottles/
   files=$(echo *.tar.gz | tr ' ' ',')

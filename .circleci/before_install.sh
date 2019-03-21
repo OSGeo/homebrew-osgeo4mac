@@ -40,7 +40,7 @@ for f in ${CHANGED_FORMULAE};do
 
   # brew update > /dev/null
   # brew update - slow
-  brew update-reset
+  # brew update-reset
 
   echo "Homebrew setup for changed formula ${f}..."
   deps=$(brew deps --include-build ${f})
