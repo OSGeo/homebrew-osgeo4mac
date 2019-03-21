@@ -9,7 +9,7 @@ build_steps: &build_steps
          brew update-reset
          brew --env
          brew config
-    # - checkout
+    - checkout
     - run:
        name: Git config
        command: |
@@ -18,9 +18,9 @@ build_steps: &build_steps
          git fetch origin
          git config --global user.name "geo-ninja"
          git config --global user.email "qgisninja@gmail.com"
-      # repo=$(brew --repo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME)
-      # mkdir -p $repo
-      # cp -a ./ $repo/
+         repo=$(brew --repo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME)
+         mkdir -p $repo
+         cp -a ./ $repo/
     - run:
        name: Update environment variables
        command: .circleci/set_env.sh
@@ -91,11 +91,10 @@ jobs:
     steps:
       - attach_workspace:
           at: /tmp/workspace
-      # - checkout
+      - checkout
       - run:
          name: Update environment variables
          command: |
-           git checkout $CIRCLE_BRANCH
            .circleci/set_env.sh
       - run:
          name: Git config
