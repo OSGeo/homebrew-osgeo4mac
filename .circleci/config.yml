@@ -13,6 +13,7 @@ build_steps: &build_steps
     - run:
        name: Git config
        command: |
+         git checkout $CIRCLE_BRANCH
          git remote set-url origin $CIRCLE_REPOSITORY_URL
          git fetch origin
          git config --global user.name "geo-ninja"
@@ -57,7 +58,6 @@ jobs:
   update-homebrew:
     macos:
       xcode: "10.1.0"
-
     steps:
       - restore_cache:
           keys:
@@ -67,15 +67,11 @@ jobs:
       - run:
           name: "Update homebrew"
           command: |
-            brew tap brewsci/bio || true
-            brew tap brewsci/science || true
-            brew untap brewsci/science || true
-            brew update || brew update
+            brew update-reset
       - save_cache:
           key: homebrew-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - /usr/local/Homebrew/Library/Taps/homebrew
-            - /usr/local/Homebrew/Library/Taps/brewsci
 
   sierra-build:
     <<: *build_steps
@@ -98,12 +94,13 @@ jobs:
       - checkout
       - run:
          name: Update environment variables
-         command: .circleci/set_env.sh
-      # - run:
-      #    name: Git config
-      #    command: |
-      #      git config --global user.name "geo-ninja"
-      #      git config --global user.email "qgisninja@gmail.com"
+         command: |
+           .circleci/set_env.sh
+      - run:
+         name: Git config
+         command: |
+           git config --global user.name "geo-ninja"
+           git config --global user.email "qgisninja@gmail.com"
       # fix for ERROR: The key you are authenticating with has been marked as read only.
       # is using the first key that is found, the one assigned in Checkout keys
       # not Add deploy key (Checkout keys)

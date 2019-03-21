@@ -19,7 +19,6 @@ set -o errexit
 set -o xtrace
 
 for f in ${CHANGED_FORMULAE};do
-
   echo 'Setting up, before install'
   if [ -n "${DEBUG_CI}" ];then
     brew list --versions
@@ -28,10 +27,11 @@ for f in ${CHANGED_FORMULAE};do
   # Forcibly remove all versions of unneeded default formula provided by travis or pre-cached
   nix_f="
   gdal
-  postgis
   sip
   pyqt
   qscintilla2
+  postgresql@10
+  postgis
   "
 
   for f in ${nix_f}; do
@@ -40,7 +40,7 @@ for f in ${CHANGED_FORMULAE};do
 
   # brew update > /dev/null
   # brew update - slow
-  brew update-reset
+  # brew update-reset
 
   echo "Homebrew setup for changed formula ${f}..."
   deps=$(brew deps --include-build ${f})
@@ -106,5 +106,4 @@ for f in ${CHANGED_FORMULAE};do
     brew install osgeo-grass
     brew unlink osgeo-grass
   fi
-
 done

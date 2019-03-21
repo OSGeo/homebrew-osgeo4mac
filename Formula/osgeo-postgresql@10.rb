@@ -5,7 +5,7 @@ class OsgeoPostgresqlAT10 < Formula
   sha256 "83104a340b5eae7892776c36641be9deb790a52dd1b325bec8509bec65efbe4f"
   version "10.7"
 
-  revision 2
+  revision 3
 
   head "https://github.com/postgres/postgres.git", :branch => "REL_10_STABLE"
 
@@ -136,16 +136,11 @@ class OsgeoPostgresqlAT10 < Formula
 
   def post_install
     (var/"log").mkpath
-    (var/name).mkpath
-    unless File.exist? "#{var}/#{name}/PG_VERSION"
-      system "#{bin}/initdb", "#{var}/#{name}"
-    end
-  end
-
-  def caveats; <<~EOS
-    To migrate existing data from a previous major version of PostgreSQL run:
-      brew postgresql-upgrade-database
-  EOS
+    # (var/name).mkpath
+    (var/"postgresql@10").mkpath
+    # unless File.exist? "#{var}/#{name}/PG_VERSION"
+    #   system "#{bin}/initdb", "#{var}/#{name}"
+    # end
   end
 
   plist_options :manual => "pg_ctl -D #{HOMEBREW_PREFIX}/var/postgresql@10 start"
@@ -163,24 +158,58 @@ class OsgeoPostgresqlAT10 < Formula
       <array>
         <string>#{opt_bin}/postgres</string>
         <string>-D</string>
-        <string>#{var}/#{name}</string>
+        <string>#{var}/postgresql@10</string>
       </array>
       <key>RunAtLoad</key>
       <true/>
       <key>WorkingDirectory</key>
       <string>#{HOMEBREW_PREFIX}</string>
       <key>StandardOutPath</key>
-      <string>#{var}/log/#{name}.log</string>
+      <string>#{var}/log/postgresql@10.log</string>
       <key>StandardErrorPath</key>
-      <string>#{var}/log/#{name}.log</string>
+      <string>#{var}/log/postgresql@10.log</string>
     </dict>
     </plist>
   EOS
   end
 
   def caveats; <<~EOS
-    To migrate existing data from a previous major version of PostgreSQL run:
-      brew postgresql-upgrade-database
+    1 - You need to link "#{name}":
+
+          \e[32m$ brew link #{name} --force\e[0m
+
+        Previously unlink any other version that you have installed.
+
+    2 - Now to init postgresql just execute the following command:
+
+          \e[32m$ initdb #{HOMEBREW_PREFIX}/var/postgresql@10 -E utf8 --locale=en_US.UTF-8\e[0m
+
+        If the file "#{HOMEBREW_PREFIX}/var/postgresql@10/PG_VERSION" exists,
+        it is because you already created this in a previous installation.
+
+    3 - Start using:
+
+          \e[32m$ pg_ctl start -D /usr/local/var/postgresql@10\e[0m
+
+    4 - Connecting to our new database
+
+          \e[32m$ psql -h localhost -d postgres\e[0m
+
+    Note:
+
+      - Could not bind ipv6 address database system was not properly shut:
+
+          \e[32m$ sudo lsof -i :5432\e[0m (search PID)
+
+          \e[32m$ kill PID\e[0m
+
+      - To migrate existing data from a previous major version of PostgreSQL run:
+
+          \e[32m$ brew postgresql-upgrade-database\e[0m
+
+      - For more information see our page with documentation:
+
+          \e[32mhttps://osgeo.github.io/homebrew-osgeo4mac\e[0m
     EOS
   end
 
@@ -188,7 +217,7 @@ class OsgeoPostgresqlAT10 < Formula
     # this was tested and it works
     # ENV["LC_ALL"]="en_US.UTF-8"
     # ENV["LC_CTYPE"]="en_US.UTF-8"
-    # system "#{bin}/initdb", "pgdata"
+    # system "#{bin}/initdb", "pgdata"
     # system "#{bin}/initdb", testpath/"test"
     # assert_equal ("#{HOMEBREW_PREFIX}/share/postgresql").to_s, shell_output("#{bin}/pg_config --sharedir").chomp
     # assert_equal ("#{HOMEBREW_PREFIX}/lib").to_s, shell_output("#{bin}/pg_config --libdir").chomp
