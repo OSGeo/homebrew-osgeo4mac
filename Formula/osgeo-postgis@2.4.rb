@@ -1,3 +1,29 @@
+class Unlinked < Requirement
+  fatal true
+
+  satisfy(:build_env => false) { !osgeo_postgis_linked && !core_postgis_linked }
+
+  def osgeo_postgis_linked
+    Formula["osgeo-postgis"].linked_keg.exist?
+  rescue
+    return false
+  end
+
+  def core_postgis_linked
+    Formula["postgis"].linked_keg.exist?
+  rescue
+    return false
+  end
+
+  def message
+    s = "\033[31mYou have other linked versions!\e[0m\n\n"
+
+    s += "Unlink with \e[32mbrew unlink osgeo-postgis\e[0m or remove with \e[32mbrew uninstall --ignore-dependencies osgeo-postgis\e[0m\n\n" if osgeo_postgis_linked
+    s += "Unlink with \e[32mbrew unlink postgis\e[0m or remove with brew \e[32muninstall --ignore-dependencies postgis\e[0m\n\n" if core_postgis_linked
+    s
+  end
+end
+
 class OsgeoPostgisAT24 < Formula
   desc "Adds support for geographic objects to PostgreSQL"
   homepage "https://postgis.net/"
@@ -12,7 +38,9 @@ class OsgeoPostgisAT24 < Formula
   option "with-api-docs", "Generate developer API documentation (long process)"
   option "with-pg10", "Build with PostgreSQL 10 client"
 
-  keg_only :versioned_formula
+  # keg_only :versioned_formula
+  # we will verify that other versions are not linked
+  depends_on Unlinked
 
   depends_on "autoconf" => :build
   depends_on "automake" => :build
