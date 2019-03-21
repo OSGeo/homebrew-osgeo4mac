@@ -18,7 +18,6 @@
 set -e
 
 if [ "$CIRCLE_BRANCH" == "master" ] && [ "$CHANGED_FORMULAE" != "" ]; then
-
   # Setup Git configuration
   COMMIT_USER=$(git log --format='%an' ${CIRCLE_SHA1}^\!)
   COMMIT_EMAIL=$(git log --format='%ae' ${CIRCLE_SHA1}^\!)
@@ -79,6 +78,7 @@ if [ "$CIRCLE_BRANCH" == "master" ] && [ "$CHANGED_FORMULAE" != "" ]; then
 
 
   # fix if there is a new commit in master
+  echo "Pull rebase..."
   git pull --rebase
 
   # Now that we're all set up, we can push.

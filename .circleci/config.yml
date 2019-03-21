@@ -57,7 +57,6 @@ jobs:
   update-homebrew:
     macos:
       xcode: "10.1.0"
-
     steps:
       - restore_cache:
           keys:
@@ -99,11 +98,11 @@ jobs:
       - run:
          name: Update environment variables
          command: .circleci/set_env.sh
-      # - run:
-      #    name: Git config
-      #    command: |
-      #      git config --global user.name "geo-ninja"
-      #      git config --global user.email "qgisninja@gmail.com"
+      - run:
+         name: Git config
+         command: |
+           git config --global user.name "geo-ninja"
+           git config --global user.email "qgisninja@gmail.com"
       # fix for ERROR: The key you are authenticating with has been marked as read only.
       # is using the first key that is found, the one assigned in Checkout keys
       # not Add deploy key (Checkout keys)
