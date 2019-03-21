@@ -96,7 +96,7 @@ class OsgeoPostgisAT24 < Formula
     args << "--with-sfcgal=#{Formula["sfcgal"].opt_bin}/sfcgal-config"
 
     args << "--with-protobuf"
-    args << "--with-protobufdir=#{Formula["protobuf-c"].opt_bin}"
+    args << "--with-protobufdir=#{Formula["protobuf-c"].opt_prefix}"
 
     system "./autogen.sh"
     system "./configure", *args
