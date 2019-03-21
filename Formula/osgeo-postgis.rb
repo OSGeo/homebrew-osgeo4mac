@@ -1,10 +1,36 @@
+class Unlinked < Requirement
+  fatal true
+
+  satisfy(:build_env => false) { !osgeo_postgis_linked && !core_postgis_linked }
+
+  def osgeo_postgis_linked
+    Formula["osgeo-postgis@2.4"].linked_keg.exist?
+  rescue
+    return false
+  end
+
+  def core_postgis_linked
+    Formula["postgis"].linked_keg.exist?
+  rescue
+    return false
+  end
+
+  def message
+    s = "\033[31mYou have other linked versions!\e[0m\n\n"
+
+    s += "Unlink with \e[32mbrew unlink osgeo-postgis@2.4\e[0m or remove with \e[32mbrew uninstall --ignore-dependencies osgeo-postgis@2.4\e[0m\n\n" if osgeo_postgis_linked
+    s += "Unlink with \e[32mbrew unlink postgis\e[0m or remove with brew \e[32muninstall --ignore-dependencies postgis\e[0m\n\n" if core_postgis_linked
+    s
+  end
+end
+
 class OsgeoPostgis < Formula
   desc "Adds support for geographic objects to PostgreSQL"
   homepage "https://postgis.net/"
   url "https://github.com/postgis/postgis/archive/2.5.2.tar.gz"
   sha256 "225aeaece00a1a6a9af15526af81bef2af27f4c198de820af1367a792ee1d1a9"
 
-  revision 2
+  revision 3
 
   head "https://github.com/postgis/postgis.git", :branch => "master"
 
@@ -15,6 +41,10 @@ class OsgeoPostgis < Formula
     sha256 "b92a2bf108bc568bb3370f146266eabd6575fe9f9548b95d86b8eb401c69ed4e" => :high_sierra
     sha256 "4d35e97d94eca658c7e34586b58b59ad5b232f2a1d71a4679551ce7ef647a565" => :sierra
   end
+
+  # keg_only
+  # we will verify that other versions are not linked
+  depends_on Unlinked
 
   option "with-html-docs", "Generate multi-file HTML documentation"
   option "with-api-docs", "Generate developer API documentation (long process)"
@@ -59,7 +89,7 @@ class OsgeoPostgis < Formula
     # as it is common for people to avoid upgrading Postgres.
     # postgres_realpath = Formula["postgresql"].opt_prefix.realpath
     ENV.append "CFLAGS", "-Diconv=libiconv -Diconv_open=libiconv_open -Diconv_close=libiconv_close"
-    ENV.append "LDFLAGS", "-L#{Formula["libiconv"].opt_lib} -liconv"
+    ENV.append "LDFLAGS", "-L#{Formula["libiconv"].opt_lib} -liconv" # ICONV_LDFLAGS
 
     ENV.deparallelize
 
@@ -83,10 +113,10 @@ class OsgeoPostgis < Formula
     # By default PostGIS will try to detect gettext support and compile with it,
     # how ever if your un into incompatibility issues that cause breakage of loader,
     # you can disable it entirely with this command. Refer to ticket
-    # http://trac.osgeo.org/- postgis/ticket/748 for an example issue solved by
+    # http://trac.osgeo.org/postgis/ticket/748 for an example issue solved by
     # configuring with this. NOTE: that you aren’t missing much by turning this off.
     # This is used for international help/label support for the GUI loader which is not
-    # yet documented and still experi- mental.
+    # yet documented and still experimental.
     args << "--with-gettext=no"
 
     if build.with?("pg10")
@@ -95,7 +125,7 @@ class OsgeoPostgis < Formula
       args << "--with-pgconfig=#{Formula["postgresql"].opt_bin}/pg_config"
     end
 
-    args << "--with-xsldir=#{Formula["docbook-xsl"].opt_prefix}/docbook-xsl" if build.with? "html-docs"
+    args << "--with-xsldir=#{Formula["docbook-xsl"].opt_prefix}/docbook-xsl" if build.with? "html-docs" # /docbook-xsl-nons
 
     args << "--with-gui"
 
@@ -142,7 +172,7 @@ class OsgeoPostgis < Formula
     bin.install Dir["stage/**/bin/*"]
     lib.install Dir["stage/**/lib/*"]
     include.install Dir["stage/**/include/*"]
-    (doc/"postgresql/extension").install Dir["stage/**/share/doc/postgresql/extension/*"]
+    (share/"doc/postgresql/extension").install Dir["stage/**/share/doc/postgresql/extension/*"]
     (share/"postgresql/extension").install Dir["stage/**/share/postgresql/extension/*"]
     # Stand-alone SQL files will be installed the share folder
     # (share/"postgis").install Dir["stage/**/contrib/postgis-*/*"]
