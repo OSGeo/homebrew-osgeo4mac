@@ -57,26 +57,10 @@ before_install:
     fi
   - export HOMEBREW_REPOSITORY="$(brew --repo)"
   - sudo chown -R "$USER":admin "${HOMEBREW_REPOSITORY}"
-  - brew --version
-  # - brew remove $(brew list)
-  - rm -rf /usr/local/Homebrew/Library/Taps/
-  - brew update-reset
-  - brew --env
-  - brew config
-  - git checkout
-  - git checkout $TRAVIS_BRANCH
-  - TRAVIS_REPOSITORY_URL=https://github.com/OSGeo/homebrew-osgeo4mac
-  - git remote set-url origin $TRAVIS_REPOSITORY_URL
-  - git fetch origin
-  - git config --global user.name "geo-ninja"
-  - git config --global user.email "qgisninja@gmail.com"
-  - repo=$(brew --repo ${TRAVIS_REPO_SLUG})
-  - mkdir -p $repo
-  - cp -a ./ $repo/
-  # - git -C "${HOMEBREW_REPOSITORY}" reset --hard origin/master
-  # - mkdir -p "${HOMEBREW_REPOSITORY}/Library/Taps/${GH_USER}"
-  # - ln -s "$TRAVIS_BUILD_DIR" "${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}"
-  # - cd "${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}"
+  - git -C "${HOMEBREW_REPOSITORY}" reset --hard origin/master
+  - mkdir -p "${HOMEBREW_REPOSITORY}/Library/Taps/${GH_USER}"
+  - ln -s "$TRAVIS_BUILD_DIR" "${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}"
+  - cd "${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}"
   - chmod -f 0644 ${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}/Formula/*.rb
   - export TRAVIS_BUILD_DIR="${HOMEBREW_REPOSITORY}/Library/Taps/${TRAVIS_REPO_SLUG}"
   - export HOMEBREW_DEVELOPER=1
