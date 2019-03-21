@@ -4,22 +4,13 @@ class OsgeoPostgis < Formula
   url "https://github.com/postgis/postgis/archive/2.5.2.tar.gz"
   sha256 "225aeaece00a1a6a9af15526af81bef2af27f4c198de820af1367a792ee1d1a9"
 
-  revision 1
+  revision 2
 
   head "https://github.com/postgis/postgis.git", :branch => "master"
 
-  bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    cellar :any
-    sha256 "577158759ea73a6e4ade7aadde8cfb47bd1a08fd10e7f28f62de5e617824d26b" => :mojave
-    sha256 "577158759ea73a6e4ade7aadde8cfb47bd1a08fd10e7f28f62de5e617824d26b" => :high_sierra
-    sha256 "e0363b449f3b36038ef6a19a0cdee52e298c4709aeb735794d64c3871ae81f19" => :sierra
-  end
-
-  option "with-gui", "Build shp2pgsql-gui in addition to command line tools"
   option "with-html-docs", "Generate multi-file HTML documentation"
   option "with-api-docs", "Generate developer API documentation (long process)"
-  option "with-postgresql10", "Build with PostgreSQL 10 client"
+  option "with-pg10", "Build with PostgreSQL 10 client"
 
   depends_on "autoconf" => :build
   depends_on "automake" => :build
@@ -37,8 +28,8 @@ class OsgeoPostgis < Formula
   depends_on "protobuf-c" #  Geobuf and Mapbox Vector Tile support
   depends_on "osgeo-gdal" # for GeoJSON and raster handling
 
-  if build.with?("postgresql10")
-    depends_on "postgresql@10"
+  if build.with?("pg10")
+    depends_on "osgeo-postgresql@10"
   else
     depends_on "postgresql"
   end
@@ -59,10 +50,8 @@ class OsgeoPostgis < Formula
     # Follow the PostgreSQL linked keg back to the active Postgres installation
     # as it is common for people to avoid upgrading Postgres.
     # postgres_realpath = Formula["postgresql"].opt_prefix.realpath
-
     ENV.append "CFLAGS", "-Diconv=libiconv -Diconv_open=libiconv_open -Diconv_close=libiconv_close"
-
-    ENV.append "ICONV_LDFLAGS", "-L#{Formula["libiconv"].opt_lib} -liconv"
+    ENV.append "LDFLAGS", "-L#{Formula["libiconv"].opt_lib} -liconv"
 
     ENV.deparallelize
 
@@ -72,9 +61,10 @@ class OsgeoPostgis < Formula
       "--with-jsondir=#{Formula["json-c"].opt_prefix}",
       "--with-raster",
       "--with-topology",
-      "--datadir=${prefix}/share/${name}",
       "--with-address-standardizer",
       "--with-gdalconfig=#{Formula["osgeo-gdal"].opt_bin}/gdal-config",
+      "--with-geosconfig=#{Formula["geos"].opt_bin}/geos-config",
+      "--with-pcredir=#{Formula["pcre"].opt_prefix}",
       # Unfortunately, NLS support causes all kinds of headaches because
       # PostGIS gets all of its compiler flags from the PGXS makefiles. This
       # makes it nigh impossible to tell the buildsystem where our keg-only
@@ -82,8 +72,17 @@ class OsgeoPostgis < Formula
       "--disable-nls",
     ]
 
-    if build.with?("postgresql10")
-      args << "--with-pgconfig=#{Formula["postgresql@10"].opt_bin}/pg_config"
+    # By default PostGIS will try to detect gettext support and compile with it,
+    # how ever if your un into incompatibility issues that cause breakage of loader,
+    # you can disable it entirely with this command. Refer to ticket
+    # http://trac.osgeo.org/- postgis/ticket/748 for an example issue solved by
+    # configuring with this. NOTE: that you aren’t missing much by turning this off.
+    # This is used for international help/label support for the GUI loader which is not
+    # yet documented and still experi- mental.
+    args << "--with-gettext=no"
+
+    if build.with?("pg10")
+      args << "--with-pgconfig=#{Formula["osgeo-postgresql@10"].opt_bin}/pg_config"
     else
       args << "--with-pgconfig=#{Formula["postgresql"].opt_bin}/pg_config"
     end
@@ -94,8 +93,7 @@ class OsgeoPostgis < Formula
 
     args << "--with-sfcgal=#{Formula["sfcgal"].opt_bin}/sfcgal-config"
 
-    args << "--with-protobuf"
-    args << "--with-protobufdir=#{Formula["protobuf-c"].opt_bin}"
+    args << "--with-protobufdir=#{Formula["protobuf-c"].opt_prefix}"
 
     system "./autogen.sh"
     system "./configure", *args
@@ -139,8 +137,9 @@ class OsgeoPostgis < Formula
     (doc/"postgresql/extension").install Dir["stage/**/share/doc/postgresql/extension/*"]
     (share/"postgresql/extension").install Dir["stage/**/share/postgresql/extension/*"]
     # Stand-alone SQL files will be installed the share folder
-    # (share/"postgis").install Dir["stage/**/contrib/postgis-2.1/*"]
-    pkgshare.install Dir["stage/**/contrib/postgis-*/*"]
+    # (share/"postgis").install Dir["stage/**/contrib/postgis-*/*"]
+    (share/"postgresql/contrib/postgis-2.5").install Dir["stage/**/contrib/postgis-*/*"]
+    # pkgshare.install Dir["stage/**/contrib/postgis-*/*"]
     (share/"postgis_topology").install Dir["stage/**/contrib/postgis_topology-*/*"]
 
     # Extension scripts
@@ -161,14 +160,14 @@ class OsgeoPostgis < Formula
   def caveats
     <<~EOS
       To create a spatially-enabled database, see the documentation:
-        https://postgis.net/docs/manual-2.4/postgis_installation.html#create_new_db_extensions
+        https://postgis.net/docs/manual-2.5/postgis_installation.html#create_new_db_extensions
       If you are currently using PostGIS 2.0+, you can go the soft upgrade path:
         ALTER EXTENSION postgis UPDATE TO "#{version}";
       Users of 1.5 and below will need to go the hard-upgrade path, see here:
-        https://postgis.net/docs/manual-2.4/postgis_installation.html#upgrading
+        https://postgis.net/docs/manual-2.5/postgis_installation.html#upgrading
 
       PostGIS SQL scripts installed to:
-        #{opt_pkgshare}
+        #{HOMEBREW_PREFIX}/share/postgresql/contrib/postgis-2.5
       PostGIS plugin libraries installed to:
         #{HOMEBREW_PREFIX}/lib
       PostGIS extension modules installed to:
