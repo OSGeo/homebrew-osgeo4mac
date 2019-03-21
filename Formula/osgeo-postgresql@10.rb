@@ -1,3 +1,29 @@
+class Unlinked < Requirement
+  fatal true
+
+  satisfy(:build_env => false) { !core_postgresql_linked && !core_postgresql10_linked }
+
+  def core_postgresql_linked
+    Formula["postgresql"].linked_keg.exist?
+  rescue
+    return false
+  end
+
+  def core_postgresql10_linked
+    Formula["postgresql@10"].linked_keg.exist?
+  rescue
+    return false
+  end
+
+  def message
+    s = "\033[31mYou have other linked versions!\e[0m\n\n"
+
+    s += "Unlink with \e[32mbrew unlink postgresql\e[0m or remove with \e[32mbrew uninstall --ignore-dependencies postgresql\e[0m\n\n" if osgeo_postgis_linked
+    s += "Unlink with \e[32mbrew unlink postgresql@10\e[0m or remove with \e[32mbrew uninstall --ignore-dependencies postgresql@10\e[0m\n\n" if osgeo_postgis_linked
+    s
+  end
+end
+
 class OsgeoPostgresqlAT10 < Formula
   desc "Relational database management system"
   homepage "https://www.postgresql.org/"
@@ -17,7 +43,9 @@ class OsgeoPostgresqlAT10 < Formula
     sha256 "c6a7a1e0b0a4642318f0b4b85f5f106a85f648a8692345540b4a39c9003d267c" => :sierra
   end
 
-  keg_only :versioned_formula
+  # keg_only :versioned_formula
+  # we will verify that other versions are not linked
+  depends_on Unlinked
 
   depends_on "pkg-config" => :build
   depends_on "e2fsprogs"
@@ -37,7 +65,7 @@ class OsgeoPostgresqlAT10 < Formula
   # others: pam
 
   def install
-    args = %W[
+    args_conf = %W[
       --disable-debug
       --enable-thread-safety
       --enable-dtrace
@@ -56,15 +84,49 @@ class OsgeoPostgresqlAT10 < Formula
       --with-tcl
     ]
 
-    args << "--prefix=#{prefix}"
-    # This is to not have the reference to Cellar in the files
+    # args_conf << "--with-system-tzdata=#{HOMEBREW_PREFIX}/share/zoneinfo" # use system time zone data in DIR
+
+    # installation directories
+    args_conf << "--prefix=#{prefix}"
+    # args_conf << "--exec-prefix=EPREFIX" # install architecture-dependent files in EPREFIX [PREFIX]
+    # This is to not have the reference to /Cellar in the files
     # Do not worry, in install they indicate where they should be installed
-    args << "--datadir=#{HOMEBREW_PREFIX}/share/postgresql"
-    args << "--libdir=#{HOMEBREW_PREFIX}/lib"
-    args << "--sysconfdir=#{HOMEBREW_PREFIX}/etc"
-    args << "--docdir=#{HOMEBREW_PREFIX}/doc"
-    args << "--mandir=#{HOMEBREW_PREFIX}/share/man"
-    # args << "--with-system-tzdata=#{HOMEBREW_PREFIX}/share/zoneinfo"
+    # args_conf << "--bindir=#{HOMEBREW_PREFIX}/bin" # user executables [EPREFIX/bin] # PG_CONFIG --bindir # BINDIR
+    # args_conf << "--sbindir=#{HOMEBREW_PREFIX}/sbin" # system admin executables [EPREFIX/sbin]
+    # args_conf << "--libexecdir=#{HOMEBREW_PREFIX}/libexec" # program executables [EPREFIX/libexec]
+    args_conf << "--sysconfdir=#{HOMEBREW_PREFIX}/etc" # read-only single-machine data [PREFIX/etc] # PG_CONFIG --sysconfdir # SYSCONFDIR
+    # args_conf << "--sharedstatedir=#{HOMEBREW_PREFIX}/com" # modifiable architecture-independent data [PREFIX/com]
+    args_conf << "--localstatedir=#{HOMEBREW_PREFIX}/var" # modifiable single-machine data [PREFIX/var]
+    args_conf << "--libdir=#{HOMEBREW_PREFIX}/lib" # object code libraries [EPREFIX/lib] # PG_CONFIG --libdir # LIBDIR
+    args_conf << "--includedir=#{HOMEBREW_PREFIX}/include" # C header files [PREFIX/include] # PG_CONFIG --includedir # INCLUDEDIR
+    # args_conf << "--oldincludedir=#{HOMEBREW_PREFIX}/include" # C header files for non-gcc [/usr/include]
+    args_conf << "--datarootdir=#{HOMEBREW_PREFIX}/share" # read-only arch.-independent data root [PREFIX/share]
+    args_conf << "--datadir=#{HOMEBREW_PREFIX}/share/postgresql" # read-only architecture-independent data [DATAROOTDIR] /postgresql # PG_CONFIG --sharedir # SHAREDIR
+    # args_conf << "--infodir=#{HOMEBREW_PREFIX}/share/info" # info documentation [DATAROOTDIR/info]
+    args_conf << "--localedir=#{HOMEBREW_PREFIX}/share/locale" # locale-dependent data [DATAROOTDIR/locale] # PG_CONFIG --localedir # LOCALEDIR
+    args_conf << "--mandir=#{HOMEBREW_PREFIX}/share/man" # man documentation [DATAROOTDIR/man] # PG_CONFIG --mandir # MANDIR
+    args_conf << "--docdir=#{HOMEBREW_PREFIX}/share/doc/postgresql" # documentation root [DATAROOTDIR/doc/postgresql] # PG_CONFIG --docdir # DOCDIR
+    # args_conf << "--htmldir=#{HOMEBREW_PREFIX}/share/doc/postgresql" # html documentation [DOCDIR] # PG_CONFIG --htmldir # HTMLDIR
+    # args_conf << "--dvidir=#{HOMEBREW_PREFIX}/share/doc/postgresql" # dvi documentation [DOCDIR]
+    # args_conf << "--pdfdir=#{HOMEBREW_PREFIX}/share/doc/postgresql" # pdf documentation [DOCDIR]
+    # args_conf << "--psdir=#{HOMEBREW_PREFIX}/share/doc/postgresql" # ps documentation [DOCDIR]
+
+    # PG_CONFIG --pkglibdir # PKGLIBDIR
+    # PG_CONFIG --pkgincludedir # PKGINCLUDEDIR
+    args_install = [
+      "pkglibdir=#{lib}/postgresql",
+      "pkgincludedir=#{include}/postgresql",
+      "sysconfdir=#{etc}",
+      "libdir=#{lib}",
+      "includedir=#{include}",
+      "datadir=#{share}/postgresql",
+      "localedir=#{share}/locale",
+      "mandir=#{man}",
+      "docdir=#{share}/doc/postgresql"
+    ]
+
+    # we do not define this or will refer to /Cellar for others
+    # "bindir=#{bin}"
 
     # avoid adding the SDK library directory to the linker search path
     # XML2_CONFIG=:
@@ -75,9 +137,9 @@ class OsgeoPostgresqlAT10 < Formula
 
     # The CLT is required to build Tcl support on 10.7 and 10.8 because
     # tclConfig.sh is not part of the SDK
-    args << "--with-tcl"
+    args_conf << "--with-tcl"
     if File.exist?("#{MacOS.sdk_path}/System/Library/Frameworks/Tcl.framework/tclConfig.sh")
-      args << "--with-tclconfig=#{MacOS.sdk_path}/System/Library/Frameworks/Tcl.framework"
+      args_conf << "--with-tclconfig=#{MacOS.sdk_path}/System/Library/Frameworks/Tcl.framework"
     end
 
     # As of Xcode/CLT 10.x the Perl headers were moved from /System
@@ -92,12 +154,12 @@ class OsgeoPostgresqlAT10 < Formula
     deps = %w[gettext icu4c openldap openssl readline tcl-tk]
     with_includes = deps.map { |f| Formula[f].opt_include }.join(":")
     with_libraries = deps.map { |f| Formula[f].opt_lib }.join(":")
-    args << "--with-includes=#{with_includes}"
-    args << "--with-libraries=#{with_libraries}"
+    args_conf << "--with-includes=#{with_includes}"
+    args_conf << "--with-libraries=#{with_libraries}"
 
     ENV["XML_CATALOG_FILES"] = "#{etc}/xml/catalog"
 
-    system "./configure", *args
+    system "./configure", *args_conf
     system "make"
 
     # pkglibdir=#{lib}/postgresql
@@ -112,36 +174,21 @@ class OsgeoPostgresqlAT10 < Formula
     # work and the build errors out on generating the documentation, so
     # for now let's simply omit it so we can package Postgresql for Mojave.
     # if DevelopmentTools.clang_build_version >= 1000
+
       system "make", "all"
-      # system "make", "-C", "contrib", "install", "all", *args
-      system "make", "-C", "contrib", "install", "all", "datadir=#{share}/postgresql",
-                                                        "libdir=#{lib}",
-                                                        "pkglibdir=#{lib}/postgresql",
-                                                        "docdir=#{doc}",
-                                                        "mandir=#{man}"
-      # system "make", "install", "all", *args
-      system "make", "install", "all", "datadir=#{share}/postgresql",
-                                       "libdir=#{lib}",
-                                       "pkglibdir=#{lib}/postgresql",
-                                       "docdir=#{doc}",
-                                       "mandir=#{man}"
+      system "make", "-C", "contrib", "install", "all", *args_install
+      system "make", "install", "all", *args_install
     # else
-    #   # system "make", "install-world", *args
-    #   system "make", "install-world", "datadir=#{share}/postgresql",
-    #                                   "libdir=#{lib}",
-    #                                   "pkglibdir=#{lib}/postgresql",
-    #                                   "docdir=#{doc}",
-    #                                   "mandir=#{man}"
+    #   system "make", "install-world", *args_install
     # end
   end
 
   def post_install
     (var/"log").mkpath
-    # (var/name).mkpath
     (var/"postgresql@10").mkpath
-    # unless File.exist? "#{var}/#{name}/PG_VERSION"
-    #   system "#{bin}/initdb", "#{var}/#{name}"
-    # end
+    unless File.exist? "#{var}/postgresql@10/PG_VERSION"
+      system "#{bin}/initdb", "#{var}/postgresql@10"
+    end
   end
 
   plist_options :manual => "pg_ctl -D #{HOMEBREW_PREFIX}/var/postgresql@10 start"
@@ -175,18 +222,16 @@ class OsgeoPostgresqlAT10 < Formula
   end
 
   def caveats; <<~EOS
-    1 - You need to link "#{name}":
+    1 - If you need to link "#{name}":
 
           \e[32m$ brew link #{name} --force\e[0m
-
-        Previously unlink any other version that you have installed.
 
     2 - Now to init postgresql just execute the following command:
 
           \e[32m$ initdb #{HOMEBREW_PREFIX}/var/postgresql@10 -E utf8 --locale=en_US.UTF-8\e[0m
 
         If the file "#{HOMEBREW_PREFIX}/var/postgresql@10/PG_VERSION" exists,
-        it is because you already created this in a previous installation.
+        it is because you already created this in postinstall or a previous installation.
 
     3 - Start using:
 
@@ -215,13 +260,12 @@ class OsgeoPostgresqlAT10 < Formula
   end
 
   test do
-    # this was tested and it works
-    # ENV["LC_ALL"]="en_US.UTF-8"
-    # ENV["LC_CTYPE"]="en_US.UTF-8"
-    # system "#{bin}/initdb", "pgdata"
-    # system "#{bin}/initdb", testpath/"test"
-    # assert_equal ("#{HOMEBREW_PREFIX}/share/postgresql").to_s, shell_output("#{bin}/pg_config --sharedir").chomp
-    # assert_equal ("#{HOMEBREW_PREFIX}/lib").to_s, shell_output("#{bin}/pg_config --libdir").chomp
-    # assert_equal ("#{HOMEBREW_PREFIX}/lib/postgresql").to_s, shell_output("#{bin}/pg_config --pkglibdir").chomp
+    ENV["LC_ALL"]="en_US.UTF-8"
+    ENV["LC_CTYPE"]="en_US.UTF-8"
+    system "#{bin}/initdb", "pgdata"
+    system "#{bin}/initdb", testpath/"test"
+    assert_equal ("#{HOMEBREW_PREFIX}/share/postgresql").to_s, shell_output("#{bin}/pg_config --sharedir").chomp
+    assert_equal ("#{HOMEBREW_PREFIX}/lib").to_s, shell_output("#{bin}/pg_config --libdir").chomp
+    assert_equal ("#{HOMEBREW_PREFIX}/lib/postgresql").to_s, shell_output("#{bin}/pg_config --pkglibdir").chomp
   end
 end
