@@ -30,6 +30,14 @@ class OsgeoPostgisAT24 < Formula
   url "https://github.com/postgis/postgis/archive/2.4.7.tar.gz"
   sha256 "6d0211a6bcbe45750967e850975ec0bcce4b14f5b4226a189f1e33694e7b8fe9"
 
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    cellar :any
+    sha256 "9a9b4737660016cde30589e957bb74348d84f0c27eaa8acd9d638ef1ac1ce605" => :mojave
+    sha256 "9a9b4737660016cde30589e957bb74348d84f0c27eaa8acd9d638ef1ac1ce605" => :high_sierra
+    sha256 "f410f31f84cf0594c00ddebe5c73ac7a0652c8543ff512087f46e43a58f0a6c4" => :sierra
+  end
+
   # revision 1
 
   head "https://github.com/postgis/postgis.git", :branch => "svn-2.4"
