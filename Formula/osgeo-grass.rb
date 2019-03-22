@@ -90,7 +90,7 @@ class OsgeoGrass < Formula
   depends_on "py3cairo"
   depends_on "pygobject3"
   depends_on "pygobject"
-  depends_on "pyqt"
+  depends_on "osgeo-pyqt"
   depends_on "numpy"
   depends_on "scipy"
   depends_on "brewsci/bio/matplotlib"
