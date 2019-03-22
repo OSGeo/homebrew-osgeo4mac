@@ -6,7 +6,7 @@ class OsgeoSagaLts < Formula
       :revision => "b6f474f8af4af7f0ff82548cc6f88c53547d91f5"
   version "2.3.2"
 
-  revision 1
+  revision 2
 
   head "https://git.code.sf.net/p/saga-gis/code.git", :branch => "release-2-3-lts"
 
@@ -25,7 +25,7 @@ class OsgeoSagaLts < Formula
 
   keg_only "LTS version is specifically for working with QGIS"
 
-  option "with-postgresql10", "Build with PostgreSQL 10 client"
+  option "with-pg10", "Build with PostgreSQL 10 client"
   option "with-app", "Build SAGA.app Package"
 
   depends_on "automake" => :build
@@ -48,7 +48,7 @@ class OsgeoSagaLts < Formula
   depends_on "libharu"
   depends_on "qhull" # instead of looking for triangle
   depends_on "poppler"
-  depends_on "hdf4"
+  depends_on "osgeo-hdf4"
   depends_on "hdf5"
   depends_on "netcdf"
   depends_on "sqlite"
@@ -61,8 +61,8 @@ class OsgeoSagaLts < Formula
   # triggers a source (re)build of boost --with-python
   depends_on "osgeo-vigra" => :optional
 
-  if build.with?("postgresql10")
-    depends_on "postgresql@10"
+  if build.with?("pg10")
+    depends_on "osgeo-postgresql@10"
   else
     depends_on "postgresql"
   end
@@ -93,8 +93,8 @@ class OsgeoSagaLts < Formula
     # xcode : xcrun --show-sdk-path
     link_misc = "-arch x86_64 -mmacosx-version-min=10.9 -isysroot #{MacOS::Xcode.prefix}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX#{MacOS.version}.sdk -lstdc++"
 
-    ENV.append "CPPFLAGS", "-I#{Formula["proj"].opt_include} -I#{Formula["gdal2"].opt_include} #{cppflags}"
-    ENV.append "LDFLAGS", "-L#{Formula["proj"].opt_lib}/libproj.dylib -L#{Formula["gdal2"].opt_lib}/libgdal.dylib #{link_misc} #{ldflags}"
+    ENV.append "CPPFLAGS", "-I#{Formula["proj"].opt_include} -I#{Formula["osgeo-gdal"].opt_include} #{cppflags}"
+    ENV.append "LDFLAGS", "-L#{Formula["proj"].opt_lib}/libproj.dylib -L#{Formula["osgeo-gdal"].opt_lib}/libgdal.dylib #{link_misc} #{ldflags}"
 
     # Disable narrowing warnings when compiling in C++11 mode.
     ENV.append "CXXFLAGS", "-Wno-c++11-narrowing -std=c++11"
