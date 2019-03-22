@@ -260,16 +260,16 @@ class OsgeoGrass < Formula
     # end
 
     # install python modules
-    # venv = virtualenv_create(libexec/'vendor', "#{Formula["python@2"].opt_bin}/python2")
-    # res = resources.map(&:name).to_set # - %w[python-dateutil]
+    venv = virtualenv_create(libexec/'vendor', "#{Formula["python@2"].opt_bin}/python2")
+    res = resources.map(&:name).to_set # - %w[python-dateutil]
 
     # fix pip._vendor.pep517.wrappers.BackendUnavailable
-    # system libexec/"vendor/bin/pip2", "install", "--upgrade", "-v", "setuptools", "pip<19.0.0", "wheel"
-    # venv.pip_install_and_link "python-dateutil"
+    system libexec/"vendor/bin/pip2", "install", "--upgrade", "-v", "setuptools", "pip<19.0.0", "wheel"
+    venv.pip_install_and_link "python-dateutil"
 
-    # res.each do |r|
-    #   venv.pip_install resource(r)
-    # end
+    res.each do |r|
+      venv.pip_install resource(r)
+    end
 
     # noinspection RubyLiteralArrayInspection
     args = [
@@ -420,119 +420,119 @@ class OsgeoGrass < Formula
   end
 
   def post_install
-    # # ensure QGIS's Processing plugin recognizes install
-    # # 2.14.8+ and other newer QGIS versions may reference just grass.sh
-    # bin_grass = "#{bin}/grass#{majmin_ver}"
-    # ln_sf "#{bin_grass}", "#{prefix}/grass-#{version}/grass#{majmin_ver}.sh"
-    # ln_sf "#{bin_grass}", "#{prefix}/grass-#{version}/grass.sh"
-    # # link so settings in external apps don't need updated on grass version bump
-    # # in QGIS Processing options, GRASS folder = HOMEBREW_PREFIX/opt/grass7/grass-base
-    # ln_sf "grass-#{version}", "#{prefix}/grass-base"
-    # # ensure python2 is used
-    # bin.env_script_all_files("#{libexec}/bin", :GRASS_PYTHON => "python2")
-    #
-    # # fix "ValueError: unknown locale: UTF-8"
-    # rm "#{bin}/grass#{majmin_ver}"
-    # File.open("#{bin}/grass#{majmin_ver}", "w") { |file|
-    #   file << '#!/bin/bash'
-    #   file << "\n"
-    #   file << "export LANG=en_US.UTF-8"
-    #   file << "\n"
-    #   file << "export LC_CTYPE=en_US.UTF-8"
-    #   file << "\n"
-    #   file << "export LC_ALL=en_US.UTF-8"
-    #   file << "\n"
-    #   file << "export GRASS_PREFIX=#{prefix}/grass-base"
-    #   file << "\n"
-    #   file << "export GRASS_SH=/bin/sh"
-    #   file << "\n"
-    #   file << "export GRASS_PROJSHARE=#{Formula["proj"].opt_share}"
-    #   file << "\n"
-    #   file << "export GRASS_VERSION=#{version}"
-    #   file << "\n"
-    #   file << "export GRASS_LD_LIBRARY_PATH=#{prefix}/grass-#{version}/lib"
-    #   file << "\n"
-    #   # file << "export GRASS_PERL=#{Formula["perl"].opt_bin}/perl"
-    #   # file << "\n"
-    #   file << "export PROJ_LIB=#{Formula["proj"].opt_lib}"
-    #   file << "\n"
-    #   file << "export GEOTIFF_CSV=#{Formula["libgeotiff"].opt_share}/epsg_csv"
-    #   file << "\n"
-    #   file << "export GDAL_DATA=#{Formula["osgeo-gdal"].opt_share}/gdal"
-    #   # file << "\n"
-    #   # file << "export PYTHONHOME=#{Formula["python"].opt_frameworks}/Python.framework/Versions/#{py_ver}:$PYTHONHOME"
-    #   # file << "export R_HOME=#{Formula["r"].opt_bin}/R:$R_HOME"
-    #   # file << "export R_HOME=/Applications/RStudio.app/Contents/MacOS/RStudio:$R_HOME"
-    #   # file << "export R_USER=USER_PROFILE/Documents"
-    #   file << "\n"
-    #   file << "GRASS_PYTHON=python2 exec #{libexec}/bin/grass#{majmin_ver} $@"
-    # }
-    #
-    # # for "--enable-macosx-app"
-    # # mkdir - permission denied: /Library/GRASS
-    # if build.with? "app"
-    #   ("#{prefix}/GRASS7.app/Contents/PkgInfo").write "APPLGRASS"
-    #   mkdir "#{prefix}/GRASS7.app/Contents/Resources"
-    #   cp_r "#{buildpath}/macosx/app/app.icns", "#{prefix}/GRASS7.app/Contents/Resources"
-    #
-    #   config = <<~EOS
-    #     <?xml version="1.0" encoding="UTF-8"?>
-    #     <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-    #     <plist version="1.0">
-    #     <dict>
-    #       <key>CFBundleDevelopmentRegion</key>
-    #       <string>English</string>
-    #       <key>CFBundleExecutable</key>
-    #       <string>grass#{majmin_ver}</string>
-    #       <key>CFBundleGetInfoString</key>
-    #       <string>GRASS GIS #{version}</string>
-    #       <key>CFBundleIconFile</key>
-    #       <string>app.icns</string>
-    #       <key>CFBundleIdentifier</key>
-    #       <string>https://grass.osgeo.org/grass#{majmin_ver}/source/</string>
-    #       <key>CFBundleInfoDictionaryVersion</key>
-    #       <string>6.0</string>
-    #       <key>CFBundlePackageType</key>
-    #       <string>APPL</string>
-    #       <key>CFBundleShortVersionString</key>
-    #       <string>GRASS GIS #{version}</string>
-    #       <key>CFBundleSignature</key>
-    #       <string>????</string>
-    #       <key>CFBundleVersion</key>
-    #       <string>#{version}</string>
-    #       <key>NSMainNibFile</key>
-    #       <string>MainMenu.nib</string>
-    #       <key>NSPrincipalClass</key>
-    #       <string>NSApplication</string>
-    #       <key>CFBundleDocumentTypes</key>
-    #       <array>
-    #         <dict>
-    #           <key>CFBundleTypeExtensions</key>
-    #           <array>
-    #             <string>****</string>
-    #           </array>
-    #           <key>CFBundleTypeName</key>
-    #           <string>FolderType</string>
-    #           <key>CFBundleTypeOSTypes</key>
-    #           <array>
-    #             <string>fold</string>
-    #           </array>
-    #           <key>CFBundleTypeRole</key>
-    #           <string>Editor</string>
-    #         </dict>
-    #       </array>
-    #     </dict>
-    #     </plist>
-    #   EOS
-    #
-    #   ("#{prefix}/GRASS7.app/Contents/Info.plist").write config
-    #
-    #   chdir "#{prefix}/GRASS7.app/Contents" do
-    #     mkdir "MacOS" do
-    #       ln_s "#{bin}/grass#{majmin_ver}", "grass#{majmin_ver}"
-    #     end
-    #   end
-    # end
+    # ensure QGIS's Processing plugin recognizes install
+    # 2.14.8+ and other newer QGIS versions may reference just grass.sh
+    bin_grass = "#{bin}/grass#{majmin_ver}"
+    ln_sf "#{bin_grass}", "#{prefix}/grass#{majmin_ver}/grass#{majmin_ver}.sh"
+    ln_sf "#{bin_grass}", "#{prefix}/grass#{majmin_ver}/grass.sh"
+    # link so settings in external apps don't need updated on grass version bump
+    # in QGIS Processing options, GRASS folder = HOMEBREW_PREFIX/opt/grass7/grass-base
+    ln_sf "grass#{majmin_ver}", "#{prefix}/grass-base"
+    # ensure python2 is used
+    bin.env_script_all_files("#{libexec}/bin", :GRASS_PYTHON => "python2")
+
+    # fix "ValueError: unknown locale: UTF-8"
+    rm "#{bin}/grass#{majmin_ver}"
+    File.open("#{bin}/grass#{majmin_ver}", "w") { |file|
+      file << '#!/bin/bash'
+      file << "\n"
+      file << "export LANG=en_US.UTF-8"
+      file << "\n"
+      file << "export LC_CTYPE=en_US.UTF-8"
+      file << "\n"
+      file << "export LC_ALL=en_US.UTF-8"
+      file << "\n"
+      file << "export GRASS_PREFIX=#{prefix}/grass-base"
+      file << "\n"
+      file << "export GRASS_SH=/bin/sh"
+      file << "\n"
+      file << "export GRASS_PROJSHARE=#{Formula["proj"].opt_share}"
+      file << "\n"
+      file << "export GRASS_VERSION=#{version}"
+      file << "\n"
+      file << "export GRASS_LD_LIBRARY_PATH=#{prefix}/grass#{majmin_ver}/lib"
+      file << "\n"
+      # file << "export GRASS_PERL=#{Formula["perl"].opt_bin}/perl"
+      # file << "\n"
+      file << "export PROJ_LIB=#{Formula["proj"].opt_lib}"
+      file << "\n"
+      file << "export GEOTIFF_CSV=#{Formula["libgeotiff"].opt_share}/epsg_csv"
+      file << "\n"
+      file << "export GDAL_DATA=#{Formula["osgeo-gdal"].opt_share}/gdal"
+      # file << "\n"
+      # file << "export PYTHONHOME=#{Formula["python"].opt_frameworks}/Python.framework/Versions/#{py_ver}:$PYTHONHOME"
+      # file << "export R_HOME=#{Formula["r"].opt_bin}/R:$R_HOME"
+      # file << "export R_HOME=/Applications/RStudio.app/Contents/MacOS/RStudio:$R_HOME"
+      # file << "export R_USER=USER_PROFILE/Documents"
+      file << "\n"
+      file << "GRASS_PYTHON=python2 exec #{libexec}/bin/grass#{majmin_ver} $@"
+    }
+
+    # for "--enable-macosx-app"
+    # mkdir - permission denied: /Library/GRASS
+    if build.with? "app"
+      ("#{prefix}/GRASS7.app/Contents/PkgInfo").write "APPLGRASS"
+      mkdir "#{prefix}/GRASS7.app/Contents/Resources"
+      cp_r "#{buildpath}/macosx/app/app.icns", "#{prefix}/GRASS7.app/Contents/Resources"
+
+      config = <<~EOS
+        <?xml version="1.0" encoding="UTF-8"?>
+        <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+        <plist version="1.0">
+        <dict>
+          <key>CFBundleDevelopmentRegion</key>
+          <string>English</string>
+          <key>CFBundleExecutable</key>
+          <string>grass#{majmin_ver}</string>
+          <key>CFBundleGetInfoString</key>
+          <string>GRASS GIS #{version}</string>
+          <key>CFBundleIconFile</key>
+          <string>app.icns</string>
+          <key>CFBundleIdentifier</key>
+          <string>https://grass.osgeo.org/grass#{majmin_ver}/source/</string>
+          <key>CFBundleInfoDictionaryVersion</key>
+          <string>6.0</string>
+          <key>CFBundlePackageType</key>
+          <string>APPL</string>
+          <key>CFBundleShortVersionString</key>
+          <string>GRASS GIS #{version}</string>
+          <key>CFBundleSignature</key>
+          <string>????</string>
+          <key>CFBundleVersion</key>
+          <string>#{version}</string>
+          <key>NSMainNibFile</key>
+          <string>MainMenu.nib</string>
+          <key>NSPrincipalClass</key>
+          <string>NSApplication</string>
+          <key>CFBundleDocumentTypes</key>
+          <array>
+            <dict>
+              <key>CFBundleTypeExtensions</key>
+              <array>
+                <string>****</string>
+              </array>
+              <key>CFBundleTypeName</key>
+              <string>FolderType</string>
+              <key>CFBundleTypeOSTypes</key>
+              <array>
+                <string>fold</string>
+              </array>
+              <key>CFBundleTypeRole</key>
+              <string>Editor</string>
+            </dict>
+          </array>
+        </dict>
+        </plist>
+      EOS
+
+      ("#{prefix}/GRASS7.app/Contents/Info.plist").write config
+
+      chdir "#{prefix}/GRASS7.app/Contents" do
+        mkdir "MacOS" do
+          ln_s "#{bin}/grass#{majmin_ver}", "grass#{majmin_ver}"
+        end
+      end
+    end
   end
 
   def formula_site_packages(f)
