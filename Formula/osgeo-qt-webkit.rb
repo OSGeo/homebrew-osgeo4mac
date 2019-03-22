@@ -3,9 +3,9 @@ class OsgeoQtWebkit < Formula
   homepage "https://www.qt.io/developers"
   url "https://github.com/qt/qtwebkit/archive/72cfbd7664f21fcc0e62b869a6b01bf73eb5e7da.tar.gz"
   sha256 "2e393e7429387437cbfef56ec839329663e9b136ea68997d1e1cdd2f4d9d3ae0"
-  version "5.12.1"
+  version "5.12.2"
 
-  revision 1
+  # revision 1
 
   # from the developer: "https://github.com/annulen/webkit.git"
   head "https://github.com/qt/qtwebkit.git"
