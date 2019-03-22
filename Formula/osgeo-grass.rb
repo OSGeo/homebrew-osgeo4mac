@@ -13,7 +13,7 @@ class OsgeoGrass < Formula
 
   stable do
     url "https://grass.osgeo.org/grass76/source/grass-7.6.1.tar.gz"
-    sha256 "07628f83ad59ba6d9d097cdc91c490efaf5b1d57bc7ee1fc2709183162741b6a"
+    sha256 "9e25c99cafd16ed8f5e2dca75b5a10dc2af0568dbedf3fc39f1c5a0a9c840b0b"
 
     # Patches to keep files from being installed outside of the prefix.
     # Remove lines from Makefile that try to install to /Library/Documentation.
