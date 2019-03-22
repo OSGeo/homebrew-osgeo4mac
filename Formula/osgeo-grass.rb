@@ -233,8 +233,8 @@ class OsgeoGrass < Formula
   end
 
   resource "tornado" do
-    url "https://files.pythonhosted.org/packages/b1/7f/8109821ff9df1bf3519169e34646705c32ac13be6a4d51a79ed57f47686e/tornado-6.0.1.tar.gz"
-    sha256 "de274c65f45f6656c375cdf1759dbf0bc52902a1e999d12a35eb13020a641a53"
+    url "https://files.pythonhosted.org/packages/e6/78/6e7b5af12c12bdf38ca9bfe863fcaf53dc10430a312d0324e76c1e5ca426/tornado-5.1.1.tar.gz"
+    sha256 "4e5158d97583502a7e2739951553cbd88a72076f152b4b11b64b9a10c4c49409"
   end
 
   resource "cairocffi" do
