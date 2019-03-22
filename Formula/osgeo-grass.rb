@@ -238,8 +238,8 @@ class OsgeoGrass < Formula
   end
 
   resource "cairocffi" do
-    url "https://files.pythonhosted.org/packages/0f/0f/7e21b5ddd31b610e46a879c0d21e222dd0fef428c1fc86bbd2bd57fed8a7/cairocffi-1.0.2.tar.gz"
-    sha256 "01ac51ae12c4324ca5809ce270f9dd1b67f5166fe63bd3e497e9ea3ca91946ff"
+    url "https://files.pythonhosted.org/packages/62/be/ad4d422b6f38d99b09ad6d046ab725e8ccac5fefd9ca256ca35a80dbf3c6/cairocffi-0.9.0.tar.gz"
+    sha256 "15386c3a9e08823d6826c4491eaccc7b7254b1dc587a3b9ce60c350c3f990337"
   end
 
   resource "subprocess32" do
