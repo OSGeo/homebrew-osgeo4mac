@@ -4,7 +4,7 @@ class OsgeoGrass < Formula
   desc "Geographic Resources Analysis Support System"
   homepage "https://grass.osgeo.org/"
 
-  revision 1
+  # revision 1
 
   # svn: E230001: Server SSL certificate verification failed: issuer is not trusted
   # head "https://svn.osgeo.org/grass/grass/trunk", :using => :svn
@@ -12,7 +12,7 @@ class OsgeoGrass < Formula
   head "https://github.com/GRASS-GIS/grass-ci.git", :branch => "master"
 
   stable do
-    url "https://grass.osgeo.org/grass76/source/grass-7.6.0.tar.gz"
+    url "https://grass.osgeo.org/grass76/source/grass-7.6.1.tar.gz"
     sha256 "07628f83ad59ba6d9d097cdc91c490efaf5b1d57bc7ee1fc2709183162741b6a"
 
     # Patches to keep files from being installed outside of the prefix.
@@ -90,10 +90,10 @@ class OsgeoGrass < Formula
   depends_on "py3cairo"
   depends_on "pygobject3"
   depends_on "pygobject"
-  depends_on "pyqt"
+  depends_on "osgeo-pyqt"
   depends_on "numpy"
   depends_on "scipy"
-  depends_on "brewsci/bio/matplotlib"
+  depends_on "osgeo-matplotlib"
 
   # optional dependencies
 
@@ -161,13 +161,13 @@ class OsgeoGrass < Formula
   end
 
   resource "pip" do
-    url "https://files.pythonhosted.org/packages/45/ae/8a0ad77defb7cc903f09e551d88b443304a9bd6e6f124e75c0fbbf6de8f7/pip-18.1.tar.gz"
-    sha256 "c0a292bd977ef590379a3f05d7b7f65135487b67470f6281289a94e015650ea1"
+    url "https://files.pythonhosted.org/packages/36/fa/51ca4d57392e2f69397cd6e5af23da2a8d37884a605f9e3f2d3bfdc48397/pip-19.0.3.tar.gz"
+    sha256 "6e6f197a1abfb45118dbb878b5c859a0edbdd33fd250100bc015b67fded4b9f2"
   end
 
   resource "wheel" do
-    url "https://files.pythonhosted.org/packages/d8/55/221a530d66bf78e72996453d1e2dedef526063546e131d70bed548d80588/wheel-0.32.3.tar.gz"
-    sha256 "029703bf514e16c8271c3821806a1c171220cc5bdd325cbf4e7da1e056a01db6"
+    url "https://files.pythonhosted.org/packages/b7/cf/1ea0f5b3ce55cacde1e84cdde6cee1ebaff51bd9a3e6c7ba4082199af6f6/wheel-0.33.1.tar.gz"
+    sha256 "66a8fd76f28977bb664b098372daef2b27f60dc4d1688cfab7b37a09448f0e9d"
   end
 
   resource "Pillow" do
@@ -233,13 +233,13 @@ class OsgeoGrass < Formula
   end
 
   resource "tornado" do
-    url "https://files.pythonhosted.org/packages/e6/78/6e7b5af12c12bdf38ca9bfe863fcaf53dc10430a312d0324e76c1e5ca426/tornado-5.1.1.tar.gz"
-    sha256 "4e5158d97583502a7e2739951553cbd88a72076f152b4b11b64b9a10c4c49409"
+    url "https://files.pythonhosted.org/packages/b1/7f/8109821ff9df1bf3519169e34646705c32ac13be6a4d51a79ed57f47686e/tornado-6.0.1.tar.gz"
+    sha256 "de274c65f45f6656c375cdf1759dbf0bc52902a1e999d12a35eb13020a641a53"
   end
 
   resource "cairocffi" do
-    url "https://files.pythonhosted.org/packages/62/be/ad4d422b6f38d99b09ad6d046ab725e8ccac5fefd9ca256ca35a80dbf3c6/cairocffi-0.9.0.tar.gz"
-    sha256 "15386c3a9e08823d6826c4491eaccc7b7254b1dc587a3b9ce60c350c3f990337"
+    url "https://files.pythonhosted.org/packages/0f/0f/7e21b5ddd31b610e46a879c0d21e222dd0fef428c1fc86bbd2bd57fed8a7/cairocffi-1.0.2.tar.gz"
+    sha256 "01ac51ae12c4324ca5809ce270f9dd1b67f5166fe63bd3e497e9ea3ca91946ff"
   end
 
   resource "subprocess32" do
@@ -253,8 +253,8 @@ class OsgeoGrass < Formula
   end
 
   resource "numpy" do
-    url "https://files.pythonhosted.org/packages/2b/26/07472b0de91851b6656cbc86e2f0d5d3a3128e7580f23295ef58b6862d6c/numpy-1.16.1.zip"
-    sha256 "31d3fe5b673e99d33d70cfee2ea8fe8dccd60f265c3ed990873a88647e3dd288"
+    url "https://files.pythonhosted.org/packages/cf/8d/6345b4f32b37945fedc1e027e83970005fc9c699068d2f566b82826515f2/numpy-1.16.2.zip"
+    sha256 "6c692e3879dde0b67a9dc78f9bfb6f61c666b4562fd8619632d7043fb5b691b0"
   end
 
   # "error: no member named 'signbit' in the global namespace"
@@ -311,7 +311,7 @@ class OsgeoGrass < Formula
       "--with-odbc",
       "--with-odbc-includes=#{Formula["unixodbc"].opt_include}",
       "--with-odbc-libs=#{Formula["unixodbc"].opt_lib}",
-      "--with-gdal=#{Formula["gdal2"].opt_bin}/gdal-config",
+      "--with-gdal=#{Formula["osgeo-gdal"].opt_bin}/gdal-config",
       "--with-zlib-includes=#{Formula["zlib"].opt_include}",
       "--with-zlib-libs=#{Formula["zlib"].opt_lib}",
       "--with-bzlib",
@@ -474,7 +474,7 @@ class OsgeoGrass < Formula
       file << "\n"
       file << "export GEOTIFF_CSV=#{Formula["libgeotiff"].opt_share}/epsg_csv"
       file << "\n"
-      file << "export GDAL_DATA=#{Formula["gdal2"].opt_share}/gdal"
+      file << "export GDAL_DATA=#{Formula["osgeo-gdal"].opt_share}/gdal"
       # file << "\n"
       # file << "export PYTHONHOME=#{Formula["python"].opt_frameworks}/Python.framework/Versions/#{py_ver}:$PYTHONHOME"
       # file << "export R_HOME=#{Formula["r"].opt_bin}/R:$R_HOME"

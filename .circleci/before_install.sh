@@ -48,7 +48,7 @@ for f in ${CHANGED_FORMULAE};do
   echo "${deps}"
 
   # Install XQuartz
-  if [ "$(echo ${deps} | grep -c 'osgeo-grass')" != "0" ] || [[ "${f}" =~ "osgeo-grass" ]];then
+  if [ "$(echo ${deps} | grep -c 'osgeo-grass')" != "0" ] || [[ "${f}" == "osgeo-grass" ]];then
     brew cask install xquartz
   fi
 
