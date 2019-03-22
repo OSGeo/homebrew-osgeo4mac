@@ -18,8 +18,8 @@ class Unlinked < Requirement
   def message
     s = "\033[31mYou have other linked versions!\e[0m\n\n"
 
-    s += "Unlink with \e[32mbrew unlink postgresql\e[0m or remove with \e[32mbrew uninstall --ignore-dependencies postgresql\e[0m\n\n" if osgeo_postgis_linked
-    s += "Unlink with \e[32mbrew unlink postgresql@10\e[0m or remove with \e[32mbrew uninstall --ignore-dependencies postgresql@10\e[0m\n\n" if osgeo_postgis_linked
+    s += "Unlink with \e[32mbrew unlink postgresql\e[0m or remove with \e[32mbrew uninstall --ignore-dependencies postgresql\e[0m\n\n" if core_postgresql_linked
+    s += "Unlink with \e[32mbrew unlink postgresql@10\e[0m or remove with \e[32mbrew uninstall --ignore-dependencies postgresql@10\e[0m\n\n" if core_postgresql10_linked
     s
   end
 end
@@ -31,7 +31,7 @@ class OsgeoPostgresqlAT10 < Formula
   sha256 "83104a340b5eae7892776c36641be9deb790a52dd1b325bec8509bec65efbe4f"
   version "10.7"
 
-  revision 3
+  revision 4
 
   head "https://github.com/postgres/postgres.git", :branch => "REL_10_STABLE"
 
@@ -174,10 +174,9 @@ class OsgeoPostgresqlAT10 < Formula
     # work and the build errors out on generating the documentation, so
     # for now let's simply omit it so we can package Postgresql for Mojave.
     # if DevelopmentTools.clang_build_version >= 1000
-
-      system "make", "all"
-      system "make", "-C", "contrib", "install", "all", *args_install
-      system "make", "install", "all", *args_install
+    system "make", "all"
+    system "make", "-C", "contrib", "install", "all", *args_install
+    system "make", "install", "all", *args_install
     # else
     #   system "make", "install-world", *args_install
     # end
@@ -226,7 +225,9 @@ class OsgeoPostgresqlAT10 < Formula
 
           \e[32m$ brew link #{name} --force\e[0m
 
-    2 - Now to init postgresql just execute the following command:
+        Previously unlink any other version that you have installed.
+
+    2 - If you need to init postgresql just execute the following command:
 
           \e[32m$ initdb #{HOMEBREW_PREFIX}/var/postgresql@10 -E utf8 --locale=en_US.UTF-8\e[0m
 
