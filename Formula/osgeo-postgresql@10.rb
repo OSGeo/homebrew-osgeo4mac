@@ -37,10 +37,9 @@ class OsgeoPostgresqlAT10 < Formula
 
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    rebuild 2
-    sha256 "e26dc1c28c582d54e760918bf3219e2bfcf23cd570c65255c393427501cee36b" => :mojave
-    sha256 "e26dc1c28c582d54e760918bf3219e2bfcf23cd570c65255c393427501cee36b" => :high_sierra
-    sha256 "1f045a88a186fc194fed855d14aaba91c12c50afe9d2684f9f1ef38347d69c78" => :sierra
+    sha256 "e7e588c0b4f6d5f902394026808bb877bd2e29f2f2c46d5a5db159ef67858409" => :mojave
+    sha256 "e7e588c0b4f6d5f902394026808bb877bd2e29f2f2c46d5a5db159ef67858409" => :high_sierra
+    sha256 "017f0d39fed093ea47861d58da0338d667a47b014b3412f208c7d15b49191aa3" => :sierra
   end
 
   # keg_only :versioned_formula
