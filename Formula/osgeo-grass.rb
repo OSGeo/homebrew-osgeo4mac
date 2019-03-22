@@ -4,7 +4,7 @@ class OsgeoGrass < Formula
   desc "Geographic Resources Analysis Support System"
   homepage "https://grass.osgeo.org/"
 
-  revision 1
+  revision 2
 
   # svn: E230001: Server SSL certificate verification failed: issuer is not trusted
   # head "https://svn.osgeo.org/grass/grass/trunk", :using => :svn
@@ -429,11 +429,17 @@ class OsgeoGrass < Formula
     # link so settings in external apps don't need updated on grass version bump
     # in QGIS Processing options, GRASS folder = HOMEBREW_PREFIX/opt/grass7/grass-base
     ln_sf "grass#{majmin_ver}", "#{prefix}/grass-base"
-    # ensure python2 is used
-    bin.env_script_all_files("#{libexec}/bin", :GRASS_PYTHON => "python2")
+    # Writes a wrapper env script and moves all files to the dst
 
-    # fix "ValueError: unknown locale: UTF-8"
-    rm "#{bin}/grass#{majmin_ver}"
+    # ensure python2 is used
+    # for some reason, in this build (v7.6.1_1), the script is not created.
+    # bin.env_script_all_files("#{libexec}/bin", :GRASS_PYTHON => "python2")
+    # for this reason we move the binary and create another that will call
+    # this with the requirements mentioned above.
+    mkdir "#{libexec}/bin"
+    mv "#{bin}/grass#{majmin_ver}", "#{libexec}/bin/grass#{majmin_ver}"
+    # And fix "ValueError: unknown locale: UTF-8"
+    # if exist: rm "#{bin}/grass#{majmin_ver}"
     File.open("#{bin}/grass#{majmin_ver}", "w") { |file|
       file << '#!/bin/bash'
       file << "\n"
@@ -468,6 +474,8 @@ class OsgeoGrass < Formula
       file << "\n"
       file << "GRASS_PYTHON=python2 exec #{libexec}/bin/grass#{majmin_ver} $@"
     }
+    chmod("+x", "#{bin}/grass#{majmin_ver}")
+    chmod("+x", "#{libexec}/bin/grass#{majmin_ver}")
 
     # for "--enable-macosx-app"
     # mkdir - permission denied: /Library/GRASS
