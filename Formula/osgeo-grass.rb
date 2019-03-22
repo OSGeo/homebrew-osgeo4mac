@@ -4,7 +4,7 @@ class OsgeoGrass < Formula
   desc "Geographic Resources Analysis Support System"
   homepage "https://grass.osgeo.org/"
 
-  # revision 1
+  revision 1
 
   # svn: E230001: Server SSL certificate verification failed: issuer is not trusted
   # head "https://svn.osgeo.org/grass/grass/trunk", :using => :svn
@@ -20,6 +20,7 @@ class OsgeoGrass < Formula
     # no_symbolic_links
     patch :DATA
   end
+
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
     cellar :any
@@ -28,19 +29,12 @@ class OsgeoGrass < Formula
     sha256 "57f13876bd9f9ae91ed65352b8a853a6c31f5e7b2159ad07359b2e058ce1c257" => :sierra
   end
 
-
   option "without-gui", "Build without WxPython interface. Command line tools still available"
   option "with-aqua", "Build with experimental Aqua GUI backend"
   option "with-app", "Build GRASS.app Package"
   option "with-avce00", "Build with AVCE00 support: Make Arc/Info (binary) Vector Coverages appear as E00"
-  option "with-postgresql10", "Build with PostgreSQL 10 client"
+  option "with-pg10", "Build with PostgreSQL 10 client"
   option "with-others", "Build with other optional dependencies"
-  # option "with-r", "Build with R support"
-  # option "with-r-sethrfore", "Build with R support (only if you are going to install with this version of R)"
-  # option "with-liblas", "Build with LibLAS-with-GDAL2 support"
-  # option "with-postgresql", "Build with PostgreSQL support"
-  # option "with-mysql", "Build with MySQL support"
-  # option "with-pthread", "Build with PThread support"
   # option "with-openmp", "Build with openmp support"
   # option "with-opendwg", "Build with OpenDWG support"
   # option "with-pdal", "Build with PDAL support" # Build - Error: /vector/v.in.pdal
@@ -84,8 +78,6 @@ class OsgeoGrass < Formula
   depends_on "osgeo-gdal"
   depends_on "osgeo-gdal-python"
 
-  depends_on :x11 if build.without? "aqua" # needs to find at least X11/include/GL/gl.h
-
   # matplotlib
   depends_on "py3cairo"
   depends_on "pygobject3"
@@ -96,25 +88,20 @@ class OsgeoGrass < Formula
   depends_on "osgeo-matplotlib"
 
   # optional dependencies
+  depends_on "osgeo-liblas"
+  depends_on "mysql"
+  depends_on "r"
+  depends_on "avce00" => :optional # avcimport
+  # depends_on "libomp" if build.with? "openmp"
+  # depends_on "osgeo-pdal"
 
-  depends_on "osgeo-liblas" # if build.with? "liblas"
-
-  depends_on "mysql" # if build.with? "mysql"
-
-  if build.with?("postgresql10")
-    depends_on "postgresql@10"
+  if build.with?("pg10")
+    depends_on "osgeo-postgresql@10"
   else
     depends_on "postgresql"
   end
 
-  depends_on "avce00" => :optional # avcimport
-
-  # if build.with? "r"
-  depends_on "r"
-  # end
-
-  # depends_on "pdal" => :optional
-  # depends_on "libomp" if build.with? "openmp"
+  depends_on :x11 if build.without? "aqua" # needs to find at least X11/include/GL/gl.h
 
   # other dependencies
   if build.with? "others"
@@ -278,7 +265,7 @@ class OsgeoGrass < Formula
 
     # fix pip._vendor.pep517.wrappers.BackendUnavailable
     system libexec/"vendor/bin/pip2", "install", "--upgrade", "-v", "setuptools", "pip<19.0.0", "wheel"
-    # venv.pip_install_and_link "python-dateutil"
+    venv.pip_install_and_link "python-dateutil"
 
     res.each do |r|
       venv.pip_install resource(r)
@@ -351,34 +338,30 @@ class OsgeoGrass < Formula
     args << "--with-liblas=#{Formula["osgeo-liblas"].opt_bin}/liblas-config" # if build.with? "liblas"
 
     args << "--with-postgres"
-    if build.with?("postgresql10")
-      args << "--with-postgres-includes=#{Formula["postgres@10"].opt_include}"
-      args << "--with-postgres-libs=#{Formula["postgres@10"].opt_lib}"
+    if build.with?("pg10")
+      args << "--with-postgres-includes=#{Formula["osgeo-postgresql@10"].opt_include}"
+      args << "--with-postgres-libs=#{Formula["osgeo-postgresql@10"].opt_lib}"
     else
-      args << "--with-postgres-includes=#{Formula["postgres"].opt_include}"
-      args << "--with-postgres-libs=#{Formula["postgres"].opt_lib}"
+      args << "--with-postgres-includes=#{Formula["postgresql"].opt_include}"
+      args << "--with-postgres-libs=#{Formula["postgresql"].opt_lib}"
     end
 
-    # if build.with? "mysql"
     args << "--with-mysql"
     args << "--with-mysql-includes=#{Formula["mysql"].opt_include}/mysql"
     args << "--with-mysql-libs=#{Formula["mysql"].opt_lib}"
-    # end
 
-    # if build.with? "pthread"
     args << "--with-pthread"
     args << "--with-pthread-includes=#{Formula["boost"].opt_include}/boost/thread"
     args << "--with-pthread-libs=#{Formula["boost"].opt_lib}"
+
+    # if build.with? "pdal"
+    #   args << "--with-pdal=#{Formula["osgeo-pdal"].opt_bin}/pdal-config"
     # end
 
     # if build.with? "opendwg"
     #   args << "--with-opendwg"
     #   args << "--with-opendwg-includes="
     #   args << "--with-opendwg-libs="
-    # end
-
-    # if build.with? "pdal"
-    #   args << "--with-pdal=#{Formula["pdal"].opt_bin}/pdal-config"
     # end
 
     # if build.with? "openmp"
@@ -406,12 +389,12 @@ class OsgeoGrass < Formula
     # args << "--with-macos-archs=#{MacOS.preferred_arch}"
 
     # unless MacOS::CLT.installed?
-      # On Xcode-only systems (without the CLT), we have to help:
-      args << "--with-macosx-sdk=#{MacOS.sdk_path}"
-      args << "--with-macosx-archs=#{MacOS.preferred_arch}" # Hardware::CPU.universal_archs
-      args << "--with-opengl-includes=#{MacOS.sdk_path}/System/Library/Frameworks/OpenGL.framework/Headers"
-      # args << "--with-opengl-libs=" # GL
-      # args << "--with-opengl-framework="
+    # On Xcode-only systems (without the CLT), we have to help:
+    args << "--with-macosx-sdk=#{MacOS.sdk_path}"
+    args << "--with-macosx-archs=#{MacOS.preferred_arch}" # Hardware::CPU.universal_archs
+    args << "--with-opengl-includes=#{MacOS.sdk_path}/System/Library/Frameworks/OpenGL.framework/Headers"
+    # args << "--with-opengl-libs=" # GL
+    # args << "--with-opengl-framework="
     # end
 
     # Enable Aqua GUI, instead of X11
@@ -434,21 +417,22 @@ class OsgeoGrass < Formula
     system "./configure", "--prefix=#{prefix}", *args
     system "make", "-j", Hardware::CPU.cores, "GDAL_DYNAMIC=" # make and make install must be separate steps.
     system "make", "-j", Hardware::CPU.cores, "GDAL_DYNAMIC=", "install" # GDAL_DYNAMIC set to blank for r.external compatability
+  end
 
+  def post_install
     # ensure QGIS's Processing plugin recognizes install
     # 2.14.8+ and other newer QGIS versions may reference just grass.sh
-    bin_grass = "../bin/grass#{majmin_ver}"
-    ln_sf bin_grass, prefix/"grass-#{version}/grass#{majmin_ver}.sh"
-    ln_sf bin_grass, prefix/"grass-#{version}/grass.sh"
+    bin_grass = "#{bin}/grass#{majmin_ver}"
+    ln_sf "#{bin_grass}", "#{prefix}/grass#{majmin_ver}/grass#{majmin_ver}.sh"
+    ln_sf "#{bin_grass}", "#{prefix}/grass#{majmin_ver}/grass.sh"
     # link so settings in external apps don't need updated on grass version bump
     # in QGIS Processing options, GRASS folder = HOMEBREW_PREFIX/opt/grass7/grass-base
-    ln_sf "grass-#{version}", prefix/"grass-base"
+    ln_sf "grass#{majmin_ver}", "#{prefix}/grass-base"
     # ensure python2 is used
-    bin.env_script_all_files(libexec/"bin", :GRASS_PYTHON => "python2")
+    bin.env_script_all_files("#{libexec}/bin", :GRASS_PYTHON => "python2")
 
     # fix "ValueError: unknown locale: UTF-8"
     rm "#{bin}/grass#{majmin_ver}"
-    grass_version = "#{version}"
     File.open("#{bin}/grass#{majmin_ver}", "w") { |file|
       file << '#!/bin/bash'
       file << "\n"
@@ -466,7 +450,7 @@ class OsgeoGrass < Formula
       file << "\n"
       file << "export GRASS_VERSION=#{version}"
       file << "\n"
-      file << "export GRASS_LD_LIBRARY_PATH=#{prefix}/grass-#{version}/lib"
+      file << "export GRASS_LD_LIBRARY_PATH=#{prefix}/grass#{majmin_ver}/lib"
       file << "\n"
       # file << "export GRASS_PERL=#{Formula["perl"].opt_bin}/perl"
       # file << "\n"
@@ -487,7 +471,7 @@ class OsgeoGrass < Formula
     # for "--enable-macosx-app"
     # mkdir - permission denied: /Library/GRASS
     if build.with? "app"
-      (prefix/"GRASS7.app/Contents/PkgInfo").write "APPLGRASS"
+      ("#{prefix}/GRASS7.app/Contents/PkgInfo").write "APPLGRASS"
       mkdir "#{prefix}/GRASS7.app/Contents/Resources"
       cp_r "#{buildpath}/macosx/app/app.icns", "#{prefix}/GRASS7.app/Contents/Resources"
 
@@ -496,52 +480,52 @@ class OsgeoGrass < Formula
         <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
         <plist version="1.0">
         <dict>
-        	<key>CFBundleDevelopmentRegion</key>
-        	<string>English</string>
-        	<key>CFBundleExecutable</key>
-        	<string>grass#{majmin_ver}</string>
-        	<key>CFBundleGetInfoString</key>
-        	<string>GRASS GIS #{version}</string>
-        	<key>CFBundleIconFile</key>
-        	<string>app.icns</string>
-        	<key>CFBundleIdentifier</key>
-        	<string>https://grass.osgeo.org/grass#{majmin_ver}/source/</string>
-        	<key>CFBundleInfoDictionaryVersion</key>
-        	<string>6.0</string>
-        	<key>CFBundlePackageType</key>
-        	<string>APPL</string>
-        	<key>CFBundleShortVersionString</key>
-        	<string>GRASS GIS #{version}</string>
-        	<key>CFBundleSignature</key>
-        	<string>????</string>
-        	<key>CFBundleVersion</key>
-        	<string>#{version}</string>
-        	<key>NSMainNibFile</key>
-        	<string>MainMenu.nib</string>
-        	<key>NSPrincipalClass</key>
-        	<string>NSApplication</string>
-        	<key>CFBundleDocumentTypes</key>
-        	<array>
-        		<dict>
-        			<key>CFBundleTypeExtensions</key>
-        			<array>
-        				<string>****</string>
-        			</array>
-        			<key>CFBundleTypeName</key>
-        			<string>FolderType</string>
-        			<key>CFBundleTypeOSTypes</key>
-        			<array>
-        				<string>fold</string>
-        			</array>
-        			<key>CFBundleTypeRole</key>
-        			<string>Editor</string>
-        		</dict>
-        	</array>
+          <key>CFBundleDevelopmentRegion</key>
+          <string>English</string>
+          <key>CFBundleExecutable</key>
+          <string>grass#{majmin_ver}</string>
+          <key>CFBundleGetInfoString</key>
+          <string>GRASS GIS #{version}</string>
+          <key>CFBundleIconFile</key>
+          <string>app.icns</string>
+          <key>CFBundleIdentifier</key>
+          <string>https://grass.osgeo.org/grass#{majmin_ver}/source/</string>
+          <key>CFBundleInfoDictionaryVersion</key>
+          <string>6.0</string>
+          <key>CFBundlePackageType</key>
+          <string>APPL</string>
+          <key>CFBundleShortVersionString</key>
+          <string>GRASS GIS #{version}</string>
+          <key>CFBundleSignature</key>
+          <string>????</string>
+          <key>CFBundleVersion</key>
+          <string>#{version}</string>
+          <key>NSMainNibFile</key>
+          <string>MainMenu.nib</string>
+          <key>NSPrincipalClass</key>
+          <string>NSApplication</string>
+          <key>CFBundleDocumentTypes</key>
+          <array>
+            <dict>
+              <key>CFBundleTypeExtensions</key>
+              <array>
+                <string>****</string>
+              </array>
+              <key>CFBundleTypeName</key>
+              <string>FolderType</string>
+              <key>CFBundleTypeOSTypes</key>
+              <array>
+                <string>fold</string>
+              </array>
+              <key>CFBundleTypeRole</key>
+              <string>Editor</string>
+            </dict>
+          </array>
         </dict>
         </plist>
       EOS
 
-      (prefix/"GRASS7.app/Contents/Info.plist").write config
+      ("#{prefix}/GRASS7.app/Contents/Info.plist").write config
 
       chdir "#{prefix}/GRASS7.app/Contents" do
         mkdir "MacOS" do
