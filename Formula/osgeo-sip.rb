@@ -1,10 +1,10 @@
 class OsgeoSip < Formula
   desc "Tool to create Python bindings for C and C++ libraries"
   homepage "https://www.riverbankcomputing.com/software/sip/intro"
-  url "https://www.riverbankcomputing.com/static/Downloads/sip/sip-4.19.14.tar.gz"
-  sha256 "0ef3765dbcc3b8131f83e60239f49508f82205b33cae5408c405e2e2f2d0af87"
+  url "https://www.riverbankcomputing.com/static/Downloads/sip/sip-4.19.15.tar.gz"
+  sha256 "2b5c0b2c0266b467b365c21376d50dde61a3236722ab87ff1e8dacec283eb610"
 
-  revision 1
+  # revision 1
 
   head "https://www.riverbankcomputing.com/hg/sip", :using => :hg
 
