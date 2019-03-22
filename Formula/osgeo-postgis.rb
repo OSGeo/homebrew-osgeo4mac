@@ -30,10 +30,6 @@ class OsgeoPostgis < Formula
   url "https://github.com/postgis/postgis/archive/2.5.2.tar.gz"
   sha256 "225aeaece00a1a6a9af15526af81bef2af27f4c198de820af1367a792ee1d1a9"
 
-  revision 3
-
-  head "https://github.com/postgis/postgis.git", :branch => "master"
-
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
     cellar :any
@@ -43,13 +39,17 @@ class OsgeoPostgis < Formula
     sha256 "aa05e7886927009a39a862c1478f912d38fde9d65f07708eace86549966ae56c" => :sierra
   end
 
-  # keg_only
-  # we will verify that other versions are not linked
-  depends_on Unlinked
+  revision 4
+
+  head "https://github.com/postgis/postgis.git", :branch => "master"
 
   option "with-html-docs", "Generate multi-file HTML documentation"
   option "with-api-docs", "Generate developer API documentation (long process)"
   option "with-pg10", "Build with PostgreSQL 10 client"
+
+  # keg_only
+  # we will verify that other versions are not linked
+  depends_on Unlinked
 
   depends_on "autoconf" => :build
   depends_on "automake" => :build
@@ -95,20 +95,17 @@ class OsgeoPostgis < Formula
     ENV.deparallelize
 
     args = [
-      "--with-projdir=#{Formula["proj"].opt_prefix}",
-      "--with-json",
-      "--with-jsondir=#{Formula["json-c"].opt_prefix}",
-      "--with-raster",
-      "--with-topology",
-      "--with-address-standardizer",
-      "--with-gdalconfig=#{Formula["osgeo-gdal"].opt_bin}/gdal-config",
+      "--with-libiconv=#{Formula["libiconv"].opt_prefix}",
+      "--with-xml2config=#{Formula["libxml2"].opt_bin}/xml2-config",
       "--with-geosconfig=#{Formula["geos"].opt_bin}/geos-config",
+      "--with-sfcgal=#{Formula["sfcgal"].opt_bin}/sfcgal-config",
+      "--with-projdir=#{Formula["proj"].opt_prefix}",
+      "--with-jsondir=#{Formula["json-c"].opt_prefix}",
+      "--with-protobufdir=#{Formula["protobuf-c"].opt_prefix}",
       "--with-pcredir=#{Formula["pcre"].opt_prefix}",
-      # Unfortunately, NLS support causes all kinds of headaches because
-      # PostGIS gets all of its compiler flags from the PGXS makefiles. This
-      # makes it nigh impossible to tell the buildsystem where our keg-only
-      # gettext installations are.
-      "--disable-nls",
+      "--with-gdalconfig=#{Formula["osgeo-gdal"].opt_bin}/gdal-config",
+      "--with-gui",
+      "--with-raster",
     ]
 
     # By default PostGIS will try to detect gettext support and compile with it,
@@ -118,21 +115,35 @@ class OsgeoPostgis < Formula
     # configuring with this. NOTE: that you aren’t missing much by turning this off.
     # This is used for international help/label support for the GUI loader which is not
     # yet documented and still experimental.
-    args << "--with-gettext=no"
+    args << "--with-gettext=no" # or PATH
+
+    # Unfortunately, NLS support causes all kinds of headaches because
+    # PostGIS gets all of its compiler flags from the PGXS makefiles. This
+    # makes it nigh impossible to tell the buildsystem where our keg-only
+    # gettext installations are.
+    args << "--disable-nls"
+
+    # Wagyu will only be necessary if protobuf is present to build MVTs
+    # args << "--with-wagyu"
+
+    # Disable topology support.
+    # There is no corresponding library as all logic needed for
+    # topology is in postgis- 2.5.2 library.
+    # args << "--without-topology"
+
+    # Disable the address_standardizer extension
+    # args << "--without-address-standardizer"
+
+    # specify the dtd path for mathml2.dtd
+    # args << "--with-mathmldtd=PATH"
+
+    args << "--with-xsldir=#{Formula["docbook-xsl"].opt_prefix}/docbook-xsl" if build.with? "html-docs" # /docbook-xsl-nons
 
     if build.with?("pg10")
       args << "--with-pgconfig=#{Formula["osgeo-postgresql@10"].opt_bin}/pg_config"
     else
       args << "--with-pgconfig=#{Formula["postgresql"].opt_bin}/pg_config"
     end
-
-    args << "--with-xsldir=#{Formula["docbook-xsl"].opt_prefix}/docbook-xsl" if build.with? "html-docs" # /docbook-xsl-nons
-
-    args << "--with-gui"
-
-    args << "--with-sfcgal=#{Formula["sfcgal"].opt_bin}/sfcgal-config"
-
-    args << "--with-protobufdir=#{Formula["protobuf-c"].opt_prefix}"
 
     system "./autogen.sh"
     system "./configure", *args
@@ -175,11 +186,7 @@ class OsgeoPostgis < Formula
     include.install Dir["stage/**/include/*"]
     (share/"doc/postgresql/extension").install Dir["stage/**/share/doc/postgresql/extension/*"]
     (share/"postgresql/extension").install Dir["stage/**/share/postgresql/extension/*"]
-    # Stand-alone SQL files will be installed the share folder
-    # (share/"postgis").install Dir["stage/**/contrib/postgis-*/*"]
     (share/"postgresql/contrib/postgis-2.5").install Dir["stage/**/contrib/postgis-*/*"]
-    # pkgshare.install Dir["stage/**/contrib/postgis-*/*"]
-    (share/"postgis_topology").install Dir["stage/**/contrib/postgis_topology-*/*"]
 
     # Extension scripts
     bin.install %w[
