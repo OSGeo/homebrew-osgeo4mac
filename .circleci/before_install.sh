@@ -34,8 +34,8 @@ for f in ${CHANGED_FORMULAE};do
   postgis
   "
 
-  for f in ${nix_f}; do
-    brew uninstall --force --ignore-dependencies ${f} || true
+  for nf in ${nix_f}; do
+    brew uninstall --force --ignore-dependencies ${nf} || true
   done
 
   # brew update > /dev/null
