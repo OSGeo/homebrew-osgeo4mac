@@ -1,3 +1,29 @@
+class Unlinked < Requirement
+  fatal true
+
+  satisfy(:build_env => false) { !osgeo_openscenegraph_linked && !core_openscenegraph_linked }
+
+  def osgeo_openscenegraph_linked
+    Formula["osgeo-openscenegraph@3.4"].linked_keg.exist?
+  rescue
+    return false
+  end
+
+  def core_openscenegraph_linked
+    Formula["open-scene-graph"].linked_keg.exist?
+  rescue
+    return false
+  end
+
+  def message
+    s = "\033[31mYou have other linked versions!\e[0m\n\n"
+
+    s += "Unlink with \e[32mbrew unlink osgeo-openscenegraph@3.4\e[0m or remove with \e[32mbrew uninstall --ignore-dependencies osgeo-openscenegraph@3.4\e[0m\n\n" if osgeo_openscenegraph_linked
+    s += "Unlink with \e[32mbrew unlink open-scene-graph\e[0m or remove with brew \e[32muninstall --ignore-dependencies open-scene-graph\e[0m\n\n" if core_openscenegraph_linked
+    s
+  end
+end
+
 class OsgeoOpenscenegraph < Formula
   desc "High performance 3D graphics toolkit"
   homepage "http://www.openscenegraph.org/"
@@ -7,6 +33,10 @@ class OsgeoOpenscenegraph < Formula
   revision 1
 
   head "https://github.com/openscenegraph/OpenSceneGraph.git", :branch => "master"
+
+  # keg_only
+  # we will verify that other versions are not linked
+  depends_on Unlinked
 
   depends_on "cmake" => :build
   depends_on "doxygen" => :build
