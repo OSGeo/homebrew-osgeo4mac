@@ -1,21 +1,12 @@
-class OpenscenegraphQt5 < Formula
+class OsgeoOpenscenegraph < Formula
   desc "High performance 3D graphics toolkit"
   homepage "http://www.openscenegraph.org/"
-  url "https://github.com/openscenegraph/OpenSceneGraph.git",
-    :branch => "OpenSceneGraph-3.6",
-    :commit => "ea1e832d4d19eff5304c4e7d8da9e96ffa66bd12"
-  version "3.6.3"
+  url "https://github.com/openscenegraph/OpenSceneGraph/archive/OpenSceneGraph-3.6.3.tar.gz"
+  sha256 "51bbc79aa73ca602cd1518e4e25bd71d41a10abd296e18093a8acfebd3c62696"
 
-  revision 1
+  # revision 1
 
   head "https://github.com/openscenegraph/OpenSceneGraph.git", :branch => "master"
-
-  bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    sha256 "88c4a57f8a895bd0ee03ba83d5b7a1e291ab8ca899ee1625d0f0a7f4f09049b1" => :mojave
-    sha256 "88c4a57f8a895bd0ee03ba83d5b7a1e291ab8ca899ee1625d0f0a7f4f09049b1" => :high_sierra
-    sha256 "88c4a57f8a895bd0ee03ba83d5b7a1e291ab8ca899ee1625d0f0a7f4f09049b1" => :sierra
-  end
 
   depends_on "cmake" => :build
   depends_on "doxygen" => :build
@@ -27,7 +18,6 @@ class OpenscenegraphQt5 < Formula
   depends_on "dcmtk"
   depends_on "ffmpeg"
   depends_on "freetype"
-  depends_on "gdal2"
   depends_on "giflib"
   depends_on "gnuplot"
   depends_on "gtkglext"
@@ -44,11 +34,20 @@ class OpenscenegraphQt5 < Formula
   depends_on "sdl"
   depends_on "wget"
   depends_on "zlib"
+  depends_on "libxml2"
+  depends_on "cairo"
+  depends_on "gtk+"
 
-  depends_on "asio" => :optional
-  depends_on "ilmbase" => :optional
-  depends_on "opencollada" => :optional
-  depends_on "v8" => :optional
+  depends_on "osgeo-gdal"
+  depends_on "osgeo-opencollada"
+
+  depends_on "asio"
+  depends_on "ilmbase"
+  depends_on "v8"
+  depends_on "llvm"
+  depends_on "gstreamer"
+
+  depends_on :x11
 
   # patch necessary to ensure support for gtkglext-quartz
   # filed as an issue to the developers https://github.com/openscenegraph/osg/issues/34

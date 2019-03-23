@@ -54,6 +54,6 @@
   "fcgi-debug": "osgeo-fcgi-debug",
   "gpkgtools": "osgeo-gpkgtools",
   "pointcloud": "osgeo-pointcloud",
-  "postgis2": "osgeo-postgis"
-
+  "postgis2": "osgeo-postgis",
+  "openscenegraph-qt5.rb": "osgeo-openscenegraph"
 }
