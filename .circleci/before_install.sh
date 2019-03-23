@@ -48,12 +48,12 @@ for f in ${CHANGED_FORMULAE};do
   echo "${deps}"
 
   # Install XQuartz
-  if [ "$(echo ${deps} | grep -c 'osgeo-grass')" != "0" ];then
-    echo "The formula depends on "osgeo-grass" that requires XQuartz, installing..."
+  if [ "$(echo ${deps} | grep -c 'osgeo-grass')" != "0" ] || [ "$(echo ${deps} | grep -c 'osgeo-openscenegraph')" != "0" ];then
+    echo "one of the dependencies requires XQuartz, installing..."
     brew cask install xquartz
   fi
-  if [ "${f}" == "osgeo-grass" ];then
-    echo "Require of XQuartz, installing..."
+  if [ "${f}" == "osgeo-grass" ] || [ "${f}" == "osgeo-openscenegraph" ];then
+    echo "${f} require of XQuartz, installing..."
     brew cask install xquartz
   fi
 
