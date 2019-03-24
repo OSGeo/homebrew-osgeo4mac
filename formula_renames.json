@@ -55,5 +55,6 @@
   "gpkgtools": "osgeo-gpkgtools",
   "pointcloud": "osgeo-pointcloud",
   "postgis2": "osgeo-postgis",
-  "openscenegraph-qt5.rb": "osgeo-openscenegraph"
+  "openscenegraph-qt5.rb": "osgeo-openscenegraph",
+  "ossim": "osgeo-ossim"
 }
