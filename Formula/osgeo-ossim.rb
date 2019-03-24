@@ -4,9 +4,11 @@ class OsgeoOssim < Formula
   url "https://github.com/ossimlabs/ossim/archive/Laguna-2.7.0.tar.gz"
   sha256 "63695f00441d025c758552864b4048dc405bb5f0495fbaab4647aad024b0f8ac"
 
-  option "without-framework", "Generate library instead of framework"
+  # revision 1
+
+  head "https://github.com/ossimlabs/ossim.git", :branch => "master"
+
   option "with-curl-apps", "Build curl-dependent apps"
-  option "with-gui", "Build new ossimGui library and geocell application"
   option "with-pg10", "Build with PostgreSQL 10 client"
 
   depends_on "cmake" => :build
@@ -106,10 +108,14 @@ class OsgeoOssim < Formula
     # error: no member named 'printError' in 'H5::Exception'
     args << "-DBUILD_OSSIM_HDF5_SUPPORT=" + (build.with?("hdf5") ? "ON" : "OFF")
 
+    # generate library instead of framework
     args << "-DBUILD_OSSIM_FRAMEWORKS=ON"
+
+    # build new ossimGui library and geocell application
+    args << "-DBUILD_OSSIM_GUI=ON"
+
     args << "-DBUILD_OSSIM_MPI_SUPPORT=" + (build.with?("mpi") ? "ON" : "OFF")
     args << "-DBUILD_OSSIM_CURL_APPS=" + (build.with?("curl-apps") ? "ON" : "OFF")
-    args << "-DBUILD_OSSIM_GUI=ON"
 
     mkdir "build" do
       system "cmake", "..", *args
