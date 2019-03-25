@@ -550,7 +550,7 @@ class OsgeoGrass < Formula
   def caveats
     s = <<~EOS
 
-      If that is tha case you can change the shebang a the beginning of
+      If it is the case that you can change the shebang at the beginning of
       the script to enforce Python 2 usage.
 
         \e[32m#!/usr/bin/env python\e[0m
