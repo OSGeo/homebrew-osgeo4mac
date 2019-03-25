@@ -20,22 +20,21 @@ end
 class OsgeoProj < Formula
   desc "Cartographic Projections Library"
   homepage "https://proj4.org/"
-  url "https://download.osgeo.org/proj/proj-6.0.0.tar.gz"
-  sha256 "4510a2c1c8f9056374708a867c51b1192e8d6f9a5198dd320bf6a168e44a3657"
+  url "https://github.com/OSGeo/proj.4/archive/6.0.0.tar.gz"
+  sha256 "8c2bc0b31ba266d59771bac14b589814a8e38b23822210b4dc038be737d61d7d"
 
-  head do
-    url "https://github.com/OSGeo/proj.4.git"
-    depends_on "autoconf" => :build
-    depends_on "automake" => :build
-    depends_on "libtool" => :build
-  end
+  # revision 1
+
+  head "https://github.com/OSGeo/proj.4.git", :branch => "master"
 
   # keg_only "proj is already provided by homebrew/core"
   # we will verify that other versions are not linked
   depends_on Unlinked
 
   depends_on "pkg-config" => :build
-  # depends_on "cmake" => :build
+  depends_on "autoconf" => :build
+  depends_on "automake" => :build
+  depends_on "libtool" => :build
 
   conflicts_with "blast", :because => "both install a `libproj.a` library"
 
@@ -50,7 +49,7 @@ class OsgeoProj < Formula
   def install
     (buildpath/"nad").install resource("datumgrid")
 
-    system "./autogen.sh" if build.head?
+    system "./autogen.sh"
     system "./configure", "--disable-dependency-tracking",
                           "--prefix=#{prefix}"
     system "make", "install"
