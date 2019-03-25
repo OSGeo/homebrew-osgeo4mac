@@ -23,6 +23,8 @@ class OsgeoNetcdf < Formula
   url "https://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-c-4.6.3.tar.gz"
   sha256 "335fdf16d7531f430ad75e732ed1a9a3fc83ad3ef91fb33a70119a555dd5415c"
 
+  revision 1
+
   # keg_only "netcdf is already provided by homebrew/core"
   # we will verify that other versions are not linked
   depends_on Unlinked
