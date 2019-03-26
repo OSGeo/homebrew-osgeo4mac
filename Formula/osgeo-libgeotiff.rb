@@ -23,6 +23,13 @@ class OsgeoLibgeotiff < Formula
   url "https://github.com/OSGeo/libgeotiff/archive/1.4.3.tar.gz"
   sha256 "96fb426877a99ecb66a73c0b912f42995bc1275c1ae687bbaab9ad97c4e8bdf2"
 
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    sha256 "230b7f9ce8776d7120f4fcbcb6b9c725d80472b68d9835105550de0b51fc158f" => :mojave
+    sha256 "230b7f9ce8776d7120f4fcbcb6b9c725d80472b68d9835105550de0b51fc158f" => :high_sierra
+    sha256 "5f85dc6712b7b9668ddd80a94ac4a14eea2dc9d69b9f5c23de686ee1df21797d" => :sierra
+  end
+
   # revision 1
 
   head "https://github.com/OSGeo/libgeotiff.git", :branch => "master"
