@@ -30,7 +30,7 @@ class OsgeoLibgeotiff < Formula
   # ACCEPT_USE_OF_DEPRECATED_PROJ_API_H
   patch :DATA
 
-  # keg_only "postgis is already provided by homebrew/core"
+  # keg_only "libgeotiff is already provided by homebrew/core"
   # we will verify that other versions are not linked
   depends_on Unlinked
 
