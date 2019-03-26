@@ -1,8 +1,8 @@
 class OsgeoGdal < Formula
   desc "GDAL: Geospatial Data Abstraction Library"
   homepage "https://www.gdal.org/"
-  url "https://github.com/OSGeo/gdal/archive/v2.4.0.tar.gz"
-  sha256 "625f84721e09151626274922c0ee1b0eec0537e9735c65bc892ba96541a1bd14"
+  url "https://github.com/OSGeo/gdal/archive/v2.4.1.tar.gz"
+  sha256 "17f94c0dfbecab2fc2433428766860de3c89c3fba57f5c9aa77749c1824c02aa"
 
   # revision 1
 
@@ -41,7 +41,7 @@ class OsgeoGdal < Formula
   depends_on "pcre" # for REGEXP operator in SQLite/Spatialite driver
   depends_on "libspatialite"
   depends_on "libtiff"
-  depends_on "proj"
+  depends_on "osgeo-proj"
   depends_on "numpy"
   depends_on "armadillo"
   depends_on "sfcgal"
@@ -55,7 +55,7 @@ class OsgeoGdal < Formula
   depends_on "osgeo-libkml"
 
   # Raster libraries
-  depends_on "netcdf" # Also brings in HDF5
+  depends_on "osgeo-netcdf" # Also brings in HDF5
   depends_on "osgeo-hdf4"
   depends_on "hdf5"
   depends_on "cfitsio"
@@ -79,7 +79,7 @@ class OsgeoGdal < Formula
   if build.with?("postgresql10")
     depends_on "postgresql@10"
   else
-    depends_on "postgresql"
+    depends_on "osgeo-postgresql"
   end
 
   # - Base configuration
@@ -126,12 +126,12 @@ class OsgeoGdal < Formula
       "--with-gif=#{Formula["giflib"].opt_prefix}",
       "--with-libjson-c=#{Formula["json-c"].opt_prefix}",
       "--with-libiconv-prefix=#{Formula["libiconv"].opt_prefix}",
-      "--with-proj=#{Formula["proj"].opt_prefix}",
+      "--with-proj=#{Formula["osgeo-proj"].opt_prefix}",
       "--with-zstd=#{Formula["zstd"].opt_prefix}",
       "--with-cfitsio=#{Formula["cfitsio"].opt_prefix}",
       "--with-hdf4=#{Formula["osgeo-hdf4"].opt_prefix}",
       "--with-hdf5=#{Formula["hdf5"].opt_prefix}",
-      "--with-netcdf=#{Formula["netcdf"].opt_prefix}",
+      "--with-netcdf=#{Formula["osgeo-netcdf"].opt_prefix}",
       "--with-jasper=#{Formula["jasper"].opt_prefix}",
       "--with-openjpeg=#{Formula["openjpeg"].opt_prefix}",
       "--with-expat=#{Formula["expat"].opt_prefix}",
@@ -283,7 +283,7 @@ class OsgeoGdal < Formula
       if build.with?("postgresql10")
         args << "--with-pg=#{Formula["postgresql@10"].opt_bin}/pg_config"
       else
-        args << "--with-pg=#{Formula["postgresql"].opt_bin}/pg_config"
+        args << "--with-pg=#{Formula["osgeo-postgresql"].opt_bin}/pg_config"
       end
 
       system "./configure", *args
