@@ -30,7 +30,7 @@ class OsgeoLibgeotiff < Formula
     sha256 "5f85dc6712b7b9668ddd80a94ac4a14eea2dc9d69b9f5c23de686ee1df21797d" => :sierra
   end
 
-  # revision 1
+  revision 1
 
   head "https://github.com/OSGeo/libgeotiff.git", :branch => "master"
 
