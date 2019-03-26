@@ -1,3 +1,23 @@
+
+class Unlinked < Requirement
+  fatal true
+
+  satisfy(:build_env => false) { !core_gdal_linked }
+
+  def core_gdal_linked
+    Formula["gdal"].linked_keg.exist?
+  rescue
+    return false
+  end
+
+  def message
+    s = "\033[31mYou have other linked versions!\e[0m\n\n"
+
+    s += "Unlink with \e[32mbrew unlink gdal\e[0m or remove with brew \e[32muninstall --ignore-dependencies gdal\e[0m\n\n" if core_gdal_linked
+    s
+  end
+end
+
 class OsgeoGdal < Formula
   desc "GDAL: Geospatial Data Abstraction Library"
   homepage "https://www.gdal.org/"
@@ -19,7 +39,9 @@ class OsgeoGdal < Formula
     sha256 "fd316043261567dccd72fe994af8b9c08945ca21c8a284a0298be1358e60cd00" => :sierra
   end
 
-  keg_only "older version of gdal is in main tap and installs similar components"
+  # keg_only "libspatialite is already provided by homebrew/core"
+  # we will verify that other versions are not linked
+  depends_on Unlinked
 
   option "with-postgresql10", "Build with PostgreSQL 10 client"
 
@@ -35,11 +57,11 @@ class OsgeoGdal < Formula
   depends_on "jpeg"
   depends_on "json-c"
   depends_on "giflib"
-  depends_on "libgeotiff"
+  depends_on "osgeo-libgeotiff"
   depends_on "libpq"
   depends_on "sqlite" # To ensure compatibility with SpatiaLite.
   depends_on "pcre" # for REGEXP operator in SQLite/Spatialite driver
-  depends_on "libspatialite"
+  depends_on "osgeo-libspatialite"
   depends_on "libtiff"
   depends_on "osgeo-proj"
   depends_on "numpy"
@@ -121,7 +143,7 @@ class OsgeoGdal < Formula
       "--with-libz=#{Formula["libzip"].opt_prefix}",
       "--with-png=#{Formula["libpng"].opt_prefix}",
       "--with-libtiff=#{Formula["libtiff"].opt_prefix}",
-      "--with-geotiff=#{Formula["libgeotiff"].opt_prefix}",
+      "--with-geotiff=#{Formula["osgeo-libgeotiff"].opt_prefix}",
       "--with-jpeg=#{Formula["jpeg"].opt_prefix}",
       "--with-gif=#{Formula["giflib"].opt_prefix}",
       "--with-libjson-c=#{Formula["json-c"].opt_prefix}",
@@ -138,7 +160,7 @@ class OsgeoGdal < Formula
       "--with-odbc=#{Formula["unixodbc"].opt_prefix}",
       "--with-curl=#{Formula["curl"].opt_bin}/curl-config",
       "--with-xml2=#{Formula["libxml2"].opt_bin}/xml2-config",
-      "--with-spatialite=#{Formula["libspatialite"].opt_prefix}",
+      "--with-spatialite=#{Formula["osgeo-libspatialite"].opt_prefix}",
       "--with-sqlite3=#{Formula["sqlite"].opt_prefix}",
       "--with-webp=#{Formula["webp"].opt_prefix}",
       "--with-geos=#{Formula["geos"].opt_bin}/geos-config",
