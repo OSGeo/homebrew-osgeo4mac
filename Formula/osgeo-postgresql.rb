@@ -37,6 +37,13 @@ class OsgeoPostgresql < Formula
   url "https://github.com/postgres/postgres/archive/REL_11_2.tar.gz"
   sha256 "1f41c01b56cdc09c279877291695d8a9ee97b9623a48a01cc5e9f83a5b8e0df1"
 
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    sha256 "edb9232145a1a5d8eaa23887f4bf39bbab32bf8141599cd30f7955681dbfae86" => :mojave
+    sha256 "edb9232145a1a5d8eaa23887f4bf39bbab32bf8141599cd30f7955681dbfae86" => :high_sierra
+    sha256 "293061ab3ddfaf3af65e87ce96fd54b453dbf8ad8fe68f86120a2d8c9ed4f0ff" => :sierra
+  end
+
   # revision 1
 
   head "https://github.com/postgres/postgres.git", :branch => "master"
