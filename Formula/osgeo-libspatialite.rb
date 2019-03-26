@@ -34,6 +34,14 @@ class OsgeoLibspatialite < Formula
       sha256 "459434f5e6658d6f63d403a7795aa5b198b87fc9f55944c714180e7de662fce2"
     end
   end
+  bottle do
+    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    cellar :any
+    sha256 "0df1d3967c91e50dfc9889fa5e4abbb48217dcd511deb65fa1303cdb46f848a4" => :mojave
+    sha256 "0df1d3967c91e50dfc9889fa5e4abbb48217dcd511deb65fa1303cdb46f848a4" => :high_sierra
+    sha256 "332d0a8c87e04f8532405940d22ff142dcb20bbea6c8fa0683e12d2028d961a6" => :sierra
+  end
+
 
   head do
     url "https://www.gaia-gis.it/fossil/libspatialite", :using => :fossil
