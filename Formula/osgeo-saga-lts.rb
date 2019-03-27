@@ -34,7 +34,7 @@ class OsgeoSagaLts < Formula
   depends_on "libtool" => :build
   depends_on "pkg-config" => :build
   depends_on "python@2"
-  depends_on "proj"
+  depends_on "osgeo-proj"
   depends_on "wxmac"
   depends_on "wxpython"
   depends_on "geos"
@@ -51,7 +51,7 @@ class OsgeoSagaLts < Formula
   depends_on "poppler"
   depends_on "osgeo-hdf4"
   depends_on "hdf5"
-  depends_on "netcdf"
+  depends_on "osgeo-netcdf"
   depends_on "sqlite"
   depends_on "osgeo-laszip@2"
   depends_on "osgeo-gdal" # (gdal-curl, gdal-filegdb, gdal-hdf4)
@@ -65,7 +65,7 @@ class OsgeoSagaLts < Formula
   if build.with?("pg10")
     depends_on "osgeo-postgresql@10"
   else
-    depends_on "postgresql"
+    depends_on "osgeo-postgresql"
   end
 
   resource "app_icon" do
@@ -94,8 +94,8 @@ class OsgeoSagaLts < Formula
     # xcode : xcrun --show-sdk-path
     link_misc = "-arch x86_64 -mmacosx-version-min=10.9 -isysroot #{MacOS::Xcode.prefix}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX#{MacOS.version}.sdk -lstdc++"
 
-    ENV.append "CPPFLAGS", "-I#{Formula["proj"].opt_include} -I#{Formula["osgeo-gdal"].opt_include} #{cppflags}"
-    ENV.append "LDFLAGS", "-L#{Formula["proj"].opt_lib}/libproj.dylib -L#{Formula["osgeo-gdal"].opt_lib}/libgdal.dylib #{link_misc} #{ldflags}"
+    ENV.append "CPPFLAGS", "-I#{Formula["osgeo-proj"].opt_include} -I#{Formula["osgeo-gdal"].opt_include} #{cppflags}"
+    ENV.append "LDFLAGS", "-L#{Formula["osgeo-proj"].opt_lib}/libproj.dylib -L#{Formula["osgeo-gdal"].opt_lib}/libgdal.dylib #{link_misc} #{ldflags}"
 
     # Disable narrowing warnings when compiling in C++11 mode.
     ENV.append "CXXFLAGS", "-Wno-c++11-narrowing -std=c++11"
@@ -128,9 +128,9 @@ class OsgeoSagaLts < Formula
     args << "--enable-python" # if build.with? "python"
 
     if build.with?("postgresql10")
-      args << "--with-postgresql=#{Formula["postgresql@10"].opt_bin}/pg_config"
+      args << "--with-postgresql=#{Formula["osgeo-postgresql@10"].opt_bin}/pg_config"
     else
-      args << "--with-postgresql=#{Formula["postgresql"].opt_bin}/pg_config" # if build.with? "postgresql"
+      args << "--with-postgresql=#{Formula["osgeo-postgresql"].opt_bin}/pg_config" # if build.with? "postgresql"
     end
 
     system "autoreconf", "-i"

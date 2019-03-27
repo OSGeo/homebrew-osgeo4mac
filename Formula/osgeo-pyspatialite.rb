@@ -32,7 +32,7 @@ class OsgeoPyspatialite < Formula
   depends_on "geos"
   depends_on "proj"
   depends_on "sqlite"
-  depends_on "libspatialite"
+  depends_on "osgeo-libspatialite"
 
   def install
     # write setup.cfg
