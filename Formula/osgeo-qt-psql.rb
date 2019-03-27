@@ -27,7 +27,7 @@ class OsgeoQtPsql < Formula
   depends_on "sqlite"
   depends_on "openssl"
   depends_on "libpq"
-  depends_on "postgresql"
+  depends_on "osgeo-postgresql"
   depends_on :xcode => :build
 
   def install
