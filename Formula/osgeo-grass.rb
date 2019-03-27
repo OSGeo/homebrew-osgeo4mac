@@ -47,7 +47,7 @@ class OsgeoGrass < Formula
   depends_on "python@2"
   depends_on "boost"
   depends_on "libiconv"
-  depends_on "libgeotiff"
+  depends_on "osgeo-libgeotiff"
   depends_on "bison"
   depends_on "cairo"
   depends_on "flex"
@@ -58,7 +58,7 @@ class OsgeoGrass < Formula
   depends_on "libpng"
   depends_on "sqlite"
   depends_on "regex-opt"
-  depends_on "proj"
+  depends_on "osgeo-proj"
   depends_on "geos"
   depends_on "readline"
   depends_on "lapack"
@@ -66,7 +66,7 @@ class OsgeoGrass < Formula
   depends_on "bzip2"
   depends_on "zlib"
   depends_on "unixodbc"
-  depends_on "netcdf"
+  depends_on "osgeo-netcdf"
   depends_on "wxmac"
   depends_on "wxpython"
   depends_on "zstd"
@@ -98,7 +98,7 @@ class OsgeoGrass < Formula
   if build.with?("pg10")
     depends_on "osgeo-postgresql@10"
   else
-    depends_on "postgresql"
+    depends_on "osgeo-postgresql"
   end
 
   depends_on :x11 if build.without? "aqua" # needs to find at least X11/include/GL/gl.h
@@ -281,7 +281,7 @@ class OsgeoGrass < Formula
       "--with-libs=#{HOMEBREW_PREFIX}/LIB",
       "--with-python=#{libexec}/vendor/bin/python-config",
       "--with-tcltk",
-      "--with-netcdf=#{Formula["netcdf"].opt_bin}/nc-config",
+      "--with-netcdf=#{Formula["osgeo-netcdf"].opt_bin}/nc-config",
       "--with-zstd",
       "--with-zstd-includes=#{Formula["zstd"].opt_include}",
       "--with-zstd-libs=#{Formula["zstd"].opt_lib}",
@@ -312,9 +312,9 @@ class OsgeoGrass < Formula
       "--with-freetype-includes=#{Formula["freetype"].opt_include}/freetype2",
       "--with-freetype-libs=#{Formula["freetype"].opt_lib}",
       # "--with-proj",
-      "--with-proj-includes=#{Formula["proj"].opt_include}",
-      "--with-proj-libs=#{Formula["proj"].opt_lib}",
-      "--with-proj-share=#{Formula["proj"].opt_share}/proj",
+      "--with-proj-includes=#{Formula["osgeo-proj"].opt_include}",
+      "--with-proj-libs=#{Formula["osgeo-proj"].opt_lib}",
+      "--with-proj-share=#{Formula["osgeo-proj"].opt_share}/proj",
       "--with-tiff",
       "--with-tiff-includes=#{Formula["libtiff"].opt_include}",
       "--with-tiff-libs=#{Formula["libtiff"].opt_lib}",
@@ -342,8 +342,8 @@ class OsgeoGrass < Formula
       args << "--with-postgres-includes=#{Formula["osgeo-postgresql@10"].opt_include}"
       args << "--with-postgres-libs=#{Formula["osgeo-postgresql@10"].opt_lib}"
     else
-      args << "--with-postgres-includes=#{Formula["postgresql"].opt_include}"
-      args << "--with-postgres-libs=#{Formula["postgresql"].opt_lib}"
+      args << "--with-postgres-includes=#{Formula["osgeo-postgresql"].opt_include}"
+      args << "--with-postgres-libs=#{Formula["osgeo-postgresql"].opt_lib}"
     end
 
     args << "--with-mysql"
@@ -452,7 +452,7 @@ class OsgeoGrass < Formula
       file << "\n"
       file << "export GRASS_SH=/bin/sh"
       file << "\n"
-      file << "export GRASS_PROJSHARE=#{Formula["proj"].opt_share}"
+      file << "export GRASS_PROJSHARE=#{Formula["osgeo-proj"].opt_share}"
       file << "\n"
       file << "export GRASS_VERSION=#{version}"
       file << "\n"
@@ -460,9 +460,9 @@ class OsgeoGrass < Formula
       file << "\n"
       # file << "export GRASS_PERL=#{Formula["perl"].opt_bin}/perl"
       # file << "\n"
-      file << "export PROJ_LIB=#{Formula["proj"].opt_lib}"
+      file << "export PROJ_LIB=#{Formula["osgeo-proj"].opt_lib}"
       file << "\n"
-      file << "export GEOTIFF_CSV=#{Formula["libgeotiff"].opt_share}/epsg_csv"
+      file << "export GEOTIFF_CSV=#{Formula["osgeo-libgeotiff"].opt_share}/epsg_csv"
       file << "\n"
       file << "export GDAL_DATA=#{Formula["osgeo-gdal"].opt_share}/gdal"
       # file << "\n"

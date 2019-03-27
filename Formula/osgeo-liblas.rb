@@ -22,12 +22,12 @@ class OsgeoLiblas < Formula
   # option "with-laszip", "Build with laszip support"
 
   depends_on "cmake" => :build
-  depends_on "libgeotiff"
+  depends_on "osgeo-libgeotiff"
   depends_on "boost"
   depends_on "zlib"
   depends_on "jpeg"
   depends_on "libtiff"
-  depends_on "proj"
+  depends_on "osgeo-proj"
   depends_on "libxml2"
   depends_on "osgeo-gdal"
   depends_on "osgeo-laszip@2" # if build.with? "laszip"

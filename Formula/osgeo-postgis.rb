@@ -61,7 +61,7 @@ class OsgeoPostgis < Formula
   depends_on "libxml2"
   depends_on "libxslt"
   depends_on "pcre"
-  depends_on "proj"
+  depends_on "osgeo-proj"
   depends_on "sfcgal" # for advanced 2D/3D functions
   depends_on "protobuf-c" #  Geobuf and Mapbox Vector Tile support
   depends_on "osgeo-gdal" # for GeoJSON and raster handling
@@ -98,7 +98,7 @@ class OsgeoPostgis < Formula
       "--with-xml2config=#{Formula["libxml2"].opt_bin}/xml2-config",
       "--with-geosconfig=#{Formula["geos"].opt_bin}/geos-config",
       "--with-sfcgal=#{Formula["sfcgal"].opt_bin}/sfcgal-config",
-      "--with-projdir=#{Formula["proj"].opt_prefix}",
+      "--with-projdir=#{Formula["osgeo-proj"].opt_prefix}",
       "--with-jsondir=#{Formula["json-c"].opt_prefix}",
       "--with-protobufdir=#{Formula["protobuf-c"].opt_prefix}",
       "--with-pcredir=#{Formula["pcre"].opt_prefix}",
