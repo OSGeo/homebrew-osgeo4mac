@@ -65,7 +65,7 @@ We are [pondering](https://github.com/OSGeo/homebrew-osgeo4mac/issues/769) renam
 Anyhow we recommend you to pin this tap, while we try to figure out this conundrum. We encourage you to give your opinion.
 
 ```shell
-$ brew tap-pin osgeo/osfeo4mac
+$ brew tap-pin osgeo/osgeo4mac
 ```
 
 ### The maximum number of open file descriptors
