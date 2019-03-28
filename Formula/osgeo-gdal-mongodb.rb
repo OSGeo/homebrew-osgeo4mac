@@ -4,7 +4,7 @@ class OsgeoGdalMongodb < Formula
   url "https://download.osgeo.org/gdal/2.4.1/gdal-2.4.1.tar.gz"
   sha256 "f1a11d1982205b9e4cc10e16f016a5559bfc9fa9a9ea69015e99ccd6a738ea4c"
 
-  # revision 1
+  revision 1
 
   head "https://github.com/OSGeo/gdal.git", :branch => "master"
 
