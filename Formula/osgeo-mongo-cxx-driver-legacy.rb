@@ -4,7 +4,7 @@ class OsgeoMongoCxxDriverLegacy < Formula
   url "https://github.com/mongodb/mongo-cxx-driver/archive/legacy-1.1.3.tar.gz"
   sha256 "50304162f706c2c73e04f200cdac767cb2c55d47cf724811cbfc8bb34a0fd6bc"
 
-  revision 1
+  revision 2
 
   head "https://github.com/mongodb/mongo-cxx-driver.git", :branch => "releases/legacy"
 
@@ -22,6 +22,7 @@ class OsgeoMongoCxxDriverLegacy < Formula
 
   depends_on "scons" => :build
   depends_on "boost"
+  depends_on "openssl"
 
   resource "connect_test" do
     url "https://raw.githubusercontent.com/mongodb/mongo-cxx-driver/legacy/src/mongo/client/examples/tutorial.cpp"
@@ -41,8 +42,14 @@ class OsgeoMongoCxxDriverLegacy < Formula
       "--osx-version-min=10.9",
       "--extrapath=#{Formula["boost"].opt_prefix}",
       "--sharedclient",
+      "--use-sasl-client",
+      "--ssl",
+      "--disable-warnings-as-errors",
+      "--cpppath=#{Formula["openssl"].opt_include}",
+      "--libpath=#{Formula["openssl"].opt_lib}",
       "install"
     ]
+
 
     system "scons", *args
   end
