@@ -70,7 +70,7 @@ class OsgeoPostgisAT24 < Formula
   if build.with?("pg10")
     depends_on "osgeo-postgresql@10"
   else
-    depends_on "postgresql"
+    depends_on "osgeo-postgresql"
   end
 
   depends_on "gtk+" # for gui
@@ -88,7 +88,7 @@ class OsgeoPostgisAT24 < Formula
   def install
     # Follow the PostgreSQL linked keg back to the active Postgres installation
     # as it is common for people to avoid upgrading Postgres.
-    # postgres_realpath = Formula["postgresql"].opt_prefix.realpath
+    # postgres_realpath = Formula["osgeo-postgresql"].opt_prefix.realpath
     ENV.append "CFLAGS", "-Diconv=libiconv -Diconv_open=libiconv_open -Diconv_close=libiconv_close"
     ENV.append "LDFLAGS", "-L#{Formula["libiconv"].opt_lib} -liconv" # ICONV_LDFLAGS
 
@@ -142,7 +142,7 @@ class OsgeoPostgisAT24 < Formula
     if build.with?("pg10")
       args << "--with-pgconfig=#{Formula["osgeo-postgresql@10"].opt_bin}/pg_config"
     else
-      args << "--with-pgconfig=#{Formula["postgresql"].opt_bin}/pg_config"
+      args << "--with-pgconfig=#{Formula["osgeo-postgresql"].opt_bin}/pg_config"
     end
 
     system "./autogen.sh"
