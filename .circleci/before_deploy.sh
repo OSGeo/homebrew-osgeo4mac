@@ -17,8 +17,7 @@
 
 set -e
 
-if [ "$CIRCLE_BRANCH" != "master" ]; then
-# if [ "$CIRCLE_BRANCH" == "master" ] && [ "$CHANGED_FORMULAE" != "" ]; then
+if [ "$CIRCLE_BRANCH" == "master" ] && [ "$CHANGED_FORMULAE" != "" ]; then
   # Setup Git configuration
   COMMIT_USER=$(git log --format='%an' ${CIRCLE_SHA1}^\!)
   COMMIT_EMAIL=$(git log --format='%ae' ${CIRCLE_SHA1}^\!)
