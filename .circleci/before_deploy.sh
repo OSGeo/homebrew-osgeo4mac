@@ -81,10 +81,10 @@ if [ "$CIRCLE_BRANCH" == "master" ] && [ "$CHANGED_FORMULAE" != "" ]; then
   # git checkout $CIRCLE_BRANCH
   # git merge master
   # git pull <remote> <branch>
-  # git pull --rebase
+  git pull --rebase
 
   # Now that we're all set up, we can push.
-  # git push ${SSH_REPO} $CIRCLE_BRANCH
+  git push ${SSH_REPO} $CIRCLE_BRANCH
 
   # echo "Upload to Bintray..."
 
@@ -96,10 +96,10 @@ if [ "$CIRCLE_BRANCH" == "master" ] && [ "$CHANGED_FORMULAE" != "" ]; then
   echo "Upload Bottles..."
   if [ "$CIRCLE_USERNAME" == "fjperini" ]; then
     # use ssh
-    ssh-add -l
+    # ssh-add -l
     # echo -e "\nIdentityFile ~/.ssh/id_rsa" >> ~/.ssh/config
-    cat ~/.ssh/config
-    ls ~/.ssh
+    # cat ~/.ssh/config
+    # ls ~/.ssh
     # brew install https://raw.githubusercontent.com/hudochenkov/homebrew-sshpass/master/sshpass.rb
     # sshpass -e scp -P 50023 -o stricthostkeychecking=no -r ./*.tar.gz fjperini@bottle.download.osgeo.org:/osgeo/bottle
     scp -P 50023 -o stricthostkeychecking=no -r ./*.tar.gz fjperini@bottle.download.osgeo.org:/osgeo/bottle
