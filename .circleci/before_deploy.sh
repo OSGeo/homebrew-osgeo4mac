@@ -81,10 +81,10 @@ if [ "$CIRCLE_BRANCH" != "master" ]; then
   echo "Pull rebase..."
   # git checkout $CIRCLE_BRANCH
   # git merge master
-  git pull --rebase
+  # git pull --rebase
 
   # Now that we're all set up, we can push.
-  git push ${SSH_REPO} $CIRCLE_BRANCH
+  # git push ${SSH_REPO} $CIRCLE_BRANCH
 
   echo "Upload bottles..."
 
