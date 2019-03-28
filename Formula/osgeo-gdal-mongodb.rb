@@ -11,9 +11,10 @@ class OsgeoGdalMongodb < Formula
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any
-    sha256 "cea1742c26822aca3ad63f3109ec4938510d51d38ce9d96fc6e9be9e33a74b8c" => :mojave
-    sha256 "cea1742c26822aca3ad63f3109ec4938510d51d38ce9d96fc6e9be9e33a74b8c" => :high_sierra
-    sha256 "4147fc23b0518f81e28ac95e25de170ad38f94f962ca479dd037931e26aceb2a" => :sierra
+    rebuild 1
+    sha256 "e67dc91f807d4e67cce2f9856dda3b4a52839a340b7f989e5777e9df98facdc7" => :mojave
+    sha256 "e67dc91f807d4e67cce2f9856dda3b4a52839a340b7f989e5777e9df98facdc7" => :high_sierra
+    sha256 "78960f03ac643a1b78bc721e92d3f53e6646fc9ad9e27926472481c19daa7ca3" => :sierra
   end
 
   depends_on "boost"
