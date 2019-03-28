@@ -30,7 +30,7 @@ class OsgeoProj < Formula
     sha256 "d9fc1a48f875e94b9be3e59241615320a8e05fa6968c733daccb7d6e0227a6f5" => :sierra
   end
 
-  revision 1
+  revision 2
 
   head "https://github.com/OSGeo/proj.4.git", :branch => "master"
 
