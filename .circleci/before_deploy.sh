@@ -98,6 +98,9 @@ if [ "$CIRCLE_BRANCH" != "master" ]; then
   if [ "$CIRCLE_USERNAME" == "fjperini" ]; then
     # use ssh
     ssh-add -l
+    cat ~/.ssh/config
+    # echo -e "\nIdentityFile ~/.ssh/id_rsa" >> ~/.ssh/config
+    ls ~/.ssh
     # brew install https://raw.githubusercontent.com/hudochenkov/homebrew-sshpass/master/sshpass.rb
     # sshpass -e scp -P 50023 -o stricthostkeychecking=no -r ./*.tar.gz fjperini@bottle.download.osgeo.org:/osgeo/bottle
     scp -P 50023 -o stricthostkeychecking=no -r test.txt fjperini@bottle.download.osgeo.org:/osgeo/bottle
