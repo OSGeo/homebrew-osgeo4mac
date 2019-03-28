@@ -108,6 +108,7 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             - "${KEY_FINGERPRINT}"
+            - "${KEY_FINGERPRINT_OSGEO}"
       - run:
           name: Avoid hosts unknown for github
           command: |
