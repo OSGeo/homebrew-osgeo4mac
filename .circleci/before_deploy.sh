@@ -17,7 +17,8 @@
 
 set -e
 
-if [ "$CIRCLE_BRANCH" == "master" ] && [ "$CHANGED_FORMULAE" != "" ]; then
+if [ "$CIRCLE_BRANCH" != "master" ]; then
+# if [ "$CIRCLE_BRANCH" == "master" ] && [ "$CHANGED_FORMULAE" != "" ]; then
   # Setup Git configuration
   COMMIT_USER=$(git log --format='%an' ${CIRCLE_SHA1}^\!)
   COMMIT_EMAIL=$(git log --format='%ae' ${CIRCLE_SHA1}^\!)
@@ -80,14 +81,28 @@ if [ "$CIRCLE_BRANCH" == "master" ] && [ "$CHANGED_FORMULAE" != "" ]; then
   echo "Pull rebase..."
   # git checkout $CIRCLE_BRANCH
   # git merge master
-  git pull --rebase
+  # git pull <remote> <branch>
+  # git pull --rebase
 
   # Now that we're all set up, we can push.
-  git push ${SSH_REPO} $CIRCLE_BRANCH
+  # git push ${SSH_REPO} $CIRCLE_BRANCH
 
-  echo "Upload to Bintray..."
+  # echo "Upload to Bintray..."
 
   cd /tmp/workspace/bottles/
-  files=$(echo *.tar.gz | tr ' ' ',')
-  curl -X PUT -T "{$files}" -u ${BINTRAY_USER}:${BINTRAY_API} -H "X-Bintray-Publish: 1" https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles/bottles/0.1/
+
+  # files=$(echo *.tar.gz | tr ' ' ',')
+  # curl -X PUT -T "{$files}" -u ${BINTRAY_USER}:${BINTRAY_API} -H "X-Bintray-Publish: 1" https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles/bottles/0.1/
+
+  echo "Upload Bottles..."
+  if [ "$CIRCLE_USERNAME" == "fjperini" ]; then
+    # use ssh
+    ssh-add -l
+    # echo -e "\nIdentityFile ~/.ssh/id_rsa" >> ~/.ssh/config
+    cat ~/.ssh/config
+    ls ~/.ssh
+    # brew install https://raw.githubusercontent.com/hudochenkov/homebrew-sshpass/master/sshpass.rb
+    # sshpass -e scp -P 50023 -o stricthostkeychecking=no -r ./*.tar.gz fjperini@bottle.download.osgeo.org:/osgeo/bottle
+    scp -P 50023 -o stricthostkeychecking=no -r ./*.tar.gz fjperini@bottle.download.osgeo.org:/osgeo/bottle
+  fi
 fi
