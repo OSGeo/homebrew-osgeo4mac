@@ -146,13 +146,13 @@ workflows:
       - high_sierra-build:
           requires:
             - update-homebrew
-      - sierra-build:
-          requires:
-            - update-homebrew
+      # - sierra-build:
+      #     requires:
+      #       - update-homebrew
       - collect-bottles:
           requires:
             - high_sierra-build
-            - sierra-build
+            # - sierra-build
       # - deploy:
       #     requires:
       #       - collect-bottles

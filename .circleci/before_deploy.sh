@@ -97,6 +97,7 @@ if [ "$CIRCLE_BRANCH" != "master" ]; then
   echo "Upload Bottles..."
   if [ "$CIRCLE_USERNAME" == "fjperini" ]; then
     # use ssh
+    ssh-add -l
     # brew install https://raw.githubusercontent.com/hudochenkov/homebrew-sshpass/master/sshpass.rb
     # sshpass -e scp -P 50023 -o stricthostkeychecking=no -r ./*.tar.gz fjperini@bottle.download.osgeo.org:/osgeo/bottle
     scp -P 50023 -o stricthostkeychecking=no -r test.txt fjperini@bottle.download.osgeo.org:/osgeo/bottle
