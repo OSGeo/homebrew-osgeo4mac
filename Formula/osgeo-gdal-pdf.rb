@@ -9,10 +9,11 @@ class OsgeoGdalPdf < Formula
   head "https://github.com/OSGeo/gdal.git", :branch => "master"
 
   bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    sha256 "2a724545a7b200f025dac27e3c5eb0fc256efd3fbefa97496069dc50dec6abae" => :mojave
-    sha256 "2a724545a7b200f025dac27e3c5eb0fc256efd3fbefa97496069dc50dec6abae" => :high_sierra
-    sha256 "2908e7aa6a829427264f3fdb9df6b568becb8bb919c56ee1c7077df87373cf3a" => :sierra
+    root_url "https://bottle.download.osgeo.org"
+    rebuild 1
+    sha256 "e396f175369279d885ca2adae289f068b2d4d3a31e99c4bd07a764bc9c75a74b" => :mojave
+    sha256 "e396f175369279d885ca2adae289f068b2d4d3a31e99c4bd07a764bc9c75a74b" => :high_sierra
+    sha256 "826cb9902c05e5450d1a1b5646a0a34bc156aa5e6351abd75788b9b68ca1a636" => :sierra
   end
 
   depends_on "pkg-config" => :build
