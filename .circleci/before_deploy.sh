@@ -87,13 +87,14 @@ if [ "$CIRCLE_BRANCH" != "master" ]; then
   # Now that we're all set up, we can push.
   # git push ${SSH_REPO} $CIRCLE_BRANCH
 
-  echo "Upload bottles..."
+  # echo "Upload to Bintray..."
 
   cd /tmp/workspace/bottles/
 
   # files=$(echo *.tar.gz | tr ' ' ',')
   # curl -X PUT -T "{$files}" -u ${BINTRAY_USER}:${BINTRAY_API} -H "X-Bintray-Publish: 1" https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles/bottles/0.1/
 
+  echo "Upload Bottles..."
   # use ssh
   if [ "$CIRCLE_USERNAME" == "fjperini" ]; then
     # scp -P${SSH_PORT} -r . ${SSH_USER}@${SSH_HOST}
