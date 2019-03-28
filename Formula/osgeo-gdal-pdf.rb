@@ -25,7 +25,7 @@ class OsgeoGdalPdf < Formula
   depends_on "jpeg"
   depends_on "libpng"
   depends_on "libtiff"
-  depends_on "libgeotiff"
+  depends_on "osgeo-libgeotiff"
   depends_on "openjpeg"
   depends_on "podofo"
   depends_on "osgeo-pdfium"

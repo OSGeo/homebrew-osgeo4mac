@@ -22,7 +22,7 @@ class OsgeoOssim < Formula
   depends_on "jpeg"
   depends_on "jsoncpp"
   depends_on "libtiff"
-  depends_on "libgeotiff"
+  depends_on "osgeo-libgeotiff"
   depends_on "geos"
   depends_on "freetype"
   depends_on "zlib"
@@ -65,7 +65,7 @@ class OsgeoOssim < Formula
   if build.with? "pg10"
     depends_on "osgeo-postgresql@10"
   else
-    depends_on "postgresql"
+    depends_on "osgeo-postgresql"
   end
 
   def install

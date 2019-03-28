@@ -18,7 +18,7 @@ class OsgeoGdalMongodb < Formula
 
   depends_on "boost"
   depends_on "libtiff"
-  depends_on "libgeotiff"
+  depends_on "osgeo-libgeotiff"
   depends_on "osgeo-gdal"
   depends_on "osgeo-mongo-cxx-driver-legacy"
 

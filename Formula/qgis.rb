@@ -96,28 +96,28 @@ class Qgis < Formula
   depends_on "ninja" => [:build, :recommended]
   depends_on "gsl" => :build # Georeferencer plugin
   depends_on "six" => :build
-  depends_on "sip-qt5" => :build # recommended
+  depends_on "osgeo-sip" => :build # recommended
   depends_on "bison" => :build
   depends_on "flex" => :build
   depends_on "pkg-config" => :build
   depends_on "python"
   depends_on "gdal2-python" # gdal2 - core providers
   depends_on "libzip"
-  depends_on "qscintilla2-qt5"
+  depends_on "osgeo-qscintilla2"
   depends_on "qca" #
   depends_on "qt"
-  depends_on "pyqt-qt5"
-  depends_on "pyqt5-webkit" # qt5-webkit
+  depends_on "osgeo-pyqt"
+  depends_on "osgeo-pyqt-webkit" # qt5-webkit
   depends_on "qtkeychain" #
   depends_on "qwt"
   depends_on "spatialindex"
   depends_on "sqlite"
   depends_on "expat"
-  depends_on "proj"
+  depends_on "osgeo-proj"
   depends_on "hdf5"
   depends_on "geos"
   depends_on "libtasn1"
-  depends_on "libspatialite"
+  depends_on "osgeo-libspatialite"
   depends_on "qwtpolar"
   depends_on "desktop-file-utils"
   depends_on "hicolor-icon-theme"
@@ -130,11 +130,11 @@ class Qgis < Formula
   depends_on "freetds"
   depends_on "psqlodbc"
   depends_on "libpq"
-  depends_on "postgis2"
+  depends_on "osgeo-postgis"
   depends_on "exiv2"
   depends_on "liblas"
-  depends_on "netcdf"
-  depends_on "pdal"
+  depends_on "osgeo-netcdf"
+  depends_on "osgeo-pdal"
   depends_on "szip"
   depends_on "openvpn"
   depends_on "curl"
@@ -173,7 +173,7 @@ class Qgis < Formula
 
   # core plugins (c++ and python)
   # if build.with?("grass") || (HOMEBREW_PREFIX/"opt/grass7").exist?
-  depends_on "grass7" # optional
+  depends_on "osgeo-grass" # optional
   depends_on "gettext"
   # end
 
@@ -195,9 +195,9 @@ class Qgis < Formula
 
   # use newer postgresql client than Apple's, also needed by `psycopg2`
   if build.with?("postgresql10")
-    depends_on "postgresql@10"
+    depends_on "osgeo-postgresql@10"
   else
-    depends_on "postgresql"
+    depends_on "osgeo-postgresql"
   end
 
   depends_on "oracle-client-sdk" if build.with?("oracle")
@@ -217,7 +217,7 @@ class Qgis < Formula
   # core processing plugin extras
   # see `grass` above
   depends_on "orfeo6" # optional if build.with?("orfeo")
-  depends_on "saga-gis-lts" # optional if build.with?("saga")
+  depends_on "osgeo-saga-lts" # optional if build.with?("saga")
   depends_on "whitebox-tools" # optional if build.with?("whitebox")
   depends_on "lastools" # optional
   depends_on "taudem" # optional

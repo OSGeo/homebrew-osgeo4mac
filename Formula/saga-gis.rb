@@ -24,7 +24,7 @@ class SagaGis < Formula
   depends_on "libtool" => :build
   depends_on "pkg-config" => :build
   depends_on "gdal2"
-  depends_on "proj"
+  depends_on "osgeo-proj"
   depends_on "wxmac"
   depends_on "geos"
   depends_on "laszip"
@@ -41,14 +41,14 @@ class SagaGis < Formula
   # Also, using --with-python will trigger vigra to be built with it, which
   # triggers a source (re)build of boost --with-python
   depends_on "brewsci/science/vigra" => :optional
-  depends_on "postgresql" => :optional
+  depends_on "osgeo-postgresql" => :optional
   depends_on "python@2" => :optional
   depends_on "opencv" => :optional
   depends_on "liblas" => :optional
   depends_on "poppler" => :optional
   depends_on "osgeo/osgeo4mac/hdf4" => :optional
   depends_on "hdf5" => :optional
-  depends_on "netcdf" => :optional
+  depends_on "osgeo-netcdf" => :optional
   depends_on "sqlite" => :optional
 
   resource "app_icon" do

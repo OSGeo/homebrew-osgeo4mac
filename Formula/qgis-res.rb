@@ -33,7 +33,7 @@ class QgisRes < Formula
   depends_on "lapack"
   depends_on "openblas"
   depends_on "cython"
-  depends_on "postgresql" # psycopg2
+  depends_on "osgeo-postgresql" # psycopg2
   depends_on "libyaml" # yaml
   depends_on "tcl-tk" # six
   depends_on "openjpeg" # for Pillow
@@ -43,7 +43,7 @@ class QgisRes < Formula
   depends_on "dbus"
   depends_on "glib"
   depends_on "qt"
-  depends_on "pyqt-qt5"
+  depends_on "osgeo-pyqt"
 
   # for rpy2
   # if build.with?("r#{"-sethrfore" if build.with? "r-sethrfore"}")

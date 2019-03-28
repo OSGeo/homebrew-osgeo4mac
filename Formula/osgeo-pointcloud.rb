@@ -38,9 +38,9 @@ class OsgeoPointcloud < Formula
   depends_on "llvm" => :build
 
   if build.with?("postgresql10")
-    depends_on "postgresql@10"
+    depends_on "osgeo-postgresql@10"
   else
-    depends_on "postgresql"
+    depends_on "osgeo-postgresql"
   end
 
   # Fix boolean case errors when compiling againt pg11

@@ -28,7 +28,7 @@ class Mapcache < Formula
   depends_on "geos"
 
   if build.with? "tiff-cache"
-    depends_on "libgeotiff"
+    depends_on "osgeo-libgeotiff"
     depends_on "libtiff"
   end
   depends_on "berkeley-db" => :optional

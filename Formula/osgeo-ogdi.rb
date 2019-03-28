@@ -20,7 +20,7 @@ class OsgeoOgdi < Formula
   # depends on "automake" => :build
   # depends on "libtool" => :build
 
-  depends_on "proj"
+  depends_on "osgeo-proj"
   depends_on "zlib"
   depends_on "expat"
 

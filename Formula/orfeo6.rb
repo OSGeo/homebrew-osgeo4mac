@@ -43,8 +43,8 @@ class Orfeo6 < Formula
 
   # required
   depends_on "boost"
-  depends_on "vtk"
-  depends_on "libgeotiff"
+  depends_on "osgeo-vtk"
+  depends_on "osgeo-libgeotiff"
   depends_on "libpng"
   depends_on "pcre"
   depends_on "openssl"
@@ -61,11 +61,11 @@ class Orfeo6 < Formula
   depends_on "libtool" # libltdl
   depends_on "jpeg"
   depends_on "libtiff"
-  depends_on "proj"
+  depends_on "osgeo-proj"
   depends_on "geos"
-  depends_on "netcdf"
+  depends_on "osgeo-netcdf"
   depends_on "openjpeg"
-  depends_on "ossim"
+  depends_on "osgeo-ossim"
   depends_on "insighttoolkit"
   depends_on "openscenegraph-qt5" # (for libOpenThreads, now internal to osg)
 
@@ -79,7 +79,7 @@ class Orfeo6 < Formula
   # optional
   depends_on "fftw" => :optional # restricts built binaries to GPL license
   depends_on "hdf5" => :optional
-  # depends_on "hdf4" => :optional
+  # depends_on "osgeo-hdf4" => :optional
   # depends_on "mapnik" => :optional
   # depends_on "shark" if build.with? "shark"
   depends_on "open-mpi" if build.with? "mpi"

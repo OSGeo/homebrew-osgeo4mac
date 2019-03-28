@@ -99,7 +99,7 @@ class OsgeoGdal < Formula
   # depends_on "charls" # cask
 
   if build.with?("postgresql10")
-    depends_on "postgresql@10"
+    depends_on "osgeo-postgresql@10"
   else
     depends_on "osgeo-postgresql"
   end

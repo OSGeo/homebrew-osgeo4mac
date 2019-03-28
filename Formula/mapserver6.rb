@@ -62,10 +62,10 @@ class Mapserver6 < Formula
   depends_on "swig" => :build
   depends_on :java => :optional
   depends_on "giflib"
-  depends_on "proj"
+  depends_on "osgeo-proj"
   depends_on "geos" => :recommended
   depends_on "gdal"
-  depends_on "postgresql" => :recommended
+  depends_on "osgeo-postgresql" => :recommended
   depends_on "mysql" => :optional
   depends_on "fcgi" => :recommended
   depends_on "cairo" => :recommended

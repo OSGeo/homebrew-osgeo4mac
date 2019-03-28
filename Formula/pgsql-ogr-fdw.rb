@@ -26,7 +26,7 @@ class PgsqlOgrFdw < Formula
     false
   end
 
-  depends_on "postgis2"
+  depends_on "osgeo-postgis"
   depends_on "gdal2"
 
   def install
