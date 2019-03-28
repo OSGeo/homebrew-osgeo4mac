@@ -55,7 +55,6 @@ class OsgeoPostgresql < Formula
   depends_on Unlinked
 
   depends_on "pkg-config" => :build
-  depends_on "e2fsprogs"
   depends_on "gettext"
   depends_on "icu4c"
   depends_on "openldap" # libldap
@@ -68,6 +67,7 @@ class OsgeoPostgresql < Formula
   depends_on "python2"
   depends_on "perl"
   depends_on "zlib"
+  # depends_on "e2fsprogs"
 
   # others: pam
 
