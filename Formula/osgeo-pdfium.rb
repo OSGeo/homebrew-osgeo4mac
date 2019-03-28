@@ -9,7 +9,7 @@ class OsgeoPdfium < Formula
   revision 1
 
   bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    root_url "https://bottle.download.osgeo.org"
     cellar :any_skip_relocation
     sha256 "0ade6a9309d78ff85232cd3482bbc62cba37a7ebb429e89987ab7760a47cf50c" => :mojave
     sha256 "0ade6a9309d78ff85232cd3482bbc62cba37a7ebb429e89987ab7760a47cf50c" => :high_sierra
