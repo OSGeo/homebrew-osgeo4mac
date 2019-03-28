@@ -20,7 +20,7 @@ class OsgeoPyspatialite < Formula
     end
   end
   bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    root_url "https://bottle.download.osgeo.org"
     cellar :any
     sha256 "688bd53195ba337462aa64ad99adf040058fd2ca110b61889f131e3ed77ccd13" => :mojave
     sha256 "688bd53195ba337462aa64ad99adf040058fd2ca110b61889f131e3ed77ccd13" => :high_sierra

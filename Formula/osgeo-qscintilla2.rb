@@ -5,7 +5,7 @@ class OsgeoQscintilla2 < Formula
   sha256 "dae54d19e43dba5a3f98ac084fc0bcfa6fb713fa851f1783a01404397fd722f5"
 
   bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    root_url "https://bottle.download.osgeo.org"
     cellar :any
     rebuild 1
     sha256 "e52e5650b1dfeae0b011b5bfcdff7bad945bf52fd549f8fbb12505d97a70674d" => :mojave

@@ -10,7 +10,7 @@ class OsgeoLibght < Formula
   head "https://github.com/pramsey/libght.git", :branch => "master"
 
   bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    root_url "https://bottle.download.osgeo.org"
     sha256 "5e6184e734badb5943c47c45f84dce9abdfa73f37ec970e5f0f1106e8542642a" => :mojave
     sha256 "5e6184e734badb5943c47c45f84dce9abdfa73f37ec970e5f0f1106e8542642a" => :high_sierra
     sha256 "a36ab47dbead088061cbf694ff4d60642f3e699a5fc4351b5c51f54194b927d0" => :sierra

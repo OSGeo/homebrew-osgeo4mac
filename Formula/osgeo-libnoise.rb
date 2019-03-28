@@ -8,7 +8,7 @@ class OsgeoLibnoise < Formula
   revision 1
 
   bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    root_url "https://bottle.download.osgeo.org"
     cellar :any
     sha256 "c9cc8d283d929be6fc8a13b0a71bfc9c3bd47d3c0350ed344a45cbe98f1de2a9" => :mojave
     sha256 "c9cc8d283d929be6fc8a13b0a71bfc9c3bd47d3c0350ed344a45cbe98f1de2a9" => :high_sierra

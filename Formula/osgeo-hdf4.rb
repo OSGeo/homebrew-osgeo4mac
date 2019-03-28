@@ -13,7 +13,7 @@ class OsgeoHdf4 < Formula
   depends_on "gcc" if build.with? "fortran"
 
   bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    root_url "https://bottle.download.osgeo.org"
     cellar :any
     rebuild 1
     sha256 "e9c44564bd0f3be8a6c7bb0d6f103fd64865a927a16f8ae5fc2b6a8a6e3221d7" => :mojave

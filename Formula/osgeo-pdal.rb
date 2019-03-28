@@ -6,7 +6,7 @@ class OsgeoPdal < Formula
   sha256 "ef3a32c06865383feac46fd7eb7491f034cad6b0b246b3c917271ae0c8f25b69"
 
   bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    root_url "https://bottle.download.osgeo.org"
     sha256 "f4c18fb9fcaae698f44998b92035d1119efe129de66744148e6c92dcadcce848" => :mojave
     sha256 "f4c18fb9fcaae698f44998b92035d1119efe129de66744148e6c92dcadcce848" => :high_sierra
     sha256 "641d47c8a0b5bc66251ef076c75cfa20fa3e97c49e3887005ad1a484cea6ff01" => :sierra

@@ -10,7 +10,7 @@ class OsgeoVtk < Formula
   head "https://github.com/Kitware/VTK.git"
 
   bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    root_url "https://bottle.download.osgeo.org"
     rebuild 1
     sha256 "12c53fe71192dd5b1380c527fbfa0868fe551db147f92c99896ae8ffa6018f47" => :mojave
     sha256 "12c53fe71192dd5b1380c527fbfa0868fe551db147f92c99896ae8ffa6018f47" => :high_sierra

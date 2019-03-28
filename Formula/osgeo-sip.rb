@@ -9,7 +9,7 @@ class OsgeoSip < Formula
   head "https://www.riverbankcomputing.com/hg/sip", :using => :hg
 
   bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    root_url "https://bottle.download.osgeo.org"
     cellar :any_skip_relocation
     rebuild 1
     sha256 "07a23795ae5f01a10be3dc0313e01f99ca6d4971c249b99c8a9197de9f96b094" => :mojave

@@ -26,7 +26,7 @@ class OsgeoNetcdf < Formula
   revision 1
 
   bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    root_url "https://bottle.download.osgeo.org"
     sha256 "66ce892590270d04d39fc676b9311ed1c92e212eef2ee66aae5eebe6c42b8191" => :mojave
     sha256 "66ce892590270d04d39fc676b9311ed1c92e212eef2ee66aae5eebe6c42b8191" => :high_sierra
     sha256 "eaf5d8228e44b12ad4f4ac3bdb39024e1dbc3e2f31c86bbee404157d3260ca62" => :sierra

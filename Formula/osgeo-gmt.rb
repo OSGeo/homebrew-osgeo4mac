@@ -10,7 +10,7 @@ class OsgeoGmt < Formula
   revision 1
 
   bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    root_url "https://bottle.download.osgeo.org"
     sha256 "af783bd149ac9645837682f3ef27cc589c352f304e0a1e80525450510a5cc549" => :mojave
     sha256 "af783bd149ac9645837682f3ef27cc589c352f304e0a1e80525450510a5cc549" => :high_sierra
     sha256 "2ddaaaf54cbb8fd56e5f42a75d61cea7be04986bd38da97d8955c8e7c9c56f35" => :sierra

@@ -10,7 +10,7 @@ class OsgeoTaudem < Formula
   head "https://github.com/dtarb/TauDEM.git", :branch => "master"
 
   bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    root_url "https://bottle.download.osgeo.org"
     cellar :any
     sha256 "4e5d5df235413e6f3b02c1112eda3a95b5200c7e1eae640f9df0ed50db62765e" => :mojave
     sha256 "4e5d5df235413e6f3b02c1112eda3a95b5200c7e1eae640f9df0ed50db62765e" => :high_sierra

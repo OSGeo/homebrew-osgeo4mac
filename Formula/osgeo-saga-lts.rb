@@ -11,7 +11,7 @@ class OsgeoSagaLts < Formula
   head "https://git.code.sf.net/p/saga-gis/code.git", :branch => "release-2-3-lts"
 
   bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    root_url "https://bottle.download.osgeo.org"
     rebuild 1
     sha256 "8fe4975905e2a9b33db9adc93bde70c2f9dde6a06e2957679bf6fe676d386156" => :mojave
     sha256 "8fe4975905e2a9b33db9adc93bde70c2f9dde6a06e2957679bf6fe676d386156" => :high_sierra
