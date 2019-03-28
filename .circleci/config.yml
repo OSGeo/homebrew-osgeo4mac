@@ -105,10 +105,11 @@ jobs:
       # is using the first key that is found, the one assigned in Checkout keys
       # not Add deploy key (Checkout keys)
       # Add deployment key fingerprint (SSH Permissions) for CircleCI to use for a push
+      # ssh-keygen -l -E md5 -f key.pub
       - add_ssh_keys:
           fingerprints:
-            - "${KEY_FINGERPRINT}"
             - "${KEY_FINGERPRINT_OSGEO}"
+            - "${KEY_FINGERPRINT}"
       - run:
           name: Avoid hosts unknown for github
           command: |
