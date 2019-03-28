@@ -10,7 +10,7 @@ class OsgeoVigra < Formula
   head "https://github.com/ukoethe/vigra.git", :branch => "master"
 
   bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    root_url "https://bottle.download.osgeo.org"
     cellar :any
     sha256 "b7039ec5e4a8256a0bb85f0bb581a80d9ab8e77d5a0059c23ea3034a92408ad4" => :mojave
     sha256 "b7039ec5e4a8256a0bb85f0bb581a80d9ab8e77d5a0059c23ea3034a92408ad4" => :high_sierra

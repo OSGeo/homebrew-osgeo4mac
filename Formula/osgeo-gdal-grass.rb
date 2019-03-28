@@ -7,7 +7,7 @@ class OsgeoGdalGrass < Formula
   revision 1
 
   bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    root_url "https://bottle.download.osgeo.org"
     cellar :any
     sha256 "0296f0d0e666a9750e7645e869b812e71332bad5f2a4efe890e2ceb0a4d9af26" => :mojave
     sha256 "0296f0d0e666a9750e7645e869b812e71332bad5f2a4efe890e2ceb0a4d9af26" => :high_sierra

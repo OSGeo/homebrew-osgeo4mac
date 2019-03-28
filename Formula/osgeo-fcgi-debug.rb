@@ -9,7 +9,7 @@ class OsgeoFcgiDebug < Formula
   head "https://github.com/lighttpd/fcgi-debug.git", branch: "master"
 
   bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    root_url "https://bottle.download.osgeo.org"
     cellar :any
     sha256 "674bace0a4d665e202d85b1179a60e2dd6987ca6540b16b2b5fc89656175b6a4" => :mojave
     sha256 "674bace0a4d665e202d85b1179a60e2dd6987ca6540b16b2b5fc89656175b6a4" => :high_sierra

@@ -9,7 +9,7 @@ class OsgeoLaszipAT2 < Formula
   head "https://github.com/LASzip/LASzip.git", :tag => "v2.2.0"
 
   bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    root_url "https://bottle.download.osgeo.org"
     cellar :any
     sha256 "a785cd4b90dc00fb0454badb64aecab0ad033c7bae47e40afaa77fbd548c1f11" => :mojave
     sha256 "a785cd4b90dc00fb0454badb64aecab0ad033c7bae47e40afaa77fbd548c1f11" => :high_sierra

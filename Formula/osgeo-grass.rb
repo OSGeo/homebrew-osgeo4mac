@@ -22,7 +22,7 @@ class OsgeoGrass < Formula
   end
 
   bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    root_url "https://bottle.download.osgeo.org"
     cellar :any
     sha256 "9b3131289723119173c8606834d83da03e6fe01b12408b93799859b410829f97" => :mojave
     sha256 "9b3131289723119173c8606834d83da03e6fe01b12408b93799859b410829f97" => :high_sierra

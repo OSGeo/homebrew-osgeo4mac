@@ -7,7 +7,7 @@ class OsgeoInsighttoolkit < Formula
   revision 1
 
   bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    root_url "https://bottle.download.osgeo.org"
     cellar :any
     sha256 "821a66bfa2f00ac11d6ee2b58215714593033cc06b452b2485ffa8820b1732e4" => :mojave
     sha256 "821a66bfa2f00ac11d6ee2b58215714593033cc06b452b2485ffa8820b1732e4" => :high_sierra

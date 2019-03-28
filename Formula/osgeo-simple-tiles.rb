@@ -5,7 +5,7 @@ class OsgeoSimpleTiles < Formula
   sha256 "2391b2f727855de28adfea9fc95d8c7cbaca63c5b86c7286990d8cbbcd640d6f"
 
   bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    root_url "https://bottle.download.osgeo.org"
     cellar :any
     sha256 "cf3b55ed85ec7e3c84d487633831fe92a87382b024ddc7cb506f335daacc3c4a" => :mojave
     sha256 "cf3b55ed85ec7e3c84d487633831fe92a87382b024ddc7cb506f335daacc3c4a" => :high_sierra

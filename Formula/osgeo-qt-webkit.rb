@@ -11,7 +11,7 @@ class OsgeoQtWebkit < Formula
   head "https://github.com/qt/qtwebkit.git"
 
   bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    root_url "https://bottle.download.osgeo.org"
     cellar :any
     rebuild 1
     sha256 "ce086ce8d4df605a2fbcb1b9b9c82632588b077b5a4aa7c236410f94da7157ec" => :mojave

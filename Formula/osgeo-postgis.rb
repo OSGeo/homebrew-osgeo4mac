@@ -31,7 +31,7 @@ class OsgeoPostgis < Formula
   sha256 "225aeaece00a1a6a9af15526af81bef2af27f4c198de820af1367a792ee1d1a9"
 
   bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    root_url "https://bottle.download.osgeo.org"
     cellar :any
     sha256 "227b45db63a2b8f9ad708ea8096201256cb9315c81c2eb12114ee7b5263b0736" => :mojave
     sha256 "227b45db63a2b8f9ad708ea8096201256cb9315c81c2eb12114ee7b5263b0736" => :high_sierra

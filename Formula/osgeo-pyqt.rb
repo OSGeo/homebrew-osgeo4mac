@@ -5,7 +5,7 @@ class OsgeoPyqt < Formula
   sha256 "3718ce847d824090fd5f95ff3f13847ee75c2507368d4cbaeb48338f506e59bf"
 
   bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    root_url "https://bottle.download.osgeo.org"
     cellar :any
     rebuild 1
     sha256 "a1559a665c5ceece509dc49f490e50337d68b9083dfd3d15a0a9c1e2f19cae5f" => :mojave

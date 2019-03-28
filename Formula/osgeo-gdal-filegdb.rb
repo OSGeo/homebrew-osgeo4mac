@@ -9,7 +9,7 @@ class OsgeoGdalFilegdb < Formula
   head "https://github.com/OSGeo/gdal.git", :branch => "master"
 
   bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    root_url "https://bottle.download.osgeo.org"
     cellar :any
     sha256 "9edd3142d7b0c7700d9c8a9aaf3dee30592fc697905a60bd80ce5fd068a55f7e" => :mojave
     sha256 "9edd3142d7b0c7700d9c8a9aaf3dee30592fc697905a60bd80ce5fd068a55f7e" => :high_sierra

@@ -8,7 +8,7 @@ class OsgeoWhiteboxTools < Formula
   revision 1
 
   bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    root_url "https://bottle.download.osgeo.org"
     cellar :any_skip_relocation
     sha256 "19507ae5828608c527399fa341cf10717816560afaa4a0baea8a2314e255ca03" => :mojave
     sha256 "19507ae5828608c527399fa341cf10717816560afaa4a0baea8a2314e255ca03" => :high_sierra

@@ -7,7 +7,7 @@ class OsgeoPyqtWebkit < Formula
   # revision 1
 
   bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    root_url "https://bottle.download.osgeo.org"
     cellar :any
     rebuild 1
     sha256 "fa93cc5ff319d9b0c237e6fd9dfb3ad75799f4583228f5ec5cc2f693a2701499" => :mojave

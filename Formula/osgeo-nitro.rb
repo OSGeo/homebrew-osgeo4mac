@@ -10,7 +10,7 @@ class OsgeoNitro < Formula
   head "https://github.com/hobu/nitro.git", :branch => "master"
 
   bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    root_url "https://bottle.download.osgeo.org"
     cellar :any
     sha256 "2cfb9d67e88078462f73c812e7bdf66ea02d20349b6fd2ebf2af132a7346a60c" => :mojave
     sha256 "2cfb9d67e88078462f73c812e7bdf66ea02d20349b6fd2ebf2af132a7346a60c" => :high_sierra

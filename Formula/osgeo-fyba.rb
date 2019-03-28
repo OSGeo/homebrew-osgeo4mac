@@ -9,7 +9,7 @@ class OsgeoFyba < Formula
   head "https://github.com/kartverket/fyba.git", :branch => "master"
 
   bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    root_url "https://bottle.download.osgeo.org"
     cellar :any
     sha256 "9966047d61d968941f24082a9bd7a9bcef59bd3df81bc864a35fd44287991909" => :mojave
     sha256 "9966047d61d968941f24082a9bd7a9bcef59bd3df81bc864a35fd44287991909" => :high_sierra

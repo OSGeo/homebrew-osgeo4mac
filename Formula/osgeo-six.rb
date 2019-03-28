@@ -9,7 +9,7 @@ class OsgeoSix < Formula
   head "https://github.com/benjaminp/six.git", :branch => "master"
 
   bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    root_url "https://bottle.download.osgeo.org"
     cellar :any_skip_relocation
     rebuild 1
     sha256 "17b4f5e821265710f5e48c3cca862b9838ba6fb56b432dd0759b78d15a5f8e85" => :mojave

@@ -10,7 +10,7 @@ class OsgeoLastools < Formula
   head "https://github.com/LAStools/LAStools.git", :branch => "master"
 
   bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    root_url "https://bottle.download.osgeo.org"
     cellar :any_skip_relocation
     sha256 "0ad219b497728971efaabaaf66f1ab442172caa4754debac65ca5e75b13e0f58" => :mojave
     sha256 "0ad219b497728971efaabaaf66f1ab442172caa4754debac65ca5e75b13e0f58" => :high_sierra

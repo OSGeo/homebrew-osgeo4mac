@@ -9,7 +9,7 @@ class OsgeoQtMysql < Formula
   head "https://code.qt.io/qt/qt5.git", :branch => "5.12", :shallow => false
 
   bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    root_url "https://bottle.download.osgeo.org"
     cellar :any
     rebuild 1
     sha256 "db16e512f400de27dc396fc2a1ef8301df74bcc3f7ca1399e663e0b9ef6f7b14" => :mojave

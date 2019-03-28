@@ -35,7 +35,7 @@ class OsgeoOpenscenegraph < Formula
   head "https://github.com/openscenegraph/OpenSceneGraph.git", :branch => "master"
 
   bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    root_url "https://bottle.download.osgeo.org"
     sha256 "715dc3aae4dda981366600d27b81944b08f143f83c1de506ac94b0726e120fc8" => :mojave
     sha256 "715dc3aae4dda981366600d27b81944b08f143f83c1de506ac94b0726e120fc8" => :high_sierra
     sha256 "f5efec2d660144cbf6eaa9f8eec458290b2070e370da529f88d4e7eef6ade87b" => :sierra

@@ -5,7 +5,7 @@ class OsgeoPoints2grid < Formula
   sha256 "6e2f2d3bbfd6f0f5c2d0c7d263cbd5453745a6fbe3113a3a2a630a997f4a1807"
 
   bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    root_url "https://bottle.download.osgeo.org"
     cellar :any
     sha256 "40896708527e509a19c3c5d7d72b450f072ffac16d065ba9629498aa68225646" => :mojave
     sha256 "40896708527e509a19c3c5d7d72b450f072ffac16d065ba9629498aa68225646" => :high_sierra

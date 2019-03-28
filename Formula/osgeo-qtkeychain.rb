@@ -9,7 +9,7 @@ class OsgeoQtkeychain < Formula
   head "https://github.com/frankosterfeld/qtkeychain.git", :using => :git
 
   bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    root_url "https://bottle.download.osgeo.org"
     cellar :any
     sha256 "7b17b3e09a5bc5f3ae4e1d3351f3d4b4986441b26d27077351f175053ae7bb41" => :mojave
     sha256 "7b17b3e09a5bc5f3ae4e1d3351f3d4b4986441b26d27077351f175053ae7bb41" => :high_sierra
