@@ -21,7 +21,8 @@
 mkdir /tmp/bottles
 
 pushd /tmp/bottles
-  BOTTLE_ROOT=https://dl.bintray.com/homebrew-osgeo/osgeo-bottles
+  # BOTTLE_ROOT=https://dl.bintray.com/homebrew-osgeo/osgeo-bottles
+  BOTTLE_ROOT=http://bottle.download.osgeo.org/
   for f in ${CHANGED_FORMULAE};do
     echo "Bottling changed formula ${f}..."
     brew bottle --verbose --json --root-url=${BOTTLE_ROOT} osgeo/osgeo4mac/${f}
