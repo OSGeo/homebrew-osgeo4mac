@@ -4,7 +4,7 @@ class OsgeoOgdi < Formula
   url "https://github.com/libogdi/ogdi/archive/ogdi_4_0_0.tar.gz"
   sha256 "d0f1a9a7127e296d6e8e064d94b5a81bac91b5d4914bb7e5abec51cb0609cac5"
 
-  revision 1
+  revision 2
 
   head "https://github.com/libogdi/ogdi.git", :branch => "master"
 
@@ -16,10 +16,9 @@ class OsgeoOgdi < Formula
     sha256 "197024d1de44a50dc7dfceec15833d54179618147a92c7fae2991e07d7948b4e" => :sierra
   end
 
-  # depends on "autoconf" => :build
-  # depends on "automake" => :build
-  # depends on "libtool" => :build
-
+  # depends_on "autoconf" => :build
+  # depends_on "automake" => :build
+  # depends_on "libtool" => :build
   depends_on "osgeo-proj"
   depends_on "zlib"
   depends_on "expat"
@@ -44,9 +43,10 @@ class OsgeoOgdi < Formula
 
     args = %W[
       --prefix=#{prefix}
-      --with-proj=#{Formula["proj"].opt_prefix}
+      --with-proj=#{Formula["osgeo-proj"].opt_prefix}
       --with-zlib=#{Formula["zlib"].opt_prefix}
       --with-expat=#{Formula["expat"].opt_prefix}
+      --with-zlib=#{Formula["zlib"].opt_prefix}
     ]
 
     # Reset ARCHFLAGS to match how we build.
