@@ -9,11 +9,12 @@ class OsgeoGdalSosi < Formula
   head "https://github.com/OSGeo/gdal.git", :branch => "master"
 
   bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    root_url "https://bottle.download.osgeo.org"
     cellar :any
-    sha256 "96cc827c27bd4dcb48aa076fa9498115b2fc075e098246fc9f8e94d4faf61fde" => :mojave
-    sha256 "96cc827c27bd4dcb48aa076fa9498115b2fc075e098246fc9f8e94d4faf61fde" => :high_sierra
-    sha256 "e8b834676e81463bb60023e738b7484bed1d6be32e49ba0b7036aa565e6c356c" => :sierra
+    rebuild 1
+    sha256 "9cdd1377e7b012cf3ddca96bab52b9304c6e4025ccfa69d53faa7290e4f85356" => :mojave
+    sha256 "9cdd1377e7b012cf3ddca96bab52b9304c6e4025ccfa69d53faa7290e4f85356" => :high_sierra
+    sha256 "b213645a5f4e1f1cb898ea40e3203331658c29d45568f1dce1f59024825dd4d9" => :sierra
   end
 
   depends_on "osgeo-fyba"
