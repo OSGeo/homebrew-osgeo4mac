@@ -24,7 +24,7 @@ class OsgeoGdal < Formula
   url "https://github.com/OSGeo/gdal/archive/v2.4.1.tar.gz"
   sha256 "17f94c0dfbecab2fc2433428766860de3c89c3fba57f5c9aa77749c1824c02aa"
 
-  # revision 1
+  revision 1
 
   head do
     url "https://github.com/OSGeo/gdal.git", :branch => "master"
@@ -39,11 +39,11 @@ class OsgeoGdal < Formula
     sha256 "fd316043261567dccd72fe994af8b9c08945ca21c8a284a0298be1358e60cd00" => :sierra
   end
 
-  # keg_only "libspatialite is already provided by homebrew/core"
+  # keg_only "gdal is already provided by homebrew/core"
   # we will verify that other versions are not linked
   depends_on Unlinked
 
-  option "with-postgresql10", "Build with PostgreSQL 10 client"
+  option "with-pg10", "Build with PostgreSQL 10 client"
 
   depends_on "pkg-config"
   depends_on "libiconv"
@@ -98,7 +98,7 @@ class OsgeoGdal < Formula
 
   # depends_on "charls" # cask
 
-  if build.with?("postgresql10")
+  if build.with?("pg10")
     depends_on "osgeo-postgresql@10"
   else
     depends_on "osgeo-postgresql"
@@ -302,8 +302,8 @@ class OsgeoGdal < Formula
 
       args = configure_args
 
-      if build.with?("postgresql10")
-        args << "--with-pg=#{Formula["postgresql@10"].opt_bin}/pg_config"
+      if build.with?("pg10")
+        args << "--with-pg=#{Formula["osgeo-postgresql@10"].opt_bin}/pg_config"
       else
         args << "--with-pg=#{Formula["osgeo-postgresql"].opt_bin}/pg_config"
       end
