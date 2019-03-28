@@ -15,7 +15,7 @@ class OsgeoGdalMdb < Formula
   depends_on :java
   depends_on "osgeo-gdal"
   depends_on "libtiff"
-  depends_on "libgeotiff"
+  depends_on "osgeo-libgeotiff"
 
   # various deps needed for configuring
   depends_on "json-c"

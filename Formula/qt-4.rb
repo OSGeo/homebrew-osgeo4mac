@@ -30,7 +30,7 @@ class Qt4 < Formula
   depends_on "openssl"
   depends_on "dbus" => :optional
   depends_on "mysql" => :optional
-  depends_on "postgresql" => :optional
+  depends_on "osgeo-postgresql" => :optional
 
   # Qt4 is dead upstream. We backported a build fix for 10.11 but do not
   # intend to keep rescuing it forever, including for macOS 10.12. Homebrew will

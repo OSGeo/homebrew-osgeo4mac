@@ -62,7 +62,7 @@ class OsgeoPostgisAT24 < Formula
   depends_on "libxml2"
   depends_on "libxslt"
   depends_on "pcre"
-  depends_on "proj"
+  depends_on "osgeo-proj"
   depends_on "sfcgal" # for advanced 2D/3D functions
   depends_on "protobuf-c" #  Geobuf and Mapbox Vector Tile support
   depends_on "osgeo-gdal" # for GeoJSON and raster handling

@@ -24,14 +24,14 @@ class OsgeoMapnik < Formula
   depends_on "jpeg"
   depends_on "libpng"
   depends_on "libtiff"
-  depends_on "postgresql"
-  depends_on "proj"
+  depends_on "osgeo-postgresql"
+  depends_on "osgeo-proj"
   depends_on "webp"
   depends_on "libjpeg-turbo"
   depends_on "libxml2"
   depends_on "python"
 
-  depends_on "postgis2"
+  depends_on "osgeo-postgis"
   depends_on "curl"
   depends_on "libtool"
   depends_on "libxslt"
@@ -55,9 +55,9 @@ class OsgeoMapnik < Formula
   depends_on "json-c"
 
   if build.with?("postgresql10")
-    depends_on "postgresql@10"
+    depends_on "osgeo-postgresql@10"
   else
-    depends_on "postgresql"
+    depends_on "osgeo-postgresql"
   end
 
   resource "Pillow" do

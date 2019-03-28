@@ -24,7 +24,7 @@ class OsgeoVtk < Formula
   depends_on "jpeg"
   depends_on "libpng"
   depends_on "libtiff"
-  depends_on "netcdf"
+  depends_on "osgeo-netcdf"
   depends_on "python"
   depends_on "qt"
 
@@ -50,7 +50,7 @@ class OsgeoVtk < Formula
   depends_on "pugixml"
   depends_on "ffmpeg2theora"
   depends_on "zlib"
-  depends_on "proj"
+  depends_on "osgeo-proj"
   depends_on "sqlite"
   depends_on "graphviz"
 
@@ -68,7 +68,7 @@ class OsgeoVtk < Formula
   # depends_on "mysql"
   depends_on "mysql-client"
   depends_on "openslide"
-  depends_on "postgresql"
+  depends_on "osgeo-postgresql"
   depends_on "tbb"
   depends_on "inetutils"
 

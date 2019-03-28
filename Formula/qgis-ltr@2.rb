@@ -59,11 +59,11 @@ class QgisLtrAT2 < Formula
   depends_on "gsl"
   depends_on "sqlite" # keg_only
   depends_on "expat" # keg_only
-  depends_on "proj"
+  depends_on "osgeo-proj"
   depends_on "spatialindex"
   depends_on "fcgi" if build.with? "server"
   # use newer postgresql client than Apple's, also needed by `psycopg2`
-  depends_on "postgresql" => :recommended
+  depends_on "osgeo-postgresql" => :recommended
 
   # core providers
   if build.with? "gdal-1"
@@ -77,7 +77,7 @@ class QgisLtrAT2 < Formula
 
   # core plugins (c++ and python)
   if build.with?("grass") || (HOMEBREW_PREFIX/"opt/grass7").exist?
-    depends_on "grass7"
+    depends_on "osgeo-grass"
     depends_on "gettext"
   end
 
@@ -98,7 +98,7 @@ class QgisLtrAT2 < Formula
   depends_on "grass6" => :optional
   depends_on "orfeo5" => :optional
   depends_on "r" => :optional
-  depends_on "saga-gis-lts" => :optional
+  depends_on "osgeo-saga-lts" => :optional
   # TODO: LASTools straight build (2 reporting tools), or via `wine` (10 tools)
   # TODO: Fusion from USFS (via `wine`?)
 

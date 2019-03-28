@@ -27,9 +27,9 @@ class Orfeo5 < Formula
 
   # required
   depends_on "boost"
-  depends_on "vtk"
+  depends_on "osgeo-vtk"
   depends_on "brewsci/science/insighttoolkit"
-  depends_on "libgeotiff"
+  depends_on "osgeo-libgeotiff"
   depends_on "libpng"
   depends_on "pcre"
   depends_on "openssl"

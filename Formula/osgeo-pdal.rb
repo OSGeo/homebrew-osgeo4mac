@@ -23,7 +23,7 @@ class OsgeoPdal < Formula
   depends_on "python"
   depends_on "numpy"
   depends_on "hdf5"
-  depends_on "libgeotiff"
+  depends_on "osgeo-libgeotiff"
   depends_on "jsoncpp"
   depends_on "sqlite"
   depends_on "osgeo-gdal"
@@ -45,9 +45,9 @@ class OsgeoPdal < Formula
   depends_on "glew"
 
   if build.with?("postgresql10")
-    depends_on "postgresql@10"
+    depends_on "osgeo-postgresql@10"
   else
-    depends_on "postgresql"
+    depends_on "osgeo-postgresql"
   end
 
   # -- The following features have been disabled:

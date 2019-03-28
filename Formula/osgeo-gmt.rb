@@ -19,7 +19,7 @@ class OsgeoGmt < Formula
   depends_on "cmake" => :build
   depends_on "fftw"
   depends_on "hdf5"
-  depends_on "netcdf"
+  depends_on "osgeo-netcdf"
   depends_on "pcre"
   depends_on "osgeo-gdal"
 

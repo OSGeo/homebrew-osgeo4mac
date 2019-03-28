@@ -69,7 +69,7 @@ class OsgeoPostgis < Formula
   if build.with?("pg10")
     depends_on "osgeo-postgresql@10"
   else
-    depends_on "postgresql"
+    depends_on "osgeo-postgresql"
   end
 
   depends_on "gtk+" # for gui

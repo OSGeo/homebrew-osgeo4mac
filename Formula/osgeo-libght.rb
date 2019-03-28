@@ -17,7 +17,7 @@ class OsgeoLibght < Formula
   end
 
   depends_on "cmake" => :build
-  depends_on "proj"
+  depends_on "osgeo-proj"
   depends_on "osgeo-liblas"
   depends_on "cunit"
 
