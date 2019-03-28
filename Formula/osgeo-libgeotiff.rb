@@ -24,11 +24,10 @@ class OsgeoLibgeotiff < Formula
   sha256 "96fb426877a99ecb66a73c0b912f42995bc1275c1ae687bbaab9ad97c4e8bdf2"
 
   bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    rebuild 1
-    sha256 "35738f006f130d0ab18a7a44ad3a6d56ff49f9ebd9b3d3243fd07a79ebf00284" => :mojave
-    sha256 "35738f006f130d0ab18a7a44ad3a6d56ff49f9ebd9b3d3243fd07a79ebf00284" => :high_sierra
-    sha256 "3ff9ac6b9b6924ab958544741f8d037bdb01b55b166f02bf718b5b874fbbda55" => :sierra
+    root_url "https://bottle.download.osgeo.org/"
+    sha256 "3a8f017587d8481283cafd18104c54a29ec9cbb8cebf4070d49c3c0c2839f8f5" => :mojave
+    sha256 "3a8f017587d8481283cafd18104c54a29ec9cbb8cebf4070d49c3c0c2839f8f5" => :high_sierra
+    sha256 "ee627c5a30d9f85b122cdee2518d6b27fbe6edc403c4f65aa3a58af65188b03d" => :sierra
   end
 
   revision 2
