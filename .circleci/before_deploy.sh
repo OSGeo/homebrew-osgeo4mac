@@ -81,6 +81,7 @@ if [ "$CIRCLE_BRANCH" != "master" ]; then
   echo "Pull rebase..."
   # git checkout $CIRCLE_BRANCH
   # git merge master
+  # git pull <remote> <branch>
   # git pull --rebase
 
   # Now that we're all set up, we can push.
@@ -96,6 +97,7 @@ if [ "$CIRCLE_BRANCH" != "master" ]; then
   # use ssh
   if [ "$CIRCLE_USERNAME" == "fjperini" ]; then
     # scp -P${SSH_PORT} -r . ${SSH_USER}@${SSH_HOST}
+    brew install https://raw.githubusercontent.com/hudochenkov/homebrew-sshpass/master/sshpass.rb
     sshpass -e scp -P 50023 -o stricthostkeychecking=no -r ./*.tar.gz fjperini@bottle.download.osgeo.org:/osgeo/bottle
   fi
 fi
