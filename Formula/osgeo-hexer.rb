@@ -4,7 +4,7 @@ class OsgeoHexer < Formula
   url "https://github.com/hobu/hexer/archive/1.4.0.tar.gz"
   sha256 "886134fcdd75da2c50aa48624de19f5ae09231d5290812ec05f09f50319242cb"
 
-  revision 1
+  revision 2
 
   head "https://github.com/hobu/hexer.git", :branch => "master"
 
