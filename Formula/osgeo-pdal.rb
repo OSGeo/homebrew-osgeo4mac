@@ -12,11 +12,11 @@ class OsgeoPdal < Formula
     sha256 "641d47c8a0b5bc66251ef076c75cfa20fa3e97c49e3887005ad1a484cea6ff01" => :sierra
   end
 
-  # revision 1
+  revision 1
 
   head "https://github.com/PDAL/PDAL.git", :branch => "master"
 
-  option "with-postgresql10", "Build with PostgreSQL 10 client"
+  option "with-pg10", "Build with PostgreSQL 10 client"
 
   depends_on "cmake" => :build
   depends_on "pkg-config" => :build
@@ -44,7 +44,7 @@ class OsgeoPdal < Formula
   depends_on "qhull"
   depends_on "glew"
 
-  if build.with?("postgresql10")
+  if build.with?("pg10")
     depends_on "osgeo-postgresql@10"
   else
     depends_on "osgeo-postgresql"
@@ -91,14 +91,14 @@ class OsgeoPdal < Formula
     args << "-DPYTHON_INCLUDE_DIR=#{Formula["python"].opt_frameworks}/Python.framework/Versions/#{py_ver}/Headers"
     args << "-DPYTHON_LIBRARY=#{Formula["python"].opt_frameworks}/Python.framework/Versions/#{py_ver}/lib/libpython#{py_ver}.dylib"
 
-    if build.with?("postgresql10")
-      args << "-DPG_CONFIG=#{Formula["postgresql@10"].opt_bin}/pg_config"
-      args << "-DPOSTGRESQL_INCLUDE_DIR=#{Formula["postgresql@10"].opt_include}"
-      args << "-DPOSTGRESQL_LIBRARIES=#{Formula["postgresql@10"].opt_lib}/libpq.dylib"
+    if build.with?("pg10")
+      args << "-DPG_CONFIG=#{Formula["osgeo-postgresql@10"].opt_bin}/pg_config"
+      args << "-DPOSTGRESQL_INCLUDE_DIR=#{Formula["osgeo-postgresql@10"].opt_include}"
+      args << "-DPOSTGRESQL_LIBRARIES=#{Formula["osgeo-postgresql@10"].opt_lib}/libpq.dylib"
     else
-      args << "-DPG_CONFIG=#{Formula["postgresql"].opt_bin}/pg_config"
-      args << "-DPOSTGRESQL_INCLUDE_DIR=#{Formula["postgresql"].opt_include}"
-      args << "-DPOSTGRESQL_LIBRARIES=#{Formula["postgresql"].opt_lib}/libpq.dylib"
+      args << "-DPG_CONFIG=#{Formula["osgeo-postgresql"].opt_bin}/pg_config"
+      args << "-DPOSTGRESQL_INCLUDE_DIR=#{Formula["osgeo-postgresql"].opt_include}"
+      args << "-DPOSTGRESQL_LIBRARIES=#{Formula["osgeo-postgresql"].opt_lib}/libpq.dylib"
     end
 
     system "cmake", ".", *args
