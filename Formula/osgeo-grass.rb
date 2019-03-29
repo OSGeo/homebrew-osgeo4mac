@@ -4,7 +4,7 @@ class OsgeoGrass < Formula
   desc "Geographic Resources Analysis Support System"
   homepage "https://grass.osgeo.org/"
 
-  revision 2
+  revision 3
 
   # svn: E230001: Server SSL certificate verification failed: issuer is not trusted
   # head "https://svn.osgeo.org/grass/grass/trunk", :using => :svn
@@ -247,8 +247,8 @@ class OsgeoGrass < Formula
   # "error: no member named 'signbit' in the global namespace"
 
   # resource "matplotlib" do
-  #   url "https://github.com/matplotlib/matplotlib/archive/v2.2.3.tar.gz"
-  #   sha256 "da5b804222864a8e854ed68f16dcbc8b2fa096537d84f879cc8289db368735c8"
+  #   url "https://github.com/matplotlib/matplotlib/archive/v2.2.4.tar.gz"
+  #   sha256 "601a3bf5c1b08710edbe00347d97619f43f2d1edcd7aa94119ff837e6327c7f7"
   # end
 
   def install
@@ -589,6 +589,19 @@ class OsgeoGrass < Formula
 end
 
 __END__
+
+--- a/configure
++++ b/configure
+@@ -6894,7 +6894,7 @@
+   ac_save_cflags="$CFLAGS"
+   ac_save_cppflags="$CPPFLAGS"
+   LIBS="$LIBS $LIBLAS_LIBS"
+-  CFLAGS="$CFLAGS $LIBLAS_CFLAGS"
++  CFLAGS="$CFLAGS $LIBLAS_CFLAGS $LIBLAS_INC"
+   CPPFLAGS="$CPPFLAGS $LIBLAS_INC"
+   for ac_hdr in liblas/capi/liblas.h
+ do
+
 
 --- a/include/Make/Install.make
 +++ b/include/Make/Install.make
