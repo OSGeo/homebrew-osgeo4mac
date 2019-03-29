@@ -40,7 +40,7 @@ for f in ${CHANGED_FORMULAE};do
     brew reinstall gettext
     brew unlink gettext && brew link --force gettext
 
-    # brew unlink osgeo-liblas && brew link osgeo-liblas --force
+    brew unlink osgeo-liblas && brew link osgeo-liblas --force
   fi
 
   # if [[ $(brew list --versions ${f}) ]]; then
