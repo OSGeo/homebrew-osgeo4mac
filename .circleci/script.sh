@@ -39,6 +39,8 @@ for f in ${CHANGED_FORMULAE};do
   if [ "$(echo ${deps} | grep -c 'osgeo-grass')" != "0" ];then
     brew reinstall gettext
     brew unlink gettext && brew link --force gettext
+
+    # brew unlink osgeo-liblas && brew link osgeo-liblas --force
   fi
 
   # if [[ $(brew list --versions ${f}) ]]; then
