@@ -11,10 +11,10 @@ class OsgeoLiblas < Formula
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
-    rebuild 1
-    sha256 "c01b9a65730addf6d4abe0a9925135294652dcc7deb7e12889d2df927b9951ba" => :mojave
-    sha256 "c01b9a65730addf6d4abe0a9925135294652dcc7deb7e12889d2df927b9951ba" => :high_sierra
-    sha256 "5aaacb15970472e8c9686a933086e28e091f6a48a5ce567dea21975cf7a4acdb" => :sierra
+    rebuild 2
+    sha256 "ac7908df18e5bfe57eba5006187c9c092459f2bfdd1377bfd5500fdfa7556ae7" => :mojave
+    sha256 "ac7908df18e5bfe57eba5006187c9c092459f2bfdd1377bfd5500fdfa7556ae7" => :high_sierra
+    sha256 "a22080e7d77792b58cf56dbad03dc9bbc003017ed25dee1dcb7ad9d82d737fca" => :sierra
   end
 
   keg_only "other version built against older gdal is in main tap"
