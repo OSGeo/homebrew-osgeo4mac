@@ -11,9 +11,10 @@ class OsgeoHexer < Formula
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any
-    sha256 "e3f489d850e4a76dd2f2a3a6625e35383a81e0a99b94039bd13815bef04256d7" => :mojave
-    sha256 "e3f489d850e4a76dd2f2a3a6625e35383a81e0a99b94039bd13815bef04256d7" => :high_sierra
-    sha256 "a7c8948e7b24a21afd3fe33aa46249a77a7d049cf63e745e18a3ccd0dca23190" => :sierra
+    rebuild 1
+    sha256 "f0e47399758501d15c3fd209af2045671f02b2330d698aa99b350dca16c17bba" => :mojave
+    sha256 "f0e47399758501d15c3fd209af2045671f02b2330d698aa99b350dca16c17bba" => :high_sierra
+    sha256 "c77406eac551805e4621162bbcf23e96739778470c04fa9a41148e5d685e2445" => :sierra
   end
 
   # Add cmath and limits headers to utils
