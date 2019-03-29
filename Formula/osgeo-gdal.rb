@@ -1,4 +1,3 @@
-
 class Unlinked < Requirement
   fatal true
 
@@ -44,6 +43,7 @@ class OsgeoGdal < Formula
   depends_on Unlinked
 
   option "with-pg10", "Build with PostgreSQL 10 client"
+  deprecated_option "with-postgresql10" => "with-pg10"
 
   depends_on "pkg-config"
   depends_on "libiconv"
