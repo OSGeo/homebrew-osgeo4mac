@@ -38,7 +38,7 @@ class OsgeoPostgis < Formula
     sha256 "efe0c63458888d86a70bc0d27713eaceeb4c239e973c428dd140b4384defdc1e" => :sierra
   end
 
-  revision 4
+  revision 5
 
   head "https://github.com/postgis/postgis.git", :branch => "master"
 
@@ -46,7 +46,7 @@ class OsgeoPostgis < Formula
   option "with-api-docs", "Generate developer API documentation (long process)"
   option "with-pg10", "Build with PostgreSQL 10 client"
 
-  # keg_only
+  # keg_only "postgis is already provided by homebrew/core"
   # we will verify that other versions are not linked
   depends_on Unlinked
 
@@ -66,7 +66,7 @@ class OsgeoPostgis < Formula
   depends_on "protobuf-c" #  Geobuf and Mapbox Vector Tile support
   depends_on "osgeo-gdal" # for GeoJSON and raster handling
 
-  if build.with?("pg10")
+  if build.with? "pg10"
     depends_on "osgeo-postgresql@10"
   else
     depends_on "osgeo-postgresql"
@@ -141,7 +141,7 @@ class OsgeoPostgis < Formula
     if build.with?("pg10")
       args << "--with-pgconfig=#{Formula["osgeo-postgresql@10"].opt_bin}/pg_config"
     else
-      args << "--with-pgconfig=#{Formula["postgresql"].opt_bin}/pg_config"
+      args << "--with-pgconfig=#{Formula["osgeo-postgresql"].opt_bin}/pg_config"
     end
 
     system "./autogen.sh"
