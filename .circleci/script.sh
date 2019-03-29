@@ -36,9 +36,11 @@ for f in ${CHANGED_FORMULAE};do
 
   # fix error: 'libintl.h' file not found
   # build qgis with grass
-  if [ "$(echo ${deps} | grep -c 'osgeo-grass')" != "0" ];then
+  if [ "$(echo ${deps} | grep -c 'osgeo-grass')" != "0" ] || [ "${f}" == "osgeo-grass" ];then
     brew reinstall gettext
     brew unlink gettext && brew link --force gettext
+
+    brew unlink osgeo-liblas && brew link osgeo-liblas --force
   fi
 
   # if [[ $(brew list --versions ${f}) ]]; then
