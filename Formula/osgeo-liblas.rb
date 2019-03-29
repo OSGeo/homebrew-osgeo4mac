@@ -5,7 +5,7 @@ class OsgeoLiblas < Formula
   sha256 "fa2afafb8ec7c81c4216e51de51cf845c99575e7d6efbd22ad311ca8a55ce189"
   version "1.8.1"
 
-  revision 4
+  revision 5
 
   head "https://github.com/libLAS/libLAS.git", :branch => "master"
 
@@ -53,13 +53,6 @@ class OsgeoLiblas < Formula
   #   sha256 "5590aef61a58768160051997ae9753c2ae6fc5b7da8549707dfd9a682ce439c8"
   # end
 
-  # fix for liblas-config
-  resource "liblas-config" do
-    url "https://gist.githubusercontent.com/fjperini/746634c101b0ffc8926baaf55d5cf793/raw/d6bb4a0732c215a9c62fdb795bdabcf1ae8191ac/liblas-config"
-    sha256 "e45e9d99f0ff6f8e2b045ddd46007b7c6b3c6afd3620c36994ae3b54e49b17e7"
-    version "1.8.1"
-  end
-
   def install
     ENV.cxx11
 
@@ -84,11 +77,152 @@ class OsgeoLiblas < Formula
 
       # fix for liblas-config
       # for some reason it does not build
-      bin.install resource("liblas-config")
+      # bin.install resource("liblas-config")
     end
 
     # Fix rpath value, to ensure grass7 grabs the correct dylib
     MachO::Tools.change_install_name("#{lib}/liblas_c.3.dylib", "@rpath/liblas.3.dylib", "#{opt_lib}/liblas.3.dylib")
+  end
+
+  def post_install
+    # fix liblas-conf
+    config = <<~EOS
+      #!/bin/sh
+      # prefix=#{prefix}
+      # exec_prefix=#{bin}
+      # libdir=#{lib}
+
+      INCLUDES="-I#{prefix}/include "
+      LIBS="-L#{lib} -llas -llas_c -L#{HOMEBREW_PREFIX}/lib #{HOMEBREW_PREFIX}/lib/libboost_program_options-mt.dylib #{HOMEBREW_PREFIX}/lib/libboost_thread-mt.dylib"
+
+      GDAL_INCLUDE="#{Formula['osgeo-gdal'].opt_include}"
+      if test -n "$GDAL_INCLUDE" ; then
+          INCLUDES="$INCLUDES -I$GDAL_INCLUDE"
+      fi
+      GDAL_LIBRARY="#{Formula['osgeo-gdal'].opt_lib}/libgdal.dylib"
+      if test -n "$GDAL_LIBRARY" ; then
+          LIBS="$LIBS $GDAL_LIBRARY"
+      fi
+
+      GEOTIFF_INCLUDE="#{Formula['osgeo-libgeotiff'].opt_include}"
+      if test -n "$GEOTIFF_INCLUDE" ; then
+          INCLUDES="$INCLUDES -I$GEOTIFF_INCLUDE"
+      fi
+      GEOTIFF_LIBRARY="#{Formula['osgeo-libgeotiff'].opt_lib}/libgeotiff.dylib"
+      if test -n "$GEOTIFF_LIBRARY" ; then
+          LIBS="$LIBS $GEOTIFF_LIBRARY"
+      fi
+
+      ORACLE_INCLUDE=""
+      if test -n "$ORACLE_INCLUDE" ; then
+          INCLUDES="$INCLUDES -I$ORACLE_INCLUDE"
+      fi
+      ORACLE_OCI_LIBRARY=""
+      if test -n "$ORACLE_OCI_LIBRARY" ; then
+          LIBS="$LIBS $ORACLE_OCI_LIBRARY   "
+      fi
+
+      TIFF_INCLUDE="#{Formula['libtiff'].opt_include}"
+      if test -n "$TIFF_INCLUDE" ; then
+          INCLUDES="$INCLUDES -I$TIFF_INCLUDE"
+      fi
+      TIFF_LIBRARY="#{Formula['libtiff'].opt_lib}/libtiff.dylib"
+      if test -n "$TIFF_LIBRARY" ; then
+          LIBS="$LIBS $TIFF_LIBRARY"
+      fi
+
+      LIBXML2_INCLUDE_DIR="#{Formula['libxml2'].opt_include}"
+      if test -n "$LIBXML2_INCLUDE_DIR" ; then
+          INCLUDES="$INCLUDES -I$LIBXML2_INCLUDE_DIR"
+      fi
+      LIBXML2_LIBRARIES="#{Formula['libxml2'].opt_lib}/libxml2.dylib"
+      if test -n "$LIBXML2_LIBRARIES" ; then
+          LIBS="$LIBS $LIBXML2_LIBRARIES"
+      fi
+
+      LASZIP_INCLUDE_DIR="#{Formula['osgeo-laszip@2'].opt_include}"
+      if test -n "$LASZIP_INCLUDE_DIR" ; then
+          INCLUDES="$INCLUDES -I$LASZIP_INCLUDE_DIR"
+      fi
+      LASZIP_LIBRARY="#{Formula['osgeo-laszip@2'].opt_lib}/liblaszip.dylib"
+      if test -n "$LASZIP_LIBRARY" ; then
+          LIBS="$LIBS $LASZIP_LIBRARY"
+      fi
+
+
+      usage()
+      {
+        cat <<EOF
+      Usage: liblas-config [OPTIONS]
+      Options:
+        [--libs]
+        [--cflags]
+        [--cxxflags]
+        [--defines]
+        [--includes]
+        [--version]
+      EOF
+        exit $1
+      }
+
+      if test $# -eq 0; then
+        usage 1 1>&2
+      fi
+
+      case $1 in
+        --libs)
+          echo $LIBS
+          ;;
+
+        --prefix)
+          echo ${prefix}
+           ;;
+
+        --ldflags)
+          echo -L${libdir}
+          ;;
+
+        --defines)
+          echo  -DHAVE_GDAL=1 -DHAVE_LIBGEOTIFF=1
+          ;;
+
+        --includes)
+          echo ${INCLUDES}
+          ;;
+
+        --cflags)
+          echo ${INCLUDES}/liblas
+          ;;
+
+        --cxxflags)
+          echo   -Wextra -Wall -Wno-unused-parameter -Wno-unused-variable -Wpointer-arith -Wcast-align -Wcast-qual -Wfloat-equal -Wredundant-decls -Wno-long-long
+          ;;
+
+        --version)
+          echo 1.8.1
+          ;;
+
+        *)
+          usage 1 1>&2
+          ;;
+
+      esac
+    EOS
+
+    (bin/"liblas-config").write config
+
+    chmod("+x", "#{bin}/liblas-config")
+
+    # fix liblas.pc
+    rm "#{lib}/pkgconfig/liblas.pc"
+    File.open("#{lib}/pkgconfig/liblas.pc", "w") { |file|
+      file << "Name: libLAS\n"
+      file << "Description: Library (C/C++) and tools for the LAS LiDAR format\n"
+      file << "Requires: geotiff\n"
+      file << "Version: #{version}\n"
+      file << "Libs: -L#{lib} -llas -llas_c\n"
+      file << "Cflags: -I#{include}/liblas"
+    }
   end
 
   test do
