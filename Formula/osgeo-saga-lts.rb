@@ -6,7 +6,7 @@ class OsgeoSagaLts < Formula
       :revision => "b6f474f8af4af7f0ff82548cc6f88c53547d91f5"
   version "2.3.2"
 
-  revision 3
+  revision 2
 
   head "https://git.code.sf.net/p/saga-gis/code.git", :branch => "release-2-3-lts"
 
@@ -102,6 +102,12 @@ class OsgeoSagaLts < Formula
 
     ENV.append "PYTHON_VERSION", "2.7"
     ENV.append "PYTHON", "#{Formula["python@2"].opt_bin}/python2"
+
+    # support for PROJ 6
+    # ENV.append_to_cflags "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"
+    # saga lts does not support proj 6
+    # https://github.com/OSGeo/proj.4/wiki/proj.h-adoption-status
+    # https://sourceforge.net/p/saga-gis/bugs/271/
 
     cd "saga-gis"
 
