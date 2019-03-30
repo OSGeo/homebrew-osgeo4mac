@@ -36,9 +36,10 @@ class OsgeoOpenscenegraph < Formula
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
-    sha256 "715dc3aae4dda981366600d27b81944b08f143f83c1de506ac94b0726e120fc8" => :mojave
-    sha256 "715dc3aae4dda981366600d27b81944b08f143f83c1de506ac94b0726e120fc8" => :high_sierra
-    sha256 "f5efec2d660144cbf6eaa9f8eec458290b2070e370da529f88d4e7eef6ade87b" => :sierra
+    rebuild 1
+    sha256 "f33aa96bede704f4bf4cd4a2d022347c3dab74ef8af50e6b5f4aae856dce1b51" => :mojave
+    sha256 "f33aa96bede704f4bf4cd4a2d022347c3dab74ef8af50e6b5f4aae856dce1b51" => :high_sierra
+    sha256 "5b0f08e87d73279c05bf37bb32f7f28a0f0d9caa9497e35cc05819e08c1adc61" => :sierra
   end
 
   # keg_only
