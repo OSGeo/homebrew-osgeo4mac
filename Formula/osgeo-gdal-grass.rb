@@ -1,10 +1,10 @@
 class OsgeoGdalGrass < Formula
   desc "GDAL/OGR 2.x plugin for GRASS 7"
   homepage "https://www.gdal.org"
-  url "https://download.osgeo.org/gdal/2.4.0/gdal-grass-2.4.0.tar.gz"
-  sha256 "7f5c7f03504449524da5e6bb0042a4b4338d5e77e8bf70e694f59744801d695e"
+  url "https://download.osgeo.org/gdal/2.4.1/gdal-grass-2.4.1.tar.gz"
+  sha256 "07c30ca725ddf0b9b596d98e744523d86b9f9e8a208ee1f6d4130d1549672157"
 
-  revision 1
+  # revision 1
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
@@ -41,7 +41,7 @@ class OsgeoGdalGrass < Formula
                           "--disable-debug",
                           "--disable-dependency-tracking",
                           "--with-gdal=#{gdal.opt_bin}/gdal-config",
-                          "--with-grass=#{grass.prefix}/grass-#{grass.version}",
+                          "--with-grass=#{grass.prefix}/grass-base",
                           "--with-autoload=#{gdal_plugins}"
 
     # inreplace "Makefile", "mkdir", "mkdir -p"
