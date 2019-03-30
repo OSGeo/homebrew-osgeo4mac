@@ -264,8 +264,8 @@ class OsgeoMapnik < Formula
 
     # rm_r ".sconf_temp"
 
-    system "./configure", *args
-    # system "./configure", 'CUSTOM_CXXFLAGS="-DU_USING_ICU_NAMESPACE=1"', *args
+    # system "./configure", *args
+    system "./configure", 'CUSTOM_CXXFLAGS="-DU_USING_ICU_NAMESPACE=1"', *args
     # ./configure CXX="clang++" JOBS=`sysctl -n hw.ncpu`
     # To use a Python interpreter that is not named python for your build,
     # do something like the following instead:
