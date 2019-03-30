@@ -8,7 +8,7 @@ class OsgeoGpkgtools < Formula
 
   head "lp:gpkgtools", :using => :bzr
 
-  depends_on 'libspatialite'
+  depends_on 'osgeo-libspatialite'
   depends_on "python@2"
 
   resource "Pillow" do
@@ -17,16 +17,16 @@ class OsgeoGpkgtools < Formula
   end
 
   def install
-    head_ext = "#{HOMEBREW_PREFIX}/Cellar/libspatialite/HEAD/lib/spatialite.dylib"
+    head_ext = "#{HOMEBREW_PREFIX}/Cellar/osgeo-libspatialite/HEAD/lib/spatialite.dylib"
     unless File.exist? head_ext
       odie <<~EOS
-        No libspatialite HEAD build or SQLite3 extension 'spatialite.dylib' exists.
-        Install libspatialite using --HEAD and --with-geopackage options'.
-        NOTE: To experiment with the HEAD build, but already have libspatialite
+        No osgeo-libspatialite HEAD build or SQLite3 extension 'spatialite.dylib' exists.
+        Install osgeo-libspatialite using --HEAD and --with-geopackage options'.
+        NOTE: To experiment with the HEAD build, but already have osgeo-libspatialite
               installed, do the following:
-                `brew upgrade libspatialite --HEAD --with-geopackage`
-                `brew list --versions libspatialite` (note non-HEAD version)
-                `brew switch libspatialite <non-HEAD version>`
+                `brew upgrade osgeo-libspatialite --HEAD --with-geopackage`
+                `brew list --versions osgeo-libspatialite` (note non-HEAD version)
+                `brew switch osgeo-libspatialite <non-HEAD version>`
       EOS
     end
 
