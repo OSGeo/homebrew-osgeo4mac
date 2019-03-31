@@ -117,7 +117,7 @@ class OsgeoOrfeo < Formula
       -DQWT_LIBRARY=#{Formula["qwt"].lib}/qwt.framework
       -DQWT_INCLUDE_DIR=#{Formula["qwt"].lib}/qwt.framework/Headers
       -DOSSIM_LIBRARY=#{Formula["osgeo-ossim"].opt_prefix}/Frameworks/ossim.framework
-      -DOSSIM_INCLUDE_DIR=#{Formula["osgeo-ossim"].include}
+      -DOSSIM_INCLUDE_DIR=#{Formula["osgeo-ossim"].opt_prefix}/Frameworks/ossim.framework/Headers
       -DOTB_USE_GSL=ON
     ]
 
@@ -135,7 +135,7 @@ class OsgeoOrfeo < Formula
     # args << "-DOTB_USE_SSE_FLAGS=ON"
 
     # Enable module 6S
-    args << "-DOTB_USE_6S=OFF"
+    # args << "-DOTB_USE_6S=ON"
 
     # Enable module Curl
     # args << "-DOTB_USE_CURL=ON"
