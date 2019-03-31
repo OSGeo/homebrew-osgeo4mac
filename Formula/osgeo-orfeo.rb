@@ -135,7 +135,7 @@ class OsgeoOrfeo < Formula
     # args << "-DOTB_USE_SSE_FLAGS=ON"
 
     # Enable module 6S
-    # args << "-DOTB_USE_6S=ON"
+    args << "-DOTB_USE_6S=OFF"
 
     # Enable module Curl
     # args << "-DOTB_USE_CURL=ON"
