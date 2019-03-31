@@ -56,5 +56,6 @@
   "pointcloud": "osgeo-pointcloud",
   "postgis2": "osgeo-postgis",
   "openscenegraph-qt5.rb": "osgeo-openscenegraph",
-  "ossim": "osgeo-ossim"
+  "ossim": "osgeo-ossim",
+  "orfeo6": "osgeo-orfeo"
 }
