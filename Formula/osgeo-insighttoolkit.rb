@@ -57,6 +57,19 @@ class OsgeoInsighttoolkit < Formula
 
     ENV.append "CXXFLAGS", "-std=c++11"
 
+    # link_misc = "-arch x86_64 -mmacosx-version-min=10.9 -isysroot #{MacOS::Xcode.prefix}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX#{MacOS.version}.sdk -lstdc++"
+    #
+    # ENV.append "LDFLAGS", "#{link_misc} -stdlib=libc++"
+    # ENV.append "CPATH", "#{MacOS::Xcode.prefix}/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1"
+
+    # Temporary fix for Xcode/CLT 9.0.x issue of missing header files
+    # See: https://github.com/OSGeo/homebrew-osgeo4mac/issues/276
+    # Work around "error: no member named 'signbit' in the global namespace"
+    if DevelopmentTools.clang_build_version >= 900
+      ENV.delete "SDKROOT"
+      ENV.delete "HOMEBREW_SDKROOT"
+    end
+
     # Warning: python modules have explicit framework links
     # These python extension modules were linked directly to a Python
     # framework binary. They should be linked with -undefined dynamic_lookup
