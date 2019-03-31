@@ -101,14 +101,6 @@ class OsgeoOrfeo < Formula
   def install
     ENV.cxx11
 
-
-    ldflags = "-L#{HOMEBREW_PREFIX}/lib -framework OpenCL -framework OpenGL"
-    link_misc = "-arch x86_64 -mmacosx-version-min=10.9 -isysroot #{MacOS::Xcode.prefix}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX#{MacOS.version}.sdk -lstdc++"
-
-    # ENV.append "CPPFLAGS", ""
-    ENV.append "LDFLAGS", "#{link_misc} #{ldflags}"
-
-
     # Module for monteverdi build
     # if build.with? "monteverdi"
     #   (buildpath/"Modules/Remote").install resource("GKSVM")
@@ -128,6 +120,8 @@ class OsgeoOrfeo < Formula
       -DOSSIM_INCLUDE_DIR=#{Formula["osgeo-ossim"].opt_prefix}/Frameworks/ossim.framework/Headers
       -DOTB_USE_GSL=ON
     ]
+
+    args << "-DWITH_OPENCL=OFF"
 
     # Simple Parallel Tiff Writer
     # args << "OTB_USE_SPTW=OFF"
