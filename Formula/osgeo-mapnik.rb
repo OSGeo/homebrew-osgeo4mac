@@ -12,7 +12,17 @@ class OsgeoMapnik < Formula
 
   revision 1
 
+  bottle do
+    root_url "https://bottle.download.osgeo.org"
+    cellar :any
+    sha256 "96b3ecb1467f2661bae9fe41621387953f4b746201b50cd047c6ebe4f14f2cc2" => :mojave
+    sha256 "96b3ecb1467f2661bae9fe41621387953f4b746201b50cd047c6ebe4f14f2cc2" => :high_sierra
+    sha256 "96b3ecb1467f2661bae9fe41621387953f4b746201b50cd047c6ebe4f14f2cc2" => :sierra
+  end
+
   head "https://github.com/mapnik/mapnik.git", :branch => "master"
+
+  option "with-pg10", "Build with PostgreSQL 10 client"
 
   depends_on "pkg-config" => :build
   depends_on "scons" => :build
@@ -24,7 +34,6 @@ class OsgeoMapnik < Formula
   depends_on "jpeg"
   depends_on "libpng"
   depends_on "libtiff"
-  depends_on "osgeo-postgresql"
   depends_on "osgeo-proj"
   depends_on "webp"
   depends_on "libjpeg-turbo"
@@ -54,7 +63,7 @@ class OsgeoMapnik < Formula
   depends_on "git"
   depends_on "json-c"
 
-  if build.with?("postgresql10")
+  if build.with?("pg10")
     depends_on "osgeo-postgresql@10"
   else
     depends_on "osgeo-postgresql"
@@ -129,6 +138,10 @@ class OsgeoMapnik < Formula
     ENV.append "CUSTOM_CXXFLAGS", "-I#{Formula["sqlite"].opt_include}"
     ENV.append "CUSTOM_LDFLAGS", "-L#{Formula["sqlite"].opt_lib} -lsqlite3"
 
+    # support for PROJ 6
+    # https://github.com/mapnik/mapnik/issues/4036
+    ENV.append_to_cflags "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"
+
     args = %W[
       CC=#{ENV.cc}
       CXX=#{ENV.cxx}
@@ -140,6 +153,8 @@ class OsgeoMapnik < Formula
 
     # http://site.icu-project.org/download/61#TOC-Migration-Issues
     # ENV.append "CXXFLAGS", "-DU_USING_ICU_NAMESPACE=1"
+    # https://github.com/mapnik/mapnik/issues/3961
+    # ENV.append "CUSTOM_CXXFLAGS", "-DU_USING_ICU_NAMESPACE=1"
 
     # mapnik compiles can take ~1.5 GB per job for some .cpp files
     # so lets be cautious by limiting to CPUS/2
@@ -216,21 +231,21 @@ class OsgeoMapnik < Formula
     args << "HB_LIBS=#{Formula["harfbuzz"].opt_lib}"
 
     args << "PROJ=TRUE"
-    args << "PROJ_INCLUDES=#{Formula["proj"].opt_include}"
-    args << "PROJ_LIBS=#{Formula["proj"].opt_lib}"
+    args << "PROJ_INCLUDES=#{Formula["osgeo-proj"].opt_include}"
+    args << "PROJ_LIBS=#{Formula["osgeo-proj"].opt_lib}"
 
     # fails if defined
     # args << "SQLITE_INCLUDES=#{Formula["sqlite"].opt_include}"
     # args << "SQLITE_LIBS=#{Formula["sqlite"].opt_lib}"
 
-    if build.with?("postgresql10")
-      args << "PG_CONFIG=#{Formula["postgresql@10"].opt_bin}/pg_config"
-      args << "PG_INCLUDES=#{Formula["postgresql@10"].opt_include}"
-      args << "PG_LIBS=#{Formula["postgresql@10"].opt_lib}"
+    if build.with?("pg10")
+      args << "PG_CONFIG=#{Formula["osgeo-postgresql@10"].opt_bin}/pg_config"
+      args << "PG_INCLUDES=#{Formula["osgeo-postgresql@10"].opt_include}"
+      args << "PG_LIBS=#{Formula["osgeo-postgresql@10"].opt_lib}"
     else
-      args << "PG_CONFIG=#{Formula["postgresql"].opt_bin}/pg_config"
-      args << "PG_INCLUDES=#{Formula["postgresql"].opt_include}"
-      args << "PG_LIBS=#{Formula["postgresql"].opt_lib}"
+      args << "PG_CONFIG=#{Formula["osgeo-postgresql"].opt_bin}/pg_config"
+      args << "PG_INCLUDES=#{Formula["osgeo-postgresql"].opt_include}"
+      args << "PG_LIBS=#{Formula["osgeo-postgresql"].opt_lib}"
     end
 
     args << "PGSQL2SQLITE=True"
@@ -258,6 +273,7 @@ class OsgeoMapnik < Formula
     # rm_r ".sconf_temp"
 
     system "./configure", *args
+    # system "./configure", 'CUSTOM_CXXFLAGS="-DU_USING_ICU_NAMESPACE=1"', *args
     # ./configure CXX="clang++" JOBS=`sysctl -n hw.ncpu`
     # To use a Python interpreter that is not named python for your build,
     # do something like the following instead:
