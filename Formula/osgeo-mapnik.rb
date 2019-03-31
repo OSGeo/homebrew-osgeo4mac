@@ -12,6 +12,14 @@ class OsgeoMapnik < Formula
 
   revision 1
 
+  bottle do
+    root_url "https://bottle.download.osgeo.org"
+    cellar :any
+    sha256 "96b3ecb1467f2661bae9fe41621387953f4b746201b50cd047c6ebe4f14f2cc2" => :mojave
+    sha256 "96b3ecb1467f2661bae9fe41621387953f4b746201b50cd047c6ebe4f14f2cc2" => :high_sierra
+    sha256 "96b3ecb1467f2661bae9fe41621387953f4b746201b50cd047c6ebe4f14f2cc2" => :sierra
+  end
+
   head "https://github.com/mapnik/mapnik.git", :branch => "master"
 
   option "with-pg10", "Build with PostgreSQL 10 client"
@@ -264,8 +272,8 @@ class OsgeoMapnik < Formula
 
     # rm_r ".sconf_temp"
 
-    # system "./configure", *args
-    system "./configure", 'CUSTOM_CXXFLAGS="-DU_USING_ICU_NAMESPACE=1"', *args
+    system "./configure", *args
+    # system "./configure", 'CUSTOM_CXXFLAGS="-DU_USING_ICU_NAMESPACE=1"', *args
     # ./configure CXX="clang++" JOBS=`sysctl -n hw.ncpu`
     # To use a Python interpreter that is not named python for your build,
     # do something like the following instead:
