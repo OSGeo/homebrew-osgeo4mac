@@ -101,6 +101,14 @@ class OsgeoOrfeo < Formula
   def install
     ENV.cxx11
 
+
+    ldflags = "-L#{HOMEBREW_PREFIX}/lib -framework OpenCL -framework OpenGL"
+    link_misc = "-arch x86_64 -mmacosx-version-min=10.9 -isysroot #{MacOS::Xcode.prefix}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX#{MacOS.version}.sdk -lstdc++"
+
+    # ENV.append "CPPFLAGS", ""
+    ENV.append "LDFLAGS", "#{link_misc} #{ldflags}"
+
+
     # Module for monteverdi build
     # if build.with? "monteverdi"
     #   (buildpath/"Modules/Remote").install resource("GKSVM")
