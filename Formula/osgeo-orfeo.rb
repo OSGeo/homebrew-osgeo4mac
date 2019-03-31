@@ -4,7 +4,7 @@ class OsgeoOrfeo < Formula
   url "https://github.com/orfeotoolbox/OTB/archive/6.6.1.tar.gz"
   sha256 "f8fea75f620fae1bb0ce902fb8133457b6ead40ad14d4dec55beaa59ae641b4c"
 
-  revision 1
+  revision 2
 
   head "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb.git", :branch => "master"
 
@@ -17,6 +17,7 @@ class OsgeoOrfeo < Formula
   option "with-examples", "Compile and install various examples"
   option "with-mpi", "Build with Open MPI, a High Performance Message Passing Library"
   # option "with-mapnik", "Build with Mapnik, toolkit for developing mapping applications"
+  # option "with-shark", "Build with Machine learning library"
   # option "with-openjpeg", "Build with OpenJPEG, an open source JPEG 2000 codec"
 
   depends_on "cmake" => :build
