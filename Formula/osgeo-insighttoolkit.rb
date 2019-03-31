@@ -55,12 +55,9 @@ class OsgeoInsighttoolkit < Formula
   def install
     ENV.cxx11
 
+    # error: 'auto' not allowed in function return type
+    # Modules/ThirdParty/VNL/src/vxl/core/vnl/vnl_math.h
     ENV.append "CXXFLAGS", "-std=c++11"
-
-    # link_misc = "-arch x86_64 -mmacosx-version-min=10.9 -isysroot #{MacOS::Xcode.prefix}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX#{MacOS.version}.sdk -lstdc++"
-    #
-    # ENV.append "LDFLAGS", "#{link_misc} -stdlib=libc++"
-    # ENV.append "CPATH", "#{MacOS::Xcode.prefix}/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1"
 
     # Temporary fix for Xcode/CLT 9.0.x issue of missing header files
     # See: https://github.com/OSGeo/homebrew-osgeo4mac/issues/276
@@ -126,6 +123,8 @@ class OsgeoInsighttoolkit < Formula
     # args << "-DITK_WRAP_RUBY=ON"
     # args << "-DITK_WRAP_PERL=ON"
 
+    # Could NOT find GTest
+    # it is not installed
     args << "-DITK_USE_SYSTEM_GOOGLETEST=OFF"
 
     mkdir "itk-build" do
