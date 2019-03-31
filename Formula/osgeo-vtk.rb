@@ -7,7 +7,7 @@ class OsgeoVtk < Formula
 
   revision 5
 
-  head "https://github.com/Kitware/VTK.git"
+  head "https://github.com/Kitware/VTK.git", :branch => "master"
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
@@ -74,6 +74,14 @@ class OsgeoVtk < Formula
   depends_on "open-mpi"
   # depends_on "osgeo-mpi4py"
 
+  # GeoVis incompatible with external libproj4 6.0
+  # https://gitlab.kitware.com/vtk/vtk/issues/17554
+  # https://github.com/OSGeo/proj.4/wiki/proj.h-adoption-status
+  # patch do
+  #   url "https://gitlab.kitware.com/vtk/vtk/uploads/a6aaf8d86b64c36c5705658b341e7cf8/0001-Make-code-calling-proj4-compatible-with-proj4-5.0-an.patch"
+  #   sha256 "f6401a282ad741565d766c65898874f8361e7573835cdaec524ab260fe23215d"
+  # end
+
   def install
     # Warning: python modules have explicit framework links
     # These python extension modules were linked directly to a Python
@@ -98,6 +106,9 @@ class OsgeoVtk < Formula
     # res_required.each do |r|
     #     venv.pip_install r
     # end
+
+    # support for PROJ 6
+    # ENV.append_to_cflags "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"
 
     cmd = Language::Java.java_home_cmd("1.8") # JAVA_VERSION
     ENV["JAVA_HOME"] = Utils.popen_read(cmd).chomp
