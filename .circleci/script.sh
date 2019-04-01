@@ -43,6 +43,15 @@ for f in ${CHANGED_FORMULAE};do
     brew unlink osgeo-liblas && brew link osgeo-liblas --force
   fi
 
+  # Error: The `brew link` step did not complete successfully
+  # The formula built, but is not symlinked into /usr/local
+  # Could not symlink lib/pkgconfig/libopenjp2.pc
+  # Target /usr/local/lib/pkgconfig/libopenjp2.pc
+  # is a symlink belonging to openjpeg
+  if [ "$(echo ${deps} | grep -c 'osgeo-insighttoolkit')" != "0" ] || [ "${f}" == "osgeo-insighttoolkit" ];then
+    brew unlink openjpeg
+  fi
+
   # if [[ $(brew list --versions ${f}) ]]; then
   #   echo "Clearing previously installed/cached formula ${f}..."
   #   brew uninstall --force --ignore-dependencies ${f} || true
