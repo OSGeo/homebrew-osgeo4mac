@@ -1,22 +1,21 @@
 class OsgeoInsighttoolkit < Formula
   desc "ITK is a toolkit for performing registration and segmentation"
   homepage "https://www.itk.org"
-  url "https://downloads.sourceforge.net/project/itk/itk/4.13/InsightToolkit-4.13.1.tar.gz"
-  sha256 "fdcfd218bd6f99d1826c5fb18bb2d60ebc906e9589d70576c60360d7c6715147"
+  url "https://downloads.sourceforge.net/project/itk/itk/4.13/InsightToolkit-4.13.2.tar.gz"
+  sha256 "d8760b279de20497c432e7cdf97ed349277da1ae435be1f6f0f00fbe8d4938c1"
 
-  revision 1
+  # revision 1
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any
-    sha256 "821a66bfa2f00ac11d6ee2b58215714593033cc06b452b2485ffa8820b1732e4" => :mojave
-    sha256 "821a66bfa2f00ac11d6ee2b58215714593033cc06b452b2485ffa8820b1732e4" => :high_sierra
-    sha256 "821a66bfa2f00ac11d6ee2b58215714593033cc06b452b2485ffa8820b1732e4" => :sierra
+    sha256 "c6c825d125d86b5da6c21b8cc8e2833ebcba9af694d60d42366175e06b2dba99" => :mojave
+    sha256 "c6c825d125d86b5da6c21b8cc8e2833ebcba9af694d60d42366175e06b2dba99" => :high_sierra
+    sha256 "d7e9eea63cbdb8c4d0943a48209e70c401004e49967b8eb5b240240a544b5971" => :sierra
   end
 
-  head "git://itk.org/ITK.git"
+  head "https://github.com/InsightSoftwareConsortium/ITK.git", :branch => "master"
 
-  option :cxx11
   option "with-examples", "Compile and install various examples"
   option "with-itkv3-compatibility", "Include ITKv3 compatibility"
   option "with-remove-legacy", "Disable legacy APIs"
@@ -24,28 +23,20 @@ class OsgeoInsighttoolkit < Formula
   deprecated_option "examples" => "with-examples"
   deprecated_option "remove-legacy" => "with-remove-legacy"
 
-  cxx11dep = build.cxx11? ? ["c++11"] : []
-
   depends_on "cmake" => :build
-  depends_on "opencv@2" => [:recommended] + cxx11dep
+  depends_on "opencv@2" => :recommended
   depends_on "python@2" if build.with? "python2"
   depends_on "python" => :recommended
   depends_on "fftw" => :recommended
-  depends_on "hdf5" => [:recommended] + cxx11dep
+  depends_on "hdf5" => :recommended
   # depends_on "jpeg" => :recommended
   depends_on "libjpeg-turbo" => :recommended
   depends_on "libpng" => :recommended
   depends_on "libtiff" => :recommended
-  depends_on "gdcm" => [:optional] + cxx11dep
+  depends_on "gdcm" => :optional
   depends_on "expat" unless OS.mac?
 
-  if build.with? "python"
-    depends_on "osgeo-vtk" => [:build, "with-python", "without-python2"] + cxx11dep
-  elsif build.with? "python2"
-    depends_on "osgeo-vtk" => [:build, "with-python2", "without-python"] + cxx11dep
-  else
-    depends_on "osgeo-vtk" => [:build] + cxx11dep
-  end
+  depends_on "osgeo-vtk" => :build
 
   # JAVA_VERSION = "1.8" # "1.10+"
   depends_on :java => ["1.8", :build] # JAVA_VERSION
@@ -62,6 +53,20 @@ class OsgeoInsighttoolkit < Formula
   # depends_on "perl"
 
   def install
+    ENV.cxx11
+
+    # error: 'auto' not allowed in function return type
+    # Modules/ThirdParty/VNL/src/vxl/core/vnl/vnl_math.h
+    ENV.append "CXXFLAGS", "-std=c++11"
+
+    # Temporary fix for Xcode/CLT 9.0.x issue of missing header files
+    # See: https://github.com/OSGeo/homebrew-osgeo4mac/issues/276
+    # Work around "error: no member named 'signbit' in the global namespace"
+    if DevelopmentTools.clang_build_version >= 900
+      ENV.delete "SDKROOT"
+      ENV.delete "HOMEBREW_SDKROOT"
+    end
+
     # Warning: python modules have explicit framework links
     # These python extension modules were linked directly to a Python
     # framework binary. They should be linked with -undefined dynamic_lookup
@@ -105,8 +110,7 @@ class OsgeoInsighttoolkit < Formula
     args << "-DModule_ITKVtkGlue=ON"
     args << "-DITK_USE_GPU=" + (OS.mac? ? "ON" : "OFF")
 
-    args << "-DVCL_INCLUDE_CXX_0X=ON" if build.cxx11?
-    ENV.cxx11 if build.cxx11?
+    args << "-DVCL_INCLUDE_CXX_0X=ON" # for cxx11
 
     args << "-DITK_USE_SYSTEM_LIBRARIES=ON"
     args << "-DITK_USE_SYSTEM_SWIG=ON"
@@ -119,37 +123,43 @@ class OsgeoInsighttoolkit < Formula
     # args << "-DITK_WRAP_RUBY=ON"
     # args << "-DITK_WRAP_PERL=ON"
 
+    # Could NOT find GTest
+    # it is not installed
+    args << "-DITK_USE_SYSTEM_GOOGLETEST=OFF"
+
     mkdir "itk-build" do
-      if build.with?("python") || build.with?("python2")
-        python_executable = `which python2`.strip if build.with? "python2"
-        python_executable = `which python3`.strip if build.with? "python"
-
-        python_prefix = `#{python_executable} -c 'import sys;print(sys.prefix)'`.chomp
-        python_include = `#{python_executable} -c 'from distutils import sysconfig;print(sysconfig.get_python_inc(True))'`.chomp
-        python_version = "python" + `#{python_executable} -c 'import sys;print(sys.version[:3])'`.chomp
-
-        args << "-DITK_WRAP_PYTHON=ON"
-        args << "-DPYTHON_EXECUTABLE='#{python_executable}'"
-        args << "-DPYTHON_INCLUDE_DIR='#{python_include}'"
-
-        # if PYTHON_EXECUTABLE
-        # does not match Python's prefix
-        # Python site-packages directory to install Python bindings
-        # PY_SITE_PACKAGES_PATH
-
-        # CMake picks up the system's python dylib, even if we have a brewed one.
-        if File.exist? "#{python_prefix}/Python"
-          args << "-DPYTHON_LIBRARY='#{python_prefix}/Python'"
-        elsif File.exist? "#{python_prefix}/lib/lib#{python_version}.a"
-          args << "-DPYTHON_LIBRARY='#{python_prefix}/lib/lib#{python_version}.a'"
-        elsif File.exist? "#{python_prefix}/lib/lib#{python_version}.#{dylib}"
-          args << "-DPYTHON_LIBRARY='#{python_prefix}/lib/lib#{python_version}.#{dylib}'"
-        elsif File.exist? "#{python_prefix}/lib/x86_64-linux-gnu/lib#{python_version}.#{dylib}"
-          args << "-DPYTHON_LIBRARY='#{python_prefix}/lib/x86_64-linux-gnu/lib#{python_version}.#{dylib}'"
-        else
-          odie "No libpythonX.Y.{dylib|so|a} file found!"
-        end
+      if build.with? "python2"
+        python_executable = `which python2`.strip
+      else
+        python_executable = `which python3`.strip
       end
+
+      python_prefix = `#{python_executable} -c 'import sys;print(sys.prefix)'`.chomp
+      python_include = `#{python_executable} -c 'from distutils import sysconfig;print(sysconfig.get_python_inc(True))'`.chomp
+      python_version = "python" + `#{python_executable} -c 'import sys;print(sys.version[:3])'`.chomp
+
+      args << "-DITK_WRAP_PYTHON=ON"
+      args << "-DPYTHON_EXECUTABLE='#{python_executable}'"
+      args << "-DPYTHON_INCLUDE_DIR='#{python_include}'"
+
+      # if PYTHON_EXECUTABLE
+      # does not match Python's prefix
+      # Python site-packages directory to install Python bindings
+      # PY_SITE_PACKAGES_PATH
+
+      # CMake picks up the system's python dylib, even if we have a brewed one.
+      if File.exist? "#{python_prefix}/Python"
+        args << "-DPYTHON_LIBRARY='#{python_prefix}/Python'"
+      elsif File.exist? "#{python_prefix}/lib/lib#{python_version}.a"
+        args << "-DPYTHON_LIBRARY='#{python_prefix}/lib/lib#{python_version}.a'"
+      elsif File.exist? "#{python_prefix}/lib/lib#{python_version}.#{dylib}"
+        args << "-DPYTHON_LIBRARY='#{python_prefix}/lib/lib#{python_version}.#{dylib}'"
+      elsif File.exist? "#{python_prefix}/lib/x86_64-linux-gnu/lib#{python_version}.#{dylib}"
+        args << "-DPYTHON_LIBRARY='#{python_prefix}/lib/x86_64-linux-gnu/lib#{python_version}.#{dylib}'"
+      else
+        odie "No libpythonX.Y.{dylib|so|a} file found!"
+      end
+
       system "cmake", *args
       system "make", "install"
     end
@@ -172,9 +182,9 @@ class OsgeoInsighttoolkit < Formula
     dylib = OS.mac? ? "1.dylib" : "so.1"
     v=version.to_s.split(".")[0..1].join(".")
     # Build step
-    system ENV.cxx, "-isystem", "#{include}/ITK-#{v}", "-o", "test.cxx.o", "-c", "test.cxx"
+    system ENV.cxx, "-std=c++11", "-isystem", "#{include}/ITK-#{v}", "-o", "test.cxx.o", "-c", "test.cxx"
     # Linking step
-    system ENV.cxx, "test.cxx.o", "-o", "test",
+    system ENV.cxx, "-std=c++11", "test.cxx.o", "-o", "test",
                     "#{lib}/libITKCommon-#{v}.#{dylib}",
                     "#{lib}/libITKVNLInstantiation-#{v}.#{dylib}",
                     "#{lib}/libitkvnl_algo-#{v}.#{dylib}",
