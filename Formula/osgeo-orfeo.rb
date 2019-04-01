@@ -4,7 +4,7 @@ class OsgeoOrfeo < Formula
   url "https://github.com/orfeotoolbox/OTB/archive/6.6.1.tar.gz"
   sha256 "f8fea75f620fae1bb0ce902fb8133457b6ead40ad14d4dec55beaa59ae641b4c"
 
-  revision 2
+  revision 3
 
   head "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb.git", :branch => "master"
 
@@ -117,7 +117,7 @@ class OsgeoOrfeo < Formula
       -DQWT_LIBRARY=#{Formula["qwt"].lib}/qwt.framework
       -DQWT_INCLUDE_DIR=#{Formula["qwt"].lib}/qwt.framework/Headers
       -DOSSIM_LIBRARY=#{Formula["osgeo-ossim"].opt_prefix}/Frameworks/ossim.framework
-      -DOSSIM_INCLUDE_DIR=#{Formula["osgeo-ossim"].include}
+      -DOSSIM_INCLUDE_DIR=#{Formula["osgeo-ossim"].opt_prefix}/Frameworks/ossim.framework/Headers
       -DOTB_USE_GSL=ON
     ]
 
