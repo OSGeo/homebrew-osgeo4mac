@@ -4,7 +4,15 @@ class OsgeoOrfeo < Formula
   url "https://github.com/orfeotoolbox/OTB/archive/6.6.1.tar.gz"
   sha256 "f8fea75f620fae1bb0ce902fb8133457b6ead40ad14d4dec55beaa59ae641b4c"
 
-  revision 2
+  revision 3
+
+  bottle do
+    root_url "https://bottle.download.osgeo.org"
+    cellar :any
+    sha256 "b0bb5b051b4a0c64c67e1a6917229f27d107b08bfc82fafb804213e72cf73e9f" => :mojave
+    sha256 "b0bb5b051b4a0c64c67e1a6917229f27d107b08bfc82fafb804213e72cf73e9f" => :high_sierra
+    sha256 "fbdea683ddc16897e068951f93dd6cc8d0e4a3b4d167719f6bd8c94b89323025" => :sierra
+  end
 
   head "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb.git", :branch => "master"
 
@@ -116,13 +124,18 @@ class OsgeoOrfeo < Formula
       -DCMAKE_CXX_STANDARD=11
       -DQWT_LIBRARY=#{Formula["qwt"].lib}/qwt.framework
       -DQWT_INCLUDE_DIR=#{Formula["qwt"].lib}/qwt.framework/Headers
-      -DOSSIM_LIBRARY=#{Formula["osgeo-ossim"].opt_prefix}/Frameworks/ossim.framework
-      -DOSSIM_INCLUDE_DIR=#{Formula["osgeo-ossim"].include}
       -DOTB_USE_GSL=ON
     ]
 
+    # fix error: no member named 'createRpcProjection' in 'ossimRpcSolver'
+    # args << "-DOSSIM_VERSION=#{Formula["osgeo-ossim"].version}"
+    args << "-DOSSIM_LIBRARY=#{Formula["osgeo-ossim"].opt_prefix}/Frameworks/ossim.framework"
+    args << "-DOSSIM_INCLUDE_DIR=#{Formula["osgeo-ossim"].opt_include}"
+    # args << "-DOSSIM_INCLUDE_DIR=#{Formula["osgeo-ossim"].opt_prefix}/Frameworks/ossim.framework/Headers"
+    # find_path( OSSIM_INCLUDE_DIR NAMES ossim/init/ossimInit.h )
+
     # Simple Parallel Tiff Writer
-    # args << "OTB_USE_SPTW=OFF"
+    # args << "-DOTB_USE_SPTW=OFF"
 
     # Option to activate deprecated classes
     # Turn on the use and test of deprecated classes
