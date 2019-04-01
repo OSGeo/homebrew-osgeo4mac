@@ -11,7 +11,7 @@ class OsgeoQgisRes < Formula
   sha256 "385dce925fc2d29f05afd6508bc1f46ec84c0bc607cc0c8dfce78a4bb93b9c4e"
   version "3.6.1"
 
-  # revision 1
+  revision 1
 
   option "with-pg10", "Build with PostgreSQL 10 client"
 
