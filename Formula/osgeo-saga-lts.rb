@@ -6,7 +6,7 @@ class OsgeoSagaLts < Formula
       :revision => "b6f474f8af4af7f0ff82548cc6f88c53547d91f5"
   version "2.3.2"
 
-  revision 2
+  revision 3
 
   head "https://git.code.sf.net/p/saga-gis/code.git", :branch => "release-2-3-lts"
 
@@ -34,7 +34,7 @@ class OsgeoSagaLts < Formula
   depends_on "libtool" => :build
   depends_on "pkg-config" => :build
   depends_on "python@2"
-  depends_on "osgeo-proj"
+  depends_on "osgeo-proj@5"
   depends_on "wxmac"
   depends_on "wxpython"
   depends_on "geos"
