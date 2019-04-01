@@ -57,5 +57,6 @@
   "postgis2": "osgeo-postgis",
   "openscenegraph-qt5.rb": "osgeo-openscenegraph",
   "ossim": "osgeo-ossim",
-  "orfeo6": "osgeo-orfeo"
+  "orfeo6": "osgeo-orfeo",
+  "qgis-res": "osgeo-qgis-res"
 }
