@@ -40,8 +40,8 @@ end
 class QgisLtr < Formula
   desc "Open Source Geographic Information System"
   homepage "https://www.qgis.org"
-  url "https://github.com/qgis/QGIS/archive/final-3_4_5.tar.gz"
-  sha256 "3183ebd2465ec44555e20dbb790ccff639a9da6eb4bce1e123ae030b1b42c57c"
+  url "https://github.com/qgis/QGIS/archive/final-3_4_6.tar.gz"
+  sha256 "02efb32200cb13c848209b72f7f62f22594831041b93a509cd08db741d03805e"
 
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
