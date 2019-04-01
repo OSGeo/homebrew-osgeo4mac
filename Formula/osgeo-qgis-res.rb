@@ -11,7 +11,7 @@ class OsgeoQgisRes < Formula
   sha256 "385dce925fc2d29f05afd6508bc1f46ec84c0bc607cc0c8dfce78a4bb93b9c4e"
   version "3.6.1"
 
-  revision 1
+  revision 2
 
   option "with-pg10", "Build with PostgreSQL 10 client"
 
@@ -74,9 +74,9 @@ class OsgeoQgisRes < Formula
   # R with more support
   # https://github.com/adamhsparks/setup_macOS_for_R
   # rpy2 requires finding R
-  unless Formula["sethrfore/r-srf/r"].linked_keg.exist?
-    depends_on "r"
-  end
+  # unless Formula["sethrfore/r-srf/r"].linked_keg.exist?
+  depends_on "r"
+  # end
 
   # for rpy2
   depends_on "gettext"
