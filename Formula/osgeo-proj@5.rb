@@ -23,6 +23,13 @@ class OsgeoProjAT5 < Formula
   url "https://github.com/OSGeo/proj.4/archive/5.2.0.tar.gz"
   sha256 "d784d51a8e56282123eb5918a2c685ed7da5097595afcacf5fa0246337a44361"
 
+  bottle do
+    root_url "https://bottle.download.osgeo.org"
+    sha256 "623b42fc026ca183a93ecc14e7db9ecc1cf30a729e15cad255d025268088d5d7" => :mojave
+    sha256 "623b42fc026ca183a93ecc14e7db9ecc1cf30a729e15cad255d025268088d5d7" => :high_sierra
+    sha256 "bd9c8607cc813b32b7c956b349ff1235519323deb710fb0d8a1232eab83b6d6b" => :sierra
+  end
+
   # revision 1
 
   head "https://github.com/OSGeo/proj.4.git", :branch => "master"
