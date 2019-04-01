@@ -182,9 +182,9 @@ class OsgeoInsighttoolkit < Formula
     dylib = OS.mac? ? "1.dylib" : "so.1"
     v=version.to_s.split(".")[0..1].join(".")
     # Build step
-    system ENV.cxx, "-isystem", "#{include}/ITK-#{v}", "-o", "test.cxx.o", "-c", "test.cxx"
+    system ENV.cxx, "-std=c++11", "-isystem", "#{include}/ITK-#{v}", "-o", "test.cxx.o", "-c", "test.cxx"
     # Linking step
-    system ENV.cxx, "test.cxx.o", "-o", "test",
+    system ENV.cxx, "-std=c++11", "test.cxx.o", "-o", "test",
                     "#{lib}/libITKCommon-#{v}.#{dylib}",
                     "#{lib}/libITKVNLInstantiation-#{v}.#{dylib}",
                     "#{lib}/libitkvnl_algo-#{v}.#{dylib}",
