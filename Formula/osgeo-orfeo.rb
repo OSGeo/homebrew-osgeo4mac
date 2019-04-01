@@ -6,6 +6,14 @@ class OsgeoOrfeo < Formula
 
   revision 3
 
+  bottle do
+    root_url "https://bottle.download.osgeo.org"
+    cellar :any
+    sha256 "b0bb5b051b4a0c64c67e1a6917229f27d107b08bfc82fafb804213e72cf73e9f" => :mojave
+    sha256 "b0bb5b051b4a0c64c67e1a6917229f27d107b08bfc82fafb804213e72cf73e9f" => :high_sierra
+    sha256 "fbdea683ddc16897e068951f93dd6cc8d0e4a3b4d167719f6bd8c94b89323025" => :sierra
+  end
+
   head "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb.git", :branch => "master"
 
   # otbenv.profile
