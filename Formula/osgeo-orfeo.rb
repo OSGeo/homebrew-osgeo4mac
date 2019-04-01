@@ -119,9 +119,12 @@ class OsgeoOrfeo < Formula
       -DOTB_USE_GSL=ON
     ]
 
-    args << "-DOSSIM_VERSION_NUMBER=20700"
+    # fix error: no member named 'createRpcProjection' in 'ossimRpcSolver'
+    # args << "-DOSSIM_VERSION=#{Formula["osgeo-ossim"].version}"
     args << "-DOSSIM_LIBRARY=#{Formula["osgeo-ossim"].opt_prefix}/Frameworks/ossim.framework"
-    args << "-DOSSIM_INCLUDE_DIR=#{Formula["osgeo-ossim"].opt_prefix}/Frameworks/ossim.framework/Headers"
+    args << "-DOSSIM_INCLUDE_DIR=#{Formula["osgeo-ossim"].opt_include}"
+    # args << "-DOSSIM_INCLUDE_DIR=#{Formula["osgeo-ossim"].opt_prefix}/Frameworks/ossim.framework/Headers"
+    # find_path( OSSIM_INCLUDE_DIR NAMES ossim/init/ossimInit.h )
 
     # Simple Parallel Tiff Writer
     # args << "-DOTB_USE_SPTW=OFF"
