@@ -94,8 +94,8 @@ class OsgeoSagaLts < Formula
     # xcode : xcrun --show-sdk-path
     link_misc = "-arch x86_64 -mmacosx-version-min=10.9 -isysroot #{MacOS::Xcode.prefix}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX#{MacOS.version}.sdk -lstdc++"
 
-    ENV.append "CPPFLAGS", "-I#{Formula["osgeo-proj"].opt_include} -I#{Formula["osgeo-gdal"].opt_include} #{cppflags}"
-    ENV.append "LDFLAGS", "-L#{Formula["osgeo-proj"].opt_lib}/libproj.dylib -L#{Formula["osgeo-gdal"].opt_lib}/libgdal.dylib #{link_misc} #{ldflags}"
+    ENV.append "CPPFLAGS", "-I#{Formula["osgeo-proj@5"].opt_include} -I#{Formula["osgeo-gdal"].opt_include} #{cppflags}"
+    ENV.append "LDFLAGS", "-L#{Formula["osgeo-proj@5"].opt_lib}/libproj.dylib -L#{Formula["osgeo-gdal"].opt_lib}/libgdal.dylib #{link_misc} #{ldflags}"
 
     # Disable narrowing warnings when compiling in C++11 mode.
     ENV.append "CXXFLAGS", "-Wno-c++11-narrowing -std=c++11"
