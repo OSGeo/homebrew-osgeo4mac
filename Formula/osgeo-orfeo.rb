@@ -116,13 +116,15 @@ class OsgeoOrfeo < Formula
       -DCMAKE_CXX_STANDARD=11
       -DQWT_LIBRARY=#{Formula["qwt"].lib}/qwt.framework
       -DQWT_INCLUDE_DIR=#{Formula["qwt"].lib}/qwt.framework/Headers
-      -DOSSIM_LIBRARY=#{Formula["osgeo-ossim"].opt_prefix}/Frameworks/ossim.framework
-      -DOSSIM_INCLUDE_DIR=#{Formula["osgeo-ossim"].opt_prefix}/Frameworks/ossim.framework/Headers
       -DOTB_USE_GSL=ON
     ]
 
+    args << "-DOSSIM_VERSION_NUMBER=20700"
+    args << "-DOSSIM_LIBRARY=#{Formula["osgeo-ossim"].opt_prefix}/Frameworks/ossim.framework"
+    args << "-DOSSIM_INCLUDE_DIR=#{Formula["osgeo-ossim"].opt_prefix}/Frameworks/ossim.framework/Headers"
+
     # Simple Parallel Tiff Writer
-    # args << "OTB_USE_SPTW=OFF"
+    # args << "-DOTB_USE_SPTW=OFF"
 
     # Option to activate deprecated classes
     # Turn on the use and test of deprecated classes
