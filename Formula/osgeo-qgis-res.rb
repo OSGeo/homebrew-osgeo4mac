@@ -13,6 +13,14 @@ class OsgeoQgisRes < Formula
 
   revision 2
 
+  bottle do
+    root_url "https://bottle.download.osgeo.org"
+    cellar :any
+    sha256 "88c2b6c553853698072e070fbff9bb4518dae28799435967d00d7bedd2516e47" => :mojave
+    sha256 "88c2b6c553853698072e070fbff9bb4518dae28799435967d00d7bedd2516e47" => :high_sierra
+    sha256 "6f59c4524f20e522e899f9cab73ec79148aaef9d1ec34f0627a0ef921af45970" => :sierra
+  end
+
   option "with-pg10", "Build with PostgreSQL 10 client"
 
   depends_on "pkg-config" => :build
