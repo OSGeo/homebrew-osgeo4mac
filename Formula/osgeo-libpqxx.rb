@@ -27,6 +27,8 @@ class OsgeoLibpqxx < Formula
 
   head "https://github.com/jtv/libpqxx.git", :branch => "master"
 
+  option "with-pg10", "Build with PostgreSQL 10 client"
+
   # keg_only "libpqxx is already provided by homebrew/core"
   # we will verify that other versions are not linked
   depends_on Unlinked
