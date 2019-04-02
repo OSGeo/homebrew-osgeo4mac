@@ -121,7 +121,7 @@ class OsgeoQgis < Formula
   depends_on "unixodbc"
   # depends_on "libiodbc"
   depends_on "freetds"
-  depends_on "psqlodbc"
+  depends_on "osgeo-psqlodbc"
   depends_on "libpq"
   depends_on "osgeo-postgis"
   depends_on "exiv2"
@@ -349,6 +349,9 @@ class OsgeoQgis < Formula
       # resource("otb").stage do
       #   cp_r "./otb", "#{buildpath}/python/plugins/"
       # end
+      resource("otb").stage do
+        cp_r "./otb", "#{prefix}/QGIS.app/Contents/Resources/python/plugins/"
+      end
       # resource("OtbUtils").stage do
       #   cp_r "./OtbUtils.diff", "#{buildpath}"
       # end
@@ -358,8 +361,6 @@ class OsgeoQgis < Formula
       # system "patch", "-p1", "-i", "#{buildpath}/OtbUtils.diff"
       # system "patch", "-p1", "-i", "#{buildpath}/OtbAlgorithmProvider.diff"
       # cp_r "#{buildpath}/python/plugins/otb", "#{prefix}/QGIS.app/Contents/Resources/python/plugins/"
-
-      cp_r "./otb", "#{prefix}/QGIS.app/Contents/Resources/python/plugins/"
     end
 
     # R
