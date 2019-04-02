@@ -70,7 +70,6 @@ class OsgeoLibpqxx < Formula
     # system "psql", "-h", "localhost", "-d", "postgres"
     # system "createdb", "circleci"
     system ENV.cxx, "-std=c++11", "test.cpp", "-L#{lib}", "-lpqxx", "-I#{include}", "-o", "test"
-    system "./test"
 
     # Running ./test will fail because there is no runnning postgresql server
     # system "./test"
