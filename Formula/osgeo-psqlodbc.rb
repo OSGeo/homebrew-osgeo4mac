@@ -23,6 +23,14 @@ class OsgeoPsqlodbc < Formula
   url "https://ftp.postgresql.org/pub/odbc/versions/src/psqlodbc-11.00.0000.tar.gz"
   sha256 "703e6b87022f95ffa00d9f86c8f0a877f8a55b9b3be0942081f382e794112a86"
 
+  bottle do
+    root_url "https://bottle.download.osgeo.org"
+    cellar :any
+    sha256 "b642f5e73bec11c2c21566a219a9cbdd4f72e7a85084ba87af0e4f810de1da71" => :mojave
+    sha256 "b642f5e73bec11c2c21566a219a9cbdd4f72e7a85084ba87af0e4f810de1da71" => :high_sierra
+    sha256 "415b4efb68a0461bc104856568b28a2c4971202f222a9491cd90365140d0bf74" => :sierra
+  end
+
   # revision 1
 
   head do
