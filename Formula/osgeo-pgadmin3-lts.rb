@@ -10,6 +10,14 @@ class OsgeoPgadmin3Lts < Formula
 
   head "https://github.com/pgcentral/pgadmin3-lts.git", :branch => "master"
 
+  bottle do
+    root_url "https://bottle.download.osgeo.org"
+    cellar :any
+    sha256 "cb13c999ceb7d0a605bb95a058f6d8fcdf4cdbb6343bb259d3cde20b8407a48f" => :mojave
+    sha256 "cb13c999ceb7d0a605bb95a058f6d8fcdf4cdbb6343bb259d3cde20b8407a48f" => :high_sierra
+    sha256 "63aa85fa16345195435db592c12db8f9851c816f88c09fa6bc10ff3a18d81080" => :sierra
+  end
+
   patch :DATA
 
   option "with-app", "Build pgAdmin.app Package"
