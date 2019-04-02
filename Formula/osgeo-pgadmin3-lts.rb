@@ -6,7 +6,7 @@ class OsgeoPgadmin3Lts < Formula
   sha256 "65de9fb0d2bc43bfa0931832c344cfb894ae862acefefc64fbc8cd7d0f6cb7ff"
   version "1.22.3"
 
-  # revision 1
+  revision 1
 
   head "https://github.com/pgcentral/pgadmin3-lts.git", :branch => "master"
 
