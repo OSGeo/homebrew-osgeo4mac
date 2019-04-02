@@ -59,7 +59,7 @@ for f in ${CHANGED_FORMULAE};do
     # pg_ctl -D /usr/local/var/postgresql -l logfile start
     brew services start osgeo/osgeo4mac/osgeo-postgresql
     # system "psql", "-h", "localhost", "-d", "postgres"
-    createdb circleci
+    # createdb template1
   fi
 
   # if [[ $(brew list --versions ${f}) ]]; then
