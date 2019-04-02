@@ -38,6 +38,7 @@ class OsgeoLibpqxx < Formula
 
   depends_on "python@2"
   depends_on "doxygen"
+  depends_on "graphviz"
 
   if build.with?("pg10")
     depends_on "osgeo-postgresql@10"
