@@ -344,7 +344,7 @@ class OsgeoQgis < Formula
     # to ensure that the patches are applied
     mkdir "#{prefix}/QGIS.app/Contents/Resources/python/plugins/"
 
-    OTB is available from branch_3.8
+    # OTB is available from branch_3.8
     unless build.head?
       # resource("otb").stage do
       #   cp_r "./otb", "#{buildpath}/python/plugins/"
