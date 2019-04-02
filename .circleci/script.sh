@@ -52,6 +52,16 @@ for f in ${CHANGED_FORMULAE};do
     brew unlink openjpeg
   fi
 
+  # fix test
+  # initdb: could not create directory "/usr/local/var/postgresql": Operation not permitted
+  if [ "${f}" == "osgeo-libpqxx" ];then
+    initdb /usr/local/var/postgresql -E utf8 --locale=en_US.UTF-8
+    # pg_ctl -D /usr/local/var/postgresql -l logfile start
+    brew services start osgeo/osgeo4mac/osgeo-postgresql
+    # system "psql", "-h", "localhost", "-d", "postgres"
+    # createdb template1
+  fi
+
   # if [[ $(brew list --versions ${f}) ]]; then
   #   echo "Clearing previously installed/cached formula ${f}..."
   #   brew uninstall --force --ignore-dependencies ${f} || true
