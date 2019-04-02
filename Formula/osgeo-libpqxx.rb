@@ -23,7 +23,7 @@ class OsgeoLibpqxx < Formula
   url "https://github.com/jtv/libpqxx/archive/6.4.2.tar.gz"
   sha256 "f3afb60b8f6d69a8077f7e7f30fc7175ce7d437551d386dba4f7e0f1e7b673ea"
 
-  # revision 1
+  revision 1
 
   head "https://github.com/jtv/libpqxx.git", :branch => "master"
 
