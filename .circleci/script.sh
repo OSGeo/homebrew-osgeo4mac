@@ -56,6 +56,7 @@ for f in ${CHANGED_FORMULAE};do
   # initdb: could not create directory "/usr/local/var/postgresql": Operation not permitted
   if [ "${f}" == "osgeo-libpqxx" ];then
     initdb /usr/local/var/postgresql -E utf8 --locale=en_US.UTF-8
+    pg_ctl -D /usr/local/var/postgresql -l logfile start
     # system "psql", "-h", "localhost", "-d", "postgres"
     createdb circleci
   fi
