@@ -43,7 +43,7 @@ class OsgeoQgis < Formula
   sha256 "473a3b11a53eb3bd4e4e2a42026db1c268e34586a4f4d84c368cbc9e43678bae"
   version "3.6.1"
 
-  # revision 1
+  revision 1
 
   head "https://github.com/qgis/QGIS.git", :branch => "master"
 
