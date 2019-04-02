@@ -66,9 +66,9 @@ class OsgeoLibpqxx < Formula
       }
     EOS
 
-    system "initdb", "/usr/local/var/postgresql", "-E", "utf8", "--locale=en_US.UTF-8"
+    # system "initdb", "/usr/local/var/postgresql", "-E", "utf8", "--locale=en_US.UTF-8"
     # system "psql", "-h", "localhost", "-d", "postgres"
-    system "createdb", "circleci"
+    # system "createdb", "circleci"
     system ENV.cxx, "-std=c++11", "test.cpp", "-L#{lib}", "-lpqxx", "-I#{include}", "-o", "test"
     system "./test"
 
