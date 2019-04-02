@@ -1,5 +1,5 @@
 {
-  "qgis3": "qgis",
+  "qgis3": "osgeo-qgis",
   "qgis2": "qgis-ltr@2",
   "libkml-dev": "osgeo-libkml",
   "hdf4": "osgeo-hdf4",
@@ -58,5 +58,6 @@
   "openscenegraph-qt5.rb": "osgeo-openscenegraph",
   "ossim": "osgeo-ossim",
   "orfeo6": "osgeo-orfeo",
-  "qgis-res": "osgeo-qgis-res"
+  "qgis-res": "osgeo-qgis-res",
+  "qgis": "osgeo-qgis"
 }
