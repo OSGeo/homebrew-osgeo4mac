@@ -1,6 +1,5 @@
 ################################################################################
 # Maintainer: FJ Perini @fjperini
-# Collaborator: Nick Robison @nickrobison
 # Collaborator: Luis Puerto @luispuerto
 ################################################################################
 
@@ -37,22 +36,16 @@ class UnlinkedQGIS < Requirement
   end
 end
 
-class QgisLtr < Formula
+class OsgeoQgisLtr < Formula
   desc "Open Source Geographic Information System"
   homepage "https://www.qgis.org"
-  url "https://github.com/qgis/QGIS/archive/final-3_4_5.tar.gz"
-  sha256 "3183ebd2465ec44555e20dbb790ccff639a9da6eb4bce1e123ae030b1b42c57c"
-
-  bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    sha256 "c4d95c15b65d16347dbe172fb45705685a8d1d3e2f4f3c57439c8db0494a5687" => :mojave
-    sha256 "c4d95c15b65d16347dbe172fb45705685a8d1d3e2f4f3c57439c8db0494a5687" => :high_sierra
-    sha256 "c4d95c15b65d16347dbe172fb45705685a8d1d3e2f4f3c57439c8db0494a5687" => :sierra
-  end
+  url "https://github.com/qgis/QGIS/archive/final-3_4_6.tar.gz"
+  sha256 "02efb32200cb13c848209b72f7f62f22594831041b93a509cd08db741d03805e"
+  # version "3_4_6"
 
   # revision 1
 
-  head "https://github.com/qgis/QGIS.git", :branch => "release-3_4"
+  head "https://github.com/qgis/QGIS.git", :branch => "master"
 
   # fix FindQsci and FindPyQt5
   patch :DATA
@@ -63,30 +56,31 @@ class QgisLtr < Formula
 
   option "without-debug", "Disable debug build, which outputs info to system.log or console"
   option "without-ninja", "Disable use of ninja CMake generator"
+  option "without-server", "Build without QGIS Server (qgis_mapserv.fcgi)"
   option "without-postgresql", "Build without current PostgreSQL client"
   option "without-pyqt5-webkit", "Build without webkit python bindings"
   option "without-qgis-res", "Build without QGIS Resources support"
-  option "without-server", "Build without QGIS Server (qgis_mapserv.fcgi)"
-  option "with-3d", "Build with 3D Map View panel"
   option "with-api-docs", "Build the API documentation with Doxygen and Graphviz"
-  option "with-gpsbabel", "Build with GPSBabel. Read, write and manipulate GPS waypoints in a variety of formats"
-  option "with-grass", "Build with GRASS 7 integration plugin and Processing plugin support (or install grass-7x first)"
   option "with-isolation", "Isolate .app's environment to HOMEBREW_PREFIX, to coexist with other QGIS installs"
-  option "with-lastools", "Build with LAStools, efficient tools for LiDAR processing. Contains LASlib, a C++ programming API for reading / writing LIDAR data stored in standard LAS format."
   option "with-mssql", "Build with Microsoft ODBC Driver for SQL Server"
   option "with-oracle", "Build extra Oracle geospatial database and raster support"
-  option "with-orfeo", "Build extra Orfeo Toolbox for Processing plugin"
-  option "with-postgresql10", "Build with PostgreSQL 10 client"
-  option "with-qspatialite", "Build QSpatialite Qt database driver"
-  option "with-r", "Build extra R for Processing plugin"
-  option "with-r-sethrfore", "Build extra R for Processing plugin (only if you are going to install with this version of R)"
-  option "with-saga", "Build extra Saga GIS (LTS) for Processing plugin"
-  option "with-server", "Build with QGIS Server (qgis_mapserv.fcgi)"
-  option "with-taudem", "Build with TauDEM, Terrain Analysis Using Digital Elevation Models for hydrology"
-  option "with-whitebox", "Build with Whitebox Tools, an advanced geospatial data analysis platform"
+  option "with-pg10", "Build with PostgreSQL 10 client"
   # option "with-globe", "Build with Globe plugin, based upon osgEarth"
 
+  # Build with 3D Map View panel
+  # Build with GPSBabel. Read, write and manipulate GPS waypoints in a variety of formats
+  # Build with GRASS 7 integration plugin and Processing plugin support (or install grass-7x first)
+  # Build with LAStools, efficient tools for LiDAR processing. Contains LASlib, a C++ programming API for reading / writing LIDAR data stored in standard LAS format.
+  # Build extra Orfeo Toolbox for Processing plugin
+  # Build QSpatialite Qt database driver
+  # Build extra R for Processing plugin
+  # Build extra Saga GIS (LTS) for Processing plugin
+  # Build with QGIS Server (qgis_mapserv.fcgi)
+  # Build with TauDEM, Terrain Analysis Using Digital Elevation Models for hydrology
+  # Build with Whitebox Tools, an advanced geospatial data analysis platform
+
   deprecated_option "with-saga-gis-lts" => "with-saga"
+  deprecated_option "with-postgresql10" => "with-pg10"
 
   depends_on UnlinkedQGIS
 
@@ -94,20 +88,20 @@ class QgisLtr < Formula
   depends_on "cmake" => :build
   depends_on "ninja" => [:build, :recommended]
   depends_on "gsl" => :build # Georeferencer plugin
-  depends_on "six" => :build
-  depends_on "osgeo-sip" => :build # recommended
+  depends_on "six" => [:build, :recommended]
+  depends_on "osgeo-sip" => [:build, :recommended]
   depends_on "bison" => :build
   depends_on "flex" => :build
   depends_on "pkg-config" => :build
   depends_on "python"
-  depends_on "gdal2-python" # gdal2 - core providers
+  depends_on "osgeo-gdal-python" # gdal - core providers
   depends_on "libzip"
   depends_on "osgeo-qscintilla2"
-  depends_on "qca" #
+  depends_on "qca"
   depends_on "qt"
   depends_on "osgeo-pyqt"
   depends_on "osgeo-pyqt-webkit" # qt5-webkit
-  depends_on "qtkeychain" #
+  depends_on "osgeo-qtkeychain"
   depends_on "qwt"
   depends_on "spatialindex"
   depends_on "sqlite"
@@ -125,13 +119,13 @@ class QgisLtr < Formula
   depends_on "openssl"
   depends_on "qjson"
   depends_on "unixodbc"
-  depends_on "libiodbc"
+  # depends_on "libiodbc"
   depends_on "freetds"
-  depends_on "psqlodbc"
+  depends_on "osgeo-psqlodbc"
   depends_on "libpq"
   depends_on "osgeo-postgis"
   depends_on "exiv2"
-  depends_on "liblas"
+  depends_on "osgeo-liblas"
   depends_on "osgeo-netcdf"
   depends_on "osgeo-pdal"
   depends_on "szip"
@@ -146,7 +140,7 @@ class QgisLtr < Formula
 
   depends_on "numpy"
   depends_on "scipy"
-  depends_on "brewsci/bio/matplotlib"
+  depends_on "osgeo-matplotlib"
 
   if build.with?("api-docs")
     depends_on "graphviz" => :build
@@ -161,45 +155,43 @@ class QgisLtr < Formula
   # pygments - MetaSearch
   # yaml - Processing
   # many useful modules are incorporated
-  depends_on "qgis-res" => :recommended
+  depends_on "osgeo-qgis-res"
 
-  # fcgi
-  if build.with?("server")
-    depends_on "fcgi"
-    depends_on "spawn-fcgi"
-    depends_on "lighttpd"
-  end
+  # fcgi - server
+  depends_on "fcgi"
+  depends_on "spawn-fcgi"
+  depends_on "lighttpd"
 
-  # core plugins (c++ and python)
-  if build.with?("grass") || (HOMEBREW_PREFIX/"opt/grass7").exist?
-    depends_on "osgeo-grass"
-    depends_on "gettext"
-  end
+  # core plugins (c++ and python
+
+  # grass
+  depends_on "osgeo-grass"
+  depends_on "gettext"
+
+  depends_on "gpsbabel" # GPS Tools plugin
 
   # the Globe Plugin for QGIS 3 is still not available,
   # only for QGIS 2 and it does not support a larger version than OSGearh v2.7.
   # working on the implementation
   # if build.with? "globe"
-  #   depends_on "openscenegraph-qt5"
-  #   depends_on "osgqt"
-  #   depends_on "osgearth-qt5"
+  #   depends_on "osgeo-openscenegraph"
+  #   depends_on "osgeo-osgqt"
+  #   depends_on "osgeo-osgearth"
   # end
-
-  depends_on "gpsbabel" => :optional # GPS Tools plugin
 
   # TODO: remove "pyspatialite" when PyPi package supports spatialite 4.x
   #       or DB Manager supports libspatialite >= 4.2.0 (with mod_spatialite)
   # TODO: what to do for Py3 and pyspatialite?
-  depends_on "pyspatialite" # for DB Manager
+  depends_on "osgeo-pyspatialite" # for DB Manager
 
   # use newer postgresql client than Apple's, also needed by `psycopg2`
-  if build.with?("postgresql10")
-    depends_on "osgeo-postgresql@10" => :recommended
+  if build.with?("pg10")
+    depends_on "osgeo-postgresql@10"
   else
-    depends_on "osgeo-postgresql" => :recommended
+    depends_on "osgeo-postgresql"
   end
 
-  depends_on "oracle-client-sdk" if build.with?("oracle")
+  depends_on "osgeo-oracle-client-sdk" if build.with?("oracle")
 
   # TODO: add MSSQL third-party support formula?, :optional
   if build.with?("mssql")
@@ -207,116 +199,110 @@ class QgisLtr < Formula
     depends_on "microsoft/mssql-release/mssql-tools"
   end
 
-  depends_on "qpsql"
-  depends_on "qodbc"
-  depends_on "qmysql" # for eVis plugin
-  # depends_on "qtds" # obsolete from Qt 4.7
-  # depends_on "qoci" # from oracle-client-sdk?
+  depends_on "osgeo-qt-psql"
+  depends_on "osgeo-qt-odbc"
+  depends_on "osgeo-qt-mysql" # for eVis plugin
+  # depends_on "osgeo-qt-tds" # obsolete from Qt 4.7
+  # depends_on "osgeo-qt-oci" # from oracle-client-sdk?
 
   # core processing plugin extras
   # see `grass` above
-  depends_on "orfeo6" if build.with?("orfeo")
-
-  if build.with?("r")
-    depends_on "r"
-  end
+  depends_on "osgeo-orfeo"
+  depends_on "osgeo-saga-lts"
+  depends_on "osgeo-whitebox-tools"
+  depends_on "osgeo-lastools"
+  depends_on "osgeo-taudem"
 
   # R with more support
   # https://github.com/adamhsparks/setup_macOS_for_R
   # fix: will not build if the R version does not match
-  if build.with?("r-sethrfore")
-    depends_on "sethrfore/r-srf/r"
-  end
-
-  depends_on "osgeo-saga-lts" if build.with?("saga")
-
-  depends_on "whitebox-tools" if build.with?("whitebox")
-
-  depends_on "lastools" => :optional
-
-  depends_on "taudem" => :optional
+  # If you installed sethrfore/r-srf/r, before installing
+  # rename "/usr/local/opt/r" to "/usr/local/Cellar/r-bk"
+  # and then restore it after installing qgis
+  depends_on "r" # optional
 
   # TODO: LASTools straight build (2 reporting tools), or via `wine` (10 tools)
   # TODO: Fusion from USFS (via `wine`?)
 
   # R Plugin
   resource "r" do
-    url "https://github.com/north-road/qgis-processing-r.git",
-      :branch => "master",
-      :commit => "eb270b01c24c63313eb3debb23dc197df5036e75"
-    version "1.0.2"
+    url "https://github.com/north-road/qgis-processing-r/archive/51371402c0200b6649fa3daa8ca8067e83aa6c15.tar.gz"
+    sha256 "f6309e1edc334f76938f46a396c71e986b1910dd8c4c58936cad8d7fad54a346"
+    version "1.0.5"
   end
 
   # OTB Plugin
-  resource "otb" do
-    url "https://gitlab.orfeo-toolbox.org/orfeotoolbox/qgis-otb-plugin.git",
-      :branch => "master",
-      :commit => "f7fb2b4d0a1311d06edc0d11310353bf8311b2c5"
-    version "1.2"
+  unless build.head?
+    resource "otb" do
+      url "https://gitlab.orfeo-toolbox.org/orfeotoolbox/qgis-otb-plugin/-/archive/d5e8f0a2e11e9d1d5b28f1a0d1f9af1a4985b477/qgis-otb-plugin-d5e8f0a2e11e9d1d5b28f1a0d1f9af1a4985b477.tar.gz"
+      sha256 "939b89065604c10ee3a1b61f186e494f8e734aae1856547a32b1cb296dc4895b"
+      version "1.4.2"
+    end
+    # # Patch: OtbUtils
+    # resource "OtbUtils" do
+    #   url "https://gist.githubusercontent.com/fjperini/dc45ed0f637ae7dc8ec543a701e012f6/raw/c2b6bbafd6a9439bba903403f14c1b3c1ec3683d/OtbUtils.diff"
+    #   sha256 "b02c2fba5751dea84284072c590ce969ef215bb54e06cc2043ccbaf4449189e5"
+    # end
+    # # Patch: OtbAlgorithmProvider
+    # resource "OtbAlgorithmProvider" do
+    #   url "https://gist.githubusercontent.com/fjperini/d8fe440818814c0800e5071a0ccb4f70/raw/034e1dc2950749fcf70b2fd2925df11aa6deaae3/OtbAlgorithmProvider.diff"
+    #   sha256 "add76b970cee0c42bd56af50da1f77e1a214ae8912e6b8e3da6e82611ecc30b5"
+    # end
   end
 
   # WhiteboxTools Plugin
   resource "whitebox" do
-    url "https://github.com/alexbruy/processing-whitebox.git",
-      :branch => "master",
-      :commit => "5cbd81240e2a4e08fa0df515bf3dbf11957998ea"
+    url "https://github.com/alexbruy/processing-whitebox/archive/5cbd81240e2a4e08fa0df515bf3dbf11957998ea.tar.gz"
+    sha256 "4ccf112dae81447842ccaa08a86d3c5fa12b0a1087e8dc485723a5c8737ebbd9"
     version "0.9.0"
   end
-
-  # TauDEM Plugin
-  resource "taudem" do
-    url "https://github.com/alexbruy/processing-taudem.git",
-      :branch => "master",
-      :commit => "38dc454c477b6a6e917f2b3777dc69ed3ecd6062"
-    version "2.0.0"
-  end
-
-  # TauDEM Plugin
-  resource "lastools" do
-    url "https://github.com/rapidlasso/LAStoolsPluginQGIS3.git",
-      :branch => "master",
-      :commit => "5b297ddbc6dab4f5c323d637e284f77809970927"
-    version "1.2"
-  end
-
-  # Patch: OtbUtils
-  resource "OtbUtils" do
-    url "https://gist.githubusercontent.com/fjperini/dc45ed0f637ae7dc8ec543a701e012f6/raw/abda623ca0861c0dda5b68f6590168400254a98c/OtbUtils.diff"
-    sha256 "dc0a0e083046006d37b90d17856f580b677e6e34724e4b19e387b0102bc8defe"
-  end
-
-  # Patch: OtbAlgorithmProvider
-  resource "OtbAlgorithmProvider" do
-    url "https://gist.githubusercontent.com/fjperini/d8fe440818814c0800e5071a0ccb4f70/raw/4d286cb59a137c84198f203ee3ac037963baba23/OtbAlgorithmProvider.diff"
-    sha256 "0392533435901dd396809f9cc2302ac501a60cacac3708b859f13edcd1d9142c"
-  end
-
   # Patch: whiteboxProvider
   resource "whiteboxProvider" do
     url "https://gist.githubusercontent.com/fjperini/fcb9f964c5396ab8b72c874a8db41b1d/raw/154deb8f17d52d11f1fba2642d43df2b1d0d936d/whiteboxProvider.diff"
     sha256 "e95191b38765d6072c1a637e735114cce03d53173e47b96626bb30930b5e9c7f"
   end
 
+  # TauDEM Plugin
+  resource "taudem" do
+    url "https://github.com/alexbruy/processing-taudem/archive/38dc454c477b6a6e917f2b3777dc69ed3ecd6062.tar.gz"
+    sha256 "7df793ae6a26ed65b6b15a8c8151b7f8598118b9f8da920eb260049d7c57229d"
+    version "2.0.0"
+  end
   # Patch: taudemProvider
   resource "taudemProvider" do
     url "https://gist.githubusercontent.com/fjperini/1899e20e0286058a74116aecf466f0a0/raw/a2fc2c7a31c747fca5fbed4e885a6503fe6a5d4c/taudemProvider.diff"
     sha256 "39a494f886d00011a0101b40715d828465592f304590438a7658d03298950cf5"
   end
-
   # Patch: taudemUtils
   resource "taudemUtils" do
     url "https://gist.githubusercontent.com/fjperini/f3e5ed0e964f4b7ead80a7c39a7115f6/raw/c3c8cca96d51156d0f60fe487b5b848faa3d0c2c/taudemUtils.diff"
     sha256 "3cf403f74c2ed67f6cdfb87c04cf0b09b085fb9f77ddde9be1d7f2ac12fe53a3"
   end
 
+  # LAStools Plugin
+  resource "lastools" do
+    url "https://github.com/rapidlasso/LAStoolsPluginQGIS3/archive/55866f1685c03c8f9771a6a995550e08095b1f8a.tar.gz"
+    sha256 "0badea99da9f14ae02a50860e368c48953eea921bf732593a2c059c090e1c248"
+    version "1.3"
+  end
   # Patch: LAStoolsProvider
   resource "LAStoolsProvider" do
     url "https://gist.githubusercontent.com/fjperini/d6dd9f294be338fba4a05959b845f095/raw/4da2e9e0bd931ad00b3ca66777c3a9d50cde18ba/LAStoolsProvider.diff"
     sha256 "82656a9fd6f42056d5c2a5487f2429b7f2c66c83287852fb644517abccecc563"
   end
 
+  # splash
+  resource "splash" do
+    url "https://raw.githubusercontent.com/OSGeo/homebrew-osgeo4mac/master/docs/assets/images/splash.png"
+    sha256 "836d55171dadcb8db121673516ab9ef7b41d19ad994d5d1a41db2f5f1801e796"
+  end
+
   def install
     ENV.cxx11
+
+    # change splash
+    rm "#{buildpath}/images/splash/splash.png"
+    (buildpath/"images/splash").install resource("splash")
 
     # suggestions before installing
     printf  "\n\033[31mSome suggestions that you should keep in mind!!!\e[0m\n\n"
@@ -328,8 +314,8 @@ class QgisLtr < Formula
     printf  "    \e[32m$ $PATH (Check that there is no other version)\e[0m\n\n"
     printf  "- If the installation failed due to the problem reported in \e[32mhttps://github.com/OSGeo/homebrew-osgeo4mac/issues/510\e[0m\n\n"
     printf  "  Try after doing:\n\n"
-    printf  "    \e[32m$ brew reinstall ninja gsl python qt sip-qt5 pyqt-qt5 pyqt5-webkit qscintilla2-qt5 six bison flex pkg-config\e[0m\n\n"
-    printf  "    \e[32m$ brew link --overwrite pyqt-qt5\e[0m  \e[1;33m(**)\e[0m\n\n"
+    printf  "    \e[32m$ brew reinstall ninja gsl python qt osgeo-sip osgeo-pyqt osgeo-pyqt-webkit osgeo-qscintilla2 six bison flex pkg-config\e[0m\n\n"
+    printf  "    \e[32m$ brew link --overwrite osgeo-pyqt\e[0m  \e[1;33m(**)\e[0m\n\n"
     printf  "- Other Notes:\n\n"
     printf  "    - An installation that failed previously may have created this link\n\n"
     printf  "      \033[31m#{HOMEBREW_PREFIX}/lib/python#{py_ver}/site-packages/PyQt5/uic/widget-plugins/qgis_customwidgets.py\e[0m, you will need to delete it.\n\n"
@@ -345,8 +331,6 @@ class QgisLtr < Formula
     printf  "      Try after doing: \e[32m$ brew unlink gettext && brew link --force gettext\e[0m  \e[1;33m(***)\e[0m\n\n"
     printf  "\n\033[31mWe recommend that you run on the terminal\e[0m \e[1;33m(*)\e[0m\033[31m,\e[1;33m(**)\e[0m \033[31mand\e[0m \e[1;33m(***)\e[0m \033[31mbefore installation,\e[0m\n"
     printf  "\n\033[31mto make sure everything works correctly.\e[0m\n\n"
-    printf  "\n\033[31mIf you will use additional supports, we recommend that you first install \e[1;34mqgis-res\e[0m \033[31mwith\e[0m \e[1;33m--with-r\e[0m  \033[31mor\e[0m \e[1;33m--with-r-sethrfore\e[0m, \033[31mand\e[0m \e[1;33m--with-complete\e[0m,\e[0m\n"
-    printf  "\n\033[31mto ensure that you have all the necessary modules.\e[0m\n\n"
     printf "\033[31mThe installation will continue, but remember the above.\e[0m\n"
 
     30.downto(0) do |i|
@@ -360,63 +344,63 @@ class QgisLtr < Formula
     # to ensure that the patches are applied
     mkdir "#{prefix}/QGIS.app/Contents/Resources/python/plugins/"
 
-    if build.with?("orfeo") || brewed_orfeo?
+    # OTB is available from branch_3.8
+    unless build.head?
+    #   resource("otb").stage do
+    #     cp_r "./otb", "#{buildpath}/python/plugins/"
+    #   end
       resource("otb").stage do
-        cp_r "./otb", "#{buildpath}/python/plugins/"
+        cp_r "./otb", "#{prefix}/QGIS.app/Contents/Resources/python/plugins/"
       end
-      resource("OtbUtils").stage do
-        cp_r "./OtbUtils.diff", "#{buildpath}"
-      end
-      resource("OtbAlgorithmProvider").stage do
-        cp_r "./OtbAlgorithmProvider.diff", "#{buildpath}"
-      end
-      system "patch", "-p1", "-i", "#{buildpath}/OtbUtils.diff"
-      system "patch", "-p1", "-i", "#{buildpath}/OtbAlgorithmProvider.diff"
-      cp_r "#{buildpath}/python/plugins/otb", "#{prefix}/QGIS.app/Contents/Resources/python/plugins/"
+    #   resource("OtbUtils").stage do
+    #     cp_r "./OtbUtils.diff", "#{buildpath}"
+    #   end
+    #   resource("OtbAlgorithmProvider").stage do
+    #     cp_r "./OtbAlgorithmProvider.diff", "#{buildpath}"
+    #   end
+    #   system "patch", "-p1", "-i", "#{buildpath}/OtbUtils.diff"
+    #   system "patch", "-p1", "-i", "#{buildpath}/OtbAlgorithmProvider.diff"
+    #   cp_r "#{buildpath}/python/plugins/otb", "#{prefix}/QGIS.app/Contents/Resources/python/plugins/"
     end
 
-    if build.with? "r#{build.with?("r-sethrfore") ? "-sethrfore" : ""}" || brewed_r?
-      resource("r").stage do
-        cp_r "./processing_r", "#{prefix}/QGIS.app/Contents/Resources/python/plugins/"
-      end
+    # R
+    resource("r").stage do
+      cp_r "./processing_r", "#{prefix}/QGIS.app/Contents/Resources/python/plugins/"
     end
 
-    if build.with?("whitebox") || brewed_whitebox?
-      resource("whitebox").stage do
-        cp_r "./", "#{buildpath}/python/plugins/processing_whitebox"
-      end
-      resource("whiteboxProvider").stage do
-        cp_r "./whiteboxProvider.diff", "#{buildpath}"
-      end
-      system "patch", "-p1", "-i", "#{buildpath}/whiteboxProvider.diff"
-      cp_r "#{buildpath}/python/plugins/processing_whitebox", "#{prefix}/QGIS.app/Contents/Resources/python/plugins/"
+    # WhiteboxTools
+    resource("whitebox").stage do
+      cp_r "./", "#{buildpath}/python/plugins/processing_whitebox"
     end
+    resource("whiteboxProvider").stage do
+      cp_r "./whiteboxProvider.diff", "#{buildpath}"
+    end
+    system "patch", "-p1", "-i", "#{buildpath}/whiteboxProvider.diff"
+    cp_r "#{buildpath}/python/plugins/processing_whitebox", "#{prefix}/QGIS.app/Contents/Resources/python/plugins/"
 
-    if build.with?("taudem") || brewed_taudem?
-      resource("taudem").stage do
-        cp_r "./", "#{buildpath}/python/plugins/processing_taudem"
-      end
-      resource("taudemProvider").stage do
-        cp_r "./taudemProvider.diff", "#{buildpath}"
-      end
-      resource("taudemUtils").stage do
-        cp_r "./taudemUtils.diff", "#{buildpath}"
-      end
-      system "patch", "-p1", "-i", "#{buildpath}/taudemProvider.diff"
-      system "patch", "-p1", "-i", "#{buildpath}/taudemUtils.diff"
-      cp_r "#{buildpath}/python/plugins/processing_taudem", "#{prefix}/QGIS.app/Contents/Resources/python/plugins/"
+    # TauDEM
+    resource("taudem").stage do
+      cp_r "./", "#{buildpath}/python/plugins/processing_taudem"
     end
+    resource("taudemProvider").stage do
+      cp_r "./taudemProvider.diff", "#{buildpath}"
+    end
+    resource("taudemUtils").stage do
+      cp_r "./taudemUtils.diff", "#{buildpath}"
+    end
+    system "patch", "-p1", "-i", "#{buildpath}/taudemProvider.diff"
+    system "patch", "-p1", "-i", "#{buildpath}/taudemUtils.diff"
+    cp_r "#{buildpath}/python/plugins/processing_taudem", "#{prefix}/QGIS.app/Contents/Resources/python/plugins/"
 
-    if build.with?("lastools") || brewed_lastools?
-      resource("lastools").stage do
-        cp_r "./LAStools", "#{buildpath}/python/plugins/lastools"
-      end
-      resource("LAStoolsProvider").stage do
-        cp_r "./LAStoolsProvider.diff", "#{buildpath}"
-      end
-      system "patch", "-p1", "-i", "#{buildpath}/LAStoolsProvider.diff"
-      cp_r "#{buildpath}/python/plugins/lastools", "#{prefix}/QGIS.app/Contents/Resources/python/plugins/"
+    # LASTools
+    resource("lastools").stage do
+      cp_r "./LAStools", "#{buildpath}/python/plugins/lastools"
     end
+    resource("LAStoolsProvider").stage do
+      cp_r "./LAStoolsProvider.diff", "#{buildpath}"
+    end
+    system "patch", "-p1", "-i", "#{buildpath}/LAStoolsProvider.diff"
+    cp_r "#{buildpath}/python/plugins/lastools", "#{prefix}/QGIS.app/Contents/Resources/python/plugins/"
 
     # if you have a 3rd party Python installed, and/or Python 3,
     # you need to remove it from your path for the installation.
@@ -427,7 +411,7 @@ class QgisLtr < Formula
     pths = "#{HOMEBREW_PREFIX}/bin:#{HOMEBREW_PREFIX}/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/usr/X11/bin"
     ENV.append_path "PATH", "#{pths}"
 
-    # when gdal2-python.rb loaded, PYTHONPATH gets set to 2.7 site-packages...
+    # when osgeo-gdal-python.rb loaded, PYTHONPATH gets set to 2.7 site-packages...
     # clear it before calling any local python3 functions
     ENV["PYTHONPATH"] = nil
     if ARGV.debug?
@@ -457,34 +441,41 @@ class QgisLtr < Formula
               "${PYQT5_MOD_DIR}", lib/"python#{py_ver}/site-packages/PyQt5".to_s
 
     # install db plugins to local qt plugins prefix
-    if build.with? "qspatialite"
-      mkdir lib/"qt/plugins/sqldrivers"
-      inreplace "external/qspatialite/CMakeLists.txt",
-                "${QT_PLUGINS_DIR}/sqldrivers", lib/"qt/plugins/sqldrivers".to_s
-    end
+    # qspatialite
+    mkdir lib/"qt/plugins/sqldrivers"
+    inreplace "external/qspatialite/CMakeLists.txt",
+              "${QT_PLUGINS_DIR}/sqldrivers", lib/"qt/plugins/sqldrivers".to_s
+
+    # end
     if build.with? "oracle"
       mkdir lib/"qt/plugins/sqldrivers"
       inreplace "src/providers/oracle/ocispatial/CMakeLists.txt",
                 "${QT_PLUGINS_DIR}/sqldrivers", lib/"qt/plugins/sqldrivers".to_s
     end
 
+    # support for PROJ 6
+    # https://github.com/OSGeo/proj.4/wiki/proj.h-adoption-status
+    # ENV.append "CFLAGS", "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"
+
     args = std_cmake_args
     args << "-DCMAKE_BUILD_TYPE=RelWithDebInfo" if build.with? "debug" # override
 
     cmake_prefixes = %w[
       qt
-      qt5-webkit
-      pyqt5-webkit
-      qscintilla2-qt5
+      osgeo-qt-webkit
+      osgeo-pyqt-webkit
+      osgeo-qscintilla2
+      osgeo-pyqt
+      osgeo-sip
       qwt
       qwtpolar
       qca
-      qtkeychain
-      gdal2
+      osgeo-qtkeychain
+      osgeo-gdal
       gsl
       geos
-      proj
-      libspatialite
+      osgeo-proj
+      osgeo-libspatialite
       spatialindex
       expat
       sqlite
@@ -506,8 +497,8 @@ class QgisLtr < Formula
       -DEXPAT_INCLUDE_DIR=#{Formula["expat"].opt_include}
       -DEXPAT_LIBRARY=#{Formula["expat"].opt_lib}/libexpat.dylib
       -DFLEX_EXECUTABLE=#{Formula["flex"].opt_bin}/flex
-      -DPROJ_INCLUDE_DIR=#{Formula["proj"].opt_include}
-      -DPROJ_LIBRARY=#{Formula["proj"].opt_lib}/libproj.dylib
+      -DPROJ_INCLUDE_DIR=#{Formula["osgeo-proj"].opt_include}
+      -DPROJ_LIBRARY=#{Formula["osgeo-proj"].opt_lib}/libproj.dylib
       -DQCA_INCLUDE_DIR=#{qca_fw}/Headers
       -DQCA_LIBRARY=#{qca_fw}/qca-qt5
       -DQWTPOLAR_INCLUDE_DIR=#{qwtpolar_fw}/Headers
@@ -521,10 +512,10 @@ class QgisLtr < Formula
       -DLIBZIP_CONF_INCLUDE_DIR=#{Formula["libzip"].opt_lib}/pkgconfig
       -DLIBZIP_INCLUDE_DIR=#{Formula["libzip"].opt_include}
       -DLIBZIP_LIBRARY=#{Formula["libzip"].opt_lib}/libzip.dylib
-      -DSPATIALITE_INCLUDE_DIR=#{Formula["libspatialite"].opt_include}
-      -DSPATIALITE_LIBRARY=#{Formula["libspatialite"].opt_lib}/libspatialite.dylib
+      -DSPATIALITE_INCLUDE_DIR=#{Formula["osgeo-libspatialite"].opt_include}
+      -DSPATIALITE_LIBRARY=#{Formula["osgeo-libspatialite"].opt_lib}/libspatialite.dylib
       -DQTKEYCHAIN_INCLUDE_DIR=#{Formula["qtkeychain"].opt_include}/qt5keychain
-      -DQTKEYCHAIN_LIBRARY=#{Formula["qtkeychain"].opt_lib}/libqt5keychain.dylib
+      -DQTKEYCHAIN_LIBRARY=#{Formula["osgeo-qtkeychain"].opt_lib}/libqt5keychain.dylib
       -DLIBTASN1_INCLUDE_DIR=#{Formula["libtasn1"].opt_include}
       -DLIBTASN1_LIBRARY=#{Formula["libtasn1"].opt_lib}/libtasn1.dylib
       -DPYRCC_PROGRAM=#{libexec}/vendor/bin/pyrcc5
@@ -537,12 +528,13 @@ class QgisLtr < Formula
       -DWITH_QTWEBKIT=TRUE
       -DQT_LRELEASE_EXECUTABLE=#{Formula["qt"].opt_bin}/lrelease
       -DQT5_3DEXTRA_INCLUDE_DIR=#{Formula["qt"].opt_lib}/cmake/Qt53DExtras
-      -DQt5WebKitWidgets_DIR=#{Formula["qt5-webkit"].opt_lib}/cmake/Qt5WebKitWidgets
-      -DQt5WebKit_DIR=#{Formula["qt5-webkit"].opt_lib}/cmake/Qt5WebKit
-      -DQGIS_MACAPP_BUNDLE=0
-      -DQGIS_MACAPP_INSTALL_DEV=FALSE
-      -DQGIS_APP_NAME=QGIS-HB
+      -DQt5WebKitWidgets_DIR=#{Formula["osgeo-qt-webkit"].opt_lib}/cmake/Qt5WebKitWidgets
+      -DQt5WebKit_DIR=#{Formula["osgeo-qt-webkit"].opt_lib}/cmake/Qt5WebKit
     ]
+
+    args << "-DQGIS_MACAPP_BUNDLE=0"
+    args << "-DQGIS_MACAPP_INSTALL_DEV=FALSE"
+    # args << "-DQGIS_APP_NAME=QGIS-HB"
 
     # Build unit tests
     args << "-DENABLE_TESTS=FALSE"
@@ -551,10 +543,10 @@ class QgisLtr < Formula
     # Perform coverage tests
     args << "-DENABLE_COVERAGE=FALSE"
 
-    args << "-DSIP_BINARY_PATH=#{Formula["sip-qt5"].opt_bin}/sip"
+    args << "-DSIP_BINARY_PATH=#{Formula["osgeo-sip"].opt_bin}/sip"
     args << "-DSIP_DEFAULT_SIP_DIR=#{HOMEBREW_PREFIX}/share/sip"
-    args << "-DSIP_INCLUDE_DIR=#{Formula["sip-qt5"].opt_include}"
-    args << "-DSIP_MODULE_DIR=#{Formula["sip-qt5"].opt_lib}/python#{py_ver}/site-packages"
+    args << "-DSIP_INCLUDE_DIR=#{Formula["osgeo-sip"].opt_include}"
+    args << "-DSIP_MODULE_DIR=#{Formula["osgeo-sip"].opt_lib}/python#{py_ver}/site-packages"
 
     args << "-DPYQT5_MOD_DIR=#{Formula["python"].opt_prefix}/Frameworks/Python.framework/Versions/#{py_ver}/lib/python#{py_ver}/site-packages/PyQt5"
     args << "-DPYQT5_SIP_DIR=#{HOMEBREW_PREFIX}/share/sip/PyQt5" # Qt5
@@ -563,8 +555,8 @@ class QgisLtr < Formula
     args << "-DPYQT5_SIP_FLAGS=-n PyQt5.sip -t WS_MACX -t Qt_5_12_1"
 
     args << "-DQSCI_SIP_DIR=#{HOMEBREW_PREFIX}/share/sip/PyQt5/Qsci" # Qsci/qscimod5.sip
-    args << "-DQSCINTILLA_INCLUDE_DIR=#{Formula["qscintilla2-qt5"].opt_include}" # Qsci/qsciglobal.h
-    args << "-DQSCINTILLA_LIBRARY=#{Formula["qscintilla2-qt5"].opt_lib}/libqscintilla2_qt5.dylib"
+    args << "-DQSCINTILLA_INCLUDE_DIR=#{Formula["osgeo-qscintilla2"].opt_include}" # Qsci/qsciglobal.h
+    args << "-DQSCINTILLA_LIBRARY=#{Formula["osgeo-qscintilla2"].opt_lib}/libqscintilla2_qt5.dylib"
 
     # disable CCache
     args << "-DUSE_CCACHE=OFF"
@@ -644,105 +636,100 @@ class QgisLtr < Formula
     # used internal sources
     # args << "OPENCL_HPP_INCLUDE_DIR="
 
-    args << "-DWITH_SERVER=#{build.with?("server") || brewed_fcgi? ? "TRUE" : "FALSE"}"
-    if build.with?("server") || brewed_fcgi?
-      args << "-DWITH_SERVER_PLUGINS=TRUE"
-      fcgi_opt = Formula["fcgi"].opt_prefix
-      args << "-DFCGI_INCLUDE_DIR=#{fcgi_opt}/include"
-      args << "-DFCGI_LIBRARY=#{fcgi_opt}/lib/libfcgi.dylib"
-    end
+    # server
+    args << "-DWITH_SERVER=TRUE"
+    args << "-DWITH_SERVER_PLUGINS=TRUE"
+    fcgi_opt = Formula["fcgi"].opt_prefix
+    args << "-DFCGI_INCLUDE_DIR=#{fcgi_opt}/include"
+    args << "-DFCGI_LIBRARY=#{fcgi_opt}/lib/libfcgi.dylib"
 
-    args << "-DWITH_POSTGRESQL=#{build.with?("postgresql") || brewed_postgresql10? ? "TRUE" : "FALSE"}"
-    if build.with?("postgresql10")
-      args << "-DPOSTGRES_CONFIG=#{Formula["postgresql@10"].opt_bin}/pg_config"
-      args << "-DPOSTGRES_INCLUDE_DIR=#{Formula["postgresql@10"].opt_include}"
-      args << "-DPOSTGRES_LIBRARY=#{Formula["postgresql@10"].opt_lib}/libpq.dylib"
+    # postgresql
+    args << "-DWITH_POSTGRESQL=TRUE"
+    if build.with?("pg10")
+      args << "-DPOSTGRES_CONFIG=#{Formula["osgeo-postgresql@10"].opt_bin}/pg_config"
+      args << "-DPOSTGRES_INCLUDE_DIR=#{Formula["osgeo-postgresql@10"].opt_include}"
+      args << "-DPOSTGRES_LIBRARY=#{Formula["osgeo-postgresql@10"].opt_lib}/libpq.dylib"
     else
-      args << "-DPOSTGRES_CONFIG=#{Formula["postgresql"].opt_bin}/pg_config"
-      args << "-DPOSTGRES_INCLUDE_DIR=#{Formula["postgresql"].opt_include}"
-      args << "-DPOSTGRES_LIBRARY=#{Formula["postgresql"].opt_lib}/libpq.dylib"
+      args << "-DPOSTGRES_CONFIG=#{Formula["osgeo-postgresql"].opt_bin}/pg_config"
+      args << "-DPOSTGRES_INCLUDE_DIR=#{Formula["osgeo-postgresql"].opt_include}"
+      args << "-DPOSTGRES_LIBRARY=#{Formula["osgeo-postgresql"].opt_lib}/libpq.dylib"
     end
 
-    args << "-DWITH_GRASS7=#{build.with?("grass") || brewed_grass? ? "TRUE" : "FALSE"}"
-    if build.with?("grass") || brewed_grass?
-      args << "-DWITH_GRASS=FALSE" # grass6
-      # this is to build the GRASS Plugin, not for Processing plugin support
-      grass = Formula["grass7"]
-      args << "-DGRASS_PREFIX7=#{grass.opt_prefix}/grass-base"
-      # keep superenv from stripping (use Cellar prefix)
-      ENV.append "CXXFLAGS", "-isystem #{grass.prefix.resolved_path}/grass-base/include"
-      # So that `libintl.h` can be found (use Cellar prefix; should not be needed anymore with QGIS 2.99+)
-      ENV.append "CXXFLAGS", "-isystem #{Formula["gettext"].include.resolved_path}"
-    end
+    # grass
+    args << "-DWITH_GRASS7=TRUE"
+    args << "-DWITH_GRASS=FALSE" # grass6
+    # this is to build the GRASS Plugin, not for Processing plugin support
+    grass = Formula["osgeo-grass"]
+    args << "-DGRASS_PREFIX7=#{grass.opt_prefix}/grass-base"
+    # keep superenv from stripping (use Cellar prefix)
+    ENV.append "CXXFLAGS", "-isystem #{grass.prefix.resolved_path}/grass-base/include"
+    # So that `libintl.h` can be found (use Cellar prefix; should not be needed anymore with QGIS 2.99+)
+    ENV.append "CXXFLAGS", "-isystem #{Formula["gettext"].include.resolved_path}"
 
-    # args << "-DWITH_GLOBE=#{build.with?("globe") || (brewed_openscenegraph? && brewed_osgqt? && brewed_osgearth?) ? "TRUE" : "FALSE"}"
-    # if build.with?("globe") || (brewed_openscenegraph? && brewed_osgqt? && brewed_osgearth?)
-    #   osg = Formula["openscenegraph-qt5"]
-    #   osgqt = Formula["osgqt"]
-    #   osgearth = Formula["osgearth-qt5"]
-    #   opoo "`openscenegraph-qt5` formula's keg not linked." unless osg.linked_keg.exist?
-    #
-    #   # OSG
-    #   # must be HOMEBREW_PREFIX/lib/osgPlugins-#.#.#, since all osg plugins are symlinked there
-    #   args << "-DOSG_PLUGINS_PATH=#{HOMEBREW_PREFIX}/lib/osgPlugins-#{osg.version}"
-    #   args << "-DOSG_DIR=#{osg.opt_prefix}"
-    #   args << "-DOSG_INCLUDE_DIR=#{osg.opt_include}" # osg/Node
-    #   args << "-DOSG_GEN_INCLUDE_DIR=#{osg.opt_include}" # osg/Config
-    #   args << "-DOSG_LIBRARY=#{osg.opt_lib}/libosg.dylib"
-    #   args << "-DOSGUTIL_LIBRARY=#{osg.opt_lib}/libosgUtil.dylib"
-    #   args << "-DOSGDB_LIBRARY=#{osg.opt_lib}/libosgDB.dylib"
-    #   args << "-DOSGTEXT_LIBRARY=#{osg.opt_lib}/libosgText.dylib"
-    #   args << "-DOSGTERRAIN_LIBRARY=#{osg.opt_lib}/libosgTerrain.dylib"
-    #   args << "-DOSGFX_LIBRARY=#{osg.opt_lib}/libosgFX.dylib"
-    #   args << "-DOSGSIM_LIBRARY=#{osg.opt_lib}/libosgSim.dylib"
-    #   args << "-DOSGVIEWER_LIBRARY=#{osg.opt_lib}/libosgViewer.dylib"
-    #   args << "-DOSGGA_LIBRARY=#{osg.opt_lib}/libosgGA.dylib"
-    #   args << "-DOSGQT_LIBRARY=#{osgqt.opt_lib}/libosgQt5.dylib"
-    #   args << "-DOSGWIDGET_LIBRARY=#{osg.opt_lib}/libosgWidget.dylib"
-    #   args << "-DOPENTHREADS_LIBRARY=#{osg.opt_lib}/libOpenThreads.dylib"
-    #   # args << "-DOPENTHREADS_INCLUDE_DIR=#{osg.opt_include}"
-    #   # args << "-DOSGSHADOW_LIBRARY=#{osg.opt_lib}/libosgShadow.dylib"
-    #   # args << "-DOSGMANIPULATOR_LIBRARY=#{osg.opt_lib}/libosgManipulator.dylib"
-    #   # args << "-DOSGPARTICLE_LIBRARY=#{osg.opt_lib}/libosgParticle.dylib"
-    #
-    #   # OSGEARTH
-    #   args << "-DOSGEARTH_DIR=#{osgearth.opt_prefix}"
-    #   args << "-DOSGEARTH_INCLUDE_DIR=#{osgearth.opt_include}" # osgEarth/TileSource
-    #   args << "-DOSGEARTH_GEN_INCLUDE_DIR=#{osgearth.opt_include}" # osgEarth/Common
-    #   args << "-DOSGEARTH_ELEVATION_QUERY=#{osgearth.opt_include}" # osgEarth/ElevationQuery
-    #   args << "-DOSGEARTH_LIBRARY=#{osgearth.opt_lib}/libosgEarth.dylib"
-    #   args << "-DOSGEARTHUTIL_LIBRARY=#{osgearth.opt_lib}/libosgEarthUtil.dylib"
-    #   args << "-DOSGEARTHFEATURES_LIBRARY=#{osgearth.opt_lib}/libosgEarthFeatures.dylib"
-    #   args << "-DOSGEARTHSYMBOLOGY_LIBRARY=#{osgearth.opt_lib}/libosgEarthSymbology.dylib"
-    #   args << "-DOSGEARTHQT_LIBRARY=#{osgearth.opt_lib}/libosgEarthQt5.dylib"
-    #   args << "-DOSGEARTHANNOTATION_LIBRARY=#{osgearth.opt_lib}/libosgEarthAnnotation.dylib"
-    #
-    #   args << "-DQt5OpenGL_INCLUDE_DIRS=#{Formula["qt"].opt_include}/QtOpenGL"
-    # end
+    # args << "-DWITH_GLOBE=TRUE"
+    # osg = Formula["osgeo-openscenegraph"]
+    # osgqt = Formula["osgqt"]
+    # osgearth = Formula["osgeo-osgearth"]
+    # opoo "`osgeo-openscenegraph` formula's keg not linked." unless osg.linked_keg.exist?
+    # # OSG
+    # # must be HOMEBREW_PREFIX/lib/osgPlugins-#.#.#, since all osg plugins are symlinked there
+    # args << "-DOSG_PLUGINS_PATH=#{HOMEBREW_PREFIX}/lib/osgPlugins-#{osg.version}"
+    # args << "-DOSG_DIR=#{osg.opt_prefix}"
+    # args << "-DOSG_INCLUDE_DIR=#{osg.opt_include}" # osg/Node
+    # args << "-DOSG_GEN_INCLUDE_DIR=#{osg.opt_include}" # osg/Config
+    # args << "-DOSG_LIBRARY=#{osg.opt_lib}/libosg.dylib"
+    # args << "-DOSGUTIL_LIBRARY=#{osg.opt_lib}/libosgUtil.dylib"
+    # args << "-DOSGDB_LIBRARY=#{osg.opt_lib}/libosgDB.dylib"
+    # args << "-DOSGTEXT_LIBRARY=#{osg.opt_lib}/libosgText.dylib"
+    # args << "-DOSGTERRAIN_LIBRARY=#{osg.opt_lib}/libosgTerrain.dylib"
+    # args << "-DOSGFX_LIBRARY=#{osg.opt_lib}/libosgFX.dylib"
+    # args << "-DOSGSIM_LIBRARY=#{osg.opt_lib}/libosgSim.dylib"
+    # args << "-DOSGVIEWER_LIBRARY=#{osg.opt_lib}/libosgViewer.dylib"
+    # args << "-DOSGGA_LIBRARY=#{osg.opt_lib}/libosgGA.dylib"
+    # args << "-DOSGQT_LIBRARY=#{osgqt.opt_lib}/libosgQt5.dylib"
+    # args << "-DOSGWIDGET_LIBRARY=#{osg.opt_lib}/libosgWidget.dylib"
+    # args << "-DOPENTHREADS_LIBRARY=#{osg.opt_lib}/libOpenThreads.dylib"
+    # # args << "-DOPENTHREADS_INCLUDE_DIR=#{osg.opt_include}"
+    # # args << "-DOSGSHADOW_LIBRARY=#{osg.opt_lib}/libosgShadow.dylib"
+    # # args << "-DOSGMANIPULATOR_LIBRARY=#{osg.opt_lib}/libosgManipulator.dylib"
+    # # args << "-DOSGPARTICLE_LIBRARY=#{osg.opt_lib}/libosgParticle.dylib"
+    # # OSGEARTH
+    # args << "-DOSGEARTH_DIR=#{osgearth.opt_prefix}"
+    # args << "-DOSGEARTH_INCLUDE_DIR=#{osgearth.opt_include}" # osgEarth/TileSource
+    # args << "-DOSGEARTH_GEN_INCLUDE_DIR=#{osgearth.opt_include}" # osgEarth/Common
+    # args << "-DOSGEARTH_ELEVATION_QUERY=#{osgearth.opt_include}" # osgEarth/ElevationQuery
+    # args << "-DOSGEARTH_LIBRARY=#{osgearth.opt_lib}/libosgEarth.dylib"
+    # args << "-DOSGEARTHUTIL_LIBRARY=#{osgearth.opt_lib}/libosgEarthUtil.dylib"
+    # args << "-DOSGEARTHFEATURES_LIBRARY=#{osgearth.opt_lib}/libosgEarthFeatures.dylib"
+    # args << "-DOSGEARTHSYMBOLOGY_LIBRARY=#{osgearth.opt_lib}/libosgEarthSymbology.dylib"
+    # args << "-DOSGEARTHQT_LIBRARY=#{osgearth.opt_lib}/libosgEarthQt5.dylib"
+    # args << "-DOSGEARTHANNOTATION_LIBRARY=#{osgearth.opt_lib}/libosgEarthAnnotation.dylib"
+    # # qt
+    # args << "-DQt5OpenGL_INCLUDE_DIRS=#{Formula["qt"].opt_include}/QtOpenGL"
 
     args << "-DWITH_ORACLE=#{build.with?("oracle") || brewed_oracle? ? "TRUE" : "FALSE"}"
     if build.with?("oracle") || brewed_oracle?
-      oracle_opt = Formula["oracle-client-sdk"].opt_prefix
+      oracle_opt = Formula["osgeo-oracle-client-sdk"].opt_prefix
       args << "-DOCI_INCLUDE_DIR=#{oracle_opt}/include/oci"
       args << "-DOCI_LIBRARY=#{oracle_opt}/lib/libclntsh.dylib"
     end
 
-    args << "-DWITH_QSPATIALITE=#{build.with?("qspatialite") ? "TRUE" : "FALSE"}"
+    args << "-DWITH_QSPATIALITE=TRUE"
 
     args << "-DWITH_APIDOC=#{build.with?("api-docs") ? "TRUE" : "FALSE"}"
 
-    args << "-DWITH_3D=#{build.with?("3d") ? "TRUE" : "FALSE"}"
+    args << "-DWITH_3D=TRUE"
 
-    # args << "-DWITH_QTWEBKIT=#{build.with?("qt5-webkit") ? "TRUE" : "FALSE"}"
-    # if build.with? "qt5-webkit"
-    #   args << "-DOPTIONAL_QTWEBKIT=#{Formula["qt5-webkit"].opt_lib}/cmake/Qt5WebKitWidgets"
+    # args << "-DWITH_QTWEBKIT=#{build.with?("osgeo-qt-webkit") ? "TRUE" : "FALSE"}"
+    # if build.with? "qtwebkit"
+    #   args << "-DOPTIONAL_QTWEBKIT=#{Formula["osgeo-qt-webkit"].opt_lib}/cmake/Qt5WebKitWidgets"
     # end
 
     # prefer opt_prefix for CMake modules that find versioned prefix by default
     # this keeps non-critical dependency upgrades from breaking QGIS linking
-    args << "-DGDAL_CONFIG=#{Formula["gdal2"].opt_bin}/gdal-config"
-    args << "-DGDAL_INCLUDE_DIR=#{Formula["gdal2"].opt_include}"
-    args << "-DGDAL_LIBRARY=#{Formula["gdal2"].opt_lib}/libgdal.dylib"
+    args << "-DGDAL_CONFIG=#{Formula["osgeo-gdal"].opt_bin}/gdal-config"
+    args << "-DGDAL_INCLUDE_DIR=#{Formula["osgeo-gdal"].opt_include}"
+    args << "-DGDAL_LIBRARY=#{Formula["osgeo-gdal"].opt_lib}/libgdal.dylib"
     args << "-DGEOS_CONFIG=#{Formula["geos"].opt_bin}/geos-config"
     args << "-DGEOS_INCLUDE_DIR=#{Formula["geos"].opt_include}"
     args << "-DGEOS_LIBRARY=#{Formula["geos"].opt_lib}/libgeos_c.dylib"
@@ -800,7 +787,7 @@ class QgisLtr < Formula
     # fixup some errant lib linking
     # TODO: fix upstream in CMake
     dy_libs = [lib/"qt/plugins/designer/libqgis_customwidgets.dylib"]
-    dy_libs << lib/"qt/plugins/sqldrivers/libqsqlspatialite.dylib" if build.with? "qspatialite"
+    dy_libs << lib/"qt/plugins/sqldrivers/libqsqlspatialite.dylib" # qspatialite
     dy_libs << lib/"qt/plugins/sqldrivers/libqsqlocispatial.dylib" if build.with? "oracle"
     dy_libs.each do |dy_lib|
       MachO::Tools.dylibs(dy_lib.to_s).each do |i_n|
@@ -818,13 +805,13 @@ class QgisLtr < Formula
 
     # update .app's bundle identifier, so other installers doesn't get confused
     inreplace prefix/"QGIS.app/Contents/Info.plist",
-              "org.qgis.qgis3", "org.qgis.qgis-hb#{build.head? ? "-dev" : ""}"
+              "org.qgis.qgis3", "org.qgis.osgeo-qgis-hb#{build.head? ? "-dev" : ""}"
 
     py_lib = lib/"python#{py_ver}/site-packages"
     py_lib.mkpath
     ln_s "../../../QGIS.app/Contents/Resources/python/qgis", py_lib/"qgis"
 
-    ln_s "QGIS.app/Contents/MacOS/fcgi-bin", prefix/"fcgi-bin" if build.with? "server"
+    ln_s "QGIS.app/Contents/MacOS/fcgi-bin", prefix/"fcgi-bin" # server
 
     doc.mkpath
     mv prefix/"QGIS.app/Contents/Resources/doc/api", doc/"api" if build.with? "api-docs"
@@ -834,7 +821,7 @@ class QgisLtr < Formula
     # only works with QGIS > 2.0.1
     # doesn't need executable bit set, loaded by Python runner in QGIS
     # TODO: for Py3
-    cp_r "#{Formula["qgis-res"].opt_libexec}/pyqgis_startup.py", "#{libexec}/pyqgis_startup.py"
+    cp_r "#{Formula["osgeo-qgis-res"].opt_libexec}/pyqgis_startup.py", "#{libexec}/pyqgis_startup.py"
 
     bin.mkdir
     qgis_bin = bin/name.to_s
@@ -879,25 +866,21 @@ class QgisLtr < Formula
 
     # prepend qt based utils to PATH (reverse order)
     pths.insert(0, "#{Formula["qca"].opt_bin}")
-    pths.insert(0, "#{Formula["pyqt"].opt_bin}")
-    pths.insert(0, "#{Formula["sip"].opt_bin}")
+    pths.insert(0, "#{Formula["osgeo-pyqt"].opt_bin}")
+    pths.insert(0, "#{Formula["osgeo-sip"].opt_bin}")
     pths.insert(0, "#{Formula["qt"].opt_bin}")
 
-    if opts.include?("with-gpsbabel") || brewed_gpsbabel?
-      pths.insert(0, "#{Formula["gpsbabel"].opt_bin}")
-    end
+    pths.insert(0, "#{Formula["gpsbabel"].opt_bin}")
 
     # we need to manually add the saga lts path, since it's keg only
-    if opts.include?("with-saga") || brewed_saga?
-      pths.insert(0, "#{Formula["saga-gis-lts"].opt_bin}")
-    end
+    pths.insert(0, "#{Formula["osgeo-saga-lts"].opt_bin}")
 
     envars = {
       :PATH => pths.join(pthsep),
       :QGIS_BUNDLE => "#{opt_prefix}/QGIS.app/Contents",
       :QGIS_PREFIX_PATH => "#{opt_prefix}/QGIS.app/Contents/MacOS",
       :GDAL_DRIVER_PATH => "#{HOMEBREW_PREFIX}/lib/gdalplugins",
-      :GDAL_DATA => "#{Formula["gdal2"].opt_share}/gdal",
+      :GDAL_DATA => "#{Formula["osgeo-gdal"].opt_share}/gdal",
       :CHECK_DISK_FREE_SPACE => "FALSE",
       :PYTHONPATH => pypths.join(pthsep),
       # if it is set, grass it will not work correctly, using Python 2
@@ -920,99 +903,98 @@ class QgisLtr < Formula
     proc_plugins = "#{app}/Contents/Resources/python/plugins"
     proc_plugins_algs = "#{proc_plugins}/processing/algs"
 
-    if opts.include?("with-grass") || brewed_grass?
-      # for core integration plugin support
-      grass = Formula["grass7"]
-      grass_version = "#{grass.version}"
-      envars[:GRASS_PREFIX] = "#{grass.opt_prefix}/grass-base"
-      envars[:GRASS_SH] = "/bin/sh"
-      envars[:GRASS_PROJSHARE] = "#{Formula["proj"].opt_share}"
-      envars[:GRASS_VERSION] = "#{grass_version}"
-      envars[:GRASS_LD_LIBRARY_PATH] = "#{grass.opt_prefix}/grass-#{grass_version}/lib"
-      # envars[:GRASS_PERL] = "#{Formula["perl"].opt_bin}/perl"
-      envars[:PROJ_LIB] = "#{Formula["proj"].opt_lib}"
-      envars[:GEOTIFF_CSV] = "#{Formula["libgeotiff"].opt_share}/epsg_csv"
-      # envars[:R_HOME] = "#{Formula["r"].opt_bin}/R"
-      # envars[:R_HOME] = "/Applications/RStudio.app/Contents/MacOS/RStudio"
-      # envars[:R_USER] = "USER_PROFILE/Documents"
-      begin
-        inreplace "#{proc_plugins_algs}/grass7/Grass7Utils.py",
-                  "'/Applications/GRASS-7.{}.app/Contents/MacOS'.format(version)",
-                  "'#{grass.opt_prefix}/grass-base'"
-        puts "GRASS 7 GrassUtils.py has been updated"
-        rescue Utils::InreplaceError
-        puts "GRASS 7 GrassUtils.py already updated"
-      end
+    # for core integration plugin support
+
+    # grass
+    grass = Formula["osgeo-grass"]
+    grass_version = "#{grass.version}"
+    envars[:GRASS_PREFIX] = "#{grass.opt_prefix}/grass-base"
+    envars[:GRASS_SH] = "/bin/sh"
+    envars[:GRASS_PROJSHARE] = "#{Formula["osgeo-proj"].opt_share}"
+    envars[:GRASS_VERSION] = "#{grass_version}"
+    envars[:GRASS_LD_LIBRARY_PATH] = "#{grass.opt_prefix}/grass#{majmin_ver}/lib"
+    # envars[:GRASS_PERL] = "#{Formula["perl"].opt_bin}/perl"
+    envars[:PROJ_LIB] = "#{Formula["osgeo-proj"].opt_lib}"
+    envars[:GEOTIFF_CSV] = "#{Formula["osgeo-libgeotiff"].opt_share}/epsg_csv"
+    # envars[:R_HOME] = "#{Formula["r"].opt_bin}/R"
+    # envars[:R_HOME] = "/Applications/RStudio.app/Contents/MacOS/RStudio"
+    # envars[:R_USER] = "USER_PROFILE/Documents"
+    begin
+      inreplace "#{proc_plugins_algs}/grass7/Grass7Utils.py",
+                "'/Applications/GRASS-7.{}.app/Contents/MacOS'.format(version)",
+                "'#{grass.opt_prefix}/grass-base'"
+      puts "GRASS 7 GrassUtils.py has been updated"
+      rescue Utils::InreplaceError
+      puts "GRASS 7 GrassUtils.py already updated"
     end
 
-    if opts.include?("with-orfeo") || brewed_orfeo?
-      orfeo = Formula["orfeo6"]
-      # envars[:QGIS_PLUGINPATH] = "#{orfeo.opt_prefix}"
-      begin
-        inreplace "#{proc_plugins}/otb/OTBUtils.py" do |s|
-        # default geoid path
-        # try to replace first, so it fails (if already done) before global replaces
-        s.sub! "OTB_FOLDER", "#{orfeo.opt_prefix}"
-        s.sub! "OTB_APP_FOLDER", "#{orfeo.opt_lib}/otb/applications"
-        s.sub! "OTB_GEOID_FILE", "#{orfeo.opt_libexec}/default_geoid/egm96.grd"
-        end
-        puts "ORFEO 6 OTBUtils.py has been updated"
-        rescue Utils::InreplaceError
-        puts "ORFEO 6 OTBUtils.py already updated"
+    # OTB is available from branch_3.8
+    # unless build.head?
+    #   orfeo = Formula["osgeo-orfeo"]
+    #   # envars[:QGIS_PLUGINPATH] = "#{orfeo.opt_prefix}"
+    #   begin
+    #     inreplace "#{proc_plugins}/otb/OTBUtils.py" do |s|
+    #     # default geoid path
+    #     # try to replace first, so it fails (if already done) before global replaces
+    #     s.sub! "OTB_FOLDER", "#{orfeo.opt_prefix}"
+    #     s.sub! "OTB_APP_FOLDER", "#{orfeo.opt_lib}/otb/applications"
+    #     s.sub! "OTB_GEOID_FILE", "#{orfeo.opt_libexec}/default_geoid/egm96.grd"
+    #     end
+    #     puts "ORFEO 6 OTBUtils.py has been updated"
+    #     rescue Utils::InreplaceError
+    #     puts "ORFEO 6 OTBUtils.py already updated"
+    #   end
+    # end
+
+    # R
+    # Remove setting to activate provider
+    # See: https://github.com/north-road/qgis-processing-r/commit/7d8d182962392297690c02f77829b8cd64b5e8a9#diff-ce2ac984448f961cfa0f7e446bdbd4ca
+    # begin
+    #   inreplace "#{proc_plugins}/processing_r/processing/provider.py" do |s|
+    #   s.gsub! "'Activate'), False))", "'Activate'), True))"
+    #   end
+    #   puts "R RAlgorithmProvider.py has been updated"
+    #   rescue Utils::InreplaceError
+    #   puts "R provider.py already updated"
+    # end
+
+    # WhiteboxTools
+    begin
+      whitebox="#{Formula["osgeo-whitebox-tools"].opt_bin}/whitebox_tools"
+      inreplace "#{proc_plugins}/processing_whitebox/whiteboxProvider.py" do |s|
+      s.gsub! "/usr/local/opt/whitebox-tools/bin/whitebox_tools", "#{whitebox}"
       end
+      puts "Whitebox Tools whiteboxProvider.py has been updated"
+      rescue Utils::InreplaceError
+      puts "Whitebox Tools whiteboxProvider.py already updated"
     end
 
-    if opts.include?("with-r" || "with-r-sethrfore") || brewed_r?
-      begin
-        inreplace "#{proc_plugins}/processing_r/processing/provider.py" do |s|
-        s.gsub! "'Activate'), False))", "'Activate'), True))"
-        end
-        puts "R RAlgorithmProvider.py has been updated"
-        rescue Utils::InreplaceError
-        puts "R provider.py already updated"
+    # TauDEM
+    begin
+      taudem="#{Formula["osgeo-taudem"].opt_bin}"
+      mpich="#{Formula["open-mpi"].opt_bin}"
+      inreplace "#{proc_plugins}/processing_taudem/taudemProvider.py" do |s|
+      s.gsub! "/usr/local/opt/taudem/bin", "#{taudem}"
+      s.gsub! "/usr/local/opt/open-mpi/bin", "#{mpich}"
       end
+      puts "TauDEM taudemProvider.py and has been updated"
+      rescue Utils::InreplaceError
+      puts "TauDEM taudemProvider.py already updated"
     end
 
-    if opts.include?("with-whitebox") || brewed_whitebox?
-      begin
-        whitebox="#{Formula["whitebox-tools"].opt_bin}/whitebox_tools"
-        inreplace "#{proc_plugins}/processing_whitebox/whiteboxProvider.py" do |s|
-        s.gsub! "/usr/local/opt/whitebox-tools/bin/whitebox_tools", "#{whitebox}"
-        end
-        puts "Whitebox Tools whiteboxProvider.py has been updated"
-        rescue Utils::InreplaceError
-        puts "Whitebox Tools whiteboxProvider.py already updated"
+    # LASTools
+    begin
+      lastools="#{Formula["osgeo-lastools"].opt_prefix}"
+      inreplace "#{proc_plugins}/lastools/LAStoolsProvider.py" do |s|
+      s.gsub! 'C:\LAStools', "#{lastools}"
       end
-    end
-
-    if opts.include?("with-taudem") || brewed_taudem?
-      begin
-        taudem="#{Formula["taudem"].opt_bin}"
-        mpich="#{Formula["open-mpi"].opt_bin}"
-        inreplace "#{proc_plugins}/processing_taudem/taudemProvider.py" do |s|
-        s.gsub! "/usr/local/opt/taudem/bin", "#{taudem}"
-        s.gsub! "/usr/local/opt/open-mpi/bin", "#{mpich}"
-        end
-        puts "TauDEM taudemProvider.py and has been updated"
-        rescue Utils::InreplaceError
-        puts "TauDEM taudemProvider.py already updated"
-      end
-    end
-
-    if opts.include?("with-lastools") || brewed_lastools?
-      begin
-        lastools="#{Formula["lastools"].opt_prefix}"
-        inreplace "#{proc_plugins}/lastools/LAStoolsProvider.py" do |s|
-        s.gsub! 'C:\LAStools', "#{lastools}"
-        end
-        puts "LAStools LAStoolsProvider.py has been updated"
-        rescue Utils::InreplaceError
-        puts "LAStools LAStoolsProvider.py already updated"
-      end
+      puts "LAStools LAStoolsProvider.py has been updated"
+      rescue Utils::InreplaceError
+      puts "LAStools LAStoolsProvider.py already updated"
     end
 
     unless opts.include?("without-globe")
-      osg = Formula["openscenegraph-qt5"]
+      osg = Formula["osgeo-openscenegraph"]
       envars[:OSG_LIBRARY_PATH] = "#{HOMEBREW_PREFIX}/lib/osgPlugins-#{osg.version}"
     end
 
@@ -1075,22 +1057,22 @@ class QgisLtr < Formula
     qgis_bin.chmod 0755
 
     # link python modules
-    (prefix/"QGIS.app/Contents/Resources/python").install_symlink Dir["#{Formula["qgis-res"].opt_libexec}/vendor/lib/python#{py_ver}/site-packages/*"]
-    (prefix/"QGIS.app/Contents/Resources/python/PyQt5").install_symlink Dir["#{Formula["sip-qt5"].opt_lib}/python#{py_ver}/site-packages/PyQt5/*"]
-    ln_s "#{Formula["sip-qt5"].opt_lib}/python#{py_ver}/site-packages/sipconfig.py", "#{prefix}/QGIS.app/Contents/Resources/python/sipconfig.py"
-    ln_s "#{Formula["sip-qt5"].opt_lib}/python#{py_ver}/site-packages/sipdistutils.py", "#{prefix}/QGIS.app/Contents/Resources/python/sipdistutils.py"
-    (prefix/"QGIS.app/Contents/Resources/python/PyQt5").install_symlink Dir["#{Formula["pyqt-qt5"].opt_lib}/python#{py_ver}/site-packages/PyQt5/*"]
-    (prefix/"QGIS.app/Contents/Resources/python/PyQt5").install_symlink Dir["#{Formula["pyqt5-webkit"].opt_lib}/python#{py_ver}/site-packages/PyQt5/*"]
-    (prefix/"QGIS.app/Contents/Resources/python/PyQt5").install_symlink Dir["#{Formula["qscintilla2-qt5"].opt_lib}/python#{py_ver}/site-packages/PyQt5/*"]
-    (prefix/"QGIS.app/Contents/Resources/python").install_symlink Dir["#{Formula["matplotlib"].opt_lib}/python#{py_ver}/site-packages/*"]
+    (prefix/"QGIS.app/Contents/Resources/python").install_symlink Dir["#{Formula["osgeo-qgis-res"].opt_libexec}/vendor/lib/python#{py_ver}/site-packages/*"]
+    (prefix/"QGIS.app/Contents/Resources/python/PyQt5").install_symlink Dir["#{Formula["osgeo-sip"].opt_lib}/python#{py_ver}/site-packages/PyQt5/*"]
+    ln_s "#{Formula["osgeo-sip"].opt_lib}/python#{py_ver}/site-packages/sipconfig.py", "#{prefix}/QGIS.app/Contents/Resources/python/sipconfig.py"
+    ln_s "#{Formula["osgeo-sip"].opt_lib}/python#{py_ver}/site-packages/sipdistutils.py", "#{prefix}/QGIS.app/Contents/Resources/python/sipdistutils.py"
+    (prefix/"QGIS.app/Contents/Resources/python/PyQt5").install_symlink Dir["#{Formula["osgeo-pyqt"].opt_lib}/python#{py_ver}/site-packages/PyQt5/*"]
+    (prefix/"QGIS.app/Contents/Resources/python/PyQt5").install_symlink Dir["#{Formula["osgeo-pyqt-webkit"].opt_lib}/python#{py_ver}/site-packages/PyQt5/*"]
+    (prefix/"QGIS.app/Contents/Resources/python/PyQt5").install_symlink Dir["#{Formula["osgeo-qscintilla2"].opt_lib}/python#{py_ver}/site-packages/PyQt5/*"]
+    # (prefix/"QGIS.app/Contents/Resources/python").install_symlink Dir["#{Formula["osgeo-matplotlib"].opt_lib}/python#{py_ver}/site-packages/*"]
     # (prefix/"QGIS.app/Contents/Resources/python").install_symlink Dir["#{Formula["numpy"].opt_lib}/python#{py_ver}/site-packages/*"]
     # (prefix/"QGIS.app/Contents/Resources/python").install_symlink Dir["#{Formula["scipy"].opt_lib}/python#{py_ver}/site-packages/*"]
-    (prefix/"QGIS.app/Contents/Resources/python").install_symlink Dir["#{Formula["gdal2-python"].opt_lib}/python#{py_ver}/site-packages/*"]
+    (prefix/"QGIS.app/Contents/Resources/python").install_symlink Dir["#{Formula["osgeo-gdal-python"].opt_lib}/python#{py_ver}/site-packages/*"]
 
     # fix ImportError: No module named site for gdal_*.py
     mkdir "#{prefix}/QGIS.app/Contents/MacOS/bin"
-    (prefix/"QGIS.app/Contents/MacOS/bin").install_symlink Dir["#{Formula["gdal2-python"].opt_bin}/*"]
-    (prefix/"QGIS.app/Contents/MacOS/bin").install_symlink Dir["#{Formula["gdal2"].opt_bin}/*"]
+    (prefix/"QGIS.app/Contents/MacOS/bin").install_symlink Dir["#{Formula["osgeo-gdal-python"].opt_bin}/*"]
+    (prefix/"QGIS.app/Contents/MacOS/bin").install_symlink Dir["#{Formula["osgeo-gdal"].opt_bin}/*"]
     (prefix/"QGIS.app/Contents/Frameworks").install_symlink Dir["#{Formula["qt"].opt_frameworks}/*"]
     (prefix/"QGIS.app/Contents/Frameworks").install_symlink Dir["#{Formula["python"].opt_frameworks}/*"]
 
@@ -1120,7 +1102,7 @@ class QgisLtr < Formula
 
         \e[32m#!/usr/bin/env bash\e[0m
 
-        \e[32mqgis_location=$(find $(brew --prefix)/Cellar/qgis/ -name "3.*" -print -quit)/QGIS.app\e[0m
+        \e[32mqgis_location=$(find $(brew --prefix)/Cellar/osgeo-qgis/ -name "3.*" -print -quit)/QGIS.app\e[0m
         \e[32mosascript -e 'tell application "Finder"' -e 'make new alias to file (posix file "'$qgis_location'") at (posix file "/Applications")' -e 'end tell'\e[0m
 
         https://github.com/OSGeo/homebrew-osgeo4mac/issues/607#issuecomment-455905926
@@ -1144,34 +1126,30 @@ class QgisLtr < Formula
       EOS
     end
 
-    if build.with?("lastools")
-      s += <<~EOS
+    s += <<~EOS
 
-        You installed LAStools!
+      You installed LAStools!
 
-        If you will use Wine to have more features:
+      If you will use Wine to have more features:
 
-        \n1 - Download \e[32mhttp://lastools.org/download/LAStools.zip\e[0m and unzip LASTools.
-            Remember where you unzipped it.
+      \n1 - Download \e[32mhttp://lastools.org/download/LAStools.zip\e[0m and unzip LASTools.
+          Remember where you unzipped it.
 
-        2 - Start QGIS. Select \e[32mProcessing/Options.\e[0m
-            In the Providers section scroll to “LASTools”
+      2 - Start QGIS. Select \e[32mProcessing/Options.\e[0m
+          In the Providers section scroll to “LASTools”
 
-            \033[31mLASTools folder:\e[0m \e[32mLASTools directory\e[0m (unzipped)
-            \033[31mWine Folder:\e[0m \e[32m#{Formula["wine"].opt_bin}\e[0m\n
-      EOS
-    end
+          \033[31mLASTools folder:\e[0m \e[32mLASTools directory\e[0m (unzipped)
+          \033[31mWine Folder:\e[0m \e[32m#{Formula["wine"].opt_bin}\e[0m\n
+    EOS
 
-    if build.with?("grass")
-      s += <<~EOS
-        If you have built GRASS 7 for the Processing plugin set the following in QGIS
+    s += <<~EOS
+      If you have built GRASS 7 for the Processing plugin set the following in QGIS
 
-          \e[32mProcessing -> Options: Providers -> GRASS GIS 7 commands -> GRASS 7 folder\e[0m
+        \e[32mProcessing -> Options: Providers -> GRASS GIS 7 commands -> GRASS 7 folder\e[0m
 
-          to \e[32m#{HOMEBREW_PREFIX}/opt/grass7/grass-base\e[0m
+        to \e[32m#{HOMEBREW_PREFIX}/opt/osgeo-grass/grass-base\e[0m
 
-      EOS
-    end
+    EOS
 
     s += <<~EOS
       QGIS plugins may need extra Python modules to function. Most can be installed
@@ -1202,64 +1180,26 @@ class QgisLtr < Formula
 
   private
 
-  def brewed_grass?
-    Formula["grass7"].opt_prefix.exist?
-  end
-
-  def brewed_saga?
-    Formula["saga-gis-lts"].opt_prefix.exist?
-  end
-
-  def brewed_orfeo?
-    Formula["orfeo6"].opt_prefix.exist?
-  end
-
-  def brewed_gpsbabel?
-    Formula["gpsbabel"].opt_prefix.exist?
+  def majmin_ver
+    grass_version = "#{Formula["osgeo-grass"].version}"
+    ver_split = grass_version.to_s.split(".")
+    ver_split[0] + ver_split[1]
   end
 
   # def brewed_openscenegraph?
-  #   Formula["openscenegraph-qt5"].opt_prefix.exist?
+  #   Formula["osgeo-openscenegraph"].opt_prefix.exist?
   # end
 
   # def brewed_osgqt?
-  #   Formula["osgqt"].opt_prefix.exist?
+  #   Formula["osgeo-osgqt"].opt_prefix.exist?
   # end
 
   # def brewed_osgearth?
-  #   Formula["osgearth-qt5"].opt_prefix.exist?
+  #   Formula["osgeo-osgearth"].opt_prefix.exist?
   # end
-
-  def brewed_r?
-    Formula["r"].opt_prefix.exist?
-  end
-
-  def brewed_lastools?
-    Formula["lastools"].opt_prefix.exist?
-  end
-
-  def brewed_taudem?
-    Formula["taudem"].opt_prefix.exist?
-  end
-
-  def brewed_whitebox?
-    Formula["whitebox-tools"].opt_prefix.exist?
-  end
-
-  def brewed_fcgi?
-    Formula["fcgi"].opt_prefix.exist?
-  end
-
-  # def brewed_postgresql?
-  #   Formula["postgresql"].opt_prefix.exist?
-  # end
-
-  def brewed_postgresql10?
-    Formula["postgresql@10"].opt_prefix.exist?
-  end
 
   def brewed_oracle?
-    Formula["oracle-client-sdk"].opt_prefix.exist?
+    Formula["osgeo-oracle-client-sdk"].opt_prefix.exist?
   end
 
   def brewed_python?
@@ -1297,15 +1237,15 @@ class QgisLtr < Formula
   end
 
   def gdal_python_packages
-    "#{Formula["gdal2-python"].opt_lib}/python#{py_ver}/site-packages"
+    "#{Formula["osgeo-gdal-python"].opt_lib}/python#{py_ver}/site-packages"
   end
 
   def gdal_python_opt_bin
-    "#{Formula["gdal2-python"].opt_bin}"
+    "#{Formula["osgeo-gdal-python"].opt_bin}"
   end
 
   def gdal_opt_bin
-    "#{Formula["gdal2"].opt_bin}"
+    "#{Formula["osgeo-gdal"].opt_bin}"
   end
 end
 
@@ -1364,6 +1304,19 @@ __END__
      STRING(REGEX REPLACE ".*\npyqt_sip_module:([^\n]+).*$" "\\1" PYQT5_SIP_IMPORT ${pyqt_config})
 
 
+--- a/src/app/qgisapp.cpp
++++ b/src/app/qgisapp.cpp
+@@ -509,7 +509,7 @@
+   if ( QgsProject::instance()->isDirty() )
+     caption.prepend( '*' );
+
+-  caption += QgisApp::tr( "QGIS" );
++  caption += QgisApp::tr( "OSGeo4Mac - QGIS" );
+
+   if ( Qgis::QGIS_VERSION.endsWith( QLatin1String( "Master" ) ) )
+   {
+
+
 --- a/src/ui/qgsabout.ui
 +++ b/src/ui/qgsabout.ui
 @@ -244,6 +244,16 @@
@@ -1374,7 +1327,7 @@ __END__
 +           <item>
 +            <widget class="QLabel" name="label_osgeo">
 +             <property name="text">
-+              <string>OSGeo4Mac Team / Maintainer: @fjperini - Collaborators: @nickrobison and @luispuerto</string>
++              <string>OSGeo4Mac Team / Maintainer: @fjperini - Collaborator: @luispuerto</string>
 +             </property>
 +             <property name="alignment">
 +              <set>Qt::AlignCenter</set>
