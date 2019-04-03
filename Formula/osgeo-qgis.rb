@@ -39,11 +39,19 @@ end
 class OsgeoQgis < Formula
   desc "Open Source Geographic Information System"
   homepage "https://www.qgis.org"
-  url "https://github.com/qgis/QGIS/archive/289f1372380baa5707c792316bc1356508098de8.tar.gz"
-  sha256 "473a3b11a53eb3bd4e4e2a42026db1c268e34586a4f4d84c368cbc9e43678bae"
-  version "3.6.1"
+  url "https://github.com/qgis/QGIS/archive/final-3_6_1.tar.gz"
+  sha256 "e5d891c5d00f3fbfa2a251d4916ce8e2be51534fde23cec5e68f4a351d27b0d3"
+  # version "3.6.1"
 
-  # revision 1
+  revision 1
+
+  bottle do
+    root_url "https://bottle.download.osgeo.org"
+    cellar :any
+    sha256 "9031e2297c21acf3730988ec14e7eb9c96f83370e51023a1e4c4c106585485b0" => :mojave
+    sha256 "9031e2297c21acf3730988ec14e7eb9c96f83370e51023a1e4c4c106585485b0" => :high_sierra
+    sha256 "bd3db031c8866a74190f7f99deefe46eda35190864c66d03f511141a4e9cf440" => :sierra
+  end
 
   head "https://github.com/qgis/QGIS.git", :branch => "master"
 
@@ -121,11 +129,11 @@ class OsgeoQgis < Formula
   depends_on "unixodbc"
   # depends_on "libiodbc"
   depends_on "freetds"
-  depends_on "psqlodbc"
+  depends_on "osgeo-psqlodbc"
   depends_on "libpq"
   depends_on "osgeo-postgis"
   depends_on "exiv2"
-  depends_on "liblas"
+  depends_on "osgeo-liblas"
   depends_on "osgeo-netcdf"
   depends_on "osgeo-pdal"
   depends_on "szip"
@@ -345,10 +353,13 @@ class OsgeoQgis < Formula
     mkdir "#{prefix}/QGIS.app/Contents/Resources/python/plugins/"
 
     # OTB is available from branch_3.8
-    # unless build.head?
+    unless build.head?
     #   resource("otb").stage do
     #     cp_r "./otb", "#{buildpath}/python/plugins/"
     #   end
+      resource("otb").stage do
+        cp_r "./otb", "#{prefix}/QGIS.app/Contents/Resources/python/plugins/"
+      end
     #   resource("OtbUtils").stage do
     #     cp_r "./OtbUtils.diff", "#{buildpath}"
     #   end
@@ -358,7 +369,7 @@ class OsgeoQgis < Formula
     #   system "patch", "-p1", "-i", "#{buildpath}/OtbUtils.diff"
     #   system "patch", "-p1", "-i", "#{buildpath}/OtbAlgorithmProvider.diff"
     #   cp_r "#{buildpath}/python/plugins/otb", "#{prefix}/QGIS.app/Contents/Resources/python/plugins/"
-    # end
+    end
 
     # R
     resource("r").stage do
@@ -452,7 +463,7 @@ class OsgeoQgis < Formula
 
     # support for PROJ 6
     # https://github.com/OSGeo/proj.4/wiki/proj.h-adoption-status
-    ENV.append "CFLAGS", "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"
+    # ENV.append "CFLAGS", "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"
 
     args = std_cmake_args
     args << "-DCMAKE_BUILD_TYPE=RelWithDebInfo" if build.with? "debug" # override
@@ -802,7 +813,7 @@ class OsgeoQgis < Formula
 
     # update .app's bundle identifier, so other installers doesn't get confused
     inreplace prefix/"QGIS.app/Contents/Info.plist",
-              "org.qgis.qgis3", "org.qgis.qgis-hb#{build.head? ? "-dev" : ""}"
+              "org.qgis.qgis3", "org.qgis.osgeo-qgis-hb#{build.head? ? "-dev" : ""}"
 
     py_lib = lib/"python#{py_ver}/site-packages"
     py_lib.mkpath
@@ -1301,23 +1312,23 @@ __END__
      STRING(REGEX REPLACE ".*\npyqt_sip_module:([^\n]+).*$" "\\1" PYQT5_SIP_IMPORT ${pyqt_config})
 
 
---- a/src/core/processing/qgsprocessingfeedback.cpp
-+++ b/src/core/processing/qgsprocessingfeedback.cpp
-@@ -22,6 +22,9 @@
- #if PROJ_VERSION_MAJOR > 4
- #include <proj.h>
- #else
-+#ifndef ACCEPT_USE_OF_DEPRECATED_PROJ_API_H
-+#define ACCEPT_USE_OF_DEPRECATED_PROJ_API_H
-+#endif
- #include <proj_api.h>
- #endif
-
-@@ -124,4 +127,3 @@ void QgsProcessingMultiStepFeedback::updateOverallProgress( double progress )
-   double currentAlgorithmProgress = progress / mChildSteps;
-   mFeedback->setProgress( baseProgress + currentAlgorithmProgress );
- }
--
+# --- a/src/core/processing/qgsprocessingfeedback.cpp
+# +++ b/src/core/processing/qgsprocessingfeedback.cpp
+# @@ -22,6 +22,9 @@
+#  #if PROJ_VERSION_MAJOR > 4
+#  #include <proj.h>
+#  #else
+# +#ifndef ACCEPT_USE_OF_DEPRECATED_PROJ_API_H
+# +#define ACCEPT_USE_OF_DEPRECATED_PROJ_API_H
+# +#endif
+#  #include <proj_api.h>
+#  #endif
+#
+# @@ -124,4 +127,3 @@ void QgsProcessingMultiStepFeedback::updateOverallProgress( double progress )
+#    double currentAlgorithmProgress = progress / mChildSteps;
+#    mFeedback->setProgress( baseProgress + currentAlgorithmProgress );
+#  }
+# -
 
 
 --- a/src/app/qgisapp.cpp
