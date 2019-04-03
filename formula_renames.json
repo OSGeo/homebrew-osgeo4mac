@@ -60,5 +60,6 @@
   "orfeo6": "osgeo-orfeo",
   "qgis-res": "osgeo-qgis-res",
   "qgis": "osgeo-qgis",
+  "qgis-ltr": "osgeo-qgis-ltr",
   "osgeo-pgsql-ogr-fdw": "osgeo-osgeo-pgsql-ogr-fdw"
 }
