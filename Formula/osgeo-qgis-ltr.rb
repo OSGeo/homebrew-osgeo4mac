@@ -43,7 +43,7 @@ class OsgeoQgisLtr < Formula
   sha256 "02efb32200cb13c848209b72f7f62f22594831041b93a509cd08db741d03805e"
   # version "3_4_6"
 
-  # revision 1
+  revision 1
 
   head "https://github.com/qgis/QGIS.git", :branch => "master"
 
@@ -805,7 +805,7 @@ class OsgeoQgisLtr < Formula
 
     # update .app's bundle identifier, so other installers doesn't get confused
     inreplace prefix/"QGIS.app/Contents/Info.plist",
-              "org.qgis.qgis3", "org.qgis.osgeo-qgis-hb#{build.head? ? "-dev" : ""}"
+              "org.qgis.qgis3", "org.qgis.osgeo-qgis-ltr-hb#{build.head? ? "-dev" : ""}"
 
     py_lib = lib/"python#{py_ver}/site-packages"
     py_lib.mkpath
