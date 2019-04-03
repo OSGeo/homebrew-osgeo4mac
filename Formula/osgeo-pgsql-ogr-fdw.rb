@@ -1,15 +1,8 @@
-class PgsqlOgrFdw < Formula
+class OsgeoPgsqlOgrFdw < Formula
   desc "PostgreSQL foreign data wrapper for OGR"
   homepage "https://github.com/pramsey/pgsql-ogr-fdw"
   url "https://github.com/pramsey/pgsql-ogr-fdw/archive/v1.0.7.tar.gz"
   sha256 "c776d9ad108818bae33336ca8d2219837e04d2c25c9086928e4bb6e06947b6e9"
-
-  bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    sha256 "d24ceabc0e9fe709877bf4fb863f9e6170824f89bd1b6e5838aa153860f6ea79" => :mojave
-    sha256 "d24ceabc0e9fe709877bf4fb863f9e6170824f89bd1b6e5838aa153860f6ea79" => :high_sierra
-    sha256 "d24ceabc0e9fe709877bf4fb863f9e6170824f89bd1b6e5838aa153860f6ea79" => :sierra
-  end
 
   # revision 1
 
@@ -27,7 +20,7 @@ class PgsqlOgrFdw < Formula
   end
 
   depends_on "osgeo-postgis"
-  depends_on "gdal2"
+  depends_on "osgeo-gdal"
 
   def install
     ENV.deparallelize
@@ -52,7 +45,7 @@ class PgsqlOgrFdw < Formula
   end
 
   def caveats;
-    pg = Formula["postgresql"].opt_prefix
+    pg = Formula["osgeo-postgresql"].opt_prefix
     <<~EOS
       For info on using extension, read the included REAMDE.md or visit:
         https://github.com/pramsey/pgsql-ogr-fdw
@@ -101,12 +94,12 @@ __END__
  EXTRA_CLEAN = sql/*.sql expected/*.out
 
 -GDAL_CONFIG = gdal-config
-+GDAL_CONFIG = /usr/local/opt/gdal2/bin/gdal-config
++GDAL_CONFIG = /usr/local/opt/osgeo-gdal/bin/gdal-config
  GDAL_CFLAGS = $(shell $(GDAL_CONFIG) --cflags)
  GDAL_LIBS = $(shell $(GDAL_CONFIG) --libs)
 
 -PG_CONFIG = pg_config
-+PG_CONFIG = /usr/local/opt/postgresql/bin/pg_config
++PG_CONFIG = /usr/local/opt/osgeo-postgresql/bin/pg_config
  REGRESS_OPTS = --encoding=UTF8
 
  PG_CPPFLAGS += $(GDAL_CFLAGS)

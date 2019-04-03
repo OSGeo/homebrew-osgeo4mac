@@ -59,5 +59,6 @@
   "ossim": "osgeo-ossim",
   "orfeo6": "osgeo-orfeo",
   "qgis-res": "osgeo-qgis-res",
-  "qgis": "osgeo-qgis"
+  "qgis": "osgeo-qgis",
+  "osgeo-pgsql-ogr-fdw": "osgeo-osgeo-pgsql-ogr-fdw"
 }
