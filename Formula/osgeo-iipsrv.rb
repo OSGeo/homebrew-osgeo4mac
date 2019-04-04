@@ -5,7 +5,7 @@ class OsgeoIipsrv < Formula
   :revision => "f68b225013c54dd08badcd55d0819d29eb4fc5f8"
   version "1.1-dev"
 
-  # revision 1
+  revision 1
 
   head "https://github.com/ruven/iipsrv.git", :branch => "master"
 
