@@ -43,7 +43,15 @@ class OsgeoQgisLtr < Formula
   sha256 "02efb32200cb13c848209b72f7f62f22594831041b93a509cd08db741d03805e"
   # version "3_4_6"
 
-  # revision 1
+  revision 1
+
+  bottle do
+    root_url "https://bottle.download.osgeo.org"
+    cellar :any
+    sha256 "fcf870d412e5aaf02621d52f4c664d8b9a2484a4c2fc10f77b3a007b8e520f8d" => :mojave
+    sha256 "fcf870d412e5aaf02621d52f4c664d8b9a2484a4c2fc10f77b3a007b8e520f8d" => :high_sierra
+    sha256 "4922f200c8c2895ae4b9cb6cadf46f2831078b0158cd25e5de527323d88b1817" => :sierra
+  end
 
   head "https://github.com/qgis/QGIS.git", :branch => "master"
 
@@ -805,7 +813,7 @@ class OsgeoQgisLtr < Formula
 
     # update .app's bundle identifier, so other installers doesn't get confused
     inreplace prefix/"QGIS.app/Contents/Info.plist",
-              "org.qgis.qgis3", "org.qgis.osgeo-qgis-hb#{build.head? ? "-dev" : ""}"
+              "org.qgis.qgis3", "org.qgis.osgeo-qgis-ltr-hb#{build.head? ? "-dev" : ""}"
 
     py_lib = lib/"python#{py_ver}/site-packages"
     py_lib.mkpath
