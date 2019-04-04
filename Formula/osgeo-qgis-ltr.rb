@@ -45,6 +45,14 @@ class OsgeoQgisLtr < Formula
 
   revision 1
 
+  bottle do
+    root_url "https://bottle.download.osgeo.org"
+    cellar :any
+    sha256 "fcf870d412e5aaf02621d52f4c664d8b9a2484a4c2fc10f77b3a007b8e520f8d" => :mojave
+    sha256 "fcf870d412e5aaf02621d52f4c664d8b9a2484a4c2fc10f77b3a007b8e520f8d" => :high_sierra
+    sha256 "4922f200c8c2895ae4b9cb6cadf46f2831078b0158cd25e5de527323d88b1817" => :sierra
+  end
+
   head "https://github.com/qgis/QGIS.git", :branch => "master"
 
   # fix FindQsci and FindPyQt5
