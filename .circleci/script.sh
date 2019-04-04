@@ -64,6 +64,11 @@ for f in ${CHANGED_FORMULAE};do
     # createdb template1
   fi
 
+  if [ "${f}" == "osgeo-iipsrv" ];then
+    # No such file or directory @ rb_sysopen - /usr/local/var/log/iipsrv.log
+    touch /usr/local/var/log/iipsrv.log
+  fi
+
   # if [[ $(brew list --versions ${f}) ]]; then
   #   echo "Clearing previously installed/cached formula ${f}..."
   #   brew uninstall --force --ignore-dependencies ${f} || true
