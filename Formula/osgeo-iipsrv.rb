@@ -1,21 +1,16 @@
-class Iipsrv < Formula
+class OsgeoIipsrv < Formula
+  desc "Publish spatial data and interactive mapping apps to the web"
   homepage "https://github.com/ruven/iipsrv"
   url "https://github.com/ruven/iipsrv.git",
-  :revision => "95a0393ccd165a1c17ec72db4a66d442c10b7c38"
+  :revision => "f68b225013c54dd08badcd55d0819d29eb4fc5f8"
   version "1.1-dev"
 
-  bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    cellar :any
-    sha256 "ddf28643ef4eb467b3578ad6f5512331c7b412f65842b4d8526c6f860d465cbf" => :mojave
-    sha256 "ddf28643ef4eb467b3578ad6f5512331c7b412f65842b4d8526c6f860d465cbf" => :high_sierra
-    sha256 "ddf28643ef4eb467b3578ad6f5512331c7b412f65842b4d8526c6f860d465cbf" => :sierra
-  end
+  # revision 1
+
+  head "https://github.com/ruven/iipsrv.git", :branch => "master"
 
   option "with-lighttpd", "Install lighttpd and iipsrv configuration file"
   option "with-nginx", "Install nginx and iipsrv configuration file"
-  option "with-vips", "Install VIPS for creating Tiled Pyramidal TIFFs"
-  option "with-imagemagick", "Install ImageMagick for creating Tiled Pyramidal TIFFs"
   option "without-tests", "Do not run test suite"
 
   depends_on "autoconf"
@@ -31,12 +26,12 @@ class Iipsrv < Formula
   depends_on "spawn-fcgi"
   depends_on "lighttpd" => :optional
   depends_on "nginx" => :optional
-  depends_on "vips" => :optional
-  depends_on "imagemagick" => :optional
+  depends_on "vips" # for creating Tiled Pyramidal TIFFs
+  depends_on "imagemagick" # for creating Tiled Pyramidal TIFFs
 
   resource "iipmooviewer" do
     url "https://github.com/ruven/iipmooviewer.git",
-    :revision => "93a6979130919f23da4c3abf7645d140ecfef7f5"
+    :revision => "cbcbe75b1af7d2fcf75c62d8fc650060c8081e13"
     version "2.0-dev"
   end
 
