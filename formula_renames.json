@@ -56,6 +56,7 @@
   "pointcloud": "osgeo-pointcloud",
   "postgis2": "osgeo-postgis",
   "openscenegraph-qt5": "osgeo-openscenegraph",
+  "osgqt": "osgeo-osgqt",
   "ossim": "osgeo-ossim",
   "orfeo6": "osgeo-orfeo",
   "qgis-res": "osgeo-qgis-res",

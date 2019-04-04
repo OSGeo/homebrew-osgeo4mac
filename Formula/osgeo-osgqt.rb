@@ -1,32 +1,24 @@
-class Osgqt < Formula
+class OsgeoOsgqt < Formula
   desc "3D graphics toolkit (osgQt)"
   homepage "https://github.com/openscenegraph/osgQt"
   url "https://github.com/openscenegraph/osgQt.git",
     :branch => "master",
-    :commit => "6d324db8a56feb7d1976e9fb3f1de9bf7d255646"
+    :commit => "8c6db61ef8ab650b972556142cceb11db057bda9"
   version "3.6.3"
 
-  revision 1
+  # revision 1
 
   head "https://github.com/openscenegraph/osgQt.git"
 
-  bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    cellar :any
-    rebuild 1
-    sha256 "fa239bc93027d6c20b18662b855d16a739609929aaf1a140f7d4fd1be78debba" => :mojave
-    sha256 "fa239bc93027d6c20b18662b855d16a739609929aaf1a140f7d4fd1be78debba" => :high_sierra
-    sha256 "fa239bc93027d6c20b18662b855d16a739609929aaf1a140f7d4fd1be78debba" => :sierra
-  end
-
   depends_on "cmake" => :build
   depends_on "pkg-config" => :build
-  depends_on "openscenegraph-qt5"
+  depends_on "osgeo-openscenegraph"
   depends_on "qt"
 
   # compatible with the new and old versions of OSG
   # QtWindowingSystem exist from OSG 3.5.3
-  patch :DATA
+  # patch :DATA
+  # for commit: 6d324db8a56feb7d1976e9fb3f1de9bf7d255646
 
   def install
     # Fix "fatal error: 'os/availability.h' file not found" on 10.11 and
@@ -61,7 +53,7 @@ class Osgqt < Formula
           return 0;
         }
     EOS
-    system ENV.cxx, "test.cpp", "-I#{include}", "-L#{lib}", "-losg", "-o", "test"
+    system ENV.cxx, "test.cpp", "-I#{include}", "-L#{lib}", "-I#{Formula["osgeo-openscenegraph"].opt_include}", "-L#{Formula["osgeo-openscenegraph"].opt_lib}", "-losg", "-o", "test"
     assert_equal `./test`.chomp, version.to_s
   end
 end
