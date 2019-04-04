@@ -1,8 +1,8 @@
 class OsgeoIipsrv < Formula
   desc "Publish spatial data and interactive mapping apps to the web"
   homepage "https://github.com/ruven/iipsrv"
-  url "https://github.com/ruven/iipsrv.git",
-  :revision => "f68b225013c54dd08badcd55d0819d29eb4fc5f8"
+  url "https://github.com/ruven/iipsrv/archive/f68b225013c54dd08badcd55d0819d29eb4fc5f8.tar.gz"
+  sha256 "9d9e90cdc1f4588f1cb14b004c17a07ffa3ad88cd2c3e69582b660483dc5114b"
   version "1.1-dev"
 
   revision 1
@@ -32,8 +32,8 @@ class OsgeoIipsrv < Formula
   depends_on "imagemagick" # for creating Tiled Pyramidal TIFFs
 
   resource "iipmooviewer" do
-    url "https://github.com/ruven/iipmooviewer.git",
-    :revision => "cbcbe75b1af7d2fcf75c62d8fc650060c8081e13"
+    url "https://github.com/ruven/iipmooviewer/archive/cbcbe75b1af7d2fcf75c62d8fc650060c8081e13.tar.gz"
+    sha256 "0c84fd68b9d295c37d3afd9b659442c0d5ba67ebe3f9c3fe10160d6aca5d9126"
     version "2.0-dev"
   end
 
