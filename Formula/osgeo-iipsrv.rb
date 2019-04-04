@@ -63,7 +63,13 @@ class OsgeoIipsrv < Formula
     end
 
     # Set up log
-    touch iipsrv_log
+    # touch iipsrv_log
+
+    # fix for: No such file or directory @ rb_sysopen - /usr/local/var/log/iipsrv.log
+    config = <<~EOS
+      # iipsrv_log
+    EOS
+    (var/"log/iipsrv.log").write config
 
     # Spawn-fcgi utility
     (bin/"iipsrv-spawn").write(spawn_script)
