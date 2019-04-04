@@ -9,6 +9,14 @@ class OsgeoIipsrv < Formula
 
   head "https://github.com/ruven/iipsrv.git", :branch => "master"
 
+  bottle do
+    root_url "https://bottle.download.osgeo.org"
+    cellar :any
+    sha256 "4e6c8c55f45543b26eaa7b031c87a4e00b3cfcbf037aa33c6e62fbef2cf22b6d" => :mojave
+    sha256 "4e6c8c55f45543b26eaa7b031c87a4e00b3cfcbf037aa33c6e62fbef2cf22b6d" => :high_sierra
+    sha256 "8ce2d0857dcf778a32aef8298b42e2a94d845526c87158fa3c88b24e58612ff3" => :sierra
+  end
+
   option "with-lighttpd", "Install lighttpd and iipsrv configuration file"
   option "with-nginx", "Install nginx and iipsrv configuration file"
   option "without-tests", "Do not run test suite"
