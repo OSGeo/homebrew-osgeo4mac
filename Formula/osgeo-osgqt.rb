@@ -10,6 +10,14 @@ class OsgeoOsgqt < Formula
 
   head "https://github.com/openscenegraph/osgQt.git"
 
+  bottle do
+    root_url "https://bottle.download.osgeo.org"
+    cellar :any
+    sha256 "a46381ad5bf779f261a2fa5193ebfd0c8855be402738dc65f920ef5652bf941b" => :mojave
+    sha256 "a46381ad5bf779f261a2fa5193ebfd0c8855be402738dc65f920ef5652bf941b" => :high_sierra
+    sha256 "9ffb4ec0c6d668244d61b7273aea57ebf5c3d309f0011460b50f1d56d5b8b733" => :sierra
+  end
+
   depends_on "cmake" => :build
   depends_on "pkg-config" => :build
   depends_on "osgeo-openscenegraph"
