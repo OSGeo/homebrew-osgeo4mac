@@ -17,6 +17,8 @@ class OsgeoIipsrv < Formula
   depends_on "automake"
   depends_on "libtool"
 
+  depends_on "pkg-config"
+
   depends_on "fcgi"
   depends_on "jpeg"
   depends_on "libtiff"
