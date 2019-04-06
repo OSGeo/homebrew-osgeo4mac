@@ -142,7 +142,7 @@ class OsgeoGdal < Formula
       "--with-qhull=internal",
       "--with-libz=#{Formula["libzip"].opt_prefix}",
       "--with-png=#{Formula["libpng"].opt_prefix}",
-      "--with-libtiff=#{Formula["libtiff"].opt_prefix}",
+      "--with-libtiff=internal",
       "--with-geotiff=#{Formula["osgeo-libgeotiff"].opt_prefix}",
       "--with-jpeg=#{Formula["jpeg"].opt_prefix}",
       "--with-gif=#{Formula["giflib"].opt_prefix}",
