@@ -23,7 +23,7 @@ class OsgeoGdal < Formula
   url "https://github.com/OSGeo/gdal/archive/v2.4.1.tar.gz"
   sha256 "17f94c0dfbecab2fc2433428766860de3c89c3fba57f5c9aa77749c1824c02aa"
 
-  revision 1
+  revision 2
 
   head do
     url "https://github.com/OSGeo/gdal.git", :branch => "master"
@@ -50,11 +50,11 @@ class OsgeoGdal < Formula
   depends_on "expat"
   depends_on "zlib"
   depends_on "qhull"
-  depends_on "curl"
+  depends_on "curl-openssl"
   depends_on "libpng"
   depends_on "freexl"
   depends_on "geos"
-  depends_on "jpeg"
+  depends_on "jpeg-turbo"
   depends_on "json-c"
   depends_on "giflib"
   depends_on "osgeo-libgeotiff"
@@ -142,7 +142,7 @@ class OsgeoGdal < Formula
       "--with-qhull=internal",
       "--with-libz=#{Formula["libzip"].opt_prefix}",
       "--with-png=#{Formula["libpng"].opt_prefix}",
-      "--with-libtiff=#{Formula["libtiff"].opt_prefix}",
+      "--with-libtiff=internal", # #{Formula["libtiff"].opt_prefix}
       "--with-geotiff=#{Formula["osgeo-libgeotiff"].opt_prefix}",
       "--with-jpeg=#{Formula["jpeg"].opt_prefix}",
       "--with-gif=#{Formula["giflib"].opt_prefix}",
