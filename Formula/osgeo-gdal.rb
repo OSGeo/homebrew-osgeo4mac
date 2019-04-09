@@ -143,7 +143,7 @@ class OsgeoGdal < Formula
       "--with-libz=#{Formula["libzip"].opt_prefix}",
       "--with-png=#{Formula["libpng"].opt_prefix}",
       "--with-libtiff=internal", # #{Formula["libtiff"].opt_prefix}
-      "--with-geotiff=#{Formula["osgeo-libgeotiff"].opt_prefix}",
+      "--with-geotiff=internal", # #{Formula["osgeo-libgeotiff"].opt_prefix}
       "--with-jpeg=#{Formula["jpeg"].opt_prefix}",
       "--with-gif=#{Formula["giflib"].opt_prefix}",
       "--with-libjson-c=#{Formula["json-c"].opt_prefix}",
@@ -154,7 +154,7 @@ class OsgeoGdal < Formula
       "--with-hdf4=#{Formula["osgeo-hdf4"].opt_prefix}",
       "--with-hdf5=#{Formula["hdf5"].opt_prefix}",
       "--with-netcdf=#{Formula["osgeo-netcdf"].opt_prefix}",
-      "--with-jasper=#{Formula["jasper"].opt_prefix}",
+      # "--with-jasper=#{Formula["jasper"].opt_prefix}", #  or GDAL_SKIP="Jasper"
       "--with-openjpeg=#{Formula["openjpeg"].opt_prefix}",
       "--with-expat=#{Formula["expat"].opt_prefix}",
       "--with-odbc=#{Formula["unixodbc"].opt_prefix}",
