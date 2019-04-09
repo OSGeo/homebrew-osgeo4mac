@@ -64,6 +64,18 @@ for f in ${CHANGED_FORMULAE};do
     # createdb template1
   fi
 
+  # mapnik - fix high_sierra-build
+  # Exiting... the following required dependencies were not found:
+  #  - boost regex (more info see: https://github.com/mapnik/mapnik/wiki/Mapnik-Installation & http://www.boost.org)
+  # Also, these OPTIONAL dependencies were not found:
+  #  - boost program_options (more info see: https://github.com/mapnik/mapnik/wiki/Mapnik-Installation & http://www.boost.org)
+  #  - boost_regex_icu (libboost_regex built with optional ICU unicode support is needed for unicode regex support in mapnik.)
+  #  - gdal (GDAL C++ library | configured using gdal-config program | try setting GDAL_CONFIG SCons option | more info: https://github.com/mapnik/mapnik/wiki/GDAL)
+  if [ "${f}" == "osgeo-mapnik" ];then
+    cp_r "#{buildpath}/config.log", "#{prefix}"
+    brew unlink boost && brew link boost --force
+  fi
+
   # if [[ $(brew list --versions ${f}) ]]; then
   #   echo "Clearing previously installed/cached formula ${f}..."
   #   brew uninstall --force --ignore-dependencies ${f} || true
