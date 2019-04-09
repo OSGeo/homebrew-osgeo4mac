@@ -23,7 +23,7 @@ class OsgeoGdal < Formula
   url "https://github.com/OSGeo/gdal/archive/v2.4.1.tar.gz"
   sha256 "17f94c0dfbecab2fc2433428766860de3c89c3fba57f5c9aa77749c1824c02aa"
 
-  revision 1
+  revision 2
 
   head do
     url "https://github.com/OSGeo/gdal.git", :branch => "master"
@@ -42,6 +42,7 @@ class OsgeoGdal < Formula
   # we will verify that other versions are not linked
   depends_on Unlinked
 
+  option "with-proj5", "Build with PROJ5"
   option "with-pg10", "Build with PostgreSQL 10 client"
   deprecated_option "with-postgresql10" => "with-pg10"
 
@@ -50,11 +51,11 @@ class OsgeoGdal < Formula
   depends_on "expat"
   depends_on "zlib"
   depends_on "qhull"
-  depends_on "curl"
+  depends_on "curl-openssl"
   depends_on "libpng"
   depends_on "freexl"
   depends_on "geos"
-  depends_on "jpeg"
+  depends_on "jpeg-turbo"
   depends_on "json-c"
   depends_on "giflib"
   depends_on "osgeo-libgeotiff"
@@ -63,7 +64,6 @@ class OsgeoGdal < Formula
   depends_on "pcre" # for REGEXP operator in SQLite/Spatialite driver
   depends_on "osgeo-libspatialite"
   depends_on "libtiff"
-  depends_on "osgeo-proj"
   depends_on "numpy"
   depends_on "armadillo"
   depends_on "sfcgal"
@@ -97,6 +97,12 @@ class OsgeoGdal < Formula
   depends_on "xz" # get liblzma compression algorithm library from XZutils
 
   # depends_on "charls" # cask
+
+  if build.with?("proj5")
+    depends_on "osgeo-proj@5"
+  else
+    depends_on "osgeo-proj"
+  end
 
   if build.with?("pg10")
     depends_on "osgeo-postgresql@10"
@@ -142,19 +148,18 @@ class OsgeoGdal < Formula
       "--with-qhull=internal",
       "--with-libz=#{Formula["libzip"].opt_prefix}",
       "--with-png=#{Formula["libpng"].opt_prefix}",
-      "--with-libtiff=#{Formula["libtiff"].opt_prefix}",
-      "--with-geotiff=#{Formula["osgeo-libgeotiff"].opt_prefix}",
+      "--with-libtiff=internal", # #{Formula["libtiff"].opt_prefix}
+      "--with-geotiff=internal", # #{Formula["osgeo-libgeotiff"].opt_prefix}
       "--with-jpeg=#{Formula["jpeg"].opt_prefix}",
       "--with-gif=#{Formula["giflib"].opt_prefix}",
       "--with-libjson-c=#{Formula["json-c"].opt_prefix}",
       "--with-libiconv-prefix=#{Formula["libiconv"].opt_prefix}",
-      "--with-proj=#{Formula["osgeo-proj"].opt_prefix}",
       "--with-zstd=#{Formula["zstd"].opt_prefix}",
       "--with-cfitsio=#{Formula["cfitsio"].opt_prefix}",
       "--with-hdf4=#{Formula["osgeo-hdf4"].opt_prefix}",
       "--with-hdf5=#{Formula["hdf5"].opt_prefix}",
       "--with-netcdf=#{Formula["osgeo-netcdf"].opt_prefix}",
-      "--with-jasper=#{Formula["jasper"].opt_prefix}",
+      # "--with-jasper=#{Formula["jasper"].opt_prefix}", #  or GDAL_SKIP="Jasper"
       "--with-openjpeg=#{Formula["openjpeg"].opt_prefix}",
       "--with-expat=#{Formula["expat"].opt_prefix}",
       "--with-odbc=#{Formula["unixodbc"].opt_prefix}",
@@ -301,6 +306,12 @@ class OsgeoGdal < Formula
       inreplace "GDALmake.opt.in", "PDF_PLUGIN),yes", "PDF_PLUGIN),no"
 
       args = configure_args
+
+      if build.with?("proj5")
+        args << "--with-proj=#{Formula["osgeo-proj@5"].opt_prefix}"
+      else
+        args << "--with-proj=#{Formula["osgeo-proj"].opt_prefix}"
+      end
 
       if build.with?("pg10")
         args << "--with-pg=#{Formula["osgeo-postgresql@10"].opt_bin}/pg_config"
