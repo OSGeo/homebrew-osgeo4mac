@@ -42,6 +42,7 @@ class OsgeoGdal < Formula
   # we will verify that other versions are not linked
   depends_on Unlinked
 
+  option "with-proj5", "Build with PROJ5"
   option "with-pg10", "Build with PostgreSQL 10 client"
   deprecated_option "with-postgresql10" => "with-pg10"
 
@@ -63,7 +64,6 @@ class OsgeoGdal < Formula
   depends_on "pcre" # for REGEXP operator in SQLite/Spatialite driver
   depends_on "osgeo-libspatialite"
   depends_on "libtiff"
-  depends_on "osgeo-proj"
   depends_on "numpy"
   depends_on "armadillo"
   depends_on "sfcgal"
@@ -97,6 +97,12 @@ class OsgeoGdal < Formula
   depends_on "xz" # get liblzma compression algorithm library from XZutils
 
   # depends_on "charls" # cask
+
+  if build.with?("proj5")
+    depends_on "osgeo-proj@5"
+  else
+    depends_on "osgeo-proj"
+  end
 
   if build.with?("pg10")
     depends_on "osgeo-postgresql@10"
@@ -148,7 +154,6 @@ class OsgeoGdal < Formula
       "--with-gif=#{Formula["giflib"].opt_prefix}",
       "--with-libjson-c=#{Formula["json-c"].opt_prefix}",
       "--with-libiconv-prefix=#{Formula["libiconv"].opt_prefix}",
-      "--with-proj=#{Formula["osgeo-proj"].opt_prefix}",
       "--with-zstd=#{Formula["zstd"].opt_prefix}",
       "--with-cfitsio=#{Formula["cfitsio"].opt_prefix}",
       "--with-hdf4=#{Formula["osgeo-hdf4"].opt_prefix}",
@@ -301,6 +306,12 @@ class OsgeoGdal < Formula
       inreplace "GDALmake.opt.in", "PDF_PLUGIN),yes", "PDF_PLUGIN),no"
 
       args = configure_args
+
+      if build.with?("proj5")
+        args << "--with-proj=#{Formula["osgeo-proj@5"].opt_prefix}"
+      else
+        args << "--with-proj=#{Formula["osgeo-proj"].opt_prefix}"
+      end
 
       if build.with?("pg10")
         args << "--with-pg=#{Formula["osgeo-postgresql@10"].opt_bin}/pg_config"
