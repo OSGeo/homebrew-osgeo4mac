@@ -138,10 +138,6 @@ class OsgeoMapnik < Formula
     ENV.append "CUSTOM_CXXFLAGS", "-I#{Formula["sqlite"].opt_include}"
     ENV.append "CUSTOM_LDFLAGS", "-L#{Formula["sqlite"].opt_lib} -lsqlite3"
 
-    # support for PROJ 6
-    # https://github.com/mapnik/mapnik/issues/4036
-    ENV.append_to_cflags "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"
-
     args = %W[
       CC=#{ENV.cc}
       CXX=#{ENV.cxx}
@@ -150,6 +146,10 @@ class OsgeoMapnik < Formula
       INPUT_PLUGINS=all
       NIK2IMG=FALSE
     ]
+    
+    # support for PROJ 6
+    # https://github.com/mapnik/mapnik/issues/4036
+    args << "CUSTOM_DEFINES=-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"
 
     # http://site.icu-project.org/download/61#TOC-Migration-Issues
     # ENV.append "CXXFLAGS", "-DU_USING_ICU_NAMESPACE=1"
