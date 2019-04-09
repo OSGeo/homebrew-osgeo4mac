@@ -217,8 +217,8 @@ class OsgeoMapnik < Formula
     args << "GDAL_CONFIG=#{Formula["osgeo-gdal"].opt_bin}/gdal-config"
     args << "OCCI_INCLUDES=#{Formula["osgeo-gdal"].opt_include}"
     args << "OCCI_LIBS=#{Formula["osgeo-gdal"].opt_lib}"
-    args << "RASTERLITE_INCLUDES=#{Formula["osgeo-gdal"].opt_bin}"
-    args << "RASTERLITE_LIBS=#{Formula["osgeo-gdal"].opt_bin}"
+    args << "RASTERLITE_INCLUDES=#{Formula["osgeo-gdal"].opt_include}"
+    args << "RASTERLITE_LIBS=#{Formula["osgeo-gdal"].opt_lib}"
 
     args << "XML2_CONFIG=#{Formula["libxml2"].opt_bin}/xml2-config"
     args << "XML2_INCLUDES=#{Formula["libxml2"].opt_include}"
