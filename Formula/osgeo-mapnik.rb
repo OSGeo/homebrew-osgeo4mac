@@ -124,6 +124,9 @@ class OsgeoMapnik < Formula
     # Work around "error: no member named 'signbit' in the global namespace"
     # encountered when trying to detect boost regex in configure
     ENV.delete("SDKROOT") if DevelopmentTools.clang_build_version >= 900
+    
+    ENV.append "CPPPATH", "#{HOMEBREW_PREFIX}/include"
+    ENV.append "LIBPATH", "#{HOMEBREW_PREFIX}/lib"
 
     # install python modules
     venv = virtualenv_create(libexec/'vendor', "#{Formula["python"].opt_bin}/python3")
