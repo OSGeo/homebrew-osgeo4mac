@@ -10,7 +10,7 @@ class OsgeoMapnik < Formula
   # version "3.0.22"
   # https://github.com/mapnik/mapnik/wiki/MacInstallation_Homebrew
 
-  revision 1
+  revision 2
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
@@ -38,6 +38,7 @@ class OsgeoMapnik < Formula
   depends_on "webp"
   depends_on "libjpeg-turbo"
   depends_on "libxml2"
+  depends_on "python@2"
   depends_on "python"
 
   depends_on "osgeo-postgis"
@@ -124,12 +125,12 @@ class OsgeoMapnik < Formula
     # Work around "error: no member named 'signbit' in the global namespace"
     # encountered when trying to detect boost regex in configure
     ENV.delete("SDKROOT") if DevelopmentTools.clang_build_version >= 900
-    
+
     ENV.append "CPPPATH", "#{HOMEBREW_PREFIX}/include"
     ENV.append "LIBPATH", "#{HOMEBREW_PREFIX}/lib"
 
     # install python modules
-    venv = virtualenv_create(libexec/'vendor', "#{Formula["python"].opt_bin}/python3")
+    venv = virtualenv_create(libexec/'vendor', "#{Formula["python@2"].opt_bin}/python2")
     res = resources.map(&:name).to_set - %w[geometry polylabel protozero variant]
     res.each do |r|
       venv.pip_install resource(r)
@@ -149,7 +150,7 @@ class OsgeoMapnik < Formula
       INPUT_PLUGINS=all
       NIK2IMG=FALSE
     ]
-    
+
     # support for PROJ 6
     # https://github.com/mapnik/mapnik/issues/4036
     args << "CUSTOM_DEFINES=-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"
@@ -190,7 +191,7 @@ class OsgeoMapnik < Formula
 
     # fails if defined
     # args << "ICU_INCLUDES=#{Formula["icu4c"].opt_include}/unicode"
-    # args << "ICU_LIBS=#{Formula["icu4c"].opt_lib}"
+    # args << "ICU_LIBS=#{Formula["icu4c"].opt_lib}"
     # args << "ICU_LIB_NAME=#{Formula["icu4c"].opt_lib}"
 
     args << "CAIRO=TRUE"
@@ -200,6 +201,8 @@ class OsgeoMapnik < Formula
     args << "PKG_CONFIG_PATH=/usr/lib/pkgconfig:/usr/local/lib/pkgconfig:/usr/X11/lib/pkgconfig"
 
     args << "GRID_RENDERER=TRUE"
+
+    args << "SVG2PNG=True"
     args << "SVG_RENDERER=TRUE"
 
     args << "PNG=TRUE"
@@ -228,7 +231,7 @@ class OsgeoMapnik < Formula
     args << "XML2_LIBS=#{Formula["libxml2"].opt_lib}"
     # fails if defined
     # args << "XMLPARSER=libxml2"
-    # args << "OPTIONAL_LIBSHEADERS=#{Formula["libxml2"].opt_include}"
+    # args << "OPTIONAL_LIBSHEADERS=#{Formula["libxml2"].opt_include}"
 
     args << "HB_INCLUDES=#{Formula["harfbuzz"].opt_include}"
     args << "HB_LIBS=#{Formula["harfbuzz"].opt_lib}"
@@ -241,6 +244,8 @@ class OsgeoMapnik < Formula
     # args << "SQLITE_INCLUDES=#{Formula["sqlite"].opt_include}"
     # args << "SQLITE_LIBS=#{Formula["sqlite"].opt_lib}"
 
+    args << "PGSQL2SQLITE=True"
+
     if build.with?("pg10")
       args << "PG_CONFIG=#{Formula["osgeo-postgresql@10"].opt_bin}/pg_config"
       args << "PG_INCLUDES=#{Formula["osgeo-postgresql@10"].opt_include}"
@@ -251,14 +256,12 @@ class OsgeoMapnik < Formula
       args << "PG_LIBS=#{Formula["osgeo-postgresql"].opt_lib}"
     end
 
-    args << "PGSQL2SQLITE=True"
-
     # link variant as submodules are missing from source tarball
     # https://github.com/mapnik/mapnik/issues/3246#issuecomment-279646631
 
     # this is faster than doing "git submodule update..."
 
-    # rm_r "#{buildpath}/deps/mapbox/geometry"
+    # rm_r "#{buildpath}/deps/mapbox/geometry"
     # rm_r "#{buildpath}/deps/mapbox/polylabel"
     # rm_r "#{buildpath}/deps/mapbox/protozero"
     rm_r "#{buildpath}/deps/mapbox/variant"
@@ -275,19 +278,19 @@ class OsgeoMapnik < Formula
 
     # rm_r ".sconf_temp"
 
-    system "./configure", *args
+    # system "./configure", *args
     # system "./configure", 'CUSTOM_CXXFLAGS="-DU_USING_ICU_NAMESPACE=1"', *args
     # ./configure CXX="clang++" JOBS=`sysctl -n hw.ncpu`
     # To use a Python interpreter that is not named python for your build,
     # do something like the following instead:
     # PYTHON=python2 ./configure
     # make PYTHON=python2
-    system "make"
-    system "make", "install"
+    # system "make"
+    # system "make", "install"
 
-    # system "#{Formula["python"].opt_bin}/python3", "scons/scons.py", "./configure", "--config=cache", "--implicit-cache", "--max-drift=1", *args # "--jobs=${jobs}
-    # system "#{Formula["python"].opt_bin}/python3", "scons/scons.py"
-    # system "#{Formula["python"].opt_bin}/python3", "scons/scons.py", "install"
+    system "#{Formula["python@2"].opt_bin}/python2", "scons/scons.py", "./configure", "--config=cache", "--implicit-cache", "--max-drift=1", *args # "--jobs=${jobs}
+    system "#{Formula["python@2"].opt_bin}/python2", "scons/scons.py"
+    system "#{Formula["python@2"].opt_bin}/python2", "scons/scons.py", "install"
   end
 
   # def post_install
