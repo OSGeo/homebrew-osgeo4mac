@@ -39,11 +39,11 @@ end
 class OsgeoQgis < Formula
   desc "Open Source Geographic Information System"
   homepage "https://www.qgis.org"
-  url "https://github.com/qgis/QGIS/archive/final-3_6_1.tar.gz"
-  sha256 "e5d891c5d00f3fbfa2a251d4916ce8e2be51534fde23cec5e68f4a351d27b0d3"
-  # version "3.6.1"
+  url "https://github.com/qgis/QGIS/archive/final-3_6_2.tar.gz"
+  sha256 "10920eaac37ea5986a9f833a2db79ec5d5c359edfc6821643a24cfc68df48638"
+  # version "3.6.2"
 
-  revision 1
+  # revision 1
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
