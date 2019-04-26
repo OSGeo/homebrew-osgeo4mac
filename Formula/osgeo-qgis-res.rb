@@ -9,9 +9,9 @@ class OsgeoQgisRes < Formula
   homepage "https://www.qgis.org"
   url "https://gist.githubusercontent.com/dakcarto/11385561/raw/e49f75ecec96ed7d6d3950f45ad3f30fe94d4fb2/pyqgis_startup.py"
   sha256 "385dce925fc2d29f05afd6508bc1f46ec84c0bc607cc0c8dfce78a4bb93b9c4e"
-  version "3.6.1"
+  version "3.6.2"
 
-  revision 2
+  revision 1
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
