@@ -39,9 +39,9 @@ end
 class OsgeoQgisLtr < Formula
   desc "Open Source Geographic Information System"
   homepage "https://www.qgis.org"
-  url "https://github.com/qgis/QGIS/archive/final-3_4_6.tar.gz"
-  sha256 "02efb32200cb13c848209b72f7f62f22594831041b93a509cd08db741d03805e"
-  # version "3_4_6"
+  url "https://github.com/qgis/QGIS/archive/final-3_4_7.tar.gz"
+  sha256 "d070da42e842e59ce9a338b40784b9bc4582f3d48a19255fa8aef967cca653ba"
+  # version "3_4_7"
 
   revision 1
 
