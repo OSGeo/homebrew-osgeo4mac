@@ -43,7 +43,7 @@ class OsgeoQgisLtr < Formula
   sha256 "d070da42e842e59ce9a338b40784b9bc4582f3d48a19255fa8aef967cca653ba"
   # version "3_4_7"
 
-  revision 1
+  revision 2
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
@@ -311,6 +311,7 @@ class OsgeoQgisLtr < Formula
     # change splash
     rm "#{buildpath}/images/splash/splash.png"
     (buildpath/"images/splash").install resource("splash")
+    mv "#{buildpath}/images/splash/splash-3.4.png", "#{buildpath}/images/splash/splash.png",
 
     # suggestions before installing
     printf  "\n\033[31mSome suggestions that you should keep in mind!!!\e[0m\n\n"
