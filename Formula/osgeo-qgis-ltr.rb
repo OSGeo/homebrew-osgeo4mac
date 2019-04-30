@@ -301,8 +301,8 @@ class OsgeoQgisLtr < Formula
 
   # splash
   resource "splash" do
-    url "https://raw.githubusercontent.com/OSGeo/homebrew-osgeo4mac/master/docs/assets/images/splash.png"
-    sha256 "836d55171dadcb8db121673516ab9ef7b41d19ad994d5d1a41db2f5f1801e796"
+    url "https://bottle.download.osgeo.org/qgis-splash/splash-3.4.png"
+    sha256 "39aa3a7f99b3056a763da053ff74f39250f12b4088b02115c21ea97723d7fcb0"
   end
 
   def install
