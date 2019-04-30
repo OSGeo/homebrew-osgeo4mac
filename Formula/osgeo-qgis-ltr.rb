@@ -39,9 +39,9 @@ end
 class OsgeoQgisLtr < Formula
   desc "Open Source Geographic Information System"
   homepage "https://www.qgis.org"
-  url "https://github.com/qgis/QGIS/archive/final-3_4_6.tar.gz"
-  sha256 "02efb32200cb13c848209b72f7f62f22594831041b93a509cd08db741d03805e"
-  # version "3_4_6"
+  url "https://github.com/qgis/QGIS/archive/final-3_4_7.tar.gz"
+  sha256 "d070da42e842e59ce9a338b40784b9bc4582f3d48a19255fa8aef967cca653ba"
+  # version "3_4_7"
 
   revision 1
 
@@ -301,8 +301,8 @@ class OsgeoQgisLtr < Formula
 
   # splash
   resource "splash" do
-    url "https://raw.githubusercontent.com/OSGeo/homebrew-osgeo4mac/master/docs/assets/images/splash.png"
-    sha256 "836d55171dadcb8db121673516ab9ef7b41d19ad994d5d1a41db2f5f1801e796"
+    url "https://bottle.download.osgeo.org/qgis-splash/splash-3.4.png"
+    sha256 "39aa3a7f99b3056a763da053ff74f39250f12b4088b02115c21ea97723d7fcb0"
   end
 
   def install
