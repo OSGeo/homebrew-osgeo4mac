@@ -1,7 +1,7 @@
 class OsgeoSip < Formula
   desc "Tool to create Python bindings for C and C++ libraries"
   homepage "https://www.riverbankcomputing.com/software/sip/intro"
-  url "https://www.riverbankcomputing.com/static/Downloads/sip/sip-4.19.15.tar.gz"
+  url "https://www.riverbankcomputing.com/static/Downloads/sip/4.19.15/sip-4.19.15.tar.gz"
   sha256 "2b5c0b2c0266b467b365c21376d50dde61a3236722ab87ff1e8dacec283eb610"
 
   # revision 1
