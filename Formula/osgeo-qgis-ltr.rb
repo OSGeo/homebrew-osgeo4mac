@@ -43,7 +43,7 @@ class OsgeoQgisLtr < Formula
   sha256 "d070da42e842e59ce9a338b40784b9bc4582f3d48a19255fa8aef967cca653ba"
   # version "3_4_7"
 
-  revision 3
+  revision 4
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
