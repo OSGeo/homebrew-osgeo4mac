@@ -20,8 +20,8 @@ end
 class OsgeoLibgeotiff < Formula
   desc "Library and tools for dealing with GeoTIFF"
   homepage "https://geotiff.osgeo.org/"
-  url "https://github.com/OSGeo/libgeotiff/archive/1.4.3.tar.gz"
-  sha256 "96fb426877a99ecb66a73c0b912f42995bc1275c1ae687bbaab9ad97c4e8bdf2"
+  url "https://github.com/OSGeo/libgeotiff/archive/1.5.1.tar.gz"
+  sha256 "fb04491572afb25ffe60239fdfdcfa2c64e6cf644cad9b0b922b10115ccbd488"
 
   bottle do
     root_url "https://bottle.download.osgeo.org/"
@@ -30,12 +30,9 @@ class OsgeoLibgeotiff < Formula
     sha256 "ee627c5a30d9f85b122cdee2518d6b27fbe6edc403c4f65aa3a58af65188b03d" => :sierra
   end
 
-  revision 2
+  # revision 1
 
   head "https://github.com/OSGeo/libgeotiff.git", :branch => "master"
-
-  # ACCEPT_USE_OF_DEPRECATED_PROJ_API_H
-  patch :DATA
 
   # keg_only "libgeotiff is already provided by homebrew/core"
   # we will verify that other versions are not linked
@@ -96,16 +93,3 @@ class OsgeoLibgeotiff < Formula
     assert_match /GeogInvFlatteningGeoKey.*123.456/, output
   end
 end
-
-__END__
-
---- a/libgeotiff/geotiff_proj4.c
-+++ b/libgeotiff/geotiff_proj4.c
-@@ -1374,6 +1374,7 @@
- }
- #else
-
-+#define ACCEPT_USE_OF_DEPRECATED_PROJ_API_H
- #include "proj_api.h"
-
- /************************************************************************/
