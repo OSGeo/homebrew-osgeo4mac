@@ -52,10 +52,16 @@ class OsgeoNetcdf < Formula
   end
 
   resource "fortran" do
-    url "https://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-fortran-4.4.5.tar.gz"
-    mirror "https://www.gfd-dennou.org/arch/netcdf/unidata-mirror/netcdf-fortran-4.4.5.tar.gz"
-    sha256 "2467536ce29daea348c736476aa8e684c075d2f6cab12f3361885cb6905717b8"
+    url "https://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-fortran-4.4.4.tar.gz"
+    mirror "https://www.gfd-dennou.org/arch/netcdf/unidata-mirror/netcdf-fortran-4.4.4.tar.gz"
+    sha256 "b2d395175f8d283e68c8be516e231a96b191ade67ad0caafaf7fa01b1e6b5d75"
   end
+
+  # resource "fortran" do
+  #   url "https://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-fortran-4.4.5.tar.gz"
+  #   mirror "https://www.gfd-dennou.org/arch/netcdf/unidata-mirror/netcdf-fortran-4.4.5.tar.gz"
+  #   sha256 "2467536ce29daea348c736476aa8e684c075d2f6cab12f3361885cb6905717b8"
+  # end
 
   def install
     ENV.deparallelize
