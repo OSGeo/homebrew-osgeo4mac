@@ -1,8 +1,8 @@
 class OsgeoPyqt < Formula
   desc "Python bindings for v5 of Qt"
-  homepage "https://www.riverbankcomputing.com/software/pyqt/download5"
-  url "https://www.riverbankcomputing.com/static/Downloads/PyQt5/PyQt5_gpl-5.12.1.tar.gz"
-  sha256 "3718ce847d824090fd5f95ff3f13847ee75c2507368d4cbaeb48338f506e59bf"
+  homepage "https://www.riverbankcomputing.com/software/pyqt/intro"
+  url "https://www.riverbankcomputing.com/static/Downloads/PyQt5/5.12.2/PyQt5_gpl-5.12.2.tar.gz"
+  sha256 "c565829e77dc9c281aa1a0cdf2eddaead4e0f844cbaf7a4408441967f03f5f0f"
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
@@ -22,8 +22,8 @@ class OsgeoPyqt < Formula
   depends_on "dbus" => :optional
 
   resource "setuptools" do
-    url "https://files.pythonhosted.org/packages/c2/f7/c7b501b783e5a74cf1768bc174ee4fb0a8a6ee5af6afa92274ff964703e0/setuptools-40.8.0.zip"
-    sha256 "6e4eec90337e849ade7103723b9a99631c1f0d19990d6e8412dc42f5ae8b304d"
+    url "https://files.pythonhosted.org/packages/1d/64/a18a487b4391a05b9c7f938b94a16d80305bf0369c6b0b9509e86165e1d3/setuptools-41.0.1.zip"
+    sha256 "a222d126f5471598053c9a77f4b5d4f26eaa1f150ad6e01dcf1a42e185d05613"
   end
 
   resource "enum34" do
