@@ -34,8 +34,8 @@ end
 class OsgeoPostgresql < Formula
   desc "Object-relational database system"
   homepage "https://www.postgresql.org/"
-  url "https://github.com/postgres/postgres/archive/REL_11_2.tar.gz"
-  sha256 "1f41c01b56cdc09c279877291695d8a9ee97b9623a48a01cc5e9f83a5b8e0df1"
+  url "https://github.com/postgres/postgres/archive/REL_11_3.tar.gz"
+  sha256 "b6f8b3bd6173654536e9890f587fe706a141afd8435601052b6ec0fca86b3a79"
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
@@ -44,7 +44,7 @@ class OsgeoPostgresql < Formula
     sha256 "363a58ec4a1c43343bb48b9499be8a16bcc6c7d8381bff605c2a1d35c1836724" => :sierra
   end
 
-  revision 2
+  # revision 1
 
   head "https://github.com/postgres/postgres.git", :branch => "master"
 
@@ -188,30 +188,33 @@ class OsgeoPostgresql < Formula
     #   system "#{bin}/initdb", "#{var}/postgresql"
     # end
 
-    if File.exists?(File.join("#{HOMEBREW_PREFIX}/Cellar", "osgeo-postgis@2.4"))
-      unless File.exists?("#{HOMEBREW_PREFIX}/opt/osgeo-postgresql/lib/postgresql/postgis-2.4.so")
-        # copy postgis 2.4.x to postgresql 11.x
-        FileUtils.cp_r "#{Formula["osgeo-postgis@2.4"].opt_share}/postgresql/.", "#{share}/postgresql/"
-        FileUtils.cp_r "#{Formula["osgeo-postgis@2.4"].opt_lib}/postgresql/.", "#{lib}/postgresql/"
-        # FileUtils.cp_r "#{Formula["osgeo-postgis@2.4"].opt_lib}/postgresql/rtpostgis-2.4.so", "#{lib}/postgresql/"
-        # FileUtils.cp_r "#{Formula["osgeo-postgis@2.4"].opt_lib}/postgresql/postgis-2.4.so", "#{lib}/postgresql/"
-        # FileUtils.cp_r "#{Formula["osgeo-postgis@2.4"].opt_lib}/postgresql/postgis_topology-2.4.so", "#{lib}/postgresql/"
+    if build.with? "cellar"
+      if File.exists?(File.join("#{HOMEBREW_PREFIX}/Cellar", "osgeo-postgis@2.4"))
+        unless File.exists?("#{HOMEBREW_PREFIX}/opt/osgeo-postgresql/lib/postgresql/postgis-2.4.so")
+          # copy postgis 2.4.x to postgresql 11.x
+          FileUtils.cp_r "#{Formula["osgeo-postgis@2.4"].opt_share}/postgresql/.", "#{share}/postgresql/"
+          FileUtils.cp_r "#{Formula["osgeo-postgis@2.4"].opt_lib}/postgresql/.", "#{lib}/postgresql/"
+          # FileUtils.cp_r "#{Formula["osgeo-postgis@2.4"].opt_lib}/postgresql/rtpostgis-2.4.so", "#{lib}/postgresql/"
+          # FileUtils.cp_r "#{Formula["osgeo-postgis@2.4"].opt_lib}/postgresql/postgis-2.4.so", "#{lib}/postgresql/"
+          # FileUtils.cp_r "#{Formula["osgeo-postgis@2.4"].opt_lib}/postgresql/postgis_topology-2.4.so", "#{lib}/postgresql/"
+        end
       end
-    end
 
-    # if File.exists?(File.join("#{HOMEBREW_PREFIX}/Cellar", "osgeo-postgis"))
-    #   unless File.exists?("#{HOMEBREW_PREFIX}/opt/osgeo-postgresql/lib/postgresql/postgis-2.5.so")
-    #     # install postgis 2.5.x to postgresql 11.x
-    #     FileUtils.cp_r "#{Formula["osgeo-postgis"].opt_share}/postgresql/.", "#{share}/postgresql/"
-    #     # FileUtils.cp_r "#{Formula["osgeo-postgis"].opt_lib}/postgresql/.", "#{lib}/postgresql/"
-    #     FileUtils.cp_r "#{Formula["osgeo-postgis"].opt_lib}/postgresql/rtpostgis-2.5.so", "#{lib}/postgresql/"
-    #     FileUtils.cp_r "#{Formula["osgeo-postgis"].opt_lib}/postgresql/postgis-2.5.so", "#{lib}/postgresql/"
-    #     FileUtils.cp_r "#{Formula["osgeo-postgis"].opt_lib}/postgresql/postgis_topology-2.5.so", "#{lib}/postgresql/"
-    #   end
-    # end
+      # if File.exists?(File.join("#{HOMEBREW_PREFIX}/Cellar", "osgeo-postgis"))
+      #   unless File.exists?("#{HOMEBREW_PREFIX}/opt/osgeo-postgresql/lib/postgresql/postgis-2.5.so")
+      #     # install postgis 2.5.x to postgresql 11.x
+      #     FileUtils.cp_r "#{Formula["osgeo-postgis"].opt_share}/postgresql/.", "#{share}/postgresql/"
+      #     # FileUtils.cp_r "#{Formula["osgeo-postgis"].opt_lib}/postgresql/.", "#{lib}/postgresql/"
+      #     FileUtils.cp_r "#{Formula["osgeo-postgis"].opt_lib}/postgresql/rtpostgis-2.5.so", "#{lib}/postgresql/"
+      #     FileUtils.cp_r "#{Formula["osgeo-postgis"].opt_lib}/postgresql/postgis-2.5.so", "#{lib}/postgresql/"
+      #     FileUtils.cp_r "#{Formula["osgeo-postgis"].opt_lib}/postgresql/postgis_topology-2.5.so", "#{lib}/postgresql/"
+      #   end
+      # end
+    end
   end
 
   def caveats; <<~EOS
+
     1 - If you need to link "#{name}":
 
           \e[32m$ brew link #{name} --force\e[0m
@@ -234,6 +237,16 @@ class OsgeoPostgresql < Formula
           \e[32m$ psql -h localhost -d postgres\e[0m
 
     Note:
+
+      - Services doesn't start properly, add to \e[32mhomebrew.mxcl.osgeo-postgresql.plist\e[0m:
+
+          \e[32m<key>EnvironmentVariables</key>\e[0m
+          \e[32m<dict>\e[0m
+            \e[32m<key>LC_ALL</key>\e[0m
+            \e[32m<string>en_US.UTF-8</string>\e[0m
+          \e[32m</dict>\e[0m
+
+          issue: \e[32mhttps://github.com/OSGeo/homebrew-osgeo4mac/issues/1075#issuecomment-490052517\e[0m
 
       - Could not bind ipv6 address database system was not properly shut:
 
