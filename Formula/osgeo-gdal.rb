@@ -310,7 +310,8 @@ class OsgeoGdal < Formula
       # All PDF driver functionality moved to gdal2-pdf plugin,
       # so nix default internal-built PDF w+ driver, which keeps plugin from loading.
       # Just using --enable-pdf-plugin isn't enough (we don't want the plugin built here)
-      inreplace "GDALmake.opt.in", "PDF_PLUGIN),yes", "PDF_PLUGIN),no"
+      # inreplace "GDALmake.opt.in", "PDF_PLUGIN),yes", "PDF_PLUGIN),no"
+      # https://github.com/OSGeo/gdal/commit/20716436ce5debca66cbbe0396304e09b79bc3aa#diff-adc90aa0203327969e0048718b911252
 
       args = configure_args
 
