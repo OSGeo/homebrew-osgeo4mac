@@ -20,10 +20,10 @@ end
 class OsgeoGdal < Formula
   desc "GDAL: Geospatial Data Abstraction Library"
   homepage "https://www.gdal.org/"
-  url "https://github.com/OSGeo/gdal/archive/v2.4.1.tar.gz"
-  sha256 "17f94c0dfbecab2fc2433428766860de3c89c3fba57f5c9aa77749c1824c02aa"
+  url "https://github.com/OSGeo/gdal/archive/v3.0.0.tar.gz"
+  sha256 "638f4db7f97f9db91800beb0214620380b12e43da3595b98554ac63442b8d43a"
 
-  revision 2
+  # revision 1
 
   head do
     url "https://github.com/OSGeo/gdal.git", :branch => "master"
@@ -57,23 +57,24 @@ class OsgeoGdal < Formula
   depends_on "jpeg-turbo"
   depends_on "json-c"
   depends_on "giflib"
-  depends_on "osgeo-libgeotiff"
   depends_on "libpq"
   depends_on "sqlite" # To ensure compatibility with SpatiaLite.
   depends_on "pcre" # for REGEXP operator in SQLite/Spatialite driver
-  depends_on "osgeo-libspatialite"
   depends_on "libtiff"
   depends_on "numpy"
   depends_on "armadillo"
   depends_on "sfcgal"
-  depends_on :java => ["1.8", :build]
   depends_on "ant"
   depends_on "swig"
   depends_on "mdbtools"
   depends_on "libzip"
   depends_on "openssl"
   depends_on "cryptopp"
+  depends_on "osgeo-libgeotiff"
+  depends_on "osgeo-libspatialite"
   depends_on "osgeo-libkml"
+
+  depends_on :java => ["1.8", :build]
 
   # Raster libraries
   depends_on "osgeo-netcdf" # Also brings in HDF5
@@ -109,6 +110,13 @@ class OsgeoGdal < Formula
     depends_on "osgeo-postgresql"
   end
 
+  # use: osgeo-gdal-pdf
+  # depends_on "poppler"
+
+  # use: osgeo-gdal-python
+  # depends_on "python"
+  # depends_on "python@2"
+
   # - Base configuration
   # - GDAL native backends
   # - Supported backends: optional Homebrew packages supporting additional formats.
@@ -132,7 +140,7 @@ class OsgeoGdal < Formula
       "--mandir=#{man}",
       "--disable-debug",
       "--with-local=#{prefix}",
-      "--with-dods-root=#{HOMEBREW_PREFIX}",
+      "--with-dods-root=#{Formula["libdap"].opt_prefix}", # #{HOMEBREW_PREFIX}
       "--with-libtool",
       "--with-bsb",
       "--with-grib",
@@ -149,7 +157,7 @@ class OsgeoGdal < Formula
       "--with-png=#{Formula["libpng"].opt_prefix}",
       "--with-libtiff=internal", # #{Formula["libtiff"].opt_prefix}
       "--with-geotiff=internal", # #{Formula["osgeo-libgeotiff"].opt_prefix}
-      "--with-jpeg=#{Formula["jpeg"].opt_prefix}",
+      "--with-jpeg=#{Formula["jpeg-turbo"].opt_prefix}",
       "--with-gif=#{Formula["giflib"].opt_prefix}",
       "--with-libjson-c=#{Formula["json-c"].opt_prefix}",
       "--with-libiconv-prefix=#{Formula["libiconv"].opt_prefix}",
@@ -302,7 +310,8 @@ class OsgeoGdal < Formula
       # All PDF driver functionality moved to gdal2-pdf plugin,
       # so nix default internal-built PDF w+ driver, which keeps plugin from loading.
       # Just using --enable-pdf-plugin isn't enough (we don't want the plugin built here)
-      inreplace "GDALmake.opt.in", "PDF_PLUGIN),yes", "PDF_PLUGIN),no"
+      # inreplace "GDALmake.opt.in", "PDF_PLUGIN),yes", "PDF_PLUGIN),no"
+      # https://github.com/OSGeo/gdal/commit/20716436ce5debca66cbbe0396304e09b79bc3aa#diff-adc90aa0203327969e0048718b911252
 
       args = configure_args
 
