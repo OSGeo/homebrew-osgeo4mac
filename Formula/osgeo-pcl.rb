@@ -6,10 +6,9 @@ class OsgeoPcl < Formula
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
-    rebuild 1
-    sha256 "82cd938d7659eb1390a7043880bc377ca977acee0db52ff2035c5f69eb2fe53c" => :mojave
-    sha256 "82cd938d7659eb1390a7043880bc377ca977acee0db52ff2035c5f69eb2fe53c" => :high_sierra
-    sha256 "03932f9105b73078cca19825056fe85bec48675e19c4a6642268ca0c73e7acbb" => :sierra
+    sha256 "08b3166bf20d1b2541e8fd875a2fa8940e68b387c5e9ac4eb93160a44502346f" => :mojave
+    sha256 "08b3166bf20d1b2541e8fd875a2fa8940e68b387c5e9ac4eb93160a44502346f" => :high_sierra
+    sha256 "b52f87ff87e054214bd4f8c1e25634eef380555920cc3deddebcb7e8881d0c16" => :sierra
   end
 
   revision 2
