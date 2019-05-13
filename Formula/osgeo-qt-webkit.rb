@@ -13,10 +13,9 @@ class OsgeoQtWebkit < Formula
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any
-    rebuild 1
-    sha256 "ce086ce8d4df605a2fbcb1b9b9c82632588b077b5a4aa7c236410f94da7157ec" => :mojave
-    sha256 "ce086ce8d4df605a2fbcb1b9b9c82632588b077b5a4aa7c236410f94da7157ec" => :high_sierra
-    sha256 "3dcf4776cd4153c302fb8209bd438b0c2672ac92dabc88df3322141602934b99" => :sierra
+    sha256 "d828ff78caadbfd7f3ab1698d0bbd19944fc3344b9f736a3ef2bde5f64d7e1b8" => :mojave
+    sha256 "d828ff78caadbfd7f3ab1698d0bbd19944fc3344b9f736a3ef2bde5f64d7e1b8" => :high_sierra
+    sha256 "bf7815cb46bfa369c7f2ecc018e0974d20147a6cfc994b7db9ce2280f937e1d0" => :sierra
   end
 
   # insert the XPC_NOESCAPE macro in the right places in xpc_array_apply and xpc_dictionary_apply
