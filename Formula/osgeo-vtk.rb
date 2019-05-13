@@ -11,9 +11,10 @@ class OsgeoVtk < Formula
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
-    sha256 "8ef382022a2bf2e5671c0f39d2b067fd0561767f791767760c5a8fd203478dd3" => :mojave
-    sha256 "8ef382022a2bf2e5671c0f39d2b067fd0561767f791767760c5a8fd203478dd3" => :high_sierra
-    sha256 "086b5d6008356cc15c9ce99bb1a90077f8c4c45bbee8c1783363e95828fa116e" => :sierra
+    rebuild 1
+    sha256 "ca99255895d0b916aa8db0326c5033d1e374649109ef033ba9bba627f3d72454" => :mojave
+    sha256 "ca99255895d0b916aa8db0326c5033d1e374649109ef033ba9bba627f3d72454" => :high_sierra
+    sha256 "17b88c8e7068a4f6c55e5468efa04b40cf09e58e08c149a0802032c0c6a7886d" => :sierra
   end
 
   depends_on "cmake" => :build
