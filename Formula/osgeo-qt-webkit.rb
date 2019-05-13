@@ -3,7 +3,7 @@ class OsgeoQtWebkit < Formula
   homepage "https://www.qt.io/developers"
   url "https://github.com/qt/qtwebkit/archive/72cfbd7664f21fcc0e62b869a6b01bf73eb5e7da.tar.gz"
   sha256 "2e393e7429387437cbfef56ec839329663e9b136ea68997d1e1cdd2f4d9d3ae0"
-  version "5.12.2"
+  version "5.12.3"
 
   # revision 1
 
@@ -71,8 +71,10 @@ class OsgeoQtWebkit < Formula
     args << "-DCMAKE_SKIP_RPATH=ON"
     args << "-DCMAKE_SKIP_INSTALL_RPATH=ON"
 
-    # Fuck up rpath
-    # inreplace "Source/cmake/OptionsQt.cmake", "RPATH\ ON", "RPATH\ OFF"
+    # Fuck off rpath
+    # inreplace "Source/cmake/OptionsQt.cmake",
+    #           "set(CMAKE_MACOSX_RPATH\ ON)",
+    #           ""
     mkdir "build" do
       system "cmake", "-G", build.with?("ninja") ? "Ninja" : "Unix Makefiles", *args, ".."
       system "cmake", "--build", ".", "--target", "all", "--", "-j", Hardware::CPU.cores
@@ -258,9 +260,13 @@ class OsgeoQtWebkit < Formula
     #   end
     # end
   end
+  # could be used:
+  # (testpath/"CMakeLists.txt").write("find_package(Qt5 CONFIG COMPONENTS WebKit WebKitWidgets REQUIRED)")
+  # system "cmake", ".", "-Wno-dev"
 end
 
 __END__
+
 --- a/Source/WTF/wtf/spi/darwin/XPCSPI.h 2017-06-17 13:46:54.000000000 +0300
 +++ b/Source/WTF/wtf/spi/darwin/XPCSPI.h 2018-09-08 23:41:06.397523110 +0300
 @@ -89,10 +89,6 @@
