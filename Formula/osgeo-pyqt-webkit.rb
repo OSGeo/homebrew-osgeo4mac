@@ -1,8 +1,8 @@
 class OsgeoPyqtWebkit < Formula
   desc "Python bindings for v5 of Qt's Webkit"
   homepage "https://www.riverbankcomputing.com/software/pyqt"
-  url "https://www.riverbankcomputing.com/static/Downloads/PyQt5/PyQt5_gpl-5.12.1.tar.gz"
-  sha256 "3718ce847d824090fd5f95ff3f13847ee75c2507368d4cbaeb48338f506e59bf"
+  url "https://www.riverbankcomputing.com/static/Downloads/PyQt5/5.12.2/PyQt5_gpl-5.12.2.tar.gz"
+  sha256 "c565829e77dc9c281aa1a0cdf2eddaead4e0f844cbaf7a4408441967f03f5f0f"
 
   # revision 1
 
