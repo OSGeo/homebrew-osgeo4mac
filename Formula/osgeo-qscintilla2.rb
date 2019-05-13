@@ -1,7 +1,7 @@
 class OsgeoQscintilla2 < Formula
   desc "Port to Qt of the Scintilla editing component"
   homepage "https://www.riverbankcomputing.com/software/qscintilla/intro"
-  url "https://www.riverbankcomputing.com/static/Downloads/QScintilla/QScintilla_gpl-2.11.1.tar.gz"
+  url "https://www.riverbankcomputing.com/static/Downloads/QScintilla/2.11.1/QScintilla_gpl-2.11.1.tar.gz"
   sha256 "dae54d19e43dba5a3f98ac084fc0bcfa6fb713fa851f1783a01404397fd722f5"
 
   bottle do
@@ -13,7 +13,7 @@ class OsgeoQscintilla2 < Formula
     sha256 "9c4d91781a8670fa6491b7898be72767fba592b853e873596f5dfdd82b640ac5" => :sierra
   end
 
-  revision 3
+  revision 4
 
   depends_on "python"
   depends_on "python@2"
