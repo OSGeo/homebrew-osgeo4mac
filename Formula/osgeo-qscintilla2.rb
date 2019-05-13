@@ -13,7 +13,7 @@ class OsgeoQscintilla2 < Formula
     sha256 "9c4d91781a8670fa6491b7898be72767fba592b853e873596f5dfdd82b640ac5" => :sierra
   end
 
-  revision 2
+  revision 3
 
   depends_on "python"
   depends_on "python@2"
