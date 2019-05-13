@@ -17,6 +17,8 @@ class OsgeoVtk < Formula
     sha256 "17b88c8e7068a4f6c55e5468efa04b40cf09e58e08c149a0802032c0c6a7886d" => :sierra
   end
 
+  option "with-pg10", "Build with PostgreSQL 10 client"
+
   depends_on "cmake" => :build
   depends_on "boost"
   depends_on "fontconfig"
@@ -68,9 +70,14 @@ class OsgeoVtk < Formula
   # depends_on "mysql"
   depends_on "mysql-client"
   depends_on "openslide"
-  depends_on "osgeo-postgresql"
   depends_on "tbb"
   depends_on "inetutils"
+
+  if build.with?("pg10")
+    depends_on "osgeo-postgresql@10"
+  else
+    depends_on "osgeo-postgresql"
+  end
 
   depends_on "open-mpi"
   # depends_on "osgeo-mpi4py"
