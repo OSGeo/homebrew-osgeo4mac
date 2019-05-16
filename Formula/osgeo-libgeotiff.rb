@@ -20,8 +20,8 @@ end
 class OsgeoLibgeotiff < Formula
   desc "Library and tools for dealing with GeoTIFF"
   homepage "https://geotiff.osgeo.org/"
-  url "https://github.com/OSGeo/libgeotiff/archive/1.5.1.tar.gz"
-  sha256 "fb04491572afb25ffe60239fdfdcfa2c64e6cf644cad9b0b922b10115ccbd488"
+  url "https://github.com/OSGeo/libgeotiff/archive/1.4.3.tar.gz"
+  sha256 "96fb426877a99ecb66a73c0b912f42995bc1275c1ae687bbaab9ad97c4e8bdf2"
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
