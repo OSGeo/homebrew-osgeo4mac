@@ -20,22 +20,14 @@ end
 class OsgeoProj < Formula
   desc "Cartographic Projections Library"
   homepage "https://proj4.org/"
-  url "https://github.com/OSGeo/proj.4/archive/6.0.0.tar.gz"
-  sha256 "8c2bc0b31ba266d59771bac14b589814a8e38b23822210b4dc038be737d61d7d"
+  url "https://github.com/OSGeo/proj.4/archive/5.2.0.tar.gz"
+  sha256 "d784d51a8e56282123eb5918a2c685ed7da5097595afcacf5fa0246337a44361"
 
-  bottle do
-    root_url "http://bottle.download.osgeo.org/"
-    rebuild 1
-    sha256 "19f788a70f222510ce1dc7ba825fa2e07bd803c2c4e1eef39460086125e69ee2" => :mojave
-    sha256 "19f788a70f222510ce1dc7ba825fa2e07bd803c2c4e1eef39460086125e69ee2" => :high_sierra
-    sha256 "9591f4d943bc4df94b32d1eeb6f2f0175a9e55e30b26f30a531487974764985a" => :sierra
-  end
-
-  revision 3
+  # revision 1
 
   head "https://github.com/OSGeo/proj.4.git", :branch => "master"
 
-  # keg_only "proj is already provided by homebrew/core"
+  # keg_only "proj" is already provided by homebrew/core"
   # we will verify that other versions are not linked
   depends_on Unlinked
 
