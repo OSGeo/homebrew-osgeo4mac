@@ -25,11 +25,9 @@ class OsgeoLibgeotiff < Formula
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
-    cellar :any
-    rebuild 1
-    sha256 "ab3dfdd431ea401288b548f7efb067be69be28b1cb94b3dc9f0b488e3894a025" => :mojave
-    sha256 "ab3dfdd431ea401288b548f7efb067be69be28b1cb94b3dc9f0b488e3894a025" => :high_sierra
-    sha256 "78ef4ac2b038ede768ef851a97bf2539cdc276b75825739c92b23d9a5be10bd4" => :sierra
+    sha256 "57618e1dc8caf1f9fd64faa7addef9f529db23beff2b9b0a2a42da0add7dd949" => :mojave
+    sha256 "57618e1dc8caf1f9fd64faa7addef9f529db23beff2b9b0a2a42da0add7dd949" => :high_sierra
+    sha256 "123fd4d0da7f1e4c6bf506229878c772219bc39f827dbed9e7ba9200890cdaa8" => :sierra
   end
 
   # revision 1
