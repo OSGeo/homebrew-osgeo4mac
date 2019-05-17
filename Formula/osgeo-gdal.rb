@@ -20,8 +20,8 @@ end
 class OsgeoGdal < Formula
   desc "GDAL: Geospatial Data Abstraction Library"
   homepage "https://www.gdal.org/"
-  url "https://github.com/OSGeo/gdal/archive/v3.0.0.tar.gz"
-  sha256 "638f4db7f97f9db91800beb0214620380b12e43da3595b98554ac63442b8d43a"
+  url "https://github.com/OSGeo/gdal/archive/v2.4.1.tar.gz"
+  sha256 "17f94c0dfbecab2fc2433428766860de3c89c3fba57f5c9aa77749c1824c02aa"
 
   # revision 1
 
@@ -38,11 +38,10 @@ class OsgeoGdal < Formula
     sha256 "70a056fd1e47fe8e9b22c1edda9a3d1e25f8a154c2e5b6560c0284365bda82d4" => :sierra
   end
 
-  # keg_only "gdal is already provided by homebrew/core"
+  # keg_only "gdal" is already provided by homebrew/core"
   # we will verify that other versions are not linked
   depends_on Unlinked
 
-  option "with-proj5", "Build with PROJ5"
   option "with-pg10", "Build with PostgreSQL 10 client"
   deprecated_option "with-postgresql10" => "with-pg10"
 
@@ -99,11 +98,7 @@ class OsgeoGdal < Formula
 
   # depends_on "charls" # cask
 
-  if build.with?("proj5")
-    depends_on "osgeo-proj@5"
-  else
-    depends_on "osgeo-proj"
-  end
+  depends_on "osgeo-proj"
 
   if build.with?("pg10")
     depends_on "osgeo-postgresql@10"
@@ -316,11 +311,7 @@ class OsgeoGdal < Formula
 
       args = configure_args
 
-      if build.with?("proj5")
-        args << "--with-proj=#{Formula["osgeo-proj@5"].opt_prefix}"
-      else
-        args << "--with-proj=#{Formula["osgeo-proj"].opt_prefix}"
-      end
+      args << "--with-proj=#{Formula["osgeo-proj"].opt_prefix}"
 
       if build.with?("pg10")
         args << "--with-pg=#{Formula["osgeo-postgresql@10"].opt_bin}/pg_config"
