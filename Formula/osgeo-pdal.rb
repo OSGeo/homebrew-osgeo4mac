@@ -1,7 +1,7 @@
 class Unlinked < Requirement
   fatal true
 
-  satisfy(:build_env => false) { !core_gdal_linked }
+  satisfy(:build_env => false) { !core_pdal_linked }
 
   def core_pdal_linked
     Formula["pdal"].linked_keg.exist?
