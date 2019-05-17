@@ -39,7 +39,7 @@ class OsgeoPostgis < Formula
     sha256 "29e47cd0691405cfbfb987988ccc93eedeffc5c4e3014c323d01adddf763db75" => :sierra
   end
 
-  revision 5
+  revision 6
 
   head "https://github.com/postgis/postgis.git", :branch => "master"
 
