@@ -21,7 +21,7 @@ class OsgeoLibspatialite < Formula
   desc "Adds spatial SQL capabilities to SQLite"
   homepage "https://www.gaia-gis.it/fossil/libspatialite/index"
 
-  revision 1
+  revision 2
 
   stable do
     url "https://www.gaia-gis.it/gaia-sins/libspatialite-sources/libspatialite-4.3.0a.tar.gz"
@@ -51,7 +51,7 @@ class OsgeoLibspatialite < Formula
     depends_on "libtool" => :build
   end
 
-  # keg_only "libspatialite is already provided by homebrew/core"
+  # keg_only "libspatialite" is already provided by homebrew/core"
   # we will verify that other versions are not linked
   depends_on Unlinked
 
