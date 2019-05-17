@@ -1,9 +1,28 @@
+class Unlinked < Requirement
+  fatal true
+
+  satisfy(:build_env => false) { !core_gdal_linked }
+
+  def core_pdal_linked
+    Formula["pdal"].linked_keg.exist?
+  rescue
+    return false
+  end
+
+  def message
+    s = "\033[31mYou have other linked versions!\e[0m\n\n"
+
+    s += "Unlink with \e[32mbrew unlink pdal\e[0m or remove with brew \e[32muninstall --ignore-dependencies pdal\e[0m\n\n" if core_pdal_linked
+    s
+  end
+end
+
 class OsgeoPdal < Formula
   include Language::Python::Virtualenv
   desc "Point data abstraction library"
   homepage "https://www.pdal.io/"
-  url "https://github.com/PDAL/PDAL/archive/1.8.0.tar.gz"
-  sha256 "ef3a32c06865383feac46fd7eb7491f034cad6b0b246b3c917271ae0c8f25b69"
+  url "https://github.com/PDAL/PDAL/archive/1.9.1.tar.gz"
+  sha256 "c388643cc781be39537c17ca48d0a436411ff68baeb0df56daed5e8596e09e92"
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
@@ -13,11 +32,15 @@ class OsgeoPdal < Formula
     sha256 "e828b9323d15d03799a614ab09260feae3737a59dd0b62e2434cf5c59cbeec43" => :sierra
   end
 
-  revision 1
+  # revision 1
 
   head "https://github.com/PDAL/PDAL.git", :branch => "master"
 
   option "with-pg10", "Build with PostgreSQL 10 client"
+
+  # keg_only "pdal" is already provided by homebrew/core"
+  # we will verify that other versions are not linked
+  depends_on Unlinked
 
   depends_on "cmake" => :build
   depends_on "pkg-config" => :build
@@ -80,7 +103,7 @@ class OsgeoPdal < Formula
       -DBUILD_PLUGIN_PYTHON=ON
       -DBUILD_PLUGIN_SQLITE=ON
       -DWITH_LASZIP=TRUE
-      -DWITH_LAZPERF=ON"
+      -DWITH_LAZPERF=TRUE"
     ]
 
     # args << "-DBUILD_PLUGIN_HEXBIN=ON" # not used by the project
