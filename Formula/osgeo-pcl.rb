@@ -11,7 +11,7 @@ class OsgeoPcl < Formula
     sha256 "b52f87ff87e054214bd4f8c1e25634eef380555920cc3deddebcb7e8881d0c16" => :sierra
   end
 
-  revision 2
+  revision 3
 
   head "https://github.com/PointCloudLibrary/pcl.git", :branch => "master"
 
