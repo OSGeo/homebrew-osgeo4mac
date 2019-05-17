@@ -26,10 +26,9 @@ class OsgeoPdal < Formula
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
-    rebuild 1
-    sha256 "cf2b09db2c508776e52c2b6b4cf3ee007ac62418895f41c901680046fb9f32f4" => :mojave
-    sha256 "cf2b09db2c508776e52c2b6b4cf3ee007ac62418895f41c901680046fb9f32f4" => :high_sierra
-    sha256 "e828b9323d15d03799a614ab09260feae3737a59dd0b62e2434cf5c59cbeec43" => :sierra
+    sha256 "c2f79f0c51e1de1fa159ae808524f514055d4efe2aef763259a8e7dea5816d40" => :mojave
+    sha256 "c2f79f0c51e1de1fa159ae808524f514055d4efe2aef763259a8e7dea5816d40" => :high_sierra
+    sha256 "fd527eacedf9484e703d00a2ce633f9626ee35a606988ce186dfd81f1510450d" => :sierra
   end
 
   # revision 1
