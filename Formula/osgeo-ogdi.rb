@@ -1,10 +1,10 @@
 class OsgeoOgdi < Formula
   desc "Open Geographic Datastore Interface - client/server API for GIS"
   homepage "https://ogdi.sourceforge.io/"
-  url "https://github.com/libogdi/ogdi/archive/ogdi_4_0_0.tar.gz"
-  sha256 "d0f1a9a7127e296d6e8e064d94b5a81bac91b5d4914bb7e5abec51cb0609cac5"
+  url "https://github.com/libogdi/ogdi/archive/ogdi_4_1_0.tar.gz"
+  sha256 "e0b9c6ca37f983f21b45116126d153c0b5609954568fddc306568e204a10e41c"
 
-  revision 2
+  # revision 1
 
   head "https://github.com/libogdi/ogdi.git", :branch => "master"
 
