@@ -5,7 +5,7 @@ class OsgeoTaudem < Formula
   sha256 "2adffb82f6c9cdda42c2373f551aefb4d52f444005df961675eaf08f6edcbccc"
   version "5.3.8"
 
-  revision 1
+  revision 2
 
   head "https://github.com/dtarb/TauDEM.git", :branch => "master"
 
