@@ -4,7 +4,7 @@ class OsgeoGdalGrass < Formula
   url "https://download.osgeo.org/gdal/2.4.1/gdal-grass-2.4.1.tar.gz"
   sha256 "07c30ca725ddf0b9b596d98e744523d86b9f9e8a208ee1f6d4130d1549672157"
 
-  # revision 1
+  revision 1
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
