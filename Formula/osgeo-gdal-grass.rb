@@ -9,10 +9,9 @@ class OsgeoGdalGrass < Formula
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any
-    rebuild 1
-    sha256 "da079951807a2bdfdbd8fa7d3998a2afa56c826c748eecd4b286822dff1fcec6" => :mojave
-    sha256 "da079951807a2bdfdbd8fa7d3998a2afa56c826c748eecd4b286822dff1fcec6" => :high_sierra
-    sha256 "00bc3b008b007e90d92d5bfd76d7cde07eabc20637468eac264ad3efad820967" => :sierra
+    sha256 "24d80b0a8250aee06a5af69277371f582b24e87036c091f0b174268a898b2ae0" => :mojave
+    sha256 "24d80b0a8250aee06a5af69277371f582b24e87036c091f0b174268a898b2ae0" => :high_sierra
+    sha256 "736afd0da344f3b221bc0b4e58019970b50552d40e2472b00ff8872248f5a977" => :sierra
   end
 
   depends_on "osgeo-gdal"
