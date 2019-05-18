@@ -12,10 +12,9 @@ class OsgeoSagaLts < Formula
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
-    rebuild 2
-    sha256 "807ea0cc3c8bf446833c8e2109df53a9c5e18aa6c257516c960b359ae7b3e83c" => :mojave
-    sha256 "807ea0cc3c8bf446833c8e2109df53a9c5e18aa6c257516c960b359ae7b3e83c" => :high_sierra
-    sha256 "1adee41d4cb37964b0f1337ec1ebf147ccc22dea6551dbe9b506937076001e60" => :sierra
+    sha256 "bb6702ffed57f06104bfddf13cd78fae43645f26c8cde6f52cce1f3cb0105922" => :mojave
+    sha256 "bb6702ffed57f06104bfddf13cd78fae43645f26c8cde6f52cce1f3cb0105922" => :high_sierra
+    sha256 "dfeccfe1c7f73b7e29dfc11ddff3b828d66d7e4d6569e06f239114eebd800f66" => :sierra
   end
 
   # - saga_api, CSG_Table::Del_Records(): bug fix, check record count correctly
