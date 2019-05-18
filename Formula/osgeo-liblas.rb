@@ -5,7 +5,7 @@ class OsgeoLiblas < Formula
   sha256 "fa2afafb8ec7c81c4216e51de51cf845c99575e7d6efbd22ad311ca8a55ce189"
   version "1.8.1"
 
-  revision 5
+  revision 6
 
   head "https://github.com/libLAS/libLAS.git", :branch => "master"
 
@@ -23,13 +23,13 @@ class OsgeoLiblas < Formula
   # option "with-laszip", "Build with laszip support"
 
   depends_on "cmake" => :build
-  depends_on "osgeo-libgeotiff"
   depends_on "boost"
   depends_on "zlib"
   depends_on "jpeg"
   depends_on "libtiff"
-  depends_on "osgeo-proj"
   depends_on "libxml2"
+  depends_on "osgeo-libgeotiff"
+  depends_on "osgeo-proj"
   depends_on "osgeo-gdal"
   depends_on "osgeo-laszip@2" # if build.with? "laszip"
   # other: oracle
