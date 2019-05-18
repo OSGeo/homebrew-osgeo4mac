@@ -6,7 +6,7 @@ class OsgeoSagaLts < Formula
       :revision => "b6f474f8af4af7f0ff82548cc6f88c53547d91f5"
   version "2.3.2"
 
-  revision 3
+  revision 4
 
   head "https://git.code.sf.net/p/saga-gis/code.git", :branch => "release-2-3-lts"
 
@@ -34,7 +34,6 @@ class OsgeoSagaLts < Formula
   depends_on "libtool" => :build
   depends_on "pkg-config" => :build
   depends_on "python@2"
-  depends_on "osgeo-proj@5"
   depends_on "wxmac"
   depends_on "wxpython"
   depends_on "geos"
@@ -49,10 +48,11 @@ class OsgeoSagaLts < Formula
   depends_on "libharu"
   depends_on "qhull" # instead of looking for triangle
   depends_on "poppler"
-  depends_on "osgeo-hdf4"
-  depends_on "hdf5"
-  depends_on "osgeo-netcdf"
   depends_on "sqlite"
+  depends_on "hdf5"
+  depends_on "osgeo-hdf4"
+  depends_on "osgeo-proj"
+  depends_on "osgeo-netcdf"
   depends_on "osgeo-laszip@2"
   depends_on "osgeo-gdal" # (gdal-curl, gdal-filegdb, gdal-hdf4)
   depends_on "osgeo-liblas"
@@ -94,8 +94,8 @@ class OsgeoSagaLts < Formula
     # xcode : xcrun --show-sdk-path
     link_misc = "-arch x86_64 -mmacosx-version-min=10.9 -isysroot #{MacOS::Xcode.prefix}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX#{MacOS.version}.sdk -lstdc++"
 
-    ENV.append "CPPFLAGS", "-I#{Formula["osgeo-proj@5"].opt_include} -I#{Formula["osgeo-gdal"].opt_include} #{cppflags}"
-    ENV.append "LDFLAGS", "-L#{Formula["osgeo-proj@5"].opt_lib}/libproj.dylib -L#{Formula["osgeo-gdal"].opt_lib}/libgdal.dylib #{link_misc} #{ldflags}"
+    ENV.append "CPPFLAGS", "-I#{Formula["osgeo-proj"].opt_include} -I#{Formula["osgeo-gdal"].opt_include} #{cppflags}"
+    ENV.append "LDFLAGS", "-L#{Formula["osgeo-proj"].opt_lib}/libproj.dylib -L#{Formula["osgeo-gdal"].opt_lib}/libgdal.dylib #{link_misc} #{ldflags}"
 
     # Disable narrowing warnings when compiling in C++11 mode.
     ENV.append "CXXFLAGS", "-Wno-c++11-narrowing -std=c++11"
