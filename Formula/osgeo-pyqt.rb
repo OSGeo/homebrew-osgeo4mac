@@ -1,3 +1,22 @@
+class Unlinked < Requirement
+  fatal true
+
+  satisfy(:build_env => false) { !core_pyqt_linked }
+
+  def core_pyqt_linked
+    Formula["pyqt"].linked_keg.exist?
+  rescue
+    return false
+  end
+
+  def message
+    s = "\033[31mYou have other linked versions!\e[0m\n\n"
+
+    s += "Unlink with \e[32mbrew unlink pyqt\e[0m or remove with brew \e[32muninstall --ignore-dependencies pyqt\e[0m\n\n" if core_pyqt_linked
+    s
+  end
+end
+
 class OsgeoPyqt < Formula
   desc "Python bindings for v5 of Qt"
   homepage "https://www.riverbankcomputing.com/software/pyqt/intro"
@@ -12,7 +31,11 @@ class OsgeoPyqt < Formula
     sha256 "94a68066678bb5d42defcd71ffc0ac107f358286b30ce50424ec6ed26c675703" => :sierra
   end
 
-  # revision 1
+  revision 1
+
+  # keg_only "pyqt" is already provided by homebrew/core"
+  # we will verify that other versions are not linked
+  depends_on Unlinked
 
   depends_on "python"
   depends_on "python@2"
