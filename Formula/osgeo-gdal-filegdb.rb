@@ -11,10 +11,9 @@ class OsgeoGdalFilegdb < Formula
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any
-    rebuild 1
-    sha256 "06b710042bf008561b3ac3924c88457513a3fa612fbcbfc3e746ae1b4f6895a5" => :mojave
-    sha256 "06b710042bf008561b3ac3924c88457513a3fa612fbcbfc3e746ae1b4f6895a5" => :high_sierra
-    sha256 "96ed6da1839e26d55c2b3de33f5049a9a5daf6fd63977bfe784c5ba767992eb7" => :sierra
+    sha256 "9ccbb6398c8d448060512f9a8d844f7d1f8baea3b8ab737f9596b654e082a0ec" => :mojave
+    sha256 "9ccbb6398c8d448060512f9a8d844f7d1f8baea3b8ab737f9596b654e082a0ec" => :high_sierra
+    sha256 "d253b5ad86d2657d5a6a04268343617b2ff8ef34b9d10e50aa11ad4f18f62d18" => :sierra
   end
 
   depends_on "osgeo-filegdb-api"
