@@ -4,7 +4,7 @@ class OsgeoGrass < Formula
   desc "Geographic Resources Analysis Support System"
   homepage "https://grass.osgeo.org/"
 
-  revision 4
+  revision 5
 
   # svn: E230001: Server SSL certificate verification failed: issuer is not trusted
   # head "https://svn.osgeo.org/grass/grass/trunk", :using => :svn
@@ -261,10 +261,10 @@ class OsgeoGrass < Formula
   def install
     # Work around "error: no member named 'signbit' in the global namespace"
     # encountered when trying to detect boost regex in configure
-    # if DevelopmentTools.clang_build_version >= 900
-    #   ENV.delete "SDKROOT"
-    #   ENV.delete "HOMEBREW_SDKROOT"
-    # end
+    if DevelopmentTools.clang_build_version >= 900
+      ENV.delete "SDKROOT"
+      ENV.delete "HOMEBREW_SDKROOT"
+    end
 
     # install python modules
     venv = virtualenv_create(libexec/'vendor', "#{Formula["python@2"].opt_bin}/python2")
