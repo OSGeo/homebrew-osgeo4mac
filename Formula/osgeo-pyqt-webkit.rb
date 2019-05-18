@@ -1,10 +1,10 @@
 class OsgeoPyqtWebkit < Formula
   desc "Python bindings for v5 of Qt's Webkit"
-  homepage "https://www.riverbankcomputing.com/software/pyqt"
+  homepage "https://www.riverbankcomputing.com/software/pyqt/intro"
   url "https://www.riverbankcomputing.com/static/Downloads/PyQt5/5.12.2/PyQt5_gpl-5.12.2.tar.gz"
   sha256 "c565829e77dc9c281aa1a0cdf2eddaead4e0f844cbaf7a4408441967f03f5f0f"
 
-  # revision 1
+  revision 1
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
