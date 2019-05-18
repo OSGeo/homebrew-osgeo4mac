@@ -3,9 +3,9 @@ class OsgeoWhiteboxTools < Formula
   homepage "https://www.uoguelph.ca/~hydrogeo/WhiteboxTools"
   url "https://github.com/jblindsay/whitebox-tools/releases/download/v0.15/WhiteboxTools_darwin_amd64.zip"
   sha256 "6e425ddf43f1c9cdcd9f00c9766a66fd42f5477aac30a5bc9b96784f9fb4c026"
-  version "0.14.1"
+  version "0.15.0"
 
-  revision 1
+  # revision 1
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
