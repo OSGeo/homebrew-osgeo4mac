@@ -1,3 +1,22 @@
+class Unlinked < Requirement
+  fatal true
+
+  satisfy(:build_env => false) { !core_qscintilla2_linked }
+
+  def core_qscintilla2_linked
+    Formula["qscintilla2"].linked_keg.exist?
+  rescue
+    return false
+  end
+
+  def message
+    s = "\033[31mYou have other linked versions!\e[0m\n\n"
+
+    s += "Unlink with \e[32mbrew unlink qscintilla2\e[0m or remove with brew \e[32muninstall --ignore-dependencies qscintilla2\e[0m\n\n" if core_qscintilla2_linked
+    s
+  end
+end
+
 class OsgeoQscintilla2 < Formula
   desc "Port to Qt of the Scintilla editing component"
   homepage "https://www.riverbankcomputing.com/software/qscintilla/intro"
@@ -12,7 +31,11 @@ class OsgeoQscintilla2 < Formula
     sha256 "33cba6cfcd98ba6c7f6cb0c0755676b9d11f061c9310889db184699343d1a850" => :sierra
   end
 
-  revision 4
+  revision 5
+
+  # keg_only "qscintilla2" is already provided by homebrew/core"
+  # we will verify that other versions are not linked
+  depends_on Unlinked
 
   depends_on "python"
   depends_on "python@2"
