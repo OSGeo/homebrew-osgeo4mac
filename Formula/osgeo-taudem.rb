@@ -12,9 +12,10 @@ class OsgeoTaudem < Formula
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any
-    sha256 "4e5d5df235413e6f3b02c1112eda3a95b5200c7e1eae640f9df0ed50db62765e" => :mojave
-    sha256 "4e5d5df235413e6f3b02c1112eda3a95b5200c7e1eae640f9df0ed50db62765e" => :high_sierra
-    sha256 "a425c679506c2f16bc90f274b96fce85973ef826d2f7b926798255ff6f65d9f3" => :sierra
+    rebuild 1
+    sha256 "3796a5e106893fb0151c627bfe0fc32a8920321700ac440b85cde081e192117c" => :mojave
+    sha256 "3796a5e106893fb0151c627bfe0fc32a8920321700ac440b85cde081e192117c" => :high_sierra
+    sha256 "1e7818bc9f9297495feebb6e21232c1ebc00c2c1457b6c01d9c72d5be9f0777c" => :sierra
   end
 
   depends_on "cmake" => :build
