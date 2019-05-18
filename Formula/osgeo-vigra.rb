@@ -12,9 +12,10 @@ class OsgeoVigra < Formula
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any
-    sha256 "b7039ec5e4a8256a0bb85f0bb581a80d9ab8e77d5a0059c23ea3034a92408ad4" => :mojave
-    sha256 "b7039ec5e4a8256a0bb85f0bb581a80d9ab8e77d5a0059c23ea3034a92408ad4" => :high_sierra
-    sha256 "112c97bbf2a438d46876324b984a3222ec9550bf1fcae1f49f5ed7908c07e5f1" => :sierra
+    rebuild 1
+    sha256 "3b864be9be725491b2db6cdad5c94fc130536c1bdc32d67d827b35d670e27cc3" => :mojave
+    sha256 "3b864be9be725491b2db6cdad5c94fc130536c1bdc32d67d827b35d670e27cc3" => :high_sierra
+    sha256 "ecd4a73b3e8f366c69014890e0ced53a6e8fc446dbd1bc6f91c666beebdf36d7" => :sierra
   end
 
   option "without-test", "skip tests"
