@@ -4,16 +4,17 @@ class OsgeoGrass < Formula
   desc "Geographic Resources Analysis Support System"
   homepage "https://grass.osgeo.org/"
 
-  revision 3
+  revision 4
 
   # svn: E230001: Server SSL certificate verification failed: issuer is not trusted
   # head "https://svn.osgeo.org/grass/grass/trunk", :using => :svn
   # head "svn://svn.osgeo.org/grass/grass/trunk"
-  head "https://github.com/GRASS-GIS/grass-ci.git", :branch => "master"
+  # head "https://github.com/GRASS-GIS/grass-ci.git", :branch => "master"
+  head "https://github.com/OSGeo/grass.git", :branch => "master"
 
   stable do
-    url "https://grass.osgeo.org/grass76/source/grass-7.6.1.tar.gz"
-    sha256 "9e25c99cafd16ed8f5e2dca75b5a10dc2af0568dbedf3fc39f1c5a0a9c840b0b"
+    url "https://github.com/OSGeo/grass/archive/grass_7_6_1.tar.gz"
+    sha256 "7fec2cd868226b6b4a46e1ec8eba9da8603b7a30327a6aeedeb99224bd4c0d6a"
 
     # Patches to keep files from being installed outside of the prefix.
     # Remove lines from Makefile that try to install to /Library/Documentation.
@@ -48,7 +49,6 @@ class OsgeoGrass < Formula
   depends_on "python@2"
   depends_on "boost"
   depends_on "libiconv"
-  depends_on "osgeo-libgeotiff"
   depends_on "bison"
   depends_on "cairo"
   depends_on "flex"
@@ -59,7 +59,6 @@ class OsgeoGrass < Formula
   depends_on "libpng"
   depends_on "sqlite"
   depends_on "regex-opt"
-  depends_on "osgeo-proj"
   depends_on "geos"
   depends_on "readline"
   depends_on "lapack"
@@ -67,7 +66,6 @@ class OsgeoGrass < Formula
   depends_on "bzip2"
   depends_on "zlib"
   depends_on "unixodbc"
-  depends_on "osgeo-netcdf"
   depends_on "wxmac"
   depends_on "wxpython"
   depends_on "zstd"
@@ -76,8 +74,11 @@ class OsgeoGrass < Formula
   depends_on "byacc" # yacc
   depends_on "subversion" # for g.extension
   depends_on "openjpeg" # for Pillow
+  depends_on "osgeo-netcdf"
+  depends_on "osgeo-proj"
   depends_on "osgeo-gdal"
   depends_on "osgeo-gdal-python"
+  depends_on "osgeo-libgeotiff"
 
   # matplotlib
   depends_on "py3cairo"
@@ -144,23 +145,23 @@ class OsgeoGrass < Formula
   end
 
   resource "setuptools" do
-    url "https://files.pythonhosted.org/packages/c2/f7/c7b501b783e5a74cf1768bc174ee4fb0a8a6ee5af6afa92274ff964703e0/setuptools-40.8.0.zip"
-    sha256 "6e4eec90337e849ade7103723b9a99631c1f0d19990d6e8412dc42f5ae8b304d"
+    url "https://files.pythonhosted.org/packages/1d/64/a18a487b4391a05b9c7f938b94a16d80305bf0369c6b0b9509e86165e1d3/setuptools-41.0.1.zip"
+    sha256 "a222d126f5471598053c9a77f4b5d4f26eaa1f150ad6e01dcf1a42e185d05613"
   end
 
   resource "pip" do
-    url "https://files.pythonhosted.org/packages/36/fa/51ca4d57392e2f69397cd6e5af23da2a8d37884a605f9e3f2d3bfdc48397/pip-19.0.3.tar.gz"
-    sha256 "6e6f197a1abfb45118dbb878b5c859a0edbdd33fd250100bc015b67fded4b9f2"
+    url "https://files.pythonhosted.org/packages/93/ab/f86b61bef7ab14909bd7ec3cd2178feb0a1c86d451bc9bccd5a1aedcde5f/pip-19.1.1.tar.gz"
+    sha256 "44d3d7d3d30a1eb65c7e5ff1173cdf8f7467850605ac7cc3707b6064bddd0958"
   end
 
   resource "wheel" do
-    url "https://files.pythonhosted.org/packages/b7/cf/1ea0f5b3ce55cacde1e84cdde6cee1ebaff51bd9a3e6c7ba4082199af6f6/wheel-0.33.1.tar.gz"
-    sha256 "66a8fd76f28977bb664b098372daef2b27f60dc4d1688cfab7b37a09448f0e9d"
+    url "https://files.pythonhosted.org/packages/1d/b0/f478e80aeace42fe251225a86752799174a94314c4a80ebfc5bf0ab1153a/wheel-0.33.4.tar.gz"
+    sha256 "62fcfa03d45b5b722539ccbc07b190e4bfff4bb9e3a4d470dd9f6a0981002565"
   end
 
   resource "Pillow" do
-    url "https://files.pythonhosted.org/packages/3c/7e/443be24431324bd34d22dd9d11cc845d995bcd3b500676bcf23142756975/Pillow-5.4.1.tar.gz"
-    sha256 "5233664eadfa342c639b9b9977190d64ad7aca4edc51a966394d7e08e7f38a9f"
+    url "https://files.pythonhosted.org/packages/81/1a/6b2971adc1bca55b9a53ed1efa372acff7e8b9913982a396f3fa046efaf8/Pillow-6.0.0.tar.gz"
+    sha256 "809c0a2ce9032cbcd7b5313f71af4bdc5c8c771cb86eb7559afd954cab82ebb5"
   end
 
   resource "ply" do
@@ -189,8 +190,8 @@ class OsgeoGrass < Formula
   end
 
   resource "psycopg2" do
-    url "https://files.pythonhosted.org/packages/63/54/c039eb0f46f9a9406b59a638415c2012ad7be9b4b97bfddb1f48c280df3a/psycopg2-2.7.7.tar.gz"
-    sha256 "f4526d078aedd5187d0508aa5f9a01eae6a48a470ed678406da94b4cd6524b7e"
+    url "https://files.pythonhosted.org/packages/23/7e/93c325482c328619870b6cd09370f6dbe1148283daca65115cd63642e60f/psycopg2-2.8.2.tar.gz"
+    sha256 "5cacf21b6f813c239f100ef78a4132056f93a5940219ec25d2ef833cbeb05588"
   end
 
   resource "termcolor" do
@@ -206,28 +207,28 @@ class OsgeoGrass < Formula
   end
 
   resource "kiwisolver" do
-    url "https://files.pythonhosted.org/packages/31/60/494fcce70d60a598c32ee00e71542e52e27c978e5f8219fae0d4ac6e2864/kiwisolver-1.0.1.tar.gz"
-    sha256 "ce3be5d520b4d2c3e5eeb4cd2ef62b9b9ab8ac6b6fedbaa0e39cdb6f50644278"
+    url "https://files.pythonhosted.org/packages/16/e7/df58eb8868d183223692d2a62529a594f6414964a3ae93548467b146a24d/kiwisolver-1.1.0.tar.gz"
+    sha256 "53eaed412477c836e1b9522c19858a8557d6e595077830146182225613b11a75"
   end
 
   resource "pyparsing" do
-    url "https://files.pythonhosted.org/packages/b9/b8/6b32b3e84014148dcd60dd05795e35c2e7f4b72f918616c61fdce83d27fc/pyparsing-2.3.1.tar.gz"
-    sha256 "66c9268862641abcac4a96ba74506e594c884e3f57690a696d21ad8210ed667a"
+    url "https://files.pythonhosted.org/packages/5d/3a/24d275393f493004aeb15a1beae2b4a3043526e8b692b65b4a9341450ebe/pyparsing-2.4.0.tar.gz"
+    sha256 "1873c03321fc118f4e9746baf201ff990ceb915f433f23b395f5580d1840cb2a"
   end
 
   resource "pytz" do
-    url "https://files.pythonhosted.org/packages/af/be/6c59e30e208a5f28da85751b93ec7b97e4612268bb054d0dff396e758a90/pytz-2018.9.tar.gz"
-    sha256 "d5f05e487007e29e03409f9398d074e158d920d36eb82eaf66fb1136b0c5374c"
+    url "https://files.pythonhosted.org/packages/df/d5/3e3ff673e8f3096921b3f1b79ce04b832e0100b4741573154b72b756a681/pytz-2019.1.tar.gz"
+    sha256 "d747dd3d23d77ef44c6a3526e274af6efeb0a6f1afd5a69ba4d5be4098c8e141"
   end
 
   resource "tornado" do
-    url "https://files.pythonhosted.org/packages/e6/78/6e7b5af12c12bdf38ca9bfe863fcaf53dc10430a312d0324e76c1e5ca426/tornado-5.1.1.tar.gz"
-    sha256 "4e5158d97583502a7e2739951553cbd88a72076f152b4b11b64b9a10c4c49409"
+    url "https://files.pythonhosted.org/packages/03/3f/5f89d99fca3c0100c8cede4f53f660b126d39e0d6a1e943e95cc3ed386fb/tornado-6.0.2.tar.gz"
+    sha256 "457fcbee4df737d2defc181b9073758d73f54a6cfc1f280533ff48831b39f4a8"
   end
 
   resource "cairocffi" do
-    url "https://files.pythonhosted.org/packages/62/be/ad4d422b6f38d99b09ad6d046ab725e8ccac5fefd9ca256ca35a80dbf3c6/cairocffi-0.9.0.tar.gz"
-    sha256 "15386c3a9e08823d6826c4491eaccc7b7254b1dc587a3b9ce60c350c3f990337"
+    url "https://files.pythonhosted.org/packages/0f/0f/7e21b5ddd31b610e46a879c0d21e222dd0fef428c1fc86bbd2bd57fed8a7/cairocffi-1.0.2.tar.gz"
+    sha256 "01ac51ae12c4324ca5809ce270f9dd1b67f5166fe63bd3e497e9ea3ca91946ff"
   end
 
   resource "subprocess32" do
@@ -241,16 +242,20 @@ class OsgeoGrass < Formula
   end
 
   resource "numpy" do
-    url "https://files.pythonhosted.org/packages/cf/8d/6345b4f32b37945fedc1e027e83970005fc9c699068d2f566b82826515f2/numpy-1.16.2.zip"
-    sha256 "6c692e3879dde0b67a9dc78f9bfb6f61c666b4562fd8619632d7043fb5b691b0"
+    url "https://files.pythonhosted.org/packages/93/48/956b9dcdddfcedb1705839280e02cbfeb2861ed5d7f59241210530867d5b/numpy-1.16.3.zip"
+    sha256 "78a6f89da87eeb48014ec652a65c4ffde370c036d780a995edaeb121d3625621"
+  end
+
+  resource "scipy" do
+    url "https://files.pythonhosted.org/packages/cb/97/361c8c6ceb3eb765371a702ea873ff2fe112fa40073e7d2b8199db8eb56e/scipy-1.3.0.tar.gz"
+    sha256 "c3bb4bd2aca82fb498247deeac12265921fe231502a6bc6edea3ee7fe6c40a7a"
   end
 
   # "error: no member named 'signbit' in the global namespace"
-
-  # resource "matplotlib" do
-  #   url "https://github.com/matplotlib/matplotlib/archive/v2.2.4.tar.gz"
-  #   sha256 "601a3bf5c1b08710edbe00347d97619f43f2d1edcd7aa94119ff837e6327c7f7"
-  # end
+  resource "matplotlib" do
+    url "https://github.com/matplotlib/matplotlib/archive/v2.2.4.tar.gz"
+    sha256 "601a3bf5c1b08710edbe00347d97619f43f2d1edcd7aa94119ff837e6327c7f7"
+  end
 
   def install
     # Work around "error: no member named 'signbit' in the global namespace"
