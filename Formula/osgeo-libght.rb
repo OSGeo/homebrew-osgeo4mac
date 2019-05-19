@@ -5,7 +5,7 @@ class OsgeoLibght < Formula
   sha256 "43a5b2909234fecdba17ecfc93ab6d254b14cdf0dac48d17d1481ac2d8e398b4"
   version "0.1.1"
 
-  revision 2
+  revision 3
 
   head "https://github.com/pramsey/libght.git", :branch => "master"
 
@@ -25,7 +25,7 @@ class OsgeoLibght < Formula
   def install
 
     # support for PROJ 6
-    ENV.append_to_cflags "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"
+    # ENV.append_to_cflags "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"
 
     mkdir "build" do
       system "cmake", "..", *std_cmake_args
