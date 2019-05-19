@@ -11,10 +11,9 @@ class OsgeoQtMysql < Formula
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any
-    rebuild 1
-    sha256 "db16e512f400de27dc396fc2a1ef8301df74bcc3f7ca1399e663e0b9ef6f7b14" => :mojave
-    sha256 "db16e512f400de27dc396fc2a1ef8301df74bcc3f7ca1399e663e0b9ef6f7b14" => :high_sierra
-    sha256 "8a714204a79a434d375803422e1d8559cd1aeaab5cb952b1a9d70729b78e91a5" => :sierra
+    sha256 "97d630110d8c3a3b8992a8ab1975c5601e4e424ef27922c5b587e656340b2191" => :mojave
+    sha256 "97d630110d8c3a3b8992a8ab1975c5601e4e424ef27922c5b587e656340b2191" => :high_sierra
+    sha256 "69257610b675ae0f57d691c7af3097e8e4fb9f83f306a98cb16c1723c16c00f4" => :sierra
   end
 
   depends_on "pkg-config" => :build
