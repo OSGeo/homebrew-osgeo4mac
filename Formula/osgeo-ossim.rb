@@ -1,8 +1,8 @@
 class OsgeoOssim < Formula
   desc "Geospatial libs and apps to process imagery, terrain, and vector data"
   homepage "https://trac.osgeo.org/ossim/"
-  url "https://github.com/ossimlabs/ossim/archive/Laguna-2.7.0.tar.gz"
-  sha256 "63695f00441d025c758552864b4048dc405bb5f0495fbaab4647aad024b0f8ac"
+  url "https://github.com/ossimlabs/ossim/archive/Laguna-2.8.0.tar.gz"
+  sha256 "3a8fb6332083461f388b99f4f174ee6500960574d090bc400c3537af8e563686"
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
@@ -12,7 +12,7 @@ class OsgeoOssim < Formula
     sha256 "8d9ae10d329cc4768a731a7a9d509962acb2c10df501368897179b7343cdaac9" => :sierra
   end
 
-  revision 1
+  # revision 1
 
   head "https://github.com/ossimlabs/ossim.git", :branch => "master"
 
@@ -23,7 +23,6 @@ class OsgeoOssim < Formula
   depends_on "jpeg"
   depends_on "jsoncpp"
   depends_on "libtiff"
-  depends_on "osgeo-libgeotiff"
   depends_on "geos"
   depends_on "freetype"
   depends_on "zlib"
@@ -41,6 +40,10 @@ class OsgeoOssim < Formula
   depends_on "sqlite"
   depends_on "fftw"
   depends_on "expat"
+  depends_on "curl"
+  depends_on "jpeg-turbo"
+  depends_on "osgeo-proj"
+  depends_on "osgeo-libgeotiff"
   depends_on "osgeo-laszip@2"
   depends_on "osgeo-liblas"
   depends_on "osgeo-pdal"
