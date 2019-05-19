@@ -12,9 +12,10 @@ class OsgeoLastools < Formula
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any_skip_relocation
-    sha256 "0ad219b497728971efaabaaf66f1ab442172caa4754debac65ca5e75b13e0f58" => :mojave
-    sha256 "0ad219b497728971efaabaaf66f1ab442172caa4754debac65ca5e75b13e0f58" => :high_sierra
-    sha256 "e17529bbbf3e8cec7e535dbed54885db6751e762f8672cb720250a657673a3ed" => :sierra
+    rebuild 1
+    sha256 "d716dda8ec8ede2cf07517190456e6e3f5407d7ff5e5dbf190e6b7b310eaf1a2" => :mojave
+    sha256 "d716dda8ec8ede2cf07517190456e6e3f5407d7ff5e5dbf190e6b7b310eaf1a2" => :high_sierra
+    sha256 "d6c319e04e9c03e3ce7dfaf110e187164e8f6398c82dd71f63ed892792328a19" => :sierra
   end
 
   option "with-wine", "Use Wine to have more support"
