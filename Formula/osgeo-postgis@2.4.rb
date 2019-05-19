@@ -33,10 +33,9 @@ class OsgeoPostgisAT24 < Formula
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any
-    rebuild 1
-    sha256 "865183488e1b816e489b2f1ad33d46b00c3952d814a2449305a445f3e646de9e" => :mojave
-    sha256 "865183488e1b816e489b2f1ad33d46b00c3952d814a2449305a445f3e646de9e" => :high_sierra
-    sha256 "721c13617cc8c940db71b66514ad78f569d1dc2a8f1de00c5212d9541e11d067" => :sierra
+    sha256 "5ac082bc3418f9a9b860ebb93877286101183b08602c3d6c0bc331b1acd837a3" => :mojave
+    sha256 "5ac082bc3418f9a9b860ebb93877286101183b08602c3d6c0bc331b1acd837a3" => :high_sierra
+    sha256 "16f4be27c6b5b4ed73fee8786f3e68f4c4d512ee848a0ff2b1f27c0a24b61830" => :sierra
   end
 
   revision 2
