@@ -39,7 +39,7 @@ class OsgeoPostgisAT24 < Formula
     sha256 "721c13617cc8c940db71b66514ad78f569d1dc2a8f1de00c5212d9541e11d067" => :sierra
   end
 
-  revision 1
+  revision 2
 
   head "https://github.com/postgis/postgis.git", :branch => "svn-2.4"
 
@@ -88,7 +88,7 @@ class OsgeoPostgisAT24 < Formula
   def install
     # Follow the PostgreSQL linked keg back to the active Postgres installation
     # as it is common for people to avoid upgrading Postgres.
-    # postgres_realpath = Formula["osgeo-postgresql"].opt_prefix.realpath
+    # postgres_realpath = Formula["osgeo-postgresql@10"].opt_prefix.realpath
     ENV.append "CFLAGS", "-Diconv=libiconv -Diconv_open=libiconv_open -Diconv_close=libiconv_close"
     ENV.append "LDFLAGS", "-L#{Formula["libiconv"].opt_lib} -liconv" # ICONV_LDFLAGS
 
@@ -99,7 +99,7 @@ class OsgeoPostgisAT24 < Formula
       "--with-xml2config=#{Formula["libxml2"].opt_bin}/xml2-config",
       "--with-geosconfig=#{Formula["geos"].opt_bin}/geos-config",
       "--with-sfcgal=#{Formula["sfcgal"].opt_bin}/sfcgal-config",
-      "--with-projdir=#{Formula["proj"].opt_prefix}",
+      "--with-projdir=#{Formula["osgeo-proj"].opt_prefix}",
       "--with-jsondir=#{Formula["json-c"].opt_prefix}",
       "--with-protobufdir=#{Formula["protobuf-c"].opt_prefix}",
       "--with-pcredir=#{Formula["pcre"].opt_prefix}",
