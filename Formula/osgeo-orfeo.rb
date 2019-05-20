@@ -1,10 +1,10 @@
 class OsgeoOrfeo < Formula
   desc "Library of image processing algorithms"
-  homepage "https://www.orfeo-toolbox.org/otb/"
+  homepage "https://www.orfeo-toolbox.org/otb"
   url "https://github.com/orfeotoolbox/OTB/archive/6.6.2.tar.gz"
   sha256 "39c2a9e202e1a2e2b12f2fb96b60a99123700cd169b69a8fb021137f5612b89c"
 
-  # revision 1
+  revision 1
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
@@ -288,13 +288,13 @@ __END__
 
  # set GDAL_DATA variable used by otb application
 -GDAL_DATA=OUT_DIR/share/gdal
-+GDAL_DATA=HOMEBREW_PREFIX/opt/gdal2/share/gdal
++GDAL_DATA=HOMEBREW_PREFIX/opt/osgeo-gdal/share/gdal
 
  export GDAL_DRIVER_PATH=disable
 
  # set GEOTIFF_CSV variable used by otb application
 -GEOTIFF_CSV=OUT_DIR/share/epsg_csv
-+GEOTIFF_CSV=HOMEBREW_PREFIX/opt/libgeotiff/share/epsg_csv
++GEOTIFF_CSV=HOMEBREW_PREFIX/opt/osgeo-libgeotiff/share/epsg_csv
 
  # export variables
  export LC_NUMERIC
