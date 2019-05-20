@@ -7,9 +7,10 @@ class OsgeoPointcloud < Formula
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any
-    sha256 "7c256b3bcdad665e88b18d54975658e63e71852374aa3340465e7b8740b8125e" => :mojave
-    sha256 "7c256b3bcdad665e88b18d54975658e63e71852374aa3340465e7b8740b8125e" => :high_sierra
-    sha256 "60bc28e7274904d6729e7cf2fd82c2388907a26d1ba07d559ff7785164de4b17" => :sierra
+    rebuild 1
+    sha256 "0441c0f8dafa1e14e132feedecf64d587dd9f676517199a78f7c633d32c05da1" => :mojave
+    sha256 "0441c0f8dafa1e14e132feedecf64d587dd9f676517199a78f7c633d32c05da1" => :high_sierra
+    sha256 "39acb394587990363e8495770479e91af9f13edf5bcf157905c0762e667c24e3" => :sierra
   end
 
   # url "https://github.com/pgpointcloud/pointcloud/archive/v1.0.1.tar.gz"
