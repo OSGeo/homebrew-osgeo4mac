@@ -1,10 +1,10 @@
 class OsgeoOrfeo < Formula
   desc "Library of image processing algorithms"
   homepage "https://www.orfeo-toolbox.org/otb/"
-  url "https://github.com/orfeotoolbox/OTB/archive/6.6.1.tar.gz"
-  sha256 "f8fea75f620fae1bb0ce902fb8133457b6ead40ad14d4dec55beaa59ae641b4c"
+  url "https://github.com/orfeotoolbox/OTB/archive/6.6.2.tar.gz"
+  sha256 "39c2a9e202e1a2e2b12f2fb96b60a99123700cd169b69a8fb021137f5612b89c"
 
-  revision 3
+  # revision 1
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
@@ -31,7 +31,6 @@ class OsgeoOrfeo < Formula
   depends_on "cmake" => :build
   depends_on "boost"
   depends_on "pkg-config"
-  depends_on "osgeo-libgeotiff"
   depends_on "libpng"
   depends_on "pcre"
   depends_on "openssl"
@@ -47,9 +46,7 @@ class OsgeoOrfeo < Formula
   depends_on "libtool" # libltdl
   depends_on "jpeg"
   depends_on "libtiff"
-  depends_on "osgeo-proj"
   depends_on "geos"
-  depends_on "osgeo-netcdf"
   depends_on "openjpeg"
   depends_on "hdf5"
   depends_on "opencv@2"
@@ -60,7 +57,10 @@ class OsgeoOrfeo < Formula
   depends_on "libsvm" => :recommended
   depends_on "minizip" => :recommended
   depends_on "muparser" => :recommended
+  depends_on "osgeo-libgeotiff"
+  depends_on "osgeo-proj"
   depends_on "osgeo-hdf4"
+  depends_on "osgeo-netcdf"
   depends_on "osgeo-muparserx" => :recommended
   depends_on "osgeo-libkml" => :recommended
   depends_on "osgeo-vtk"
