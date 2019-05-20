@@ -4,7 +4,7 @@ class OsgeoOrfeo < Formula
   url "https://github.com/orfeotoolbox/OTB/archive/6.6.2.tar.gz"
   sha256 "39c2a9e202e1a2e2b12f2fb96b60a99123700cd169b69a8fb021137f5612b89c"
 
-  revision 1
+  # revision 1
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
@@ -258,17 +258,17 @@ class OsgeoOrfeo < Formula
   end
 
   test do
-    # puts "Testing CLI wrapper"
-    # out = `#{opt_bin}/otbcli 2>&1`
-    # assert_match "module_name [MODULEPATH] [arguments]", out
-    # puts "Testing Rescale CLI app"
-    # out = `#{opt_bin}/otbcli_Rescale 2>&1`
-    # assert_match "Rescale the image between two given values", out
-    # if (opt_bin/"otbgui").exist?
-    #   puts "Testing Qt GUI wrapper"
-    #   out = `#{opt_bin}/otbgui 2>&1`
-    #   assert_match "module_name [module_path]", out
-    # end
+    puts "Testing CLI wrapper"
+    out = `#{opt_bin}/otbcli 2>&1`
+    assert_match "module_name [MODULEPATH] [arguments]", out
+    puts "Testing Rescale CLI app"
+    out = `#{opt_bin}/otbcli_Rescale 2>&1`
+    assert_match "Rescale the image between two given values", out
+    if (opt_bin/"otbgui").exist?
+      puts "Testing Qt GUI wrapper"
+      out = `#{opt_bin}/otbgui 2>&1`
+      assert_match "module_name [module_path]", out
+    end
   end
 end
 
