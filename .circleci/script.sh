@@ -76,6 +76,9 @@ for f in ${CHANGED_FORMULAE};do
   brew install -v ${FLAGS} ${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/${f}&
   PID=$!
   # add progress to ensure Travis doesn't complain about no output
+
+  brew reinstall -v ${FLAGS} ${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/${f}&
+
   while true; do
     sleep 30
     if jobs -rp | grep ${PID} >/dev/null; then
@@ -91,7 +94,4 @@ for f in ${CHANGED_FORMULAE};do
   # (mentioned that it is skipped if installing with --build-bottle)
   # brew postinstall ${f}
   # brew test ${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/${f}
-
-  brew install -v ${FLAGS} ${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/${f}&
-  PID=$!
 done
