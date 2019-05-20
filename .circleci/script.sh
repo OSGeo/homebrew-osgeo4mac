@@ -91,4 +91,7 @@ for f in ${CHANGED_FORMULAE};do
   # (mentioned that it is skipped if installing with --build-bottle)
   # brew postinstall ${f}
   # brew test ${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/${f}
+
+  brew install -v ${FLAGS} ${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/${f}&
+  PID=$!
 done
