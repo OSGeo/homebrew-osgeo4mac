@@ -11,10 +11,9 @@ class OsgeoLibght < Formula
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
-    rebuild 1
-    sha256 "712a3fafca167504fd960d3f090e2c0de5b5449985c1a75495e8f93cc52e0b44" => :mojave
-    sha256 "712a3fafca167504fd960d3f090e2c0de5b5449985c1a75495e8f93cc52e0b44" => :high_sierra
-    sha256 "e743da7823aed863f0a19f1658237e8d0ff89861d49fb1528e6bb283a8137bfb" => :sierra
+    sha256 "c9ee3b2d00ad53ec24ae6d670c03e53a3c5229875d3ae0797edd8c6fea9ea9b0" => :mojave
+    sha256 "c9ee3b2d00ad53ec24ae6d670c03e53a3c5229875d3ae0797edd8c6fea9ea9b0" => :high_sierra
+    sha256 "af246921f6cb0e3fcb594eaae4d298b9caf21a5f77c1235dda36ed7350cb4623" => :sierra
   end
 
   depends_on "cmake" => :build
