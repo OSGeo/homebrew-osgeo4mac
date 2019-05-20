@@ -3,6 +3,7 @@ class OsgeoPointcloud < Formula
   homepage "https://github.com/pgpointcloud/pointcloud"
   url "https://github.com/pgpointcloud/pointcloud/archive/v1.2.0.tar.gz"
   sha256 "8542a4c714b4d0c67f10d092291a43b5650871b4ec8caf831e492810f25bb93c"
+
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any
@@ -14,7 +15,7 @@ class OsgeoPointcloud < Formula
   # url "https://github.com/pgpointcloud/pointcloud/archive/v1.0.1.tar.gz"
   # sha256 "3fac2efe1263b0876c26fc77e28f3664b56aa1e142c92383f9eb5b828999d0e7"
 
-  revision 1
+  revision 2
 
   head "https://github.com/pgpointcloud/pointcloud.git", :branch => "master"
 
@@ -52,9 +53,9 @@ class OsgeoPointcloud < Formula
 
   def install
     if build.with?("postgresql10")
-      args = "--with-pgconfig=#{Formula["postgresql@10"].opt_bin}/pg_config"
+      args = "--with-pgconfig=#{Formula["osgeo-postgresql@10"].opt_bin}/pg_config"
     else
-      args = "--with-pgconfig=#{Formula["postgresql"].opt_bin}/pg_config"
+      args = "--with-pgconfig=#{Formula["osgeo-postgresql"].opt_bin}/pg_config"
     end
 
     mkdir lib/"postgresql"
@@ -87,7 +88,7 @@ class OsgeoPointcloud < Formula
 
     # for v1.0.1
     # mkdir "build" do
-    #   system "cmake", "..", "-DCMAKE_PREFIX_PATH=#{Formula["postgresql"].opt_prefix}", *std_cmake_args
+    #   system "cmake", "..", "-DCMAKE_PREFIX_PATH=#{Formula["osgeo-postgresql"].opt_prefix}", *std_cmake_args
     #   system "make"
     #   # system "/usr/local/bin/bbedit", "CMakeCache.txt"
     #   # raise
