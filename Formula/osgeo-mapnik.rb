@@ -203,7 +203,7 @@ class OsgeoMapnik < Formula
 
     args << "GRID_RENDERER=TRUE"
 
-    args << "SVG2PNG=True"
+    # args << "SVG2PNG=True" # Error: Failed changing install name in /bin/svg2png
     args << "SVG_RENDERER=TRUE"
 
     args << "PNG=TRUE"
@@ -292,8 +292,6 @@ class OsgeoMapnik < Formula
     # system "#{Formula["python"].opt_bin}/python3", "scons/scons.py", "./configure", "--config=cache", "--implicit-cache", "--max-drift=1", *args # "--jobs=${jobs}
     # system "#{Formula["python"].opt_bin}/python3", "scons/scons.py"
     # system "#{Formula["python"].opt_bin}/python3", "scons/scons.py", "install"
-
-    MachO::Tools.change_install_name("#{bin}/svg2png", "/usr/local/opt/boost/lib/libboost_system.dylib", "@@HOMEBREW_PREFIX@@/opt/boost/lib/libboost_system.dylib")
   end
 
   # def post_install
