@@ -28,9 +28,10 @@ class OsgeoPsqlodbc < Formula
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any
-    sha256 "b642f5e73bec11c2c21566a219a9cbdd4f72e7a85084ba87af0e4f810de1da71" => :mojave
-    sha256 "b642f5e73bec11c2c21566a219a9cbdd4f72e7a85084ba87af0e4f810de1da71" => :high_sierra
-    sha256 "415b4efb68a0461bc104856568b28a2c4971202f222a9491cd90365140d0bf74" => :sierra
+    rebuild 1
+    sha256 "9184542ccf288784794bd6c3ec4d13127771166c7619ff305d7c56816984c89f" => :mojave
+    sha256 "9184542ccf288784794bd6c3ec4d13127771166c7619ff305d7c56816984c89f" => :high_sierra
+    sha256 "ec4d537d87495060b8084da9f79e01ad3408d07c5d1161add9bd46a77130fe98" => :sierra
   end
 
   # revision 1
