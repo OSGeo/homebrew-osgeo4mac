@@ -145,15 +145,15 @@ workflows:
   test-bot:
     jobs:
       - update-homebrew
-      - high_sierra-build:
-          requires:
-            - update-homebrew
+      # - high_sierra-build:
+      #     requires:
+      #       - update-homebrew
       - sierra-build:
           requires:
             - update-homebrew
       - collect-bottles:
           requires:
-            - high_sierra-build
+            # - high_sierra-build
             - sierra-build
       # - deploy:
       #     requires:
