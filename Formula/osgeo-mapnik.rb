@@ -10,7 +10,7 @@ class OsgeoMapnik < Formula
   # version "3.0.22"
   # https://github.com/mapnik/mapnik/wiki/MacInstallation_Homebrew
 
-  revision 1
+  revision 2
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
@@ -39,6 +39,7 @@ class OsgeoMapnik < Formula
   depends_on "libjpeg-turbo"
   depends_on "libxml2"
   depends_on "python"
+  # depends_on "python@2"
 
   depends_on "osgeo-postgis"
   depends_on "curl"
@@ -70,13 +71,13 @@ class OsgeoMapnik < Formula
   end
 
   resource "Pillow" do
-    url "https://files.pythonhosted.org/packages/3c/7e/443be24431324bd34d22dd9d11cc845d995bcd3b500676bcf23142756975/Pillow-5.4.1.tar.gz"
-    sha256 "5233664eadfa342c639b9b9977190d64ad7aca4edc51a966394d7e08e7f38a9f"
+    url "https://files.pythonhosted.org/packages/81/1a/6b2971adc1bca55b9a53ed1efa372acff7e8b9913982a396f3fa046efaf8/Pillow-6.0.0.tar.gz"
+    sha256 "809c0a2ce9032cbcd7b5313f71af4bdc5c8c771cb86eb7559afd954cab82ebb5"
   end
 
   resource "lxml" do
-    url "https://files.pythonhosted.org/packages/65/6f/d070609b415f4a24bf36b7deb94bfd791e8d023c0dbf4233659af53fe0ab/lxml-4.3.2.tar.gz"
-    sha256 "3a9d8521c89bf6f2a929c3d12ad3ad7392c774c327ea809fd08a13be6b3bc05f"
+    url "https://files.pythonhosted.org/packages/7d/29/174d70f303016c58bd790c6c86e6e86a9d18239fac314d55a9b7be501943/lxml-4.3.3.tar.gz"
+    sha256 "4a03dd682f8e35a10234904e0b9508d705ff98cf962c5851ed052e9340df3d90"
   end
 
   resource "nose" do
@@ -125,6 +126,9 @@ class OsgeoMapnik < Formula
     # encountered when trying to detect boost regex in configure
     ENV.delete("SDKROOT") if DevelopmentTools.clang_build_version >= 900
 
+    # ENV.append "CPPPATH", "#{HOMEBREW_PREFIX}/include"
+    # ENV.append "LIBPATH", "#{HOMEBREW_PREFIX}/lib"
+
     # install python modules
     venv = virtualenv_create(libexec/'vendor', "#{Formula["python"].opt_bin}/python3")
     res = resources.map(&:name).to_set - %w[geometry polylabel protozero variant]
@@ -138,10 +142,6 @@ class OsgeoMapnik < Formula
     ENV.append "CUSTOM_CXXFLAGS", "-I#{Formula["sqlite"].opt_include}"
     ENV.append "CUSTOM_LDFLAGS", "-L#{Formula["sqlite"].opt_lib} -lsqlite3"
 
-    # support for PROJ 6
-    # https://github.com/mapnik/mapnik/issues/4036
-    ENV.append_to_cflags "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"
-
     args = %W[
       CC=#{ENV.cc}
       CXX=#{ENV.cxx}
@@ -150,6 +150,11 @@ class OsgeoMapnik < Formula
       INPUT_PLUGINS=all
       NIK2IMG=FALSE
     ]
+
+    # support for PROJ 6
+    # https://github.com/mapnik/mapnik/issues/4036
+    # ENV.append_to_cflags "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"
+    # args << "CUSTOM_DEFINES=-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"
 
     # http://site.icu-project.org/download/61#TOC-Migration-Issues
     # ENV.append "CXXFLAGS", "-DU_USING_ICU_NAMESPACE=1"
@@ -197,6 +202,8 @@ class OsgeoMapnik < Formula
     args << "PKG_CONFIG_PATH=/usr/lib/pkgconfig:/usr/local/lib/pkgconfig:/usr/X11/lib/pkgconfig"
 
     args << "GRID_RENDERER=TRUE"
+
+    args << "SVG2PNG=True"
     args << "SVG_RENDERER=TRUE"
 
     args << "PNG=TRUE"
@@ -217,8 +224,8 @@ class OsgeoMapnik < Formula
     args << "GDAL_CONFIG=#{Formula["osgeo-gdal"].opt_bin}/gdal-config"
     args << "OCCI_INCLUDES=#{Formula["osgeo-gdal"].opt_include}"
     args << "OCCI_LIBS=#{Formula["osgeo-gdal"].opt_lib}"
-    args << "RASTERLITE_INCLUDES=#{Formula["osgeo-gdal"].opt_bin}"
-    args << "RASTERLITE_LIBS=#{Formula["osgeo-gdal"].opt_bin}"
+    args << "RASTERLITE_INCLUDES=#{Formula["osgeo-gdal"].opt_include}"
+    args << "RASTERLITE_LIBS=#{Formula["osgeo-gdal"].opt_lib}"
 
     args << "XML2_CONFIG=#{Formula["libxml2"].opt_bin}/xml2-config"
     args << "XML2_INCLUDES=#{Formula["libxml2"].opt_include}"
