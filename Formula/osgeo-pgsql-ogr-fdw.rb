@@ -1,8 +1,8 @@
 class OsgeoPgsqlOgrFdw < Formula
   desc "PostgreSQL foreign data wrapper for OGR"
   homepage "https://github.com/pramsey/pgsql-ogr-fdw"
-  url "https://github.com/pramsey/pgsql-ogr-fdw/archive/v1.0.7.tar.gz"
-  sha256 "c776d9ad108818bae33336ca8d2219837e04d2c25c9086928e4bb6e06947b6e9"
+  url "https://github.com/pramsey/pgsql-ogr-fdw/archive/v1.0.8.tar.gz"
+  sha256 "4ab0c303006bfd83dcd40af4d53c48e7d8ec7835bb98491bc6640686da788a8b"
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
@@ -154,11 +154,11 @@ class OsgeoPgsqlOgrFdw < Formula
       CREATE FOREIGN TABLE pt_two (
         fid bigint,
         geom Geometry(Point,4326),
-        name varchar,
+        name varchar(50),
         age integer,
-        height real,
+        height doubleprecision,
         birthdate date
-      ) SERVER myserver
+      ) SERVER "myserver"
       OPTIONS (layer 'pt_two');
 
     EOS
