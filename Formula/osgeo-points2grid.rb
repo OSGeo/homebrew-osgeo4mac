@@ -12,7 +12,7 @@ class OsgeoPoints2grid < Formula
     sha256 "84c8ebcfb7828a9e71b6970c701a6ae0dffeeb80584f24562b0f753cbb9268eb" => :sierra
   end
 
-  # revision 1
+  revision 1
 
   head "https://github.com/CRREL/points2grid.git", :branch => "master"
 
