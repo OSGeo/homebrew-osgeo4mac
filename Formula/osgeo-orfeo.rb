@@ -9,9 +9,9 @@ class OsgeoOrfeo < Formula
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any
-    sha256 "b0bb5b051b4a0c64c67e1a6917229f27d107b08bfc82fafb804213e72cf73e9f" => :mojave
-    sha256 "b0bb5b051b4a0c64c67e1a6917229f27d107b08bfc82fafb804213e72cf73e9f" => :high_sierra
-    sha256 "fbdea683ddc16897e068951f93dd6cc8d0e4a3b4d167719f6bd8c94b89323025" => :sierra
+    sha256 "be41ed265d0a0eb849763a0fbf6500a86e93520d8952e1fe08bf73f44ae43f91" => :mojave
+    sha256 "be41ed265d0a0eb849763a0fbf6500a86e93520d8952e1fe08bf73f44ae43f91" => :high_sierra
+    sha256 "33215fbefa9ddb036f419653d6396460dea0d7fc5dc62e16f7e1111296f625d4" => :sierra
   end
 
   head "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb.git", :branch => "master"
