@@ -23,6 +23,8 @@ class OsgeoPsqlodbc < Formula
   url "https://ftp.postgresql.org/pub/odbc/versions/src/psqlodbc-11.00.0000.tar.gz"
   sha256 "703e6b87022f95ffa00d9f86c8f0a877f8a55b9b3be0942081f382e794112a86"
 
+  revision 1
+
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any
