@@ -154,11 +154,11 @@ class OsgeoPgsqlOgrFdw < Formula
       CREATE FOREIGN TABLE pt_two (
         fid bigint,
         geom Geometry(Point,4326),
-        name varchar,
+        name varchar(50),
         age integer,
-        height real,
+        height doubleprecision,
         birthdate date
-      ) SERVER myserver
+      ) SERVER "myserver"
       OPTIONS (layer 'pt_two');
 
     EOS
