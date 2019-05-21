@@ -19,9 +19,9 @@ end
 
 class OsgeoLibpqxx < Formula
   desc "C++ connector for PostgreSQL"
-  homepage "http://pqxx.org/development/libpqxx/"
-  url "https://github.com/jtv/libpqxx/archive/6.4.2.tar.gz"
-  sha256 "f3afb60b8f6d69a8077f7e7f30fc7175ce7d437551d386dba4f7e0f1e7b673ea"
+  homepage "http://pqxx.org/development/libpqxx"
+  url "https://github.com/jtv/libpqxx/archive/6.4.4.tar.gz"
+  sha256 "6ae3a0113a242db6bb9d998943b7cc23699652d843dab702aa06a8b9330c171a"
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
