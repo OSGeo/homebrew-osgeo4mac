@@ -73,9 +73,7 @@ for f in ${CHANGED_FORMULAE};do
   # Default installation flag set
   FLAGS="--build-bottle"
 
-  brew install -s -v ${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/${f}
-
-  brew reinstall -v ${FLAGS} ${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/${f}&
+  brew install -v ${FLAGS} ${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/${f}&
   PID=$!
   # add progress to ensure Travis doesn't complain about no output
 
