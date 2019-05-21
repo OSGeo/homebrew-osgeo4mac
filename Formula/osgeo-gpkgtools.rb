@@ -4,7 +4,7 @@ class OsgeoGpkgtools < Formula
   desc "Some tools for the GeoPackage mapping (vector, tiles and raster) container"
   homepage 'https://launchpad.net/gpkgtools'
 
-  # revision 1
+  revision 1
 
   head "lp:gpkgtools", :using => :bzr
 
@@ -12,8 +12,8 @@ class OsgeoGpkgtools < Formula
   depends_on "python@2"
 
   resource "Pillow" do
-    url "https://files.pythonhosted.org/packages/3c/7e/443be24431324bd34d22dd9d11cc845d995bcd3b500676bcf23142756975/Pillow-5.4.1.tar.gz"
-    sha256 "5233664eadfa342c639b9b9977190d64ad7aca4edc51a966394d7e08e7f38a9f"
+    url "https://files.pythonhosted.org/packages/81/1a/6b2971adc1bca55b9a53ed1efa372acff7e8b9913982a396f3fa046efaf8/Pillow-6.0.0.tar.gz"
+    sha256 "809c0a2ce9032cbcd7b5313f71af4bdc5c8c771cb86eb7559afd954cab82ebb5"
   end
 
   def install
