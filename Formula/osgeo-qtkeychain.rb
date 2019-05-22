@@ -1,10 +1,29 @@
+class Unlinked < Requirement
+  fatal true
+
+  satisfy(:build_env => false) { !core_qtkeychain_linked }
+
+  def core_qtkeychain_linked
+    Formula["qtkeychain"].linked_keg.exist?
+  rescue
+    return false
+  end
+
+  def message
+    s = "\033[31mYou have other linked versions!\e[0m\n\n"
+
+    s += "Unlink with \e[32mbrew unlink qtkeychain\e[0m or remove with brew \e[32muninstall --ignore-dependencies qtkeychain\e[0m\n\n" if core_qtkeychain_linked
+    s
+  end
+end
+
 class OsgeoQtkeychain < Formula
   desc "Platform-independent Qt-based API for storing passwords securely"
   homepage "https://github.com/frankosterfeld/qtkeychain"
   url "https://github.com/frankosterfeld/qtkeychain/archive/v0.9.1.tar.gz"
   sha256 "9c2762d9d0759a65cdb80106d547db83c6e9fdea66f1973c6e9014f867c6f28e"
 
-  revision 1
+  revision 2
 
   head "https://github.com/frankosterfeld/qtkeychain.git", :using => :git
 
@@ -18,6 +37,10 @@ class OsgeoQtkeychain < Formula
 
   option "with-static", "Build static in addition to shared library"
   option "with-translations", "Generate Qt translation (.ts) files"
+
+  # keg_only "qtkeychain" is already provided by homebrew/core"
+  # we will verify that other versions are not linked
+  depends_on Unlinked
 
   depends_on "cmake" => :build
   depends_on "qt"
