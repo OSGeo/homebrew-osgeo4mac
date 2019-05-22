@@ -149,9 +149,8 @@ class OsgeoQgisRes < Formula
         venv.pip_install r
     end
 
-    system libexec/"vendor/bin/pip3", "install", "--upgrade", "-v", "setuptools", "pip<19.0.0", "wheel"
     # 'pyproj': version 2.0.0 supports & requires PROJ 6
-    venv.pip_install "pyproj==1.9.6"
+    system libexec/"vendor/bin/pip3", "install", "--upgrade", "-v", "setuptools", "pip<19.0.0", "wheel", "pyproj==1.9.6"
 
     resource("numpy").stage do
       openblas = Formula["openblas"].opt_prefix
@@ -225,9 +224,8 @@ class OsgeoQgisRes < Formula
       venv.pip_install r
     end
 
-    system libexec/"vendor/bin/pip3", "install", "--upgrade", "-v", "setuptools", "pip<19.0.0", "wheel"
     # 'scikit-learn': It seems that scikit-learn cannot be built with OpenMP support
-    venv.pip_install "scikit-learn"
+    system libexec/"vendor/bin/pip3", "install", "--upgrade", "-v", "setuptools", "pip<19.0.0", "wheel", "scikit-learn==0.19.2"
 
     # upgrade pip
     # system libexec/"vendor/bin/pip3", "install", "--upgrade", "-v", "setuptools", "pip", "wheel"
