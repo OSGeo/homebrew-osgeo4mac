@@ -1,6 +1,6 @@
 class OsgeoSimpleTiles < Formula
   desc "Image generation library for spatial data"
-  homepage "https://propublica.github.io/simple-tiles/"
+  homepage "https://propublica.github.io/simple-tiles"
   url "https://github.com/propublica/simple-tiles/archive/v0.6.1.tar.gz"
   sha256 "2391b2f727855de28adfea9fc95d8c7cbaca63c5b86c7286990d8cbbcd640d6f"
 
@@ -12,7 +12,7 @@ class OsgeoSimpleTiles < Formula
     sha256 "4cecd6dd82c66d4648fa72e6220a21be6d6cbb0c820d39cd8974f4d3718258e3" => :sierra
   end
 
-  revision 1
+  revision 2
 
   head "https://github.com/propublica/simple-tiles.git", :branch => "master"
 
