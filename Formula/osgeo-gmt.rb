@@ -7,7 +7,7 @@ class OsgeoGmt < Formula
   mirror "https://fossies.org/linux/misc/GMT/gmt-5.4.5-src.tar.xz"
   sha256 "225629c7869e204d5f9f1a384c4ada43e243f83e1ed28bdca4f7c2896bf39ef6"
 
-  revision 1
+  revision 2
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
@@ -98,7 +98,7 @@ class OsgeoGmt < Formula
 
     args << "-DGDAL_ROOT=#{Formula["osgeo-gdal"].opt_prefix}" # GDAL_DIR
 
-    args << "-DNETCDF_ROOT=#{Formula["netcdf"].opt_prefix}" # NETCDF_DIR
+    args << "-DNETCDF_ROOT=#{Formula["osgeo-netcdf"].opt_prefix}" # NETCDF_DIR
 
     # SPHINX_DIR or SPHINX_ROOT
     # args << "-DSPHINX_EXECUTABLE=#{Formula["sphinx"].opt_bin}" # sphinx-build
