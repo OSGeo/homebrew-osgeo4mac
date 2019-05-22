@@ -9,9 +9,9 @@ class OsgeoQgisRes < Formula
   homepage "https://www.qgis.org"
   url "https://gist.githubusercontent.com/dakcarto/11385561/raw/e49f75ecec96ed7d6d3950f45ad3f30fe94d4fb2/pyqgis_startup.py"
   sha256 "385dce925fc2d29f05afd6508bc1f46ec84c0bc607cc0c8dfce78a4bb93b9c4e"
-  version "3.6.2"
+  version "3.6.3"
 
-  revision 1
+  # revision 1
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
@@ -99,14 +99,19 @@ class OsgeoQgisRes < Formula
   # pyqgis_startup.py
   # TODO: add one for Py3 (only necessary when macOS ships a Python3 or 3rd-party isolation is needed)
 
+  # resource "pyproj" do
+  #   url "https://files.pythonhosted.org/packages/93/48/956b9dcdddfcedb1705839280e02cbfeb2861ed5d7f59241210530867d5b/numpy-1.16.3.zip"
+  #   sha256 "78a6f89da87eeb48014ec652a65c4ffde370c036d780a995edaeb121d3625621"
+  # end
+
   resource "numpy" do
-    url "https://files.pythonhosted.org/packages/cf/8d/6345b4f32b37945fedc1e027e83970005fc9c699068d2f566b82826515f2/numpy-1.16.2.zip"
-    sha256 "6c692e3879dde0b67a9dc78f9bfb6f61c666b4562fd8619632d7043fb5b691b0"
+    url "https://files.pythonhosted.org/packages/93/48/956b9dcdddfcedb1705839280e02cbfeb2861ed5d7f59241210530867d5b/numpy-1.16.3.zip"
+    sha256 "78a6f89da87eeb48014ec652a65c4ffde370c036d780a995edaeb121d3625621"
   end
 
   resource "scipy" do
-    url "https://files.pythonhosted.org/packages/a9/b4/5598a706697d1e2929eaf7fe68898ef4bea76e4950b9efbe1ef396b8813a/scipy-1.2.1.tar.gz"
-    sha256 "e085d1babcb419bbe58e2e805ac61924dac4ca45a07c9fa081144739e500aa3c"
+    url "https://files.pythonhosted.org/packages/cb/97/361c8c6ceb3eb765371a702ea873ff2fe112fa40073e7d2b8199db8eb56e/scipy-1.3.0.tar.gz"
+    sha256 "c3bb4bd2aca82fb498247deeac12265921fe231502a6bc6edea3ee7fe6c40a7a"
   end
 
   resource "matplotlib" do
@@ -137,8 +142,11 @@ class OsgeoQgisRes < Formula
     system libexec/"vendor/bin/pip3", "install", "--upgrade", "-v", "setuptools", "pip<19.0.0", "wheel"
 
     res_required = ['requests', 'six', 'future', 'Sphinx', 'setuptools-scm', 'chardet', 'idna', 'urllib3', 'PySocks', 'Pillow', 'cycler', \
-      'kiwisolver', 'tornado', 'Unidecode', 'pyparsing', 'MarkupSafe', 'nose', 'Cython', 'python-dateutil', 'pyproj', 'pytz', 'Jinja2', 'OWSLib', \
+      'kiwisolver', 'tornado', 'Unidecode', 'pyparsing', 'MarkupSafe', 'nose', 'Cython', 'python-dateutil', 'pytz', 'Jinja2', 'OWSLib', \
       'psycopg2', 'Pygments', 'PyYAML', "dbus-python", "PyOpenGL", 'certifi', 'funcsigs', 'coverage', 'mock', 'pbr', 'termcolor', 'oauthlib', 'pyOpenSSL', 'httplib2']
+
+    # 'pyproj': version 2.0.0 supports & requires PROJ 6
+    venv.pip_install "pyproj==1.9.6"
 
     res_required.each do |r|
         venv.pip_install r
