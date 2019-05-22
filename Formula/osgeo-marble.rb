@@ -10,9 +10,10 @@ class OsgeoMarble < Formula
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
-    sha256 "8f841a6e59e8ddd33832a8a063d4add71b782118db305dfa386aa5c8d383d7d5" => :mojave
-    sha256 "8f841a6e59e8ddd33832a8a063d4add71b782118db305dfa386aa5c8d383d7d5" => :high_sierra
-    sha256 "ec0502ae4ef80e2d2a3f5def21e97a93017b2491a5a62bc51f9babd7cfbfb5c1" => :sierra
+    rebuild 1
+    sha256 "b9b28fdf6d0fbf2894f6103abffa263f05727f7b1c7ac7b5a830725a6e9243f4" => :mojave
+    sha256 "b9b28fdf6d0fbf2894f6103abffa263f05727f7b1c7ac7b5a830725a6e9243f4" => :high_sierra
+    sha256 "0e556ae04c4a72d7b5e2b486d1a3298ab81ec9d1cd3d06e056cf3820f7bdd1db" => :sierra
   end
 
   option "with-debug", "Enable debug build type"
