@@ -1,10 +1,10 @@
 class OsgeoMarble < Formula
   homepage "http://marble.kde.org/"
-  url "https://download.kde.org/stable/applications/18.12.3/src/marble-18.12.3.tar.xz"
-  sha256 "0bfd7ae576e42ebbddadc8c83c2fec5edaf462bcf284642b1002d36d751b24ee"
-  version "18.12.3"
+  url "https://download.kde.org/stable/applications/19.04.1/src/marble-19.04.1.tar.xz"
+  sha256 "acd9c15c4758684f6eff6c2318fc4dd88fd68dd41336de9458cad4d5f6832c61"
+  version "19.04.1"
 
-  revision 1
+  # revision 1
 
   head "git://anongit.kde.org/marble"
 
