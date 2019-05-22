@@ -149,9 +149,6 @@ class OsgeoQgisRes < Formula
         venv.pip_install r
     end
 
-    # 'pyproj': version 2.0.0 supports & requires PROJ 6
-    system libexec/"vendor/bin/pip3", "install", "--upgrade", "-v", "setuptools", "pip<19.0.0", "wheel", "pyproj==1.9.6"
-
     resource("numpy").stage do
       openblas = Formula["openblas"].opt_prefix
       ENV["ATLAS"] = "None" # avoid linking against Accelerate.framework
@@ -225,7 +222,8 @@ class OsgeoQgisRes < Formula
     end
 
     # 'scikit-learn': It seems that scikit-learn cannot be built with OpenMP support
-    system libexec/"vendor/bin/pip3", "install", "--upgrade", "-v", "setuptools", "pip<19.0.0", "wheel", "scikit-learn==0.19.2"
+    # 'pyproj': version 2.0.0 supports & requires PROJ 6
+    system libexec/"vendor/bin/pip3", "install", "--upgrade", "-v", "setuptools", "pip<19.0.0", "wheel", "scikit-learn==0.19.2", "pyproj==1.9.6"
 
     # upgrade pip
     # system libexec/"vendor/bin/pip3", "install", "--upgrade", "-v", "setuptools", "pip", "wheel"
