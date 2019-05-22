@@ -13,9 +13,10 @@ class OsgeoPgadmin3Lts < Formula
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any
-    sha256 "cb13c999ceb7d0a605bb95a058f6d8fcdf4cdbb6343bb259d3cde20b8407a48f" => :mojave
-    sha256 "cb13c999ceb7d0a605bb95a058f6d8fcdf4cdbb6343bb259d3cde20b8407a48f" => :high_sierra
-    sha256 "63aa85fa16345195435db592c12db8f9851c816f88c09fa6bc10ff3a18d81080" => :sierra
+    rebuild 1
+    sha256 "52a1ede0df8e5cadd152cb3066b7948d8a40a8ede53b9175b4c0e55f8445daaa" => :mojave
+    sha256 "52a1ede0df8e5cadd152cb3066b7948d8a40a8ede53b9175b4c0e55f8445daaa" => :high_sierra
+    sha256 "581f3d4725d6f45892ed4fb168340da23cf0b0078bb35ff9c14051174e96a1c8" => :sierra
   end
 
   patch :DATA
