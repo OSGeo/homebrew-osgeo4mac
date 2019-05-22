@@ -6,7 +6,7 @@ class OsgeoOsgqt < Formula
     :commit => "8c6db61ef8ab650b972556142cceb11db057bda9"
   version "3.6.3"
 
-  revision 1
+  revision 2
 
   head "https://github.com/openscenegraph/osgQt.git"
 
