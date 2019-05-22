@@ -13,9 +13,10 @@ class OsgeoOsgqt < Formula
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any
-    sha256 "a46381ad5bf779f261a2fa5193ebfd0c8855be402738dc65f920ef5652bf941b" => :mojave
-    sha256 "a46381ad5bf779f261a2fa5193ebfd0c8855be402738dc65f920ef5652bf941b" => :high_sierra
-    sha256 "9ffb4ec0c6d668244d61b7273aea57ebf5c3d309f0011460b50f1d56d5b8b733" => :sierra
+    rebuild 1
+    sha256 "6a35302754dd73e74eb3d94d9d8569c4f3c027350669ff6010acf1091651381e" => :mojave
+    sha256 "6a35302754dd73e74eb3d94d9d8569c4f3c027350669ff6010acf1091651381e" => :high_sierra
+    sha256 "ea0310e01f112a7ed1376164eee194dd94a420442aa332daef448bb535ac8c80" => :sierra
   end
 
   depends_on "cmake" => :build
