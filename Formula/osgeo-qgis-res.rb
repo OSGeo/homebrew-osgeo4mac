@@ -145,12 +145,13 @@ class OsgeoQgisRes < Formula
       'kiwisolver', 'tornado', 'Unidecode', 'pyparsing', 'MarkupSafe', 'nose', 'Cython', 'python-dateutil', 'pytz', 'Jinja2', 'OWSLib', \
       'psycopg2', 'Pygments', 'PyYAML', "dbus-python", "PyOpenGL", 'certifi', 'funcsigs', 'coverage', 'mock', 'pbr', 'termcolor', 'oauthlib', 'pyOpenSSL', 'httplib2']
 
-    # 'pyproj': version 2.0.0 supports & requires PROJ 6
-    venv.pip_install "pyproj==1.9.6"
-
     res_required.each do |r|
         venv.pip_install r
     end
+
+    system libexec/"vendor/bin/pip3", "install", "--upgrade", "-v", "setuptools", "pip<19.0.0", "wheel"
+    # 'pyproj': version 2.0.0 supports & requires PROJ 6
+    venv.pip_install "pyproj==1.9.6"
 
     resource("numpy").stage do
       openblas = Formula["openblas"].opt_prefix
@@ -216,13 +217,17 @@ class OsgeoQgisRes < Formula
       'gnm', 'h5py', 'ipython', 'ipython_genutils', 'jsonschema', 'jupyter', 'jupyter_core', 'lidar', 'lxml', 'mpmath', 'nbformat', \
       'networkx', 'nltk', 'nose2', 'numexpr', 'olefile', 'openpyxl', 'palettable', 'pandas', 'pandas_oracle', 'pandas-datareader', 'pgi', \
       'plotly', 'ply', 'pubsub', 'py-postgresql', 'py2oracle', 'pycparser', 'pymssql', 'PyMySQL', 'pyodbc', 'PyPubSub', \
-      'pyqtgraph', 'Pyro4', 'PySAL', 'pytest', 'pytils', 'qtpy', 'retrying', 'Rtree', 'scikit-learn', 'seaborn', 'Shapely', 'simplejson', 'smmap', \
+      'pyqtgraph', 'Pyro4', 'PySAL', 'pytest', 'pytils', 'qtpy', 'retrying', 'Rtree', 'seaborn', 'Shapely', 'simplejson', 'smmap', \
       'smmap2', 'sqlalchemy', 'statsmodels', 'subprocess32', 'sympy', 'test', 'tools', 'traitlets', 'whitebox', 'xlrd', 'xlsxwriter', 'xlwt']
 
     # others: gmt-python, pytables
     res_optional.each do |r|
       venv.pip_install r
     end
+
+    system libexec/"vendor/bin/pip3", "install", "--upgrade", "-v", "setuptools", "pip<19.0.0", "wheel"
+    # 'scikit-learn': It seems that scikit-learn cannot be built with OpenMP support
+    venv.pip_install "scikit-learn"
 
     # upgrade pip
     # system libexec/"vendor/bin/pip3", "install", "--upgrade", "-v", "setuptools", "pip", "wheel"
