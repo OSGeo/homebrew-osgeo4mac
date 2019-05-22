@@ -12,7 +12,7 @@ class OsgeoSimpleTiles < Formula
     sha256 "4cecd6dd82c66d4648fa72e6220a21be6d6cbb0c820d39cd8974f4d3718258e3" => :sierra
   end
 
-  # revision 1
+  revision 1
 
   head "https://github.com/propublica/simple-tiles.git", :branch => "master"
 
