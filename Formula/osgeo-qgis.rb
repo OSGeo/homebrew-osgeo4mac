@@ -39,9 +39,9 @@ end
 class OsgeoQgis < Formula
   desc "Open Source Geographic Information System"
   homepage "https://www.qgis.org"
-  url "https://github.com/qgis/QGIS/archive/final-3_6_2.tar.gz"
-  sha256 "10920eaac37ea5986a9f833a2db79ec5d5c359edfc6821643a24cfc68df48638"
-  # version "3.6.2"
+  url "https://github.com/qgis/QGIS/archive/final-3_6_3.tar.gz"
+  sha256 "8e5c6bb88089c5e5f164ea59c5663b862a1373261313e76fca767d497a6441fb"
+  # version "3.6.3"
 
   # revision 1
 
@@ -1354,7 +1354,7 @@ __END__
 +           <item>
 +            <widget class="QLabel" name="label_osgeo">
 +             <property name="text">
-+              <string>OSGeo4Mac Team / Maintainer: @fjperini - Collaborators: @luispuerto</string>
++              <string>OSGeo4Mac Team / Maintainer: @fjperini - Collaborator: @luispuerto</string>
 +             </property>
 +             <property name="alignment">
 +              <set>Qt::AlignCenter</set>
