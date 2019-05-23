@@ -9,10 +9,11 @@ class OsgeoSaga < Formula
   head "https://git.code.sf.net/p/saga-gis/code.git"
 
   bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
-    sha256 "7e88b37f9d9dd8d90e668e984503fa7c6384c24cca1e50e4baa36a8db4c14a28" => :mojave
-    sha256 "7e88b37f9d9dd8d90e668e984503fa7c6384c24cca1e50e4baa36a8db4c14a28" => :high_sierra
-    sha256 "7e88b37f9d9dd8d90e668e984503fa7c6384c24cca1e50e4baa36a8db4c14a28" => :sierra
+    root_url "https://bottle.download.osgeo.org"
+    rebuild 1
+    sha256 "4495e4bdb13e163455a2befdb4c2661581c0f569edc25a83acd84294ab64a18a" => :mojave
+    sha256 "4495e4bdb13e163455a2befdb4c2661581c0f569edc25a83acd84294ab64a18a" => :high_sierra
+    sha256 "5375870fa795d3162d85a2d3525f30092f7bea898274f6de956b066d0fdfd9e2" => :sierra
   end
 
   keg_only "QGIS fails to load the correct SAGA version, if the latest version is in the path"
