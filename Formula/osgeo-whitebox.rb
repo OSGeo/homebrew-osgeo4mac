@@ -1,4 +1,4 @@
-class Whitebox < Formula
+class OsgeoWhitebox < Formula
   desc "Geographic information system (GIS) and remote sensing package intended for advanced geospatial analysis and data visualization"
   homepage "https://www.uoguelph.ca/~hydrogeo/Whitebox"
   url "https://www.uoguelph.ca/~hydrogeo/Whitebox/WhiteboxGAT-mac.zip"
