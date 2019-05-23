@@ -39,18 +39,18 @@ end
 class OsgeoQgisLtr < Formula
   desc "Open Source Geographic Information System"
   homepage "https://www.qgis.org"
-  url "https://github.com/qgis/QGIS/archive/final-3_4_7.tar.gz"
-  sha256 "d070da42e842e59ce9a338b40784b9bc4582f3d48a19255fa8aef967cca653ba"
-  # version "3_4_7"
+  url "https://github.com/qgis/QGIS/archive/final-3_4_8.tar.gz"
+  sha256 "3f7c1e9b1aa932dc0b038d2a0fba2468cf7bea5973fa65eb8a248d60a5c1aa84"
+  # version "3.4.8"
 
-  revision 4
+  # revision 1
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
-    rebuild 1
-    sha256 "7675b610f7dfc333dc8da7a936707408406b6ffbc46f4a08cd9741e3b0829858" => :mojave
-    sha256 "7675b610f7dfc333dc8da7a936707408406b6ffbc46f4a08cd9741e3b0829858" => :high_sierra
-    sha256 "dc5b4ee1fe15dab0977d0311b0e611fb72d52d7975d533c458e93c34fc78c4f2" => :sierra
+    cellar :any
+    sha256 "f0d960ebbd15adcfec24706b29236d59d8ac489cfcc3c42fe3bbd401bb53f5c4" => :mojave
+    sha256 "f0d960ebbd15adcfec24706b29236d59d8ac489cfcc3c42fe3bbd401bb53f5c4" => :high_sierra
+    sha256 "3bf4672513ea08a1674b0cb186d7151bfcc0de96faf2ed855210eae0bc1298f4" => :sierra
   end
 
   head "https://github.com/qgis/QGIS.git", :branch => "master"
