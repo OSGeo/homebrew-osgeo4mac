@@ -4,7 +4,7 @@ class OsgeoSaga < Formula
   url "https://downloads.sourceforge.net/project/saga-gis/SAGA%20-%207/SAGA%20-%207.2.0/saga-7.2.0.tar.gz"
   sha256 "56152aa39e90e60fb8bcd2b9ded30706176d3a7f50084505138fcfc26a61f281"
 
-  # revision 1
+  revision 1
 
   head "https://git.code.sf.net/p/saga-gis/code.git"
 
