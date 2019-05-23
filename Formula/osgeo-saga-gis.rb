@@ -100,7 +100,7 @@ class SagaGis < Formula
     # https://github.com/OSGeo/proj.4/wiki/proj.h-adoption-status
     # https://sourceforge.net/p/saga-gis/bugs/271/
 
-    cd "saga-gis"
+    # cd "saga-gis"
 
     # fix homebrew-specific header location for qhull
     inreplace "src/tools/grid/grid_gridding/nn/delaunay.c", "qhull/", "libqhull/" # if build.with? "qhull"
