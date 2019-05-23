@@ -29,6 +29,7 @@
   "mongo-cxx-driver-legacy": "osgeo-mongo-cxx-driver-legacy",
   "vigra": "osgeo-vigra",
   "saga-gis-lts": "osgeo-saga-lts",
+  "saga-gis": "osgeo-saga",
   "sip-qt5": "osgeo-sip",
   "pyqt-qt5": "osgeo-pyqt",
   "qscintilla2-qt5": "osgeo-qscintilla2",

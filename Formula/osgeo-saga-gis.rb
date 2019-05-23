@@ -1,8 +1,8 @@
 class SagaGis < Formula
   desc "System for Automated Geoscientific Analyses - Long Term Support"
   homepage "http://saga-gis.org"
-  url "https://downloads.sourceforge.net/project/saga-gis/SAGA%20-%207/SAGA%20-%207.1.1/saga-7.1.1.tar.gz"
-  sha256 "8ebb720fe721afb94e3586d9ed80854c74a07efe38db236c063accbc89fdea78"
+  url "https://downloads.sourceforge.net/project/saga-gis/SAGA%20-%207/SAGA%20-%207.2.0/saga-7.2.0.tar.gz"
+  sha256 "56152aa39e90e60fb8bcd2b9ded30706176d3a7f50084505138fcfc26a61f281"
 
   # revision 1
 
@@ -17,39 +17,47 @@ class SagaGis < Formula
 
   keg_only "QGIS fails to load the correct SAGA version, if the latest version is in the path"
 
+  option "with-pg10", "Build with PostgreSQL 10 client"
   option "with-app", "Build SAGA.app Package"
 
   depends_on "automake" => :build
   depends_on "autoconf" => :build
   depends_on "libtool" => :build
   depends_on "pkg-config" => :build
-  depends_on "gdal2"
-  depends_on "osgeo-proj"
+  depends_on "python@2"
   depends_on "wxmac"
+  depends_on "wxpython"
   depends_on "geos"
-  depends_on "laszip"
   depends_on "jasper"
   depends_on "fftw"
   depends_on "libtiff"
   depends_on "swig"
   depends_on "xz" # lzma
   depends_on "giflib"
-  depends_on "unixodbc" => :recommended
-  depends_on "libharu" => :recommended
-  depends_on "qhull" => :recommended # instead of looking for triangle
+  depends_on "opencv@2"
+  depends_on "unixodbc"
+  depends_on "libharu"
+  depends_on "qhull" # instead of looking for triangle
+  depends_on "poppler"
+  depends_on "sqlite"
+  depends_on "hdf5"
+  depends_on "osgeo-hdf4"
+  depends_on "osgeo-proj"
+  depends_on "osgeo-netcdf"
+  depends_on "osgeo-laszip@2"
+  depends_on "osgeo-gdal" # (gdal-curl, gdal-filegdb, gdal-hdf4)
+  depends_on "osgeo-liblas"
+
   # Vigra support builds, but dylib in saga shows 'failed' when loaded
   # Also, using --with-python will trigger vigra to be built with it, which
   # triggers a source (re)build of boost --with-python
-  depends_on "brewsci/science/vigra" => :optional
-  depends_on "osgeo-postgresql" => :optional
-  depends_on "python@2" => :optional
-  depends_on "opencv" => :optional
-  depends_on "liblas" => :optional
-  depends_on "poppler" => :optional
-  depends_on "osgeo/osgeo4mac/hdf4" => :optional
-  depends_on "hdf5" => :optional
-  depends_on "osgeo-netcdf" => :optional
-  depends_on "sqlite" => :optional
+  depends_on "osgeo-vigra" => :optional
+
+  if build.with?("pg10")
+    depends_on "osgeo-postgresql@10"
+  else
+    depends_on "osgeo-postgresql"
+  end
 
   resource "app_icon" do
     url "https://osgeo4mac.s3.amazonaws.com/src/saga_gui.icns"
@@ -62,6 +70,7 @@ class SagaGis < Formula
     # SKIP liblas support until SAGA supports > 1.8.1, which should support GDAL 2;
     #      otherwise, SAGA binaries may lead to multiple GDAL versions being loaded
     # See: https://github.com/libLAS/libLAS/issues/106
+    #      Update: https://github.com/libLAS/libLAS/issues/106
 
     # https://sourceforge.net/p/saga-gis/wiki/Compiling%20SAGA%20on%20Mac%20OS%20X/
     # configure FEATURES CXX="CXX" CPPFLAGS="DEFINES GDAL_H $PROJ_H" LDFLAGS="GDAL_SRCH PROJ_SRCH LINK_MISC"
@@ -76,14 +85,25 @@ class SagaGis < Formula
     # xcode : xcrun --show-sdk-path
     link_misc = "-arch x86_64 -mmacosx-version-min=10.9 -isysroot #{MacOS::Xcode.prefix}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX#{MacOS.version}.sdk -lstdc++"
 
-    ENV.append "CPPFLAGS", "-I#{Formula["proj"].opt_include} -I#{Formula["gdal2"].opt_include} #{cppflags}"
-    ENV.append "LDFLAGS", "-L#{Formula["proj"].opt_lib}/libproj.dylib -L#{Formula["gdal2"].opt_lib}/libgdal.dylib #{link_misc} #{ldflags}"
+    ENV.append "CPPFLAGS", "-I#{Formula["osgeo-proj"].opt_include} -I#{Formula["osgeo-gdal"].opt_include} #{cppflags}"
+    ENV.append "LDFLAGS", "-L#{Formula["osgeo-proj"].opt_lib}/libproj.dylib -L#{Formula["osgeo-gdal"].opt_lib}/libgdal.dylib #{link_misc} #{ldflags}"
 
     # Disable narrowing warnings when compiling in C++11 mode.
     ENV.append "CXXFLAGS", "-Wno-c++11-narrowing -std=c++11"
 
+    ENV.append "PYTHON_VERSION", "2.7"
+    ENV.append "PYTHON", "#{Formula["python@2"].opt_bin}/python2"
+
+    # support for PROJ 6
+    # ENV.append_to_cflags "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"
+    # saga lts does not support proj 6
+    # https://github.com/OSGeo/proj.4/wiki/proj.h-adoption-status
+    # https://sourceforge.net/p/saga-gis/bugs/271/
+
+    cd "saga-gis"
+
     # fix homebrew-specific header location for qhull
-    inreplace "src/tools/grid/grid_gridding/nn/delaunay.c", "qhull/", "libqhull/" if build.with? "qhull"
+    inreplace "src/modules/grid/grid_gridding/nn/delaunay.c", "qhull/", "libqhull/" # if build.with? "qhull"
 
     # libfire and triangle are for non-commercial use only, skip them
     args = %W[
@@ -100,9 +120,15 @@ class SagaGis < Formula
     # --enable-unicode
 
     args << "--disable-odbc" if build.without? "unixodbc"
-    args << "--disable-triangle" if build.with? "qhull"
-    args << "--with-postgresql=#{Formula["postgresql"].opt_bin}/pg_config" if build.with? "postgresql"
-    args << "--with-python" if build.with? "python"
+    args << "--disable-triangle" # if build.with? "qhull"
+
+    args << "--enable-python" # if build.with? "python"
+
+    if build.with?("pg10")
+      args << "--with-postgresql=#{Formula["osgeo-postgresql@10"].opt_bin}/pg_config"
+    else
+      args << "--with-postgresql=#{Formula["osgeo-postgresql"].opt_bin}/pg_config" # if build.with? "postgresql"
+    end
 
     system "autoreconf", "-i"
     system "./configure", *args
