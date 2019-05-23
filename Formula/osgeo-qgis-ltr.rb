@@ -47,10 +47,10 @@ class OsgeoQgisLtr < Formula
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
-    rebuild 1
-    sha256 "7675b610f7dfc333dc8da7a936707408406b6ffbc46f4a08cd9741e3b0829858" => :mojave
-    sha256 "7675b610f7dfc333dc8da7a936707408406b6ffbc46f4a08cd9741e3b0829858" => :high_sierra
-    sha256 "dc5b4ee1fe15dab0977d0311b0e611fb72d52d7975d533c458e93c34fc78c4f2" => :sierra
+    cellar :any
+    sha256 "f0d960ebbd15adcfec24706b29236d59d8ac489cfcc3c42fe3bbd401bb53f5c4" => :mojave
+    sha256 "f0d960ebbd15adcfec24706b29236d59d8ac489cfcc3c42fe3bbd401bb53f5c4" => :high_sierra
+    sha256 "3bf4672513ea08a1674b0cb186d7151bfcc0de96faf2ed855210eae0bc1298f4" => :sierra
   end
 
   head "https://github.com/qgis/QGIS.git", :branch => "master"
