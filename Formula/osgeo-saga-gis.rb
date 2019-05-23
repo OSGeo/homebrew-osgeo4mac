@@ -103,7 +103,7 @@ class SagaGis < Formula
     cd "saga-gis"
 
     # fix homebrew-specific header location for qhull
-    inreplace "src/modules/grid/grid_gridding/nn/delaunay.c", "qhull/", "libqhull/" # if build.with? "qhull"
+    inreplace "src/tools/grid/grid_gridding/nn/delaunay.c", "qhull/", "libqhull/" # if build.with? "qhull"
 
     # libfire and triangle are for non-commercial use only, skip them
     args = %W[
