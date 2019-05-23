@@ -1,11 +1,11 @@
-class Whitebox < Formula
+class OsgeoWhitebox < Formula
   desc "Geographic information system (GIS) and remote sensing package intended for advanced geospatial analysis and data visualization"
   homepage "https://www.uoguelph.ca/~hydrogeo/Whitebox"
   url "https://www.uoguelph.ca/~hydrogeo/Whitebox/WhiteboxGAT-mac.zip"
   sha256 "32b2a75dab883e97d271621c60e7ad254558587b8bda0f1013bb9562077eea34"
   version "3.4.0"
 
-  revision 4
+  revision 5
 
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
