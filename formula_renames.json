@@ -65,5 +65,6 @@
   "qgis": "osgeo-qgis",
   "qgis-ltr": "osgeo-qgis-ltr",
   "pgsql-ogr-fdw": "osgeo-pgsql-ogr-fdw",
-  "iipsrv": "osgeo-iipsrv"
+  "iipsrv": "osgeo-iipsrv",
+  "osm2po": "osgeo-osm2po"
 }

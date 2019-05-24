@@ -5,13 +5,16 @@ class CurlRefererDownloadStrategy < CurlDownloadStrategy
   end
 end
 
-class Osm2po < Formula
+class OsgeoOsm2po < Formula
+  desc "Openstreetmap converter and routing engine for java"
   homepage "https://osm2po.de"
-  url "https://osm2po.de/releases/osm2po-5.2.126.zip"
-  sha256 "43987da8b65f8a8598d3f8aa56afe0e2d9b54b65db703c4c791e1e79a3ccabc9"
+  url "https://osm2po.de/releases/osm2po-5.2.127.zip"
+  sha256 "607fc4c2007c713dd867fd51cc8b8f403aa8d6048f8eb7e15124d9786f39d165"
+
+  # revision 1
 
   bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    root_url "https://bottle.download.osgeo.org"
     cellar :any_skip_relocation
     sha256 "c9ed9224e1ae4ba4081c9bfaaec13ea0546149e3471b173362294011c11f9e80" => :mojave
     sha256 "c9ed9224e1ae4ba4081c9bfaaec13ea0546149e3471b173362294011c11f9e80" => :high_sierra
