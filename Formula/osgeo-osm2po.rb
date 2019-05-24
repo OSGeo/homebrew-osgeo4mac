@@ -16,9 +16,10 @@ class OsgeoOsm2po < Formula
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any_skip_relocation
-    sha256 "c9ed9224e1ae4ba4081c9bfaaec13ea0546149e3471b173362294011c11f9e80" => :mojave
-    sha256 "c9ed9224e1ae4ba4081c9bfaaec13ea0546149e3471b173362294011c11f9e80" => :high_sierra
-    sha256 "c9ed9224e1ae4ba4081c9bfaaec13ea0546149e3471b173362294011c11f9e80" => :sierra
+    rebuild 1
+    sha256 "b5721c5081b85ec5f045c631102c4e990818c42f50f56934712fa36f070d1546" => :mojave
+    sha256 "b5721c5081b85ec5f045c631102c4e990818c42f50f56934712fa36f070d1546" => :high_sierra
+    sha256 "b5721c5081b85ec5f045c631102c4e990818c42f50f56934712fa36f070d1546" => :sierra
   end
 
   def install
