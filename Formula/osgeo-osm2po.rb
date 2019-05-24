@@ -11,7 +11,7 @@ class OsgeoOsm2po < Formula
   url "https://osm2po.de/releases/osm2po-5.2.127.zip"
   sha256 "607fc4c2007c713dd867fd51cc8b8f403aa8d6048f8eb7e15124d9786f39d165"
 
-  # revision 1
+  revision 1
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
