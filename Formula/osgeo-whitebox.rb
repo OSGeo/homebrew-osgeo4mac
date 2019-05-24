@@ -8,11 +8,12 @@ class OsgeoWhitebox < Formula
   revision 5
 
   bottle do
-    root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
+    root_url "https://bottle.download.osgeo.org"
     cellar :any_skip_relocation
-    sha256 "c5b43f07f074ddf5dd0e965f4b040083f135ab0dfe47bef639c038b48daa170f" => :mojave
-    sha256 "c5b43f07f074ddf5dd0e965f4b040083f135ab0dfe47bef639c038b48daa170f" => :high_sierra
-    sha256 "e93ba2d70de4b09a99f1a64ec8da34c92793b6c2f2eb567a79c6193b0f78b9d9" => :sierra
+    rebuild 1
+    sha256 "cdba2fcb6523c0d5e4f6914a62dcf9c61045ac6d9d8bc16e59de8711472093af" => :mojave
+    sha256 "cdba2fcb6523c0d5e4f6914a62dcf9c61045ac6d9d8bc16e59de8711472093af" => :high_sierra
+    sha256 "e242f15ef55571f5ea3a0cd7f031c2cfd74e712e75a56de33593253dea33fe39" => :sierra
   end
 
   option "with-app", "Build WBT.app Package"
