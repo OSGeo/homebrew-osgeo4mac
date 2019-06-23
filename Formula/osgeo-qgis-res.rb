@@ -9,9 +9,9 @@ class OsgeoQgisRes < Formula
   homepage "https://www.qgis.org"
   url "https://gist.githubusercontent.com/dakcarto/11385561/raw/e49f75ecec96ed7d6d3950f45ad3f30fe94d4fb2/pyqgis_startup.py"
   sha256 "385dce925fc2d29f05afd6508bc1f46ec84c0bc607cc0c8dfce78a4bb93b9c4e"
-  version "3.6.3"
+  version "3.8.0"
 
-  revision 1
+  # revision 1
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
@@ -72,7 +72,7 @@ class OsgeoQgisRes < Formula
   depends_on "scipy"
   depends_on "osgeo-matplotlib"
 
-  depends_on "gdal2-python" # gdal2: for Fiona
+  depends_on "osgeo-gdal-python" # osgeo-gdal: for Fiona
   depends_on "spatialindex" # for Rtree
   depends_on "hdf5" # for h5py
   depends_on "unixodbc" # for pyodbc
