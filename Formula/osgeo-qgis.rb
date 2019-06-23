@@ -48,9 +48,9 @@ class OsgeoQgis < Formula
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any
-    sha256 "1358abb2047ed099162bcddc174c98661dc1495a8dd1a1fb09824957fc087d3b" => :mojave
-    sha256 "1358abb2047ed099162bcddc174c98661dc1495a8dd1a1fb09824957fc087d3b" => :high_sierra
-    sha256 "1a3365596535567873205a72060245865ae2a2dec2cdd698a842cdd2d0b2e6b3" => :sierra
+    sha256 "f528bbc1a6b54e8893a43349f01b336f8fa1213cce41eafe6d1f1703a999c3f7" => :mojave
+    sha256 "f528bbc1a6b54e8893a43349f01b336f8fa1213cce41eafe6d1f1703a999c3f7" => :high_sierra
+    sha256 "c61d51aade695514fa742f79fc0c63499025dfeea9f993ab56423cf34bf6a9d7" => :sierra
   end
 
   head "https://github.com/qgis/QGIS.git", :branch => "master"
