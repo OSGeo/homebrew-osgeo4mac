@@ -56,7 +56,7 @@ class OsgeoProj < Formula
   def install
     (buildpath/"nad").install resource("datumgrid")
 
-    system "./autogen.sh"
+    # system "./autogen.sh"
     system "./configure", "--disable-dependency-tracking",
                           "--prefix=#{prefix}"
     system "make", "install"
