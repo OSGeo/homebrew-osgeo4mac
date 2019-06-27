@@ -37,7 +37,7 @@ class OsgeoGdal < Formula
     sha256 "89118915b410857aa34029d39979e4fc16354e425b2bb299961e2184d7b67ed1" => :sierra
   end
 
-  # keg_only "gdal" is already provided by homebrew/core"
+  # keg_only "gdal is already provided by homebrew/core"
   # we will verify that other versions are not linked
   depends_on Unlinked
 
@@ -302,7 +302,7 @@ class OsgeoGdal < Formula
       # These libs are statically linked in libkml-dev and libkml formula
       inreplace "configure", " -lminizip -luriparser", ""
 
-      # All PDF driver functionality moved to gdal2-pdf plugin,
+      # All PDF driver functionality moved to osgeo-gdal-pdf plugin,
       # so nix default internal-built PDF w+ driver, which keeps plugin from loading.
       # Just using --enable-pdf-plugin isn't enough (we don't want the plugin built here)
       # inreplace "GDALmake.opt.in", "PDF_PLUGIN),yes", "PDF_PLUGIN),no"
@@ -322,7 +322,7 @@ class OsgeoGdal < Formula
       system "make"
       system "make", "install"
 
-      # Add GNM headers for gdal2-python swig wrapping
+      # Add GNM headers for osgeo-gdal-python swig wrapping
       include.install Dir["gnm/**/*.h"]
 
       cd "swig/java" do
