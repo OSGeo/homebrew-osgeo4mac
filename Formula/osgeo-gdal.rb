@@ -292,7 +292,7 @@ class OsgeoGdal < Formula
     # Reset ARCHFLAGS to match how we build
     ENV["ARCHFLAGS"] = "-arch #{MacOS.preferred_arch}"
 
-    chdir "gdal" do
+    # chdir "gdal" do
       # GDAL looks for the renamed hdf4 library, which is an artifact of old builds, so we need to repoint it
       inreplace "configure", "-ldf", "-lhdf"
 
@@ -342,7 +342,7 @@ class OsgeoGdal < Formula
       system "make", "install-man"
       # Clean up any stray doxygen files.
       Dir.glob("#{bin}/*.dox") { |p| rm p }
-    end
+    # end
   end
 
   def post_install
