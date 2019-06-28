@@ -43,7 +43,7 @@ class OsgeoQgis < Formula
   sha256 "f6db56b8cce8482933ec492b26376a2c62cb269cd1b722b374b6c828e35f258e"
   # version "3.8.0"
 
-  # revision 1
+  revision 1
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
@@ -301,8 +301,8 @@ class OsgeoQgis < Formula
 
   # splash
   resource "splash" do
-    url "https://raw.githubusercontent.com/OSGeo/homebrew-osgeo4mac/master/docs/assets/images/splash.png"
-    sha256 "836d55171dadcb8db121673516ab9ef7b41d19ad994d5d1a41db2f5f1801e796"
+    url "https://bottle.download.osgeo.org/qgis-splash/splash-3.8.png"
+    sha256 "e53726b42fc4e11c97f667b662a052ef25ef0c7d99d358e2ee3a21189d2bfc04"
   end
 
   def install
