@@ -43,14 +43,14 @@ class OsgeoQgis < Formula
   sha256 "f6db56b8cce8482933ec492b26376a2c62cb269cd1b722b374b6c828e35f258e"
   # version "3.8.0"
 
-  # revision 1
+  revision 1
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any
-    sha256 "f528bbc1a6b54e8893a43349f01b336f8fa1213cce41eafe6d1f1703a999c3f7" => :mojave
-    sha256 "f528bbc1a6b54e8893a43349f01b336f8fa1213cce41eafe6d1f1703a999c3f7" => :high_sierra
-    sha256 "c61d51aade695514fa742f79fc0c63499025dfeea9f993ab56423cf34bf6a9d7" => :sierra
+    sha256 "2a576d409659dee8a6033356b06962aee01782dd7a00240039bf15ba880ba227" => :mojave
+    sha256 "2a576d409659dee8a6033356b06962aee01782dd7a00240039bf15ba880ba227" => :high_sierra
+    sha256 "7c7b0b8c196a716380ed817749a519680487fd82ec472e7ac347e8fa41b3b824" => :sierra
   end
 
   head "https://github.com/qgis/QGIS.git", :branch => "master"
@@ -301,8 +301,8 @@ class OsgeoQgis < Formula
 
   # splash
   resource "splash" do
-    url "https://raw.githubusercontent.com/OSGeo/homebrew-osgeo4mac/master/docs/assets/images/splash.png"
-    sha256 "836d55171dadcb8db121673516ab9ef7b41d19ad994d5d1a41db2f5f1801e796"
+    url "https://bottle.download.osgeo.org/qgis-splash/splash-3.8.png"
+    sha256 "e53726b42fc4e11c97f667b662a052ef25ef0c7d99d358e2ee3a21189d2bfc04"
   end
 
   def install
@@ -311,6 +311,7 @@ class OsgeoQgis < Formula
     # change splash
     rm "#{buildpath}/images/splash/splash.png"
     (buildpath/"images/splash").install resource("splash")
+    mv "#{buildpath}/images/splash/splash-3.8.png", "#{buildpath}/images/splash/splash.png"
 
     # suggestions before installing
     printf  "\n\033[31mSome suggestions that you should keep in mind!!!\e[0m\n\n"
