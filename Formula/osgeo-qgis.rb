@@ -311,6 +311,7 @@ class OsgeoQgis < Formula
     # change splash
     rm "#{buildpath}/images/splash/splash.png"
     (buildpath/"images/splash").install resource("splash")
+    mv "#{buildpath}/images/splash/splash-3.8.png", "#{buildpath}/images/splash/splash.png"
 
     # suggestions before installing
     printf  "\n\033[31mSome suggestions that you should keep in mind!!!\e[0m\n\n"
