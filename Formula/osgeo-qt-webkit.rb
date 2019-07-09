@@ -1,9 +1,9 @@
 class OsgeoQtWebkit < Formula
   desc "Classes for a WebKit2 based implementation and a new QML API"
   homepage "https://www.qt.io/developers"
-  url "https://github.com/qt/qtwebkit/archive/72cfbd7664f21fcc0e62b869a6b01bf73eb5e7da.tar.gz"
-  sha256 "2e393e7429387437cbfef56ec839329663e9b136ea68997d1e1cdd2f4d9d3ae0"
-  version "5.12.3"
+  url "https://github.com/qt/qtwebkit/archive/eb6c5179e8650f66b304a656409a1e5e5efec956.tar.gz"
+  sha256 "9316ebd066522bf7082225266aee227363862bb6b48521f0418d9e402b60fb8c"
+  version "5.13.0"
 
   # revision 1
 
@@ -20,7 +20,7 @@ class OsgeoQtWebkit < Formula
 
   # insert the XPC_NOESCAPE macro in the right places in xpc_array_apply and xpc_dictionary_apply
   # to match the definitions now used in the 10.14 SDK
-  patch :DATA
+  # patch :DATA
 
   depends_on "cmake" => :build
   depends_on "ninja" => [:build, :recommended]
