@@ -1,9 +1,9 @@
 class OsgeoQtWebkit < Formula
   desc "Classes for a WebKit2 based implementation and a new QML API"
   homepage "https://www.qt.io/developers"
-  url "https://github.com/qt/qtwebkit/archive/72cfbd7664f21fcc0e62b869a6b01bf73eb5e7da.tar.gz"
-  sha256 "2e393e7429387437cbfef56ec839329663e9b136ea68997d1e1cdd2f4d9d3ae0"
-  version "5.12.3"
+  url "https://github.com/qt/qtwebkit/archive/eb6c5179e8650f66b304a656409a1e5e5efec956.tar.gz"
+  sha256 "9316ebd066522bf7082225266aee227363862bb6b48521f0418d9e402b60fb8c"
+  version "5.13.0"
 
   # revision 1
 
@@ -13,14 +13,14 @@ class OsgeoQtWebkit < Formula
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any
-    sha256 "d828ff78caadbfd7f3ab1698d0bbd19944fc3344b9f736a3ef2bde5f64d7e1b8" => :mojave
-    sha256 "d828ff78caadbfd7f3ab1698d0bbd19944fc3344b9f736a3ef2bde5f64d7e1b8" => :high_sierra
-    sha256 "bf7815cb46bfa369c7f2ecc018e0974d20147a6cfc994b7db9ce2280f937e1d0" => :sierra
+    sha256 "77e7caf619657cc21270a6f62a85d1c247e90b29c6f8222e845920ecef022b1a" => :mojave
+    sha256 "77e7caf619657cc21270a6f62a85d1c247e90b29c6f8222e845920ecef022b1a" => :high_sierra
+    sha256 "1924b1576afa3d89d2fc258718660bcafc14313b5fec922c3d7050f9ac72c827" => :sierra
   end
 
   # insert the XPC_NOESCAPE macro in the right places in xpc_array_apply and xpc_dictionary_apply
   # to match the definitions now used in the 10.14 SDK
-  patch :DATA
+  # patch :DATA
 
   depends_on "cmake" => :build
   depends_on "ninja" => [:build, :recommended]
