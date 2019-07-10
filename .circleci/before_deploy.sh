@@ -94,7 +94,6 @@ if [ "$CIRCLE_BRANCH" == "master" ] && [ "$CHANGED_FORMULAE" != "" ]; then
   # curl -X PUT -T "{$files}" -u ${BINTRAY_USER}:${BINTRAY_API} -H "X-Bintray-Publish: 1" https://api.bintray.com/content/homebrew-osgeo/osgeo-bottles/bottles/0.1/
 
   echo "Upload Bottles..."
-  if [ "$CIRCLE_USERNAME" == "fjperini" ]; then
     # use ssh
     # ssh-add -l
     # echo -e "\nIdentityFile ~/.ssh/id_rsa" >> ~/.ssh/config
@@ -103,5 +102,4 @@ if [ "$CIRCLE_BRANCH" == "master" ] && [ "$CHANGED_FORMULAE" != "" ]; then
     # brew install https://raw.githubusercontent.com/hudochenkov/homebrew-sshpass/master/sshpass.rb
     # sshpass -e scp -P 50023 -o stricthostkeychecking=no -r ./*.tar.gz fjperini@bottle.download.osgeo.org:/osgeo/bottle
     scp -P 50023 -o stricthostkeychecking=no -r ./*.tar.gz fjperini@bottle.download.osgeo.org:/osgeo/bottle
-  fi
 fi
