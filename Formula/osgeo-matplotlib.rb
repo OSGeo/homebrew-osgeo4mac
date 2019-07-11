@@ -123,9 +123,9 @@ class OsgeoMatplotlib < Formula
       ENV.delete "HOMEBREW_SDKROOT"
     end
 
-    inreplace "setupext.py",
-              "'darwin': ['/usr/local/'",
-              "'darwin': ['#{HOMEBREW_PREFIX}'"
+    # inreplace "setupext.py",
+    #           "'darwin': ['/usr/local/'",
+    #           "'darwin': ['#{HOMEBREW_PREFIX}'"
 
     xy = Language::Python.major_minor_version "python3"
     site_packages = libexec/"lib/python#{xy}/site-packages"
