@@ -11,9 +11,10 @@ class OsgeoVtk < Formula
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
-    sha256 "9c537222126fd02d7e0d091803c1760a89993e7a438427473b94af277bc0776c" => :mojave
-    sha256 "9c537222126fd02d7e0d091803c1760a89993e7a438427473b94af277bc0776c" => :high_sierra
-    sha256 "c2c328a392d39b54e909af66ed4c44385c9b24117bbe5fe1cedee6b2dff1eb87" => :sierra
+    rebuild 1
+    sha256 "b6bd7fe0c61250b2524a0b5f4655c2df16015663c40bcc6d301f5f2567a1f4cc" => :mojave
+    sha256 "b6bd7fe0c61250b2524a0b5f4655c2df16015663c40bcc6d301f5f2567a1f4cc" => :high_sierra
+    sha256 "44336a551fc462ca22a616e65c47f2873ecb82334f9c188fc5e49f404c388b7b" => :sierra
   end
 
   option "with-pg10", "Build with PostgreSQL 10 client"
