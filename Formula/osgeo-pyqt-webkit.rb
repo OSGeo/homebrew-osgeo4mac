@@ -4,7 +4,7 @@ class OsgeoPyqtWebkit < Formula
   url "https://www.riverbankcomputing.com/static/Downloads/PyQt5/5.13.0/PyQt5_gpl-5.13.0.tar.gz"
   sha256 "0cdbffe5135926527b61cc3692dd301cd0328dd87eeaf1313e610787c46faff9"
 
-  # revision 1
+  revision 1
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
