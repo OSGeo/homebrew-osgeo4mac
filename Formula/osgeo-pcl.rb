@@ -71,7 +71,7 @@ class OsgeoPcl < Formula
       -DBUILD_apps_in_hand_scanner=AUTO_OFF
       -DBUILD_apps_optronic_viewer=AUTO_OFF
       -DBUILD_apps_point_cloud_editor=AUTO_OFF
-      -DBUILD_examples:BOOL=ON
+      -DBUILD_examples:BOOL=OFF
       -DBUILD_global_tests:BOOL=OFF
       -DBUILD_outofcore:BOOL=AUTO_OFF
       -DBUILD_people:BOOL=AUTO_OFF
