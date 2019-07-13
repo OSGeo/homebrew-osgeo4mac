@@ -11,7 +11,7 @@ class OsgeoQgisRes < Formula
   sha256 "385dce925fc2d29f05afd6508bc1f46ec84c0bc607cc0c8dfce78a4bb93b9c4e"
   version "3.8.0"
 
-  # revision 1
+  revision 1
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
@@ -105,8 +105,8 @@ class OsgeoQgisRes < Formula
   # end
 
   resource "numpy" do
-    url "https://files.pythonhosted.org/packages/93/48/956b9dcdddfcedb1705839280e02cbfeb2861ed5d7f59241210530867d5b/numpy-1.16.3.zip"
-    sha256 "78a6f89da87eeb48014ec652a65c4ffde370c036d780a995edaeb121d3625621"
+    url "https://files.pythonhosted.org/packages/d3/4b/f9f4b96c0b1ba43d28a5bdc4b64f0b9d3fbcf31313a51bc766942866a7c7/numpy-1.16.4.zip"
+    sha256 "7242be12a58fec245ee9734e625964b97cf7e3f2f7d016603f9e56660ce479c7"
   end
 
   resource "scipy" do
@@ -115,8 +115,8 @@ class OsgeoQgisRes < Formula
   end
 
   resource "matplotlib" do
-    url "https://files.pythonhosted.org/packages/26/04/8b381d5b166508cc258632b225adbafec49bbe69aa9a4fa1f1b461428313/matplotlib-3.0.3.tar.gz"
-    sha256 "e1d33589e32f482d0a7d1957bf473d43341115d40d33f578dad44432e47df7b7"
+    url "https://files.pythonhosted.org/packages/12/d1/7b12cd79c791348cb0c78ce6e7d16bd72992f13c9f1e8e43d2725a6d8adf/matplotlib-3.1.1.tar.gz"
+    sha256 "1febd22afe1489b13c6749ea059d392c03261b2950d1d45c17e3aed812080c93"
   end
 
   def install
@@ -200,9 +200,9 @@ class OsgeoQgisRes < Formula
         ENV.delete "HOMEBREW_SDKROOT"
       end
 
-      inreplace "setupext.py",
-                "'darwin': ['/usr/local/'",
-                "'darwin': ['#{HOMEBREW_PREFIX}'"
+      # inreplace "setupext.py",
+      #           "'darwin': ['/usr/local/'",
+      #           "'darwin': ['#{HOMEBREW_PREFIX}'"
 
       system "#{libexec}/vendor/bin/python3", "setup.py",
         "install", "--prefix=#{libexec}/vendor"
