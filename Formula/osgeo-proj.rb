@@ -19,9 +19,9 @@ end
 
 class OsgeoProj < Formula
   desc "Cartographic Projections Library"
-  homepage "https://proj4.org/"
-  url "https://github.com/OSGeo/proj.4/archive/5.2.0.tar.gz"
-  sha256 "d784d51a8e56282123eb5918a2c685ed7da5097595afcacf5fa0246337a44361"
+  homepage "https://proj.org/"
+  url "https://github.com/OSGeo/PROJ/releases/download/6.1.1/proj-6.1.1.tar.gz"
+  sha256 "5cf0a2360a28b5d724c53edbb87f3f3b14fd96001265411ac4e56f369e2d503f"
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
@@ -32,7 +32,7 @@ class OsgeoProj < Formula
 
   # revision 1
 
-  head "https://github.com/OSGeo/proj.4.git", :branch => "master"
+  head "https://github.com/OSGeo/PROJ.git", :branch => "master"
 
   # keg_only "proj" is already provided by homebrew/core"
   # we will verify that other versions are not linked
@@ -56,7 +56,7 @@ class OsgeoProj < Formula
   def install
     (buildpath/"nad").install resource("datumgrid")
 
-    system "./autogen.sh"
+    # system "./autogen.sh"
     system "./configure", "--disable-dependency-tracking",
                           "--prefix=#{prefix}"
     system "make", "install"
