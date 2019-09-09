@@ -20,8 +20,8 @@ end
 class OsgeoLibgeotiff < Formula
   desc "Library and tools for dealing with GeoTIFF"
   homepage "https://geotiff.osgeo.org/"
-  url "https://github.com/OSGeo/libgeotiff/archive/1.4.3.tar.gz"
-  sha256 "96fb426877a99ecb66a73c0b912f42995bc1275c1ae687bbaab9ad97c4e8bdf2"
+  url "https://github.com/OSGeo/libgeotiff/releases/download/1.5.1/libgeotiff-1.5.1.tar.gz"
+  sha256 "f9e99733c170d11052f562bcd2c7cb4de53ed405f7acdde4f16195cd3ead612c"
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
@@ -48,7 +48,7 @@ class OsgeoLibgeotiff < Formula
 
   def install
     cd "libgeotiff" do
-      system "./autogen.sh"
+      # system "./autogen.sh"
       system "./configure", "--disable-dependency-tracking",
                             "--prefix=#{prefix}",
                             "--with-jpeg", "--with-zlib"
