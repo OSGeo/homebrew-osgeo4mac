@@ -25,9 +25,10 @@ class OsgeoProj < Formula
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
-    sha256 "4b35b6321e2b91c0e5662952990735991d3c7178d90bf3e79b5278568fcad883" => :mojave
-    sha256 "4b35b6321e2b91c0e5662952990735991d3c7178d90bf3e79b5278568fcad883" => :high_sierra
-    sha256 "815974df0698547ad5c264f3be4cd5f03dadcc88e5e613eea9cbbcbf01d5f069" => :sierra
+    rebuild 1
+    sha256 "ab073d23b26a4fc7e08753f9b521ef82d3daebf3dc71ac17bb57d732f1365e6c" => :mojave
+    sha256 "ab073d23b26a4fc7e08753f9b521ef82d3daebf3dc71ac17bb57d732f1365e6c" => :high_sierra
+    sha256 "67ee4e6f85907d9efa2c2f6bce2790391c07167e0a3dbf9def24bb1767695d17" => :sierra
   end
 
   # revision 1
