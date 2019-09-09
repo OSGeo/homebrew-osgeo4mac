@@ -47,14 +47,14 @@ class OsgeoLibgeotiff < Formula
   depends_on "osgeo-proj"
 
   def install
-    cd "libgeotiff" do
+    # cd "libgeotiff" do
       # system "./autogen.sh"
       system "./configure", "--disable-dependency-tracking",
                             "--prefix=#{prefix}",
                             "--with-jpeg", "--with-zlib"
       system "make" # Separate steps or install fails
       system "make", "install"
-    end
+    # end
   end
 
   test do
