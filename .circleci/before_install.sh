@@ -45,8 +45,8 @@ for f in ${CHANGED_FORMULAE};do
   # fix: Permission Denied When Creating Directory or Writing a File
   # https://support.circleci.com/hc/en-us/articles/360003649774-Permission-Denied-When-Creating-Directory-or-Writing-a-File
   # chown -R $USER:$USER /Users/distiller
-  rm -rf /Users/distiller/.viminf*
-  chown -R $USER: /Users/distiller
+  # rm -rf /Users/distiller/.viminf*
+  # chown -R $USER: /Users/distiller
 
 
 
