@@ -42,6 +42,11 @@ for f in ${CHANGED_FORMULAE};do
   # brew update - slow
   # brew update-reset
 
+  # fix: Permission Denied When Creating Directory or Writing a File
+  # https://support.circleci.com/hc/en-us/articles/360003649774-Permission-Denied-When-Creating-Directory-or-Writing-a-File
+  chown -R $USER:$USER /Users/distiller
+
+
   echo "Homebrew setup for changed formula ${f}..."
   deps=$(brew deps --include-build ${f})
   echo "${f} dependencies:"
