@@ -27,10 +27,9 @@ class OsgeoNetcdf < Formula
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
-    rebuild 1
-    sha256 "9e1b82c359421f1f72d445b2c7315ebcd764f5b493ad99b2cac4a00865ab3bda" => :mojave
-    sha256 "9e1b82c359421f1f72d445b2c7315ebcd764f5b493ad99b2cac4a00865ab3bda" => :high_sierra
-    sha256 "ad966aa6d41877157c50285b033be7c5f61819c3dc86d74d6fa8f6071a83f17f" => :sierra
+    sha256 "fe2228f4560c918cab46d530311f8de5d625ebc41b0f447e20b912ca41d1e8f0" => :mojave
+    sha256 "fe2228f4560c918cab46d530311f8de5d625ebc41b0f447e20b912ca41d1e8f0" => :high_sierra
+    sha256 "316acc70f61f5620fb7eb1e032f9e9b7176fe547cdc50ed34d94c52b2f7ed0ef" => :sierra
   end
 
   # keg_only "netcdf is already provided by homebrew/core"
