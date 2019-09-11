@@ -20,8 +20,8 @@ end
 class OsgeoGdal < Formula
   desc "GDAL: Geospatial Data Abstraction Library"
   homepage "https://www.gdal.org/"
-  url "https://github.com/OSGeo/gdal/archive/v2.4.1.tar.gz"
-  sha256 "17f94c0dfbecab2fc2433428766860de3c89c3fba57f5c9aa77749c1824c02aa"
+  url "https://github.com/OSGeo/gdal/releases/download/v3.0.1/gdal-3.0.1.tar.gz"
+  sha256 "37fd5b61fabc12b4f13a556082c680025023f567459f7a02590600344078511c"
 
   # revision 1
 
@@ -37,7 +37,7 @@ class OsgeoGdal < Formula
     sha256 "89118915b410857aa34029d39979e4fc16354e425b2bb299961e2184d7b67ed1" => :sierra
   end
 
-  # keg_only "gdal" is already provided by homebrew/core"
+  # keg_only "gdal is already provided by homebrew/core"
   # we will verify that other versions are not linked
   depends_on Unlinked
 
@@ -292,7 +292,7 @@ class OsgeoGdal < Formula
     # Reset ARCHFLAGS to match how we build
     ENV["ARCHFLAGS"] = "-arch #{MacOS.preferred_arch}"
 
-    chdir "gdal" do
+    # chdir "gdal" do
       # GDAL looks for the renamed hdf4 library, which is an artifact of old builds, so we need to repoint it
       inreplace "configure", "-ldf", "-lhdf"
 
@@ -302,7 +302,7 @@ class OsgeoGdal < Formula
       # These libs are statically linked in libkml-dev and libkml formula
       inreplace "configure", " -lminizip -luriparser", ""
 
-      # All PDF driver functionality moved to gdal2-pdf plugin,
+      # All PDF driver functionality moved to osgeo-gdal-pdf plugin,
       # so nix default internal-built PDF w+ driver, which keeps plugin from loading.
       # Just using --enable-pdf-plugin isn't enough (we don't want the plugin built here)
       # inreplace "GDALmake.opt.in", "PDF_PLUGIN),yes", "PDF_PLUGIN),no"
@@ -322,7 +322,7 @@ class OsgeoGdal < Formula
       system "make"
       system "make", "install"
 
-      # Add GNM headers for gdal2-python swig wrapping
+      # Add GNM headers for osgeo-gdal-python swig wrapping
       include.install Dir["gnm/**/*.h"]
 
       cd "swig/java" do
@@ -342,7 +342,7 @@ class OsgeoGdal < Formula
       system "make", "install-man"
       # Clean up any stray doxygen files.
       Dir.glob("#{bin}/*.dox") { |p| rm p }
-    end
+    # end
   end
 
   def post_install
