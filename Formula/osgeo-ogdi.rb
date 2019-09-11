@@ -4,7 +4,7 @@ class OsgeoOgdi < Formula
   url "https://github.com/libogdi/ogdi/archive/ogdi_4_1_0.tar.gz"
   sha256 "e0b9c6ca37f983f21b45116126d153c0b5609954568fddc306568e204a10e41c"
 
-  # revision 1
+  revision 1
 
   head "https://github.com/libogdi/ogdi.git", :branch => "master"
 
