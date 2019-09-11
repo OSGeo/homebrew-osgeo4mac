@@ -10,9 +10,10 @@ class OsgeoGdalPdf < Formula
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
-    sha256 "88ea39458331e164f26c43e0146f41ac00939e9cb8be9e689f646e4815de703e" => :mojave
-    sha256 "88ea39458331e164f26c43e0146f41ac00939e9cb8be9e689f646e4815de703e" => :high_sierra
-    sha256 "4e21de4b2057507be402b4e99c97585db224bb1e6bc5a28625562fd7d974bdf1" => :sierra
+    rebuild 1
+    sha256 "c96f953be6e62bd2d132781124a2afbc61820451e9a429d7be475cc9a41989fc" => :mojave
+    sha256 "c96f953be6e62bd2d132781124a2afbc61820451e9a429d7be475cc9a41989fc" => :high_sierra
+    sha256 "e62eff2ffa8dd0ed97037ab71be9bd34400d6e9d707c38bc3ce00ee8cef3182d" => :sierra
   end
 
   depends_on "pkg-config" => :build
