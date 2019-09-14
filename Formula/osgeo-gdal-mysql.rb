@@ -10,9 +10,10 @@ class OsgeoGdalMysql < Formula
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
-    sha256 "78a101876004b381452e45bf8f7b5eea66bbd55e403a52cb25ce5f4cbf131ea5" => :mojave
-    sha256 "78a101876004b381452e45bf8f7b5eea66bbd55e403a52cb25ce5f4cbf131ea5" => :high_sierra
-    sha256 "06fd7274d53ce98687ead55d70ac03f5d523f6d261b2f75058f18bc7f3c38f73" => :sierra
+    rebuild 1
+    sha256 "a4c39f772b7ffafcdec5eed0c39922ed96e8af72c2ecab5d1bedf749cb7021b2" => :mojave
+    sha256 "a4c39f772b7ffafcdec5eed0c39922ed96e8af72c2ecab5d1bedf749cb7021b2" => :high_sierra
+    sha256 "a07cb1183e909e96fdac52b1a0d16cf38db3f3d6775c07ae521ad6315776aa43" => :sierra
   end
 
   depends_on "mysql" => :build # adds openssl
