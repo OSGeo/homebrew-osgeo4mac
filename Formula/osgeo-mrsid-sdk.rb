@@ -8,7 +8,7 @@ class OsgeoMrsidSdk < Formula
   version "9.5.1.4427"
   sha256 "286843f4a22845835a06626327eed67216e403a54e17d8b10a675663d41b9829"
 
-  revision 1
+  revision 2
 
   option "with-bindings", "Include Lidar Python and Ruby bindings"
   option "with-docs", "Intall documentation and examples for SDKs"
