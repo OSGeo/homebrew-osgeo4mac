@@ -47,6 +47,8 @@ class OsgeoLibgeotiff < Formula
   depends_on "autoconf" => :build
   depends_on "automake" => :build
   depends_on "libtool" => :build
+  depends_on "gettext" => :build
+  depends_on "pkgconfig" => :build
   depends_on "jpeg"
   depends_on "zlib"
   depends_on "libtiff"
@@ -54,6 +56,7 @@ class OsgeoLibgeotiff < Formula
 
   def install
     cd "libgeotiff" do
+      # autoreconf -fvi
       system "./autogen.sh"
       system "./configure", "--disable-dependency-tracking",
                             "--prefix=#{prefix}",
