@@ -21,7 +21,7 @@ class OsgeoLibspatialite < Formula
   desc "Adds spatial SQL capabilities to SQLite"
   homepage "https://www.gaia-gis.it/fossil/libspatialite/index"
 
-  revision 3
+  revision 2
 
   stable do
     url "https://www.gaia-gis.it/gaia-sins/libspatialite-sources/libspatialite-4.3.0a.tar.gz"
@@ -37,10 +37,9 @@ class OsgeoLibspatialite < Formula
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any
-    rebuild 1
-    sha256 "a2e339c3db3e6d777242159ae083a8abe27943c935c80c23a569772b5569364a" => :mojave
-    sha256 "a2e339c3db3e6d777242159ae083a8abe27943c935c80c23a569772b5569364a" => :high_sierra
-    sha256 "38b49ea931e017046f7014274d23d44f344779bee6049f539d32c69e670c7de3" => :sierra
+    sha256 "60c373eacb0e0786d860495678f3be8bf993008ecdac878e10be042446af1647" => :mojave
+    sha256 "60c373eacb0e0786d860495678f3be8bf993008ecdac878e10be042446af1647" => :high_sierra
+    sha256 "92ab0f182815f349661841dc412700d95bb01cb6104334c892810c4acc27158b" => :sierra
   end
 
 

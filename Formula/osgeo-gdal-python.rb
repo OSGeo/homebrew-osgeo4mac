@@ -31,20 +31,19 @@ class OsgeoGdalPython < Formula
 
   desc "Python bindings for GDAL: Geospatial Data Abstraction Library"
   homepage "https://pypi.python.org/pypi/GDAL"
-  url "https://github.com/OSGeo/gdal/releases/download/v3.0.1/gdal-3.0.1.tar.gz"
-  sha256 "37fd5b61fabc12b4f13a556082c680025023f567459f7a02590600344078511c"
+  url "https://download.osgeo.org/gdal/2.4.1/gdal-2.4.1.tar.gz"
+  sha256 "f1a11d1982205b9e4cc10e16f016a5559bfc9fa9a9ea69015e99ccd6a738ea4c"
 
-  # revision 1
+  revision 1
 
   head "https://github.com/OSGeo/gdal.git", :branch => "master"
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any
-    rebuild 1
-    sha256 "9d9c504525f08286020cbf4e99619136552349707cb822235c5c926e5ff22755" => :mojave
-    sha256 "9d9c504525f08286020cbf4e99619136552349707cb822235c5c926e5ff22755" => :high_sierra
-    sha256 "4267860e13ab436cddb485b35c23225278e762603ca0f9ffe3858789ee5359cc" => :sierra
+    sha256 "53defb86be93bbeb180c9e8c32098dacc963c2093871baccdd151923209e15e3" => :mojave
+    sha256 "53defb86be93bbeb180c9e8c32098dacc963c2093871baccdd151923209e15e3" => :high_sierra
+    sha256 "df1689e7985c7d9dad55f888a54e3b3b63775ca5a698c0f681a57adc7026655d" => :sierra
   end
 
   keg_only "older version of gdal is in main tap and installs similar components"
@@ -56,8 +55,8 @@ class OsgeoGdalPython < Formula
   depends_on "osgeo-gdal"
 
   resource "autotest" do
-    url "https://download.osgeo.org/gdal/3.0.1/gdalautotest-3.0.1.tar.gz"
-    sha256 "36551c612509549a10d23012c46a81da61213dc617835e773f105b5682c95b5c"
+    url "https://download.osgeo.org/gdal/2.4.1/gdalautotest-2.4.1.tar.gz"
+    sha256 "ce70807792f35f66f0f3dfa0e2d41071bf845d9b65cebd97279620cf90a30603"
   end
 
   def install

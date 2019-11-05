@@ -20,8 +20,8 @@ end
 class OsgeoGdal < Formula
   desc "GDAL: Geospatial Data Abstraction Library"
   homepage "https://www.gdal.org/"
-  url "https://github.com/OSGeo/gdal/releases/download/v3.0.1/gdal-3.0.1.tar.gz"
-  sha256 "37fd5b61fabc12b4f13a556082c680025023f567459f7a02590600344078511c"
+  url "https://github.com/OSGeo/gdal/archive/v2.4.1.tar.gz"
+  sha256 "17f94c0dfbecab2fc2433428766860de3c89c3fba57f5c9aa77749c1824c02aa"
 
   # revision 1
 
@@ -33,9 +33,9 @@ class OsgeoGdal < Formula
   bottle do
     root_url "https://bottle.download.osgeo.org"
     rebuild 1
-    sha256 "d0cbdae3e3a2358c2cdb25e15342761ddb2443d190c1b55122aca9de3049a2f2" => :mojave
-    sha256 "d0cbdae3e3a2358c2cdb25e15342761ddb2443d190c1b55122aca9de3049a2f2" => :high_sierra
-    sha256 "7a3054267e2b5a26892d02fbed0fa1865a404987d7d660183a6b46193272a2a6" => :sierra
+    sha256 "328b641c25849e62af4c5ea4dbbe220dc30e690a058a3565979b517e1b2d8eb6" => :mojave
+    sha256 "328b641c25849e62af4c5ea4dbbe220dc30e690a058a3565979b517e1b2d8eb6" => :high_sierra
+    sha256 "89118915b410857aa34029d39979e4fc16354e425b2bb299961e2184d7b67ed1" => :sierra
   end
 
   # keg_only "gdal is already provided by homebrew/core"
