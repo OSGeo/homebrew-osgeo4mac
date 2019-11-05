@@ -37,10 +37,9 @@ class OsgeoLibspatialite < Formula
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any
-    rebuild 1
-    sha256 "a2e339c3db3e6d777242159ae083a8abe27943c935c80c23a569772b5569364a" => :mojave
-    sha256 "a2e339c3db3e6d777242159ae083a8abe27943c935c80c23a569772b5569364a" => :high_sierra
-    sha256 "38b49ea931e017046f7014274d23d44f344779bee6049f539d32c69e670c7de3" => :sierra
+    sha256 "d34db158a6311af2621ac4643b4679a0435d3a640784a2c45c12cf5422e3f337" => :mojave
+    sha256 "d34db158a6311af2621ac4643b4679a0435d3a640784a2c45c12cf5422e3f337" => :high_sierra
+    sha256 "6850d7f093ed74f7153acf2cdcffbfcd3b871b823c6613caa3fb4ac261d94dc7" => :sierra
   end
 
 
