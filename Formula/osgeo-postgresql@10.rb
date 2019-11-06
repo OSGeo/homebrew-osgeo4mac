@@ -34,8 +34,8 @@ end
 class OsgeoPostgresqlAT10 < Formula
   desc "Relational database management system"
   homepage "https://www.postgresql.org/"
-  url "https://github.com/postgres/postgres/archive/REL_10_9.tar.gz"
-  sha256 "2d603c342760660588add2490f7555e1be55e7b2b91b85f302dd9d60daf664c8"
+  url "https://github.com/postgres/postgres/archive/REL_10_10.tar.gz"
+  sha256 "1834d1517e8d28b35662bf6419c1f9da774dcafe3845ae3f2460f48defc0eae0"
 
   # revision 1
 
