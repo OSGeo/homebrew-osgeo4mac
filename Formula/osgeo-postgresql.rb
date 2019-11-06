@@ -34,8 +34,8 @@ end
 class OsgeoPostgresql < Formula
   desc "Object-relational database system"
   homepage "https://www.postgresql.org/"
-  url "https://github.com/postgres/postgres/archive/REL_11_5.tar.gz"
-  sha256 "f46bb57a3495f6f8c0b0b435000c80bd81ab232aef18e191f8e1dbea3e5eaf3d"
+  url "https://github.com/postgres/postgres/archive/REL_12_0.tar.gz"
+  sha256 "d528bbb5298e7f007f05079509fb96563340b3122c9900ef553181856dc8099e"
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
