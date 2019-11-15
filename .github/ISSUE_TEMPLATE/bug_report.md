@@ -11,8 +11,8 @@ assignees: ''
 
 I've... 
 - I read
-	- [ ] the [reporting issues](https://github.com/OSGeo/homebrew-osgeo4mac/docs/reporting-issues)
-	- [ ] the [troubleshooting](https://github.com/OSGeo/homebrew-osgeo4mac/docs/troubleshooting)
+	- [ ] the [reporting issues](https://github.com/OSGeo/homebrew-osgeo4mac/blob/master/docs/docs/reporting-issues.md)
+	- [ ] the [troubleshooting](https://github.com/OSGeo/homebrew-osgeo4mac/blob/master/docs/docs/troubleshooting.md)
 - [ ] I checked the documentation and found no answer
 - [ ] I tried to install after following the suggestions
 - [ ] I am running the latest version (`brew update` twice?)
