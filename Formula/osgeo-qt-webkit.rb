@@ -1,9 +1,9 @@
 class OsgeoQtWebkit < Formula
   desc "Classes for a WebKit2 based implementation and a new QML API"
   homepage "https://www.qt.io/developers"
-  url "https://github.com/qt/qtwebkit/archive/eb6c5179e8650f66b304a656409a1e5e5efec956.tar.gz"
-  sha256 "9316ebd066522bf7082225266aee227363862bb6b48521f0418d9e402b60fb8c"
-  version "5.13.0"
+  url "https://github.com/qt/qtwebkit/archive/ab1bd15209abaf7effc51dbc2f272c5681af7223.tar.gz"
+  sha256 "0128e09a9623a62ffe93c395294f571306f2d318797cf4e69d812cca6e42ec90"
+  version "5.14.0"
 
   # revision 1
 
