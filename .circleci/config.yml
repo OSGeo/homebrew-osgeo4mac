@@ -145,7 +145,6 @@ workflows:
       - collect-bottles:
           requires:
             - high_sierra-build
-            - sierra-build
       # - deploy:
       #     requires:
       #       - collect-bottles
