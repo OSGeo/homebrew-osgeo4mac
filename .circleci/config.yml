@@ -73,12 +73,6 @@ jobs:
           paths:
             - /usr/local/Homebrew/Library/Taps/homebrew
 
-  sierra-build:
-    <<: *build_steps
-    <<: *filter
-    macos:
-      xcode: "8.3.3"
-
   high_sierra-build:
     <<: *build_steps
     <<: *filter
@@ -146,9 +140,6 @@ workflows:
     jobs:
       - update-homebrew
       - high_sierra-build:
-          requires:
-            - update-homebrew
-      - sierra-build:
           requires:
             - update-homebrew
       - collect-bottles:
