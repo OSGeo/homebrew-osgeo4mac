@@ -24,7 +24,7 @@ class OsgeoLibgeotiff < Formula
   # sha256 "f9e99733c170d11052f562bcd2c7cb4de53ed405f7acdde4f16195cd3ead612c"
   url "https://github.com/OSGeo/libgeotiff.git",
     :branch => "master",
-    :commit => "cfe0433bce6811520bc8e22ca5d14d63a37cf717"
+    :commit => "47a3a6bb314e8b8b9125beb9b5715b3837b82c74"
   version "1.5.1"
 
   bottle do
@@ -36,7 +36,7 @@ class OsgeoLibgeotiff < Formula
     sha256 "5574d383f2af0052dda396105028bbe9b0030001d1315842c67c760e498331c1" => :sierra
   end
 
-  # revision 1
+  revision 1
 
   head "https://github.com/OSGeo/libgeotiff.git", :branch => "master"
 
