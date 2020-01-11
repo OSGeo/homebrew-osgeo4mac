@@ -37,7 +37,7 @@ class OsgeoProj < Formula
   depends_on Unlinked
 
   head do
-    head "https://github.com/OSGeo/PROJ.git", :branch => "master"
+    url "https://github.com/OSGeo/PROJ.git", :branch => "master"
     depends_on "autoconf" => :build
     depends_on "automake" => :build
     depends_on "libtool" => :build
