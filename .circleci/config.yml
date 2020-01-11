@@ -1,3 +1,10 @@
+# Supported Xcode Versions
+# https://circleci.com/docs/2.0/testing-ios/
+# 10.15 - 11.3.0 - Catalina
+# 10.14 - 11.1.0 - Mojave
+# 10.13 - 10.1.0 - HS
+# 10.12 - 9.0.1  - Sierra
+
 build_steps: &build_steps
   steps:
     - run:
@@ -73,11 +80,29 @@ jobs:
           paths:
             - /usr/local/Homebrew/Library/Taps/homebrew
 
+  # catalina-build:
+  #   <<: *build_steps
+  #   <<: *filter
+  #   macos:
+  #     xcode: "11.3.0"
+
+  # mojave-build:
+  #   <<: *build_steps
+  #   <<: *filter
+  #   macos:
+  #     xcode: "11.1.0"
+
   high_sierra-build:
     <<: *build_steps
     <<: *filter
     macos:
       xcode: "10.1.0"
+
+  sierra-build:
+    <<: *build_steps
+    <<: *filter
+    macos:
+      xcode: "9.0.1"
 
   collect-bottles:
     macos:
@@ -139,12 +164,24 @@ workflows:
   test-bot:
     jobs:
       - update-homebrew
+      # - catalina-build:
+      #     requires:
+      #       - update-homebrew
+      # - mojave-build:
+      #     requires:
+      #       - update-homebrew
       - high_sierra-build:
+          requires:
+            - update-homebrew
+      - sierra-build:
           requires:
             - update-homebrew
       - collect-bottles:
           requires:
+            # - catalina-build
+            # - mojave-build
             - high_sierra-build
+            - sierra-build
       # - deploy:
       #     requires:
       #       - collect-bottles

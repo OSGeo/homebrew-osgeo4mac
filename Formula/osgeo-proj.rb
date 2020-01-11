@@ -20,8 +20,8 @@ end
 class OsgeoProj < Formula
   desc "Cartographic Projections Library"
   homepage "https://proj.org/"
-  url "https://github.com/OSGeo/PROJ/releases/download/6.2.1/proj-6.2.1.tar.gz"
-  sha256 "7f2e0fe63312f1e766057cceb53dc9585c4a335ff6641de45696dbd40d17c340"
+  url "https://github.com/OSGeo/PROJ/releases/download/6.3.0/proj-6.3.0.tar.gz"
+  sha256 "68ce9ba0005d442c2c1d238a3b9bc6654c358159b4af467b91e8d5b407c79c77"
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
@@ -32,16 +32,18 @@ class OsgeoProj < Formula
 
   # revision 1
 
-  head "https://github.com/OSGeo/PROJ.git", :branch => "master"
-
-  # keg_only "proj" is already provided by homebrew/core"
+  # keg_only "proj is already provided by homebrew/core"
   # we will verify that other versions are not linked
   depends_on Unlinked
 
+  head do
+    head "https://github.com/OSGeo/PROJ.git", :branch => "master"
+    depends_on "autoconf" => :build
+    depends_on "automake" => :build
+    depends_on "libtool" => :build
+  end
+
   depends_on "pkg-config" => :build
-  depends_on "autoconf" => :build
-  depends_on "automake" => :build
-  depends_on "libtool" => :build
 
   conflicts_with "blast", :because => "both install a `libproj.a` library"
 
@@ -56,7 +58,7 @@ class OsgeoProj < Formula
   def install
     (buildpath/"nad").install resource("datumgrid")
 
-    # system "./autogen.sh"
+    system "./autogen.sh" if build.head?
     system "./configure", "--disable-dependency-tracking",
                           "--prefix=#{prefix}"
     system "make", "install"
