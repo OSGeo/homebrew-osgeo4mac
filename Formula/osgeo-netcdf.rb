@@ -21,7 +21,7 @@ class OsgeoNetcdf < Formula
   desc "Libraries and data formats for array-oriented scientific data"
   homepage "https://www.unidata.ucar.edu/software/netcdf"
   url "https://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-c-4.7.3.tar.gz"
-  sha256 "8e8c9f4ee15531debcf83788594744bd6553b8489c06a43485a15c93b4e0448b"
+  sha256 "299214919520a9b808257ebb6e7c1a4fbaeed5e99534739c8feae93cf6a738ee"
 
   # revision 1
 
