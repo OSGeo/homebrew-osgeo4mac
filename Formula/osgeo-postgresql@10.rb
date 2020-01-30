@@ -34,8 +34,8 @@ end
 class OsgeoPostgresqlAT10 < Formula
   desc "Relational database management system"
   homepage "https://www.postgresql.org/"
-  url "https://github.com/postgres/postgres/archive/REL_10_10.tar.gz"
-  sha256 "1834d1517e8d28b35662bf6419c1f9da774dcafe3845ae3f2460f48defc0eae0"
+  url "https://github.com/postgres/postgres/archive/REL_10_11.tar.gz"
+  sha256 "e20481e643736d7210f8146b61c72c47ad1498afe9ca12d5fef761c0d054b7c5"
 
   # revision 1
 
@@ -83,6 +83,9 @@ class OsgeoPostgresqlAT10 < Formula
     # https://www.postgresql.org/message-id/153558865647.1483.573481613491501077%40wrigleys.postgresql.org
     ENV.prepend "LDFLAGS", "-L#{Formula["openssl"].opt_lib} -L#{Formula["readline"].opt_lib} -R#{lib}/postgresql"
     ENV.prepend "CPPFLAGS", "-I#{Formula["openssl"].opt_include} -I#{Formula["readline"].opt_include}"
+
+    # ENV["PYTHON"] = which("python3")
+    ENV["PYTHON"] = "#{Formula["python"].opt_bin}/python3"
 
     args = %W[
       --disable-debug
