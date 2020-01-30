@@ -35,7 +35,7 @@ class OsgeoPostgresql < Formula
   desc "Object-relational database system"
   homepage "https://www.postgresql.org/"
   url "https://github.com/postgres/postgres/archive/REL_12_1.tar.gz"
-  sha256 "d528bbb5298e7f007f05079509fb96563340b3122c9900ef553181856dc8099e"
+  sha256 "5ceb092232edbbd2d2e9ea7a5c8454ef10a37e7a2d61e12d40965d40f0043eef"
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
