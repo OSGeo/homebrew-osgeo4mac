@@ -34,7 +34,7 @@ end
 class OsgeoPostgresql < Formula
   desc "Object-relational database system"
   homepage "https://www.postgresql.org/"
-  url "https://github.com/postgres/postgres/archive/REL_12_0.tar.gz"
+  url "https://github.com/postgres/postgres/archive/REL_12_1.tar.gz"
   sha256 "d528bbb5298e7f007f05079509fb96563340b3122c9900ef553181856dc8099e"
 
   bottle do
@@ -82,6 +82,9 @@ class OsgeoPostgresql < Formula
     # https://www.postgresql.org/message-id/153558865647.1483.573481613491501077%40wrigleys.postgresql.org
     ENV.prepend "LDFLAGS", "-L#{Formula["openssl"].opt_lib} -L#{Formula["readline"].opt_lib} -R#{lib}/postgresql"
     ENV.prepend "CPPFLAGS", "-I#{Formula["openssl"].opt_include} -I#{Formula["readline"].opt_include}"
+
+    # ENV["PYTHON"] = which("python3")
+    ENV["PYTHON"] = "#{Formula["python"].opt_bin}/python3"
 
     args = %W[
       --disable-debug
