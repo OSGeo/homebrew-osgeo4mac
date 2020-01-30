@@ -86,7 +86,7 @@ jobs:
   #   macos:
   #     xcode: "11.3.0"
 
-  # mojave-build:
+  # mojave-build:
   #   <<: *build_steps
   #   <<: *filter
   #   macos:
@@ -98,11 +98,11 @@ jobs:
     macos:
       xcode: "10.1.0"
 
-  sierra-build:
-    <<: *build_steps
-    <<: *filter
-    macos:
-      xcode: "9.0.1"
+  # sierra-build:
+  #   <<: *build_steps
+  #   <<: *filter
+  #   macos:
+  #     xcode: "9.0.1"
 
   collect-bottles:
     macos:
@@ -169,19 +169,19 @@ workflows:
       #       - update-homebrew
       # - mojave-build:
       #     requires:
-      #       - update-homebrew
+      #       - update-homebrew
       - high_sierra-build:
           requires:
             - update-homebrew
-      - sierra-build:
-          requires:
-            - update-homebrew
+      # - sierra-build:
+      #     requires:
+      #       - update-homebrew
       - collect-bottles:
           requires:
             # - catalina-build
             # - mojave-build
             - high_sierra-build
-            - sierra-build
+            # - sierra-build
       # - deploy:
       #     requires:
       #       - collect-bottles
