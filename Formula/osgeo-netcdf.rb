@@ -20,8 +20,8 @@ end
 class OsgeoNetcdf < Formula
   desc "Libraries and data formats for array-oriented scientific data"
   homepage "https://www.unidata.ucar.edu/software/netcdf"
-  url "https://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-c-4.7.2.tar.gz"
-  sha256 "b751cc1f314ac8357df2e0a1bacf35a624df26fe90981d3ad3fa85a5bbd8989a"
+  url "https://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-c-4.7.3.tar.gz"
+  sha256 "8e8c9f4ee15531debcf83788594744bd6553b8489c06a43485a15c93b4e0448b"
 
   # revision 1
 
@@ -42,8 +42,8 @@ class OsgeoNetcdf < Formula
   depends_on "hdf5"
 
   resource "cxx" do
-    url "https://github.com/Unidata/netcdf-cxx4/archive/v4.3.0.tar.gz"
-    sha256 "25da1c97d7a01bc4cee34121c32909872edd38404589c0427fefa1301743f18f"
+    url "https://github.com/Unidata/netcdf-cxx4/archive/v4.3.1.tar.gz"
+    sha256 "e3fe3d2ec06c1c2772555bf1208d220aab5fee186d04bd265219b0bc7a978edc"
   end
 
   resource "cxx-compat" do
@@ -52,37 +52,56 @@ class OsgeoNetcdf < Formula
   end
 
   resource "fortran" do
-    url "https://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-fortran-4.4.4.tar.gz"
-    sha256 "b2d395175f8d283e68c8be516e231a96b191ade67ad0caafaf7fa01b1e6b5d75"
+    url "https://github.com/Unidata/netcdf-fortran/archive/v4.5.2.tar.gz"
+    sha256 "0b05c629c70d6d224a3be28699c066bfdfeae477aea211fbf034d973a8309b49"
   end
 
   def install
     ENV.deparallelize
 
-    common_args = std_cmake_args << "-DBUILD_TESTING=OFF"
+    ENV.prepend "CPPFLAGS", "-I#{include}"
+    ENV.prepend "LDFLAGS", "-L#{lib}"
+    # ENV.append "CFLAGS", "#{CFLAGS}
+
+    args_c = %W[
+        -DCMAKE_INSTALL_PREFIX=#{prefix}
+        -DCMAKE_INSTALL_LIBDIR=#{lib}
+    		-DCMAKE_BUILD_TYPE=Release
+    		-DENABLE_CDF5=ON
+    		-DENABLE_DAP_LONG_TESTS=ON
+    		-DENABLE_EXAMPLE_TESTS=ON
+    		-DENABLE_EXTRA_TESTS=ON
+    		-DENABLE_FAILING_TESTS=ON
+    		-DENABLE_FILTER_TESTING=ON
+    		-DENABLE_LARGE_FILE_TESTS=ON
+        -DENABLE_TESTS=OFF
+        -DENABLE_NETCDF_4=ON
+        -DENABLE_DOXYGEN=OFF
+        -DENABLE_DAP_AUTH_TESTS=OFF
+        -DBUILD_TESTING=OFF
+      ]
 
     mkdir "build" do
-      args = common_args.dup
-      args << "-DENABLE_TESTS=OFF"
-      args << "-DNC_EXTRA_DEPS=-lmpi" if Tab.for_name("hdf5").with? "mpi"
-      args << "-DENABLE_DAP_AUTH_TESTS=OFF" << "-DENABLE_NETCDF_4=ON" << "-DENABLE_DOXYGEN=OFF"
-
-      system "cmake", "..", "-DBUILD_SHARED_LIBS=ON", *args
+      args_c << "-DNC_EXTRA_DEPS=-lmpi" if Tab.for_name("hdf5").with? "mpi"
+      system "cmake", "..", "-DBUILD_SHARED_LIBS=ON", *args_c
       system "make", "install"
       system "make", "clean"
-      system "cmake", "..", "-DBUILD_SHARED_LIBS=OFF", *args
+      system "cmake", "..", "-DBUILD_SHARED_LIBS=OFF", *args_c
       system "make"
       lib.install "liblib/libnetcdf.a"
     end
 
+    common_args = std_cmake_args
     # Add newly created installation to paths so that binding libraries can
     # find the core libs.
-    args = common_args.dup << "-DNETCDF_C_LIBRARY=#{lib}"
+    args = common_args.dup << "-DNETCDF_C_LIBRARY=#{lib}/libnetcdf.dylib"
 
     cxx_args = args.dup
     cxx_args << "-DNCXX_ENABLE_TESTS=OFF"
     resource("cxx").stage do
       mkdir "build-cxx" do
+        # system "./configure", "--enable-shared", "--enable-extra-tests", "--enable-large-file-tests"
+        # --prefix=/usr
         system "cmake", "..", "-DBUILD_SHARED_LIBS=ON", *cxx_args
         system "make", "install"
         system "make", "clean"
@@ -105,8 +124,6 @@ class OsgeoNetcdf < Formula
       end
     end
 
-    ENV.prepend "CPPFLAGS", "-I#{include}"
-    ENV.prepend "LDFLAGS", "-L#{lib}"
     resource("cxx-compat").stage do
       system "./configure", "--disable-dependency-tracking",
                             "--enable-shared",
