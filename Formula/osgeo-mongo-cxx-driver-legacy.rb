@@ -4,7 +4,7 @@ class OsgeoMongoCxxDriverLegacy < Formula
   url "https://github.com/mongodb/mongo-cxx-driver/archive/legacy-1.1.3.tar.gz"
   sha256 "50304162f706c2c73e04f200cdac767cb2c55d47cf724811cbfc8bb34a0fd6bc"
 
-  revision 2
+  revision 3
 
   head "https://github.com/mongodb/mongo-cxx-driver.git", :branch => "releases/legacy"
 
@@ -19,11 +19,15 @@ class OsgeoMongoCxxDriverLegacy < Formula
 
   keg_only "Newer driver in homebrew core"
 
+  # src/.../ssl_manager.cpp:631:23: error: BIO_s_file_internal was not declared in this scope
+  # https://bugs.gentoo.org/676066
+  # https://patch-diff.githubusercontent.com/raw/mongodb/mongo-cxx-driver/pull/615.patch
   patch :DATA
 
   depends_on "scons" => :build
   depends_on "boost"
   depends_on "openssl"
+  # depends_on "openssl@1.1"
 
   resource "connect_test" do
     url "https://raw.githubusercontent.com/mongodb/mongo-cxx-driver/legacy/src/mongo/client/examples/tutorial.cpp"
@@ -76,8 +80,7 @@ class OsgeoMongoCxxDriverLegacy < Formula
 end
 
 __END__
-diff --git a/src/mongo/client/command_writer.h b/src/mongo/client/command_writer.h
-index 09cd752..6d60721 100644
+
 --- a/src/mongo/client/command_writer.h
 +++ b/src/mongo/client/command_writer.h
 @@ -17,6 +17,11 @@
@@ -92,10 +95,7 @@ index 09cd752..6d60721 100644
  namespace mongo {
 
  class DBClientBase;
---
-2.17.0
-diff --git a/src/mongo/client/wire_protocol_writer.h b/src/mongo/client/wire_protocol_writer.h
-index 10cc935..72bb191 100644
+
 --- a/src/mongo/client/wire_protocol_writer.h
 +++ b/src/mongo/client/wire_protocol_writer.h
 @@ -16,6 +16,10 @@
@@ -109,5 +109,58 @@ index 10cc935..72bb191 100644
 
  namespace mongo {
 
---
-2.17.0
+
+--- a/src/mongo/crypto/crypto_openssl.cpp
++++ b/src/mongo/crypto/crypto_openssl.cpp
+@@ -34,19 +34,27 @@ namespace crypto {
+  * Computes a SHA-1 hash of 'input'.
+  */
+ bool sha1(const unsigned char* input, const size_t inputLen, unsigned char* output) {
+-    EVP_MD_CTX digestCtx;
+-    EVP_MD_CTX_init(&digestCtx);
+-    ON_BLOCK_EXIT(EVP_MD_CTX_cleanup, &digestCtx);
++    EVP_MD_CTX *digestCtx = EVP_MD_CTX_create();
++    if (!digestCtx) {
++        return false;
++    }
++
++    EVP_MD_CTX_init(digestCtx);
++    #if OPENSSL_VERSION_NUMBER < 0x10100000L
++    ON_BLOCK_EXIT(EVP_MD_CTX_destroy, digestCtx);
++    #else
++    ON_BLOCK_EXIT(EVP_MD_CTX_free, digestCtx);
++    #endif
+
+-    if (1 != EVP_DigestInit_ex(&digestCtx, EVP_sha1(), NULL)) {
++    if (1 != EVP_DigestInit_ex(digestCtx, EVP_sha1(), NULL)) {
+         return false;
+     }
+
+-    if (1 != EVP_DigestUpdate(&digestCtx, input, inputLen)) {
++    if (1 != EVP_DigestUpdate(digestCtx, input, inputLen)) {
+         return false;
+     }
+
+-    return (1 == EVP_DigestFinal_ex(&digestCtx, output, NULL));
++    return (1 == EVP_DigestFinal_ex(digestCtx, output, NULL));
+ }
+
+ /*
+
+
+--- a/src/mongo/util/net/ssl_manager.cpp
++++ b/src/mongo/util/net/ssl_manager.cpp
+@@ -628,7 +628,12 @@ bool SSLManager::_initSSLContext(SSL_CTX** context, const Params& params) {
+
+ bool SSLManager::_setSubjectName(const std::string& keyFile, std::string& subjectName) {
+     // Read the certificate subject name and store it
+-    BIO* in = BIO_new(BIO_s_file_internal());
++    BIO* in;
++    #if OPENSSL_VERSION_NUMBER < 0x10100000L
++    in = BIO_new(BIO_s_file_internal());
++    #else
++    in = BIO_new(BIO_s_file());
++    #endif
+     if (NULL == in) {
+         error() << "failed to allocate BIO object: " << getSSLErrorMessage(ERR_get_error()) << endl;
+         return false;
