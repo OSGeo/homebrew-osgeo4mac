@@ -1,6 +1,6 @@
 require File.expand_path("../../Strategies/cache-download", Pathname.new(__FILE__).realpath)
 
-ECWJP2_SDK = "/Hexagon/ERDASEcwJpeg2000SDK5.4.0/Desktop_Read-Only".freeze
+ECWJP2_SDK = "/Hexagon/ERDASEcwJpeg2000SDK5.5.0/Desktop_Read-Only/".freeze
 
 class EcwJpeg2000SDK < Requirement
   fatal true
