@@ -11,10 +11,9 @@ class OsgeoMongoCxxDriverLegacy < Formula
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any
-    rebuild 1
-    sha256 "c8f78cbbfa742e21ef20256c107e5a9ffba19032f13ddf21a326cfbb2e39c770" => :mojave
-    sha256 "c8f78cbbfa742e21ef20256c107e5a9ffba19032f13ddf21a326cfbb2e39c770" => :high_sierra
-    sha256 "bd5eca50e4023efd40616f5a4e7f9099079a7b3947aae4fae4e15e985d530fe1" => :sierra
+    sha256 "eba1f1faf4e7aa27700f0daf65ac89711162244583a609e0bafc6e88060c8056" => :catalina
+    sha256 "eba1f1faf4e7aa27700f0daf65ac89711162244583a609e0bafc6e88060c8056" => :mojave
+    sha256 "eba1f1faf4e7aa27700f0daf65ac89711162244583a609e0bafc6e88060c8056" => :high_sierra
   end
 
   keg_only "Newer driver in homebrew core"
