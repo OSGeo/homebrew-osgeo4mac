@@ -1,11 +1,14 @@
 class OsgeoLiblas < Formula
   desc "C/C++ library for reading and writing the LAS LiDAR format"
   homepage "https://liblas.org/"
-  url "https://github.com/libLAS/libLAS/archive/09d45518776489508f34098f1c159f58b856f459.tar.gz"
-  sha256 "fa2afafb8ec7c81c4216e51de51cf845c99575e7d6efbd22ad311ca8a55ce189"
+  url "https://github.com/libLAS/libLAS/archive/bd157f25b3de9747fa3146f9dcf2323bc275b254.tar.gz"
+  sha256 "9e056b8f973cdfc0e772290a16af8a2c895d997e25677332fe70ae60420913b5"
   version "1.8.1"
 
-  revision 6
+  revision 7
+
+  # gt_wkt_srs_cpp
+  patch :DATA
 
   head "https://github.com/libLAS/libLAS.git", :branch => "master"
 
@@ -31,6 +34,7 @@ class OsgeoLiblas < Formula
   depends_on "osgeo-proj"
   depends_on "osgeo-gdal"
   depends_on "osgeo-laszip@2" # if build.with? "laszip"
+  # depends_on "pkgconfig"
   # other: oracle
 
   # for laszip 3.2.9
@@ -54,6 +58,7 @@ class OsgeoLiblas < Formula
 
   def install
     ENV.cxx11
+    # ENV.append "CXXFLAGS", "-std=c++11"
 
     mkdir "macbuild" do
       # CMake finds boost, but variables like this were set in the last
@@ -69,9 +74,17 @@ class OsgeoLiblas < Formula
       args << "-DLASZIP_LIBRARY=#{Formula['osgeo-laszip@2'].opt_lib}/liblaszip.dylib"
       # end
 
+      args << "-DPROJ4_INCLUDE_DIR=#{Formula['osgeo-proj'].opt_include}"
+      args << "-DPROJ4_LIBRARY=#{Formula['osgeo-proj'].opt_lib}"
+
+      # args << "-DWITH_PKGCONFIG=ON"
+
+      args << "-DWITH_STATIC_LASZIP=ON"
+      args << "-DWITH_UTILITIES=ON"
+
       system "cmake", "..", *args
       system "make"
-      system "make", "test" if build.bottle? || build.with?("test")
+      system "make", "test" if build.with?("test") # || build.bottle?
       system "make", "install"
 
       # fix for liblas-config
@@ -229,3 +242,35 @@ class OsgeoLiblas < Formula
     # system bin/"liblas-config", "--version"
   end
 end
+
+__END__
+
+--- /src/gt_wkt_srs.cpp
++++ /src/gt_wkt_srs.cpp
+@@ -299,7 +299,7 @@
+                 oSRS.SetFromUserInput(pszWKT);
+                 oSRS.SetExtension( "PROJCS", "PROJ4",
+                                    "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext  +no_defs" );
+-                oSRS.FixupOrdering();
++                //oSRS.FixupOrdering();
+                 CPLFree(pszWKT);
+                 pszWKT = NULL;
+                 oSRS.exportToWkt(&pszWKT);
+@@ -505,7 +505,7 @@
+         {
+             char	*pszWKT;
+             oSRS.morphFromESRI();
+-            oSRS.FixupOrdering();
++            //oSRS.FixupOrdering();
+             if( oSRS.exportToWkt( &pszWKT ) == OGRERR_NONE )
+                 return pszWKT;
+         }
+@@ -1107,7 +1107,7 @@
+ /* ==================================================================== */
+     char	*pszWKT;
+
+-    oSRS.FixupOrdering();
++    //oSRS.FixupOrdering();
+
+     if( oSRS.exportToWkt( &pszWKT ) == OGRERR_NONE )
+         return pszWKT;
