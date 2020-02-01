@@ -58,7 +58,7 @@ class OsgeoLiblas < Formula
 
   def install
     ENV.cxx11
-    ENV.append "CXXFLAGS", "-std=c++11"
+    # ENV.append "CXXFLAGS", "-std=c++11"
 
     mkdir "macbuild" do
       # CMake finds boost, but variables like this were set in the last
