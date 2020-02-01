@@ -84,7 +84,7 @@ class OsgeoLiblas < Formula
 
       system "cmake", "..", *args
       system "make"
-      system "make", "test" if build.bottle? || build.with?("test")
+      system "make", "test" if build.with?("test") # || build.bottle?
       system "make", "install"
 
       # fix for liblas-config
