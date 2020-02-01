@@ -25,7 +25,6 @@ class OsgeoLiblas < Formula
   # option "with-laszip", "Build with laszip support"
 
   depends_on "cmake" => :build
-  depends_on "pkgconfig"
   depends_on "boost"
   depends_on "zlib"
   depends_on "jpeg"
@@ -35,6 +34,7 @@ class OsgeoLiblas < Formula
   depends_on "osgeo-proj"
   depends_on "osgeo-gdal"
   depends_on "osgeo-laszip@2" # if build.with? "laszip"
+  # depends_on "pkgconfig"
   # other: oracle
 
   # for laszip 3.2.9
@@ -77,7 +77,8 @@ class OsgeoLiblas < Formula
       args << "-DPROJ4_INCLUDE_DIR=#{Formula['osgeo-proj'].opt_include}"
       args << "-DPROJ4_LIBRARY=#{Formula['osgeo-proj'].opt_lib}"
 
-      args << "-DWITH_PKGCONFIG=ON"
+      # args << "-DWITH_PKGCONFIG=ON"
+
       args << "-DWITH_STATIC_LASZIP=ON"
       args << "-DWITH_UTILITIES=ON"
 
