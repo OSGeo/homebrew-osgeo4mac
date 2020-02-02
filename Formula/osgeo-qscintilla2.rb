@@ -20,8 +20,8 @@ end
 class OsgeoQscintilla2 < Formula
   desc "Port to Qt of the Scintilla editing component"
   homepage "https://www.riverbankcomputing.com/software/qscintilla/intro"
-  url "https://www.riverbankcomputing.com/static/Downloads/QScintilla/2.11.2/QScintilla_gpl-2.11.2.tar.gz"
-  sha256 "029bdc476a069fda2cea3cd937ba19cc7fa614fb90578caef98ed703b658f4a1"
+  url "https://www.riverbankcomputing.com/static/Downloads/QScintilla/2.11.4/QScintilla-2.11.4.tar.gz"
+  sha256 "723f8f1d1686d9fc8f204cd855347e984322dd5cd727891d324d0d7d187bee20"
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
@@ -33,7 +33,7 @@ class OsgeoQscintilla2 < Formula
 
   revision 1
 
-  # keg_only "qscintilla2" is already provided by homebrew/core"
+  # keg_only "qscintilla2 is already provided by homebrew/core"
   # we will verify that other versions are not linked
   depends_on Unlinked
 
