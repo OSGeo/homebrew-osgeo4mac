@@ -20,8 +20,8 @@ end
 class OsgeoPyqt < Formula
   desc "Python bindings for v5 of Qt"
   homepage "https://www.riverbankcomputing.com/software/pyqt/intro"
-  url "https://www.riverbankcomputing.com/static/Downloads/PyQt5/5.13.0/PyQt5_gpl-5.13.0.tar.gz"
-  sha256 "0cdbffe5135926527b61cc3692dd301cd0328dd87eeaf1313e610787c46faff9"
+  url "https://www.riverbankcomputing.com/static/Downloads/PyQt5/5.13.2/PyQt5-5.13.2.tar.gz"
+  sha256 "adc17c077bf233987b8e43ada87d1e0deca9bd71a13e5fd5fc377482ed69c827"
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
@@ -45,8 +45,8 @@ class OsgeoPyqt < Formula
   depends_on "dbus" => :optional
 
   resource "setuptools" do
-    url "https://files.pythonhosted.org/packages/1d/64/a18a487b4391a05b9c7f938b94a16d80305bf0369c6b0b9509e86165e1d3/setuptools-41.0.1.zip"
-    sha256 "a222d126f5471598053c9a77f4b5d4f26eaa1f150ad6e01dcf1a42e185d05613"
+    url "https://files.pythonhosted.org/packages/42/3e/2464120172859e5d103e5500315fb5555b1e908c0dacc73d80d35a9480ca/setuptools-45.1.0.zip"
+    sha256 "91f72d83602a6e5e4a9e4fe296e27185854038d7cbda49dcd7006c4d3b3b89d5"
   end
 
   resource "enum34" do
@@ -77,6 +77,7 @@ class OsgeoPyqt < Formula
               "--qmake=#{Formula["qt"].bin}/qmake",
               # Force deployment target to avoid libc++ issues
               "QMAKE_MACOSX_DEPLOYMENT_TARGET=#{MacOS.version}",
+              "--designer-plugindir=#{pkgshare}/plugins",
               "--qml-plugindir=#{pkgshare}/plugins",
               "--verbose",
               "--sip=#{Formula["osgeo-sip"].opt_bin}/sip",
@@ -92,7 +93,8 @@ class OsgeoPyqt < Formula
 
       system python, "configure.py", *args
       system "make"
-      system "make", "install"
+      # system "make", "install"
+      ENV.deparallelize { system "make", "install" }
       system "make", "clean"
     end
   end
