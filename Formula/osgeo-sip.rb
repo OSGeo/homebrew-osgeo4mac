@@ -31,10 +31,9 @@ class OsgeoSip < Formula
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any_skip_relocation
-    rebuild 1
-    sha256 "620950c2558416449a0ade3ad54b5d27741bda54361fe83bf31ab067976ee448" => :mojave
-    sha256 "620950c2558416449a0ade3ad54b5d27741bda54361fe83bf31ab067976ee448" => :high_sierra
-    sha256 "07294895b2d26e96822fcb8d6d520a4a2950549f627156c920bf2f4cd9c79888" => :sierra
+    sha256 "bd690b45d1f1d77518ccbe46f9abdbca1b40256ed9904a480b7f30e5ed68b5dc" => :catalina
+    sha256 "bd690b45d1f1d77518ccbe46f9abdbca1b40256ed9904a480b7f30e5ed68b5dc" => :mojave
+    sha256 "bd690b45d1f1d77518ccbe46f9abdbca1b40256ed9904a480b7f30e5ed68b5dc" => :high_sierra
   end
 
   # keg_only "sip" is already provided by homebrew/core"
