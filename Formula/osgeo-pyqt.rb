@@ -20,7 +20,7 @@ end
 class OsgeoPyqt < Formula
   desc "Python bindings for v5 of Qt"
   homepage "https://www.riverbankcomputing.com/software/pyqt/intro"
-  url "https://www.riverbankcomputing.com/static/Downloads/PyQt5/5.13.0/PyQt5_gpl-5.13.0.tar.gz"
+  url "https://www.riverbankcomputing.com/static/Downloads/PyQt5/5.13.2/PyQt5-5.13.2.tar.gz"
   sha256 "0cdbffe5135926527b61cc3692dd301cd0328dd87eeaf1313e610787c46faff9"
 
   bottle do
