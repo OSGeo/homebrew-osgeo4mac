@@ -77,6 +77,7 @@ class OsgeoPyqt < Formula
               "--qmake=#{Formula["qt"].bin}/qmake",
               # Force deployment target to avoid libc++ issues
               "QMAKE_MACOSX_DEPLOYMENT_TARGET=#{MacOS.version}",
+              "--designer-plugindir=#{pkgshare}/plugins",
               "--qml-plugindir=#{pkgshare}/plugins",
               "--verbose",
               "--sip=#{Formula["osgeo-sip"].opt_bin}/sip",
@@ -92,7 +93,8 @@ class OsgeoPyqt < Formula
 
       system python, "configure.py", *args
       system "make"
-      system "make", "install"
+      # system "make", "install"
+      ENV.deparallelize { system "make", "install" }
       system "make", "clean"
     end
   end
