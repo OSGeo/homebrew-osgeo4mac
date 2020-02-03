@@ -56,7 +56,7 @@ class OsgeoMatplotlib < Formula
   depends_on "gtk+3"
   depends_on "pygobject3"
   # depends_on "pygtk" # pygtk has been deprecated since a very long time, and does not support Python 3.
-  depends_on "pygobject"
+  # depends_on "pygobject" # Does not support Python 3, and needs pygtk which has been removed.
   depends_on "osgeo-pyqt"
   depends_on "wxpython"
   depends_on "rsync"
