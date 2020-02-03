@@ -1,10 +1,10 @@
 class OsgeoSix < Formula
   desc "Python 2 and 3 compatibility utilities"
   homepage "https://pypi.python.org/pypi/six"
-  url "https://github.com/benjaminp/six/archive/1.12.0.tar.gz"
-  sha256 "0ce7aef70d066b8dda6425c670d00c25579c3daad8108b3e3d41bef26003c852"
+  url "https://github.com/benjaminp/six/archive/1.14.0.tar.gz"
+  sha256 "6efff7289d1d369f0a25180433aba83ec2584e489e90f115b52ba69e4816cfb4"
 
-  revision 2
+  # revision 1
 
   head "https://github.com/benjaminp/six.git", :branch => "master"
 
@@ -21,13 +21,13 @@ class OsgeoSix < Formula
   depends_on "tcl-tk"
 
   resource "setuptools" do
-    url "https://files.pythonhosted.org/packages/1d/64/a18a487b4391a05b9c7f938b94a16d80305bf0369c6b0b9509e86165e1d3/setuptools-41.0.1.zip"
-    sha256 "a222d126f5471598053c9a77f4b5d4f26eaa1f150ad6e01dcf1a42e185d05613"
+    url "https://files.pythonhosted.org/packages/42/3e/2464120172859e5d103e5500315fb5555b1e908c0dacc73d80d35a9480ca/setuptools-45.1.0.zip"
+    sha256 "91f72d83602a6e5e4a9e4fe296e27185854038d7cbda49dcd7006c4d3b3b89d5"
   end
 
   resource "pytest" do
-    url "https://files.pythonhosted.org/packages/88/04/f2ae104dffcd6b2e3c7ed35773b760971c1bacbe4447250966f927cf5efd/pytest-4.5.0.tar.gz"
-    sha256 "1a8aa4fa958f8f451ac5441f3ac130d9fc86ea38780dd2715e6d5c5882700b24"
+    url "https://files.pythonhosted.org/packages/f0/5f/41376614e41f7cdee02d22d1aec1ea028301b4c6c4523a5f7ef8e960fe0b/pytest-5.3.5.tar.gz"
+    sha256 "0d5fe9189a148acc3c3eb2ac8e1ac0742cb7618c084f3d228baaec0c254b318d"
   end
 
   def install
