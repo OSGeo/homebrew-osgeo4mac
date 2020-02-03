@@ -20,8 +20,8 @@ end
 class OsgeoMatplotlib < Formula
   desc "Python 2D plotting library"
   homepage "https://matplotlib.org"
-  url "https://github.com/matplotlib/matplotlib/archive/v3.1.2.tar.gz"
-  sha256 "a48803e79013d01f22454fd718a575c6f9dadced211722637487fc2f7803620e"
+  url "https://github.com/matplotlib/matplotlib/archive/v3.1.3.tar.gz"
+  sha256 "6edfe021671fcad1bd6081c980c380cb3d66d00895eb8c3450fa3842c441d1d1"
 
   # revision 1
 
@@ -50,6 +50,7 @@ class OsgeoMatplotlib < Formula
   depends_on "openblas"
   depends_on "numpy"
   depends_on "scipy"
+  depends_on "osgeo-six"
   depends_on "cairo"
   depends_on "py3cairo"
   depends_on "gtk+3"
@@ -102,20 +103,25 @@ class OsgeoMatplotlib < Formula
     sha256 "b02c06db6cf09c12dd25137e563b31700d3b80fcc4ad23abb7a315f2789819be"
   end
 
-  resource "six" do
-    url "https://files.pythonhosted.org/packages/21/9f/b251f7f8a76dec1d6651be194dfba8fb8d7781d10ab3987190de8391d08e/six-1.14.0.tar.gz"
-    sha256 "236bdbdce46e6e6a3d61a337c0f8b763ca1e8717c03b369e87a7ec7ce1319c0a"
-  end
+  # resource "six" do
+  #   url "https://files.pythonhosted.org/packages/21/9f/b251f7f8a76dec1d6651be194dfba8fb8d7781d10ab3987190de8391d08e/six-1.14.0.tar.gz"
+  #   sha256 "236bdbdce46e6e6a3d61a337c0f8b763ca1e8717c03b369e87a7ec7ce1319c0a"
+  # end
 
   resource "tornado" do
     url "https://files.pythonhosted.org/packages/30/78/2d2823598496127b21423baffaa186b668f73cd91887fcef78b6eade136b/tornado-6.0.3.tar.gz"
     sha256 "c845db36ba616912074c5b1ee897f8e0124df269468f25e4fe21fe72f6edd7a9"
   end
 
+  # resource "scipy" do
+  #   url "https://files.pythonhosted.org/packages/04/ab/e2eb3e3f90b9363040a3d885ccc5c79fe20c5b8a3caa8fe3bf47ff653260/scipy-1.4.1.tar.gz"
+  #   sha256 "dee1bbf3a6c8f73b6b218cb28eed8dd13347ea2f87d572ce19b289d6fd3fbc59"
+  # end
+
   # resource "numpy" do
   #   url "https://files.pythonhosted.org/packages/40/de/0ea5092b8bfd2e3aa6fdbb2e499a9f9adf810992884d414defc1573dca3f/numpy-1.18.1.zip"
   #   sha256 "b6ff59cee96b454516e47e7721098e6ceebef435e3e21ac2d6c3b8b02628eb77"
-  # end
+  # end
 
   def install
     if DevelopmentTools.clang_build_version >= 900
