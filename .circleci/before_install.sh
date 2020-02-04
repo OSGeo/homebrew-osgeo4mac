@@ -123,4 +123,6 @@ for f in ${CHANGED_FORMULAE};do
   # osgeo-vtk: Java 1.8 is required to install this formula.
   # Install AdoptOpenJDK 8 with Homebrew Cask:
   brew cask install homebrew/cask-versions/adoptopenjdk8
+  brew install jpeg-turbo
+  brew unlink jpeg-turbo && brew link --force jpeg-turbo
 done
