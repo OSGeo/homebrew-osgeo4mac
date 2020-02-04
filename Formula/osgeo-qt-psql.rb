@@ -1,8 +1,8 @@
 class OsgeoQtPsql < Formula
   desc "Qt SQL Database Driver - QPSQL for PostgreSQL"
   homepage "https://doc.qt.io/qt-5/sql-driver.html"
-  url "https://download.qt.io/official_releases/qt/5.13/5.13.0/single/qt-everywhere-src-5.13.0.tar.xz"
-  sha256 "2cba31e410e169bd5cdae159f839640e672532a4687ea0f265f686421e0e86d6"
+  url "https://download.qt.io/official_releases/qt/5.14/5.14.1/single/qt-everywhere-src-5.14.1.tar.xz"
+  sha256 "6f17f488f512b39c2feb57d83a5e0a13dcef32999bea2e2a8f832f54a29badb8"
 
   # revision 1
 
