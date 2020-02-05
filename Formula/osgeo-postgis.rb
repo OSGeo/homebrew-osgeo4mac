@@ -27,8 +27,8 @@ end
 class OsgeoPostgis < Formula
   desc "Adds support for geographic objects to PostgreSQL"
   homepage "https://postgis.net/"
-  url "https://github.com/postgis/postgis/archive/2.5.2.tar.gz"
-  sha256 "225aeaece00a1a6a9af15526af81bef2af27f4c198de820af1367a792ee1d1a9"
+  url "https://github.com/postgis/postgis/archive/3.0.0.tar.gz"
+  sha256 "1c83fb2fc8870d36ed49859c49a12c8c4c8ae8c5c3f912a21a951c5bcc249123"
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
@@ -39,7 +39,7 @@ class OsgeoPostgis < Formula
     sha256 "a65d242333642f2285dd566dcd9160016506e86e1a71e52869d5fffc5ecb6972" => :sierra
   end
 
-  revision 7
+  # revision 1
 
   head "https://github.com/postgis/postgis.git", :branch => "master"
 
@@ -128,7 +128,7 @@ class OsgeoPostgis < Formula
 
     # Disable topology support.
     # There is no corresponding library as all logic needed for
-    # topology is in postgis- 2.5.2 library.
+    # topology is in postgis- 3.0.2 library.
     # args << "--without-topology"
 
     # Disable the address_standardizer extension
@@ -184,9 +184,11 @@ class OsgeoPostgis < Formula
     bin.install Dir["stage/**/bin/*"]
     lib.install Dir["stage/**/lib/*"]
     include.install Dir["stage/**/include/*"]
+    pkgshare.install Dir["stage/**/contrib/postgis-*/*"]
     (share/"doc/postgresql/extension").install Dir["stage/**/share/doc/postgresql/extension/*"]
     (share/"postgresql/extension").install Dir["stage/**/share/postgresql/extension/*"]
-    (share/"postgresql/contrib/postgis-2.5").install Dir["stage/**/contrib/postgis-*/*"]
+    (share/"postgresql/contrib/postgis-3.0").install Dir["stage/**/contrib/postgis-*/*"]
+    (share/"postgis_topology").install Dir["stage/**/contrib/postgis_topology-*/*"]
 
     # Extension scripts
     bin.install %w[
@@ -206,14 +208,14 @@ class OsgeoPostgis < Formula
   def caveats
     <<~EOS
       To create a spatially-enabled database, see the documentation:
-        https://postgis.net/docs/manual-2.5/postgis_installation.html#create_new_db_extensions
+        https://postgis.net/docs/manual-3.0/postgis_installation.html#create_new_db_extensions
       If you are currently using PostGIS 2.0+, you can go the soft upgrade path:
         ALTER EXTENSION postgis UPDATE TO "#{version}";
       Users of 1.5 and below will need to go the hard-upgrade path, see here:
-        https://postgis.net/docs/manual-2.5/postgis_installation.html#upgrading
+        https://postgis.net/docs/manual-3.0/postgis_installation.html#upgrading
 
       PostGIS SQL scripts installed to:
-        #{HOMEBREW_PREFIX}/share/postgresql/contrib/postgis-2.5
+        #{HOMEBREW_PREFIX}/share/postgresql/contrib/postgis-3.0
       PostGIS plugin libraries installed to:
         #{HOMEBREW_PREFIX}/lib
       PostGIS extension modules installed to:
@@ -255,7 +257,7 @@ class OsgeoPostgis < Formula
       igAAABI=
     EOS
     result = shell_output("#{bin}/shp2pgsql #{testpath}/brew.shp")
-    assert_match /Point/, result
-    assert_match /AddGeometryColumn/, result
+    assert_match(/Point/, result)
+    assert_match(/AddGeometryColumn/, result)
   end
 end
