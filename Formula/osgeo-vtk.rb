@@ -195,10 +195,10 @@ class OsgeoVtk < Formula
     # Fix build with Java 12
     # sed -i 's/VTK_JAVA_SOURCE_VERSION "1.6"/VTK_JAVA_SOURCE_VERSION "1.7"/
     #        s/VTK_JAVA_TARGET_VERSION "1.6"/VTK_JAVA_TARGET_VERSION "1.7"/' Wrapping/Java/CMakeLists.txt
-    # inreplace "Wrapping/Java/CMakeLists.txt",
-    #          'VTK_JAVA_SOURCE_VERSION "1.6"', 'VTK_JAVA_SOURCE_VERSION "1.7"'
-    # inreplace "Wrapping/Java/CMakeLists.txt",
-    #          'VTK_JAVA_TARGET_VERSION "1.6"', 'VTK_JAVA_TARGET_VERSION "1.7"'
+    inreplace "Wrapping/Java/CMakeLists.txt",
+              'VTK_JAVA_SOURCE_VERSION "1.6"', 'VTK_JAVA_SOURCE_VERSION "1.7"'
+    inreplace "Wrapping/Java/CMakeLists.txt",
+              'VTK_JAVA_TARGET_VERSION "1.6"', 'VTK_JAVA_TARGET_VERSION "1.7"'
 
     cmd = Language::Java.java_home_cmd("1.8") # JAVA_VERSION
     ENV["JAVA_HOME"] = Utils.popen_read(cmd).chomp
@@ -879,20 +879,20 @@ __END__
 ################################################################################
 
 ################################################################################
---- a/Wrapping/Java/CMakeLists.txt
-+++ b/Wrapping/Java/CMakeLists.txt
-@@ -339,9 +339,9 @@ if(JOGL_GLUE)
- endif()
-
- # Set the javac source version
--set(VTK_JAVA_SOURCE_VERSION "1.6" CACHE STRING "javac source version")
-+set(VTK_JAVA_SOURCE_VERSION "13" CACHE STRING "javac source version")
- mark_as_advanced(VTK_JAVA_SOURCE_VERSION)
--set(VTK_JAVA_TARGET_VERSION "1.6" CACHE STRING "javac target version")
-+set(VTK_JAVA_TARGET_VERSION "13" CACHE STRING "javac target version")
- mark_as_advanced(VTK_JAVA_TARGET_VERSION)
-
- # On machines with long paths to VTK (or windows where the command line length
+# --- a/Wrapping/Java/CMakeLists.txt
+# +++ b/Wrapping/Java/CMakeLists.txt
+# @@ -339,9 +339,9 @@ if(JOGL_GLUE)
+#  endif()
+#
+#  # Set the javac source version
+# -set(VTK_JAVA_SOURCE_VERSION "1.6" CACHE STRING "javac source version")
+# +set(VTK_JAVA_SOURCE_VERSION "13" CACHE STRING "javac source version")
+#  mark_as_advanced(VTK_JAVA_SOURCE_VERSION)
+# -set(VTK_JAVA_TARGET_VERSION "1.6" CACHE STRING "javac target version")
+# +set(VTK_JAVA_TARGET_VERSION "13" CACHE STRING "javac target version")
+#  mark_as_advanced(VTK_JAVA_TARGET_VERSION)
+#
+#  # On machines with long paths to VTK (or windows where the command line length
 ################################################################################
 
 
