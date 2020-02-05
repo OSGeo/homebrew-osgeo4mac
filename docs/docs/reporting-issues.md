@@ -49,7 +49,7 @@ If your problem hasn't been solved or reported, then create an issue:
   * Please make, one problem one error. Don't mix up things because it isn't going to have any sense. 
   * Don't dumb in the description of the issue a incredible amount of code, use a [Gist](https://gist.github.com) instead.   
   **What is an incredible amount of code?** Well, you'll know it when you'll see it. Scrolling down endlessly to be able some meaningful text doesn't usually have any sense. 
-  * Try to be as descriptive as possible, without being redundan, in other words **be concise**. This is not a chat or a forum, but informal style is encourage. Please follow the [Code of Conduct.](https://github.com/OSGeo/homebrew-osgeo4mac/blob/master/CODE_OF_CONDUCT.md#specific-guidelines). 
+  * Try to be as descriptive as possible, without being redundant, in other words **be concise**. This is not a chat or a forum, but informal style is encourage. Please follow the [Code of Conduct.](https://github.com/OSGeo/homebrew-osgeo4mac/blob/master/CODE_OF_CONDUCT.md#specific-guidelines). 
 
 ## How to get the building logs?
 
