@@ -9,10 +9,9 @@ class OsgeoPyqtWebkit < Formula
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any
-    rebuild 1
-    sha256 "da9f516127999d4a6b757e31f2fd172e4936e0b9b3d7839d24369121e39ba9a5" => :mojave
-    sha256 "da9f516127999d4a6b757e31f2fd172e4936e0b9b3d7839d24369121e39ba9a5" => :high_sierra
-    sha256 "317cf85f101efe1fdd22b6fd6ff9f8534a0fcf902bb6a8da8c50f0af4b92892e" => :sierra
+    sha256 "dbe549f90b99c91bf7645f10057fa223d46c69d94341e7982c63b609884692e5" => :catalina
+    sha256 "dbe549f90b99c91bf7645f10057fa223d46c69d94341e7982c63b609884692e5" => :mojave
+    sha256 "dbe549f90b99c91bf7645f10057fa223d46c69d94341e7982c63b609884692e5" => :high_sierra
   end
 
   option "with-debug", "Build with debug symbols"
