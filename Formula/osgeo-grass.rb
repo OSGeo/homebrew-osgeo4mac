@@ -13,8 +13,8 @@ class OsgeoGrass < Formula
   head "https://github.com/OSGeo/grass.git", :branch => "master"
 
   stable do
-    url "https://github.com/OSGeo/grass/archive/grass_7_6_1.tar.gz"
-    sha256 "7fec2cd868226b6b4a46e1ec8eba9da8603b7a30327a6aeedeb99224bd4c0d6a"
+    url "https://grass.osgeo.org/grass78/source/grass-7.8.2.tar.gz"
+    sha256 "33576f7078f805b39ca20c2fa416ac79c64260c0581072a6dc7d813f53aa9abb"
 
     # Patches to keep files from being installed outside of the prefix.
     # Remove lines from Makefile that try to install to /Library/Documentation.
@@ -25,9 +25,6 @@ class OsgeoGrass < Formula
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any
-    sha256 "ac8f550b317d60ff6549ed823b4934f487de0856f30187d03e17811021ecaaaf" => :mojave
-    sha256 "ac8f550b317d60ff6549ed823b4934f487de0856f30187d03e17811021ecaaaf" => :high_sierra
-    sha256 "6c7364c8994f0398800bf3c7616841262998f1faf6e8ecfbddfb8d780a95ce24" => :sierra
   end
 
   option "without-gui", "Build without WxPython interface. Command line tools still available"
@@ -45,7 +42,7 @@ class OsgeoGrass < Formula
   depends_on "pkg-config" => :build
   depends_on "fftw" => :recommended
   depends_on "tcl-tk" => :recommended
-  depends_on "python@2"
+  depends_on "python"
   depends_on "boost"
   depends_on "libiconv"
   depends_on "bison"
