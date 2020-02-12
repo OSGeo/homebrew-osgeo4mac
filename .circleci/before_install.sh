@@ -18,7 +18,6 @@
 set -o errexit
 set -o xtrace
 
-git -C "${CIRCLE_REPOSITORY_URL}" fetch
 git checkout -b bottles
 
 for f in ${CHANGED_FORMULAE};do

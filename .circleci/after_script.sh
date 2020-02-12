@@ -32,7 +32,6 @@ pushd /tmp/bottles
   BOTTLE_ROOT=https://bottle.download.osgeo.org
   for f in ${CHANGED_FORMULAE};do
     echo "Bottling changed formula ${f}..."
-    git -C "${CIRCLE_REPOSITORY_URL}" fetch
     git checkout -b bottles
     brew bottle --verbose --json --root-url=${BOTTLE_ROOT} osgeo/osgeo4mac/${f}
 

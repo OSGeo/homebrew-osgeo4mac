@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 set -e
 
-git -C "${CIRCLE_REPOSITORY_URL}" fetch
 git checkout -b bottles
 
 # manually added by env var. Will not be filtered by skip-formulas.txt
