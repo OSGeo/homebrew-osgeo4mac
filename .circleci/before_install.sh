@@ -69,7 +69,7 @@ for f in ${CHANGED_FORMULAE};do
 
     # Set up Python .pth files
     # get python short version (major.minor)
-    PY_VER=$(/usr/local/bin/python3 -c 'import sys;print("{0}.{1}".format(sys.version_info[0],sys.version_info[1]))')
+    PY_VER=$(/usr/local/opt/python@3.8/bin/python3 -c 'import sys;print("{0}.{1}".format(sys.version_info[0],sys.version_info[1]))')
     if [ -n "${DEBUG_CI}" ];then
       echo $PY_VER
     fi
@@ -82,7 +82,7 @@ for f in ${CHANGED_FORMULAE};do
 
     if [[ "${f}" =~ "osgeo-gdal" ]];then
       echo "Installing GDAL 2 Python 3 dependencies"
-      /usr/local/bin/pip3 install numpy
+      /usr/local/opt/python@3.8/bin/pip3 install numpy
     fi
   fi
 
