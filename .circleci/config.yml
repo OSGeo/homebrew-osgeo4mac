@@ -179,9 +179,11 @@ workflows:
             - update-homebrew
           filters:
             branches:
-              only:
-                - bottles
-                - /^(?!pull\/).*$/
+              ignore:
+                - master
+              # only:
+              #   - bottles
+              #   - /^(?!pull\/).*$/
       # - sierra-build:
       #     requires:
       #       - update-homebrew
@@ -192,9 +194,11 @@ workflows:
             - high_sierra-build
           filters:
             branches:
-              only:
-                - bottles
-                - /^(?!pull\/).*$/
+              ignore:
+                - master
+              # only:
+              #   - bottles
+              #   - /^(?!pull\/).*$/
             # - sierra-build
       # - deploy:
       #     requires:
