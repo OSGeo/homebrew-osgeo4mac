@@ -19,7 +19,7 @@ set -e
 
 ulimit -n 1024
 
-git checkout -b bottles
+git checkout bottles
 
 echo ${CHANGED_FORMULAE}
 

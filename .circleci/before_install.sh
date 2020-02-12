@@ -18,7 +18,7 @@
 set -o errexit
 set -o xtrace
 
-git checkout -b bottles
+git checkout bottles
 
 for f in ${CHANGED_FORMULAE};do
   echo 'Setting up, before install'

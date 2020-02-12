@@ -18,7 +18,7 @@
 set -e
 ulimit -n 1024
 
-git checkout -b bottles
+git checkout bottles
 
 for f in ${CHANGED_FORMULAE};do
   echo "Installing dependencies for changed formula ${f}..."
