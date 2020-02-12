@@ -10,7 +10,7 @@ else
 
 	  if [[ ! -z  $CIRCLE_PULL_REQUEST  ]]; then
 		# if on a PR, just analyze the changed files
-		FILES=$(git diff --diff-filter=AM --name-only $(git merge-base origin/bottles ${CIRCLE_BRANCH} ) )
+		FILES=$(git diff --diff-filter=AM --name-only $(git merge-base origin/master ${CIRCLE_BRANCH} ) )
 	else
         # Get the commit range for the build
         # For workflows, we can't use the CIRCLE_COMPARE_URL feature, so we do it by manualy diffing the branch
@@ -22,7 +22,7 @@ else
         # Since CircleCI doesn't currently support getting a range of commits when running as a workflow, we're stuck just looking at the changes from the most recent commit.
         # This means we always needs to rebase or squash and merge, which is mostly what we do anyways.
 		    #FILES=$(git diff --diff-filter=AM --name-only master...${CIRCLE_BRANCH} )
-        	FILES=$(git diff --diff-filter=AM --name-only bottles^1 )
+        	FILES=$(git diff --diff-filter=AM --name-only master^1 )
 	fi
 
 	FORMULAS=
