@@ -88,6 +88,9 @@ if [ "$CIRCLE_BRANCH" == "bottles" ] && [ "$CHANGED_FORMULAE" != "" ]; then
   git rebase bottles
   git checkout bottles
   git merge bottles
+  
+  git pull ${SSH_REPO} $CIRCLE_BRANCH
+  git branch --set-upstream-to=origin/bottles bottles
 
   git pull --rebase
 
