@@ -17,7 +17,7 @@
 
 set -e
 
-if [ "$CIRCLE_BRANCH" == "master" ] && [ "$CHANGED_FORMULAE" != "" ]; then
+if [ "$CIRCLE_BRANCH" == "bottles" ] && [ "$CHANGED_FORMULAE" != "" ]; then
   # Setup Git configuration
   COMMIT_USER=$(git log --format='%an' ${CIRCLE_SHA1}^\!)
   COMMIT_EMAIL=$(git log --format='%ae' ${CIRCLE_SHA1}^\!)
@@ -79,8 +79,16 @@ if [ "$CIRCLE_BRANCH" == "master" ] && [ "$CHANGED_FORMULAE" != "" ]; then
   # fix if there is a new commit in master
   echo "Pull rebase..."
   # git checkout $CIRCLE_BRANCH
-  # git merge master
+  # git merge master
+
   # git pull <remote> <branch>
+  # git branch --set-upstream-to=origin/<branch> bottles
+
+  git checkout bottles
+  git rebase bottles
+  git checkout bottles
+  git merge bottles
+
   git pull --rebase
 
   # Now that we're all set up, we can push.

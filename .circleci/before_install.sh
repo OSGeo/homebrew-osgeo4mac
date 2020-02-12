@@ -48,8 +48,6 @@ for f in ${CHANGED_FORMULAE};do
   # rm -rf /Users/distiller/.viminf*
   # chown -R $USER: /Users/distiller
 
-
-
   echo "Homebrew setup for changed formula ${f}..."
   deps=$(brew deps --include-build ${f})
   echo "${f} dependencies:"
@@ -65,36 +63,13 @@ for f in ${CHANGED_FORMULAE};do
     brew cask install xquartz
   fi
 
-  if [ "$(echo ${deps} | grep -c '[python@2|python2]')" != "0" ];then
-    echo "Installing and configuring Homebrew Python 2"
-    brew reinstall python@2
-
-    # Set up Python .pth files
-    # get python short version (major.minor)
-    PY_VER=$(/usr/local/bin/python2 -c 'import sys;print("{0}.{1}".format(sys.version_info[0],sys.version_info[1]))')
-    if [ -n "${DEBUG_CI}" ];then
-      echo $PY_VER
-    fi
-    mkdir -p ${CIRCLE_WORKING_DIRECTORY}/Library/Python/${PY_VER}/lib/python/site-packages
-
-    echo 'import site; site.addsitedir("/usr/local/lib/python${PY_VER}/site-packages")' \
-         >> ${CIRCLE_WORKING_DIRECTORY}/Library/Python/${PY_VER}/lib/python/site-packages/homebrew.pth
-    echo 'import site; site.addsitedir("/usr/local/opt/osgeo-gdal/lib/python${PY_VER}/site-packages")' \
-         >> ${CIRCLE_WORKING_DIRECTORY}/Library/Python/${PY_VER}/lib/python/site-packages/gdal2.pth
-
-    if [[ "${f}" =~ "osgeo-gdal" ]];then
-      echo "Installing GDAL 2 Python 2 dependencies"
-      /usr/local/bin/pip2 install numpy
-    fi
-  fi
-
-  if [ "$(echo ${deps} | grep -c '[python|python3]')" != "0" ];then
+  if [ "$(echo ${deps} | grep -c '[python|python@3.8]')" != "0" ];then
     echo "Installing and configuring Homebrew Python 3"
-    brew reinstall python
+    brew reinstall python@3.8
 
     # Set up Python .pth files
     # get python short version (major.minor)
-    PY_VER=$(/usr/local/bin/python3 -c 'import sys;print("{0}.{1}".format(sys.version_info[0],sys.version_info[1]))')
+    PY_VER=$(/usr/local/opt/python@3.8/bin/python3 -c 'import sys;print("{0}.{1}".format(sys.version_info[0],sys.version_info[1]))')
     if [ -n "${DEBUG_CI}" ];then
       echo $PY_VER
     fi
@@ -107,7 +82,7 @@ for f in ${CHANGED_FORMULAE};do
 
     if [[ "${f}" =~ "osgeo-gdal" ]];then
       echo "Installing GDAL 2 Python 3 dependencies"
-      /usr/local/bin/pip3 install numpy
+      /usr/local/opt/python@3.8/bin/pip3 install numpy
     fi
   fi
 
@@ -120,9 +95,13 @@ for f in ${CHANGED_FORMULAE};do
     brew unlink osgeo-grass
   fi
 
-  # osgeo-vtk: Java 1.8 is required to install this formula.
-  # Install AdoptOpenJDK 8 with Homebrew Cask:
-  brew cask install homebrew/cask-versions/adoptopenjdk8
-  brew install jpeg-turbo
-  brew unlink jpeg-turbo && brew link --force jpeg-turbo
+  if [ "$(echo ${deps} | grep -c 'osgeo-vtk')" != "0" ];then
+    echo "Installing jpeg-turbo"
+    # osgeo-vtk: Java 1.8 is required to install this formula.
+    # Install AdoptOpenJDK 8 with Homebrew Cask:
+    # brew cask install homebrew/cask-versions/adoptopenjdk8
+    brew install jpeg-turbo
+    brew unlink jpeg-turbo && brew link --force jpeg-turbo
+  fi
+
 done
