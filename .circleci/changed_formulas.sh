@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 set -e
 
-git checkout bottles
-
 # manually added by env var. Will not be filtered by skip-formulas.txt
 # If manual formulae are specified, changed files will be ignored
 # This avoids rebuilding bottles when triggered against master

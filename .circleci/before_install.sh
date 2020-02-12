@@ -18,8 +18,6 @@
 set -o errexit
 set -o xtrace
 
-git checkout bottles
-
 for f in ${CHANGED_FORMULAE};do
   echo 'Setting up, before install'
   if [ -n "${DEBUG_CI}" ];then
