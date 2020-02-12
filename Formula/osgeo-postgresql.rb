@@ -45,7 +45,7 @@ class OsgeoPostgresql < Formula
     sha256 "2759c5a7ca99e72de3bcad6efeb134c2edfedd705690d853de33e2dc3cbbea82" => :high_sierra
   end
 
-  # revision 1
+  revision 2
 
   head "https://github.com/postgres/postgres.git", :branch => "master"
 
