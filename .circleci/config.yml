@@ -161,16 +161,12 @@ jobs:
 
 workflows:
   version: 2
-  test-bot:
+  build:
     jobs:
-      build:
-        branches:
-          only:
-           - bottles
-           - /^(?!pull\/).*$/
-          ignore:
-           - master
       - update-homebrew
+          filters:
+            branches:
+              ignore: master
       # - catalina-build:
       #     requires:
       #       - update-homebrew
@@ -180,14 +176,24 @@ workflows:
       - high_sierra-build:
           requires:
             - update-homebrew
+          filters:
+            branches:
+              only:
+                - bottles
+                - /^(?!pull\/).*$/
       # - sierra-build:
       #     requires:
       #       - update-homebrew
       - collect-bottles:
-          requires:
             # - catalina-build
             # - mojave-build
+          requires:
             - high_sierra-build
+          filters:
+            branches:
+              only:
+                - bottles
+                - /^(?!pull\/).*$/
             # - sierra-build
       # - deploy:
       #     requires:
@@ -195,8 +201,3 @@ workflows:
       #     filters:
       #       branches:
       #         only: master
-
-
-jobs:
-  build:
-    branches:
