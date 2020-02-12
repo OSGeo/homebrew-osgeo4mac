@@ -18,6 +18,9 @@
 set -e
 ulimit -n 1024
 
+git -C "${CIRCLE_REPOSITORY_URL}" fetch
+git checkout -b bottles
+
 for f in ${CHANGED_FORMULAE};do
   echo "Installing dependencies for changed formula ${f}..."
   FLAGS="--only-dependencies --build-bottle"

@@ -64,8 +64,7 @@ class OsgeoPostgresql < Formula
   depends_on "tcl-tk"
   depends_on "krb5"
   depends_on "libxml2"
-  depends_on "python"
-  depends_on "python2"
+  depends_on "python@3.8"
   depends_on "perl"
   depends_on "zlib"
   # depends_on "e2fsprogs"
@@ -85,7 +84,7 @@ class OsgeoPostgresql < Formula
     ENV.prepend "CPPFLAGS", "-I#{Formula["openssl"].opt_include} -I#{Formula["readline"].opt_include}"
 
     # ENV["PYTHON"] = which("python3")
-    ENV["PYTHON"] = "#{Formula["python"].opt_bin}/python3"
+    ENV["PYTHON"] = "#{Formula["python@3.8"].opt_bin}/python3"
 
     args = %W[
       --disable-debug

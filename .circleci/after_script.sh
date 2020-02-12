@@ -21,6 +21,7 @@
 # MAJOR_MAC_VERSION=$(sw_vers -productVersion | awk -F '.' '{print $1 "." $2}')
 # system_profiler SPSoftwareDataType
 
+
 # Build the actual bottles
 # In Travis, this used to be part of the deploy phase, but now it needs
 # to run as part of the original build process, but only on master.
@@ -31,6 +32,8 @@ pushd /tmp/bottles
   BOTTLE_ROOT=https://bottle.download.osgeo.org
   for f in ${CHANGED_FORMULAE};do
     echo "Bottling changed formula ${f}..."
+    git -C "${CIRCLE_REPOSITORY_URL}" fetch
+    git checkout -b bottles
     brew bottle --verbose --json --root-url=${BOTTLE_ROOT} osgeo/osgeo4mac/${f}
 
     # for art in ${f}*.sierra.bottle.*; do

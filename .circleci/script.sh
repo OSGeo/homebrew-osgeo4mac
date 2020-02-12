@@ -19,6 +19,9 @@ set -e
 
 ulimit -n 1024
 
+git -C "${CIRCLE_REPOSITORY_URL}" fetch
+git checkout -b bottles
+
 echo ${CHANGED_FORMULAE}
 
 for f in ${CHANGED_FORMULAE};do
