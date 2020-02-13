@@ -40,11 +40,10 @@ class OsgeoSip < Formula
   # we will verify that other versions are not linked
   depends_on Unlinked
 
-  depends_on "python"
-  depends_on "python@2"
+  depends_on "python@3.8"
 
   def install
-    ENV.prepend_path "PATH", Formula["python"].opt_libexec/"bin"
+    ENV.prepend_path "PATH", Formula["python@3.8"].opt_libexec/"bin"
     ENV.delete("SDKROOT") # Avoid picking up /Application/Xcode.app paths
 
     if build.head?
@@ -52,24 +51,21 @@ class OsgeoSip < Formula
       # build.py can use it to figure out a version number.
       ln_s cached_download/".hg", ".hg"
       # build.py doesn't run with python3
-      system "python", "build.py", "prepare"
+      system "python3", "build.py", "prepare"
     end
 
-    ["#{Formula["python@2"].opt_bin}/python2", "#{Formula["python"].opt_bin}/python3"].each do |python|
-
-      version = Language::Python.major_minor_version python
-      system python, "configure.py",
-                     "--deployment-target=#{MacOS.version}",
-                     "--destdir=#{lib}/python#{version}/site-packages",
-                     "--bindir=#{bin}",
-                     "--incdir=#{include}",
-                     "--sipdir=#{HOMEBREW_PREFIX}/share/sip",
-                     "--sip-module=PyQt5.sip",
-                     "--no-dist-info"
-      system "make"
-      system "make", "install"
-      system "make", "clean"
-    end
+    version = Language::Python.major_minor_version "python3"
+    system "python3", "configure.py",
+                   "--deployment-target=#{MacOS.version}",
+                   "--destdir=#{lib}/python#{version}/site-packages",
+                   "--bindir=#{bin}",
+                   "--incdir=#{include}",
+                   "--sipdir=#{HOMEBREW_PREFIX}/share/sip",
+                   "--sip-module=PyQt5.sip",
+                   "--no-dist-info"
+    system "make"
+    system "make", "install"
+    system "make", "clean"
   end
 
   def post_install
@@ -82,10 +78,8 @@ class OsgeoSip < Formula
   end
 
   test do
-    ["#{Formula["python@2"].opt_bin}/python2", "#{Formula["python"].opt_bin}/python3"].each do |python|
-      version = Language::Python.major_minor_version python
-      ENV["PYTHONPATH"] = lib/"python#{version}/site-packages"
-      system python, "-c", '"import PyQt5.sip"'
-    end
+    version = Language::Python.major_minor_version "python3"
+    ENV["PYTHONPATH"] = lib/"python#{version}/site-packages"
+    system "python3", "-c", '"import PyQt5.sip"'
   end
 end
