@@ -23,7 +23,7 @@ class OsgeoMatplotlib < Formula
   url "https://github.com/matplotlib/matplotlib/archive/v3.1.3.tar.gz"
   sha256 "6edfe021671fcad1bd6081c980c380cb3d66d00895eb8c3450fa3842c441d1d1"
 
-  # revision 1
+  revision 1
 
   head "https://github.com/matplotlib/matplotlib.git", :branch => "master"
 
@@ -39,7 +39,7 @@ class OsgeoMatplotlib < Formula
   depends_on NoExternalPyCXXPackage => :build
   depends_on "pkg-config" => :build
   depends_on "gcc" => :build # for gfortran
-  depends_on "python" => :build
+  depends_on "python@3.8" => :build
   depends_on "swig" => :build
   depends_on "libagg"
   depends_on "freetype"
