@@ -111,5 +111,9 @@ class OsgeoSip < Formula
     system ENV.cxx, "-shared", "-Wl,-install_name,#{testpath}/libtest.dylib",
                     "-o", "libtest.dylib", "test.cpp"
     system bin/"sip", "-b", "test.build", "-c", ".", "test.sip"
+
+    version = Language::Python.major_minor_version "python3"
+    ENV["PYTHONPATH"] = lib/"python#{version}/site-packages"
+    system "python3", "-c", '"import PyQt5.sip"'
   end
 end
