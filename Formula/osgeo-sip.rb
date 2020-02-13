@@ -78,8 +78,37 @@ class OsgeoSip < Formula
   end
 
   test do
-    version = Language::Python.major_minor_version "python3"
-    ENV["PYTHONPATH"] = lib/"python#{version}/site-packages"
-    system "python3", "-c", '"import PyQt5.sip"'
+    (testpath/"test.h").write <<~EOS
+      #pragma once
+      class Test {
+      public:
+        Test();
+        void test();
+      };
+    EOS
+    (testpath/"test.cpp").write <<~EOS
+      #include "test.h"
+      #include <iostream>
+      Test::Test() {}
+      void Test::test()
+      {
+        std::cout << "Hello World!" << std::endl;
+      }
+    EOS
+    (testpath/"test.sip").write <<~EOS
+      %Module test
+      class Test {
+      %TypeHeaderCode
+      #include "test.h"
+      %End
+      public:
+        Test();
+        void test();
+      };
+    EOS
+
+    system ENV.cxx, "-shared", "-Wl,-install_name,#{testpath}/libtest.dylib",
+                    "-o", "libtest.dylib", "test.cpp"
+    system bin/"sip", "-b", "test.build", "-c", ".", "test.sip"
   end
 end
