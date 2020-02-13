@@ -45,20 +45,6 @@ class OsgeoSix < Formula
     ENV.prepend_create_path "PYTHONPATH", "#{lib}/python#{xy}/site-packages"
     system "python3", "setup.py", "install", "--prefix=#{prefix}", "--single-version-externally-managed", "--record=installed.txt", "--optimize=1"
 
-    bin.env_script_all_files(libexec/"bin", :PYTHONPATH => ENV["PYTHONPATH"])xy = Language::Python.major_minor_version "python3"
-    ENV.prepend_create_path "PYTHONPATH", "#{libexec}/lib/python#{xy}/site-packages"
-
-    resource("setuptools").stage do
-      system "python3", "setup.py", "install", "--prefix=#{libexec}", "--single-version-externally-managed", "--record=installed.txt"
-    end
-
-    resource("pytest").stage do
-      system "python3", "setup.py", "install", "--prefix=#{libexec}", "--single-version-externally-managed", "--record=installed.txt"
-    end
-
-    ENV.prepend_create_path "PYTHONPATH", "#{lib}/python#{xy}/site-packages"
-    system "python3", "setup.py", "install", "--prefix=#{prefix}", "--single-version-externally-managed", "--record=installed.txt", "--optimize=1"
-
     bin.env_script_all_files(libexec/"bin", :PYTHONPATH => ENV["PYTHONPATH"])
   end
 
