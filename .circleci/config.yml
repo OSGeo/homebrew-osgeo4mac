@@ -57,8 +57,11 @@ build_steps: &build_steps
 workflow_filter: &filter
   filters:
     branches:
+      ignore:
+        - master
       only:
         - bottles
+        - /^(?!pull\/).*$/
 
 version: 2
 jobs:
@@ -168,6 +171,9 @@ workflows:
             branches:
               ignore:
                 - master
+              only:
+                - bottles
+                - /^(?!pull\/).*$/
       # - catalina-build:
       #     requires:
       #       - update-homebrew
