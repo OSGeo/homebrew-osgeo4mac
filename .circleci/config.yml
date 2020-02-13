@@ -58,7 +58,7 @@ workflow_filter: &filter
   filters:
     branches:
       only:
-        - master
+        - bottles
 
 version: 2
 jobs:
@@ -181,9 +181,9 @@ workflows:
             branches:
               ignore:
                 - master
-              # only:
-              #   - bottles
-              #   - /^(?!pull\/).*$/
+              only:
+                - bottles
+                - /^(?!pull\/).*$/
       # - sierra-build:
       #     requires:
       #       - update-homebrew
@@ -196,9 +196,9 @@ workflows:
             branches:
               ignore:
                 - master
-              # only:
-              #   - bottles
-              #   - /^(?!pull\/).*$/
+              only:
+                - bottles
+                - /^(?!pull\/).*$/
             # - sierra-build
       # - deploy:
       #     requires:
