@@ -1,32 +1,28 @@
 class OsgeoGdalPython < Formula
-  def self.gdal2
+  def self.gdal
     Formula["osgeo-gdal"]
   end
 
-  def gdal2
-    self.class.gdal2
+  def gdal
+    self.class.gdal
   end
 
-  def self.gdal2_opts
-    tab = Tab.for_formula(gdal2)
+  def self.gdal_opts
+    tab = Tab.for_formula(gdal)
     tab.used_options
   end
 
-  def gdal2_opts
-    self.class.gdal2_opts
+  def gdal_opts
+    self.class.gdal_opts
   end
 
-  def self.gdal2_python(python)
+  def self.gdal_python(python)
     py_ver = Language::Python.major_minor_version(python)
-    gdal2.opt_lib/"python#{py_ver}"
+    gdal.opt_lib/"python#{py_ver}"
   end
 
-  def self.gdal2_py2_exist?
-    gdal2_python("python@2").exist?
-  end
-
-  def self.gdal2_py3_exist?
-    gdal2_python("python").exist?
+  def self.gdal_py3_exist?
+    gdal_python("python@3.8").exist?
   end
 
   desc "Python bindings for GDAL: Geospatial Data Abstraction Library"
@@ -60,19 +56,19 @@ class OsgeoGdalPython < Formula
   end
 
   def install
-    if build.without?("python@2") && build.without?("python")
+    if build.without?("python@3.8")
       odie "Must choose a version of Python bindings to build"
     end
 
     cd "swig/python" do
-      # Customize to gdal2 install opt_prefix
+      # Customize to gdal install opt_prefix
       inreplace "setup.cfg" do |s|
-        s.sub! "../../apps/gdal-config", "#{gdal2.opt_bin}/gdal-config"
+        s.sub! "../../apps/gdal-config", "#{gdal.opt_bin}/gdal-config"
       end
-      ENV.prepend "LDFLAGS", "-L#{gdal2.opt_lib}" # or gdal1 lib will be found
+      ENV.prepend "LDFLAGS", "-L#{gdal.opt_lib}" # or gdal1 lib will be found
 
       # Check for GNM support
-      (Pathname.pwd/"setup_vars.ini").write "GNM_ENABLED=yes\n" unless gdal2_opts.include? "without-gnm"
+      (Pathname.pwd/"setup_vars.ini").write "GNM_ENABLED=yes\n" unless gdal_opts.include? "without-gnm"
 
       Language::Python.each_python(build) do |python, _python_version|
         system python, *Language::Python.setup_install_args(prefix)
@@ -104,14 +100,14 @@ class OsgeoGdalPython < Formula
       next unless (lib/"python#{python_version}/site-packages").exist?
       ENV["PYTHONPATH"] = lib/"python#{python_version}/site-packages"
       pkgs = %w[gdal ogr osr gdal_array gdalconst]
-      pkgs << "gnm" unless gdal2_opts.include? "without-gnm"
+      pkgs << "gnm" unless gdal_opts.include? "without-gnm"
       system python, "-c", "from osgeo import #{pkgs.join ","}"
     end
 
     if ENV["GDAL_AUTOTEST"]
-      ENV.prepend_path "PATH", gdal2.opt_bin.to_s
+      ENV.prepend_path "PATH", gdal.opt_bin.to_s
       ENV["GDAL_DRIVER_PATH"] = "#{HOMEBREW_PREFIX}/lib/gdalplugins"
-      ENV["GDAL_DATA"] = "#{gdal2.opt_share}/gdal"
+      ENV["GDAL_DATA"] = "#{gdal.opt_share}/gdal"
       ENV["GDAL_DOWNLOAD_TEST_DATA"] = "YES"
       # These driver tests cause hard failures, stopping test output
       ENV["GDAL_SKIP"] = "GRASS"
