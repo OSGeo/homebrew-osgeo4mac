@@ -70,11 +70,11 @@ class OsgeoGdalPython < Formula
       # Check for GNM support
       (Pathname.pwd/"setup_vars.ini").write "GNM_ENABLED=yes\n" unless gdal_opts.include? "without-gnm"
 
-      Language::Python.each_python(build) do |python, _python_version|
-        system python, *Language::Python.setup_install_args(prefix)
+      #Language::Python.each_python(build) do |python, _python_version|
+        system "python3", *Language::Python.setup_install_args(prefix)
         system "echo", "#{opt_prefix}/lib/python#{_python_version}/site-packages",
                 ">", "#{lib}/python#{_python_version}/site-packages/#{name}.pth"
-      end
+      #end
 
       # Scripts compatible with Python3? Appear to be...
       bin.install Dir["scripts/*"]
@@ -96,13 +96,15 @@ class OsgeoGdalPython < Formula
   end
 
   test do
-    Language::Python.each_python(build) do |python, python_version|
+    python_version = Language::Python.major_minor_version "python3"
+
+    #Language::Python.each_python(build) do |python, python_version|
       next unless (lib/"python#{python_version}/site-packages").exist?
       ENV["PYTHONPATH"] = lib/"python#{python_version}/site-packages"
       pkgs = %w[gdal ogr osr gdal_array gdalconst]
       pkgs << "gnm" unless gdal_opts.include? "without-gnm"
-      system python, "-c", "from osgeo import #{pkgs.join ","}"
-    end
+      system "python3", "-c", "from osgeo import #{pkgs.join ","}"
+    #end
 
     if ENV["GDAL_AUTOTEST"]
       ENV.prepend_path "PATH", gdal.opt_bin.to_s
@@ -119,7 +121,7 @@ class OsgeoGdalPython < Formula
           # ogr gcore gdrivers osr alg gnm utilities pyscripts
           %w[ogr gcore gdrivers osr alg gnm utilities pyscripts].each do |t|
             begin
-              system python, "run_all.py", t.to_s
+              system "python3", "run_all.py", t.to_s
             rescue
               next
             end
