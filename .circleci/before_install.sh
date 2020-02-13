@@ -67,21 +67,21 @@ for f in ${CHANGED_FORMULAE};do
     echo "Installing and configuring Homebrew Python 3"
     brew reinstall python@3.8
 
-    echo "Check Python 3"
-    which python3
+    echo "Link Python 3"
+    # which python3
     brew unlink python@3.8 && brew link --overwrite --force python@3.8
 
-    ls -l /usr/local/bin/python*
+    # ls -l /usr/local/bin/python*
     # rm /usr/local/bin/python*
     # rm /usr/local/bin/pip*
     # rm -Rf /Library/Frameworks/Python.framework/Versions/*
-    export PATH=/usr/local/bin:/usr/local/sbin:$PATH
-    export PATH="/usr/local/opt/python@3.8/libexec/bin:$PATH"
-    /usr/local/bin/python -V
-    /usr/local/bin/pip -V
-    cd /usr/local/bin
-    ln -s python3 python
-    ln -s pip3 pip
+    # export PATH=/usr/local/bin:/usr/local/sbin:$PATH
+    # export PATH="/usr/local/opt/python@3.8/libexec/bin:$PATH"
+    # /usr/local/bin/python -V
+    # /usr/local/bin/pip -V
+    # cd /usr/local/bin
+    # ln -s python3 python
+    # ln -s pip3 pip
 
 
     # Set up Python .pth files
