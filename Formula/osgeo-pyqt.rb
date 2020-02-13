@@ -26,9 +26,9 @@ class OsgeoPyqt < Formula
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any
-    sha256 "3fbaf4df5cfaca0e6c5d7ebf1dce4a9b2ecb14b279cb70f27a17deb9a604db08" => :catalina
-    sha256 "3fbaf4df5cfaca0e6c5d7ebf1dce4a9b2ecb14b279cb70f27a17deb9a604db08" => :mojave
-    sha256 "3fbaf4df5cfaca0e6c5d7ebf1dce4a9b2ecb14b279cb70f27a17deb9a604db08" => :high_sierra
+    sha256 "b004007c36f9cb4b3bc6d2bbda5804e43d47113d164286a3d015ca16f77a8de9" => :catalina
+    sha256 "b004007c36f9cb4b3bc6d2bbda5804e43d47113d164286a3d015ca16f77a8de9" => :mojave
+    sha256 "b004007c36f9cb4b3bc6d2bbda5804e43d47113d164286a3d015ca16f77a8de9" => :high_sierra
   end
 
   revision 2
