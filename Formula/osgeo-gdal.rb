@@ -316,7 +316,10 @@ class OsgeoGdal < Formula
       if build.with?("pg10")
         args << "--with-pg=#{Formula["osgeo-postgresql@10"].opt_bin}/pg_config"
       else
-        args << "--with-pg=#{Formula["osgeo-postgresql"].opt_bin}/pg_config"
+        # https://github.com/OSGeo/gdal/pull/2190
+        # https://github.com/OSGeo/gdal/commit/45e06386d9099cbbe4f8eb7b4c2b8edca09ed144
+        # https://github.com/OSGeo/homebrew-osgeo4mac/issues/1291
+        args << "--with-pg=yes"
       end
 
       system "./configure", *args
