@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
+if [ "$CIRCLE_BRANCH" != "master" ]; then
 # manually added by env var. Will not be filtered by skip-formulas.txt
 # If manual formulae are specified, changed files will be ignored
 # This avoids rebuilding bottles when triggered against master
@@ -34,4 +35,5 @@ else
 	#FORMULAS=$(sed -n -E 's#^Formula/(.+)\.rb$#\1#p' <<< $FILES)
 	# skip formulas
   comm -1 -3 <(cat .circleci/skip-formulas.txt | sort -u ) <(echo ${FORMULAS} | tr ' ' '\n' | sort -u )
+fi
 fi

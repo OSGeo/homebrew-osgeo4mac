@@ -19,6 +19,7 @@ set -e
 
 ulimit -n 1024
 
+if [ "$CIRCLE_BRANCH" != "master" ]; then
 git checkout bottles
 
 echo ${CHANGED_FORMULAE}
@@ -110,3 +111,4 @@ for f in ${CHANGED_FORMULAE};do
   # brew postinstall ${f}
   brew test ${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/${f}
 done
+fi

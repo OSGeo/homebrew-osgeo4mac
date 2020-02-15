@@ -18,6 +18,7 @@
 set -e
 ulimit -n 1024
 
+if [ "$CIRCLE_BRANCH" != "master" ]; then
 git checkout bottles
 
 for f in ${CHANGED_FORMULAE};do
@@ -37,3 +38,4 @@ for f in ${CHANGED_FORMULAE};do
     fi
   done
 done
+fi
