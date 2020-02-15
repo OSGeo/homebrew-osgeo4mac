@@ -24,7 +24,7 @@ class OsgeoSip < Formula
   url "https://www.riverbankcomputing.com/static/Downloads/sip/4.19.21/sip-4.19.21.tar.gz"
   sha256 "6af9979ab41590e8311b8cc94356718429ef96ba0e3592bdd630da01211200ae"
 
-  revision 1
+  revision 2
 
   head "https://www.riverbankcomputing.com/hg/sip", :using => :hg
 
@@ -40,10 +40,10 @@ class OsgeoSip < Formula
   # we will verify that other versions are not linked
   depends_on Unlinked
 
-  depends_on "python@3.8"
+  depends_on "python"
 
   def install
-    ENV.prepend_path "PATH", Formula["python@3.8"].opt_libexec/"bin"
+    ENV.prepend_path "PATH", Formula["python"].opt_libexec/"bin"
     ENV.delete("SDKROOT") # Avoid picking up /Application/Xcode.app paths
 
     if build.head?
