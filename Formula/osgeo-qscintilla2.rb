@@ -31,13 +31,13 @@ class OsgeoQscintilla2 < Formula
     sha256 "10c94b037a5fb2cad86fc725d44132992203e592917b115748334f4e0cdf85a3" => :high_sierra
   end
 
-  revision 3
+  revision 4
 
   # keg_only "qscintilla2 is already provided by homebrew/core"
   # we will verify that other versions are not linked
   depends_on Unlinked
 
-  depends_on "python@3.8"
+  depends_on "python"
   depends_on "qt"
   depends_on "osgeo-sip"
   depends_on "osgeo-pyqt"
