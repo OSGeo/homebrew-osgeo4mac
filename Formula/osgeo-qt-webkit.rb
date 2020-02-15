@@ -20,7 +20,7 @@ class OsgeoQtWebkit < Formula
 
   # insert the XPC_NOESCAPE macro in the right places in xpc_array_apply and xpc_dictionary_apply
   # to match the definitions now used in the 10.14 SDK
-  patch :DATA
+  # patch :DATA
 
   depends_on "cmake" => :build
   depends_on "ninja" => [:build, :recommended]
