@@ -31,13 +31,13 @@ class OsgeoPyqt < Formula
     sha256 "b004007c36f9cb4b3bc6d2bbda5804e43d47113d164286a3d015ca16f77a8de9" => :high_sierra
   end
 
-  revision 2
+  revision 3
 
   # keg_only "pyqt" is already provided by homebrew/core"
   # we will verify that other versions are not linked
   depends_on Unlinked
 
-  depends_on "python@3.8"
+  depends_on "python"
   depends_on "osgeo-sip"
   depends_on "qt"
   depends_on "dbus" => :optional
