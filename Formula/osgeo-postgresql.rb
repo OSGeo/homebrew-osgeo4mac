@@ -34,8 +34,8 @@ end
 class OsgeoPostgresql < Formula
   desc "Object-relational database system"
   homepage "https://www.postgresql.org/"
-  url "https://github.com/postgres/postgres/archive/REL_12_1.tar.gz"
-  sha256 "5ceb092232edbbd2d2e9ea7a5c8454ef10a37e7a2d61e12d40965d40f0043eef"
+  url "https://github.com/postgres/postgres/archive/REL_12_2.tar.gz"
+  sha256 "6d313f7513d071693227fd8e1d15c66ac9d476493d4cfcffc12765c0b66272fa"
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
@@ -44,7 +44,7 @@ class OsgeoPostgresql < Formula
     sha256 "82d9b99f487b28a2a479660adcfbbd0068aabba27ed921288ec21be32b93fab5" => :high_sierra
   end
 
-  revision 3
+  # revision 1
 
   head "https://github.com/postgres/postgres.git", :branch => "master"
 
@@ -63,7 +63,7 @@ class OsgeoPostgresql < Formula
   depends_on "tcl-tk"
   depends_on "krb5"
   depends_on "libxml2"
-  depends_on "python@3.8"
+  depends_on "python"
   depends_on "perl"
   depends_on "zlib"
   # depends_on "e2fsprogs"
@@ -83,7 +83,7 @@ class OsgeoPostgresql < Formula
     ENV.prepend "CPPFLAGS", "-I#{Formula["openssl"].opt_include} -I#{Formula["readline"].opt_include}"
 
     # ENV["PYTHON"] = which("python3")
-    ENV["PYTHON"] = "#{Formula["python@3.8"].opt_bin}/python3"
+    ENV["PYTHON"] = "#{Formula["python"].opt_bin}/python3"
 
     args = %W[
       --disable-debug

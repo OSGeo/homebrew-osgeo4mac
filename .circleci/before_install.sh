@@ -63,20 +63,20 @@ for f in ${CHANGED_FORMULAE};do
     brew cask install xquartz
   fi
 
-  if [ "$(echo ${deps} | grep -c '[python|python@3.8]')" != "0" ];then
+  if [ "$(echo ${deps} | grep -c '[python|python]')" != "0" ];then
     echo "Installing and configuring Homebrew Python 3"
-    brew reinstall python@3.8
+    brew reinstall python
 
     echo "Link Python 3"
     # which python3
-    brew unlink python@3.8 && brew link --overwrite --force python@3.8
+    brew unlink python && brew link --overwrite --force python
 
     # ls -l /usr/local/bin/python*
     # rm /usr/local/bin/python*
     # rm /usr/local/bin/pip*
     # rm -Rf /Library/Frameworks/Python.framework/Versions/*
     # export PATH=/usr/local/bin:/usr/local/sbin:$PATH
-    # export PATH="/usr/local/opt/python@3.8/libexec/bin:$PATH"
+    # export PATH="/usr/local/opt/python/libexec/bin:$PATH"
     # /usr/local/bin/python -V
     # /usr/local/bin/pip -V
     # cd /usr/local/bin
@@ -86,7 +86,7 @@ for f in ${CHANGED_FORMULAE};do
 
     # Set up Python .pth files
     # get python short version (major.minor)
-    PY_VER=$(/usr/local/opt/python@3.8/bin/python3 -c 'import sys;print("{0}.{1}".format(sys.version_info[0],sys.version_info[1]))')
+    PY_VER=$(/usr/local/opt/python/bin/python3 -c 'import sys;print("{0}.{1}".format(sys.version_info[0],sys.version_info[1]))')
     if [ -n "${DEBUG_CI}" ];then
       echo $PY_VER
     fi
@@ -99,7 +99,7 @@ for f in ${CHANGED_FORMULAE};do
 
     if [[ "${f}" =~ "osgeo-gdal" ]];then
       echo "Installing GDAL 2 Python 3 dependencies"
-      /usr/local/opt/python@3.8/bin/pip3 install numpy
+      /usr/local/opt/python/bin/pip3 install numpy
     fi
   fi
 
