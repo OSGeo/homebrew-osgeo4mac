@@ -17,6 +17,7 @@
 
 set -e
 
+if [ "$CIRCLE_BRANCH" != "master" ]; then
 ulimit -c unlimited
            ulimit -n 2048
            export CHANGED_FORMULAE=$(.circleci/changed_formulas.sh)
@@ -39,3 +40,4 @@ ulimit -c unlimited
            echo 'export HOMEBREW_PREFIX=/usr/local' >> $BASH_ENV
            echo 'export CIRCLE_REPOSITORY_URL=https://github.com/OSGeo/homebrew-osgeo4mac' >> $BASH_ENV
            echo 'export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)' >> $BASH_ENV
+fi

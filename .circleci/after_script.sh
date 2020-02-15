@@ -21,7 +21,7 @@
 # MAJOR_MAC_VERSION=$(sw_vers -productVersion | awk -F '.' '{print $1 "." $2}')
 # system_profiler SPSoftwareDataType
 
-
+if [ "$CIRCLE_BRANCH" != "master" ]; then
 # Build the actual bottles
 # In Travis, this used to be part of the deploy phase, but now it needs
 # to run as part of the original build process, but only on master.
@@ -71,3 +71,4 @@ pushd /tmp/bottles
   done
   ls
 popd
+fi

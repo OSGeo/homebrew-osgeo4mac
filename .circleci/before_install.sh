@@ -18,6 +18,7 @@
 set -o errexit
 set -o xtrace
 
+if [ "$CIRCLE_BRANCH" != "master" ]; then
 for f in ${CHANGED_FORMULAE};do
   echo 'Setting up, before install'
   if [ -n "${DEBUG_CI}" ];then
@@ -122,3 +123,4 @@ for f in ${CHANGED_FORMULAE};do
   fi
 
 done
+fi
