@@ -34,10 +34,10 @@ end
 class OsgeoPostgresqlAT10 < Formula
   desc "Relational database management system"
   homepage "https://www.postgresql.org/"
-  url "https://github.com/postgres/postgres/archive/REL_10_11.tar.gz"
-  sha256 "e20481e643736d7210f8146b61c72c47ad1498afe9ca12d5fef761c0d054b7c5"
+  url "https://github.com/postgres/postgres/archive/REL_10_12.tar.gz"
+  sha256 "b9756620353e9b2094125a280fb0779b42a05854419f067198de749ced51573f"
 
-  revision 1
+  # revision 1
 
   head "https://github.com/postgres/postgres.git", :branch => "REL_10_STABLE"
 
@@ -63,7 +63,7 @@ class OsgeoPostgresqlAT10 < Formula
   depends_on "tcl-tk"
   depends_on "krb5"
   depends_on "libxml2"
-  depends_on "python@3.8"
+  depends_on "python"
   depends_on "perl"
   depends_on "zlib"
   # depends_on "e2fsprogs"
@@ -83,7 +83,7 @@ class OsgeoPostgresqlAT10 < Formula
     ENV.prepend "CPPFLAGS", "-I#{Formula["openssl"].opt_include} -I#{Formula["readline"].opt_include}"
 
     # ENV["PYTHON"] = which("python3")
-    ENV["PYTHON"] = "#{Formula["python@3.8"].opt_bin}/python3"
+    ENV["PYTHON"] = "#{Formula["python"].opt_bin}/python3"
 
     args = %W[
       --disable-debug
