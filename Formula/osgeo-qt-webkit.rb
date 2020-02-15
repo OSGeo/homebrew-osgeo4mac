@@ -20,7 +20,7 @@ class OsgeoQtWebkit < Formula
 
   # insert the XPC_NOESCAPE macro in the right places in xpc_array_apply and xpc_dictionary_apply
   # to match the definitions now used in the 10.14 SDK
-  # patch :DATA
+  patch :DATA
 
   depends_on "cmake" => :build
   depends_on "ninja" => [:build, :recommended]
@@ -266,16 +266,33 @@ end
 
 __END__
 
---- a/Source/WTF/wtf/spi/darwin/XPCSPI.h 2017-06-17 13:46:54.000000000 +0300
-+++ b/Source/WTF/wtf/spi/darwin/XPCSPI.h 2018-09-08 23:41:06.397523110 +0300
-@@ -89,10 +89,6 @@
- EXTERN_C const struct _xpc_type_s _xpc_type_string;
+--- a/Source/cmake/WebKitCommon.cmake
++++ b/Source/cmake/WebKitCommon.cmake
+@@ -24,9 +24,9 @@
+     # TODO Enforce version requirement for perl
+     find_package(Perl 5.10.0 REQUIRED)
 
- EXTERN_C xpc_object_t xpc_array_create(const xpc_object_t*, size_t count);
--#if COMPILER_SUPPORTS(BLOCKS)
--EXTERN_C bool xpc_array_apply(xpc_object_t, xpc_array_applier_t);
--EXTERN_C bool xpc_dictionary_apply(xpc_object_t xdict, xpc_dictionary_applier_t applier);
--#endif
- EXTERN_C size_t xpc_array_get_count(xpc_object_t);
- EXTERN_C const char* xpc_array_get_string(xpc_object_t, size_t index);
- EXTERN_C void xpc_array_set_string(xpc_object_t, size_t index, const char* string);
+-    find_package(PythonInterp 2.7.0 REQUIRED)
+-    if (PYTHON_VERSION_MAJOR GREATER 2)
+-        message(FATAL_ERROR "Python 2 is required, but Python ${PYTHON_VERSION_MAJOR} was found.")
++    find_package(PythonInterp 3.7.6 REQUIRED)
++    if (PYTHON_VERSION_MAJOR GREATER 3)
++        message(FATAL_ERROR "Python 3 is required, but Python ${PYTHON_VERSION_MAJOR} was found.")
+     endif ()
+
+     # We cannot check for RUBY_FOUND because it is set only when the full package is installed and
+
+
+# --- a/Source/WTF/wtf/spi/darwin/XPCSPI.h 2017-06-17 13:46:54.000000000 +0300
+# +++ b/Source/WTF/wtf/spi/darwin/XPCSPI.h 2018-09-08 23:41:06.397523110 +0300
+# @@ -89,10 +89,6 @@
+#  EXTERN_C const struct _xpc_type_s _xpc_type_string;
+#
+#  EXTERN_C xpc_object_t xpc_array_create(const xpc_object_t*, size_t count);
+# -#if COMPILER_SUPPORTS(BLOCKS)
+# -EXTERN_C bool xpc_array_apply(xpc_object_t, xpc_array_applier_t);
+# -EXTERN_C bool xpc_dictionary_apply(xpc_object_t xdict, xpc_dictionary_applier_t applier);
+# -#endif
+#  EXTERN_C size_t xpc_array_get_count(xpc_object_t);
+#  EXTERN_C const char* xpc_array_get_string(xpc_object_t, size_t index);
+#  EXTERN_C void xpc_array_set_string(xpc_object_t, size_t index, const char* string);
