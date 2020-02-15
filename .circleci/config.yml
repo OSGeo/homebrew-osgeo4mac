@@ -46,7 +46,8 @@ build_steps: &build_steps
         command: |
           .circleci/after_script.sh
           # fix if the formula does not change or if a file is updated/uploaded
-          echo "${CIRCLE_BUILD_NUM}" > /tmp/bottles/build-num-${CIRCLE_BUILD_NUM}.txt
+          # echo "${CIRCLE_BUILD_NUM}" > /tmp/bottles/build-num-${CIRCLE_BUILD_NUM}.txt
+          echo "FIX" > /tmp/bottles/fix.txt
     - persist_to_workspace:
         root: /tmp
         paths:

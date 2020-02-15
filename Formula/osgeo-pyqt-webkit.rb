@@ -4,14 +4,14 @@ class OsgeoPyqtWebkit < Formula
   url "https://www.riverbankcomputing.com/static/Downloads/PyQt5/5.13.2/PyQt5-5.13.2.tar.gz"
   sha256 "adc17c077bf233987b8e43ada87d1e0deca9bd71a13e5fd5fc377482ed69c827"
 
-  # revision 1
+  revision 1
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any
-    sha256 "dbe549f90b99c91bf7645f10057fa223d46c69d94341e7982c63b609884692e5" => :catalina
-    sha256 "dbe549f90b99c91bf7645f10057fa223d46c69d94341e7982c63b609884692e5" => :mojave
-    sha256 "dbe549f90b99c91bf7645f10057fa223d46c69d94341e7982c63b609884692e5" => :high_sierra
+    sha256 "4497d7c18b1736ea5ddb4d6a3d265348d5184e724afa8f34c225d4fe03ba3cb5" => :catalina
+    sha256 "4497d7c18b1736ea5ddb4d6a3d265348d5184e724afa8f34c225d4fe03ba3cb5" => :mojave
+    sha256 "4497d7c18b1736ea5ddb4d6a3d265348d5184e724afa8f34c225d4fe03ba3cb5" => :high_sierra
   end
 
   option "with-debug", "Build with debug symbols"
@@ -22,7 +22,6 @@ class OsgeoPyqtWebkit < Formula
   # to the CMake arguments will fix the problem.
 
   depends_on "python"
-  depends_on "python@2"
   depends_on "qt"
   depends_on "osgeo-sip"
   depends_on "osgeo-pyqt"
@@ -39,52 +38,48 @@ class OsgeoPyqtWebkit < Formula
     EOS
     end
 
-    ["#{Formula["python@2"].opt_bin}/python2", "#{Formula["python"].opt_bin}/python3"].each do |python|
-      version = Language::Python.major_minor_version python
-      args = ["--confirm-license",
-              "--bindir=#{bin}",
-              "--destdir=#{lib}/python#{version}/site-packages",
-              "--stubsdir=#{lib}/python#{version}/site-packages/PyQt5",
-              "--sipdir=#{share}/sip/PyQt5",
-              # sip.h could not be found automatically
-              "--sip-incdir=#{Formula["osgeo-sip"].opt_include}",
-              "--qmake=#{Formula["qt"].bin}/qmake",
-              # Force deployment target to avoid libc++ issues
-              "QMAKE_MACOSX_DEPLOYMENT_TARGET=#{MacOS.version}",
-              "--enable=QtWebKit",
-              "--enable=QtWebKitWidgets",
-              "--no-designer-plugin",
-              "--no-python-dbus",
-              "--no-qml-plugin",
-              "--no-qsci-api",
-              "--no-sip-files",
-              "--no-tools",
-              "--verbose",
-              "--no-dist-info"
-             ]
-      args << "--debug" if build.with? "debug"
+    version = Language::Python.major_minor_version "python3"
+    args = ["--confirm-license",
+            "--bindir=#{bin}",
+            "--destdir=#{lib}/python#{version}/site-packages",
+            "--stubsdir=#{lib}/python#{version}/site-packages/PyQt5",
+            "--sipdir=#{share}/sip/PyQt5",
+            # sip.h could not be found automatically
+            "--sip-incdir=#{Formula["osgeo-sip"].opt_include}",
+            "--qmake=#{Formula["qt"].bin}/qmake",
+            # Force deployment target to avoid libc++ issues
+            "QMAKE_MACOSX_DEPLOYMENT_TARGET=#{MacOS.version}",
+            "--enable=QtWebKit",
+            "--enable=QtWebKitWidgets",
+            "--no-designer-plugin",
+            "--no-python-dbus",
+            "--no-qml-plugin",
+            "--no-qsci-api",
+            "--no-sip-files",
+            "--no-tools",
+            "--verbose",
+            "--no-dist-info"
+           ]
+    args << "--debug" if build.with? "debug"
 
-      system python, "configure.py", *args
-      system "make"
-      system "make", "install"
-      system "make", "clean"
+    system "python3", "configure.py", *args
+    system "make"
+    system "make", "install"
+    system "make", "clean"
 
-      # clean out non-WebKit artifacts (already in pyqt5 formula prefix)
-      rm_r prefix/"share"
-      cd "#{lib}/python#{version}/site-packages/PyQt5" do
-        rm "__init__.py"
-        rm "Qt.so"
-        rm_r "uic"
-      end
+    # clean out non-WebKit artifacts (already in pyqt5 formula prefix)
+    rm_r prefix/"share"
+    cd "#{lib}/python#{version}/site-packages/PyQt5" do
+      rm "__init__.py"
+      rm "Qt.so"
+      rm_r "uic"
     end
   end
 
   test do
-    ["#{Formula["python@2"].opt_bin}/python2", "#{Formula["python"].opt_bin}/python3"].each do |python|
-      version = Language::Python.major_minor_version python
-      ENV["PYTHONPATH"] = lib/"python#{version}/site-packages"
-      system python, "-c", '"import PyQt5.QtWebKit"'
-      system python, "-c", '"import PyQt5.QtWebKitWidgets"'
-    end
+    version = Language::Python.major_minor_version "python3"
+    ENV["PYTHONPATH"] = lib/"python#{version}/site-packages"
+    system "python3", "-c", '"import PyQt5.QtWebKit"'
+    system "python3", "-c", '"import PyQt5.QtWebKitWidgets"'
   end
 end
