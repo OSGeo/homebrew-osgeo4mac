@@ -26,9 +26,9 @@ class OsgeoQscintilla2 < Formula
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any
-    sha256 "10c94b037a5fb2cad86fc725d44132992203e592917b115748334f4e0cdf85a3" => :catalina
-    sha256 "10c94b037a5fb2cad86fc725d44132992203e592917b115748334f4e0cdf85a3" => :mojave
-    sha256 "10c94b037a5fb2cad86fc725d44132992203e592917b115748334f4e0cdf85a3" => :high_sierra
+    sha256 "9bfdaecbac2bde6e59c5b7d7e5e11c146f5c6e3f1f163b8cdeb86080b8632fe6" => :catalina
+    sha256 "9bfdaecbac2bde6e59c5b7d7e5e11c146f5c6e3f1f163b8cdeb86080b8632fe6" => :mojave
+    sha256 "9bfdaecbac2bde6e59c5b7d7e5e11c146f5c6e3f1f163b8cdeb86080b8632fe6" => :high_sierra
   end
 
   revision 4
