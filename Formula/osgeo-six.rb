@@ -4,20 +4,18 @@ class OsgeoSix < Formula
   url "https://github.com/benjaminp/six/archive/1.14.0.tar.gz"
   sha256 "6efff7289d1d369f0a25180433aba83ec2584e489e90f115b52ba69e4816cfb4"
 
-  # revision 1
+  revision 2
 
   head "https://github.com/benjaminp/six.git", :branch => "master"
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any_skip_relocation
-    rebuild 1
-    sha256 "f1e3d26a7344c37bcea3361ce3e4a9322246126718a12d37a00c5171c43aac9e" => :catalina
-    sha256 "f1e3d26a7344c37bcea3361ce3e4a9322246126718a12d37a00c5171c43aac9e" => :mojave
-    sha256 "f1e3d26a7344c37bcea3361ce3e4a9322246126718a12d37a00c5171c43aac9e" => :high_sierra
+    sha256 "9b809e5952d31c3469b0f0d36699b800e6ce81062028e6adc79d30fc4a4df7fc" => :catalina
+    sha256 "9b809e5952d31c3469b0f0d36699b800e6ce81062028e6adc79d30fc4a4df7fc" => :mojave
+    sha256 "9b809e5952d31c3469b0f0d36699b800e6ce81062028e6adc79d30fc4a4df7fc" => :high_sierra
   end
 
-  depends_on "python@2"
   depends_on "python"
   depends_on "tcl-tk"
 
@@ -32,23 +30,21 @@ class OsgeoSix < Formula
   end
 
   def install
-    ["#{Formula["python@2"].opt_bin}/python2", "#{Formula["python"].opt_bin}/python3"].each do |python|
-      xy = Language::Python.major_minor_version python
-      ENV.prepend_create_path "PYTHONPATH", "#{libexec}/lib/python#{xy}/site-packages"
+    xy = Language::Python.major_minor_version "python3"
+    ENV.prepend_create_path "PYTHONPATH", "#{libexec}/lib/python#{xy}/site-packages"
 
-      resource("setuptools").stage do
-        system python, "setup.py", "install", "--prefix=#{libexec}", "--single-version-externally-managed", "--record=installed.txt"
-      end
-
-      resource("pytest").stage do
-        system python, "setup.py", "install", "--prefix=#{libexec}", "--single-version-externally-managed", "--record=installed.txt"
-      end
-
-      ENV.prepend_create_path "PYTHONPATH", "#{lib}/python#{xy}/site-packages"
-      system python, "setup.py", "install", "--prefix=#{prefix}", "--single-version-externally-managed", "--record=installed.txt", "--optimize=1"
-
-      bin.env_script_all_files(libexec/"bin", :PYTHONPATH => ENV["PYTHONPATH"])
+    resource("setuptools").stage do
+      system "python3", "setup.py", "install", "--prefix=#{libexec}", "--single-version-externally-managed", "--record=installed.txt"
     end
+
+    resource("pytest").stage do
+      system "python3", "setup.py", "install", "--prefix=#{libexec}", "--single-version-externally-managed", "--record=installed.txt"
+    end
+
+    ENV.prepend_create_path "PYTHONPATH", "#{lib}/python#{xy}/site-packages"
+    system "python3", "setup.py", "install", "--prefix=#{prefix}", "--single-version-externally-managed", "--record=installed.txt", "--optimize=1"
+
+    bin.env_script_all_files(libexec/"bin", :PYTHONPATH => ENV["PYTHONPATH"])
   end
 
   test do

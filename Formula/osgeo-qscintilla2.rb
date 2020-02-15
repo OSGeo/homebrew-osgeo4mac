@@ -26,20 +26,18 @@ class OsgeoQscintilla2 < Formula
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any
-    rebuild 1
-    sha256 "a868209b6e5bf22bcf3c315df56812184537a4c646936c29e267769215eb91a7" => :catalina
-    sha256 "a868209b6e5bf22bcf3c315df56812184537a4c646936c29e267769215eb91a7" => :mojave
-    sha256 "a868209b6e5bf22bcf3c315df56812184537a4c646936c29e267769215eb91a7" => :high_sierra
+    sha256 "9bfdaecbac2bde6e59c5b7d7e5e11c146f5c6e3f1f163b8cdeb86080b8632fe6" => :catalina
+    sha256 "9bfdaecbac2bde6e59c5b7d7e5e11c146f5c6e3f1f163b8cdeb86080b8632fe6" => :mojave
+    sha256 "9bfdaecbac2bde6e59c5b7d7e5e11c146f5c6e3f1f163b8cdeb86080b8632fe6" => :high_sierra
   end
 
-  revision 1
+  revision 4
 
   # keg_only "qscintilla2 is already provided by homebrew/core"
   # we will verify that other versions are not linked
   depends_on Unlinked
 
   depends_on "python"
-  depends_on "python@2"
   depends_on "qt"
   depends_on "osgeo-sip"
   depends_on "osgeo-pyqt"
@@ -72,27 +70,27 @@ class OsgeoQscintilla2 < Formula
 
     cd "Python" do
       (share/"sip/PyQt5/Qsci").mkpath
-      ["#{Formula["python@2"].opt_bin}/python2", "#{Formula["python3"].opt_bin}/python3"].each do |python|
-        version = Language::Python.major_minor_version python
-        system python, "configure.py", "-o", lib, "-n", include,
-                       "--apidir=#{prefix}/qsci",
-                       "--destdir=#{lib}/python#{version}/site-packages/PyQt5",
-                       "--stubsdir=#{lib}/python#{version}/site-packages/PyQt5",
-                       "--qsci-sipdir=#{share}/sip/PyQt5",
-                       "--qsci-incdir=#{include}",
-                       "--qsci-libdir=#{lib}",
-                       "--pyqt=PyQt5",
-                       "--pyqt-sipdir=#{Formula["osgeo-pyqt"].opt_share}/sip/PyQt5",
-                       "--sip-incdir=#{Formula["osgeo-sip"].opt_include}",
-                       "--spec=#{spec}",
-                       "--no-dist-info",
-                       "--verbose"
-        system "make"
-        system "make", "install"
-        system "make", "clean"
-      end
-        (share/"sip/PyQt5/Qsci").install Dir["sip/*.sip"]
+      version = Language::Python.major_minor_version "python3"
+      ENV["PYTHONPATH"] = lib/"python#{version}/site-packages"
+
+      system "python3", "configure.py", "-o", lib, "-n", include,
+                     "--apidir=#{prefix}/qsci",
+                     "--destdir=#{lib}/python#{version}/site-packages/PyQt5",
+                     "--stubsdir=#{lib}/python#{version}/site-packages/PyQt5",
+                     "--qsci-sipdir=#{share}/sip/PyQt5",
+                     "--qsci-incdir=#{include}",
+                     "--qsci-libdir=#{lib}",
+                     "--pyqt=PyQt5",
+                     "--pyqt-sipdir=#{Formula["osgeo-pyqt"].opt_share}/sip/PyQt5",
+                     "--sip-incdir=#{Formula["osgeo-sip"].opt_include}",
+                     "--spec=#{spec}",
+                     "--no-dist-info",
+                     "--verbose"
+      system "make"
+      system "make", "install"
+      system "make", "clean"
     end
+      (share/"sip/PyQt5/Qsci").install Dir["sip/*.sip"]
   end
 
   test do
@@ -101,10 +99,8 @@ class OsgeoQscintilla2 < Formula
       assert("QsciLexer" in dir(PyQt5.Qsci))
     EOS
 
-    ["#{Formula["python@2"].opt_bin}/python2", "#{Formula["python"].opt_bin}/python3"].each do |python|
-      version = Language::Python.major_minor_version python
-      ENV["PYTHONPATH"] = lib/"python#{version}/site-packages"
-      system python, "test.py"
-    end
+    version = Language::Python.major_minor_version "python3"
+    ENV["PYTHONPATH"] = lib/"python#{version}/site-packages"
+    system "python3", "test.py"
   end
 end

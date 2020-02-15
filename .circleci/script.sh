@@ -19,6 +19,8 @@ set -e
 
 ulimit -n 1024
 
+git checkout bottles
+
 echo ${CHANGED_FORMULAE}
 
 for f in ${CHANGED_FORMULAE};do
@@ -29,9 +31,7 @@ for f in ${CHANGED_FORMULAE};do
   if [ "$(echo ${deps} | grep -c 'osgeo-pyqt')" != "0" ];then
     brew reinstall ${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/osgeo-pyqt
     brew unlink osgeo-pyqt && brew link osgeo-pyqt --force
-    /usr/local/bin/pip2 install enum34
-    /usr/local/bin/python2 -c "import PyQt5.QtCore"
-    /usr/local/bin/python3 -c "import PyQt5.QtCore"
+    /usr/local/opt/python/bin/python3 -c "import PyQt5.QtCore"
   fi
 
   # fix error: 'libintl.h' file not found

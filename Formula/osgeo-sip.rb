@@ -24,16 +24,16 @@ class OsgeoSip < Formula
   url "https://www.riverbankcomputing.com/static/Downloads/sip/4.19.21/sip-4.19.21.tar.gz"
   sha256 "6af9979ab41590e8311b8cc94356718429ef96ba0e3592bdd630da01211200ae"
 
-  # revision 1
+  revision 2
 
   head "https://www.riverbankcomputing.com/hg/sip", :using => :hg
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any_skip_relocation
-    sha256 "bd690b45d1f1d77518ccbe46f9abdbca1b40256ed9904a480b7f30e5ed68b5dc" => :catalina
-    sha256 "bd690b45d1f1d77518ccbe46f9abdbca1b40256ed9904a480b7f30e5ed68b5dc" => :mojave
-    sha256 "bd690b45d1f1d77518ccbe46f9abdbca1b40256ed9904a480b7f30e5ed68b5dc" => :high_sierra
+    sha256 "85c2a7a70ebeb3e4ebfaa97df2848bd04948d292bfe930dfc59a44ab6c3bcfc8" => :catalina
+    sha256 "85c2a7a70ebeb3e4ebfaa97df2848bd04948d292bfe930dfc59a44ab6c3bcfc8" => :mojave
+    sha256 "85c2a7a70ebeb3e4ebfaa97df2848bd04948d292bfe930dfc59a44ab6c3bcfc8" => :high_sierra
   end
 
   # keg_only "sip" is already provided by homebrew/core"
@@ -41,7 +41,6 @@ class OsgeoSip < Formula
   depends_on Unlinked
 
   depends_on "python"
-  depends_on "python@2"
 
   def install
     ENV.prepend_path "PATH", Formula["python"].opt_libexec/"bin"
@@ -52,24 +51,21 @@ class OsgeoSip < Formula
       # build.py can use it to figure out a version number.
       ln_s cached_download/".hg", ".hg"
       # build.py doesn't run with python3
-      system "python", "build.py", "prepare"
+      system "python3", "build.py", "prepare"
     end
 
-    ["#{Formula["python@2"].opt_bin}/python2", "#{Formula["python"].opt_bin}/python3"].each do |python|
-
-      version = Language::Python.major_minor_version python
-      system python, "configure.py",
-                     "--deployment-target=#{MacOS.version}",
-                     "--destdir=#{lib}/python#{version}/site-packages",
-                     "--bindir=#{bin}",
-                     "--incdir=#{include}",
-                     "--sipdir=#{HOMEBREW_PREFIX}/share/sip",
-                     "--sip-module=PyQt5.sip",
-                     "--no-dist-info"
-      system "make"
-      system "make", "install"
-      system "make", "clean"
-    end
+    version = Language::Python.major_minor_version "python3"
+    system "python3", "configure.py",
+                   "--deployment-target=#{MacOS.version}",
+                   "--destdir=#{lib}/python#{version}/site-packages",
+                   "--bindir=#{bin}",
+                   "--incdir=#{include}",
+                   "--sipdir=#{HOMEBREW_PREFIX}/share/sip",
+                   "--sip-module=PyQt5.sip",
+                   "--no-dist-info"
+    system "make"
+    system "make", "install"
+    system "make", "clean"
   end
 
   def post_install
@@ -82,10 +78,41 @@ class OsgeoSip < Formula
   end
 
   test do
-    ["#{Formula["python@2"].opt_bin}/python2", "#{Formula["python"].opt_bin}/python3"].each do |python|
-      version = Language::Python.major_minor_version python
-      ENV["PYTHONPATH"] = lib/"python#{version}/site-packages"
-      system python, "-c", '"import PyQt5.sip"'
-    end
+    (testpath/"test.h").write <<~EOS
+      #pragma once
+      class Test {
+      public:
+        Test();
+        void test();
+      };
+    EOS
+    (testpath/"test.cpp").write <<~EOS
+      #include "test.h"
+      #include <iostream>
+      Test::Test() {}
+      void Test::test()
+      {
+        std::cout << "Hello World!" << std::endl;
+      }
+    EOS
+    (testpath/"test.sip").write <<~EOS
+      %Module test
+      class Test {
+      %TypeHeaderCode
+      #include "test.h"
+      %End
+      public:
+        Test();
+        void test();
+      };
+    EOS
+
+    system ENV.cxx, "-shared", "-Wl,-install_name,#{testpath}/libtest.dylib",
+                    "-o", "libtest.dylib", "test.cpp"
+    system bin/"sip", "-b", "test.build", "-c", ".", "test.sip"
+
+    version = Language::Python.major_minor_version "python3"
+    ENV["PYTHONPATH"] = lib/"python#{version}/site-packages"
+    system "python3", "-c", '"import PyQt5.sip"'
   end
 end

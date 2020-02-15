@@ -34,15 +34,14 @@ end
 class OsgeoPostgresql < Formula
   desc "Object-relational database system"
   homepage "https://www.postgresql.org/"
-  url "https://github.com/postgres/postgres/archive/REL_12_1.tar.gz"
-  sha256 "5ceb092232edbbd2d2e9ea7a5c8454ef10a37e7a2d61e12d40965d40f0043eef"
+  url "https://github.com/postgres/postgres/archive/REL_12_2.tar.gz"
+  sha256 "6d313f7513d071693227fd8e1d15c66ac9d476493d4cfcffc12765c0b66272fa"
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
-    rebuild 1
-    sha256 "2759c5a7ca99e72de3bcad6efeb134c2edfedd705690d853de33e2dc3cbbea82" => :catalina
-    sha256 "2759c5a7ca99e72de3bcad6efeb134c2edfedd705690d853de33e2dc3cbbea82" => :mojave
-    sha256 "2759c5a7ca99e72de3bcad6efeb134c2edfedd705690d853de33e2dc3cbbea82" => :high_sierra
+    sha256 "7d47e98b0e6ebe6d8a5968e8b1ff5828bdc7ab91644d41feb2847225f2d96684" => :catalina
+    sha256 "7d47e98b0e6ebe6d8a5968e8b1ff5828bdc7ab91644d41feb2847225f2d96684" => :mojave
+    sha256 "7d47e98b0e6ebe6d8a5968e8b1ff5828bdc7ab91644d41feb2847225f2d96684" => :high_sierra
   end
 
   # revision 1
@@ -65,7 +64,6 @@ class OsgeoPostgresql < Formula
   depends_on "krb5"
   depends_on "libxml2"
   depends_on "python"
-  depends_on "python2"
   depends_on "perl"
   depends_on "zlib"
   # depends_on "e2fsprogs"

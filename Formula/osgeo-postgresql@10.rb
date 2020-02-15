@@ -34,8 +34,8 @@ end
 class OsgeoPostgresqlAT10 < Formula
   desc "Relational database management system"
   homepage "https://www.postgresql.org/"
-  url "https://github.com/postgres/postgres/archive/REL_10_11.tar.gz"
-  sha256 "e20481e643736d7210f8146b61c72c47ad1498afe9ca12d5fef761c0d054b7c5"
+  url "https://github.com/postgres/postgres/archive/REL_10_12.tar.gz"
+  sha256 "b9756620353e9b2094125a280fb0779b42a05854419f067198de749ced51573f"
 
   # revision 1
 
@@ -43,9 +43,9 @@ class OsgeoPostgresqlAT10 < Formula
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
-    sha256 "65132908c23f057de3766e53ebddaefc7db9031f87f8605ed65848ad52236db3" => :catalina
-    sha256 "65132908c23f057de3766e53ebddaefc7db9031f87f8605ed65848ad52236db3" => :mojave
-    sha256 "65132908c23f057de3766e53ebddaefc7db9031f87f8605ed65848ad52236db3" => :high_sierra
+    sha256 "88f06cb6dee84feb856c6d370c19d44e30355d92aceb92fa48d5c9ff64868d7e" => :catalina
+    sha256 "88f06cb6dee84feb856c6d370c19d44e30355d92aceb92fa48d5c9ff64868d7e" => :mojave
+    sha256 "88f06cb6dee84feb856c6d370c19d44e30355d92aceb92fa48d5c9ff64868d7e" => :high_sierra
   end
 
   option "with-cellar", "Use /Cellar in the path configuration (necessary for migration)"
@@ -64,7 +64,6 @@ class OsgeoPostgresqlAT10 < Formula
   depends_on "krb5"
   depends_on "libxml2"
   depends_on "python"
-  depends_on "python2"
   depends_on "perl"
   depends_on "zlib"
   # depends_on "e2fsprogs"
