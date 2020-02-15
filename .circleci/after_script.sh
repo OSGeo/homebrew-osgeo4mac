@@ -21,12 +21,11 @@
 # MAJOR_MAC_VERSION=$(sw_vers -productVersion | awk -F '.' '{print $1 "." $2}')
 # system_profiler SPSoftwareDataType
 
-if [ "$CIRCLE_BRANCH" != "master" ]; then
 # Build the actual bottles
 # In Travis, this used to be part of the deploy phase, but now it needs
 # to run as part of the original build process, but only on master.
 mkdir /tmp/bottles
-
+if [ "$CIRCLE_BRANCH" != "master" ]; then
 pushd /tmp/bottles
   # BOTTLE_ROOT=https://dl.bintray.com/homebrew-osgeo/osgeo-bottles
   BOTTLE_ROOT=https://bottle.download.osgeo.org
