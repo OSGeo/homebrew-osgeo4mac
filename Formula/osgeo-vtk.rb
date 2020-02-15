@@ -8,7 +8,7 @@ class OsgeoVtk < Formula
   # sha256 "badeaada5bd2ef93c010dd17445280d032505aad6eb45a5ec423aa1030fe9801"
   # version "8.2.0"
 
-  revision 11
+  revision 12
 
   head "https://github.com/Kitware/VTK.git", :branch => "master"
 

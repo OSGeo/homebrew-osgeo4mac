@@ -27,15 +27,6 @@ echo ${CHANGED_FORMULAE}
 for f in ${CHANGED_FORMULAE};do
   deps=$(brew deps --include-build ${f})
 
-  if [ "${f}" == "osgeo-vtk" ];then
-    echo "Installing jpeg-turbo"
-    # osgeo-vtk: Java 1.8 is required to install this formula.
-    # Install AdoptOpenJDK 8 with Homebrew Cask:
-    # brew cask install homebrew/cask-versions/adoptopenjdk8
-    brew install jpeg-turbo
-    brew unlink jpeg-turbo && brew link --force jpeg-turbo
-  fi
-
   # fix error: Unable to import PyQt5.QtCore
   # build qscintilla2
   if [ "$(echo ${deps} | grep -c 'osgeo-pyqt')" != "0" ];then
