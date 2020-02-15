@@ -8,21 +8,21 @@ class OsgeoVtk < Formula
   # sha256 "badeaada5bd2ef93c010dd17445280d032505aad6eb45a5ec423aa1030fe9801"
   # version "8.2.0"
 
-  revision 9
+  revision 12
 
   head "https://github.com/Kitware/VTK.git", :branch => "master"
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
-    sha256 "ec0d9b2e9a78292f890ae53f4780601613e6f39db82bb27cbd2714f661414b15" => :catalina
-    sha256 "ec0d9b2e9a78292f890ae53f4780601613e6f39db82bb27cbd2714f661414b15" => :mojave
-    sha256 "ec0d9b2e9a78292f890ae53f4780601613e6f39db82bb27cbd2714f661414b15" => :high_sierra
+    sha256 "bc8567382a55eb7c79f7f035a167be4d64d930dae3d0e537aabe4653c1037645" => :catalina
+    sha256 "bc8567382a55eb7c79f7f035a167be4d64d930dae3d0e537aabe4653c1037645" => :mojave
+    sha256 "bc8567382a55eb7c79f7f035a167be4d64d930dae3d0e537aabe4653c1037645" => :high_sierra
   end
 
-  resource "FindPEGTL" do
-    url "https://src.fedoraproject.org/rpms/vtk/raw/master/f/FindPEGTL.cmake"
-    sha256 "0183debe3b115c8504edb2bf73b1eb4dc7127a864dce077d12c56a0b0ccf1b8a"
-  end
+  # resource "FindPEGTL" do
+  #   url "https://src.fedoraproject.org/rpms/vtk/raw/master/f/FindPEGTL.cmake"
+  #   sha256 "0183debe3b115c8504edb2bf73b1eb4dc7127a864dce077d12c56a0b0ccf1b8a"
+  # end
 
   # Fix compile issues on Mojave and later
     # Files:
@@ -338,7 +338,7 @@ class OsgeoVtk < Formula
     # (buildpath/"ThirdParty/vtkm/vtkvtkm/vtk-m").install resource("vtk-m")
 
     # rm "#{buildpath}/CMake/FindPEGTL.cmake"
-    (buildpath/"CMake/FindPEGTL.cmake").install resource("FindPEGTL")
+    # (buildpath/"CMake/FindPEGTL.cmake").install resource("FindPEGTL")
 
     mkdir "build" do
       system "cmake", "..", *args
