@@ -14,9 +14,9 @@ class OsgeoVtk < Formula
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
-    sha256 "ec0d9b2e9a78292f890ae53f4780601613e6f39db82bb27cbd2714f661414b15" => :catalina
-    sha256 "ec0d9b2e9a78292f890ae53f4780601613e6f39db82bb27cbd2714f661414b15" => :mojave
-    sha256 "ec0d9b2e9a78292f890ae53f4780601613e6f39db82bb27cbd2714f661414b15" => :high_sierra
+    sha256 "bc8567382a55eb7c79f7f035a167be4d64d930dae3d0e537aabe4653c1037645" => :catalina
+    sha256 "bc8567382a55eb7c79f7f035a167be4d64d930dae3d0e537aabe4653c1037645" => :mojave
+    sha256 "bc8567382a55eb7c79f7f035a167be4d64d930dae3d0e537aabe4653c1037645" => :high_sierra
   end
 
   # resource "FindPEGTL" do
