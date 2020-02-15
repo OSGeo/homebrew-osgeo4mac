@@ -4,7 +4,7 @@ class OsgeoSix < Formula
   url "https://github.com/benjaminp/six/archive/1.14.0.tar.gz"
   sha256 "6efff7289d1d369f0a25180433aba83ec2584e489e90f115b52ba69e4816cfb4"
 
-  revision 1
+  revision 2
 
   head "https://github.com/benjaminp/six.git", :branch => "master"
 
@@ -16,7 +16,7 @@ class OsgeoSix < Formula
     sha256 "a87e276718bce6c32775ee72598a8b6c149c4d174f09e7a326db9cce050d84ed" => :high_sierra
   end
 
-  depends_on "python@3.8"
+  depends_on "python"
   depends_on "tcl-tk"
 
   resource "setuptools" do
