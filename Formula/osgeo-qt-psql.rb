@@ -4,17 +4,16 @@ class OsgeoQtPsql < Formula
   url "https://download.qt.io/official_releases/qt/5.14/5.14.1/single/qt-everywhere-src-5.14.1.tar.xz"
   sha256 "6f17f488f512b39c2feb57d83a5e0a13dcef32999bea2e2a8f832f54a29badb8"
 
-  # revision 1
+  revision 1
 
-  head "https://code.qt.io/qt/qt5.git", :branch => "5.12", :shallow => false
+  head "https://code.qt.io/qt/qt5.git", :branch => "5.14", :shallow => false
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any
-    rebuild 1
-    sha256 "6444d53ea828bb03b2e43720dfc755280db1c924218e3c278dcfd1631761d60a" => :catalina
-    sha256 "6444d53ea828bb03b2e43720dfc755280db1c924218e3c278dcfd1631761d60a" => :mojave
-    sha256 "6444d53ea828bb03b2e43720dfc755280db1c924218e3c278dcfd1631761d60a" => :high_sierra
+    sha256 "9c4eb19f5f64ee35989b3f2daaef50f428f01719f3a075b7ab3ce53eb556bfca" => :catalina
+    sha256 "9c4eb19f5f64ee35989b3f2daaef50f428f01719f3a075b7ab3ce53eb556bfca" => :mojave
+    sha256 "9c4eb19f5f64ee35989b3f2daaef50f428f01719f3a075b7ab3ce53eb556bfca" => :high_sierra
   end
 
   depends_on "pkg-config" => :build
