@@ -4,9 +4,9 @@ class OsgeoQtPsql < Formula
   url "https://download.qt.io/official_releases/qt/5.14/5.14.1/single/qt-everywhere-src-5.14.1.tar.xz"
   sha256 "6f17f488f512b39c2feb57d83a5e0a13dcef32999bea2e2a8f832f54a29badb8"
 
-  # revision 1
+  revision 1
 
-  head "https://code.qt.io/qt/qt5.git", :branch => "5.12", :shallow => false
+  head "https://code.qt.io/qt/qt5.git", :branch => "5.14", :shallow => false
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
