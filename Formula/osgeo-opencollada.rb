@@ -11,9 +11,9 @@ class OsgeoOpencollada < Formula
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any
-    sha256 "26086dc7e83ca99899aa27830ea7731ebdc3afa8dfdc17459dd60cb23cacf0b8" => :mojave
-    sha256 "26086dc7e83ca99899aa27830ea7731ebdc3afa8dfdc17459dd60cb23cacf0b8" => :high_sierra
-    sha256 "1fd5d9db14710d34f5abf52e2b69008e70fb3e34c2e091e74210593fa802599a" => :sierra
+    sha256 "7a4c9941364bfb7b76d0162356740be685797317c2d3b02cd4975f8167b0e57d" => :catalina
+    sha256 "7a4c9941364bfb7b76d0162356740be685797317c2d3b02cd4975f8167b0e57d" => :mojave
+    sha256 "7a4c9941364bfb7b76d0162356740be685797317c2d3b02cd4975f8167b0e57d" => :high_sierra
   end
 
   depends_on "cmake" => :build
