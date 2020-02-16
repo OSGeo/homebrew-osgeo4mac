@@ -27,10 +27,10 @@ end
 class OsgeoOpenscenegraph < Formula
   desc "High performance 3D graphics toolkit"
   homepage "http://www.openscenegraph.org/"
-  url "https://github.com/openscenegraph/OpenSceneGraph/archive/OpenSceneGraph-3.6.3.tar.gz"
-  sha256 "51bbc79aa73ca602cd1518e4e25bd71d41a10abd296e18093a8acfebd3c62696"
+  url "https://github.com/openscenegraph/OpenSceneGraph/archive/OpenSceneGraph-3.6.5.tar.gz"
+  sha256 "aea196550f02974d6d09291c5d83b51ca6a03b3767e234a8c0e21322927d1e12"
 
-  revision 3
+  # revision 1
 
   head "https://github.com/openscenegraph/OpenSceneGraph.git", :branch => "master"
 
