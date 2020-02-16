@@ -8,10 +8,9 @@ class OsgeoInsighttoolkit < Formula
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
-    rebuild 1
-    sha256 "67d2ba3196aa9e68327c84e577b727d1016f6206fc3676f28b0175222e0f9064" => :mojave
-    sha256 "67d2ba3196aa9e68327c84e577b727d1016f6206fc3676f28b0175222e0f9064" => :high_sierra
-    sha256 "c4acfb0b4f36e8fbda63c181dfc9c1291517125ba947d22b3b193dd1147bdd20" => :sierra
+    sha256 "cc31b55d65c9b587c5b86ccc21414054baa5af82ee22dadf21fdbf609bab1f0b" => :catalina
+    sha256 "cc31b55d65c9b587c5b86ccc21414054baa5af82ee22dadf21fdbf609bab1f0b" => :mojave
+    sha256 "cc31b55d65c9b587c5b86ccc21414054baa5af82ee22dadf21fdbf609bab1f0b" => :high_sierra
   end
 
   head "https://github.com/InsightSoftwareConsortium/ITK.git", :branch => "master"
