@@ -4,7 +4,7 @@ class OsgeoInsighttoolkit < Formula
   url "https://github.com/InsightSoftwareConsortium/ITK/releases/download/v5.0.1/InsightToolkit-5.0.1.tar.gz"
   sha256 "613b125cbf58481e8d1e36bdeacf7e21aba4b129b4e524b112f70c4d4e6d15a6"
 
-  # revision 1
+  revision 1
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
