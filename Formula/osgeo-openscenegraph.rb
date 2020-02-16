@@ -97,6 +97,9 @@ class OsgeoOpenscenegraph < Formula
       ENV["SDKROOT"] = MacOS.sdk_path
     end
 
+    ENV.cxx11
+    ENV.append "CXXFLAGS", "-std=c++11"
+
     args = std_cmake_args
 
     args << "-DCMAKE_PREFIX_PATH=#{Formula["qt"].opt_lib}/cmake"
