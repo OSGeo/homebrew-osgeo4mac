@@ -1,10 +1,10 @@
 class OsgeoInsighttoolkit < Formula
   desc "ITK is a toolkit for performing registration and segmentation"
   homepage "https://www.itk.org"
-  url "https://downloads.sourceforge.net/project/itk/itk/4.13/InsightToolkit-4.13.2.tar.gz"
-  sha256 "d8760b279de20497c432e7cdf97ed349277da1ae435be1f6f0f00fbe8d4938c1"
+  url "https://github.com/InsightSoftwareConsortium/ITK/releases/download/v5.0.1/InsightToolkit-5.0.1.tar.gz"
+  sha256 "613b125cbf58481e8d1e36bdeacf7e21aba4b129b4e524b112f70c4d4e6d15a6"
 
-  revision 1
+  # revision 1
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
@@ -25,7 +25,6 @@ class OsgeoInsighttoolkit < Formula
 
   depends_on "cmake" => :build
   depends_on "opencv@2" => :recommended
-  depends_on "python@2" if build.with? "python2"
   depends_on "python" => :recommended
   depends_on "fftw" => :recommended
   depends_on "hdf5" => :recommended
@@ -128,11 +127,8 @@ class OsgeoInsighttoolkit < Formula
     args << "-DITK_USE_SYSTEM_GOOGLETEST=OFF"
 
     mkdir "itk-build" do
-      if build.with? "python2"
-        python_executable = `which python2`.strip
-      else
-        python_executable = `which python3`.strip
-      end
+
+      python_executable = `which python3`.strip
 
       python_prefix = `#{python_executable} -c 'import sys;print(sys.prefix)'`.chomp
       python_include = `#{python_executable} -c 'from distutils import sysconfig;print(sysconfig.get_python_inc(True))'`.chomp
