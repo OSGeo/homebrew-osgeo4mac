@@ -4,7 +4,7 @@ class OsgeoGrass < Formula
   desc "Geographic Resources Analysis Support System"
   homepage "https://grass.osgeo.org/"
 
-  revision 5
+  # revision 1
 
   # svn: E230001: Server SSL certificate verification failed: issuer is not trusted
   # head "https://svn.osgeo.org/grass/grass/trunk", :using => :svn
@@ -13,8 +13,8 @@ class OsgeoGrass < Formula
   head "https://github.com/OSGeo/grass.git", :branch => "master"
 
   stable do
-    url "https://github.com/OSGeo/grass/archive/grass_7_6_1.tar.gz"
-    sha256 "7fec2cd868226b6b4a46e1ec8eba9da8603b7a30327a6aeedeb99224bd4c0d6a"
+    url "https://github.com/OSGeo/grass/archive/7.8.2.tar.gz"
+    sha256 "07b69e2fe0678bca29d9303a90eaf4a29dddcfa97fa92e056e214f0415629b6d"
 
     # Patches to keep files from being installed outside of the prefix.
     # Remove lines from Makefile that try to install to /Library/Documentation.
@@ -45,7 +45,7 @@ class OsgeoGrass < Formula
   depends_on "pkg-config" => :build
   depends_on "fftw" => :recommended
   depends_on "tcl-tk" => :recommended
-  depends_on "python@2"
+  depends_on "python"
   depends_on "boost"
   depends_on "libiconv"
   depends_on "bison"
@@ -82,8 +82,9 @@ class OsgeoGrass < Formula
   # matplotlib
   depends_on "py3cairo"
   depends_on "pygobject3"
-  depends_on "pygobject"
+  # depends_on "pygobject" # Does not support Python 3, and needs pygtk which has been removed.
   depends_on "osgeo-pyqt"
+  depends_on "osgeo-six"
   depends_on "numpy"
   depends_on "scipy"
   depends_on "osgeo-matplotlib"
@@ -144,23 +145,23 @@ class OsgeoGrass < Formula
   end
 
   resource "setuptools" do
-    url "https://files.pythonhosted.org/packages/1d/64/a18a487b4391a05b9c7f938b94a16d80305bf0369c6b0b9509e86165e1d3/setuptools-41.0.1.zip"
-    sha256 "a222d126f5471598053c9a77f4b5d4f26eaa1f150ad6e01dcf1a42e185d05613"
+    url "https://files.pythonhosted.org/packages/42/3e/2464120172859e5d103e5500315fb5555b1e908c0dacc73d80d35a9480ca/setuptools-45.1.0.zip"
+    sha256 "91f72d83602a6e5e4a9e4fe296e27185854038d7cbda49dcd7006c4d3b3b89d5"
   end
 
   resource "pip" do
-    url "https://files.pythonhosted.org/packages/93/ab/f86b61bef7ab14909bd7ec3cd2178feb0a1c86d451bc9bccd5a1aedcde5f/pip-19.1.1.tar.gz"
-    sha256 "44d3d7d3d30a1eb65c7e5ff1173cdf8f7467850605ac7cc3707b6064bddd0958"
+    url "https://files.pythonhosted.org/packages/8e/76/66066b7bc71817238924c7e4b448abdb17eb0c92d645769c223f9ace478f/pip-20.0.2.tar.gz"
+    sha256 "7db0c8ea4c7ea51c8049640e8e6e7fde949de672bfa4949920675563a5a6967f"
   end
 
   resource "wheel" do
-    url "https://files.pythonhosted.org/packages/1d/b0/f478e80aeace42fe251225a86752799174a94314c4a80ebfc5bf0ab1153a/wheel-0.33.4.tar.gz"
-    sha256 "62fcfa03d45b5b722539ccbc07b190e4bfff4bb9e3a4d470dd9f6a0981002565"
+    url "https://files.pythonhosted.org/packages/75/28/521c6dc7fef23a68368efefdcd682f5b3d1d58c2b90b06dc1d0b805b51ae/wheel-0.34.2.tar.gz"
+    sha256 "8788e9155fe14f54164c1b9eb0a319d98ef02c160725587ad60f14ddc57b6f96"
   end
 
   resource "Pillow" do
-    url "https://files.pythonhosted.org/packages/81/1a/6b2971adc1bca55b9a53ed1efa372acff7e8b9913982a396f3fa046efaf8/Pillow-6.0.0.tar.gz"
-    sha256 "809c0a2ce9032cbcd7b5313f71af4bdc5c8c771cb86eb7559afd954cab82ebb5"
+    url "https://files.pythonhosted.org/packages/39/47/f28067b187dd664d205f75b07dcc6e0e95703e134008a14814827eebcaab/Pillow-7.0.0.tar.gz"
+    sha256 "4d9ed9a64095e031435af120d3c910148067087541131e82b3e8db302f4c8946"
   end
 
   resource "ply" do
@@ -174,23 +175,23 @@ class OsgeoGrass < Formula
   end
 
   resource "python-dateutil" do
-    url "https://files.pythonhosted.org/packages/ad/99/5b2e99737edeb28c71bcbec5b5dda19d0d9ef3ca3e92e3e925e7c0bb364c/python-dateutil-2.8.0.tar.gz"
-    sha256 "c89805f6f4d64db21ed966fda138f8a5ed7a4fdbc1a8ee329ce1b74e3c74da9e"
+    url "https://files.pythonhosted.org/packages/be/ed/5bbc91f03fa4c839c4c7360375da77f9659af5f7086b7a7bdda65771c8e0/python-dateutil-2.8.1.tar.gz"
+    sha256 "73ebfe9dbf22e832286dafa60473e4cd239f8592f699aa5adaf10050e6e1823c"
   end
 
-  resource "six" do
-    url "https://files.pythonhosted.org/packages/dd/bf/4138e7bfb757de47d1f4b6994648ec67a51efe58fa907c1e11e350cddfca/six-1.12.0.tar.gz"
-    sha256 "d16a0141ec1a18405cd4ce8b4613101da75da0e9a7aec5bdd4fa804d0e0eba73"
-  end
+  # resource "six" do
+  #   url "https://files.pythonhosted.org/packages/21/9f/b251f7f8a76dec1d6651be194dfba8fb8d7781d10ab3987190de8391d08e/six-1.14.0.tar.gz"
+  #   sha256 "236bdbdce46e6e6a3d61a337c0f8b763ca1e8717c03b369e87a7ec7ce1319c0a"
+  # end
 
   resource "PyOpenGL" do
-    url "https://files.pythonhosted.org/packages/ce/33/ef0e3b40a3f4cbfcfb93511652673fb19d07bafac0611f01f6237d1978ed/PyOpenGL-3.1.0.zip"
-    sha256 "efa4e39a49b906ccbe66758812ca81ced13a6f26931ab2ba2dba2750c016c0d0"
+    url "https://files.pythonhosted.org/packages/b8/73/31c8177f3d236e9a5424f7267659c70ccea604dab0585bfcd55828397746/PyOpenGL-3.1.5.tar.gz"
+    sha256 "4107ba0d0390da5766a08c242cf0cf3404c377ed293c5f6d701e457c57ba3424"
   end
 
   resource "psycopg2" do
-    url "https://files.pythonhosted.org/packages/23/7e/93c325482c328619870b6cd09370f6dbe1148283daca65115cd63642e60f/psycopg2-2.8.2.tar.gz"
-    sha256 "5cacf21b6f813c239f100ef78a4132056f93a5940219ec25d2ef833cbeb05588"
+    url "https://files.pythonhosted.org/packages/84/d7/6a93c99b5ba4d4d22daa3928b983cec66df4536ca50b22ce5dcac65e4e71/psycopg2-2.8.4.tar.gz"
+    sha256 "f898e5cc0a662a9e12bde6f931263a1bbd350cfb18e1d5336a12927851825bb6"
   end
 
   resource "termcolor" do
@@ -211,51 +212,66 @@ class OsgeoGrass < Formula
   end
 
   resource "pyparsing" do
-    url "https://files.pythonhosted.org/packages/5d/3a/24d275393f493004aeb15a1beae2b4a3043526e8b692b65b4a9341450ebe/pyparsing-2.4.0.tar.gz"
-    sha256 "1873c03321fc118f4e9746baf201ff990ceb915f433f23b395f5580d1840cb2a"
+    url "https://files.pythonhosted.org/packages/a2/56/0404c03c83cfcca229071d3c921d7d79ed385060bbe969fde3fd8f774ebd/pyparsing-2.4.6.tar.gz"
+    sha256 "4c830582a84fb022400b85429791bc551f1f4871c33f23e44f353119e92f969f"
   end
 
   resource "pytz" do
-    url "https://files.pythonhosted.org/packages/df/d5/3e3ff673e8f3096921b3f1b79ce04b832e0100b4741573154b72b756a681/pytz-2019.1.tar.gz"
-    sha256 "d747dd3d23d77ef44c6a3526e274af6efeb0a6f1afd5a69ba4d5be4098c8e141"
+    url "https://files.pythonhosted.org/packages/82/c3/534ddba230bd4fbbd3b7a3d35f3341d014cca213f369a9940925e7e5f691/pytz-2019.3.tar.gz"
+    sha256 "b02c06db6cf09c12dd25137e563b31700d3b80fcc4ad23abb7a315f2789819be"
   end
 
+  # resource "tornado" do
+  #   url "https://files.pythonhosted.org/packages/e6/78/6e7b5af12c12bdf38ca9bfe863fcaf53dc10430a312d0324e76c1e5ca426/tornado-5.1.1.tar.gz"
+  #   sha256 "4e5158d97583502a7e2739951553cbd88a72076f152b4b11b64b9a10c4c49409"
+  # end
+
   resource "tornado" do
-    url "https://files.pythonhosted.org/packages/e6/78/6e7b5af12c12bdf38ca9bfe863fcaf53dc10430a312d0324e76c1e5ca426/tornado-5.1.1.tar.gz"
-    sha256 "4e5158d97583502a7e2739951553cbd88a72076f152b4b11b64b9a10c4c49409"
+    url "https://files.pythonhosted.org/packages/30/78/2d2823598496127b21423baffaa186b668f73cd91887fcef78b6eade136b/tornado-6.0.3.tar.gz"
+    sha256 "c845db36ba616912074c5b1ee897f8e0124df269468f25e4fe21fe72f6edd7a9"
   end
 
   resource "cairocffi" do
-    url "https://files.pythonhosted.org/packages/62/be/ad4d422b6f38d99b09ad6d046ab725e8ccac5fefd9ca256ca35a80dbf3c6/cairocffi-0.9.0.tar.gz"
-    sha256 "15386c3a9e08823d6826c4491eaccc7b7254b1dc587a3b9ce60c350c3f990337"
+    url "https://files.pythonhosted.org/packages/f7/99/b3a2c6393563ccbe081ffcceb359ec27a6227792c5169604c1bd8128031a/cairocffi-1.1.0.tar.gz"
+    sha256 "f1c0c5878f74ac9ccb5d48b2601fcc75390c881ce476e79f4cfedd288b1b05db"
   end
 
   resource "subprocess32" do
-    url "https://files.pythonhosted.org/packages/be/2b/beeba583e9877e64db10b52a96915afc0feabf7144dcbf2a0d0ea68bf73d/subprocess32-3.5.3.tar.gz"
-    sha256 "6bc82992316eef3ccff319b5033809801c0c3372709c5f6985299c88ac7225c3"
+    url "https://files.pythonhosted.org/packages/32/c8/564be4d12629b912ea431f1a50eb8b3b9d00f1a0b1ceff17f266be190007/subprocess32-3.5.4.tar.gz"
+    sha256 "eb2937c80497978d181efa1b839ec2d9622cf9600a039a79d0e108d1f9aec79d"
   end
 
   resource "backports.functools_lru_cache" do
-    url "https://files.pythonhosted.org/packages/57/d4/156eb5fbb08d2e85ab0a632e2bebdad355798dece07d4752f66a8d02d1ea/backports.functools_lru_cache-1.5.tar.gz"
-    sha256 "9d98697f088eb1b0fa451391f91afb5e3ebde16bbdb272819fd091151fda4f1a"
+    url "https://files.pythonhosted.org/packages/ad/2e/aa84668861c3de458c5bcbfb9813f0e26434e2232d3e294469e96efac884/backports.functools_lru_cache-1.6.1.tar.gz"
+    sha256 "8fde5f188da2d593bd5bc0be98d9abc46c95bb8a9dde93429570192ee6cc2d4a"
   end
 
-  resource "numpy" do
-    url "https://files.pythonhosted.org/packages/93/48/956b9dcdddfcedb1705839280e02cbfeb2861ed5d7f59241210530867d5b/numpy-1.16.3.zip"
-    sha256 "78a6f89da87eeb48014ec652a65c4ffde370c036d780a995edaeb121d3625621"
-  end
+  # resource "numpy" do
+  #   url "https://files.pythonhosted.org/packages/40/de/0ea5092b8bfd2e3aa6fdbb2e499a9f9adf810992884d414defc1573dca3f/numpy-1.18.1.zip"
+  #   sha256 "b6ff59cee96b454516e47e7721098e6ceebef435e3e21ac2d6c3b8b02628eb77"
+  # end
 
   # python version >= 3.5 required
   # resource "scipy" do
-  #   url "https://files.pythonhosted.org/packages/cb/97/361c8c6ceb3eb765371a702ea873ff2fe112fa40073e7d2b8199db8eb56e/scipy-1.3.0.tar.gz"
-  #   sha256 "c3bb4bd2aca82fb498247deeac12265921fe231502a6bc6edea3ee7fe6c40a7a"
-  # end
+  #   url "https://files.pythonhosted.org/packages/04/ab/e2eb3e3f90b9363040a3d885ccc5c79fe20c5b8a3caa8fe3bf47ff653260/scipy-1.4.1.tar.gz"
+  #   sha256 "dee1bbf3a6c8f73b6b218cb28eed8dd13347ea2f87d572ce19b289d6fd3fbc59"
+  # end
 
   # "error: no member named 'signbit' in the global namespace"
-  resource "matplotlib" do
-    url "https://github.com/matplotlib/matplotlib/archive/v2.2.4.tar.gz"
-    sha256 "601a3bf5c1b08710edbe00347d97619f43f2d1edcd7aa94119ff837e6327c7f7"
-  end
+  # resource "matplotlib" do
+  #   url "https://github.com/matplotlib/matplotlib/archive/v2.2.5.tar.gz"
+  #   sha256 "75e9de4e4e47ae4cb23393e9df9431424d5034da77771d598ff14363d6a51dd1"
+  # end
+
+  # resource "matplotlib" do
+  #   url "https://github.com/matplotlib/matplotlib/archive/v3.1.3.tar.gz"
+  #   sha256 "6edfe021671fcad1bd6081c980c380cb3d66d00895eb8c3450fa3842c441d1d1"
+  # end
+
+  # resource "wxPython" do
+  #   url "https://files.pythonhosted.org/packages/b9/8b/31267dd6d026a082faed35ec8d97522c0236f2e083bf15aff64d982215e1/wxPython-4.0.7.post2.tar.gz"
+  #   sha256 "5a229e695b64f9864d30a5315e0c1e4ff5e02effede0a07f16e8d856737a0c4e"
+  # end
 
   def install
     # Work around "error: no member named 'signbit' in the global namespace"
@@ -265,13 +281,18 @@ class OsgeoGrass < Formula
       ENV.delete "HOMEBREW_SDKROOT"
     end
 
+    # ENV.append "CPPFLAGS", ""
+    # ENV.append "LDFLAGS", "-framework OpenCL"
+    # ENV.append "CFLAGS", "-O2 -Werror=implicit-function-declaration"
+    ENV["MYSQLD_CONFIG"] = "#{Formula["mysql"].opt_bin}/mysql_config"
+
     # install python modules
-    venv = virtualenv_create(libexec/'vendor', "#{Formula["python@2"].opt_bin}/python2")
+    venv = virtualenv_create(libexec/'vendor', "#{Formula["python"].opt_bin}/python3")
     res = resources.map(&:name).to_set # - %w[python-dateutil]
 
     # fix pip._vendor.pep517.wrappers.BackendUnavailable
-    system libexec/"vendor/bin/pip2", "install", "--upgrade", "-v", "setuptools", "pip<19.0.0", "wheel"
-    venv.pip_install_and_link "python-dateutil"
+    # system libexec/"vendor/bin/pip3", "install", "--upgrade", "-v", "setuptools", "pip<19.0.0", "wheel"
+    # venv.pip_install_and_link "python-dateutil"
 
     res.each do |r|
       venv.pip_install resource(r)
@@ -301,6 +322,8 @@ class OsgeoGrass < Formula
       "--with-lapack-includes=#{Formula["lapack"].opt_include}",
       "--with-lapack-libs=#{Formula["lapack"].opt_lib}",
       "--with-geos=#{Formula["geos"].opt_bin}/geos-config",
+      "--with-geos-includes=#{Formula["geos"].opt_include}",
+      "--with-geos-libs=#{Formula["geos"].opt_lib}",
       "--with-odbc",
       "--with-odbc-includes=#{Formula["unixodbc"].opt_include}",
       "--with-odbc-libs=#{Formula["unixodbc"].opt_lib}",
@@ -436,9 +459,9 @@ class OsgeoGrass < Formula
     ln_sf "grass#{majmin_ver}", "#{prefix}/grass-base"
     # Writes a wrapper env script and moves all files to the dst
 
-    # ensure python2 is used
+    # ensure python3 is used
     # for some reason, in this build (v7.6.1_1), the script is not created.
-    # bin.env_script_all_files("#{libexec}/bin", :GRASS_PYTHON => "python2")
+    # bin.env_script_all_files("#{libexec}/bin", :GRASS_PYTHON => "python3")
     # for this reason we move the binary and create another that will call
     # this with the requirements mentioned above.
     mkdir "#{libexec}/bin"
@@ -477,7 +500,10 @@ class OsgeoGrass < Formula
       # file << "export R_HOME=/Applications/RStudio.app/Contents/MacOS/RStudio:$R_HOME"
       # file << "export R_USER=USER_PROFILE/Documents"
       file << "\n"
-      file << "GRASS_PYTHON=python2 exec #{libexec}/bin/grass#{majmin_ver} $@"
+      file << "GRASS_PYTHON=python3 exec #{libexec}/bin/grass#{majmin_ver} $@"
+      # file << "GISBASE=#{HOMEBREW_PREFIX}/osgeo-grass"
+      # file << "PATH=#{PATH}:#{GISBASE}/bin:#{GISBASE}/scripts"
+      # file << "MANPATH=#{MANPATH}:#{GISBASE}/man"
     }
     chmod("+x", "#{bin}/grass#{majmin_ver}")
     chmod("+x", "#{libexec}/bin/grass#{majmin_ver}")
@@ -550,20 +576,20 @@ class OsgeoGrass < Formula
   end
 
   def formula_site_packages(f)
-    `#{Formula["python@2"].opt_bin}/python2 -c "import os, sys, site; sp1 = list(sys.path); site.addsitedir('#{Formula[f].opt_lib}/python2.7/site-packages'); print(os.pathsep.join([x for x in sys.path if x not in sp1]))"`.strip
+    `#{Formula["python"].opt_bin}/python3 -c "import os, sys, site; sp1 = list(sys.path); site.addsitedir('#{Formula[f].opt_lib}/python3.7/site-packages'); print(os.pathsep.join([x for x in sys.path if x not in sp1]))"`.strip
   end
 
   def caveats
     s = <<~EOS
 
       If it is the case that you can change the shebang at the beginning of
-      the script to enforce Python 2 usage.
+      the script to enforce Python 3 usage.
 
         \e[32m#!/usr/bin/env python\e[0m
 
       Should be changed into
 
-        \e[32m#!/usr/bin/env python2\e[0m
+        \e[32m#!/usr/bin/env python3\e[0m
 
     EOS
 
