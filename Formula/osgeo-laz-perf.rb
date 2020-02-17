@@ -12,7 +12,7 @@ class OsgeoLazPerf < Formula
     sha256 "b185161a85e97816ae429781856862ef8ddd330716369132ae2b8d0ae0e0bd9d" => :sierra
   end
 
-  # revision 1
+  revision 1
 
   head "https://github.com/hobu/laz-perf.git", :branch => "master"
 
