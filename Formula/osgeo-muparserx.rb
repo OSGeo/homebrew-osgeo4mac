@@ -12,7 +12,7 @@ class OsgeoMuparserx < Formula
     sha256 "ded4ce5df774c51f10a8137b7b23b98317ecdef59183bba0375815201699a127" => :sierra
   end
 
-  # revision 1
+  revision 1
 
   head "https://github.com/beltoforion/muparserx.git", :branch => "master"
 
