@@ -1,15 +1,14 @@
 class OsgeoOssim < Formula
   desc "Geospatial libs and apps to process imagery, terrain, and vector data"
   homepage "https://trac.osgeo.org/ossim/"
-  url "https://github.com/ossimlabs/ossim/archive/Laguna-2.8.2.tar.gz"
-  sha256 "3cc1775f7b7bc6da0393f3512e65bc08dfee4acbe88fbcb40f3f0941b96c06c0"
+  url "https://github.com/ossimlabs/ossim/archive/OrchidIsland-2.11.1.tar.gz"
+  sha256 "2823d132c8da3cb57c030f72ab4c0fbf493eccac6b34c1ec7192741312a839eb"
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
-    rebuild 1
-    sha256 "7b9f6f9e4747d48232d906637c78dd1d21b6c95f75903ebe62800dfd227d0ce3" => :mojave
-    sha256 "7b9f6f9e4747d48232d906637c78dd1d21b6c95f75903ebe62800dfd227d0ce3" => :high_sierra
-    sha256 "85ccdab7170ec910edada1d3f5b98065c4cb48617303876449cba29009e4380b" => :sierra
+    sha256 "18a9745788691c522d7af3b9cafb856cfb1434802ac19bf9cca48fa6ffb9d792" => :catalina
+    sha256 "18a9745788691c522d7af3b9cafb856cfb1434802ac19bf9cca48fa6ffb9d792" => :mojave
+    sha256 "18a9745788691c522d7af3b9cafb856cfb1434802ac19bf9cca48fa6ffb9d792" => :high_sierra
   end
 
   # revision 1

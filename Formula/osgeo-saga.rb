@@ -10,15 +10,15 @@ class OsgeoSaga < Formula
   # REQUIRED_VERSION = '2.3.'
   # BETA_SUPPORT_VERSION = '7.3.'
 
-  # revision 1
+  revision 1
 
   head "https://git.code.sf.net/p/saga-gis/code.git"
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
-    sha256 "0c4326801c35cbe8704911eb4ce3b9730fecb46649cda0159ad8b93e3bf8c114" => :catalina
-    sha256 "0c4326801c35cbe8704911eb4ce3b9730fecb46649cda0159ad8b93e3bf8c114" => :mojave
-    sha256 "0c4326801c35cbe8704911eb4ce3b9730fecb46649cda0159ad8b93e3bf8c114" => :high_sierra
+    sha256 "f2be7bda78e5b6187179ff9fe4cc73ed2dd7ffff59d236a266a28e16f5a5de23" => :catalina
+    sha256 "f2be7bda78e5b6187179ff9fe4cc73ed2dd7ffff59d236a266a28e16f5a5de23" => :mojave
+    sha256 "f2be7bda78e5b6187179ff9fe4cc73ed2dd7ffff59d236a266a28e16f5a5de23" => :high_sierra
   end
 
   keg_only "QGIS fails to load the correct SAGA version, if the latest version is in the path"
@@ -30,7 +30,7 @@ class OsgeoSaga < Formula
   depends_on "autoconf" => :build
   depends_on "libtool" => :build
   depends_on "pkg-config" => :build
-  depends_on "python@2"
+  depends_on "python"
   depends_on "wxmac"
   depends_on "wxpython"
   depends_on "geos"
@@ -97,8 +97,8 @@ class OsgeoSaga < Formula
     # Disable narrowing warnings when compiling in C++11 mode.
     ENV.append "CXXFLAGS", "-Wno-c++11-narrowing -std=c++11"
 
-    ENV.append "PYTHON_VERSION", "2.7"
-    ENV.append "PYTHON", "#{Formula["python@2"].opt_bin}/python2"
+    ENV.append "PYTHON_VERSION", "3.7"
+    ENV.append "PYTHON", "#{Formula["python"].opt_bin}/python3"
 
     # support for PROJ 6
     # ENV.append_to_cflags "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"
