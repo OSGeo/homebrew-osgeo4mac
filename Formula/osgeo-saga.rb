@@ -10,7 +10,7 @@ class OsgeoSaga < Formula
   # REQUIRED_VERSION = '2.3.'
   # BETA_SUPPORT_VERSION = '7.3.'
 
-  # revision 1
+  revision 1
 
   head "https://git.code.sf.net/p/saga-gis/code.git"
 
@@ -30,7 +30,7 @@ class OsgeoSaga < Formula
   depends_on "autoconf" => :build
   depends_on "libtool" => :build
   depends_on "pkg-config" => :build
-  depends_on "python@2"
+  depends_on "python"
   depends_on "wxmac"
   depends_on "wxpython"
   depends_on "geos"
@@ -97,8 +97,8 @@ class OsgeoSaga < Formula
     # Disable narrowing warnings when compiling in C++11 mode.
     ENV.append "CXXFLAGS", "-Wno-c++11-narrowing -std=c++11"
 
-    ENV.append "PYTHON_VERSION", "2.7"
-    ENV.append "PYTHON", "#{Formula["python@2"].opt_bin}/python2"
+    ENV.append "PYTHON_VERSION", "3.7"
+    ENV.append "PYTHON", "#{Formula["python"].opt_bin}/python3"
 
     # support for PROJ 6
     # ENV.append_to_cflags "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"
