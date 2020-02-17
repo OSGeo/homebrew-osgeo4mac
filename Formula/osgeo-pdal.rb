@@ -21,8 +21,8 @@ class OsgeoPdal < Formula
   include Language::Python::Virtualenv
   desc "Point data abstraction library"
   homepage "https://www.pdal.io/"
-  url "https://github.com/PDAL/PDAL/archive/1.9.1.tar.gz"
-  sha256 "c388643cc781be39537c17ca48d0a436411ff68baeb0df56daed5e8596e09e92"
+  url "https://github.com/PDAL/PDAL/archive/2.0.1.tar.gz"
+  sha256 "bf85c0d826c644a2c52791c62227a5fbfeae845dd9d2c8bdad2d002035673e21"
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
@@ -32,13 +32,13 @@ class OsgeoPdal < Formula
     sha256 "486073617cacabf1809522aa4cc2604086d35b389ed35ad952d4e01f41415223" => :sierra
   end
 
-  revision 1
+  # revision 1
 
   head "https://github.com/PDAL/PDAL.git", :branch => "master"
 
   option "with-pg10", "Build with PostgreSQL 10 client"
 
-  # keg_only "pdal" is already provided by homebrew/core"
+  # keg_only "pdal is already provided by homebrew/core"
   # we will verify that other versions are not linked
   depends_on Unlinked
 
