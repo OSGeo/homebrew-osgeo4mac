@@ -7,9 +7,9 @@ class OsgeoLazPerf < Formula
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any_skip_relocation
-    sha256 "7b02a955661953ec73411efaa516147d67e2376b3a81ce735fa7006bf3aee116" => :mojave
-    sha256 "7b02a955661953ec73411efaa516147d67e2376b3a81ce735fa7006bf3aee116" => :high_sierra
-    sha256 "b185161a85e97816ae429781856862ef8ddd330716369132ae2b8d0ae0e0bd9d" => :sierra
+    sha256 "c7cdfafb3568e4381c0322f56af26cfe9660c796d15dc78f7e46931a18305aae" => :catalina
+    sha256 "c7cdfafb3568e4381c0322f56af26cfe9660c796d15dc78f7e46931a18305aae" => :mojave
+    sha256 "c7cdfafb3568e4381c0322f56af26cfe9660c796d15dc78f7e46931a18305aae" => :high_sierra
   end
 
   revision 1
