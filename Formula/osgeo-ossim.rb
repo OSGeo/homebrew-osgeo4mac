@@ -1,8 +1,8 @@
 class OsgeoOssim < Formula
   desc "Geospatial libs and apps to process imagery, terrain, and vector data"
   homepage "https://trac.osgeo.org/ossim/"
-  url "https://github.com/ossimlabs/ossim/archive/Laguna-2.8.2.tar.gz"
-  sha256 "3cc1775f7b7bc6da0393f3512e65bc08dfee4acbe88fbcb40f3f0941b96c06c0"
+  url "https://github.com/ossimlabs/ossim/archive/OrchidIsland-2.11.1.tar.gz"
+  sha256 "2823d132c8da3cb57c030f72ab4c0fbf493eccac6b34c1ec7192741312a839eb"
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
