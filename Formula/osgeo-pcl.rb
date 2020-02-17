@@ -1,7 +1,7 @@
 class OsgeoPcl < Formula
   desc "Library for 2D/3D image and point cloud processing"
   homepage "http://www.pointclouds.org/"
-  url "https://github.com/PointCloudLibrary/pcl/archive/pcl-1.9.1.tar.gz"
+  url "https://github.com/PointCloudLibrary/pcl/archive/pcl-1.10.0.tar.gz"
   sha256 "0add34d53cd27f8c468a59b8e931a636ad3174b60581c0387abb98a9fc9cddb6"
 
   bottle do
@@ -12,7 +12,7 @@ class OsgeoPcl < Formula
     sha256 "90dfc4fc65c96aced411ba2b568862ec43336c564fe5541b55d73bbdae54993a" => :sierra
   end
 
-  revision 5
+  # revision 1
 
   head "https://github.com/PointCloudLibrary/pcl.git", :branch => "master"
 
