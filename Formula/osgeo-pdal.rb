@@ -32,7 +32,7 @@ class OsgeoPdal < Formula
     sha256 "486073617cacabf1809522aa4cc2604086d35b389ed35ad952d4e01f41415223" => :sierra
   end
 
-  # revision 1
+  revision 1
 
   head "https://github.com/PDAL/PDAL.git", :branch => "master"
 
