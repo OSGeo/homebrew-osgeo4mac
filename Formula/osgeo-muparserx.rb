@@ -7,9 +7,9 @@ class OsgeoMuparserx < Formula
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any_skip_relocation
-    sha256 "5af85a06844fecba30fb23c997031958ba9f8b7be00245a26330755f81b71112" => :mojave
-    sha256 "5af85a06844fecba30fb23c997031958ba9f8b7be00245a26330755f81b71112" => :high_sierra
-    sha256 "ded4ce5df774c51f10a8137b7b23b98317ecdef59183bba0375815201699a127" => :sierra
+    sha256 "dc5c03f4beda885437d5a80aa3b582ec7dc24b3c3425f2e04cbb635e78c88e46" => :catalina
+    sha256 "dc5c03f4beda885437d5a80aa3b582ec7dc24b3c3425f2e04cbb635e78c88e46" => :mojave
+    sha256 "dc5c03f4beda885437d5a80aa3b582ec7dc24b3c3425f2e04cbb635e78c88e46" => :high_sierra
   end
 
   revision 1
