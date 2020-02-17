@@ -113,7 +113,7 @@ for f in ${CHANGED_FORMULAE};do
     brew unlink osgeo-grass
   fi
 
-  if [ "${f}" == "osgeo-vtk" ] || [ "${f}" == "osgeo-insighttoolkit" ];then
+  if [ "${f}" == "osgeo-vtk" ] || [ "${f}" == "osgeo-insighttoolkit" ] || [ "${f}" == "osgeo-pcl" ];then
     echo "Installing jpeg-turbo"
     # osgeo-vtk: Java 1.8 is required to install this formula.
     # Install AdoptOpenJDK 8 with Homebrew Cask:
