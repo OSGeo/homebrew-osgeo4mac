@@ -59,7 +59,8 @@ class OsgeoOpenscenegraph < Formula
   depends_on "gnuplot"
   depends_on "gtkglext"
   depends_on "jasper"
-  depends_on "jpeg"
+  # depends_on "jpeg"
+  depends_on "jpeg-turbo"
   depends_on "librsvg"
   depends_on "libtiff"
   depends_on "mesa"
@@ -78,13 +79,16 @@ class OsgeoOpenscenegraph < Formula
   depends_on "osgeo-gdal"
   depends_on "osgeo-opencollada"
 
-  depends_on "asio"
   depends_on "ilmbase"
   depends_on "v8"
   depends_on "llvm"
   depends_on "gstreamer"
 
   depends_on :x11
+
+  # https://gentoobrowse.randomdan.homeip.net/packages/dev-games/openscenegraph
+  # https://bugs.gentoo.org/698866
+  # depends_on "asio"
 
   # patch necessary to ensure support for gtkglext-quartz
   # filed as an issue to the developers https://github.com/openscenegraph/osg/issues/34
@@ -124,7 +128,7 @@ class OsgeoOpenscenegraph < Formula
     # args << "-DCMAKE_DISABLE_FIND_PACKAGE_GtkGl=1"
     # args << "-DCMAKE_DISABLE_FIND_PACKAGE_DirectInput=1"
     # args << "-DCMAKE_DISABLE_FIND_PACKAGE_NVTT=1"
-    # args << "-DCMAKE_DISABLE_FIND_PACKAGE_Asio=1"
+    args << "-DCMAKE_DISABLE_FIND_PACKAGE_Asio=1"
     # args << "-DCMAKE_DISABLE_FIND_PACKAGE_ZeroConf=1"
     # args << "-DCMAKE_DISABLE_FIND_PACKAGE_OpenCascade=1"
     # args << "-DCMAKE_DISABLE_FIND_PACKAGE_LIBLAS=1"
@@ -133,6 +137,9 @@ class OsgeoOpenscenegraph < Formula
     # args << "-DCMAKE_DISABLE_FIND_PACKAGE_FFmpeg=ON"
     # args << "-DCMAKE_DISABLE_FIND_PACKAGE_GDAL=ON"
     # args << "-DCMAKE_DISABLE_FIND_PACKAGE_TIFF=ON"
+
+    # args << "-DCMAKE_DISABLE_FIND_PACKAGE_Jasper=ON"
+    # args << "-DCMAKE_DISABLE_FIND_PACKAGE_OpenEXR=ON"
 
     args << "-DOSG_DEFAULT_IMAGE_PLUGIN_FOR_OSX=imageio"
     args << "-DOSG_WINDOWING_SYSTEM=Cocoa"
@@ -164,6 +171,46 @@ class OsgeoOpenscenegraph < Formula
 end
 
 __END__
+
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1021,7 +1021,7 @@
+         #C4706 assignment within conditional expression
+         #C4589: Constructor of abstract class 'osgGA::CameraManipulator' ignores initializer for virtual base class 'osg::Object'
+         SET(OSG_AGGRESSIVE_WARNING_FLAGS /W4 /wd4589 /wd4706 /wd4127 /wd4100)
+-ELSEIF(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
++ELSEIF(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+         SET(OSG_AGGRESSIVE_WARNING_FLAGS  -Wall -Wparentheses -Wno-long-long -Wno-import -pedantic -Wreturn-type -Wmissing-braces -Wunknown-pragmas -Wunused -Wno-overloaded-virtual)
+
+         # CMake lacks an elseif, so other non-gcc, non-VS compilers need
+@@ -1032,25 +1032,17 @@
+             SET(OSG_CXX_LANGUAGE_STANDARD "C++11" CACHE STRING "set the c++ language standard (C++98 / GNU++98 / C++11) for OSG" )
+             MARK_AS_ADVANCED(OSG_CXX_LANGUAGE_STANDARD)
+             # remove existing flags
+-            REMOVE_CXX_FLAG(-std=c++98)
+-            REMOVE_CXX_FLAG(-std=gnu++98)
+-            REMOVE_CXX_FLAG(-std=c++11)
+-            REMOVE_CXX_FLAG(-stdlib=libstdc++)
+-            REMOVE_CXX_FLAG(-stdlib=libc++)
+
+             IF(${OSG_CXX_LANGUAGE_STANDARD} STREQUAL "c++98" OR ${OSG_CXX_LANGUAGE_STANDARD} STREQUAL "C++98")
+                 set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++98")
+-                set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY "libstdc++")
+-                set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++98 -stdlib=libstdc++")
++                set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++98")
+             ELSE()
+                 IF(${OSG_CXX_LANGUAGE_STANDARD} STREQUAL "gnu++98" OR ${OSG_CXX_LANGUAGE_STANDARD} STREQUAL "GNU++98")
+                     set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "gnu++98")
+-                    set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY "libstdc++")
+-                    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++98 -stdlib=libstdc++")
++                    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++98")
+                 ELSE()
+                     set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++11")
+-                    set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY "libc++")
+-                    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -stdlib=libc++")
++                    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+                 ENDIF()
+             ENDIF()
 
 --- a/CMakeModules/FindGtkGl.cmake
 +++ b/CMakeModules/FindGtkGl.cmake
