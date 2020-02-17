@@ -2,7 +2,7 @@ class OsgeoPcl < Formula
   desc "Library for 2D/3D image and point cloud processing"
   homepage "http://www.pointclouds.org/"
   url "https://github.com/PointCloudLibrary/pcl/archive/pcl-1.10.0.tar.gz"
-  sha256 "0add34d53cd27f8c468a59b8e931a636ad3174b60581c0387abb98a9fc9cddb6"
+  sha256 "dd24f93967ba9512a02d6fa15855084a45deb4cd6f3662f22afbbf0d65978d20"
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
@@ -32,7 +32,6 @@ class OsgeoPcl < Formula
   depends_on "hdf5"
   depends_on "osgeo-netcdf"
   depends_on "gl2ps"
-  depends_on "python@2"
   depends_on "python"
   depends_on "sphinx"
   depends_on "zlib"
