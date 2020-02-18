@@ -1,4 +1,4 @@
-class OsgeoInsighttoolkitAT24 < Formula
+class OsgeoInsighttoolkitAT4 < Formula
   desc "ITK is a toolkit for performing registration and segmentation"
   homepage "https://www.itk.org"
   url "https://downloads.sourceforge.net/project/itk/itk/4.13/InsightToolkit-4.13.2.tar.gz"
