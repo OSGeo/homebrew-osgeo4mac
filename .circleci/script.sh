@@ -55,6 +55,10 @@ for f in ${CHANGED_FORMULAE};do
     brew unlink openjpeg
   fi
 
+  if [ "$(echo ${deps} | grep -c 'osgeo-insighttoolkit@4')" != "0" ] || [ "${f}" == "osgeo-insighttoolkit@4" ];then
+    brew unlink openjpeg
+  fi
+
   # fix test
   # initdb: could not create directory "/usr/local/var/postgresql": Operation not permitted
   if [ "${f}" == "osgeo-libpqxx" ];then

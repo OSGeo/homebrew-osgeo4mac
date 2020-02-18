@@ -4,7 +4,7 @@ class OsgeoInsighttoolkitAT4 < Formula
   url "https://downloads.sourceforge.net/project/itk/itk/4.13/InsightToolkit-4.13.2.tar.gz"
   sha256 "d8760b279de20497c432e7cdf97ed349277da1ae435be1f6f0f00fbe8d4938c1"
 
-  revision 1
+  revision 2
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
@@ -15,6 +15,8 @@ class OsgeoInsighttoolkitAT4 < Formula
   end
 
   head "https://github.com/InsightSoftwareConsortium/ITK.git", :branch => "master"
+
+  # keg_only "Testing ITK - is not linked"
 
   option "with-examples", "Compile and install various examples"
   option "with-itkv3-compatibility", "Include ITKv3 compatibility"
