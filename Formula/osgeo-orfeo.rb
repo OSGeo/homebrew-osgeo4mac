@@ -1,10 +1,10 @@
 class OsgeoOrfeo < Formula
   desc "Library of image processing algorithms"
   homepage "https://www.orfeo-toolbox.org/otb"
-  url "https://github.com/orfeotoolbox/OTB/archive/6.6.2.tar.gz"
-  sha256 "39c2a9e202e1a2e2b12f2fb96b60a99123700cd169b69a8fb021137f5612b89c"
+  url "https://github.com/orfeotoolbox/OTB/archive/7.0.0.tar.gz"
+  sha256 "cd81a538cda6420e06a921bb575f5c25e204f9c382aac23e161d91e583aaf22a"
 
-  revision 1
+  # revision 1
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
@@ -15,6 +15,26 @@ class OsgeoOrfeo < Formula
   end
 
   head "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb.git", :branch => "master"
+
+  # Errors found when using ITK 5
+  # https://github.com/InsightSoftwareConsortium/ITKNeuralNetworks/issues/13
+  # https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/merge_requests/194
+  ###################
+  # CMake Error at /usr/local/opt/osgeo-insighttoolkit/lib/cmake/ITK-5.0/ITKModuleAPI.cmake
+  #  No such module: "ITKNeuralNetworks"
+  # Modules/ThirdParty/ITK/otb-module-init.cmake
+  # CMake/OTBModuleEnablement.cmake
+  # CMakeLists.txt
+  ###################
+  # /Modules/Core/Common/src/otbConfigurationManager.cxx: fatal error: 'itkMultiThreader.h' file not found
+  # /Modules/Core/Metadata/src/otbImageMetadataInterfaceFactory.cxx: fatal error: 'itkMutexLock.h' file not found
+  # Modules/Core/Metadata/src/otbImageMetadataInterfaceFactory.cxx: fatal error: 'ITKDeprecatedExport.h' file not found
+  ###################
+  # MPIConfig::Pointer MPIConfig::m_Singleton = NULL;
+  # /usr/local/include/ITK-5.0/itkSmartPointer.h: note: candidate constructor
+  #   constexpr SmartPointer (std::nullptr_t p) noexcept
+  # /usr/local/include/ITK-5.0/itkSmartPointer.h: note: candidate constructor
+  #   SmartPointer (ObjectType *p) noexcept
 
   # otbenv.profile
   patch :DATA
@@ -65,7 +85,8 @@ class OsgeoOrfeo < Formula
   depends_on "osgeo-libkml" => :recommended
   depends_on "osgeo-vtk"
   depends_on "osgeo-ossim"
-  depends_on "osgeo-insighttoolkit"
+  # depends_on "osgeo-insighttoolkit"
+  depends_on "osgeo-insighttoolkit@4"
   depends_on "osgeo-openscenegraph" # (for libOpenThreads, now internal to osg)
 
   # ICE Viewer: needs X11 support
@@ -276,11 +297,11 @@ __END__
 
 --- a/Packaging/Files/otbenv.profile
 +++ b/Packaging/Files/otbenv.profile
-@@ -37,18 +37,18 @@
- PATH=OUT_DIR/bin:$PATH
+@@ -49,18 +49,18 @@
+ PATH=$(cat_path "OUT_DIR/bin" "$PATH")
 
  # export PYTHONPATH to import otbApplication.py
--PYTHONPATH=OUT_DIR/lib/python:$PYTHONPATH
+-PYTHONPATH=$(cat_path "OUT_DIR/lib/python" "$PYTHONPATH")
 +PYTHONPATH=OUT_DIR/lib/python3.7/site-packages:$PYTHONPATH
 
  # set numeric locale to C
@@ -298,3 +319,43 @@ __END__
 
  # export variables
  export LC_NUMERIC
+
+# --- a/CMakeLists.txt
+# +++ b/CMakeLists.txt
+# @@ -100,6 +100,12 @@
+#  reset_qt_i18n_sources()
+#
+#  repository_status(${PROJECT_SOURCE_DIR} OTB_GIT_STATUS_MESSAGE)
+# +
+# +#if ITK_VERSION_MAJOR < 5
+# +#define OTB_DISABLE_DYNAMIC_MT
+# +#else
+# +#define OTB_DISABLE_DYNAMIC_MT this->DynamicMultiThreadingOff();
+# +#endif
+
+ # Find python stuff
+ # Version 3 is preferred before 2
+
+# --- a/SuperBuild/CMake/External_itk.cmake
+# +++ b/SuperBuild/CMake/External_itk.cmake
+# @@ -84,7 +84,7 @@
+#    Eigen
+#    #FEM
+#    NarrowBand
+# -  NeuralNetworks
+# +  #NeuralNetworks
+#    Optimizers
+#    Optimizersv4
+#    Polynomials
+
+# --- a/Modules/ThirdParty/ITK/otb-module-init.cmake
+# +++ b/Modules/ThirdParty/ITK/otb-module-init.cmake
+# @@ -71,7 +71,7 @@
+#      ITKEigen
+#      #ITKFEM
+#      ITKNarrowBand
+# -    ITKNeuralNetworks
+# +    #ITKNeuralNetworks
+#      ITKOptimizers
+#      ITKOptimizersv4
+#      ITKPolynomials
