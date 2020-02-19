@@ -20,10 +20,10 @@ end
 class OsgeoQtkeychain < Formula
   desc "Platform-independent Qt-based API for storing passwords securely"
   homepage "https://github.com/frankosterfeld/qtkeychain"
-  url "https://github.com/frankosterfeld/qtkeychain/archive/v0.9.1.tar.gz"
-  sha256 "9c2762d9d0759a65cdb80106d547db83c6e9fdea66f1973c6e9014f867c6f28e"
+  url "https://github.com/frankosterfeld/qtkeychain/archive/v0.10.0.tar.gz"
+  sha256 "5f916cd97843de550467db32d2e10f218b904af5b21cfdfcc7c6425d7dfc3ec2"
 
-  revision 2
+  # revision 1
 
   head "https://github.com/frankosterfeld/qtkeychain.git", :using => :git
 
@@ -39,7 +39,7 @@ class OsgeoQtkeychain < Formula
   option "with-static", "Build static in addition to shared library"
   option "with-translations", "Generate Qt translation (.ts) files"
 
-  # keg_only "qtkeychain" is already provided by homebrew/core"
+  # keg_only "qtkeychain is already provided by homebrew/core"
   # we will verify that other versions are not linked
   depends_on Unlinked
 
