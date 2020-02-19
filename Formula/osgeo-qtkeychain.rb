@@ -30,10 +30,9 @@ class OsgeoQtkeychain < Formula
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any
-    rebuild 1
-    sha256 "86f4befa40e6be513f8a837fa2917f3aa3f7c268a3f3de0a383b644b63f0cd88" => :mojave
-    sha256 "86f4befa40e6be513f8a837fa2917f3aa3f7c268a3f3de0a383b644b63f0cd88" => :high_sierra
-    sha256 "9307f3557223a06d3678a66548b2f4e563aeec4a75a5a97ed6e107fde708bdd4" => :sierra
+    sha256 "a9261f3ce89b4e46e1cc52415d54b993fc2716cc7ed4fd713bb57d2f78596659" => :catalina
+    sha256 "a9261f3ce89b4e46e1cc52415d54b993fc2716cc7ed4fd713bb57d2f78596659" => :mojave
+    sha256 "a9261f3ce89b4e46e1cc52415d54b993fc2716cc7ed4fd713bb57d2f78596659" => :high_sierra
   end
 
   option "with-static", "Build static in addition to shared library"
