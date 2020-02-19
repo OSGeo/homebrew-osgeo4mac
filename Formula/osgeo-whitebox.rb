@@ -5,7 +5,7 @@ class OsgeoWhitebox < Formula
   sha256 "32b2a75dab883e97d271621c60e7ad254558587b8bda0f1013bb9562077eea34"
   version "3.4.0"
 
-  revision 5
+  revision 6
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
