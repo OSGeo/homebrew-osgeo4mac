@@ -27,7 +27,7 @@ end
 class OsgeoPostgisAT24 < Formula
   desc "Adds support for geographic objects to PostgreSQL"
   homepage "https://postgis.net/"
-  url "https://github.com/postgis/postgis/archive/2.4.7.tar.gz"
+  url "https://github.com/postgis/postgis/archive/2.4.8.tar.gz"
   sha256 "6d0211a6bcbe45750967e850975ec0bcce4b14f5b4226a189f1e33694e7b8fe9"
 
   bottle do
@@ -39,7 +39,7 @@ class OsgeoPostgisAT24 < Formula
     sha256 "c7beee0ddd6337a6f521b44a9b5cfbf57f824c20201b75d72dc115e379bcd509" => :sierra
   end
 
-  revision 3
+  #revision 3
 
   head "https://github.com/postgis/postgis.git", :branch => "svn-2.4"
 
@@ -128,7 +128,7 @@ class OsgeoPostgisAT24 < Formula
 
     # Disable topology support.
     # There is no corresponding library as all logic needed for
-    # topology is in postgis- 2.4.7 library.
+    # topology is in postgis- 2.4.8 library.
     # args << "--without-topology"
 
     # Disable the address_standardizer extension
