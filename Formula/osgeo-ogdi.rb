@@ -11,10 +11,9 @@ class OsgeoOgdi < Formula
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any
-    rebuild 1
-    sha256 "9fcc2a7bd469eb1bfc41864de8f241db81a3649cbcbd9832fd9ce9c76c7423d3" => :mojave
-    sha256 "9fcc2a7bd469eb1bfc41864de8f241db81a3649cbcbd9832fd9ce9c76c7423d3" => :high_sierra
-    sha256 "052b249ba4d37321a6fd350fca7940daecc85cc4ae9e846cecdc68d08275ed55" => :sierra
+    sha256 "1711d8d11d631cb764ff92a35beab789d4e4e620de8d1ded457b7020c42d9ed7" => :catalina
+    sha256 "1711d8d11d631cb764ff92a35beab789d4e4e620de8d1ded457b7020c42d9ed7" => :mojave
+    sha256 "1711d8d11d631cb764ff92a35beab789d4e4e620de8d1ded457b7020c42d9ed7" => :high_sierra
   end
 
   # depends_on "autoconf" => :build
