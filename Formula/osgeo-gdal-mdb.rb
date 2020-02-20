@@ -1,10 +1,10 @@
 class OsgeoGdalMdb < Formula
-  desc "GDAL/OGR 2.x plugin for MDB driver"
+  desc "GDAL/OGR 3.x plugin for MDB driver"
   homepage "http://www.gdal.org/drv_mdb.html"
   url "https://github.com/OSGeo/gdal/releases/download/v3.0.4/gdal-3.0.4.tar.gz"
   sha256 "fc15d2b9107b250305a1e0bd8421dd9ec1ba7ac73421e4509267052995af5e83"
 
-  # revision 1
+  revision 1
 
   head "https://github.com/OSGeo/gdal.git", :branch => "master"
 
