@@ -1,5 +1,5 @@
 class OsgeoGdalOracle < Formula
-  desc "GDAL/OGR 2.x plugin for Oracle Spatial driver"
+  desc "GDAL/OGR 3.x plugin for Oracle Spatial driver"
   homepage "http://www.gdal.org/drv_oci.html"
   url "https://github.com/OSGeo/gdal/releases/download/v3.0.4/gdal-3.0.4.tar.gz"
   sha256 "fc15d2b9107b250305a1e0bd8421dd9ec1ba7ac73421e4509267052995af5e83"
