@@ -22,8 +22,12 @@ class OsgeoGdal < Formula
   homepage "https://www.gdal.org/"
   url "https://github.com/OSGeo/gdal/releases/download/v3.0.4/gdal-3.0.4.tar.gz"
   sha256 "fc15d2b9107b250305a1e0bd8421dd9ec1ba7ac73421e4509267052995af5e83"
+  #url "https://github.com/OSGeo/gdal.git",
+  #  :branch => "master",
+  #  :commit => "ee535a1a3f5b35b0d231e1faac89ac1f889f7988"
+  #version "3.0.4"
 
-  # revision 1
+  revision 1
 
   head do
     url "https://github.com/OSGeo/gdal.git", :branch => "master"
