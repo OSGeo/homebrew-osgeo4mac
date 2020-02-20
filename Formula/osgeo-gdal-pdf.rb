@@ -5,7 +5,7 @@ class OsgeoGdalPdf < Formula
   sha256 "fc15d2b9107b250305a1e0bd8421dd9ec1ba7ac73421e4509267052995af5e83"
 
   revision 1
-
+  
   head "https://github.com/OSGeo/gdal.git", :branch => "master"
 
   bottle do
