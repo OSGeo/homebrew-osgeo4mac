@@ -11,9 +11,10 @@ class OsgeoPdfium < Formula
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any_skip_relocation
-    sha256 "0ade6a9309d78ff85232cd3482bbc62cba37a7ebb429e89987ab7760a47cf50c" => :mojave
-    sha256 "0ade6a9309d78ff85232cd3482bbc62cba37a7ebb429e89987ab7760a47cf50c" => :high_sierra
-    sha256 "1291540693ad1a91dbccf2979b4e0ea79ec73743958ba28ca657ac2a18c04632" => :sierra
+    rebuild 1
+    sha256 "c99e8ad04cda183ba17c53c5dee0c7bfc26ad36ab0ffb24ecbcea5b93f8e2686" => :catalina
+    sha256 "c99e8ad04cda183ba17c53c5dee0c7bfc26ad36ab0ffb24ecbcea5b93f8e2686" => :mojave
+    sha256 "c99e8ad04cda183ba17c53c5dee0c7bfc26ad36ab0ffb24ecbcea5b93f8e2686" => :high_sierra
   end
 
   keg_only "newer version of pdfium may be installed"
