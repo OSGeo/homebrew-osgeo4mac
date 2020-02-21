@@ -16,9 +16,9 @@ class OsgeoSagaLts < Formula
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
-    sha256 "f2be7bda78e5b6187179ff9fe4cc73ed2dd7ffff59d236a266a28e16f5a5de23" => :catalina
-    sha256 "f2be7bda78e5b6187179ff9fe4cc73ed2dd7ffff59d236a266a28e16f5a5de23" => :mojave
-    sha256 "f2be7bda78e5b6187179ff9fe4cc73ed2dd7ffff59d236a266a28e16f5a5de23" => :high_sierra
+    sha256 "d6e1dee1ee3b83fef35d382667ba5b8e3bce170df9a4832153452178ea47a7dc" => :catalina
+    sha256 "d6e1dee1ee3b83fef35d382667ba5b8e3bce170df9a4832153452178ea47a7dc" => :mojave
+    sha256 "d6e1dee1ee3b83fef35d382667ba5b8e3bce170df9a4832153452178ea47a7dc" => :high_sierra
   end
 
   keg_only "This version is specifically to work with QGIS"
