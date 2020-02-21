@@ -1,8 +1,8 @@
 class OsgeoSagaLts < Formula
   desc "System for Automated Geoscientific Analyses - Long Term Support"
   homepage "http://saga-gis.org"
-  url "https://downloads.sourceforge.net/project/saga-gis/SAGA%20-%207/SAGA%20-%207.4.0/saga-7.4.0.tar.gz"
-  sha256 "73556ca1d0b83830405b40c402670ed9ac69db72d0b681a8318d33a7b2c78ce6"
+  url "https://downloads.sourceforge.net/project/saga-gis/SAGA%20-%207/SAGA%20-%207.3.0/saga-7.3.0.tar.gz"
+  sha256 "f3c0f805bd48c3afbad56a35b6b0aa40e8e92799ed0ef0d682aea275fa36fbbc"
 
   # QGIS & PROJ 6 & SAGA
   # https://lists.osgeo.org/pipermail/qgis-developer/2019-December/059512.html
