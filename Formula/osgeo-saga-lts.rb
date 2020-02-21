@@ -1,29 +1,27 @@
 class OsgeoSagaLts < Formula
   desc "System for Automated Geoscientific Analyses - Long Term Support"
   homepage "http://saga-gis.org"
-  url "https://git.code.sf.net/p/saga-gis/code.git",
-      :branch => "release-2-3-lts",
-      :revision => "b6f474f8af4af7f0ff82548cc6f88c53547d91f5"
-  version "2.3.2"
+  url "https://downloads.sourceforge.net/project/saga-gis/SAGA%20-%207/SAGA%20-%207.4.0/saga-7.4.0.tar.gz"
+  sha1 "02cfcf829c4a6401c11fa9830acd4e3c6c876e57"
 
-  revision 4
+  # QGIS & PROJ 6 & SAGA
+  # https://lists.osgeo.org/pipermail/qgis-developer/2019-December/059512.html
+  # https://github.com/qgis/QGIS/blob/master/python/plugins/processing/algs/saga/SagaAlgorithmProvider.py
+  # REQUIRED_VERSION = '2.3.'
+  # BETA_SUPPORT_VERSION = '7.3.'
 
-  head "https://git.code.sf.net/p/saga-gis/code.git", :branch => "release-2-3-lts"
+  #revision 1
+
+  head "https://git.code.sf.net/p/saga-gis/code.git"
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
-    sha256 "bb6702ffed57f06104bfddf13cd78fae43645f26c8cde6f52cce1f3cb0105922" => :mojave
-    sha256 "bb6702ffed57f06104bfddf13cd78fae43645f26c8cde6f52cce1f3cb0105922" => :high_sierra
-    sha256 "dfeccfe1c7f73b7e29dfc11ddff3b828d66d7e4d6569e06f239114eebd800f66" => :sierra
+    sha256 "f2be7bda78e5b6187179ff9fe4cc73ed2dd7ffff59d236a266a28e16f5a5de23" => :catalina
+    sha256 "f2be7bda78e5b6187179ff9fe4cc73ed2dd7ffff59d236a266a28e16f5a5de23" => :mojave
+    sha256 "f2be7bda78e5b6187179ff9fe4cc73ed2dd7ffff59d236a266a28e16f5a5de23" => :high_sierra
   end
 
-  # - saga_api, CSG_Table::Del_Records(): bug fix, check record count correctly
-  # - fix clang
-  # - io_gdal, org_driver: do not use methods marked as deprecated in GDAL 2.0
-  #   https://sourceforge.net/p/saga-gis/bugs/245/
-  patch :DATA
-
-  keg_only "LTS version is specifically for working with QGIS"
+  keg_only "This version is specifically to work with QGIS"
 
   option "with-pg10", "Build with PostgreSQL 10 client"
   option "with-app", "Build SAGA.app Package"
@@ -32,7 +30,7 @@ class OsgeoSagaLts < Formula
   depends_on "autoconf" => :build
   depends_on "libtool" => :build
   depends_on "pkg-config" => :build
-  depends_on "python@2"
+  depends_on "python"
   depends_on "wxmac"
   depends_on "wxpython"
   depends_on "geos"
@@ -99,8 +97,8 @@ class OsgeoSagaLts < Formula
     # Disable narrowing warnings when compiling in C++11 mode.
     ENV.append "CXXFLAGS", "-Wno-c++11-narrowing -std=c++11"
 
-    ENV.append "PYTHON_VERSION", "2.7"
-    ENV.append "PYTHON", "#{Formula["python@2"].opt_bin}/python2"
+    ENV.append "PYTHON_VERSION", "3.7"
+    ENV.append "PYTHON", "#{Formula["python"].opt_bin}/python3"
 
     # support for PROJ 6
     # ENV.append_to_cflags "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"
@@ -108,10 +106,10 @@ class OsgeoSagaLts < Formula
     # https://github.com/OSGeo/proj.4/wiki/proj.h-adoption-status
     # https://sourceforge.net/p/saga-gis/bugs/271/
 
-    cd "saga-gis"
+    # cd "saga-gis"
 
     # fix homebrew-specific header location for qhull
-    inreplace "src/modules/grid/grid_gridding/nn/delaunay.c", "qhull/", "libqhull/" # if build.with? "qhull"
+    inreplace "src/tools/grid/grid_gridding/nn/delaunay.c", "qhull/", "libqhull/" # if build.with? "qhull"
 
     # libfire and triangle are for non-commercial use only, skip them
     args = %W[
@@ -205,131 +203,3 @@ class OsgeoSagaLts < Formula
     assert_match /The SAGA command line interpreter/, output
   end
 end
-
-__END__
-
---- a/saga-gis/src/saga_core/saga_api/table.cpp
-+++ b/saga-gis/src/saga_core/saga_api/table.cpp
-@@ -901,7 +901,7 @@
- //---------------------------------------------------------
- bool CSG_Table::Del_Records(void)
- {
--	if( m_Records > 0 )
-+	if( m_nRecords > 0 )
- 	{
- 		_Index_Destroy();
-
-
---- a/saga-gis/src/modules/imagery/imagery_maxent/me.cpp
-+++ b/saga-gis/src/modules/imagery/imagery_maxent/me.cpp
-@@ -21,7 +21,7 @@
- #ifdef _SAGA_MSW
- #define isinf(x) (!_finite(x))
- #else
--#define isinf(x) (!finite(x))
-+#define isinf(x) (!isfinite(x))
- #endif
-
- /** The input array contains a set of log probabilities lp1, lp2, lp3
-
-
---- a/saga-gis/src/modules/io/io_gdal/ogr_driver.cpp
-+++ b/saga-gis/src/modules/io/io_gdal/ogr_driver.cpp
-@@ -531,12 +531,11 @@
- //---------------------------------------------------------
- int CSG_OGR_DataSet::Get_Count(void)	const
- {
--	if( m_pDataSet )
--	{
--		return OGR_DS_GetLayerCount( m_pDataSet );
--	}
--
--	return( 0 );
-+#ifdef USE_GDAL_V2
-+	return( m_pDataSet ? GDALDatasetGetLayerCount(m_pDataSet) : 0 );
-+#else
-+ 	return( m_pDataSet ? OGR_DS_GetLayerCount(m_pDataSet) : 0 );
-+#endif
- }
-
- //---------------------------------------------------------
-@@ -544,7 +543,11 @@
- {
- 	if( m_pDataSet && iLayer >= 0 && iLayer < Get_Count() )
- 	{
--		return OGR_DS_GetLayer( m_pDataSet, iLayer);
-+#ifdef USE_GDAL_V2
-+	return( GDALDatasetGetLayer(m_pDataSet, iLayer) );
-+#else
-+	return( OGR_DS_GetLayer(m_pDataSet, iLayer) );
-+#endif
- 	}
-
- 	return( NULL );
-@@ -630,44 +633,43 @@
- 	}
-
- 	//-----------------------------------------------------
--	OGRFeatureDefnH pDef = OGR_L_GetLayerDefn( pLayer );
--	CSG_Shapes		*pShapes	= SG_Create_Shapes(Get_Type(iLayer), CSG_String(OGR_Fld_GetNameRef(pDef)), NULL, Get_Coordinate_Type(iLayer));
-+	OGRFeatureDefnH	pDefn	= OGR_L_GetLayerDefn(pLayer);
-+	CSG_Shapes		*pShapes	= SG_Create_Shapes(Get_Type(iLayer), CSG_String(OGR_L_GetName(pLayer)), NULL, Get_Coordinate_Type(iLayer));
-
- 	pShapes->Get_Projection()	= Get_Projection(iLayer);
-
- 	//-----------------------------------------------------
--	int		iField;
--
--	for(iField=0; iField< OGR_FD_GetFieldCount(pDef); iField++)
--	{
--		OGRFieldDefnH pDefField	= OGR_FD_GetFieldDefn( pDef, iField);
--
--		pShapes->Add_Field( OGR_Fld_GetNameRef( pDefField ), CSG_OGR_Drivers::Get_Data_Type( OGR_Fld_GetType( pDefField ) ) );
--	}
-+	{
-+		for(int iField=0; iField<OGR_FD_GetFieldCount(pDefn); iField++)
-+		{
-+			OGRFieldDefnH	pDefnField	= OGR_FD_GetFieldDefn(pDefn, iField);
-+
-+			pShapes->Add_Field(OGR_Fld_GetNameRef(pDefnField), CSG_OGR_Drivers::Get_Data_Type(OGR_Fld_GetType(pDefnField)));
-+		}
-+	}
-+
-
- 	//-----------------------------------------------------
- 	OGRFeatureH pFeature;
--
--	OGR_L_ResetReading( pLayer );
--
--	while( (pFeature = OGR_L_GetNextFeature( pLayer ) ) != NULL && SG_UI_Process_Get_Okay(false) )
--	{
--		OGRGeometryH pGeometry = OGR_F_GetGeometryRef( pFeature );
-+	OGR_L_ResetReading(pLayer);
-+
-+	while( (pFeature = OGR_L_GetNextFeature(pLayer)) != NULL && SG_UI_Process_Get_Okay(false) )
-+	{
-+		OGRGeometryH	pGeometry	= OGR_F_GetGeometryRef(pFeature);
-
- 		if( pGeometry != NULL )
- 		{
- 			CSG_Shape	*pShape	= pShapes->Add_Shape();
-
--			for(iField=0; iField<OGR_FD_GetFieldCount(pDef); iField++)
-+			for(int iField=0; iField<pShapes->Get_Field_Count(); iField++)
- 			{
--				OGRFieldDefnH pDefField	= OGR_FD_GetFieldDefn(pDef, iField);
--
--				switch( OGR_Fld_GetType( pDefField ) )
-+				switch( pShapes->Get_Field_Type(iField) )
- 				{
--				default:			pShape->Set_Value(iField, OGR_F_GetFieldAsString( pFeature, iField));	break;
--				case OFTString:		pShape->Set_Value(iField, OGR_F_GetFieldAsString( pFeature, iField));	break;
--				case OFTInteger:	pShape->Set_Value(iField, OGR_F_GetFieldAsInteger( pFeature, iField));	break;
--				case OFTReal:		pShape->Set_Value(iField, OGR_F_GetFieldAsDouble( pFeature, iField));	break;
-+				default                : pShape->Set_Value(iField, OGR_F_GetFieldAsString (pFeature, iField)); break;
-+				case SG_DATATYPE_String: pShape->Set_Value(iField, OGR_F_GetFieldAsString (pFeature, iField)); break;
-+				case SG_DATATYPE_Int   : pShape->Set_Value(iField, OGR_F_GetFieldAsInteger(pFeature, iField)); break;
-+				case SG_DATATYPE_Float : pShape->Set_Value(iField, OGR_F_GetFieldAsDouble (pFeature, iField)); break;
-+				case SG_DATATYPE_Double: pShape->Set_Value(iField, OGR_F_GetFieldAsDouble (pFeature, iField)); break;
- 				}
- 			}
