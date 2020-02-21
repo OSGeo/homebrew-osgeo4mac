@@ -5,7 +5,7 @@ class OsgeoLiblas < Formula
   sha256 "9e056b8f973cdfc0e772290a16af8a2c895d997e25677332fe70ae60420913b5"
   version "1.8.1"
 
-  revision 7
+  revision 8
 
   # gt_wkt_srs_cpp
   patch :DATA
