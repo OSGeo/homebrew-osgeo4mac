@@ -27,8 +27,8 @@ end
 class OsgeoPostgis < Formula
   desc "Adds support for geographic objects to PostgreSQL"
   homepage "https://postgis.net/"
-  url "https://github.com/postgis/postgis/archive/3.0.0.tar.gz"
-  sha256 "1c83fb2fc8870d36ed49859c49a12c8c4c8ae8c5c3f912a21a951c5bcc249123"
+  url "https://github.com/postgis/postgis/archive/3.0.1.tar.gz"
+  sha256 "451a34c0b9d65580b3ae44e01fefc9e1f437f3329bde6de8fefde66d025e228"
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
