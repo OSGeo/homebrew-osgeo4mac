@@ -16,9 +16,9 @@ class OsgeoSaga < Formula
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
-    sha256 "f2be7bda78e5b6187179ff9fe4cc73ed2dd7ffff59d236a266a28e16f5a5de23" => :catalina
-    sha256 "f2be7bda78e5b6187179ff9fe4cc73ed2dd7ffff59d236a266a28e16f5a5de23" => :mojave
-    sha256 "f2be7bda78e5b6187179ff9fe4cc73ed2dd7ffff59d236a266a28e16f5a5de23" => :high_sierra
+    sha256 "1632ebd8ba9ed1b678cf2514071851ada143c75e47f9969ae4e7b3c8525ba884" => :catalina
+    sha256 "1632ebd8ba9ed1b678cf2514071851ada143c75e47f9969ae4e7b3c8525ba884" => :mojave
+    sha256 "1632ebd8ba9ed1b678cf2514071851ada143c75e47f9969ae4e7b3c8525ba884" => :high_sierra
   end
 
   keg_only "QGIS fails to load the correct SAGA version, if the latest version is in the path"
