@@ -15,8 +15,8 @@ class OsgeoPyspatialite < Formula
       # link libspatialite and sqlite3, and fix redeclaration build error
       # Reported upstream: http://code.google.com/p/pyspatialite/issues/detail?id=15
       # (not tested/supported with HEAD builds)
-      url "https://gist.github.com/dakcarto/7510460/raw/2e56dd217c19d8dd661e4d3ffb2b669f34da580b/pyspatialite-3.0.1-Mac-patch.diff"
-      sha256 "8696caaadfc6edf9aa159fe61ed44ce1eac23da2fd68c242148fc2218e6c6901"
+      url "https://gist.githubusercontent.com/alazarolop/55d05517b8bc6d79c07e65e138500541/raw/d2ae95deef2841543179e55935f4ad296ba0a039/pyspatialite-4.1-Mac-patch-p3.diff"
+      sha256 "97b2e70881651389304cbf450f3e83ce872f2425ae07bef3bb4edbf88d44a068"
     end
   end
   bottle do
