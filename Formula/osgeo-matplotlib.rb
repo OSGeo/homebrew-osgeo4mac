@@ -30,9 +30,9 @@ class OsgeoMatplotlib < Formula
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any
-    sha256 "f429b5268a34f981269f6312c0a746a1fe24b28894681456fe270b0cc48d5a7b" => :catalina
-    sha256 "f429b5268a34f981269f6312c0a746a1fe24b28894681456fe270b0cc48d5a7b" => :mojave
-    sha256 "f429b5268a34f981269f6312c0a746a1fe24b28894681456fe270b0cc48d5a7b" => :high_sierra
+    sha256 "8387bc6d8d1b30c1d3995c242c1f784ad798fda21e63b7f8dd604e1fab306f6b" => :catalina
+    sha256 "8387bc6d8d1b30c1d3995c242c1f784ad798fda21e63b7f8dd604e1fab306f6b" => :mojave
+    sha256 "8387bc6d8d1b30c1d3995c242c1f784ad798fda21e63b7f8dd604e1fab306f6b" => :high_sierra
   end
 
   depends_on NoExternalPyCXXPackage => :build
