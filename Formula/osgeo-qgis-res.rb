@@ -63,7 +63,7 @@ class OsgeoQgisRes < Formula
   depends_on "svg2pdf"
   depends_on "gtk+3"
   depends_on "pygobject3"
-  depends_on "pygobject"
+  #depends_on "pygobject"
   depends_on "pygtk"
   depends_on "wxpython"
   depends_on "ffmpeg"
