@@ -6,9 +6,9 @@ class OsgeoOssim < Formula
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
-    sha256 "18a9745788691c522d7af3b9cafb856cfb1434802ac19bf9cca48fa6ffb9d792" => :catalina
-    sha256 "18a9745788691c522d7af3b9cafb856cfb1434802ac19bf9cca48fa6ffb9d792" => :mojave
-    sha256 "18a9745788691c522d7af3b9cafb856cfb1434802ac19bf9cca48fa6ffb9d792" => :high_sierra
+    sha256 "2f9e74bcc0f1cc41b39279d707c168a028f8bdaeff5d4c53091d420f6a70251b" => :catalina
+    sha256 "2f9e74bcc0f1cc41b39279d707c168a028f8bdaeff5d4c53091d420f6a70251b" => :mojave
+    sha256 "2f9e74bcc0f1cc41b39279d707c168a028f8bdaeff5d4c53091d420f6a70251b" => :high_sierra
   end
 
   revision 1
