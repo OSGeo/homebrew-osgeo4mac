@@ -10,10 +10,9 @@ class OsgeoWhiteboxTools < Formula
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any_skip_relocation
-    rebuild 1
-    sha256 "fa1b845da9db1af548184ec857e83b29be824600f39d093ddbf5c06a2b50e06c" => :mojave
-    sha256 "fa1b845da9db1af548184ec857e83b29be824600f39d093ddbf5c06a2b50e06c" => :high_sierra
-    sha256 "8fbec938117405301c0de183331e42fcb4569fbc4a1279d57fa11833dabe7ac8" => :sierra
+    sha256 "24b5c05d0b058953e7a783f1a923be428ff1ffc27fc48a4a9bc7b120a6830809" => :catalina
+    sha256 "24b5c05d0b058953e7a783f1a923be428ff1ffc27fc48a4a9bc7b120a6830809" => :mojave
+    sha256 "24b5c05d0b058953e7a783f1a923be428ff1ffc27fc48a4a9bc7b120a6830809" => :high_sierra
   end
 
   def install
