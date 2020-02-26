@@ -4,7 +4,7 @@ class OsgeoOrfeo < Formula
   url "https://github.com/orfeotoolbox/OTB/archive/7.0.0.tar.gz"
   sha256 "cd81a538cda6420e06a921bb575f5c25e204f9c382aac23e161d91e583aaf22a"
 
-  revision 1
+  revision 2
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
