@@ -31,7 +31,7 @@ class OsgeoQscintilla2 < Formula
     sha256 "9bfdaecbac2bde6e59c5b7d7e5e11c146f5c6e3f1f163b8cdeb86080b8632fe6" => :high_sierra
   end
 
-  revision 4
+  revision 5
 
   # keg_only "qscintilla2 is already provided by homebrew/core"
   # we will verify that other versions are not linked
