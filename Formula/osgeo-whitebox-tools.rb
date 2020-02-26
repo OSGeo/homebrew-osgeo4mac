@@ -1,9 +1,9 @@
 class OsgeoWhiteboxTools < Formula
   desc "An advanced geospatial data analysis platform"
   homepage "https://www.uoguelph.ca/~hydrogeo/WhiteboxTools"
-  url "https://github.com/jblindsay/whitebox-tools/releases/download/v0.15/WhiteboxTools_darwin_amd64.zip"
-  sha256 "6e425ddf43f1c9cdcd9f00c9766a66fd42f5477aac30a5bc9b96784f9fb4c026"
-  version "0.15.0"
+  url "https://jblindsay.github.io/ghrg/WhiteboxTools/WhiteboxTools_darwin_amd64.zip"
+  sha256 "c6bbd1bf8775ee778b11bb816f54dc50a93633b5f8480b512129d27cad346737"
+  version "1.2.0"
 
   # revision 1
 
