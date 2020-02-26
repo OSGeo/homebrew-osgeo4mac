@@ -30,7 +30,7 @@ class OsgeoOpenscenegraph < Formula
   url "https://github.com/openscenegraph/OpenSceneGraph/archive/OpenSceneGraph-3.6.5.tar.gz"
   sha256 "aea196550f02974d6d09291c5d83b51ca6a03b3767e234a8c0e21322927d1e12"
 
-  # revision 1
+  revision 1
 
   head "https://github.com/openscenegraph/OpenSceneGraph.git", :branch => "master"
 
