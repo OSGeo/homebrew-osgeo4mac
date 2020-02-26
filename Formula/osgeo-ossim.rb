@@ -11,7 +11,7 @@ class OsgeoOssim < Formula
     sha256 "18a9745788691c522d7af3b9cafb856cfb1434802ac19bf9cca48fa6ffb9d792" => :high_sierra
   end
 
-  # revision 1
+  revision 1
 
   head "https://github.com/ossimlabs/ossim.git", :branch => "master"
 
