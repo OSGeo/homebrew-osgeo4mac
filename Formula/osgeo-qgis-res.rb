@@ -9,7 +9,7 @@ class OsgeoQgisRes < Formula
   homepage "https://www.qgis.org"
   url "https://gist.githubusercontent.com/dakcarto/11385561/raw/e49f75ecec96ed7d6d3950f45ad3f30fe94d4fb2/pyqgis_startup.py"
   sha256 "385dce925fc2d29f05afd6508bc1f46ec84c0bc607cc0c8dfce78a4bb93b9c4e"
-  version "3.12.0"
+  version "3.8.0"
 
   # revision 1
 
@@ -63,7 +63,7 @@ class OsgeoQgisRes < Formula
   depends_on "svg2pdf"
   depends_on "gtk+3"
   depends_on "pygobject3"
-  #depends_on "pygobject"
+  depends_on "pygobject"
   depends_on "pygtk"
   depends_on "wxpython"
   depends_on "ffmpeg"
