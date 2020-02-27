@@ -9,17 +9,16 @@ class OsgeoQgisRes < Formula
   homepage "https://www.qgis.org"
   url "https://gist.githubusercontent.com/dakcarto/11385561/raw/e49f75ecec96ed7d6d3950f45ad3f30fe94d4fb2/pyqgis_startup.py"
   sha256 "385dce925fc2d29f05afd6508bc1f46ec84c0bc607cc0c8dfce78a4bb93b9c4e"
-  version "3.12.0"
+  version "3.8.0"
 
   # revision 1
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any
-    rebuild 1
-    sha256 "f8ae7bd76b57eca4f8309d654f8bda9db1904079f076cdeed4a7ccb16b9eccd0" => :mojave
-    sha256 "f8ae7bd76b57eca4f8309d654f8bda9db1904079f076cdeed4a7ccb16b9eccd0" => :high_sierra
-    sha256 "2487a40898e863c2afb824c7e6a22b6aceb9ea8b9e86b87edf544b8bd39918c8" => :sierra
+    sha256 "8e9ab749b7f1aa6d8e423803ac837038cc46c1c63e9b5c6581fa80068a7fc0c4" => :mojave
+    sha256 "8e9ab749b7f1aa6d8e423803ac837038cc46c1c63e9b5c6581fa80068a7fc0c4" => :high_sierra
+    sha256 "550e3697860fc778b23e93b38246da65181afef57872f4616e11ee29cb38be7c" => :sierra
   end
 
   option "with-pg10", "Build with PostgreSQL 10 client"
@@ -63,8 +62,8 @@ class OsgeoQgisRes < Formula
   depends_on "svg2pdf"
   depends_on "gtk+3"
   depends_on "pygobject3"
-  #depends_on "pygobject"
-  #depends_on "pygtk"
+  depends_on "pygobject"
+  depends_on "pygtk"
   depends_on "wxpython"
   depends_on "ffmpeg"
   depends_on "imagemagick"
