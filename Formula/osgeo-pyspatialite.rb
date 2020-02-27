@@ -2,7 +2,7 @@ class OsgeoPyspatialite < Formula
   desc "DB-API 2.0 interface for SQLite with Spatialite"
   homepage "https://code.google.com/p/pyspatialite"
 
-  revision 5
+  revision 4
 
   head "https://code.google.com/p/pyspatialite/", :using => :hg
 
@@ -29,7 +29,7 @@ class OsgeoPyspatialite < Formula
   end
 
 
-  depends_on "python"
+  depends_on "python@2"
   depends_on "geos"
   depends_on "osgeo-proj"
   depends_on "sqlite"
@@ -43,13 +43,13 @@ class OsgeoPyspatialite < Formula
       library_dirs=#{HOMEBREW_PREFIX}/lib:#{HOMEBREW_PREFIX}/opt/sqlite/lib
     EOS
 
-    system "#{Formula["python"].opt_bin}/python3", "setup.py", "build"
-    system "#{Formula["python"].opt_bin}/python3", "setup.py", "install", "--prefix=#{prefix}"
+    system "#{Formula["python@2"].opt_bin}/python2", "setup.py", "build"
+    system "#{Formula["python@2"].opt_bin}/python2", "setup.py", "install", "--prefix=#{prefix}"
   end
 
   test do
     Language::Python.each_python(build) do |python, _version|
-      system "python3", "-c", "import pyspatialite"
+      system python, "-c", "import pyspatialite"
     end
   end
 end
