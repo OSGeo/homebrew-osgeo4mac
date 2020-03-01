@@ -122,9 +122,8 @@ class OsgeoSaga < Formula
       --enable-debug
       --disable-gui 
     ]
+    
     #--enable-gui
-
-    # --disable-gui
     # --enable-unicode
 
     args << "--disable-odbc" if build.without? "unixodbc"
