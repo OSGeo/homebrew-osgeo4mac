@@ -120,8 +120,8 @@ class OsgeoSaga < Formula
       --enable-shared
       --enable-debug
       --disable-gui 
-    #--enable-gui
     ]
+    #--enable-gui
 
     # --disable-gui
     # --enable-unicode
