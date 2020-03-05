@@ -9,7 +9,7 @@ class OsgeoQgisRes < Formula
   homepage "https://www.qgis.org"
   url "https://gist.githubusercontent.com/dakcarto/11385561/raw/e49f75ecec96ed7d6d3950f45ad3f30fe94d4fb2/pyqgis_startup.py"
   sha256 "385dce925fc2d29f05afd6508bc1f46ec84c0bc607cc0c8dfce78a4bb93b9c4e"
-  version "3.8.0"
+  version "3.12.0"
 
   # revision 1
 
@@ -23,6 +23,9 @@ class OsgeoQgisRes < Formula
 
   option "with-pg10", "Build with PostgreSQL 10 client"
 
+  depends_on "automake" => :build
+  depends_on "autoconf" => :build
+  depends_on "libtool" => :build
   depends_on "pkg-config" => :build
   depends_on "gcc" => :build # for gfortran # numpy
   depends_on "python" => :build
@@ -62,8 +65,8 @@ class OsgeoQgisRes < Formula
   depends_on "svg2pdf"
   depends_on "gtk+3"
   depends_on "pygobject3"
-  depends_on "pygobject"
-  depends_on "pygtk"
+  #depends_on "pygobject"
+  #depends_on "pygtk"
   depends_on "wxpython"
   depends_on "ffmpeg"
   depends_on "imagemagick"
@@ -119,6 +122,9 @@ class OsgeoQgisRes < Formula
   end
 
   def install
+
+    ENV.append "CPPFLAGS", "-isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk"
+    
     # install python environment
     venv = virtualenv_create(libexec/'vendor', "#{Formula["python"].opt_bin}/python3")
 
