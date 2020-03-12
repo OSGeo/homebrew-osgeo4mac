@@ -44,6 +44,7 @@ class OsgeoProj < Formula
   end
 
   depends_on "pkg-config" => :build
+  depends_on "libtiff"
 
   conflicts_with "blast", :because => "both install a `libproj.a` library"
 
