@@ -46,7 +46,7 @@ class OsgeoGdal < Formula
   depends_on Unlinked
 
   option "with-pg10", "Build with PostgreSQL 10 client"
-  deprecated_option "with-postgresql10" => "with-pg10"
+  #deprecated_option "with-postgresql10" => "with-pg10"
 
   depends_on "pkg-config"
   depends_on "libiconv"
@@ -81,7 +81,7 @@ class OsgeoGdal < Formula
 
   # Raster libraries
   depends_on "osgeo-netcdf" # Also brings in HDF5
-  depends_on "osgeo-hdf4"
+  #depends_on "osgeo-hdf4"
   depends_on "hdf5"
   depends_on "cfitsio"
   depends_on "epsilon"
@@ -162,7 +162,7 @@ class OsgeoGdal < Formula
       "--with-libiconv-prefix=#{Formula["libiconv"].opt_prefix}",
       "--with-zstd=#{Formula["zstd"].opt_prefix}",
       "--with-cfitsio=#{Formula["cfitsio"].opt_prefix}",
-      "--with-hdf4=#{Formula["osgeo-hdf4"].opt_prefix}",
+      #"--with-hdf4=#{Formula["osgeo-hdf4"].opt_prefix}",
       "--with-hdf5=#{Formula["hdf5"].opt_prefix}",
       "--with-netcdf=#{Formula["osgeo-netcdf"].opt_prefix}",
       # "--with-jasper=#{Formula["jasper"].opt_prefix}", #  or GDAL_SKIP="Jasper"
@@ -298,7 +298,7 @@ class OsgeoGdal < Formula
 
     # chdir "gdal" do
       # GDAL looks for the renamed hdf4 library, which is an artifact of old builds, so we need to repoint it
-      inreplace "configure", "-ldf", "-lhdf"
+      #inreplace "configure", "-ldf", "-lhdf"
 
       # Fix hardcoded mandir: http://trac.osgeo.org/gdal/ticket/5092
       inreplace "configure", %r[^mandir='\$\{prefix\}/man'$], ""
