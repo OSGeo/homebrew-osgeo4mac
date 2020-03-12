@@ -20,8 +20,8 @@ end
 class OsgeoProj < Formula
   desc "Cartographic Projections Library"
   homepage "https://proj.org/"
-  url "https://github.com/OSGeo/PROJ/releases/download/6.3.1/proj-6.3.1.tar.gz"
-  sha256 "6de0112778438dcae30fcc6942dee472ce31399b9e5a2b67e8642529868c86f8"
+  url "https://github.com/OSGeo/PROJ/releases/download/7.0.0/proj-7.0.0.tar.gz"
+  sha256 "ee0e14c1bd2f9429b1a28999240304c0342ed739ebaea3d4ff44c585b1097be8"
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
