@@ -8,13 +8,13 @@ class OsgeoGdalOgdi < Formula
   
   head "https://github.com/OSGeo/gdal.git", :branch => "master"
 
-  bottle do
-    root_url "https://bottle.download.osgeo.org"
-    cellar :any
-    sha256 "33c1448189416e6812f3d05af2f0751daf604d4be188363707bc2a7d6b24f5e8" => :catalina
-    sha256 "33c1448189416e6812f3d05af2f0751daf604d4be188363707bc2a7d6b24f5e8" => :mojave
-    sha256 "33c1448189416e6812f3d05af2f0751daf604d4be188363707bc2a7d6b24f5e8" => :high_sierra
-  end
+  #bottle do
+  #  root_url "https://bottle.download.osgeo.org"
+  #  cellar :any
+  #  sha256 "33c1448189416e6812f3d05af2f0751daf604d4be188363707bc2a7d6b24f5e8" => :catalina
+  #  sha256 "33c1448189416e6812f3d05af2f0751daf604d4be188363707bc2a7d6b24f5e8" => :mojave
+  #  sha256 "33c1448189416e6812f3d05af2f0751daf604d4be188363707bc2a7d6b24f5e8" => :high_sierra
+  #end
 
   depends_on "osgeo-ogdi"
   depends_on "osgeo-gdal"

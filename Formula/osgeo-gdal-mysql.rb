@@ -8,12 +8,12 @@ class OsgeoGdalMysql < Formula
   
   head "https://github.com/OSGeo/gdal.git", :branch => "master"
 
-  bottle do
-    root_url "https://bottle.download.osgeo.org"
-    sha256 "82e4ae8e22b01017f8be53a735bf19d5120fa8b80e6c561406cf73bae0a62506" => :catalina
-    sha256 "82e4ae8e22b01017f8be53a735bf19d5120fa8b80e6c561406cf73bae0a62506" => :mojave
-    sha256 "82e4ae8e22b01017f8be53a735bf19d5120fa8b80e6c561406cf73bae0a62506" => :high_sierra
-  end
+  #bottle do
+  #  root_url "https://bottle.download.osgeo.org"
+  #  sha256 "82e4ae8e22b01017f8be53a735bf19d5120fa8b80e6c561406cf73bae0a62506" => :catalina
+  #  sha256 "82e4ae8e22b01017f8be53a735bf19d5120fa8b80e6c561406cf73bae0a62506" => :mojave
+  #  sha256 "82e4ae8e22b01017f8be53a735bf19d5120fa8b80e6c561406cf73bae0a62506" => :high_sierra
+  #end
 
   depends_on "mysql" => :build # adds openssl
   depends_on "osgeo-gdal"
