@@ -47,7 +47,7 @@ class OsgeoSaga < Formula
   depends_on "poppler"
   depends_on "sqlite"
   depends_on "hdf5"
-  depends_on "osgeo-hdf4"
+  #depends_on "osgeo-hdf4"
   depends_on "osgeo-proj"
   depends_on "osgeo-netcdf"
   depends_on "osgeo-laszip@2"
@@ -59,8 +59,8 @@ class OsgeoSaga < Formula
   # triggers a source (re)build of boost --with-python
   depends_on "osgeo-vigra" => :optional
 
-  if build.with?("pg10")
-    depends_on "osgeo-postgresql@10"
+  if build.with?("pg11")
+    depends_on "osgeo-postgresql@11"
   else
     depends_on "osgeo-postgresql"
   end
@@ -130,8 +130,8 @@ class OsgeoSaga < Formula
 
     args << "--enable-python" # if build.with? "python"
 
-    if build.with?("pg10")
-      args << "--with-postgresql=#{Formula["osgeo-postgresql@10"].opt_bin}/pg_config"
+    if build.with?("pg11")
+      args << "--with-postgresql=#{Formula["osgeo-postgresql@11"].opt_bin}/pg_config"
     else
       args << "--with-postgresql=#{Formula["osgeo-postgresql"].opt_bin}/pg_config" # if build.with? "postgresql"
     end
