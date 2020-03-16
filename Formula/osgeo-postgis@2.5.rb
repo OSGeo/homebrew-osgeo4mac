@@ -22,7 +22,7 @@ class OsgeoPostgisAT25 < Formula
 
   # keg_only "postgis is already provided by homebrew/core"
   # we will verify that other versions are not linked
-  depends_on Unlinked
+  #depends_on Unlinked
 
   depends_on "autoconf" => :build
   depends_on "automake" => :build
