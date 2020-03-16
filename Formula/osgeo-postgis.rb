@@ -44,7 +44,7 @@ class OsgeoPostgis < Formula
 
   option "with-html-docs", "Generate multi-file HTML documentation"
   option "with-api-docs", "Generate developer API documentation (long process)"
-  option "with-pg10", "Build with PostgreSQL 10 client"
+  option "with-pg11", "Build with PostgreSQL 11 client"
 
   # keg_only "postgis is already provided by homebrew/core"
   # we will verify that other versions are not linked
@@ -66,8 +66,8 @@ class OsgeoPostgis < Formula
   depends_on "protobuf-c" #  Geobuf and Mapbox Vector Tile support
   depends_on "osgeo-gdal" # for GeoJSON and raster handling
 
-  if build.with? "pg10"
-    depends_on "osgeo-postgresql@10"
+  if build.with? "pg11"
+    depends_on "osgeo-postgresql@11"
   else
     depends_on "osgeo-postgresql"
   end
@@ -138,8 +138,8 @@ class OsgeoPostgis < Formula
 
     args << "--with-xsldir=#{Formula["docbook-xsl"].opt_prefix}/docbook-xsl" if build.with? "html-docs" # /docbook-xsl-nons
 
-    if build.with?("pg10")
-      args << "--with-pgconfig=#{Formula["osgeo-postgresql@10"].opt_bin}/pg_config"
+    if build.with?("pg11")
+      args << "--with-pgconfig=#{Formula["osgeo-postgresql@11"].opt_bin}/pg_config"
     else
       args << "--with-pgconfig=#{Formula["osgeo-postgresql"].opt_bin}/pg_config"
     end

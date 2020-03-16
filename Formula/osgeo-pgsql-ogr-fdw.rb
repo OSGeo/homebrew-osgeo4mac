@@ -24,13 +24,13 @@ class OsgeoPgsqlOgrFdw < Formula
     false
   end
 
-  option "with-pg10", "Build with PostgreSQL 10 client"
+  option "with-pg11", "Build with PostgreSQL 11 client"
 
   depends_on "osgeo-postgis"
   depends_on "osgeo-gdal"
 
-  if build.with?("pg10")
-    depends_on "osgeo-postgresql@10"
+  if build.with?("pg11")
+    depends_on "osgeo-postgresql@11"
   else
     depends_on "osgeo-postgresql"
   end
@@ -48,8 +48,8 @@ class OsgeoPgsqlOgrFdw < Formula
 
     rm "#{buildpath}/Makefile"
 
-    if build.with?("pg10")
-      postgresql_ver = "#{Formula["osgeo-postgresql@10"].opt_bin}"
+    if build.with?("pg11")
+      postgresql_ver = "#{Formula["osgeo-postgresql@11"].opt_bin}"
     else
       postgresql_ver = "#{Formula["osgeo-postgresql"].opt_bin}"
     end

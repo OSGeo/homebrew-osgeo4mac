@@ -42,6 +42,8 @@ class OsgeoPsqlodbc < Formula
     depends_on "libtool" => :build
   end
 
+  option "with-pg11", "Build with PostgreSQL 11 client"
+
   # keg_only "psqlodbc is already provided by homebrew/core"
   # we will verify that other versions are not linked
   depends_on Unlinked
@@ -49,8 +51,8 @@ class OsgeoPsqlodbc < Formula
   depends_on "openssl"
   depends_on "unixodbc"
 
-  if build.with?("pg10")
-    depends_on "osgeo-postgresql@10"
+  if build.with?("pg11")
+    depends_on "osgeo-postgresql@11"
   else
     depends_on "osgeo-postgresql"
   end
