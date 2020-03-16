@@ -1,4 +1,4 @@
-class OsgeoPostgresql < Formula
+class OsgeoPostgresqlAT11 < Formula
   desc "Object-relational database system"
   homepage "https://www.postgresql.org/"
   url "https://github.com/postgres/postgres/archive/REL_11_7.tar.gz"
