@@ -25,9 +25,9 @@ class OsgeoGrass < Formula
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any
-    sha256 "4f1ead44c94accf8a35426586d720ce19a88917215d06979702398951c0b8ece" => :catalina
-    sha256 "4f1ead44c94accf8a35426586d720ce19a88917215d06979702398951c0b8ece" => :mojave
-    sha256 "4f1ead44c94accf8a35426586d720ce19a88917215d06979702398951c0b8ece" => :high_sierra
+    sha256 "7538a322420c34d4095c623703073d6f455445478763f2ad792c65a4dbb6016a" => :catalina
+    sha256 "7538a322420c34d4095c623703073d6f455445478763f2ad792c65a4dbb6016a" => :mojave
+    sha256 "7538a322420c34d4095c623703073d6f455445478763f2ad792c65a4dbb6016a" => :high_sierra
   end
 
   option "without-gui", "Build without WxPython interface. Command line tools still available"
