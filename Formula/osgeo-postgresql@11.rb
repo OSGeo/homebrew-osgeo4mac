@@ -4,12 +4,12 @@ class OsgeoPostgresql < Formula
   url "https://github.com/postgres/postgres/archive/REL_11_7.tar.gz"
   sha256 "8c427e10a5f8b6be76353e83c7cf0171ac0e85308d352b8c129612002bb342eb"
 
-  #bottle do
-  #  root_url "https://bottle.download.osgeo.org"
-  #  sha256 "7d47e98b0e6ebe6d8a5968e8b1ff5828bdc7ab91644d41feb2847225f2d96684" => :catalina
-  #  sha256 "7d47e98b0e6ebe6d8a5968e8b1ff5828bdc7ab91644d41feb2847225f2d96684" => :mojave
-  #  sha256 "7d47e98b0e6ebe6d8a5968e8b1ff5828bdc7ab91644d41feb2847225f2d96684" => :high_sierra
-  #end
+  bottle do
+    root_url "https://bottle.download.osgeo.org"
+    sha256 "7d47e98b0e6ebe6d8a5968e8b1ff5828bdc7ab91644d41feb2847225f2d96684" => :catalina
+    sha256 "7d47e98b0e6ebe6d8a5968e8b1ff5828bdc7ab91644d41feb2847225f2d96684" => :mojave
+    sha256 "7d47e98b0e6ebe6d8a5968e8b1ff5828bdc7ab91644d41feb2847225f2d96684" => :high_sierra
+  end
 
   # revision 1
 
