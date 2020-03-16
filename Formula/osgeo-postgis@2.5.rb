@@ -112,8 +112,8 @@ class OsgeoPostgisAT25 < Formula
 
     args << "--with-xsldir=#{Formula["docbook-xsl"].opt_prefix}/docbook-xsl" if build.with? "html-docs" # /docbook-xsl-nons
 
-    if build.with?("pg10")
-      args << "--with-pgconfig=#{Formula["osgeo-postgresql@10"].opt_bin}/pg_config"
+    if build.with?("pg11")
+      args << "--with-pgconfig=#{Formula["osgeo-postgresql@11"].opt_bin}/pg_config"
     else
       args << "--with-pgconfig=#{Formula["osgeo-postgresql"].opt_bin}/pg_config"
     end
@@ -160,7 +160,7 @@ class OsgeoPostgisAT25 < Formula
     pkgshare.install Dir["stage/**/contrib/postgis-*/*"]
     (share/"doc/postgresql/extension").install Dir["stage/**/share/doc/postgresql/extension/*"]
     (share/"postgresql/extension").install Dir["stage/**/share/postgresql/extension/*"]
-    (share/"postgresql/contrib/postgis-3.0").install Dir["stage/**/contrib/postgis-*/*"]
+    (share/"postgresql/contrib/postgis-2.5").install Dir["stage/**/contrib/postgis-*/*"]
     (share/"postgis_topology").install Dir["stage/**/contrib/postgis_topology-*/*"]
 
     # Extension scripts
@@ -181,14 +181,14 @@ class OsgeoPostgisAT25 < Formula
   def caveats
     <<~EOS
       To create a spatially-enabled database, see the documentation:
-        https://postgis.net/docs/manual-3.0/postgis_installation.html#create_new_db_extensions
+        https://postgis.net/docs/manual-2.5/postgis_installation.html#create_new_db_extensions
       If you are currently using PostGIS 2.0+, you can go the soft upgrade path:
         ALTER EXTENSION postgis UPDATE TO "#{version}";
       Users of 1.5 and below will need to go the hard-upgrade path, see here:
-        https://postgis.net/docs/manual-3.0/postgis_installation.html#upgrading
+        https://postgis.net/docs/manual-2.5/postgis_installation.html#upgrading
 
       PostGIS SQL scripts installed to:
-        #{HOMEBREW_PREFIX}/share/postgresql/contrib/postgis-3.0
+        #{HOMEBREW_PREFIX}/share/postgresql/contrib/postgis-2.5
       PostGIS plugin libraries installed to:
         #{HOMEBREW_PREFIX}/lib
       PostGIS extension modules installed to:
