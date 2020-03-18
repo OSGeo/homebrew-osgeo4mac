@@ -49,7 +49,7 @@ class OsgeoPyspatialite < Formula
 
   test do
     Language::Python.each_python(build) do |python, _version|
-      system python, "-c", "import pyspatialite"
+      system python3, "-c", "import pyspatialite"
     end
   end
 end
