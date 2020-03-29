@@ -27,7 +27,7 @@ class OsgeoGdal < Formula
   #  :commit => "ee535a1a3f5b35b0d231e1faac89ac1f889f7988"
   #version "3.0.4"
 
-  revision 2
+  revision 3
 
   head do
     url "https://github.com/OSGeo/gdal.git", :branch => "master"
@@ -82,7 +82,7 @@ class OsgeoGdal < Formula
 
   # Raster libraries
   depends_on "osgeo-netcdf" # Also brings in HDF5
-  #depends_on "osgeo-hdf4"
+  depends_on "osgeo-hdf4"
   depends_on "hdf5"
   depends_on "cfitsio"
   depends_on "epsilon"
@@ -163,7 +163,7 @@ class OsgeoGdal < Formula
       "--with-libiconv-prefix=#{Formula["libiconv"].opt_prefix}",
       "--with-zstd=#{Formula["zstd"].opt_prefix}",
       "--with-cfitsio=#{Formula["cfitsio"].opt_prefix}",
-      #"--with-hdf4=#{Formula["osgeo-hdf4"].opt_prefix}",
+      "--with-hdf4=#{Formula["osgeo-hdf4"].opt_prefix}",
       "--with-hdf5=#{Formula["hdf5"].opt_prefix}",
       "--with-netcdf=#{Formula["osgeo-netcdf"].opt_prefix}",
       # "--with-jasper=#{Formula["jasper"].opt_prefix}", #  or GDAL_SKIP="Jasper"
@@ -299,7 +299,7 @@ class OsgeoGdal < Formula
 
     # chdir "gdal" do
       # GDAL looks for the renamed hdf4 library, which is an artifact of old builds, so we need to repoint it
-      #inreplace "configure", "-ldf", "-lhdf"
+      inreplace "configure", "-ldf", "-lhdf"
 
       # Fix hardcoded mandir: http://trac.osgeo.org/gdal/ticket/5092
       inreplace "configure", %r[^mandir='\$\{prefix\}/man'$], ""
