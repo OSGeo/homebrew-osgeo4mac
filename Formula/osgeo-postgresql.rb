@@ -1,7 +1,13 @@
 class Unlinked < Requirement
   fatal true
 
-  satisfy(:build_env => false) { !osgeo_postgresql10_linked && !core_postgresql_linked && !core_postgresql10_linked }
+  satisfy(:build_env => false) { !osgeo_postgresql11_linked && !osgeo_postgresql10_linked && !core_postgresql_linked && !core_postgresql11_linked && !core_postgresql10_linked }
+
+  def osgeo_postgresql11_linked
+    Formula["osgeo-postgresql@11"].linked_keg.exist?
+  rescue
+    return false
+  end
 
   def osgeo_postgresql10_linked
     Formula["osgeo-postgresql@10"].linked_keg.exist?
@@ -15,6 +21,12 @@ class Unlinked < Requirement
     return false
   end
 
+  def core_postgresql11_linked
+    Formula["postgresql@11"].linked_keg.exist?
+  rescue
+    return false
+  end
+
   def core_postgresql10_linked
     Formula["postgresql@10"].linked_keg.exist?
   rescue
@@ -24,9 +36,11 @@ class Unlinked < Requirement
   def message
     s = "\033[31mYou have other linked versions!\e[0m\n\n"
 
+    s += "Unlink with \e[32mbrew unlink osgeo-postgresql@11\e[0m or remove with \e[32mbrew uninstall --ignore-dependencies osgeo-postgresql@11\e[0m\n\n" if osgeo_postgresql11_linked
     s += "Unlink with \e[32mbrew unlink osgeo-postgresql@10\e[0m or remove with \e[32mbrew uninstall --ignore-dependencies osgeo-postgresql@10\e[0m\n\n" if osgeo_postgresql10_linked
     s += "Unlink with \e[32mbrew unlink postgresql\e[0m or remove with brew \e[32muninstall --ignore-dependencies postgresql\e[0m\n\n" if core_postgresql_linked
-    s += "Unlink with \e[32mbrew unlink postgresql\e[0m or remove with brew \e[32muninstall --ignore-dependencies postgresq@10\e[0m\n\n" if core_postgresql10_linked
+    s += "Unlink with \e[32mbrew unlink postgresql@11\e[0m or remove with brew \e[32muninstall --ignore-dependencies postgresq@11\e[0m\n\n" if core_postgresql11_linked
+    s += "Unlink with \e[32mbrew unlink postgresql@10\e[0m or remove with brew \e[32muninstall --ignore-dependencies postgresq@10\e[0m\n\n" if core_postgresql10_linked
     s
   end
 end
@@ -44,7 +58,7 @@ class OsgeoPostgresql < Formula
     sha256 "7d47e98b0e6ebe6d8a5968e8b1ff5828bdc7ab91644d41feb2847225f2d96684" => :high_sierra
   end
 
-  # revision 1
+  revision 1
 
   head "https://github.com/postgres/postgres.git", :branch => "master"
 
