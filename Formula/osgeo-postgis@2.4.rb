@@ -39,7 +39,7 @@ class OsgeoPostgisAT24 < Formula
     sha256 "c7beee0ddd6337a6f521b44a9b5cfbf57f824c20201b75d72dc115e379bcd509" => :sierra
   end
 
-  #revision 3
+  revision 1
 
   head "https://github.com/postgis/postgis.git", :branch => "svn-2.4"
 
@@ -67,10 +67,13 @@ class OsgeoPostgisAT24 < Formula
   depends_on "protobuf-c" #  Geobuf and Mapbox Vector Tile support
   depends_on "osgeo-gdal" # for GeoJSON and raster handling
 
+  # The latest supported version of PostgreSQL by PostGIS 2.4 is 11,
+  # and thus it's the standard version.
+  # https://trac.osgeo.org/postgis/wiki/UsersWikiPostgreSQLPostGIS
   if build.with?("pg10")
     depends_on "osgeo-postgresql@10"
   else
-    depends_on "osgeo-postgresql"
+    depends_on "osgeo-postgresql@11"
   end
 
   depends_on "gtk+" # for gui
@@ -142,7 +145,7 @@ class OsgeoPostgisAT24 < Formula
     if build.with?("pg10")
       args << "--with-pgconfig=#{Formula["osgeo-postgresql@10"].opt_bin}/pg_config"
     else
-      args << "--with-pgconfig=#{Formula["osgeo-postgresql"].opt_bin}/pg_config"
+      args << "--with-pgconfig=#{Formula["osgeo-postgresql@11"].opt_bin}/pg_config"
     end
 
     system "./autogen.sh"
