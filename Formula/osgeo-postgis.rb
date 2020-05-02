@@ -38,12 +38,13 @@ class OsgeoPostgis < Formula
     sha256 "ec59c4ddc3a9e3b6f5e9bf7f03f0151bdaa09c8b28829bd6e9bfdbb2bdd80d87" => :high_sierra
   end
 
-  revision 3
+  revision 4
 
   head "https://github.com/postgis/postgis.git", :branch => "master"
 
   option "with-html-docs", "Generate multi-file HTML documentation"
   option "with-api-docs", "Generate developer API documentation (long process)"
+  option "with-pg10", "Build with PostgreSQL 10 client"
   option "with-pg11", "Build with PostgreSQL 11 client"
 
   # keg_only "postgis is already provided by homebrew/core"
@@ -66,7 +67,12 @@ class OsgeoPostgis < Formula
   depends_on "protobuf-c" #  Geobuf and Mapbox Vector Tile support
   depends_on "osgeo-gdal" # for GeoJSON and raster handling
 
-  if build.with? "pg11"
+  # The latest supported version of PostgreSQL by PostGIS 3.0 is 12,
+  # and thus it's the standard version.
+  # https://trac.osgeo.org/postgis/wiki/UsersWikiPostgreSQLPostGIS
+  if build.with?("pg10")
+    depends_on "osgeo-postgresql@10"
+  elsif build.with?("pg11")
     depends_on "osgeo-postgresql@11"
   else
     depends_on "osgeo-postgresql"
@@ -138,7 +144,9 @@ class OsgeoPostgis < Formula
 
     args << "--with-xsldir=#{Formula["docbook-xsl"].opt_prefix}/docbook-xsl" if build.with? "html-docs" # /docbook-xsl-nons
 
-    if build.with?("pg11")
+    if build.with?("pg10")
+      args << "--with-pgconfig=#{Formula["osgeo-postgresql@10"].opt_bin}/pg_config"
+    elsif build.with?("pg11")
       args << "--with-pgconfig=#{Formula["osgeo-postgresql@11"].opt_bin}/pg_config"
     else
       args << "--with-pgconfig=#{Formula["osgeo-postgresql"].opt_bin}/pg_config"
