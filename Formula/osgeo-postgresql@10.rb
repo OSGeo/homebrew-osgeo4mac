@@ -3,6 +3,12 @@ class Unlinked < Requirement
 
   satisfy(:build_env => false) { !osgeo_postgresql11_linked && !osgeo_postgresql_linked && !core_postgresql_linked && !core_postgresql11_linked && !core_postgresql10_linked }
 
+  def osgeo_postgresql_linked
+    Formula["osgeo-postgresql"].linked_keg.exist?
+  rescue
+    return false
+  end
+
   def osgeo_postgresql11_linked
     Formula["osgeo-postgresql@11"].linked_keg.exist?
   rescue
@@ -29,9 +35,9 @@ class Unlinked < Requirement
 
   def message
     s = "\033[31mYou have other linked versions!\e[0m\n\n"
-
-    s += "Unlink with \e[32mbrew unlink osgeo-postgresql@11\e[0m or remove with \e[32mbrew uninstall --ignore-dependencies osgeo-postgresql@11\e[0m\n\n" if osgeo_postgresql11_linked
+    
     s += "Unlink with \e[32mbrew unlink osgeo-postgresql\e[0m or remove with \e[32mbrew uninstall --ignore-dependencies osgeo-postgresql\e[0m\n\n" if osgeo_postgresql_linked
+    s += "Unlink with \e[32mbrew unlink osgeo-postgresql@11\e[0m or remove with \e[32mbrew uninstall --ignore-dependencies osgeo-postgresql@11\e[0m\n\n" if osgeo_postgresql11_linked
     s += "Unlink with \e[32mbrew unlink postgresql\e[0m or remove with brew \e[32muninstall --ignore-dependencies postgresql\e[0m\n\n" if core_postgresql_linked
     s += "Unlink with \e[32mbrew unlink postgresql@11\e[0m or remove with brew \e[32muninstall --ignore-dependencies postgresq@11\e[0m\n\n" if core_postgresql11_linked
     s += "Unlink with \e[32mbrew unlink postgresql@10\e[0m or remove with brew \e[32muninstall --ignore-dependencies postgresq@10\e[0m\n\n" if core_postgresql10_linked
