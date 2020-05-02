@@ -1,16 +1,22 @@
 class Unlinked < Requirement
   fatal true
 
-  satisfy(:build_env => false) { !osgeo_postgresql_linked && !core_postgresql_linked && !core_postgresql10_linked }
+  satisfy(:build_env => false) { !osgeo_postgresql11_linked && !osgeo_postgresql_linked && !core_postgresql_linked && !core_postgresql11_linked && !core_postgresql10_linked }
 
-  def osgeo_postgresql_linked
-    Formula["osgeo-postgresql"].linked_keg.exist?
+  def osgeo_postgresql11_linked
+    Formula["osgeo-postgresql@11"].linked_keg.exist?
   rescue
     return false
   end
 
   def core_postgresql_linked
     Formula["postgresql"].linked_keg.exist?
+  rescue
+    return false
+  end
+
+  def core_postgresql11_linked
+    Formula["postgresql@11"].linked_keg.exist?
   rescue
     return false
   end
@@ -24,9 +30,11 @@ class Unlinked < Requirement
   def message
     s = "\033[31mYou have other linked versions!\e[0m\n\n"
 
+    s += "Unlink with \e[32mbrew unlink osgeo-postgresql@11\e[0m or remove with \e[32mbrew uninstall --ignore-dependencies osgeo-postgresql@11\e[0m\n\n" if osgeo_postgresql11_linked
     s += "Unlink with \e[32mbrew unlink osgeo-postgresql\e[0m or remove with \e[32mbrew uninstall --ignore-dependencies osgeo-postgresql\e[0m\n\n" if osgeo_postgresql_linked
-    s += "Unlink with \e[32mbrew unlink postgresql\e[0m or remove with \e[32mbrew uninstall --ignore-dependencies postgresql\e[0m\n\n" if core_postgresql_linked
-    s += "Unlink with \e[32mbrew unlink postgresql@10\e[0m or remove with \e[32mbrew uninstall --ignore-dependencies postgresql@10\e[0m\n\n" if core_postgresql10_linked
+    s += "Unlink with \e[32mbrew unlink postgresql\e[0m or remove with brew \e[32muninstall --ignore-dependencies postgresql\e[0m\n\n" if core_postgresql_linked
+    s += "Unlink with \e[32mbrew unlink postgresql@11\e[0m or remove with brew \e[32muninstall --ignore-dependencies postgresq@11\e[0m\n\n" if core_postgresql11_linked
+    s += "Unlink with \e[32mbrew unlink postgresql@10\e[0m or remove with brew \e[32muninstall --ignore-dependencies postgresq@10\e[0m\n\n" if core_postgresql10_linked
     s
   end
 end
@@ -37,7 +45,7 @@ class OsgeoPostgresqlAT10 < Formula
   url "https://github.com/postgres/postgres/archive/REL_10_12.tar.gz"
   sha256 "b9756620353e9b2094125a280fb0779b42a05854419f067198de749ced51573f"
 
-  # revision 1
+  revision 1
 
   head "https://github.com/postgres/postgres.git", :branch => "REL_10_STABLE"
 
