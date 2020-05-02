@@ -20,8 +20,8 @@ end
 class OsgeoProj < Formula
   desc "Cartographic Projections Library"
   homepage "https://proj.org/"
-  url "https://github.com/OSGeo/PROJ/releases/download/7.0.0/proj-7.0.0.tar.gz"
-  sha256 "ee0e14c1bd2f9429b1a28999240304c0342ed739ebaea3d4ff44c585b1097be8"
+  url "https://github.com/OSGeo/PROJ/releases/download/6.3.2/proj-6.3.2.tar.gz"
+  sha256 "cb776a70f40c35579ae4ba04fb4a388c1d1ce025a1df6171350dc19f25b80311"
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
@@ -44,13 +44,14 @@ class OsgeoProj < Formula
   end
 
   depends_on "pkg-config" => :build
-  depends_on "libtiff"
+  # depends_on "libtiff" Proj >7
 
   conflicts_with "blast", :because => "both install a `libproj.a` library"
 
   skip_clean :la
 
-  # The datum grid files are required to support datum shifting
+  # The datum grid files are required to support datum shifting Proj <7
+  # TODO: If needed, include content from https://github.com/OSGeo/PROJ-data
   resource "datumgrid" do
     url "https://download.osgeo.org/proj/proj-datumgrid-1.8.zip"
     sha256 "b9838ae7e5f27ee732fb0bfed618f85b36e8bb56d7afb287d506338e9f33861e"
