@@ -20,12 +20,12 @@ end
 class OsgeoLibgeotiff < Formula
   desc "Library and tools for dealing with GeoTIFF"
   homepage "https://geotiff.osgeo.org/"
-  # url "https://github.com/OSGeo/libgeotiff/releases/download/1.5.1/libgeotiff-1.5.1.tar.gz"
-  # sha256 "f9e99733c170d11052f562bcd2c7cb4de53ed405f7acdde4f16195cd3ead612c"
+  # url "https://github.com/OSGeo/libgeotiff/releases/download/1.6.0/libgeotiff-1.6.0.tar.gz"
+  # sha256 "9311017e5284cffb86f2c7b7a9df1fb5ebcdc61c30468fb2e6bca36e4272ebca"
   url "https://github.com/OSGeo/libgeotiff.git",
     :branch => "master",
-    :commit => "47a3a6bb314e8b8b9125beb9b5715b3837b82c74"
-  version "1.5.1"
+    :commit => "8b1a8f52bc909f86e04ceadd699db102208074a2"
+  version "1.6.0"
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
@@ -35,7 +35,7 @@ class OsgeoLibgeotiff < Formula
     sha256 "ea480303bb1e60573de07faa2d0650e8d66e623b6fa75efb5a63bbd1dc60e9b7" => :high_sierra
   end
 
-  revision 3 
+  #revision 3 
 
   head "https://github.com/OSGeo/libgeotiff.git", :branch => "master"
 
