@@ -27,8 +27,12 @@ end
 class OsgeoPostgisAT24 < Formula
   desc "Adds support for geographic objects to PostgreSQL"
   homepage "https://postgis.net/"
-  url "https://github.com/postgis/postgis/archive/2.4.8.tar.gz"
-  sha256 "d81f36abc4dc7235de65e4e58b00dee33d1ca14e9b70a3a2b888be90544b3cb5"
+  # url "https://github.com/postgis/postgis/archive/2.4.8.tar.gz"
+  # sha256 "d81f36abc4dc7235de65e4e58b00dee33d1ca14e9b70a3a2b888be90544b3cb5"
+  url "https://github.com/postgis/postgis.git",
+    :branch => "stable-2.4",
+    :commit => "b495daed109f4771cc44066fcc0d4825131c7dc5"
+  version "2.4.8"
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
