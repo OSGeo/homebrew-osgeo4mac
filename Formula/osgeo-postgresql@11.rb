@@ -53,10 +53,9 @@ class OsgeoPostgresqlAT11 < Formula
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
-    rebuild 1
-    sha256 "ec9a6efc31350a07e978687016909e930b2bc3f8bb5c6642117569f6f35e4c57" => :catalina
-    sha256 "ec9a6efc31350a07e978687016909e930b2bc3f8bb5c6642117569f6f35e4c57" => :mojave
-    sha256 "ec9a6efc31350a07e978687016909e930b2bc3f8bb5c6642117569f6f35e4c57" => :high_sierra
+    sha256 "af6967ee45fa0035da68136796169c9f268e8d2983cfbf34d1458d3f8e4b01bb" => :catalina
+    sha256 "af6967ee45fa0035da68136796169c9f268e8d2983cfbf34d1458d3f8e4b01bb" => :mojave
+    sha256 "af6967ee45fa0035da68136796169c9f268e8d2983cfbf34d1458d3f8e4b01bb" => :high_sierra
   end
 
   revision 1
