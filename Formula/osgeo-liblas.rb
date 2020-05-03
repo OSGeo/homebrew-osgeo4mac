@@ -1,11 +1,15 @@
 class OsgeoLiblas < Formula
   desc "C/C++ library for reading and writing the LAS LiDAR format"
   homepage "https://liblas.org/"
-  url "https://github.com/libLAS/libLAS/archive/bd157f25b3de9747fa3146f9dcf2323bc275b254.tar.gz"
-  sha256 "9e056b8f973cdfc0e772290a16af8a2c895d997e25677332fe70ae60420913b5"
+  # url "https://github.com/libLAS/libLAS/archive/bd157f25b3de9747fa3146f9dcf2323bc275b254.tar.gz"
+  # sha256 "9e056b8f973cdfc0e772290a16af8a2c895d997e25677332fe70ae60420913b5"
+  # version "1.8.1"
+  url "https://github.com/libLAS/libLAS.git",
+    :branch => "master",
+    :commit => "11a9435cc90ec40c4abbc498cbb1412dd8c33588"
   version "1.8.1"
 
-  revision 8
+  revision 9
 
   # gt_wkt_srs_cpp
   patch :DATA
@@ -22,7 +26,7 @@ class OsgeoLiblas < Formula
   keg_only "other version built against older gdal is in main tap"
 
   option "with-test", "Verify during install with `make test`"
-  # option "with-laszip", "Build with laszip support"
+  option "with-laszip", "Build with laszip support"
 
   depends_on "cmake" => :build
   depends_on "boost"
@@ -33,7 +37,7 @@ class OsgeoLiblas < Formula
   depends_on "osgeo-libgeotiff"
   depends_on "osgeo-proj"
   depends_on "osgeo-gdal"
-  depends_on "osgeo-laszip@2" # if build.with? "laszip"
+  depends_on "osgeo-laszip@2" if build.with? "laszip"
   # depends_on "pkgconfig"
   # other: oracle
 
@@ -68,18 +72,18 @@ class OsgeoLiblas < Formula
       ENV["Boost_LIBRARY_DIRS"] = "#{HOMEBREW_PREFIX}/lib"
       args = ["-DWITH_GEOTIFF=ON", "-DWITH_GDAL=ON"] + std_cmake_args
 
-      # if build.with? "laszip"
-      args << "-DWITH_LASZIP=ON"
-      args << "-DLASZIP_INCLUDE_DIR=#{Formula['osgeo-laszip@2'].opt_include}"
-      args << "-DLASZIP_LIBRARY=#{Formula['osgeo-laszip@2'].opt_lib}/liblaszip.dylib"
-      # end
+      if build.with? "laszip"
+        args << "-DWITH_LASZIP=ON"
+        args << "-DLASZIP_INCLUDE_DIR=#{Formula['osgeo-laszip@2'].opt_include}"
+        args << "-DLASZIP_LIBRARY=#{Formula['osgeo-laszip@2'].opt_lib}/liblaszip.dylib"
+        rgs << "-DWITH_STATIC_LASZIP=ON"
+      end
 
       args << "-DPROJ4_INCLUDE_DIR=#{Formula['osgeo-proj'].opt_include}"
       args << "-DPROJ4_LIBRARY=#{Formula['osgeo-proj'].opt_lib}"
 
       # args << "-DWITH_PKGCONFIG=ON"
 
-      args << "-DWITH_STATIC_LASZIP=ON"
       args << "-DWITH_UTILITIES=ON"
 
       system "cmake", "..", *args
