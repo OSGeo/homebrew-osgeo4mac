@@ -1,13 +1,13 @@
 class OsgeoLiblas < Formula
   desc "C/C++ library for reading and writing the LAS LiDAR format"
   homepage "https://liblas.org/"
-  # url "https://github.com/libLAS/libLAS/archive/bd157f25b3de9747fa3146f9dcf2323bc275b254.tar.gz"
-  # sha256 "9e056b8f973cdfc0e772290a16af8a2c895d997e25677332fe70ae60420913b5"
-  # version "1.8.1"
-  url "https://github.com/libLAS/libLAS.git",
-    :branch => "master",
-    :commit => "11a9435cc90ec40c4abbc498cbb1412dd8c33588"
-  version "1.8.1"
+   url "https://github.com/libLAS/libLAS/archive/bd157f25b3de9747fa3146f9dcf2323bc275b254.tar.gz"
+   sha256 "9e056b8f973cdfc0e772290a16af8a2c895d997e25677332fe70ae60420913b5"
+   version "1.8.1"
+  #url "https://github.com/libLAS/libLAS.git",
+  #  :branch => "master",
+  #  :commit => "11a9435cc90ec40c4abbc498cbb1412dd8c33588"
+  #version "1.8.1"
 
   revision 9
 
