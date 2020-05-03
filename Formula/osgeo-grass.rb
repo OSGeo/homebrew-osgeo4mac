@@ -4,7 +4,7 @@ class OsgeoGrass < Formula
   desc "Geographic Resources Analysis Support System"
   homepage "https://grass.osgeo.org/"
 
-  revision 5
+  revision 6
 
   # svn: E230001: Server SSL certificate verification failed: issuer is not trusted
   # head "https://svn.osgeo.org/grass/grass/trunk", :using => :svn
@@ -34,9 +34,11 @@ class OsgeoGrass < Formula
   option "with-aqua", "Build with experimental Aqua GUI backend"
   option "with-app", "Build GRASS.app Package"
   option "with-avce00", "Build with AVCE00 support: Make Arc/Info (binary) Vector Coverages appear as E00"
-  option "with-pg11", "Build with PostgreSQL 10 client"
+  option "with-pg10", "Build with PostgreSQL 10 client"
+  option "with-pg11", "Build with PostgreSQL 11 client"
+  option "with-mysql", "Build with MySQL client"
+  option "with-openmp", "Build with openmp support"
   option "with-others", "Build with other optional dependencies"
-  # option "with-openmp", "Build with openmp support"
   # option "with-opendwg", "Build with OpenDWG support"
   # option "with-pdal", "Build with PDAL support" # Build - Error: /vector/v.in.pdal
 
@@ -91,13 +93,15 @@ class OsgeoGrass < Formula
 
   # optional dependencies
   depends_on "osgeo-liblas"
-  depends_on "mysql"
+  depends_on "mysql" if build.with? "mysql"
   #depends_on "r"
   depends_on "avce00" => :optional # avcimport
-  # depends_on "libomp" if build.with? "openmp"
+  depends_on "libomp" if build.with? "openmp"
   # depends_on "osgeo-pdal"
 
-  if build.with?("pg11")
+  if build.with?("pg10")
+    depends_on "osgeo-postgresql@10"
+  elsif build.with?("pg11")
     depends_on "osgeo-postgresql@11"
   else
     depends_on "osgeo-postgresql"
@@ -268,10 +272,10 @@ class OsgeoGrass < Formula
   #   sha256 "6edfe021671fcad1bd6081c980c380cb3d66d00895eb8c3450fa3842c441d1d1"
   # end
 
-  # resource "wxPython" do
-  #   url "https://files.pythonhosted.org/packages/b9/8b/31267dd6d026a082faed35ec8d97522c0236f2e083bf15aff64d982215e1/wxPython-4.0.7.post2.tar.gz"
-  #   sha256 "5a229e695b64f9864d30a5315e0c1e4ff5e02effede0a07f16e8d856737a0c4e"
-  # end
+   resource "wxPython" do
+     url "https://files.pythonhosted.org/packages/b9/8b/31267dd6d026a082faed35ec8d97522c0236f2e083bf15aff64d982215e1/wxPython-4.0.7.post2.tar.gz"
+     sha256 "5a229e695b64f9864d30a5315e0c1e4ff5e02effede0a07f16e8d856737a0c4e"
+   end
 
   def install
     # Work around "error: no member named 'signbit' in the global namespace"
@@ -284,7 +288,9 @@ class OsgeoGrass < Formula
     # ENV.append "CPPFLAGS", ""
     # ENV.append "LDFLAGS", "-framework OpenCL"
     # ENV.append "CFLAGS", "-O2 -Werror=implicit-function-declaration"
-    ENV["MYSQLD_CONFIG"] = "#{Formula["mysql"].opt_bin}/mysql_config"
+    if build.with?("mysql")
+      ENV["MYSQLD_CONFIG"] = "#{Formula["mysql"].opt_bin}/mysql_config"
+    end
 
     # install python modules
     venv = virtualenv_create(libexec/'vendor', "#{Formula["python"].opt_bin}/python3")
@@ -367,7 +373,11 @@ class OsgeoGrass < Formula
     args << "--with-liblas=#{Formula["osgeo-liblas"].opt_bin}/liblas-config" # if build.with? "liblas"
 
     args << "--with-postgres"
-    if build.with?("pg11")
+    
+    if build.with?("pg10")
+      args << "--with-postgres-includes=#{Formula["osgeo-postgresql@10"].opt_include}"
+      args << "--with-postgres-libs=#{Formula["osgeo-postgresql@10"].opt_lib}"
+    elsif build.with?("pg11")
       args << "--with-postgres-includes=#{Formula["osgeo-postgresql@11"].opt_include}"
       args << "--with-postgres-libs=#{Formula["osgeo-postgresql@11"].opt_lib}"
     else
@@ -375,9 +385,11 @@ class OsgeoGrass < Formula
       args << "--with-postgres-libs=#{Formula["osgeo-postgresql"].opt_lib}"
     end
 
-    args << "--with-mysql"
-    args << "--with-mysql-includes=#{Formula["mysql"].opt_include}/mysql"
-    args << "--with-mysql-libs=#{Formula["mysql"].opt_lib}"
+    if build.with?("mysql")
+      args << "--with-mysql"
+      args << "--with-mysql-includes=#{Formula["mysql"].opt_include}/mysql"
+      args << "--with-mysql-libs=#{Formula["mysql"].opt_lib}"
+    end
 
     args << "--with-pthread"
     args << "--with-pthread-includes=#{Formula["boost"].opt_include}/boost/thread"
@@ -393,12 +405,12 @@ class OsgeoGrass < Formula
     #   args << "--with-opendwg-libs="
     # end
 
-    # if build.with? "openmp"
-    #   # install openblas --with-openmp
-    #   args << "--with-openmp"
-    #   args << "--with-openmp-includes=#{Formula["libomp"].opt_include}"
-    #   args << "--with-openmp-libs=#{Formula["libomp"].opt_lib}"
-    # end
+    if build.with? "openmp"
+       # install openblas --with-openmp
+       args << "--with-openmp"
+       args << "--with-openmp-includes=#{Formula["libomp"].opt_include}"
+       args << "--with-openmp-libs=#{Formula["libomp"].opt_lib}"
+    end
 
     # if build.with? "opencl"
     #   args << "--with-opencl"
