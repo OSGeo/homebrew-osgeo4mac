@@ -36,9 +36,9 @@ class OsgeoGdal < Formula
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
-    sha256 "f8effdb75811f175518657eb2f46b51106eac2d548306179ca1dec1461a13217" => :catalina
-    sha256 "f8effdb75811f175518657eb2f46b51106eac2d548306179ca1dec1461a13217" => :mojave
-    sha256 "f8effdb75811f175518657eb2f46b51106eac2d548306179ca1dec1461a13217" => :high_sierra
+    sha256 "0f0e39c3b65a0cae7a187a0c145268f11f690510e141057cfa0ce3c2321cf9ac" => :catalina
+    sha256 "0f0e39c3b65a0cae7a187a0c145268f11f690510e141057cfa0ce3c2321cf9ac" => :mojave
+    sha256 "0f0e39c3b65a0cae7a187a0c145268f11f690510e141057cfa0ce3c2321cf9ac" => :high_sierra
   end
 
   # keg_only "gdal is already provided by homebrew/core"
