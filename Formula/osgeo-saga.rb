@@ -47,12 +47,17 @@ class OsgeoSaga < Formula
   depends_on "poppler"
   depends_on "sqlite"
   depends_on "hdf5"
-  #depends_on "osgeo-hdf4"
+  depends_on "osgeo-hdf4"
   depends_on "osgeo-proj"
   depends_on "osgeo-netcdf"
-  depends_on "osgeo-laszip@2"
   depends_on "osgeo-gdal" # (gdal-curl, gdal-filegdb, gdal-hdf4)
-  depends_on "osgeo-liblas"
+  
+  # SKIP liblas support until SAGA supports > 1.8.1, which should support GDAL 2;
+  #      otherwise, SAGA binaries may lead to multiple GDAL versions being loaded
+  # See: https://github.com/libLAS/libLAS/issues/106
+  #      Update: https://github.com/libLAS/libLAS/issues/106
+  #depends_on "osgeo-laszip@2"
+  #depends_on "osgeo-liblas"
 
   # Vigra support builds, but dylib in saga shows 'failed' when loaded
   # Also, using --with-python will trigger vigra to be built with it, which
@@ -73,10 +78,6 @@ class OsgeoSaga < Formula
   def install
     ENV.cxx11
 
-    # SKIP liblas support until SAGA supports > 1.8.1, which should support GDAL 2;
-    #      otherwise, SAGA binaries may lead to multiple GDAL versions being loaded
-    # See: https://github.com/libLAS/libLAS/issues/106
-    #      Update: https://github.com/libLAS/libLAS/issues/106
 
     # https://sourceforge.net/p/saga-gis/wiki/Compiling%20SAGA%20on%20Mac%20OS%20X/
     # configure FEATURES CXX="CXX" CPPFLAGS="DEFINES GDAL_H $PROJ_H" LDFLAGS="GDAL_SRCH PROJ_SRCH LINK_MISC"
@@ -89,7 +90,7 @@ class OsgeoSaga < Formula
     ldflags = "-L#{HOMEBREW_PREFIX}/lib -framework IOKit -framework Carbon -framework Cocoa -framework AudioToolbox -framework System -framework OpenGL -lwx_osx_cocoau_xrc-3.0 -lwx_osx_cocoau_html-3.0 -lwx_osx_cocoau_qa-3.0 -lwx_osx_cocoau_adv-3.0 -lwx_osx_cocoau_core-3.0 -lwx_baseu_xml-3.0 -lwx_baseu_net-3.0 -lwx_baseu-3.0" # -lwx_osx_cocoau_webview-3.0
 
     # xcode : xcrun --show-sdk-path
-    link_misc = "-arch x86_64 -mmacosx-version-min=10.9 -isysroot #{MacOS::Xcode.prefix}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX#{MacOS.version}.sdk -lstdc++"
+    link_misc = "-arch x86_64 -mmacosx-version-min=10.9 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -lstdc++"
 
     ENV.append "CPPFLAGS", "-I#{Formula["osgeo-proj"].opt_include} -I#{Formula["osgeo-gdal"].opt_include} #{cppflags}"
     ENV.append "LDFLAGS", "-L#{Formula["osgeo-proj"].opt_lib}/libproj.dylib -L#{Formula["osgeo-gdal"].opt_lib}/libgdal.dylib #{link_misc} #{ldflags}"
@@ -115,13 +116,12 @@ class OsgeoSaga < Formula
     args = %W[
       --prefix=#{prefix}
       --disable-dependency-tracking
-      --disable-openmp
       --disable-libfire
       --enable-shared
       --enable-debug
       --disable-gui 
     ]
-    
+    #--disable-openmp
     #--enable-gui
     # --enable-unicode
 
