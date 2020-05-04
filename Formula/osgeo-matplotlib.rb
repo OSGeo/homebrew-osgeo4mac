@@ -49,6 +49,7 @@ class OsgeoMatplotlib < Formula
 
   depends_on "openblas"
   depends_on "numpy"
+  depends_on "cython"
   depends_on "scipy"
   depends_on "osgeo-six"
   depends_on "cairo"
