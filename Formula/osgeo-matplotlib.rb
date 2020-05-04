@@ -134,6 +134,11 @@ class OsgeoMatplotlib < Formula
     sha256 "e7894793e6e8540dbeac77c87b489e331947813511108ae097f1715c018b8f3d"
   end
 
+  resource "Cython" do
+    url "https://files.pythonhosted.org/packages/99/36/a3dc962cc6d08749aa4b9d85af08b6e354d09c5468a3e0edc610f44c856b/Cython-0.29.17.tar.gz"
+    sha256 "6361588cb1d82875bcfbad83d7dd66c442099759f895cf547995f00601f9caf2"
+  end
+
   def install
     if DevelopmentTools.clang_build_version >= 900
       ENV.delete "SDKROOT"
