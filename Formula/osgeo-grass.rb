@@ -4,7 +4,7 @@ class OsgeoGrass < Formula
   desc "Geographic Resources Analysis Support System"
   homepage "https://grass.osgeo.org/"
 
-  revision 6
+  #revision 6
 
   # svn: E230001: Server SSL certificate verification failed: issuer is not trusted
   # head "https://svn.osgeo.org/grass/grass/trunk", :using => :svn
@@ -13,8 +13,12 @@ class OsgeoGrass < Formula
   head "https://github.com/OSGeo/grass.git", :branch => "master"
 
   stable do
-    url "https://github.com/OSGeo/grass/archive/7.8.2.tar.gz"
-    sha256 "07b69e2fe0678bca29d9303a90eaf4a29dddcfa97fa92e056e214f0415629b6d"
+    #url "https://github.com/OSGeo/grass/archive/7.8.2.tar.gz"
+    #sha256 "07b69e2fe0678bca29d9303a90eaf4a29dddcfa97fa92e056e214f0415629b6d"
+    url "https://github.com/OSGeo/grass.git",
+    :branch => "releasebranch_7_8",
+    :commit => "cfa670bcfccc5ac208fc478ae90dd6c99d7ce7db"
+    version "7.8.3RC2"
 
     # Patches to keep files from being installed outside of the prefix.
     # Remove lines from Makefile that try to install to /Library/Documentation.
@@ -37,7 +41,7 @@ class OsgeoGrass < Formula
   option "with-pg10", "Build with PostgreSQL 10 client"
   option "with-pg11", "Build with PostgreSQL 11 client"
   option "with-mysql", "Build with MySQL client"
-  option "with-openmp", "Build with openmp support"
+  #option "with-openmp", "Build with openmp support"
   option "with-others", "Build with other optional dependencies"
   # option "with-opendwg", "Build with OpenDWG support"
   # option "with-pdal", "Build with PDAL support" # Build - Error: /vector/v.in.pdal
@@ -272,10 +276,10 @@ class OsgeoGrass < Formula
   #   sha256 "6edfe021671fcad1bd6081c980c380cb3d66d00895eb8c3450fa3842c441d1d1"
   # end
 
-   resource "wxPython" do
-     url "https://files.pythonhosted.org/packages/b9/8b/31267dd6d026a082faed35ec8d97522c0236f2e083bf15aff64d982215e1/wxPython-4.0.7.post2.tar.gz"
-     sha256 "5a229e695b64f9864d30a5315e0c1e4ff5e02effede0a07f16e8d856737a0c4e"
-   end
+   #resource "wxPython" do
+   #  url "https://files.pythonhosted.org/packages/b9/8b/31267dd6d026a082faed35ec8d97522c0236f2e083bf15aff64d982215e1/wxPython-4.0.7.post2.tar.gz"
+   #  sha256 "5a229e695b64f9864d30a5315e0c1e4ff5e02effede0a07f16e8d856737a0c4e"
+   #end
 
   def install
     # Work around "error: no member named 'signbit' in the global namespace"
