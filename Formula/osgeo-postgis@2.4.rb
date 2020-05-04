@@ -27,12 +27,8 @@ end
 class OsgeoPostgisAT24 < Formula
   desc "Adds support for geographic objects to PostgreSQL"
   homepage "https://postgis.net/"
-  # url "https://github.com/postgis/postgis/archive/2.4.8.tar.gz"
-  # sha256 "d81f36abc4dc7235de65e4e58b00dee33d1ca14e9b70a3a2b888be90544b3cb5"
-  url "https://github.com/postgis/postgis.git",
-    :branch => "stable-2.4",
-    :commit => "b495daed109f4771cc44066fcc0d4825131c7dc5"
-  version "2.4.8"
+  url "https://github.com/postgis/postgis/archive/2.4.8.tar.gz"
+  sha256 "6d0211a6bcbe45750967e850975ec0bcce4b14f5b4226a189f1e33694e7b8fe9"
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
@@ -43,7 +39,7 @@ class OsgeoPostgisAT24 < Formula
     sha256 "c7beee0ddd6337a6f521b44a9b5cfbf57f824c20201b75d72dc115e379bcd509" => :sierra
   end
 
-  revision 2
+  #revision 3
 
   head "https://github.com/postgis/postgis.git", :branch => "svn-2.4"
 
@@ -71,13 +67,10 @@ class OsgeoPostgisAT24 < Formula
   depends_on "protobuf-c" #  Geobuf and Mapbox Vector Tile support
   depends_on "osgeo-gdal" # for GeoJSON and raster handling
 
-  # The latest supported version of PostgreSQL by PostGIS 2.4 is 11,
-  # and thus it's the standard version.
-  # https://trac.osgeo.org/postgis/wiki/UsersWikiPostgreSQLPostGIS
   if build.with?("pg10")
     depends_on "osgeo-postgresql@10"
   else
-    depends_on "osgeo-postgresql@11"
+    depends_on "osgeo-postgresql"
   end
 
   depends_on "gtk+" # for gui
@@ -149,7 +142,7 @@ class OsgeoPostgisAT24 < Formula
     if build.with?("pg10")
       args << "--with-pgconfig=#{Formula["osgeo-postgresql@10"].opt_bin}/pg_config"
     else
-      args << "--with-pgconfig=#{Formula["osgeo-postgresql@11"].opt_bin}/pg_config"
+      args << "--with-pgconfig=#{Formula["osgeo-postgresql"].opt_bin}/pg_config"
     end
 
     system "./autogen.sh"
