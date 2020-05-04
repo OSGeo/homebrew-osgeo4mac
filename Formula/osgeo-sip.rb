@@ -24,7 +24,7 @@ class OsgeoSip < Formula
   url "https://www.riverbankcomputing.com/static/Downloads/sip/4.19.21/sip-4.19.21.tar.gz"
   sha256 "6af9979ab41590e8311b8cc94356718429ef96ba0e3592bdd630da01211200ae"
 
-  revision 4
+  revision 5
 
   head "https://www.riverbankcomputing.com/hg/sip", :using => :hg
 
