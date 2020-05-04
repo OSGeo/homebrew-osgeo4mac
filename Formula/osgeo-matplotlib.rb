@@ -23,7 +23,7 @@ class OsgeoMatplotlib < Formula
   url "https://github.com/matplotlib/matplotlib/archive/v3.1.3.tar.gz"
   sha256 "6edfe021671fcad1bd6081c980c380cb3d66d00895eb8c3450fa3842c441d1d1"
 
-  revision 7
+  revision 8
 
   head "https://github.com/matplotlib/matplotlib.git", :branch => "master"
 
