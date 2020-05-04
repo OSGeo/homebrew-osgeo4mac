@@ -11,9 +11,9 @@ class OsgeoSix < Formula
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any_skip_relocation
-    sha256 "9b809e5952d31c3469b0f0d36699b800e6ce81062028e6adc79d30fc4a4df7fc" => :catalina
-    sha256 "9b809e5952d31c3469b0f0d36699b800e6ce81062028e6adc79d30fc4a4df7fc" => :mojave
-    sha256 "9b809e5952d31c3469b0f0d36699b800e6ce81062028e6adc79d30fc4a4df7fc" => :high_sierra
+    sha256 "13889daa3ca388e73ec579511d1f2e0ec4de504615926e15ffec064dfa1675f2" => :catalina
+    sha256 "13889daa3ca388e73ec579511d1f2e0ec4de504615926e15ffec064dfa1675f2" => :mojave
+    sha256 "13889daa3ca388e73ec579511d1f2e0ec4de504615926e15ffec064dfa1675f2" => :high_sierra
   end
 
   depends_on "python"
