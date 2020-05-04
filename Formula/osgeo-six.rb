@@ -4,7 +4,7 @@ class OsgeoSix < Formula
   url "https://github.com/benjaminp/six/archive/1.14.0.tar.gz"
   sha256 "6efff7289d1d369f0a25180433aba83ec2584e489e90f115b52ba69e4816cfb4"
 
-  revision 2
+  revision 3
 
   head "https://github.com/benjaminp/six.git", :branch => "master"
 
