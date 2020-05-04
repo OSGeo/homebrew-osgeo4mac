@@ -23,7 +23,7 @@ class OsgeoMatplotlib < Formula
   url "https://github.com/matplotlib/matplotlib/archive/v3.1.3.tar.gz"
   sha256 "6edfe021671fcad1bd6081c980c380cb3d66d00895eb8c3450fa3842c441d1d1"
 
-  revision 8
+  revision 7
 
   head "https://github.com/matplotlib/matplotlib.git", :branch => "master"
 
@@ -49,7 +49,6 @@ class OsgeoMatplotlib < Formula
 
   depends_on "openblas"
   depends_on "numpy"
-  depends_on "cython"
   depends_on "scipy"
   depends_on "osgeo-six"
   depends_on "cairo"
@@ -130,15 +129,10 @@ class OsgeoMatplotlib < Formula
   #   sha256 "dee1bbf3a6c8f73b6b218cb28eed8dd13347ea2f87d572ce19b289d6fd3fbc59"
   # end
 
-  resource "numpy" do
-    url "https://files.pythonhosted.org/packages/84/1e/ff467ac56bfeaea51d4a2e72d315c1fe440b20192fea7e460f0f248acac8/numpy-1.18.2.zip"
-    sha256 "e7894793e6e8540dbeac77c87b489e331947813511108ae097f1715c018b8f3d"
-  end
-
-  resource "Cython" do
-    url "https://files.pythonhosted.org/packages/99/36/a3dc962cc6d08749aa4b9d85af08b6e354d09c5468a3e0edc610f44c856b/Cython-0.29.17.tar.gz"
-    sha256 "6361588cb1d82875bcfbad83d7dd66c442099759f895cf547995f00601f9caf2"
-  end
+  # resource "numpy" do
+  #   url "https://files.pythonhosted.org/packages/40/de/0ea5092b8bfd2e3aa6fdbb2e499a9f9adf810992884d414defc1573dca3f/numpy-1.18.1.zip"
+  #   sha256 "b6ff59cee96b454516e47e7721098e6ceebef435e3e21ac2d6c3b8b02628eb77"
+  # end
 
   def install
     if DevelopmentTools.clang_build_version >= 900

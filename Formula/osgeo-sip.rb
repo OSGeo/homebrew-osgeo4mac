@@ -24,16 +24,16 @@ class OsgeoSip < Formula
   url "https://www.riverbankcomputing.com/static/Downloads/sip/4.19.21/sip-4.19.21.tar.gz"
   sha256 "6af9979ab41590e8311b8cc94356718429ef96ba0e3592bdd630da01211200ae"
 
-  revision 5
+  revision 4
 
   head "https://www.riverbankcomputing.com/hg/sip", :using => :hg
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any_skip_relocation
-    sha256 "85280c9f58b9b1e4f601cebb09b1a69729030ea4188348fde32d02698db5cb55" => :catalina
-    sha256 "85280c9f58b9b1e4f601cebb09b1a69729030ea4188348fde32d02698db5cb55" => :mojave
-    sha256 "85280c9f58b9b1e4f601cebb09b1a69729030ea4188348fde32d02698db5cb55" => :high_sierra
+    sha256 "cf910c8c5ad25ea96bbe4fc8e988945acd0825783535530ef8c59e046a17e9cc" => :catalina
+    sha256 "cf910c8c5ad25ea96bbe4fc8e988945acd0825783535530ef8c59e046a17e9cc" => :mojave
+    sha256 "cf910c8c5ad25ea96bbe4fc8e988945acd0825783535530ef8c59e046a17e9cc" => :high_sierra
   end
 
   # keg_only "sip" is already provided by homebrew/core"

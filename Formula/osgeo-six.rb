@@ -4,16 +4,16 @@ class OsgeoSix < Formula
   url "https://github.com/benjaminp/six/archive/1.14.0.tar.gz"
   sha256 "6efff7289d1d369f0a25180433aba83ec2584e489e90f115b52ba69e4816cfb4"
 
-  revision 3
+  revision 2
 
   head "https://github.com/benjaminp/six.git", :branch => "master"
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any_skip_relocation
-    sha256 "13889daa3ca388e73ec579511d1f2e0ec4de504615926e15ffec064dfa1675f2" => :catalina
-    sha256 "13889daa3ca388e73ec579511d1f2e0ec4de504615926e15ffec064dfa1675f2" => :mojave
-    sha256 "13889daa3ca388e73ec579511d1f2e0ec4de504615926e15ffec064dfa1675f2" => :high_sierra
+    sha256 "9b809e5952d31c3469b0f0d36699b800e6ce81062028e6adc79d30fc4a4df7fc" => :catalina
+    sha256 "9b809e5952d31c3469b0f0d36699b800e6ce81062028e6adc79d30fc4a4df7fc" => :mojave
+    sha256 "9b809e5952d31c3469b0f0d36699b800e6ce81062028e6adc79d30fc4a4df7fc" => :high_sierra
   end
 
   depends_on "python"
