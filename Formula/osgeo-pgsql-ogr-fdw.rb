@@ -11,10 +11,9 @@ class OsgeoPgsqlOgrFdw < Formula
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any
-    rebuild 1
-    sha256 "88a8f2f915e4cf9d12f3be8c4e2147d747fbac5540c97b9765812aec7724b689" => :mojave
-    sha256 "88a8f2f915e4cf9d12f3be8c4e2147d747fbac5540c97b9765812aec7724b689" => :high_sierra
-    sha256 "2efada7ebfb2a36eab4d7c9c8209818fa28a30a0d229f7c1898cee32aede953d" => :sierra
+    sha256 "5e76b46bf3aea25f7d9eaaf19753074f4345c64d73bb81b41241814bfe3c3d3a" => :catalina
+    sha256 "5e76b46bf3aea25f7d9eaaf19753074f4345c64d73bb81b41241814bfe3c3d3a" => :mojave
+    sha256 "5e76b46bf3aea25f7d9eaaf19753074f4345c64d73bb81b41241814bfe3c3d3a" => :high_sierra
   end
 
   revision 1
