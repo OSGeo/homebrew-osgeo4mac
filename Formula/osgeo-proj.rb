@@ -20,8 +20,8 @@ end
 class OsgeoProj < Formula
   desc "Cartographic Projections Library"
   homepage "https://proj.org/"
-  url "https://github.com/OSGeo/PROJ/releases/download/6.3.2/proj-6.3.2.tar.gz"
-  sha256 "cb776a70f40c35579ae4ba04fb4a388c1d1ce025a1df6171350dc19f25b80311"
+  url "https://github.com/OSGeo/PROJ/releases/download/7.0.1/proj-7.0.1.tar.gz"
+  sha256 "a7026d39c9c80d51565cfc4b33d22631c11e491004e19020b3ff5a0791e1779f"
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
@@ -44,7 +44,7 @@ class OsgeoProj < Formula
   end
 
   depends_on "pkg-config" => :build
-  # depends_on "libtiff" Proj >7
+  depends_on "libtiff"
 
   conflicts_with "blast", :because => "both install a `libproj.a` library"
 
