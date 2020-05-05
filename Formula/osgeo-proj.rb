@@ -20,14 +20,14 @@ end
 class OsgeoProj < Formula
   desc "Cartographic Projections Library"
   homepage "https://proj.org/"
-  url "https://github.com/OSGeo/PROJ/releases/download/7.0.1/proj-7.0.1.tar.gz"
-  sha256 "a7026d39c9c80d51565cfc4b33d22631c11e491004e19020b3ff5a0791e1779f"
+  url "https://github.com/OSGeo/PROJ/releases/download/6.3.2/proj-6.3.2.tar.gz"
+  sha256 "cb776a70f40c35579ae4ba04fb4a388c1d1ce025a1df6171350dc19f25b80311"
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
-    sha256 "c2af46b850956a12a1781dd120f720ac251222844d72b281cf72d2233e0140b1" => :catalina
-    sha256 "c2af46b850956a12a1781dd120f720ac251222844d72b281cf72d2233e0140b1" => :mojave
-    sha256 "c2af46b850956a12a1781dd120f720ac251222844d72b281cf72d2233e0140b1" => :high_sierra
+    sha256 "729a8816d46c6f3293951bf7f68d6b6e32bb13e4c75f339a29140f44b5ffa2e7" => :catalina
+    sha256 "729a8816d46c6f3293951bf7f68d6b6e32bb13e4c75f339a29140f44b5ffa2e7" => :mojave
+    sha256 "729a8816d46c6f3293951bf7f68d6b6e32bb13e4c75f339a29140f44b5ffa2e7" => :high_sierra
   end
 
   # revision 1
@@ -44,7 +44,7 @@ class OsgeoProj < Formula
   end
 
   depends_on "pkg-config" => :build
-  depends_on "libtiff"
+  # depends_on "libtiff" Proj >7
 
   conflicts_with "blast", :because => "both install a `libproj.a` library"
 
