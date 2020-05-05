@@ -1,8 +1,12 @@
 class OsgeoPgsqlOgrFdw < Formula
   desc "PostgreSQL foreign data wrapper for OGR"
   homepage "https://github.com/pramsey/pgsql-ogr-fdw"
-  url "https://github.com/pramsey/pgsql-ogr-fdw/archive/v1.0.8.tar.gz"
-  sha256 "4ab0c303006bfd83dcd40af4d53c48e7d8ec7835bb98491bc6640686da788a8b"
+  #url "https://github.com/pramsey/pgsql-ogr-fdw/archive/v1.0.8.tar.gz"
+  #sha256 "4ab0c303006bfd83dcd40af4d53c48e7d8ec7835bb98491bc6640686da788a8b"
+  url "https://github.com/pramsey/pgsql-ogr-fdw.git",
+    :branch => "master",
+    :commit => "33e11c04a812cd057e70fa8d16221b5af83b2750"
+  version "1.0.9"
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
@@ -13,7 +17,7 @@ class OsgeoPgsqlOgrFdw < Formula
     sha256 "2efada7ebfb2a36eab4d7c9c8209818fa28a30a0d229f7c1898cee32aede953d" => :sierra
   end
 
-  # revision 1
+  revision 1
 
   head "https://github.com/pramsey/pgsql-ogr-fdw.git", :branch => "master"
 
