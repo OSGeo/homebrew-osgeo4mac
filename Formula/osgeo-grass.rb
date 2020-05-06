@@ -13,8 +13,12 @@ class OsgeoGrass < Formula
   head "https://github.com/OSGeo/grass.git", :branch => "master"
 
   stable do
-    url "https://github.com/OSGeo/grass/archive/7.8.2.tar.gz"
-    sha256 "07b69e2fe0678bca29d9303a90eaf4a29dddcfa97fa92e056e214f0415629b6d"
+    #url "https://github.com/OSGeo/grass/archive/7.8.2.tar.gz"
+    #sha256 "07b69e2fe0678bca29d9303a90eaf4a29dddcfa97fa92e056e214f0415629b6d"
+    url "https://github.com/OSGeo/grass.git",
+    :branch => "releasebranch_7_8",
+    :commit => "8bcecc9a609bff0184519b124df17fb38e1195a5"
+    version "7.8.3"
 
     # Patches to keep files from being installed outside of the prefix.
     # Remove lines from Makefile that try to install to /Library/Documentation.
@@ -34,7 +38,9 @@ class OsgeoGrass < Formula
   option "with-aqua", "Build with experimental Aqua GUI backend"
   option "with-app", "Build GRASS.app Package"
   option "with-avce00", "Build with AVCE00 support: Make Arc/Info (binary) Vector Coverages appear as E00"
-  option "with-pg11", "Build with PostgreSQL 10 client"
+  option "with-pg11", "Build with PostgreSQL 11 client"
+  option "with-mysql", "Build with MySQL client"
+  #option "with-openmp", "Build with openmp support"
   option "with-others", "Build with other optional dependencies"
   # option "with-openmp", "Build with openmp support"
   # option "with-opendwg", "Build with OpenDWG support"
@@ -91,7 +97,7 @@ class OsgeoGrass < Formula
 
   # optional dependencies
   depends_on "osgeo-liblas"
-  depends_on "mysql"
+  depends_on "mysql" if build.with? "mysql"
   #depends_on "r"
   depends_on "avce00" => :optional # avcimport
   # depends_on "libomp" if build.with? "openmp"
@@ -284,7 +290,9 @@ class OsgeoGrass < Formula
     # ENV.append "CPPFLAGS", ""
     # ENV.append "LDFLAGS", "-framework OpenCL"
     # ENV.append "CFLAGS", "-O2 -Werror=implicit-function-declaration"
-    ENV["MYSQLD_CONFIG"] = "#{Formula["mysql"].opt_bin}/mysql_config"
+    if build.with?("mysql")
+      ENV["MYSQLD_CONFIG"] = "#{Formula["mysql"].opt_bin}/mysql_config"
+    end
 
     # install python modules
     venv = virtualenv_create(libexec/'vendor', "#{Formula["python"].opt_bin}/python3")
@@ -375,9 +383,11 @@ class OsgeoGrass < Formula
       args << "--with-postgres-libs=#{Formula["osgeo-postgresql"].opt_lib}"
     end
 
-    args << "--with-mysql"
-    args << "--with-mysql-includes=#{Formula["mysql"].opt_include}/mysql"
-    args << "--with-mysql-libs=#{Formula["mysql"].opt_lib}"
+    if build.with?("mysql")
+      args << "--with-mysql"
+      args << "--with-mysql-includes=#{Formula["mysql"].opt_include}/mysql"
+      args << "--with-mysql-libs=#{Formula["mysql"].opt_lib}"
+    end
 
     args << "--with-pthread"
     args << "--with-pthread-includes=#{Formula["boost"].opt_include}/boost/thread"
