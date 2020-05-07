@@ -1,9 +1,9 @@
 class OsgeoSaga < Formula
   desc "System for Automated Geoscientific Analyses - Long Term Support"
   homepage "http://saga-gis.org"
-  url "https://downloads.sourceforge.net/project/saga-gis/SAGA%20-%207/SAGA%20-%207.5.0/saga-7.5.0.tar.gz"
-  sha256 "d95c1cba60586916608fd6b262bf75a795a47d6a9b44c2c59a9477015049a168"
-
+  url "https://downloads.sourceforge.net/project/saga-gis/SAGA%20-%207/SAGA%20-%207.6.3/saga-7.6.3.tar.gz"
+  sha256 "8b791ca26e3e2ab923e6661b60fd5f57f5707ada7315028f4fed2591bcf03838"
+  
   # QGIS & PROJ 6 & SAGA
   # https://lists.osgeo.org/pipermail/qgis-developer/2019-December/059512.html
   # https://github.com/qgis/QGIS/blob/master/python/plugins/processing/algs/saga/SagaAlgorithmProvider.py
@@ -52,6 +52,8 @@ class OsgeoSaga < Formula
   depends_on "osgeo-proj"
   depends_on "osgeo-netcdf"
   depends_on "osgeo-gdal" # (gdal-curl, gdal-filegdb, gdal-hdf4)
+  # TODO OpenMP support
+  depends_on "libomp" 
   
   # SKIP liblas support until SAGA supports > 1.8.1, which should support GDAL 2;
   #      otherwise, SAGA binaries may lead to multiple GDAL versions being loaded
