@@ -96,7 +96,7 @@ class OsgeoGrass < Formula
   depends_on "osgeo-matplotlib"
 
   # optional dependencies
-  depends_on "osgeo-liblas"
+  #depends_on "osgeo-liblas"
   depends_on "mysql" if build.with? "mysql"
   #depends_on "r"
   depends_on "avce00" => :optional # avcimport
@@ -372,7 +372,7 @@ class OsgeoGrass < Formula
     # Disable some dependencies that don't build correctly on older version of MacOS
     args << "--without-fftw" if build.without? "fftw"
 
-    args << "--with-liblas=#{Formula["osgeo-liblas"].opt_bin}/liblas-config" # if build.with? "liblas"
+    #args << "--with-liblas=#{Formula["osgeo-liblas"].opt_bin}/liblas-config" # if build.with? "liblas"
 
     args << "--with-postgres"
     if build.with?("pg11")
