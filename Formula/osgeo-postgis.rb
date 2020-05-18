@@ -33,9 +33,9 @@ class OsgeoPostgis < Formula
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any
-    sha256 "9426281815a0408d84e2de6a71f8c08dc5f6cf12a18f46195032d65bd9c88910" => :catalina
-    sha256 "9426281815a0408d84e2de6a71f8c08dc5f6cf12a18f46195032d65bd9c88910" => :mojave
-    sha256 "9426281815a0408d84e2de6a71f8c08dc5f6cf12a18f46195032d65bd9c88910" => :high_sierra
+    sha256 "4fdba1aa40ce8b9bf470f719a5a218bf5587f9af96f537bae09975a33a2167e1" => :catalina
+    sha256 "4fdba1aa40ce8b9bf470f719a5a218bf5587f9af96f537bae09975a33a2167e1" => :mojave
+    sha256 "4fdba1aa40ce8b9bf470f719a5a218bf5587f9af96f537bae09975a33a2167e1" => :high_sierra
   end
 
   revision 6
