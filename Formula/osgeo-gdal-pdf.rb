@@ -28,7 +28,9 @@ class OsgeoGdalPdf < Formula
   depends_on "osgeo-libgeotiff"
   depends_on "openjpeg"
   depends_on "podofo"
-  depends_on "osgeo-pdfium"
+  # TODO: new code for GDAL >3.1 from: 
+  # https://github.com/rouault/pdfium_build_gdal_3_1
+  #depends_on "osgeo-pdfium"
   depends_on "osgeo-gdal"
 
   # various deps needed for configuring
@@ -73,7 +75,7 @@ class OsgeoGdalPdf < Formula
     ]
 
     # PDF-supporting backends for writing
-    args << "--with-pdfium=#{Formula["osgeo-pdfium"].opt_prefix}"
+    # args << "--with-pdfium=#{Formula["osgeo-pdfium"].opt_prefix}"
 
     # poppler is locally vendored
     args << "--with-poppler=#{libexec}/poppler"
