@@ -169,6 +169,6 @@ class OsgeoGdalPdf < Formula
     ENV["GDAL_DRIVER_PATH"] = "#{HOMEBREW_PREFIX}/lib/gdalplugins"
     gdal_opt_bin = Formula["osgeo-gdal"].opt_bin
     out = shell_output("#{gdal_opt_bin}/gdalinfo --formats")
-    assert_match "PDF -raster,vector- (rw+vs): Geospatial PDF", out
+    assert_match "PDF -raster,vector- (rw+s): Geospatial PDF", out
   end
 end
