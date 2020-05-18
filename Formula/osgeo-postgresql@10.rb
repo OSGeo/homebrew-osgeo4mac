@@ -57,9 +57,9 @@ class OsgeoPostgresqlAT10 < Formula
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
-    sha256 "69933605f54b9ab577c84678b62302f025192bc75452e632da671d8ca0a996d9" => :catalina
-    sha256 "69933605f54b9ab577c84678b62302f025192bc75452e632da671d8ca0a996d9" => :mojave
-    sha256 "69933605f54b9ab577c84678b62302f025192bc75452e632da671d8ca0a996d9" => :high_sierra
+    sha256 "185a735daf11f8ad22969c60921f3dc9a15397a5418f95ec876c2e0949bbf649" => :catalina
+    sha256 "185a735daf11f8ad22969c60921f3dc9a15397a5418f95ec876c2e0949bbf649" => :mojave
+    sha256 "185a735daf11f8ad22969c60921f3dc9a15397a5418f95ec876c2e0949bbf649" => :high_sierra
   end
 
   option "with-cellar", "Use /Cellar in the path configuration (necessary for migration)"
