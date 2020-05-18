@@ -10,7 +10,7 @@ class OsgeoSaga < Formula
   # REQUIRED_VERSION = '2.3.'
   # BETA_SUPPORT_VERSION = '7.3.'
 
-  #revision 2
+  revision 1
 
   head "https://git.code.sf.net/p/saga-gis/code.git"
 
