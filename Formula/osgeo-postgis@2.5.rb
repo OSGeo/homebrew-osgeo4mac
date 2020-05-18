@@ -12,7 +12,7 @@ class OsgeoPostgisAT25 < Formula
     sha256 "4636eeb54f158f560babf9aec89d9070a205cbd8920b63fc654db4afdd49c52c" => :high_sierra
   end
 
-  revision 2
+  revision 3
 
   head "https://github.com/postgis/postgis.git", :branch => "master"
 
