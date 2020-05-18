@@ -20,14 +20,13 @@ end
 class OsgeoGdal < Formula
   desc "GDAL: Geospatial Data Abstraction Library"
   homepage "https://www.gdal.org/"
-  url "https://github.com/OSGeo/gdal/releases/download/v3.0.4/gdal-3.0.4.tar.gz"
-  sha256 "fc15d2b9107b250305a1e0bd8421dd9ec1ba7ac73421e4509267052995af5e83"
+  url "https://github.com/OSGeo/gdal/releases/download/v3.1.0/gdal-3.1.0.tar.gz"
+  sha256 "6793ddb2b1ca042494d938ac82c71d06b9125bbb00c9bb9414a7c5e3a707c639"
   #url "https://github.com/OSGeo/gdal.git",
   #  :branch => "master",
   #  :commit => "ee535a1a3f5b35b0d231e1faac89ac1f889f7988"
   #version "3.0.4"
 
-  revision 4
 
   head do
     url "https://github.com/OSGeo/gdal.git", :branch => "master"
@@ -139,7 +138,6 @@ class OsgeoGdal < Formula
   def configure_args
     args = [
       "--prefix=#{prefix}",
-      "--mandir=#{man}",
       "--disable-debug",
       "--with-local=#{prefix}",
       "--with-dods-root=#{Formula["libdap"].opt_prefix}", # #{HOMEBREW_PREFIX}
@@ -172,8 +170,8 @@ class OsgeoGdal < Formula
       "--with-openjpeg=#{Formula["openjpeg"].opt_prefix}",
       "--with-expat=#{Formula["expat"].opt_prefix}",
       "--with-odbc=#{Formula["unixodbc"].opt_prefix}",
-      "--with-curl=#{Formula["curl"].opt_bin}/curl-config",
-      "--with-xml2=#{Formula["libxml2"].opt_bin}/xml2-config",
+      "--with-curl=#{Formula["curl-openssl"].opt_bin}/curl-config",
+      "--with-xml2=yes",
       "--with-spatialite=#{Formula["osgeo-libspatialite"].opt_prefix}",
       "--with-sqlite3=#{Formula["sqlite"].opt_prefix}",
       "--with-webp=#{Formula["webp"].opt_prefix}",
@@ -303,9 +301,6 @@ class OsgeoGdal < Formula
       # GDAL looks for the renamed hdf4 library, which is an artifact of old builds, so we need to repoint it
       inreplace "configure", "-ldf", "-lhdf"
 
-      # Fix hardcoded mandir: http://trac.osgeo.org/gdal/ticket/5092
-      inreplace "configure", %r[^mandir='\$\{prefix\}/man'$], ""
-
       # These libs are statically linked in libkml-dev and libkml formula
       inreplace "configure", " -lminizip -luriparser", ""
 
@@ -348,9 +343,6 @@ class OsgeoGdal < Formula
       end
 
       system "make", "man" if build.head?
-      # Force man installation dir: https://trac.osgeo.org/gdal/ticket/5092
-      system "make", "install-man", "INST_MAN=#{man}"
-      # Clean up any stray doxygen files
       system "make", "install-man"
       # Clean up any stray doxygen files.
       Dir.glob("#{bin}/*.dox") { |p| rm p }
