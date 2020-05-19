@@ -1,10 +1,10 @@
 class OsgeoGdalMysql < Formula
   desc "GDAL/OGR 3.x plugin for MySQL driver"
   homepage "http://www.gdal.org/drv_mysql.html"
-  url "https://github.com/OSGeo/gdal/releases/download/v3.0.4/gdal-3.0.4.tar.gz"
-  sha256 "fc15d2b9107b250305a1e0bd8421dd9ec1ba7ac73421e4509267052995af5e83"
+  url "https://github.com/OSGeo/gdal/releases/download/v3.1.0/gdal-3.1.0.tar.gz"
+  sha256 "6793ddb2b1ca042494d938ac82c71d06b9125bbb00c9bb9414a7c5e3a707c639"
 
-  revision 1
+  #revision 1
   
   head "https://github.com/OSGeo/gdal.git", :branch => "master"
 
