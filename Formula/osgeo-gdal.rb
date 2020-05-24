@@ -296,7 +296,7 @@ class OsgeoGdal < Formula
     ENV.append "CFLAGS", "-I#{sqlite.opt_include}"
 
     # Reset ARCHFLAGS to match how we build
-    ENV["ARCHFLAGS"] = "-arch #{MacOS.preferred_arch}"
+    ENV["ARCHFLAGS"] = "-arch #{Hardware::CPU.arch}"
 
     # chdir "gdal" do
       # GDAL looks for the renamed hdf4 library, which is an artifact of old builds, so we need to repoint it
