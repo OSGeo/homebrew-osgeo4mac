@@ -108,7 +108,7 @@ class OsgeoGdalPdf < Formula
     needs :cxx11 if MacOS.version < :mavericks
     # ENV.libstdcxx
     # set ARCHFLAGS to match how we build
-    ENV["ARCHFLAGS"] = "-arch #{MacOS.preferred_arch}"
+    ENV["ARCHFLAGS"] = "-arch #{Hardware::CPU.arch}"
     # ENV.append_to_cflags "-mmacosx-version-min=10.8"
     # ENV["CXXFLAGS"] = "-mmacosx-version-min=10.8"
     # ENV["MACOSX_DEPLOYMENT_TARGET"] = "10.8"
