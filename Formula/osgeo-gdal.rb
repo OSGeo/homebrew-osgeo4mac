@@ -315,16 +315,17 @@ class OsgeoGdal < Formula
 
       args << "--with-proj=#{Formula["osgeo-proj"].opt_prefix}"
 
-      if build.with?("pg10")
-        args << "--with-pg=#{Formula["osgeo-postgresql@10"].opt_bin}/pg_config"
-      elsif build.with?("pg11")
-        args << "--with-pg=#{Formula["osgeo-postgresql@11"].opt_bin}/pg_config"
-      else
-        # https://github.com/OSGeo/gdal/pull/2190
-        # https://github.com/OSGeo/gdal/commit/45e06386d9099cbbe4f8eb7b4c2b8edca09ed144
-        # https://github.com/OSGeo/homebrew-osgeo4mac/issues/1291
-        args << "--with-pg=yes"
-      end
+      args << "--with-pg=yes"
+      #if build.with?("pg10")
+      #  args << "--with-pg=#{Formula["osgeo-postgresql@10"].opt_bin}/pg_config"
+      #elsif build.with?("pg11")
+      #  args << "--with-pg=#{Formula["osgeo-postgresql@11"].opt_bin}/pg_config"
+      #else
+      #  # https://github.com/OSGeo/gdal/pull/2190
+      #  # https://github.com/OSGeo/gdal/commit/45e06386d9099cbbe4f8eb7b4c2b8edca09ed144
+      #  # https://github.com/OSGeo/homebrew-osgeo4mac/issues/1291
+      #  args << "--with-pg=yes"
+      #end
 
       system "./configure", *args
       system "make"
