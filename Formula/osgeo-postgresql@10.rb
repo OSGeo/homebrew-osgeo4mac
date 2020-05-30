@@ -51,7 +51,7 @@ class OsgeoPostgresqlAT10 < Formula
   url "https://github.com/postgres/postgres/archive/REL_10_13.tar.gz"
   sha256 "450d2b2195b0f7a73dcb6ef2eae43bd873d283668f7468e09438854173705cb8"
 
-  #revision 1
+  revision 1
 
   head "https://github.com/postgres/postgres.git", :branch => "REL_10_STABLE"
 
