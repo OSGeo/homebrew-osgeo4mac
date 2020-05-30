@@ -58,7 +58,7 @@ class OsgeoPostgresqlAT11 < Formula
     sha256 "9cd6d2d21b54ad1dfb3ef7cfaf66c4092ac4c2864aff7b777e00906cc9f7a5cf" => :high_sierra
   end
 
-  revision 1
+  revision 2
 
   head "https://github.com/postgres/postgres.git", :branch => "master"
 
