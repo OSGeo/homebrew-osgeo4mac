@@ -37,9 +37,9 @@ class OsgeoGdalPython < Formula
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any
-    sha256 "8218e0a200e6ba55fb0e31b124043f82f47f68bfe5733adeb36e756942dee37c" => :catalina
-    sha256 "8218e0a200e6ba55fb0e31b124043f82f47f68bfe5733adeb36e756942dee37c" => :mojave
-    sha256 "8218e0a200e6ba55fb0e31b124043f82f47f68bfe5733adeb36e756942dee37c" => :high_sierra
+    sha256 "91f9b43d87b47a281c201f166f4c1aa134a74a7e6d46f6eb6a768d8e9ec11552" => :catalina
+    sha256 "91f9b43d87b47a281c201f166f4c1aa134a74a7e6d46f6eb6a768d8e9ec11552" => :mojave
+    sha256 "91f9b43d87b47a281c201f166f4c1aa134a74a7e6d46f6eb6a768d8e9ec11552" => :high_sierra
   end
 
   keg_only "older version of gdal is in main tap and installs similar components"
