@@ -1,10 +1,10 @@
 class OsgeoSix < Formula
   desc "Python 2 and 3 compatibility utilities"
   homepage "https://pypi.python.org/pypi/six"
-  url "https://github.com/benjaminp/six/archive/1.14.0.tar.gz"
-  sha256 "6efff7289d1d369f0a25180433aba83ec2584e489e90f115b52ba69e4816cfb4"
+  url "https://github.com/benjaminp/six/archive/1.15.0.tar.gz"
+  sha256 "36252a752837b72f60def78bc408a05c21d22fe00a34a7dc3409d96b2c6e20c8"
 
-  revision 3
+  #revision 3
 
   head "https://github.com/benjaminp/six.git", :branch => "master"
 
