@@ -8,7 +8,7 @@ class OsgeoVtk < Formula
   # sha256 "badeaada5bd2ef93c010dd17445280d032505aad6eb45a5ec423aa1030fe9801"
   # version "8.2.0"
 
-  revision 15
+  revision 16
 
   head "https://github.com/Kitware/VTK.git", :branch => "master"
 
@@ -98,7 +98,7 @@ class OsgeoVtk < Formula
             # ThirdParty/libxml2/vtklibxml2/threads.c
   patch :DATA
 
-  option "with-pg10", "Build with PostgreSQL 10 client"
+  option "with-pg11", "Build with PostgreSQL 11 client"
 
   depends_on "cmake" => :build
   depends_on "boost"
@@ -108,10 +108,10 @@ class OsgeoVtk < Formula
   depends_on "jpeg-turbo"
   depends_on "libpng"
   depends_on "libtiff"
-  depends_on "osgeo-netcdf"
   depends_on "python"
   depends_on "qt"
-
+  depends_on "osgeo-netcdf"
+  
   depends_on "gcc"
   depends_on "double-conversion"
   depends_on "doxygen"
@@ -134,12 +134,13 @@ class OsgeoVtk < Formula
   depends_on "pugixml"
   depends_on "ffmpeg2theora"
   depends_on "zlib"
-  depends_on "osgeo-proj"
   depends_on "sqlite"
   depends_on "graphviz"
+  depends_on "osgeo-proj"
 
   depends_on "osgeo-gdal"
-  depends_on "osgeo-pyqt"
+  #depends_on "osgeo-pyqt"
+  depends_on "pyqt"
   depends_on "osgeo-qt-webkit"
   depends_on "osgeo-matplotlib"
 
@@ -154,8 +155,8 @@ class OsgeoVtk < Formula
   depends_on "tbb"
   depends_on "inetutils"
 
-  if build.with?("pg10")
-    depends_on "osgeo-postgresql@10"
+  if build.with?("pg11")
+    depends_on "osgeo-postgresql@11"
   else
     depends_on "osgeo-postgresql"
   end
