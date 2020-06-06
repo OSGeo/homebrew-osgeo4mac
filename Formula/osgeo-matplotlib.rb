@@ -20,10 +20,10 @@ end
 class OsgeoMatplotlib < Formula
   desc "Python 2D plotting library"
   homepage "https://matplotlib.org"
-  url "https://github.com/matplotlib/matplotlib/archive/v3.1.3.tar.gz"
-  sha256 "6edfe021671fcad1bd6081c980c380cb3d66d00895eb8c3450fa3842c441d1d1"
+  url "https://github.com/matplotlib/matplotlib/archive/v3.2.1.tar.gz"
+  sha256 "5462728ed3be60af21bd8a6b33f5f1632dabdb3c1b3cc279cffb05926a48255c"
 
-  revision 8 
+  #revision 8 
 
   head "https://github.com/matplotlib/matplotlib.git", :branch => "master"
 
@@ -58,7 +58,8 @@ class OsgeoMatplotlib < Formula
   depends_on "pygobject3"
   # depends_on "pygtk" # pygtk has been deprecated since a very long time, and does not support Python 3.
   # depends_on "pygobject" # Does not support Python 3, and needs pygtk which has been removed.
-  depends_on "osgeo-pyqt"
+  #depends_on "osgeo-pyqt"
+  depends_on "pyqt"
   depends_on "wxpython"
   depends_on "rsync"
   depends_on "git"
