@@ -21,8 +21,8 @@ class OsgeoPdal < Formula
   include Language::Python::Virtualenv
   desc "Point data abstraction library"
   homepage "https://www.pdal.io/"
-  url "https://github.com/PDAL/PDAL/archive/2.0.1.tar.gz"
-  sha256 "bf85c0d826c644a2c52791c62227a5fbfeae845dd9d2c8bdad2d002035673e21"
+  url "https://github.com/PDAL/PDAL/archive/2.1.0.tar.gz"
+  sha256 "c300de7935d52cb96e24bdaceea5d189b1840e88636e6deca1f6dad51f909571"
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
@@ -31,11 +31,11 @@ class OsgeoPdal < Formula
     sha256 "279ff68e0a7003ff56fec3a4045ea2533b9531234e6b7d83b98eda9df2ea0f4d" => :high_sierra
   end
 
-  revision 1
+  #revision 1
 
   head "https://github.com/PDAL/PDAL.git", :branch => "master"
 
-  option "with-pg10", "Build with PostgreSQL 10 client"
+  option "with-pg11", "Build with PostgreSQL 11 client"
 
   # keg_only "pdal is already provided by homebrew/core"
   # we will verify that other versions are not linked
@@ -46,14 +46,8 @@ class OsgeoPdal < Formula
   depends_on "python"
   depends_on "numpy"
   depends_on "hdf5"
-  depends_on "osgeo-libgeotiff"
   depends_on "jsoncpp"
   depends_on "sqlite"
-  depends_on "osgeo-gdal"
-  depends_on "osgeo-laz-perf"
-  depends_on "osgeo-vtk"
-  depends_on "osgeo-pcl"
-  depends_on "osgeo-hexer"
   depends_on "laszip" # >= 3.1
   depends_on "geos"
   depends_on "zlib"
@@ -66,9 +60,15 @@ class OsgeoPdal < Formula
   depends_on "libusb"
   depends_on "qhull"
   depends_on "glew"
+  depends_on "osgeo-libgeotiff"
+  depends_on "osgeo-gdal"
+  depends_on "osgeo-laz-perf"
+  depends_on "osgeo-vtk"
+  depends_on "osgeo-pcl"
+  depends_on "osgeo-hexer"
 
-  if build.with?("pg10")
-    depends_on "osgeo-postgresql@10"
+  if build.with?("pg11")
+    depends_on "osgeo-postgresql@11"
   else
     depends_on "osgeo-postgresql"
   end
@@ -115,9 +115,9 @@ class OsgeoPdal < Formula
     args << "-DPYTHON_LIBRARY=#{Formula["python"].opt_frameworks}/Python.framework/Versions/#{py_ver}/lib/libpython#{py_ver}.dylib"
 
     if build.with?("pg10")
-      args << "-DPG_CONFIG=#{Formula["osgeo-postgresql@10"].opt_bin}/pg_config"
-      args << "-DPOSTGRESQL_INCLUDE_DIR=#{Formula["osgeo-postgresql@10"].opt_include}"
-      args << "-DPOSTGRESQL_LIBRARIES=#{Formula["osgeo-postgresql@10"].opt_lib}/libpq.dylib"
+      args << "-DPG_CONFIG=#{Formula["osgeo-postgresql@11"].opt_bin}/pg_config"
+      args << "-DPOSTGRESQL_INCLUDE_DIR=#{Formula["osgeo-postgresql@11"].opt_include}"
+      args << "-DPOSTGRESQL_LIBRARIES=#{Formula["osgeo-postgresql@11"].opt_lib}/libpq.dylib"
     else
       args << "-DPG_CONFIG=#{Formula["osgeo-postgresql"].opt_bin}/pg_config"
       args << "-DPOSTGRESQL_INCLUDE_DIR=#{Formula["osgeo-postgresql"].opt_include}"
