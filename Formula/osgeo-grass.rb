@@ -4,7 +4,7 @@ class OsgeoGrass < Formula
   desc "Geographic Resources Analysis Support System"
   homepage "https://grass.osgeo.org/"
 
-  revision 5
+  revision 6
 
   # svn: E230001: Server SSL certificate verification failed: issuer is not trusted
   # head "https://svn.osgeo.org/grass/grass/trunk", :using => :svn
@@ -89,7 +89,7 @@ class OsgeoGrass < Formula
   depends_on "py3cairo"
   depends_on "pygobject3"
   # depends_on "pygobject" # Does not support Python 3, and needs pygtk which has been removed.
-  depends_on "osgeo-pyqt"
+  depends_on "pyqt"
   depends_on "osgeo-six"
   depends_on "numpy"
   depends_on "scipy"
