@@ -430,7 +430,7 @@ class OsgeoGrass < Formula
     # unless MacOS::CLT.installed?
     # On Xcode-only systems (without the CLT), we have to help:
     args << "--with-macosx-sdk=#{MacOS.sdk_path}"
-    args << "--with-macosx-archs=#{MacOS.preferred_arch}" # Hardware::CPU.universal_archs
+    args << "--with-macosx-archs=#{Hardware::CPU.arch}" # Hardware::CPU.universal_archs
     args << "--with-opengl-includes=#{MacOS.sdk_path}/System/Library/Frameworks/OpenGL.framework/Headers"
     # args << "--with-opengl-libs=" # GL
     # args << "--with-opengl-framework="
