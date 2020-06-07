@@ -19,9 +19,9 @@ end
 
 class OsgeoPyqt < Formula
   desc "Python bindings for v5 of Qt"
-  homepage "https://www.riverbankcomputing.com/software/pyqt/intro"
-  url "https://www.riverbankcomputing.com/static/Downloads/PyQt5/5.13.2/PyQt5-5.13.2.tar.gz"
-  sha256 "adc17c077bf233987b8e43ada87d1e0deca9bd71a13e5fd5fc377482ed69c827"
+  homepage "https://www.riverbankcomputing.com/software/pyqt/download5"
+  url "https://files.pythonhosted.org/packages/4d/81/b9a66a28fb9a7bbeb60e266f06ebc4703e7e42b99e3609bf1b58ddd232b9/PyQt5-5.14.2.tar.gz"
+  sha256 "bd230c6fd699eabf1ceb51e13a8b79b74c00a80272c622427b80141a22269eb0"
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
@@ -31,7 +31,7 @@ class OsgeoPyqt < Formula
     sha256 "d12d8f3633c20c53d850fa7618003deffcfd643bf2ce300597ad77225c1a21c7" => :high_sierra
   end
 
-  revision 5
+  # revision 5
 
   # keg_only "pyqt" is already provided by homebrew/core"
   # we will verify that other versions are not linked
