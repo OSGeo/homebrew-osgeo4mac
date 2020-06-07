@@ -1,8 +1,8 @@
 class OsgeoPcl < Formula
   desc "Library for 2D/3D image and point cloud processing"
   homepage "http://www.pointclouds.org/"
-  url "https://github.com/PointCloudLibrary/pcl/archive/pcl-1.10.0.tar.gz"
-  sha256 "dd24f93967ba9512a02d6fa15855084a45deb4cd6f3662f22afbbf0d65978d20"
+  url "https://github.com/PointCloudLibrary/pcl/archive/pcl-1.11.0.tar.gz"
+  sha256 "4255c3d3572e9774b5a1dccc235711b7a723197b79430ef539c2044e9ce65954"
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
@@ -11,7 +11,7 @@ class OsgeoPcl < Formula
     sha256 "9312f29d0021057ef6bef4a8d5500248c01aeb14e5661e1dfaf76b63d5808c07" => :high_sierra
   end
 
-  revision 3
+  #revision 3
 
   head "https://github.com/PointCloudLibrary/pcl.git", :branch => "master"
 
@@ -27,9 +27,7 @@ class OsgeoPcl < Formula
   depends_on "qt"
   depends_on "open-mpi"
   depends_on "libharu"
-  depends_on "osgeo-proj"
   depends_on "hdf5"
-  depends_on "osgeo-netcdf"
   depends_on "gl2ps"
   depends_on "python"
   depends_on "sphinx"
@@ -39,6 +37,8 @@ class OsgeoPcl < Formula
   depends_on "doxygen"
   depends_on "szip"
   depends_on "libxml2"
+  depends_on "osgeo-proj"
+  depends_on "osgeo-netcdf"
   depends_on "osgeo-vtk"
   depends_on "osgeo-qt-webkit"
 
