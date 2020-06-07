@@ -22,7 +22,7 @@ class OsgeoPdal < Formula
   desc "Point data abstraction library"
   homepage "https://www.pdal.io/"
   url "https://github.com/PDAL/PDAL/archive/2.1.0.tar.gz"
-  sha256 "c300de7935d52cb96e24bdaceea5d189b1840e88636e6deca1f6dad51f909571"
+  sha256 "43ed8ba8ef143e1ded67e96ef72bb73ee133723da0320c3e4f2f87d9bfc3737c"
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
