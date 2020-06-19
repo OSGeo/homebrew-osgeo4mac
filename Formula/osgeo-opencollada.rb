@@ -4,7 +4,7 @@ class OsgeoOpencollada < Formula
   url "https://github.com/KhronosGroup/OpenCOLLADA/archive/v1.6.68.tar.gz"
   sha256 "d9db0c0a518aa6ac0359626f222707c6ca1b63a83cbf229d97a5999c9cde347b"
 
-  revision 3
+  revision 4
 
   head "https://github.com/KhronosGroup/OpenCOLLADA.git", :branch => "master"
 
