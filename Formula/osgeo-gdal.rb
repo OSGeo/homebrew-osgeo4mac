@@ -27,7 +27,7 @@ class OsgeoGdal < Formula
   #  :commit => "ee535a1a3f5b35b0d231e1faac89ac1f889f7988"
   #version "3.0.4"
 
-  #revision 2
+  revision 1
 
   head do
     url "https://github.com/OSGeo/gdal.git", :branch => "master"
@@ -68,6 +68,7 @@ class OsgeoGdal < Formula
   depends_on "libzip"
   depends_on "pcre" # for REGEXP operator in SQLite/Spatialite driver
   depends_on "openssl"
+  depends_on "python@3.8"
   depends_on "qhull"
   depends_on "sfcgal"
   depends_on "sqlite" # To ensure compatibility with SpatiaLite.
@@ -322,6 +323,12 @@ class OsgeoGdal < Formula
       # Add GNM headers for osgeo-gdal-python swig wrapping
       include.install Dir["gnm/**/*.h"]
 
+      # Build Python bindings
+      cd "swig/python" do
+        system Formula["python@3.8"].opt_bin/"python3", *Language::Python.setup_install_args(prefix)
+      end
+      bin.install Dir["swig/python/scripts/*.py"]
+
       cd "swig/java" do
         inreplace "java.opt", "linux", "darwin"
         inreplace "java.opt", "#JAVA_HOME = /usr/lib/jvm/java-6-openjdk/", "JAVA_HOME=#{ENV["JAVA_HOME"]}"
@@ -333,7 +340,8 @@ class OsgeoGdal < Formula
       end
 
       system "make", "man" if build.head?
-      system "make", "install-man"
+      # Force man installation dir: https://trac.osgeo.org/gdal/ticket/5092
+      system "make", "install-man", "INST_MAN=#{man}"
       # Clean up any stray doxygen files.
       Dir.glob("#{bin}/*.dox") { |p| rm p }
     # end
@@ -364,5 +372,7 @@ class OsgeoGdal < Formula
     # basic tests to see if third-party dylibs are loading OK
     system "#{bin}/gdalinfo", "--formats"
     system "#{bin}/ogrinfo", "--formats"
+
+    system Formula["python@3.8"].opt_bin/"python3", "-c", "import gdal"
   end
 end
