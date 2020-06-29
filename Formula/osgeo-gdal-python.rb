@@ -27,10 +27,10 @@ class OsgeoGdalPython < Formula
 
   desc "Python bindings for GDAL: Geospatial Data Abstraction Library"
   homepage "https://pypi.python.org/pypi/GDAL"
-  url "https://github.com/OSGeo/gdal/releases/download/v3.1.0/gdal-3.1.0.tar.gz"
-  sha256 "6793ddb2b1ca042494d938ac82c71d06b9125bbb00c9bb9414a7c5e3a707c639"
+  url "https://download.osgeo.org/gdal/3.1.1/gdal-3.1.1.tar.xz"
+  sha256 "97154a606339a6c1d87c80fb354d7456fe49828b2ef9a3bc9ed91771a03d2a04"
 
-  revision 2 
+  #revision 2 
 
   head "https://github.com/OSGeo/gdal.git", :branch => "master"
 
@@ -45,19 +45,16 @@ class OsgeoGdalPython < Formula
   keg_only "older version of gdal is in main tap and installs similar components"
 
   depends_on "swig" => :build
-  depends_on "python" => :recommended
+  depends_on "python@3.8" => :recommended
   depends_on "numpy"
   depends_on "osgeo-gdal"
 
   resource "autotest" do
-    url "https://download.osgeo.org/gdal/3.0.4/gdalautotest-3.0.4.tar.gz"
-    sha256 "25378749513f849a5e3020cef34cf4188c2123b081712596e0d9a5b6de1fb3c5"
+    url "https://download.osgeo.org/gdal/3.1.1/gdalautotest-3.1.1.tar.gz"
+    sha256 "9b6571bdefbfb5f8326214cc7cae04399c1ddaeaccdb24ba77f91cf8282bd9a1"
   end
 
   def install
-    if build.without?("python")
-      odie "Must choose a version of Python bindings to build"
-    end
 
     cd "swig/python" do
       # Customize to gdal install opt_prefix
