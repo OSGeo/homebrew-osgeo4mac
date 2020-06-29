@@ -20,14 +20,14 @@ end
 class OsgeoGdal < Formula
   desc "GDAL: Geospatial Data Abstraction Library"
   homepage "https://www.gdal.org/"
-  url "https://github.com/OSGeo/gdal/releases/download/v3.1.0/gdal-3.1.0.tar.gz"
-  sha256 "6793ddb2b1ca042494d938ac82c71d06b9125bbb00c9bb9414a7c5e3a707c639"
+  url "https://download.osgeo.org/gdal/3.1.1/gdal-3.1.1.tar.xz"
+  sha256 "97154a606339a6c1d87c80fb354d7456fe49828b2ef9a3bc9ed91771a03d2a04"
   #url "https://github.com/OSGeo/gdal.git",
   #  :branch => "master",
   #  :commit => "ee535a1a3f5b35b0d231e1faac89ac1f889f7988"
   #version "3.0.4"
 
-  revision 2
+  #revision 2
 
   head do
     url "https://github.com/OSGeo/gdal.git", :branch => "master"
@@ -50,48 +50,48 @@ class OsgeoGdal < Formula
   #deprecated_option "with-postgresql10" => "with-pg10"
 
   depends_on "pkg-config"
-  depends_on "libiconv"
-  depends_on "expat"
-  depends_on "zlib"
-  depends_on "qhull"
+  depends_on "armadillo"
+  depends_on "ant"
+  depends_on "cryptopp"
   depends_on "curl-openssl"
-  depends_on "libpng"
+  depends_on "expat"
   depends_on "freexl"
   depends_on "geos"
-  depends_on "jpeg-turbo"
-  depends_on "json-c"
   depends_on "giflib"
-  depends_on "libpq"
-  depends_on "sqlite" # To ensure compatibility with SpatiaLite.
-  depends_on "pcre" # for REGEXP operator in SQLite/Spatialite driver
-  depends_on "libtiff"
-  depends_on "numpy"
-  depends_on "armadillo"
-  depends_on "sfcgal"
-  depends_on "ant"
-  depends_on "swig"
+  depends_on "json-c"
   depends_on "mdbtools"
-  depends_on "libzip"
-  depends_on "openssl"
-  depends_on "cryptopp"
-  depends_on "osgeo-libgeotiff"
-  depends_on "osgeo-libspatialite"
+  depends_on "numpy"
+  depends_on "libiconv"
   depends_on "osgeo-libkml"
-
+  depends_on "libpq"
+  depends_on "osgeo-libspatialite"
+  depends_on "libzip"
+  depends_on "pcre" # for REGEXP operator in SQLite/Spatialite driver
+  depends_on "openssl"
+  depends_on "qhull"
+  depends_on "sfcgal"
+  depends_on "sqlite" # To ensure compatibility with SpatiaLite.
+  depends_on "swig"
+  depends_on "zlib"
+  
   depends_on :java => ["1.8", :build]
-
+  
   # Raster libraries
-  depends_on "osgeo-netcdf" # Also brings in HDF5
-  depends_on "osgeo-hdf4"
-  depends_on "hdf5"
   depends_on "cfitsio"
   depends_on "epsilon"
+  depends_on "osgeo-hdf4"
+  depends_on "hdf5"
+  depends_on "jpeg-turbo"
   depends_on "jasper"
   depends_on "libdap"
+  depends_on "osgeo-libgeotiff"
+  depends_on "libpng"
+  depends_on "libtiff"
   depends_on "libxml2"
+  depends_on "osgeo-netcdf" # Also brings in HDF5
   depends_on "openjpeg"
-  depends_on "zstd"
   depends_on "webp"
+  depends_on "zstd"
 
   # Vector libraries
   depends_on "unixodbc" # OS X version is not complete enough
@@ -141,6 +141,7 @@ class OsgeoGdal < Formula
       "--prefix=#{prefix}",
       "--disable-debug",
       "--with-local=#{prefix}",
+      "--with-proj=#{Formula["osgeo-proj"].opt_prefix}",
       "--with-dods-root=#{Formula["libdap"].opt_prefix}", # #{HOMEBREW_PREFIX}
       "--with-libtool",
       "--with-bsb",
@@ -207,6 +208,7 @@ class OsgeoGdal < Formula
       "--with-mrsid_lidar=no",
       "--with-gnm",
       "--with-mysql=no",
+      "--with-pg=yes",
       "--with-poppler=no",
       "--with-podofo=no",
       "--with-pdfium=no",
@@ -312,20 +314,6 @@ class OsgeoGdal < Formula
       # https://github.com/OSGeo/gdal/commit/20716436ce5debca66cbbe0396304e09b79bc3aa#diff-adc90aa0203327969e0048718b911252
 
       args = configure_args
-
-      args << "--with-proj=#{Formula["osgeo-proj"].opt_prefix}"
-
-      args << "--with-pg=yes"
-      #if build.with?("pg10")
-      #  args << "--with-pg=#{Formula["osgeo-postgresql@10"].opt_bin}/pg_config"
-      #elsif build.with?("pg11")
-      #  args << "--with-pg=#{Formula["osgeo-postgresql@11"].opt_bin}/pg_config"
-      #else
-      #  # https://github.com/OSGeo/gdal/pull/2190
-      #  # https://github.com/OSGeo/gdal/commit/45e06386d9099cbbe4f8eb7b4c2b8edca09ed144
-      #  # https://github.com/OSGeo/homebrew-osgeo4mac/issues/1291
-      #  args << "--with-pg=yes"
-      #end
 
       system "./configure", *args
       system "make"
