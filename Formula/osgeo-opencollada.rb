@@ -4,16 +4,16 @@ class OsgeoOpencollada < Formula
   url "https://github.com/KhronosGroup/OpenCOLLADA/archive/v1.6.68.tar.gz"
   sha256 "d9db0c0a518aa6ac0359626f222707c6ca1b63a83cbf229d97a5999c9cde347b"
 
-  revision 4
+  revision 3
 
   head "https://github.com/KhronosGroup/OpenCOLLADA.git", :branch => "master"
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any
-    sha256 "5c2d41779e0402855b175a67ef2f09ba0b805c03401517d8463d6883b7d75dbb" => :catalina
-    sha256 "5c2d41779e0402855b175a67ef2f09ba0b805c03401517d8463d6883b7d75dbb" => :mojave
-    sha256 "5c2d41779e0402855b175a67ef2f09ba0b805c03401517d8463d6883b7d75dbb" => :high_sierra
+    sha256 "7a4c9941364bfb7b76d0162356740be685797317c2d3b02cd4975f8167b0e57d" => :catalina
+    sha256 "7a4c9941364bfb7b76d0162356740be685797317c2d3b02cd4975f8167b0e57d" => :mojave
+    sha256 "7a4c9941364bfb7b76d0162356740be685797317c2d3b02cd4975f8167b0e57d" => :high_sierra
   end
 
   depends_on "cmake" => :build
