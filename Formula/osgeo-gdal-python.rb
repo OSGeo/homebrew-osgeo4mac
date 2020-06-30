@@ -45,7 +45,7 @@ class OsgeoGdalPython < Formula
   keg_only "older version of gdal is in main tap and installs similar components"
 
   depends_on "swig" => :build
-  depends_on "python@3.8" => :recommended
+  depends_on "python" => :recommended
   depends_on "numpy"
   depends_on "osgeo-gdal"
 
