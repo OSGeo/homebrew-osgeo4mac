@@ -16,7 +16,7 @@ class OsgeoPgsqlOgrFdw < Formula
     sha256 "5e76b46bf3aea25f7d9eaaf19753074f4345c64d73bb81b41241814bfe3c3d3a" => :high_sierra
   end
 
-  #revision 1
+  revision 1
 
   head "https://github.com/pramsey/pgsql-ogr-fdw.git", :branch => "master"
 
