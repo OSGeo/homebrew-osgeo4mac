@@ -275,10 +275,10 @@ class OsgeoGdal < Formula
     args
   end
 
-  def plugins_subdirectory
-    gdal_ver_list = version.to_s.split(".")
-    "gdalplugins/#{gdal_ver_list[0]}.#{gdal_ver_list[1]}"
-  end
+  #def plugins_subdirectory
+  #  gdal_ver_list = version.to_s.split(".")
+  #  "gdalplugins/#{gdal_ver_list[0]}.#{gdal_ver_list[1]}"
+  #end
 
   def install
     # Temporary fix for Xcode/CLT 9.0.x issue of missing header files
@@ -347,10 +347,10 @@ class OsgeoGdal < Formula
     # end
   end
 
-  def post_install
-    # Create versioned plugins path for other formulae
-    (HOMEBREW_PREFIX/"lib/#{plugins_subdirectory}").mkpath
-  end
+  #def post_install
+  #  # Create versioned plugins path for other formulae
+  #  (HOMEBREW_PREFIX/"lib/#{plugins_subdirectory}").mkpath
+  #end
 
   def caveats
     s = <<~EOS
