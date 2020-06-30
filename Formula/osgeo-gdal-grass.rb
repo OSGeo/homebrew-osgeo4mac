@@ -1,8 +1,8 @@
 class OsgeoGdalGrass < Formula
   desc "GDAL/OGR 3.x plugin for GRASS 7"
   homepage "https://www.gdal.org"
-  url "https://github.com/OSGeo/gdal/releases/download/v3.0.4/gdal-3.0.4.tar.gz"
-  sha256 "fc15d2b9107b250305a1e0bd8421dd9ec1ba7ac73421e4509267052995af5e83"
+  url "https://download.osgeo.org/gdal/3.1.1/gdal-3.1.1.tar.xz"
+  sha256 "97154a606339a6c1d87c80fb354d7456fe49828b2ef9a3bc9ed91771a03d2a04"
 
   #revision 1
 

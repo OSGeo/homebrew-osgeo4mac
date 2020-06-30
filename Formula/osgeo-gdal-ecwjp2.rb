@@ -1,8 +1,8 @@
 class OsgeoGdalEcwjp2 < Formula
   desc "GDAL/OGR 3.x plugin for ECW driver"
   homepage "http://www.gdal.org/frmt_ecw.html"
-  url "https://github.com/OSGeo/gdal/releases/download/v3.1.0/gdal-3.1.0.tar.gz"
-  sha256 "6793ddb2b1ca042494d938ac82c71d06b9125bbb00c9bb9414a7c5e3a707c639"
+  url "https://download.osgeo.org/gdal/3.1.1/gdal-3.1.1.tar.xz"
+  sha256 "97154a606339a6c1d87c80fb354d7456fe49828b2ef9a3bc9ed91771a03d2a04"
 
   # revision 1
 
