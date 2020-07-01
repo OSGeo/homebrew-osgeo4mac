@@ -4,7 +4,7 @@ class OsgeoGrass < Formula
   desc "Geographic Resources Analysis Support System"
   homepage "https://grass.osgeo.org/"
 
-  revision 6
+  revision 7
 
   # svn: E230001: Server SSL certificate verification failed: issuer is not trusted
   # head "https://svn.osgeo.org/grass/grass/trunk", :using => :svn
@@ -40,7 +40,6 @@ class OsgeoGrass < Formula
   option "with-avce00", "Build with AVCE00 support: Make Arc/Info (binary) Vector Coverages appear as E00"
   option "with-pg11", "Build with PostgreSQL 11 client"
   option "with-mysql", "Build with MySQL client"
-  #option "with-openmp", "Build with openmp support"
   option "with-others", "Build with other optional dependencies"
   # option "with-openmp", "Build with openmp support"
   # option "with-opendwg", "Build with OpenDWG support"
