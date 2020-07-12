@@ -27,8 +27,8 @@ class OsgeoGdalPython < Formula
 
   desc "Python bindings for GDAL: Geospatial Data Abstraction Library"
   homepage "https://pypi.python.org/pypi/GDAL"
-  url "https://download.osgeo.org/gdal/3.1.1/gdal-3.1.1.tar.xz"
-  sha256 "97154a606339a6c1d87c80fb354d7456fe49828b2ef9a3bc9ed91771a03d2a04"
+  url "https://download.osgeo.org/gdal/3.1.2/gdal-3.1.2.tar.xz"
+  sha256 "767c8d0dfa20ba3283de05d23a1d1c03a7e805d0ce2936beaff0bb7d11450641"
 
   #revision 2 
 
@@ -50,8 +50,8 @@ class OsgeoGdalPython < Formula
   depends_on "osgeo-gdal"
 
   resource "autotest" do
-    url "https://download.osgeo.org/gdal/3.1.1/gdalautotest-3.1.1.tar.gz"
-    sha256 "9b6571bdefbfb5f8326214cc7cae04399c1ddaeaccdb24ba77f91cf8282bd9a1"
+    url "https://download.osgeo.org/gdal/3.1.2/gdalautotest-3.1.2.tar.gz"
+    sha256 "bf2b87acc8db0d59a3e44302a0e3b749dcd50ee642843f96c3db35b7e9ccb215"
   end
 
   def install
