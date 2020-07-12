@@ -20,8 +20,8 @@ end
 class OsgeoGdal < Formula
   desc "GDAL: Geospatial Data Abstraction Library"
   homepage "https://www.gdal.org/"
-  url "https://download.osgeo.org/gdal/3.1.1/gdal-3.1.1.tar.xz"
-  sha256 "97154a606339a6c1d87c80fb354d7456fe49828b2ef9a3bc9ed91771a03d2a04"
+  url "https://download.osgeo.org/gdal/3.1.2/gdal-3.1.2.tar.xz"
+  sha256 "767c8d0dfa20ba3283de05d23a1d1c03a7e805d0ce2936beaff0bb7d11450641"
   #url "https://github.com/OSGeo/gdal.git",
   #  :branch => "master",
   #  :commit => "ee535a1a3f5b35b0d231e1faac89ac1f889f7988"
