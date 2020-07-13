@@ -1,8 +1,8 @@
 class OsgeoSaga < Formula
   desc "System for Automated Geoscientific Analyses - Long Term Support"
   homepage "http://saga-gis.org"
-  url "https://downloads.sourceforge.net/project/saga-gis/SAGA%20-%207/SAGA%20-%207.6.3/saga-7.6.3.tar.gz"
-  sha256 "8b791ca26e3e2ab923e6661b60fd5f57f5707ada7315028f4fed2591bcf03838"
+  url "https://downloads.sourceforge.net/project/saga-gis/SAGA%20-%207/SAGA%20-%207.7.0/saga-7.7.0.tar.gz"
+  sha256 "f327cf8502cb4850e921985b8c3d6aa97adb7c1c612b7b935657547619cdbbda"
   
   # QGIS & PROJ 6 & SAGA
   # https://lists.osgeo.org/pipermail/qgis-developer/2019-December/059512.html
@@ -10,7 +10,7 @@ class OsgeoSaga < Formula
   # REQUIRED_VERSION = '2.3.'
   # BETA_SUPPORT_VERSION = '7.3.'
 
-  revision 2
+  #revision 2
 
   head "https://git.code.sf.net/p/saga-gis/code.git"
 
@@ -30,7 +30,7 @@ class OsgeoSaga < Formula
   depends_on "autoconf" => :build
   depends_on "libtool" => :build
   depends_on "pkg-config" => :build
-  depends_on "python"
+  depends_on "python@3.8"
   depends_on "wxmac"
   depends_on "wxpython"
   depends_on "geos"
@@ -40,7 +40,7 @@ class OsgeoSaga < Formula
   depends_on "swig"
   depends_on "xz" # lzma
   depends_on "giflib"
-  depends_on "opencv@2"
+  depends_on "opencv"
   depends_on "unixodbc"
   depends_on "libharu"
   depends_on "qhull" # instead of looking for triangle
@@ -100,8 +100,8 @@ class OsgeoSaga < Formula
     # Disable narrowing warnings when compiling in C++11 mode.
     ENV.append "CXXFLAGS", "-Wno-c++11-narrowing -std=c++11"
 
-    ENV.append "PYTHON_VERSION", "3.7"
-    ENV.append "PYTHON", "#{Formula["python"].opt_bin}/python3"
+    ENV.append "PYTHON_VERSION", "3.8"
+    ENV.append "PYTHON", "#{Formula["python@3.8"].opt_bin}/python3"
 
     # support for PROJ 6
     # ENV.append_to_cflags "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"
