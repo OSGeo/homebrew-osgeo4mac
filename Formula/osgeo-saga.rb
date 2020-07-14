@@ -40,7 +40,7 @@ class OsgeoSaga < Formula
   depends_on "swig"
   depends_on "xz" # lzma
   depends_on "giflib"
-  depends_on "opencv"
+  depends_on "opencv@2"
   depends_on "unixodbc"
   depends_on "libharu"
   depends_on "qhull" # instead of looking for triangle
