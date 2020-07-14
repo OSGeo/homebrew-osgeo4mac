@@ -5,8 +5,8 @@ class OsgeoPgsqlOgrFdw < Formula
   #sha256 "4ab0c303006bfd83dcd40af4d53c48e7d8ec7835bb98491bc6640686da788a8b"
   url "https://github.com/pramsey/pgsql-ogr-fdw.git",
     :branch => "master",
-    :commit => "7785af5346db27ba75c6fedad490cb1f1d52fa84"
-  version "1.0.11"
+    :commit => "6b0f4690e49ef4e0203252b2a87d25a173afc1ad"
+  version "1.0.12"
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
@@ -16,7 +16,7 @@ class OsgeoPgsqlOgrFdw < Formula
     sha256 "7fca57b06e93e3967250780e52d556c797098f49ae4cf2482d96f1b59970a0ea" => :high_sierra
   end
 
-  revision 1
+  #revision 1
 
   head "https://github.com/pramsey/pgsql-ogr-fdw.git", :branch => "master"
 
