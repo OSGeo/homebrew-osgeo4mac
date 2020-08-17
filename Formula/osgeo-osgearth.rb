@@ -1,10 +1,10 @@
-class OsgearthQt5 < Formula
+class OsgeoOsgearth < Formula
   desc "Geospatial SDK and terrain engine for OpenSceneGraph"
   homepage "http://osgearth.org"
   url "https://github.com/gwaldron/osgearth.git",
-    :branch => "2.10",
-    :commit => "62ddefab67334e41d1e9f402fd17e03508e84169"
-  version "2.10"
+    :branch => "master",
+    :commit => "1faf43af681e22b0d3b4d0a1ada7e138cf3aac46"
+  version "2.10.1"
 
   bottle do
     root_url "https://dl.bintray.com/homebrew-osgeo/osgeo-bottles"
@@ -15,7 +15,7 @@ class OsgearthQt5 < Formula
     sha256 "0784fecac54032d20b907ff013b6d7fa23faf083981ac9d26340d61e4fe45845" => :sierra
   end
 
-  revision 1
+  # revision 2
 
   head "https://github.com/gwaldron/osgearth.git", :branch => "master"
 
@@ -26,18 +26,18 @@ class OsgearthQt5 < Formula
   # option "with-tinyxml", "Use external libtinyxml, instead of internal"
   # option "with-duktape", "Build with Duktape an Embeddable Javascript engine"
 
+  #depends_on :macos => :mavericks
   depends_on "cmake" => :build
   depends_on "boost"
   depends_on "curl"
   depends_on "expat"
-  depends_on "gdal2"
   depends_on "geos"
   depends_on "glslang"
   depends_on "leveldb"
   depends_on "libzip"
-  depends_on :macos => :mavericks
-  depends_on "openscenegraph-qt5"
-  depends_on "osgqt"
+  depends_on "osgeo-gdal"
+  depends_on "osgeo-openscenegraph"
+  depends_on "osgeo-osgqt"
   depends_on "poco"
   depends_on "protobuf"
   depends_on "python" # for sphinx
@@ -89,23 +89,23 @@ class OsgearthQt5 < Formula
     args << "-DGEOS_INCLUDE_DIR=#{Formula["geos"].opt_include}"
     args << "-DLEVELDB_LIBRARY=#{Formula["leveldb"].opt_lib}/libleveldb.dylib"
     args << "-DLEVELDB_INCLUDE_DIR=#{Formula["leveldb"].opt_include}"
-    args << "-DOSG_DIR=#{Formula["openscenegraph-qt5"].opt_prefix}"
-    args << "-DOSG_LIBRARY=#{Formula["openscenegraph-qt5"].opt_lib}/libosg.dylib"
-    args << "-DOSGUTIL_LIBRARY=#{Formula["openscenegraph-qt5"].opt_lib}/libosgUtil.dylib"
-    args << "-DOSGDB_LIBRARY=#{Formula["openscenegraph-qt5"].opt_lib}/libosgDB.dylib"
-    args << "-DOSGTEXT_LIBRARY=#{Formula["openscenegraph-qt5"].opt_lib}/libosgText.dylib"
-    args << "-DOSGTERRAIN_LIBRARY=#{Formula["openscenegraph-qt5"].opt_lib}/libosgTerrain.dylib"
-    args << "-DOSGFX_LIBRARY=#{Formula["openscenegraph-qt5"].opt_lib}/libosgFX.dylib"
-    args << "-DOSGSIM_LIBRARY=#{Formula["openscenegraph-qt5"].opt_lib}/libosgSim.dylib"
-    args << "-DOSGVIEWER_LIBRARY=#{Formula["openscenegraph-qt5"].opt_lib}/libosgViewer.dylib"
-    args << "-DOSGGA_LIBRARY=#{Formula["openscenegraph-qt5"].opt_lib}/libosgGA.dylib"
-    args << "-DOSGWIDGET_LIBRARY=#{Formula["openscenegraph-qt5"].opt_lib}/libosgWidget.dylib"
-    args << "-DOSGSHADOW_LIBRARY=#{Formula["openscenegraph-qt5"].opt_lib}/libosgShadow.dylib"
-    args << "-DOSGMANIPULATOR_LIBRARY=#{Formula["openscenegraph-qt5"].opt_lib}/libosgManipulator.dylib"
-    args << "-DOSGPARTICLE_LIBRARY=#{Formula["openscenegraph-qt5"].opt_lib}/libosgParticle.dylib"
-    args << "-DOPENTHREADS_LIBRARY=#{Formula["openscenegraph-qt5"].opt_lib}/libOpenThreads.dylib"
-    args << "-DOSG_INCLUDE_DIR=#{Formula["openscenegraph-qt5"].opt_include}"
-    args << "-DOSG_GEN_INCLUDE_DIR=#{Formula["openscenegraph-qt5"].opt_include}"
+    args << "-DOSG_DIR=#{Formula["osgeo-openscenegraph"].opt_prefix}"
+    args << "-DOSG_LIBRARY=#{Formula["osgeo-openscenegraph"].opt_lib}/libosg.dylib"
+    args << "-DOSGUTIL_LIBRARY=#{Formula["osgeo-openscenegraph"].opt_lib}/libosgUtil.dylib"
+    args << "-DOSGDB_LIBRARY=#{Formula["osgeo-openscenegraph"].opt_lib}/libosgDB.dylib"
+    args << "-DOSGTEXT_LIBRARY=#{Formula["osgeo-openscenegraph"].opt_lib}/libosgText.dylib"
+    args << "-DOSGTERRAIN_LIBRARY=#{Formula["osgeo-openscenegraph"].opt_lib}/libosgTerrain.dylib"
+    args << "-DOSGFX_LIBRARY=#{Formula["osgeo-openscenegraph"].opt_lib}/libosgFX.dylib"
+    args << "-DOSGSIM_LIBRARY=#{Formula["osgeo-openscenegraph"].opt_lib}/libosgSim.dylib"
+    args << "-DOSGVIEWER_LIBRARY=#{Formula["osgeo-openscenegraph"].opt_lib}/libosgViewer.dylib"
+    args << "-DOSGGA_LIBRARY=#{Formula["osgeo-openscenegraph"].opt_lib}/libosgGA.dylib"
+    args << "-DOSGWIDGET_LIBRARY=#{Formula["osgeo-openscenegraph"].opt_lib}/libosgWidget.dylib"
+    args << "-DOSGSHADOW_LIBRARY=#{Formula["osgeo-openscenegraph"].opt_lib}/libosgShadow.dylib"
+    args << "-DOSGMANIPULATOR_LIBRARY=#{Formula["osgeo-openscenegraph"].opt_lib}/libosgManipulator.dylib"
+    args << "-DOSGPARTICLE_LIBRARY=#{Formula["osgeo-openscenegraph"].opt_lib}/libosgParticle.dylib"
+    args << "-DOPENTHREADS_LIBRARY=#{Formula["osgeo-openscenegraph"].opt_lib}/libOpenThreads.dylib"
+    args << "-DOSG_INCLUDE_DIR=#{Formula["osgeo-openscenegraph"].opt_include}"
+    args << "-DOSG_GEN_INCLUDE_DIR=#{Formula["osgeo-openscenegraph"].opt_include}"
     args << "-DPOCO_FOUNDATION_LIBRARY=#{Formula["poco"].opt_lib}/libPocoFoundation.dylib"
     args << "-DPOCO_NET_LIBRARY=#{Formula["poco"].opt_lib}/libPocoNet.dylib"
     args << "-DPOCO_UTIL_LIBRARY=#{Formula["poco"].opt_lib}/libPocoUtil.dylib"
@@ -161,7 +161,7 @@ class OsgearthQt5 < Formula
   end
 
   def caveats
-    osg = Formula["openscenegraph-qt5"]
+    osg = Formula["osgeo-openscenegraph"]
     osgver = (osg.linked_keg.exist?) ? osg.version : "#.#.# (version)"
     <<~EOS
     This formula installs Open Scene Graph plugins. To ensure access when using
