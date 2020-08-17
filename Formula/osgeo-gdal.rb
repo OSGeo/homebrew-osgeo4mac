@@ -27,7 +27,7 @@ class OsgeoGdal < Formula
   #  :commit => "ee535a1a3f5b35b0d231e1faac89ac1f889f7988"
   #version "3.0.4"
 
-  #revision 2
+  revision 1
 
   head do
     url "https://github.com/OSGeo/gdal.git", :branch => "master"
@@ -52,7 +52,7 @@ class OsgeoGdal < Formula
   depends_on "pkg-config"
   depends_on "armadillo"
   depends_on "ant"
-  depends_on "cryptopp"
+  #depends_on "cryptopp"
   depends_on "curl-openssl"
   depends_on "expat"
   depends_on "freexl"
@@ -184,7 +184,7 @@ class OsgeoGdal < Formula
       "--with-epsilon=#{Formula["epsilon"].opt_prefix}",
       "--with-sfcgal=#{Formula["sfcgal"].opt_bin}/sfcgal-config",
       "--with-armadillo=#{Formula["armadillo"].opt_prefix}",
-      "--with-cryptopp=yes",
+      #"--with-cryptopp=yes",
       "--with-crypto=yes",
       "--with-grass=no",
       "--with-libgrass=no",
