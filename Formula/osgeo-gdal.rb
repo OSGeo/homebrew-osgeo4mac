@@ -49,7 +49,7 @@ class OsgeoGdal < Formula
   option "with-pg11", "Build with PostgreSQL 11 client"
   #deprecated_option "with-postgresql10" => "with-pg10"
 
-  depends_on "pkg-config"
+  depends_on "pkg-config" => :build
   depends_on "armadillo"
   depends_on "ant"
   #depends_on "cryptopp"
@@ -185,7 +185,7 @@ class OsgeoGdal < Formula
       "--with-sfcgal=#{Formula["sfcgal"].opt_bin}/sfcgal-config",
       "--with-armadillo=#{Formula["armadillo"].opt_prefix}",
       #"--with-cryptopp=yes",
-      "--with-crypto=yes",
+      #"--with-crypto=yes",
       "--with-grass=no",
       "--with-libgrass=no",
       "--with-fme=no",
