@@ -53,7 +53,7 @@ class OsgeoGdal < Formula
   depends_on "armadillo"
   depends_on "ant"
   #depends_on "cryptopp"
-  #depends_on "curl-openssl"
+  depends_on "curl-openssl"
   depends_on "expat"
   depends_on "freexl"
   depends_on "geos"
@@ -67,7 +67,7 @@ class OsgeoGdal < Formula
   depends_on "osgeo-libspatialite"
   depends_on "libzip"
   depends_on "pcre" # for REGEXP operator in SQLite/Spatialite driver
-  #depends_on "openssl"
+  depends_on "openssl"
   depends_on "qhull"
   depends_on "sfcgal"
   depends_on "sqlite" # To ensure compatibility with SpatiaLite.
@@ -89,7 +89,7 @@ class OsgeoGdal < Formula
   depends_on "libtiff"
   depends_on "libxml2"
   depends_on "osgeo-netcdf" # Also brings in HDF5
-  depends_on "openjpeg"
+  #depends_on "openjpeg"
   depends_on "webp"
   depends_on "zstd"
 
@@ -169,10 +169,10 @@ class OsgeoGdal < Formula
       "--with-hdf5=#{Formula["hdf5"].opt_prefix}",
       "--with-netcdf=#{Formula["osgeo-netcdf"].opt_prefix}",
       # "--with-jasper=#{Formula["jasper"].opt_prefix}", #  or GDAL_SKIP="Jasper"
-      "--with-openjpeg=#{Formula["openjpeg"].opt_prefix}",
+      #"--with-openjpeg=#{Formula["openjpeg"].opt_prefix}",
       "--with-expat=#{Formula["expat"].opt_prefix}",
       "--with-odbc=#{Formula["unixodbc"].opt_prefix}",
-      #"--with-curl=#{Formula["curl-openssl"].opt_bin}/curl-config",
+      "--with-curl=#{Formula["curl-openssl"].opt_bin}/curl-config",
       "--with-xml2=yes",
       "--with-spatialite=#{Formula["osgeo-libspatialite"].opt_prefix}",
       "--with-sqlite3=#{Formula["sqlite"].opt_prefix}",
