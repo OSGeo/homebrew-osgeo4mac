@@ -81,7 +81,8 @@ class OsgeoGdal < Formula
   depends_on "epsilon"
   depends_on "osgeo-hdf4"
   depends_on "hdf5"
-  depends_on "jpeg-turbo"
+  depends_on "jpeg"
+  #depends_on "jpeg-turbo"
   depends_on "jasper"
   depends_on "libdap"
   depends_on "osgeo-libgeotiff"
@@ -159,7 +160,7 @@ class OsgeoGdal < Formula
       "--with-png=#{Formula["libpng"].opt_prefix}",
       "--with-libtiff=internal", # #{Formula["libtiff"].opt_prefix}
       "--with-geotiff=internal", # #{Formula["osgeo-libgeotiff"].opt_prefix}
-      "--with-jpeg=#{Formula["jpeg-turbo"].opt_prefix}",
+      "--with-jpeg=#{Formula["jpeg"].opt_prefix}",
       "--with-gif=#{Formula["giflib"].opt_prefix}",
       "--with-libjson-c=#{Formula["json-c"].opt_prefix}",
       "--with-libiconv-prefix=#{Formula["libiconv"].opt_prefix}",
