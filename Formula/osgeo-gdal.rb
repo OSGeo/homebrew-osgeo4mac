@@ -20,12 +20,12 @@ end
 class OsgeoGdal < Formula
   desc "GDAL: Geospatial Data Abstraction Library"
   homepage "https://www.gdal.org/"
-  url "https://download.osgeo.org/gdal/3.1.2/gdal-3.1.2.tar.xz"
-  sha256 "767c8d0dfa20ba3283de05d23a1d1c03a7e805d0ce2936beaff0bb7d11450641"
-  #url "https://github.com/OSGeo/gdal.git",
-  #  :branch => "master",
-  #  :commit => "ee535a1a3f5b35b0d231e1faac89ac1f889f7988"
-  #version "3.0.4"
+  #url "https://download.osgeo.org/gdal/3.1.2/gdal-3.1.2.tar.xz"
+  #sha256 "767c8d0dfa20ba3283de05d23a1d1c03a7e805d0ce2936beaff0bb7d11450641"
+  url "https://github.com/OSGeo/gdal.git",
+    :branch => "release/3.1",
+    :commit => "4702b12cc5567364ff010ece77df57cee8c96f76"
+  version "3.1.2"
 
   revision 1  
 
@@ -81,8 +81,8 @@ class OsgeoGdal < Formula
   depends_on "epsilon"
   depends_on "osgeo-hdf4"
   depends_on "hdf5"
-  depends_on "jpeg"
-  #depends_on "jpeg-turbo"
+  #depends_on "jpeg"
+  depends_on "jpeg-turbo"
   depends_on "jasper"
   depends_on "libdap"
   depends_on "osgeo-libgeotiff"
@@ -90,7 +90,7 @@ class OsgeoGdal < Formula
   depends_on "libtiff"
   depends_on "libxml2"
   depends_on "osgeo-netcdf" # Also brings in HDF5
-  #depends_on "openjpeg"
+  depends_on "openjpeg"
   depends_on "webp"
   depends_on "zstd"
 
@@ -160,7 +160,7 @@ class OsgeoGdal < Formula
       "--with-png=#{Formula["libpng"].opt_prefix}",
       "--with-libtiff=internal", # #{Formula["libtiff"].opt_prefix}
       "--with-geotiff=internal", # #{Formula["osgeo-libgeotiff"].opt_prefix}
-      "--with-jpeg=#{Formula["jpeg"].opt_prefix}",
+      "--with-jpeg=#{Formula["jpeg-turbo"].opt_prefix}",
       "--with-gif=#{Formula["giflib"].opt_prefix}",
       "--with-libjson-c=#{Formula["json-c"].opt_prefix}",
       "--with-libiconv-prefix=#{Formula["libiconv"].opt_prefix}",
@@ -169,8 +169,8 @@ class OsgeoGdal < Formula
       "--with-hdf4=#{Formula["osgeo-hdf4"].opt_prefix}",
       "--with-hdf5=#{Formula["hdf5"].opt_prefix}",
       "--with-netcdf=#{Formula["osgeo-netcdf"].opt_prefix}",
-      # "--with-jasper=#{Formula["jasper"].opt_prefix}", #  or GDAL_SKIP="Jasper"
-      #"--with-openjpeg=#{Formula["openjpeg"].opt_prefix}",
+      #"--with-jasper=#{Formula["jasper"].opt_prefix}", #  or GDAL_SKIP="Jasper"
+      "--with-openjpeg=#{Formula["openjpeg"].opt_prefix}",
       "--with-expat=#{Formula["expat"].opt_prefix}",
       "--with-odbc=#{Formula["unixodbc"].opt_prefix}",
       "--with-curl=#{Formula["curl-openssl"].opt_bin}/curl-config",
@@ -186,7 +186,7 @@ class OsgeoGdal < Formula
       "--with-sfcgal=#{Formula["sfcgal"].opt_bin}/sfcgal-config",
       "--with-armadillo=#{Formula["armadillo"].opt_prefix}",
       "--with-cryptopp=no",
-      "--with-crypto=no",
+      "--with-crypto=yes",
       "--with-grass=no",
       "--with-libgrass=no",
       "--with-fme=no",
