@@ -20,12 +20,12 @@ end
 class OsgeoGdal < Formula
   desc "GDAL: Geospatial Data Abstraction Library"
   homepage "https://www.gdal.org/"
-  #url "https://download.osgeo.org/gdal/3.1.2/gdal-3.1.2.tar.xz"
-  #sha256 "767c8d0dfa20ba3283de05d23a1d1c03a7e805d0ce2936beaff0bb7d11450641"
-  url "https://github.com/OSGeo/gdal.git",
-    :branch => "release/3.1",
-    :commit => "4702b12cc5567364ff010ece77df57cee8c96f76"
-  version "3.1.2"
+  url "https://download.osgeo.org/gdal/3.1.2/gdal-3.1.2.tar.xz"
+  sha256 "767c8d0dfa20ba3283de05d23a1d1c03a7e805d0ce2936beaff0bb7d11450641"
+  #url "https://github.com/OSGeo/gdal.git",
+  #  :branch => "release/3.1",
+  #  :commit => "4702b12cc5567364ff010ece77df57cee8c96f76"
+  #version "3.1.2"
 
   revision 1  
 
@@ -169,7 +169,7 @@ class OsgeoGdal < Formula
       "--with-hdf4=#{Formula["osgeo-hdf4"].opt_prefix}",
       "--with-hdf5=#{Formula["hdf5"].opt_prefix}",
       "--with-netcdf=#{Formula["osgeo-netcdf"].opt_prefix}",
-      #"--with-jasper=#{Formula["jasper"].opt_prefix}", #  or GDAL_SKIP="Jasper"
+      "--with-jasper=#{Formula["jasper"].opt_prefix}", #  or GDAL_SKIP="Jasper"
       "--with-openjpeg=#{Formula["openjpeg"].opt_prefix}",
       "--with-expat=#{Formula["expat"].opt_prefix}",
       "--with-odbc=#{Formula["unixodbc"].opt_prefix}",
