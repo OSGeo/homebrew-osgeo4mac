@@ -27,7 +27,7 @@ class OsgeoGdal < Formula
   #  :commit => "a9e385e76d8f4e7891d10adf1fc99fe3a4a89602"
   #version "3.1.2"
 
-  revision 1  
+  revision 2 
 
   head do
     url "https://github.com/OSGeo/gdal.git", :branch => "master"
