@@ -52,12 +52,14 @@ class OsgeoProj < Formula
 
   # The datum grid files are required to support datum shifting Proj <7
   # TODO: If needed, include content from https://github.com/OSGeo/PROJ-data
+  #resource "projdata" do
   resource "datumgrid" do
     url "https://download.osgeo.org/proj/proj-datumgrid-1.8.zip"
     sha256 "b9838ae7e5f27ee732fb0bfed618f85b36e8bb56d7afb287d506338e9f33861e"
   end
 
   def install
+    #(buildpath).install resource("projdata")
     (buildpath/"nad").install resource("datumgrid")
 
     system "./autogen.sh" if build.head?
