@@ -48,18 +48,18 @@ end
 class OsgeoPostgresqlAT10 < Formula
   desc "Relational database management system"
   homepage "https://www.postgresql.org/"
-  url "https://github.com/postgres/postgres/archive/REL_10_13.tar.gz"
-  sha256 "450d2b2195b0f7a73dcb6ef2eae43bd873d283668f7468e09438854173705cb8"
+  url "https://ftp.postgresql.org/pub/source/v10.14/postgresql-10.14.tar.bz2"
+  sha256 "381cd8f491d8f77db2f4326974542a50095b5fa7709f24d7c5b760be2518b23b"
 
-  revision 1
+  #revision 1
 
   head "https://github.com/postgres/postgres.git", :branch => "REL_10_STABLE"
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
-    sha256 "527f3940abbed3105c1dc55d3d7c22b1d4b4fc2af3356f6a4456172070d76c92" => :catalina
-    sha256 "527f3940abbed3105c1dc55d3d7c22b1d4b4fc2af3356f6a4456172070d76c92" => :mojave
-    sha256 "527f3940abbed3105c1dc55d3d7c22b1d4b4fc2af3356f6a4456172070d76c92" => :high_sierra
+    sha256 "128325ac2bd019ac15159a331d5b18fde8a82657a5df25d868cba91426897d45" => :catalina
+    sha256 "128325ac2bd019ac15159a331d5b18fde8a82657a5df25d868cba91426897d45" => :mojave
+    sha256 "128325ac2bd019ac15159a331d5b18fde8a82657a5df25d868cba91426897d45" => :high_sierra
   end
 
   option "with-cellar", "Use /Cellar in the path configuration (necessary for migration)"

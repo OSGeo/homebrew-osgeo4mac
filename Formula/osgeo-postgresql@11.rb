@@ -48,17 +48,17 @@ end
 class OsgeoPostgresqlAT11 < Formula
   desc "Object-relational database system"
   homepage "https://www.postgresql.org/"
-  url "https://github.com/postgres/postgres/archive/REL_11_8.tar.gz"
-  sha256 "f5a35594fbe448ecb10a2d53e0737a872751ff51805e1f86ddccb922e564cdbb"
+  url "https://ftp.postgresql.org/pub/source/v11.9/postgresql-11.9.tar.bz2"
+  sha256 "35618aa72e0372091f923c42389c6febd07513157b4fbb9408371706afbb6635"
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
-    sha256 "439b6521642aefbf2b8d54940234850d07a993b7624b3c70f033d29f1aa08546" => :catalina
-    sha256 "439b6521642aefbf2b8d54940234850d07a993b7624b3c70f033d29f1aa08546" => :mojave
-    sha256 "439b6521642aefbf2b8d54940234850d07a993b7624b3c70f033d29f1aa08546" => :high_sierra
+    sha256 "9746c2b686fc3a568f0c7062e62d517917612991832918eff4062627245701bd" => :catalina
+    sha256 "9746c2b686fc3a568f0c7062e62d517917612991832918eff4062627245701bd" => :mojave
+    sha256 "9746c2b686fc3a568f0c7062e62d517917612991832918eff4062627245701bd" => :high_sierra
   end
 
-  revision 2
+  #revision 2
 
   head "https://github.com/postgres/postgres.git", :branch => "master"
 

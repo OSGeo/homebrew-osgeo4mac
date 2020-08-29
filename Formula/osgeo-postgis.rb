@@ -27,18 +27,18 @@ end
 class OsgeoPostgis < Formula
   desc "Adds support for geographic objects to PostgreSQL"
   homepage "https://postgis.net/"
-  url "https://github.com/postgis/postgis/archive/3.0.1.tar.gz"
-  sha256 "5451a34c0b9d65580b3ae44e01fefc9e1f437f3329bde6de8fefde66d025e228"
+  url "https://github.com/postgis/postgis/archive/3.0.2.tar.gz"
+  sha256 "2d4eb79ea9af1257320922a8a7d2663d37189c805746e975a5951ee6dc5ac4ef"
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
     cellar :any
-    sha256 "f1e27aa64ff3aa2f589ff3c4dc3823bed42be7a68498d707095ae6cc49d3c5db" => :catalina
-    sha256 "f1e27aa64ff3aa2f589ff3c4dc3823bed42be7a68498d707095ae6cc49d3c5db" => :mojave
-    sha256 "f1e27aa64ff3aa2f589ff3c4dc3823bed42be7a68498d707095ae6cc49d3c5db" => :high_sierra
+    sha256 "1e7bd52b66279e1510b7cc700cb9f7e83b06f2b0f7a7348d99f140bb629e792b" => :catalina
+    sha256 "1e7bd52b66279e1510b7cc700cb9f7e83b06f2b0f7a7348d99f140bb629e792b" => :mojave
+    sha256 "1e7bd52b66279e1510b7cc700cb9f7e83b06f2b0f7a7348d99f140bb629e792b" => :high_sierra
   end
 
-  revision 8
+  #revision 8 
 
   head "https://github.com/postgis/postgis.git", :branch => "master"
 
