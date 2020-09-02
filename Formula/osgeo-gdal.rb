@@ -27,7 +27,7 @@ class OsgeoGdal < Formula
   #  :commit => "a9e385e76d8f4e7891d10adf1fc99fe3a4a89602"
   #version "3.1.2"
 
-  revision 1  
+  revision 2  
 
   head do
     url "https://github.com/OSGeo/gdal.git", :branch => "master"
@@ -81,9 +81,9 @@ class OsgeoGdal < Formula
   depends_on "epsilon"
   depends_on "osgeo-hdf4"
   depends_on "hdf5"
-  #depends_on "jpeg"
-  depends_on "jpeg-turbo"
-  #depends_on "jasper"
+  depends_on "jpeg"
+  #depends_on "jpeg-turbo"
+  depends_on "jasper"
   depends_on "libdap"
   #depends_on "osgeo-libgeotiff"
   depends_on "libpng"
@@ -160,7 +160,7 @@ class OsgeoGdal < Formula
       "--with-png=#{Formula["libpng"].opt_prefix}",
       "--with-libtiff=internal", # #{Formula["libtiff"].opt_prefix}
       "--with-geotiff=internal", # #{Formula["osgeo-libgeotiff"].opt_prefix}
-      "--with-jpeg=#{Formula["jpeg-turbo"].opt_prefix}",
+      "--with-jpeg=#{Formula["jpeg"].opt_prefix}",
       "--with-gif=#{Formula["giflib"].opt_prefix}",
       "--with-libjson-c=#{Formula["json-c"].opt_prefix}",
       "--with-libiconv-prefix=#{Formula["libiconv"].opt_prefix}",
@@ -169,7 +169,7 @@ class OsgeoGdal < Formula
       "--with-hdf4=#{Formula["osgeo-hdf4"].opt_prefix}",
       "--with-hdf5=#{Formula["hdf5"].opt_prefix}",
       "--with-netcdf=#{Formula["osgeo-netcdf"].opt_prefix}",
-      #"--with-jasper=#{Formula["jasper"].opt_prefix}", #  or GDAL_SKIP="Jasper"
+      "--with-jasper=#{Formula["jasper"].opt_prefix}", #  or GDAL_SKIP="Jasper"
       #"--with-openjpeg=#{Formula["openjpeg"].opt_prefix}",
       "--with-expat=#{Formula["expat"].opt_prefix}",
       "--with-odbc=#{Formula["unixodbc"].opt_prefix}",
