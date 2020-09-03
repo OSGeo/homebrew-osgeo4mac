@@ -81,8 +81,8 @@ class OsgeoGdal < Formula
   depends_on "epsilon"
   depends_on "osgeo-hdf4"
   depends_on "hdf5"
-  depends_on "jpeg"
-  #depends_on "jpeg-turbo"
+  #depends_on "jpeg"
+  depends_on "jpeg-turbo"
   depends_on "jasper"
   depends_on "libdap"
   #depends_on "osgeo-libgeotiff"
@@ -90,7 +90,7 @@ class OsgeoGdal < Formula
   #depends_on "libtiff"
   depends_on "libxml2"
   depends_on "osgeo-netcdf" # Also brings in HDF5
-  #depends_on "openjpeg"
+  depends_on "openjpeg"
   depends_on "webp"
   depends_on "zstd"
 
@@ -137,6 +137,19 @@ class OsgeoGdal < Formula
   #   See: https://github.com/rouault/pdfium
   # - Database support
 
+    # Fix build with Jasper.
+  # Remove on next release.
+  # https://github.com/OSGeo/gdal/issues/2844
+  patch :p2 do
+    url "https://github.com/OSGeo/gdal/commit/ab72c4893e6d14d488dfed25745d79f11bee45b9.patch?full_index=1"
+    sha256 "54e10575646666f31fb2a87b7fc5b2831282fe2fa08642231e94fdee1fee8374"
+  end
+
+  patch :p2 do
+    url "https://github.com/OSGeo/gdal/commit/e236eeaed1be45a4af457565085e3db1f2fc489f.patch?full_index=1"
+    sha256 "5b582258a556d96712761932bf94dbd3343a7a0ac61bb53c6c83a7ba4c962fe5"
+  end
+
   def configure_args
     args = [
       "--prefix=#{prefix}",
@@ -160,7 +173,7 @@ class OsgeoGdal < Formula
       "--with-png=#{Formula["libpng"].opt_prefix}",
       "--with-libtiff=internal", # #{Formula["libtiff"].opt_prefix}
       "--with-geotiff=internal", # #{Formula["osgeo-libgeotiff"].opt_prefix}
-      "--with-jpeg=#{Formula["jpeg"].opt_prefix}",
+      "--with-jpeg=#{Formula["jpeg-turbo"].opt_prefix}",
       "--with-gif=#{Formula["giflib"].opt_prefix}",
       "--with-libjson-c=#{Formula["json-c"].opt_prefix}",
       "--with-libiconv-prefix=#{Formula["libiconv"].opt_prefix}",
@@ -170,7 +183,7 @@ class OsgeoGdal < Formula
       "--with-hdf5=#{Formula["hdf5"].opt_prefix}",
       "--with-netcdf=#{Formula["osgeo-netcdf"].opt_prefix}",
       "--with-jasper=#{Formula["jasper"].opt_prefix}", #  or GDAL_SKIP="Jasper"
-      #"--with-openjpeg=#{Formula["openjpeg"].opt_prefix}",
+      "--with-openjpeg=#{Formula["openjpeg"].opt_prefix}",
       "--with-expat=#{Formula["expat"].opt_prefix}",
       "--with-odbc=#{Formula["unixodbc"].opt_prefix}",
       "--with-curl=#{Formula["curl-openssl"].opt_bin}/curl-config",
