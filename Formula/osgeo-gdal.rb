@@ -75,7 +75,7 @@ class OsgeoGdal < Formula
   depends_on "swig"
   depends_on "zlib"
   
-  depends_on :java => ["1.8", :build]
+  depends_on "openjdk" => :build
   
   # Raster libraries
   depends_on "cfitsio"

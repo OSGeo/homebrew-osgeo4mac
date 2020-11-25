@@ -12,7 +12,7 @@ class OsgeoGdalMdb < Formula
   #   never (runtime JAVA version may change too much, or be different from Travis CI)
   # end
 
-  depends_on :java
+  depends_on "openjdk"
   depends_on "osgeo-gdal"
   depends_on "libtiff"
   depends_on "osgeo-libgeotiff"
