@@ -42,7 +42,7 @@ class OsgeoPcl < Formula
   depends_on "osgeo-vtk"
   depends_on "osgeo-qt-webkit"
 
-  depends_on :java => ["1.8", :build]
+  depends_on "openjdk" => :build
 
   # openni2
   # cuda

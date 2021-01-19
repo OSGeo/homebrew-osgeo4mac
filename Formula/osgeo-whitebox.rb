@@ -18,7 +18,7 @@ class OsgeoWhitebox < Formula
   option "with-app", "Build WBT.app Package"
 
   depends_on "bash"
-  # depends_on :java
+  # depends_on "openjdk"
 
   def install
 

@@ -63,7 +63,7 @@ class OsgeoOssim < Formula
   # Geotrans
   # MrSid
 
-  depends_on :java => :optional # => ["1.8", :build]
+  depends_on "openjdk" => :optional # => ["1.8", :build]
 
   if build.with? "pg10"
     depends_on "osgeo-postgresql@10"

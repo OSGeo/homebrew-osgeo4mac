@@ -36,7 +36,7 @@ class OsgeoGmt < Formula
   # depends_on "texlive"
 
   # Using CFLAGS = -I/Library/Java/JavaVirtualMachines/..
-  depends_on :java => ["1.8", :build]
+  depends_on "openjdk" => :build
 
   # OpenMP support: disabled
 

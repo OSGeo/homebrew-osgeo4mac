@@ -60,7 +60,7 @@ class Mapserver6 < Formula
   depends_on "libpng"
   depends_on "python@2"
   depends_on "swig" => :build
-  depends_on :java => :optional
+  depends_on "openjdk" => :optional
   depends_on "giflib"
   depends_on "osgeo-proj"
   depends_on "geos" => :recommended
