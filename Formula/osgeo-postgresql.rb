@@ -1,46 +1,58 @@
 class Unlinked < Requirement
   fatal true
 
-  satisfy(:build_env => false) { !osgeo_postgresql11_linked && !osgeo_postgresql10_linked && !core_postgresql_linked && !core_postgresql11_linked && !core_postgresql10_linked }
+  satisfy(build_env: false) do
+    !osgeo_postgresql11_linked && !osgeo_postgresql10_linked && !core_postgresql_linked && !core_postgresql11_linked && !core_postgresql10_linked
+  end
 
   def osgeo_postgresql11_linked
     Formula["osgeo-postgresql@11"].linked_keg.exist?
   rescue
-    return false
+    false
   end
 
   def osgeo_postgresql10_linked
     Formula["osgeo-postgresql@10"].linked_keg.exist?
   rescue
-    return false
+    false
   end
 
   def core_postgresql_linked
     Formula["postgresql"].linked_keg.exist?
   rescue
-    return false
+    false
   end
 
   def core_postgresql11_linked
     Formula["postgresql@11"].linked_keg.exist?
   rescue
-    return false
+    false
   end
 
   def core_postgresql10_linked
     Formula["postgresql@10"].linked_keg.exist?
   rescue
-    return false
+    false
   end
 
   def message
     s = "\033[31mYou have other linked versions!\e[0m\n\n"
 
-    s += "Unlink with \e[32mbrew unlink osgeo-postgresql@11\e[0m or remove with \e[32mbrew uninstall --ignore-dependencies osgeo-postgresql@11\e[0m\n\n" if osgeo_postgresql11_linked
-    s += "Unlink with \e[32mbrew unlink osgeo-postgresql@10\e[0m or remove with \e[32mbrew uninstall --ignore-dependencies osgeo-postgresql@10\e[0m\n\n" if osgeo_postgresql10_linked
-    s += "Unlink with \e[32mbrew unlink postgresql\e[0m or remove with brew \e[32muninstall --ignore-dependencies postgresql\e[0m\n\n" if core_postgresql_linked
-    s += "Unlink with \e[32mbrew unlink postgresql@11\e[0m or remove with brew \e[32muninstall --ignore-dependencies postgresq@11\e[0m\n\n" if core_postgresql11_linked
-    s += "Unlink with \e[32mbrew unlink postgresql@10\e[0m or remove with brew \e[32muninstall --ignore-dependencies postgresq@10\e[0m\n\n" if core_postgresql10_linked
+    if osgeo_postgresql11_linked
+      s += "Unlink with \e[32mbrew unlink osgeo-postgresql@11\e[0m or remove with \e[32mbrew uninstall --ignore-dependencies osgeo-postgresql@11\e[0m\n\n"
+    end
+    if osgeo_postgresql10_linked
+      s += "Unlink with \e[32mbrew unlink osgeo-postgresql@10\e[0m or remove with \e[32mbrew uninstall --ignore-dependencies osgeo-postgresql@10\e[0m\n\n"
+    end
+    if core_postgresql_linked
+      s += "Unlink with \e[32mbrew unlink postgresql\e[0m or remove with brew \e[32muninstall --ignore-dependencies postgresql\e[0m\n\n"
+    end
+    if core_postgresql11_linked
+      s += "Unlink with \e[32mbrew unlink postgresql@11\e[0m or remove with brew \e[32muninstall --ignore-dependencies postgresq@11\e[0m\n\n"
+    end
+    if core_postgresql10_linked
+      s += "Unlink with \e[32mbrew unlink postgresql@10\e[0m or remove with brew \e[32muninstall --ignore-dependencies postgresq@10\e[0m\n\n"
+    end
     s
   end
 end
@@ -51,34 +63,33 @@ class OsgeoPostgresql < Formula
   url "https://ftp.postgresql.org/pub/source/v12.4/postgresql-12.4.tar.bz2"
   sha256 "bee93fbe2c32f59419cb162bcc0145c58da9a8644ee154a30b9a5ce47de606cc"
 
+  head "https://github.com/postgres/postgres.git", branch: "master"
+
   bottle do
     root_url "https://bottle.download.osgeo.org"
-    sha256 "c2ffac019bf7f8aed005fb3a0c50d2cfe30b7daf3a1edda9e415e64e0328a153" => :catalina
-    sha256 "c2ffac019bf7f8aed005fb3a0c50d2cfe30b7daf3a1edda9e415e64e0328a153" => :mojave
-    sha256 "c2ffac019bf7f8aed005fb3a0c50d2cfe30b7daf3a1edda9e415e64e0328a153" => :high_sierra
+    sha256 catalina:    "c2ffac019bf7f8aed005fb3a0c50d2cfe30b7daf3a1edda9e415e64e0328a153"
+    sha256 mojave:      "c2ffac019bf7f8aed005fb3a0c50d2cfe30b7daf3a1edda9e415e64e0328a153"
+    sha256 high_sierra: "c2ffac019bf7f8aed005fb3a0c50d2cfe30b7daf3a1edda9e415e64e0328a153"
   end
 
-  #revision 1
-
-  head "https://github.com/postgres/postgres.git", :branch => "master"
+  # revision 1
 
   option "with-cellar", "Use /Cellar in the path configuration (necessary for migration)"
 
   # keg_only "postgresql is already provided by homebrew/core"
   # we will verify that other versions are not linked
-  depends_on Unlinked
-
   depends_on "pkg-config" => :build
   depends_on "gettext"
   depends_on "icu4c"
-  depends_on "openldap" # libldap
-  depends_on "openssl"
-  depends_on "readline"
-  depends_on "tcl-tk"
   depends_on "krb5"
   depends_on "libxml2"
-  depends_on "python"
+  depends_on "openldap"
+  depends_on "openssl"
   depends_on "perl"
+  depends_on "python"
+  depends_on "readline"
+  depends_on "tcl-tk"
+  depends_on Unlinked # libldap
   depends_on "zlib"
   # depends_on "e2fsprogs"
 
@@ -99,7 +110,7 @@ class OsgeoPostgresql < Formula
     # ENV["PYTHON"] = which("python3")
     ENV["PYTHON"] = "#{Formula["python"].opt_bin}/python3"
 
-    args = %W[
+    args = %w[
       --disable-debug
       --enable-thread-safety
       --with-bonjour
@@ -117,19 +128,19 @@ class OsgeoPostgresql < Formula
       --with-python
     ]
 
-    if build.with? "cellar"
-      args += [
+    args += if build.with? "cellar"
+      [
         "--prefix=#{prefix}",
         # "bindir=#{bin}", # if define this, will refer to /Cellar
         "--datadir=#{share}/postgresql",
         "--libdir=#{lib}/postgresql",
         "--sysconfdir=#{etc}",
         "--docdir=#{doc}/postgresql",
-        "--includedir=#{include}/postgresql"
+        "--includedir=#{include}/postgresql",
       ]
     else
       # this is to not have the reference to /Cellar in the files
-      args += [
+      [
         "--prefix=#{prefix}",
         # "--bindir=#{HOMEBREW_PREFIX}/bin",
         "--sysconfdir=#{HOMEBREW_PREFIX}/etc",
@@ -188,7 +199,7 @@ class OsgeoPostgresql < Formula
     # Attempting to fix that by adding a dependency on `open-sp` doesn't
     # work and the build errors out on generating the documentation, so
     # for now let's simply omit it so we can package Postgresql for Mojave.
-    # if DevelopmentTools.clang_build_version >= 1000
+    #  if DevelopmentTools.clang_build_version >= 1000
     system "make", "all"
     system "make", "-C", "contrib", "install", "all", *dirs
     system "make", "install", "all", *dirs
@@ -204,110 +215,108 @@ class OsgeoPostgresql < Formula
     #   system "#{bin}/initdb", "#{var}/postgresql"
     # end
 
-    if build.with? "cellar"
-      if File.exists?(File.join("#{HOMEBREW_PREFIX}/Cellar", "osgeo-postgis@2.4"))
-        unless File.exists?("#{HOMEBREW_PREFIX}/opt/osgeo-postgresql/lib/postgresql/postgis-2.4.so")
-          # copy postgis 2.4.x to postgresql 11.x
-          FileUtils.cp_r "#{Formula["osgeo-postgis@2.4"].opt_share}/postgresql/.", "#{share}/postgresql/"
-          FileUtils.cp_r "#{Formula["osgeo-postgis@2.4"].opt_lib}/postgresql/.", "#{lib}/postgresql/"
-          # FileUtils.cp_r "#{Formula["osgeo-postgis@2.4"].opt_lib}/postgresql/rtpostgis-2.4.so", "#{lib}/postgresql/"
-          # FileUtils.cp_r "#{Formula["osgeo-postgis@2.4"].opt_lib}/postgresql/postgis-2.4.so", "#{lib}/postgresql/"
-          # FileUtils.cp_r "#{Formula["osgeo-postgis@2.4"].opt_lib}/postgresql/postgis_topology-2.4.so", "#{lib}/postgresql/"
-        end
-      end
-
-      # if File.exists?(File.join("#{HOMEBREW_PREFIX}/Cellar", "osgeo-postgis"))
-      #   unless File.exists?("#{HOMEBREW_PREFIX}/opt/osgeo-postgresql/lib/postgresql/postgis-2.5.so")
-      #     # install postgis 2.5.x to postgresql 11.x
-      #     FileUtils.cp_r "#{Formula["osgeo-postgis"].opt_share}/postgresql/.", "#{share}/postgresql/"
-      #     # FileUtils.cp_r "#{Formula["osgeo-postgis"].opt_lib}/postgresql/.", "#{lib}/postgresql/"
-      #     FileUtils.cp_r "#{Formula["osgeo-postgis"].opt_lib}/postgresql/rtpostgis-2.5.so", "#{lib}/postgresql/"
-      #     FileUtils.cp_r "#{Formula["osgeo-postgis"].opt_lib}/postgresql/postgis-2.5.so", "#{lib}/postgresql/"
-      #     FileUtils.cp_r "#{Formula["osgeo-postgis"].opt_lib}/postgresql/postgis_topology-2.5.so", "#{lib}/postgresql/"
-      #   end
-      # end
+    if build.with? "cellar" && File.exist?(File.join("#{HOMEBREW_PREFIX}/Cellar",
+"osgeo-postgis@2.4")) && !File.exist?("#{HOMEBREW_PREFIX}/opt/osgeo-postgresql/lib/postgresql/postgis-2.4.so")
+      # copy postgis 2.4.x to postgresql 11.x
+      FileUtils.cp_r "#{Formula["osgeo-postgis@2.4"].opt_share}/postgresql/.", "#{share}/postgresql/"
+      FileUtils.cp_r "#{Formula["osgeo-postgis@2.4"].opt_lib}/postgresql/.", "#{lib}/postgresql/"
+      # FileUtils.cp_r "#{Formula["osgeo-postgis@2.4"].opt_lib}/postgresql/rtpostgis-2.4.so", "#{lib}/postgresql/"
+      # FileUtils.cp_r "#{Formula["osgeo-postgis@2.4"].opt_lib}/postgresql/postgis-2.4.so", "#{lib}/postgresql/"
+      # FileUtils.cp_r "#{Formula["osgeo-postgis@2.4"].opt_lib}/postgresql/postgis_topology-2.4.so", "#{lib}/postgresql/"
     end
+
+    # if File.exists?(File.join("#{HOMEBREW_PREFIX}/Cellar", "osgeo-postgis"))
+    #   unless File.exists?("#{HOMEBREW_PREFIX}/opt/osgeo-postgresql/lib/postgresql/postgis-2.5.so")
+    #     # install postgis 2.5.x to postgresql 11.x
+    #     FileUtils.cp_r "#{Formula["osgeo-postgis"].opt_share}/postgresql/.", "#{share}/postgresql/"
+    #     # FileUtils.cp_r "#{Formula["osgeo-postgis"].opt_lib}/postgresql/.", "#{lib}/postgresql/"
+    #     FileUtils.cp_r "#{Formula["osgeo-postgis"].opt_lib}/postgresql/rtpostgis-2.5.so", "#{lib}/postgresql/"
+    #     FileUtils.cp_r "#{Formula["osgeo-postgis"].opt_lib}/postgresql/postgis-2.5.so", "#{lib}/postgresql/"
+    #     FileUtils.cp_r "#{Formula["osgeo-postgis"].opt_lib}/postgresql/postgis_topology-2.5.so", "#{lib}/postgresql/"
+    #   end
+    # end
   end
 
-  def caveats; <<~EOS
+  def caveats
+    <<~EOS
+      1 - If you need to link "#{name}":
 
-    1 - If you need to link "#{name}":
+            \e[32m$ brew link #{name} --force\e[0m
 
-          \e[32m$ brew link #{name} --force\e[0m
+          Previously unlink any other version that you have installed.
 
-        Previously unlink any other version that you have installed.
+      2 - If you need to init postgresql just execute the following command:
 
-    2 - If you need to init postgresql just execute the following command:
+            \e[32m$ initdb #{HOMEBREW_PREFIX}/var/postgresql -E utf8 --locale=en_US.UTF-8\e[0m
 
-          \e[32m$ initdb #{HOMEBREW_PREFIX}/var/postgresql -E utf8 --locale=en_US.UTF-8\e[0m
+          If the file "#{HOMEBREW_PREFIX}/var/postgresql/PG_VERSION" exists,
+          it is because you already created this in postinstall or a previous installation.
 
-        If the file "#{HOMEBREW_PREFIX}/var/postgresql/PG_VERSION" exists,
-        it is because you already created this in postinstall or a previous installation.
+      3 - Start using:
 
-    3 - Start using:
+            \e[32m$ pg_ctl start -D /usr/local/var/postgresql\e[0m
 
-          \e[32m$ pg_ctl start -D /usr/local/var/postgresql\e[0m
+      4 - Connecting to our new database
 
-    4 - Connecting to our new database
+            \e[32m$ psql -h localhost -d postgres\e[0m
 
-          \e[32m$ psql -h localhost -d postgres\e[0m
+      Note:
 
-    Note:
+        - Services doesn't start properly, add to \e[32mhomebrew.mxcl.osgeo-postgresql.plist\e[0m:
 
-      - Services doesn't start properly, add to \e[32mhomebrew.mxcl.osgeo-postgresql.plist\e[0m:
+            \e[32m<key>EnvironmentVariables</key>\e[0m
+            \e[32m<dict>\e[0m
+              \e[32m<key>LC_ALL</key>\e[0m
+              \e[32m<string>en_US.UTF-8</string>\e[0m
+            \e[32m</dict>\e[0m
 
-          \e[32m<key>EnvironmentVariables</key>\e[0m
-          \e[32m<dict>\e[0m
-            \e[32m<key>LC_ALL</key>\e[0m
-            \e[32m<string>en_US.UTF-8</string>\e[0m
-          \e[32m</dict>\e[0m
+            issue: \e[32mhttps://github.com/OSGeo/homebrew-osgeo4mac/issues/1075#issuecomment-490052517\e[0m
 
-          issue: \e[32mhttps://github.com/OSGeo/homebrew-osgeo4mac/issues/1075#issuecomment-490052517\e[0m
+        - Could not bind ipv6 address database system was not properly shut:
 
-      - Could not bind ipv6 address database system was not properly shut:
+            \e[32m$ sudo lsof -i :5432\e[0m (search PID)
 
-          \e[32m$ sudo lsof -i :5432\e[0m (search PID)
+            \e[32m$ kill PID\e[0m
 
-          \e[32m$ kill PID\e[0m
+        - To migrate existing data from a previous major version of PostgreSQL run:
 
-      - To migrate existing data from a previous major version of PostgreSQL run:
+            \e[32m$ brew postgresql-upgrade-database\e[0m
 
-          \e[32m$ brew postgresql-upgrade-database\e[0m
+        - For more information see our page with documentation:
 
-      - For more information see our page with documentation:
-
-          \e[32mhttps://osgeo.github.io/homebrew-osgeo4mac\e[0m
+            \e[32mhttps://osgeo.github.io/homebrew-osgeo4mac\e[0m
     EOS
   end
 
-  plist_options :manual => "pg_ctl -D #{HOMEBREW_PREFIX}/var/postgresql start"
+  plist_options manual: "pg_ctl -D #{HOMEBREW_PREFIX}/var/postgresql start"
 
-  def plist; <<~EOS
-    <?xml version="1.0" encoding="UTF-8"?>
-    <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-    <plist version="1.0">
-    <dict>
-      <key>KeepAlive</key>
-      <true/>
-      <key>Label</key>
-      <string>#{plist_name}</string>
-      <key>ProgramArguments</key>
-      <array>
-        <string>#{opt_bin}/postgres</string>
-        <string>-D</string>
-        <string>#{var}/postgresql</string>
-      </array>
-      <key>RunAtLoad</key>
-      <true/>
-      <key>WorkingDirectory</key>
-      <string>#{HOMEBREW_PREFIX}</string>
-      <key>StandardOutPath</key>
-      <string>#{var}/log/postgresql.log</string>
-      <key>StandardErrorPath</key>
-      <string>#{var}/log/postgresql.log</string>
-    </dict>
-    </plist>
-  EOS
+  def plist
+    <<~EOS
+      <?xml version="1.0" encoding="UTF-8"?>
+      <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+      <plist version="1.0">
+      <dict>
+        <key>KeepAlive</key>
+        <true/>
+        <key>Label</key>
+        <string>#{plist_name}</string>
+        <key>ProgramArguments</key>
+        <array>
+          <string>#{opt_bin}/postgres</string>
+          <string>-D</string>
+          <string>#{var}/postgresql</string>
+        </array>
+        <key>RunAtLoad</key>
+        <true/>
+        <key>WorkingDirectory</key>
+        <string>#{HOMEBREW_PREFIX}</string>
+        <key>StandardOutPath</key>
+        <string>#{var}/log/postgresql.log</string>
+        <key>StandardErrorPath</key>
+        <string>#{var}/log/postgresql.log</string>
+      </dict>
+      </plist>
+    EOS
   end
 
   test do

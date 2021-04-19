@@ -1,18 +1,20 @@
 class Unlinked < Requirement
   fatal true
 
-  satisfy(:build_env => false) { !core_proj_linked }
+  satisfy(build_env: false) { !core_proj_linked }
 
   def core_proj_linked
     Formula["proj"].linked_keg.exist?
   rescue
-    return false
+    false
   end
 
   def message
     s = "\033[31mYou have other linked versions!\e[0m\n\n"
 
-    s += "Unlink with \e[32mbrew unlink proj\e[0m or remove with \e[32mbrew uninstall --ignore-dependencies proj\e[0m\n\n" if core_proj_linked
+    if core_proj_linked
+      s += "Unlink with \e[32mbrew unlink proj\e[0m or remove with \e[32mbrew uninstall --ignore-dependencies proj\e[0m\n\n"
+    end
     s
   end
 end
@@ -25,41 +27,40 @@ class OsgeoProj < Formula
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
-    sha256 "729a8816d46c6f3293951bf7f68d6b6e32bb13e4c75f339a29140f44b5ffa2e7" => :catalina
-    sha256 "729a8816d46c6f3293951bf7f68d6b6e32bb13e4c75f339a29140f44b5ffa2e7" => :mojave
-    sha256 "729a8816d46c6f3293951bf7f68d6b6e32bb13e4c75f339a29140f44b5ffa2e7" => :high_sierra
+    sha256 catalina:    "729a8816d46c6f3293951bf7f68d6b6e32bb13e4c75f339a29140f44b5ffa2e7"
+    sha256 mojave:      "729a8816d46c6f3293951bf7f68d6b6e32bb13e4c75f339a29140f44b5ffa2e7"
+    sha256 high_sierra: "729a8816d46c6f3293951bf7f68d6b6e32bb13e4c75f339a29140f44b5ffa2e7"
   end
 
   # revision 1
 
   # keg_only "proj is already provided by homebrew/core"
   # we will verify that other versions are not linked
-  depends_on Unlinked
-
   head do
-    url "https://github.com/OSGeo/PROJ.git", :branch => "master"
+    url "https://github.com/OSGeo/PROJ.git", branch: "master"
     depends_on "autoconf" => :build
     depends_on "automake" => :build
     depends_on "libtool" => :build
   end
 
   depends_on "pkg-config" => :build
+  depends_on Unlinked
   # depends_on "libtiff" Proj >7
 
-  conflicts_with "blast", :because => "both install a `libproj.a` library"
+  conflicts_with "blast", because: "both install a `libproj.a` library"
 
   skip_clean :la
 
   # The datum grid files are required to support datum shifting Proj <7
   # TODO: If needed, include content from https://github.com/OSGeo/PROJ-data
-  #resource "projdata" do
+  # resource "projdata" do
   resource "datumgrid" do
     url "https://download.osgeo.org/proj/proj-datumgrid-1.8.zip"
     sha256 "b9838ae7e5f27ee732fb0bfed618f85b36e8bb56d7afb287d506338e9f33861e"
   end
 
   def install
-    #(buildpath).install resource("projdata")
+    # (buildpath).install resource("projdata")
     (buildpath/"nad").install resource("datumgrid")
 
     system "./autogen.sh" if build.head?
