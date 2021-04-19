@@ -1,18 +1,20 @@
 class Unlinked < Requirement
   fatal true
 
-  satisfy(:build_env => false) { !core_netcdf_linked }
+  satisfy(build_env: false) { !core_netcdf_linked }
 
   def core_netcdf_linked
     Formula["netcdf"].linked_keg.exist?
   rescue
-    return false
+    false
   end
 
   def message
     s = "\033[31mYou have other linked versions!\e[0m\n\n"
 
-    s += "Unlink with \e[32mbrew unlink netcdf\e[0m or remove with \e[32mbrew uninstall --ignore-dependencies netcdf\e[0m\n\n" if core_netcdf_linked
+    if core_netcdf_linked
+      s += "Unlink with \e[32mbrew unlink netcdf\e[0m or remove with \e[32mbrew uninstall --ignore-dependencies netcdf\e[0m\n\n"
+    end
     s
   end
 end
@@ -28,18 +30,17 @@ class OsgeoNetcdf < Formula
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
-    sha256 "57ab2d6562197db772ca5a21fbeb74f2a3e68a374771b536110387ae5ecb3383" => :catalina
-    sha256 "57ab2d6562197db772ca5a21fbeb74f2a3e68a374771b536110387ae5ecb3383" => :mojave
-    sha256 "57ab2d6562197db772ca5a21fbeb74f2a3e68a374771b536110387ae5ecb3383" => :high_sierra
+    sha256 catalina:    "57ab2d6562197db772ca5a21fbeb74f2a3e68a374771b536110387ae5ecb3383"
+    sha256 mojave:      "57ab2d6562197db772ca5a21fbeb74f2a3e68a374771b536110387ae5ecb3383"
+    sha256 high_sierra: "57ab2d6562197db772ca5a21fbeb74f2a3e68a374771b536110387ae5ecb3383"
   end
 
   # keg_only "netcdf is already provided by homebrew/core"
   # we will verify that other versions are not linked
-  depends_on Unlinked
-
   depends_on "cmake" => :build
-  depends_on "gcc" # for gfortran
+  depends_on "gcc"
   depends_on "hdf5"
+  depends_on Unlinked # for gfortran
 
   uses_from_macos "curl"
 
@@ -143,7 +144,7 @@ class OsgeoNetcdf < Formula
     system ENV.cc, "test.c", "-L#{lib}", "-I#{include}", "-lnetcdf",
                    "-o", "test"
     if head?
-      assert_match /^\d+(?:\.\d+)+/, `./test`
+      assert_match(/^\d+(?:\.\d+)+/, `./test`)
     else
       assert_equal version.to_s, `./test`
     end

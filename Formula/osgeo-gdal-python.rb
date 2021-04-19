@@ -30,24 +30,23 @@ class OsgeoGdalPython < Formula
   url "https://download.osgeo.org/gdal/3.1.2/gdal-3.1.2.tar.xz"
   sha256 "767c8d0dfa20ba3283de05d23a1d1c03a7e805d0ce2936beaff0bb7d11450641"
 
-  #revision 2 
+  # revision 2
 
-  head "https://github.com/OSGeo/gdal.git", :branch => "master"
+  head "https://github.com/OSGeo/gdal.git", branch: "master"
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
-    cellar :any
-    sha256 "8e2ddaec0874f61df018c622cbf465985ae4dde2171d280464d15d02c72af192" => :catalina
-    sha256 "8e2ddaec0874f61df018c622cbf465985ae4dde2171d280464d15d02c72af192" => :mojave
-    sha256 "8e2ddaec0874f61df018c622cbf465985ae4dde2171d280464d15d02c72af192" => :high_sierra
+    sha256 cellar: :any, catalina:    "8e2ddaec0874f61df018c622cbf465985ae4dde2171d280464d15d02c72af192"
+    sha256 cellar: :any, mojave:      "8e2ddaec0874f61df018c622cbf465985ae4dde2171d280464d15d02c72af192"
+    sha256 cellar: :any, high_sierra: "8e2ddaec0874f61df018c622cbf465985ae4dde2171d280464d15d02c72af192"
   end
 
   keg_only "older version of gdal is in main tap and installs similar components"
 
   depends_on "swig" => :build
-  depends_on "python" => :recommended
   depends_on "numpy"
   depends_on "osgeo-gdal"
+  depends_on "python" => :recommended
 
   resource "autotest" do
     url "https://download.osgeo.org/gdal/3.1.2/gdalautotest-3.1.2.tar.gz"
@@ -55,7 +54,6 @@ class OsgeoGdalPython < Formula
   end
 
   def install
-
     cd "swig/python" do
       # Customize to gdal install opt_prefix
       inreplace "setup.cfg" do |s|
@@ -82,12 +80,13 @@ class OsgeoGdalPython < Formula
     end
   end
 
-  def caveats; <<~EOS
-    Sample Python scripts installed to:
-      #{opt_libexec}/bin
+  def caveats
+    <<~EOS
+      Sample Python scripts installed to:
+        #{opt_libexec}/bin
 
-    To run full test suite use:
-      `brew test -v #{name} --with-autotest`
+      To run full test suite use:
+        `brew test -v #{name} --with-autotest`
     EOS
   end
 
@@ -95,6 +94,7 @@ class OsgeoGdalPython < Formula
     python_version = Language::Python.major_minor_version "python3"
 
     next unless (lib/"python#{python_version}/site-packages").exist?
+
     ENV["PYTHONPATH"] = lib/"python#{python_version}/site-packages"
     pkgs = %w[gdal ogr osr gdal_array gdalconst]
     pkgs << "gnm" unless gdal_opts.include? "without-gnm"
@@ -108,17 +108,15 @@ class OsgeoGdalPython < Formula
       # These driver tests cause hard failures, stopping test output
       ENV["GDAL_SKIP"] = "GRASS"
       ENV["OGR_SKIP"] = "ElasticSearch,GFT,OGR_GRASS"
-      Language::Python.each_python(build) do |python, python_version|
+      Language::Python.each_python(build) do |_python, python_version|
         ENV["PYTHONPATH"] = opt_lib/"python#{python_version}/site-packages"
         resource("autotest").stage do
           # Split up tests, to reduce chance of execution expiration
           # ogr gcore gdrivers osr alg gnm utilities pyscripts
           %w[ogr gcore gdrivers osr alg gnm utilities pyscripts].each do |t|
-            begin
-              system "python3", "run_all.py", t.to_s
-            rescue
-              next
-            end
+            system "python3", "run_all.py", t.to_s
+          rescue
+            next
           end
         end
         # Run autotest just once, with first found binding

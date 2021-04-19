@@ -1,18 +1,20 @@
 class Unlinked < Requirement
   fatal true
 
-  satisfy(:build_env => false) { !core_gdal_linked }
+  satisfy(build_env: false) { !core_gdal_linked }
 
   def core_gdal_linked
     Formula["gdal"].linked_keg.exist?
   rescue
-    return false
+    false
   end
 
   def message
     s = "\033[31mYou have other linked versions!\e[0m\n\n"
 
-    s += "Unlink with \e[32mbrew unlink gdal\e[0m or remove with brew \e[32muninstall --ignore-dependencies gdal\e[0m\n\n" if core_gdal_linked
+    if core_gdal_linked
+      s += "Unlink with \e[32mbrew unlink gdal\e[0m or remove with brew \e[32muninstall --ignore-dependencies gdal\e[0m\n\n"
+    end
     s
   end
 end
@@ -22,89 +24,86 @@ class OsgeoGdal < Formula
   homepage "https://www.gdal.org/"
   url "https://download.osgeo.org/gdal/3.1.2/gdal-3.1.2.tar.xz"
   sha256 "767c8d0dfa20ba3283de05d23a1d1c03a7e805d0ce2936beaff0bb7d11450641"
-  #url "https://github.com/OSGeo/gdal.git",
+  # url "https://github.com/OSGeo/gdal.git",
   #  :branch => "release/3.1",
   #  :commit => "a9e385e76d8f4e7891d10adf1fc99fe3a4a89602"
-  #version "3.1.2"
+  # version "3.1.2"
 
-  revision 2  
-
-  head do
-    url "https://github.com/OSGeo/gdal.git", :branch => "master"
-    depends_on "doxygen" => :build
-  end
+  revision 2
 
   bottle do
     root_url "https://bottle.download.osgeo.org"
     rebuild 1
-    sha256 "5c0cfe587fff624ed20d33db5ffbf2c7f9bc9af026a9bcecf795b1a07193925d" => :catalina
-    sha256 "5c0cfe587fff624ed20d33db5ffbf2c7f9bc9af026a9bcecf795b1a07193925d" => :mojave
-    sha256 "5c0cfe587fff624ed20d33db5ffbf2c7f9bc9af026a9bcecf795b1a07193925d" => :high_sierra
+    sha256 catalina:    "5c0cfe587fff624ed20d33db5ffbf2c7f9bc9af026a9bcecf795b1a07193925d"
+    sha256 mojave:      "5c0cfe587fff624ed20d33db5ffbf2c7f9bc9af026a9bcecf795b1a07193925d"
+    sha256 high_sierra: "5c0cfe587fff624ed20d33db5ffbf2c7f9bc9af026a9bcecf795b1a07193925d"
+  end
+
+  head do
+    url "https://github.com/OSGeo/gdal.git", branch: "master"
+    depends_on "doxygen" => :build
   end
 
   # keg_only "gdal is already provided by homebrew/core"
   # we will verify that other versions are not linked
-  depends_on Unlinked
-
   option "with-pg10", "Build with PostgreSQL 10 client"
   option "with-pg11", "Build with PostgreSQL 11 client"
-  #deprecated_option "with-postgresql10" => "with-pg10"
 
+  depends_on "openjdk" => :build
   depends_on "pkg-config" => :build
-  depends_on "armadillo"
   depends_on "ant"
-  #depends_on "cryptopp"
+  depends_on "armadillo"
+  depends_on "cfitsio"
   depends_on "curl-openssl"
+  depends_on "epsilon"
   depends_on "expat"
   depends_on "freexl"
   depends_on "geos"
   depends_on "giflib"
+  depends_on "hdf5"
+  depends_on "jasper"
+  depends_on "jpeg-turbo"
   depends_on "json-c"
+  depends_on "libdap"
+  depends_on "libiconv"
+  depends_on "libpng"
+  depends_on "libpq"
+  depends_on "libxml2"
+  depends_on "libzip"
   depends_on "mdbtools"
   depends_on "numpy"
-  depends_on "libiconv"
-  depends_on "osgeo-libkml"
-  depends_on "libpq"
-  depends_on "osgeo-libspatialite"
-  depends_on "libzip"
-  depends_on "pcre" # for REGEXP operator in SQLite/Spatialite driver
+  depends_on "openjpeg"
   depends_on "openssl"
+  depends_on "osgeo-hdf4"
+  depends_on "osgeo-libkml"
+  depends_on "osgeo-libspatialite"
+  depends_on "osgeo-netcdf"
+  depends_on "osgeo-proj"
+  depends_on "pcre"
   depends_on "qhull"
   depends_on "sfcgal"
-  depends_on "sqlite" # To ensure compatibility with SpatiaLite.
+  depends_on "sqlite"
   depends_on "swig"
-  depends_on "zlib"
-  
-  depends_on "openjdk" => :build
-  
-  # Raster libraries
-  depends_on "cfitsio"
-  depends_on "epsilon"
-  depends_on "osgeo-hdf4"
-  depends_on "hdf5"
-  #depends_on "jpeg"
-  depends_on "jpeg-turbo"
-  depends_on "jasper"
-  depends_on "libdap"
-  #depends_on "osgeo-libgeotiff"
-  depends_on "libpng"
-  #depends_on "libtiff"
-  depends_on "libxml2"
-  depends_on "osgeo-netcdf" # Also brings in HDF5
-  depends_on "openjpeg"
+  depends_on "unixodbc"
+  depends_on Unlinked
+  # deprecated_option "with-postgresql10" => "with-pg10"
+  # depends_on "cryptopp" # for REGEXP operator in SQLite/Spatialite driver # To ensure compatibility with SpatiaLite.
   depends_on "webp"
+  depends_on "xerces-c"
+  depends_on "xz"
+  depends_on "zlib"
+
+  # Raster libraries
+  # depends_on "jpeg"
+  # depends_on "osgeo-libgeotiff"
+  # depends_on "libtiff" # Also brings in HDF5
   depends_on "zstd"
 
-  # Vector libraries
-  depends_on "unixodbc" # OS X version is not complete enough
-  depends_on "xerces-c"
+  # Vector libraries # OS X version is not complete enough
 
-  # Other libraries
-  depends_on "xz" # get liblzma compression algorithm library from XZutils
+  # Other libraries # get liblzma compression algorithm library from XZutils
 
   # depends_on "charls" # cask
-
-  depends_on "osgeo-proj"
 
   if build.with?("pg10")
     depends_on "osgeo-postgresql@10"
@@ -138,7 +137,7 @@ class OsgeoGdal < Formula
   #   See: https://github.com/rouault/pdfium
   # - Database support
 
-    # Fix build with Jasper.
+  # Fix build with Jasper.
   # Remove on next release.
   # https://github.com/OSGeo/gdal/issues/2844
   patch :p2 do
@@ -152,7 +151,7 @@ class OsgeoGdal < Formula
   end
 
   def configure_args
-    args = [
+    [
       "--prefix=#{prefix}",
       "--disable-debug",
       "--with-local=#{prefix}",
@@ -286,7 +285,6 @@ class OsgeoGdal < Formula
       # "--without-dwgdirect",
       # "--without-ruby",
     ]
-    args
   end
 
   def plugins_subdirectory
@@ -316,41 +314,41 @@ class OsgeoGdal < Formula
     ENV["ARCHFLAGS"] = "-arch #{Hardware::CPU.arch}"
 
     # chdir "gdal" do
-      # GDAL looks for the renamed hdf4 library, which is an artifact of old builds, so we need to repoint it
-      inreplace "configure", "-ldf", "-lhdf"
+    # GDAL looks for the renamed hdf4 library, which is an artifact of old builds, so we need to repoint it
+    inreplace "configure", "-ldf", "-lhdf"
 
-      # These libs are statically linked in libkml-dev and libkml formula
-      inreplace "configure", " -lminizip -luriparser", ""
+    # These libs are statically linked in libkml-dev and libkml formula
+    inreplace "configure", " -lminizip -luriparser", ""
 
-      # All PDF driver functionality moved to osgeo-gdal-pdf plugin,
-      # so nix default internal-built PDF w+ driver, which keeps plugin from loading.
-      # Just using --enable-pdf-plugin isn't enough (we don't want the plugin built here)
-      # inreplace "GDALmake.opt.in", "PDF_PLUGIN),yes", "PDF_PLUGIN),no"
-      # https://github.com/OSGeo/gdal/commit/20716436ce5debca66cbbe0396304e09b79bc3aa#diff-adc90aa0203327969e0048718b911252
+    # All PDF driver functionality moved to osgeo-gdal-pdf plugin,
+    # so nix default internal-built PDF w+ driver, which keeps plugin from loading.
+    # Just using --enable-pdf-plugin isn't enough (we don't want the plugin built here)
+    # inreplace "GDALmake.opt.in", "PDF_PLUGIN),yes", "PDF_PLUGIN),no"
+    # https://github.com/OSGeo/gdal/commit/20716436ce5debca66cbbe0396304e09b79bc3aa#diff-adc90aa0203327969e0048718b911252
 
-      args = configure_args
+    args = configure_args
 
-      system "./configure", *args
+    system "./configure", *args
+    system "make"
+    system "make", "install"
+
+    # Add GNM headers for osgeo-gdal-python swig wrapping
+    include.install Dir["gnm/**/*.h"]
+
+    cd "swig/java" do
+      inreplace "java.opt", "linux", "darwin"
+      inreplace "java.opt", "#JAVA_HOME = /usr/lib/jvm/java-6-openjdk/", "JAVA_HOME=#{ENV["JAVA_HOME"]}"
       system "make"
       system "make", "install"
 
-      # Add GNM headers for osgeo-gdal-python swig wrapping
-      include.install Dir["gnm/**/*.h"]
+      # Install the jar that complements the native JNI bindings
+      lib.install "gdal.jar"
+    end
 
-      cd "swig/java" do
-        inreplace "java.opt", "linux", "darwin"
-        inreplace "java.opt", "#JAVA_HOME = /usr/lib/jvm/java-6-openjdk/", "JAVA_HOME=#{ENV["JAVA_HOME"]}"
-        system "make"
-        system "make", "install"
-
-        # Install the jar that complements the native JNI bindings
-        lib.install "gdal.jar"
-      end
-
-      system "make", "man" if build.head?
-      system "make", "install-man"
-      # Clean up any stray doxygen files.
-      Dir.glob("#{bin}/*.dox") { |p| rm p }
+    system "make", "man" if build.head?
+    system "make", "install-man"
+    # Clean up any stray doxygen files.
+    Dir.glob("#{bin}/*.dox") { |p| rm p }
     # end
   end
 
@@ -360,7 +358,7 @@ class OsgeoGdal < Formula
   end
 
   def caveats
-    s = <<~EOS
+    <<~EOS
       Plugins for this version of GDAL/OGR, generated by other formulae, should
       be symlinked to the following directory:
 
@@ -372,7 +370,6 @@ class OsgeoGdal < Formula
 
       PYTHON BINDINGS are now built in a separate formula: osgeo-gdal-python
     EOS
-    s
   end
 
   test do

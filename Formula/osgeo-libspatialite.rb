@@ -1,18 +1,20 @@
 class Unlinked < Requirement
   fatal true
 
-  satisfy(:build_env => false) { !core_libspatialite_linked }
+  satisfy(build_env: false) { !core_libspatialite_linked }
 
   def core_libspatialite_linked
     Formula["libspatialite"].linked_keg.exist?
   rescue
-    return false
+    false
   end
 
   def message
     s = "\033[31mYou have other linked versions!\e[0m\n\n"
 
-    s += "Unlink with \e[32mbrew unlink libspatialite\e[0m or remove with brew \e[32muninstall --ignore-dependencies libspatialite\e[0m\n\n" if core_libspatialite_linked
+    if core_libspatialite_linked
+      s += "Unlink with \e[32mbrew unlink libspatialite\e[0m or remove with brew \e[32muninstall --ignore-dependencies libspatialite\e[0m\n\n"
+    end
     s
   end
 end
@@ -36,15 +38,13 @@ class OsgeoLibspatialite < Formula
   end
   bottle do
     root_url "https://bottle.download.osgeo.org"
-    cellar :any
-    sha256 "bdf1b153bb5387bcf429f55a83758855da42b7e8f1e5488c7af19aece19ef5eb" => :catalina
-    sha256 "bdf1b153bb5387bcf429f55a83758855da42b7e8f1e5488c7af19aece19ef5eb" => :mojave
-    sha256 "bdf1b153bb5387bcf429f55a83758855da42b7e8f1e5488c7af19aece19ef5eb" => :high_sierra
+    sha256 cellar: :any, catalina:    "bdf1b153bb5387bcf429f55a83758855da42b7e8f1e5488c7af19aece19ef5eb"
+    sha256 cellar: :any, mojave:      "bdf1b153bb5387bcf429f55a83758855da42b7e8f1e5488c7af19aece19ef5eb"
+    sha256 cellar: :any, high_sierra: "bdf1b153bb5387bcf429f55a83758855da42b7e8f1e5488c7af19aece19ef5eb"
   end
 
-
   head do
-    url "https://www.gaia-gis.it/fossil/libspatialite", :using => :fossil
+    url "https://www.gaia-gis.it/fossil/libspatialite", using: :fossil
     depends_on "autoconf" => :build
     depends_on "automake" => :build
     depends_on "libtool" => :build
@@ -52,17 +52,16 @@ class OsgeoLibspatialite < Formula
 
   # keg_only "libspatialite" is already provided by homebrew/core"
   # we will verify that other versions are not linked
-  depends_on Unlinked
-
   depends_on "pkg-config" => :build
   depends_on "freexl"
   depends_on "geos"
   depends_on "libxml2"
   depends_on "osgeo-proj"
+  depends_on "sqlite"
+  depends_on Unlinked
   # Needs SQLite > 3.7.3 which rules out system SQLite on Snow Leopard and
   # below. Also needs dynamic extension support which rules out system SQLite
   # on Lion. Finally, RTree index support is required as well.
-  depends_on "sqlite"
 
   def install
     system "autoreconf", "-fi" if build.head?
